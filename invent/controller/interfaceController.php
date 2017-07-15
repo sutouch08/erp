@@ -37,6 +37,11 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['customerArea'] ) )
 	include "interface/import/importCustomerArea.php";	
 }
 
+if( isset( $_GET['syncMaster'] ) && isset( $_GET['customer'] ) )
+{
+	include "interface/import/importCustomer.php";
+}
+
 
 
 ?>

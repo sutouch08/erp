@@ -38,6 +38,7 @@ class customer {
 				$this->id 			= $rs->id;
 				$this->code			= $rs->code;
 				$this->pre_name	= $rs->pre_name;
+				$this->name			= $rs->name;
 				$this->tel				= $rs->tel;
 				$this->fax			= $rs->fax;
 				$this->mobile		= $rs->mobile;

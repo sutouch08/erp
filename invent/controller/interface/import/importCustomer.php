@@ -29,7 +29,7 @@
 				if( $i != 1 ) //---- Skip first row
 				{
 					$cid 	= trim( $rs['A'] );
-					$acitive = $rs['S'] == '' ? 1 : 0;
+					$active = $rs['S'] == '' ? 1 : 0;
 					if( $customer->isExists( $cid ) === FALSE )
 					{
 						//-- If not exists do insert
