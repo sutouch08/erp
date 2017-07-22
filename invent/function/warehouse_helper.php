@@ -47,7 +47,7 @@ function isExistsWarehouseCode($code, $id = "")
 	
 	if( $id != "" )
 	{
-		$qs = dbQuery("SELECT id_warehouse FROM tbl_warehouse WHERE code = '".$code."' AND id_warehouse != ".$id);
+		$qs = dbQuery("SELECT id_warehouse FROM tbl_warehouse WHERE code = '".$code."' AND id_warehouse != '".$id."'");
 	}
 	else
 	{
@@ -66,7 +66,7 @@ function isExistsWarehouseName($name, $id="")
 	$sc = FALSE;
 	if( $id != "" )
 	{
-		$qs = dbQuery("SELECT id_warehouse FROM tbl_warehouse WHERE warehouse_name = '".$name."' AND id_warehouse != ".$id);
+		$qs = dbQuery("SELECT id_warehouse FROM tbl_warehouse WHERE warehouse_name = '".$name."' AND id_warehouse != '".$id."'");
 	}
 	else
 	{
@@ -82,13 +82,13 @@ function isExistsWarehouseName($name, $id="")
 
 function getWarehouseDetail($id)
 {
-	return dbQuery("SELECT * FROM tbl_warehouse WHERE id_warehouse = ".$id);
+	return dbQuery("SELECT * FROM tbl_warehouse WHERE id_warehouse = '".$id."'");
 }
 
 function isEmptyWarehouse($id_warehouse)
 {
 	$sc = TRUE;
-	$qs = dbQuery("SELECT id_zone FROM tbl_zone WHERE id_warehouse = ".$id_warehouse);
+	$qs = dbQuery("SELECT id_zone FROM tbl_zone WHERE id_warehouse = '".$id_warehouse."'");
 	if( dbNumRows($qs) > 0 )
 	{
 		$sc = FALSE;	
@@ -100,7 +100,7 @@ function isEmptyWarehouse($id_warehouse)
 function getWarehouseCode($id)
 {
 	$sc = "";
-	$qs = dbQuery("SELECT code FROM tbl_warehouse WHERE id_warehouse = ".$id);
+	$qs = dbQuery("SELECT code FROM tbl_warehouse WHERE id_warehouse = '".$id."'");
 	if( dbNumRows($qs) == 1 )
 	{
 		list( $sc ) = dbFetchArray($qs);
@@ -113,7 +113,7 @@ function getWarehouseCode($id)
 function isAllowUnderZero($id)
 {
 	$sc = FALSE;
-	$qs = dbQuery("SELECT allow_under_zero FROM tbl_warehouse WHERE allow_under_zero = 1 AND id_warehouse = ".$id);
+	$qs = dbQuery("SELECT allow_under_zero FROM tbl_warehouse WHERE allow_under_zero = 1 AND id_warehouse = '".$id."'");
 	if( dbNumRows($qs) == 1 )
 	{
 		$sc = TRUE;	
@@ -124,7 +124,7 @@ function isAllowUnderZero($id)
 function isAllowPrepare($id)
 {
 	$sc = FALSE;
-	$qs = dbQuery("SELECT prepare FROM tbl_warehouse WHERE id_warehouse = ".$id." AND prepare = 1 ");
+	$qs = dbQuery("SELECT prepare FROM tbl_warehouse WHERE id_warehouse = '".$id."' AND prepare = 1 ");
 	if( dbNumRows($qs) == 1 )
 	{
 		$sc = TRUE;	
@@ -135,7 +135,7 @@ function isAllowPrepare($id)
 function isAllowSell($id)
 {
 	$sc = FALSE;
-	$qs = dbQuery("SELECT sell FROM tbl_warehouse WHERE id_warehouse = ".$id." AND sell = 1");
+	$qs = dbQuery("SELECT sell FROM tbl_warehouse WHERE id_warehouse = '".$id."' AND sell = 1");
 	if( dbNumRows($qs) == 1 )
 	{
 		$sc = TRUE; 
@@ -146,7 +146,7 @@ function isAllowSell($id)
 function isWarehouseActive($id)
 {
 	$sc = FALSE;
-	$qs = dbQuery("SELECT active FROM tbl_warehouse WHERE id_warehouse = ".$id." AND active = 1");
+	$qs = dbQuery("SELECT active FROM tbl_warehouse WHERE id_warehouse = '".$id."' AND active = 1");
 	if( dbNumRows($qs) == 1 )
 	{
 		$sc = TRUE;

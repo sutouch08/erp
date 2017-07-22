@@ -1,23 +1,28 @@
 <?php
 class unit {
-	public $code 		= '';
-	public $name		= '';
-	public $date_upd	= '';
+	public $id;
+	public $code;
+	public $name;
 	
-	public function __construct($code = "")
+	public function __construct($id = "")
 	{
-		if( $code != "" )
+		if( $id != "" )
 		{
-			$qs = dbQuery("SELECT * FROM tbl_unit WHERE code = '".$code."'");
+			$qs = dbQuery("SELECT * FROM tbl_unit WHERE id = '".$id."'");
 			if( dbNumRows($qs) == 1 )
 			{
 				$rs = dbFetchObject($qs);
+				$ths->id		= $rs->id;
 				$this->code = $rs->code;
 				$this->name = $rs->name;
-				$this->date_upd = $rs->date_upd;
 			}
 		}
 	}
+	
+	
+	
+	
+	
 	
 	public function add(array $ds)
 	{
@@ -38,7 +43,14 @@ class unit {
 		return $sc;
 	}
 	
-	public function update($code, array $ds)
+	
+	
+	
+	
+	
+	
+	
+	public function update($id, array $ds)
 	{
 		$sc = FALSE;
 		if( count($ds) > 0 )
@@ -50,18 +62,46 @@ class unit {
 				$set .= $i == 1 ? $field . " = '".$value."'" : ", ".$field . " = '".$value."'";
 				$i++;	
 			}
-			$sc = dbQuery("UPDATE tbl_unit SET ".$set." WHERE code = '".$code."'");
+			$sc = dbQuery("UPDATE tbl_unit SET ".$set." WHERE id = '".$id."'");
 		}
 		return $sc;	
 	}
 	
-	public function isExists($code)
+	
+	
+	
+	
+	
+	public function delete($id)
+	{
+		return dbQuery("DELETE FROM tbl_unit WHERE id = '".$id."'");	
+	}
+	
+	
+	
+	
+	
+	public function isExists($id)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT code FROM tbl_unit WHERE code = '". $code. "'");
+		$qs = dbQuery("SELECT code FROM tbl_unit WHERE id = '". $id. "'");
 		if( dbNumRows($qs) > 0 )
 		{
 			$sc = TRUE;
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	public function getName($code)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT name FROM tbl_unit WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc 	) = dbFetchArray($qs);
 		}
 		return $sc;
 	}

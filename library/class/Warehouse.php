@@ -12,9 +12,9 @@
 		
 		public function __construct($id='')
 		{
-			if( is_numeric($id) )
+			if( $id != '' )
 			{
-				$qs = dbQuery("SELECT * FROM tbl_warehouse WHERE id_warehouse = ".$id);
+				$qs = dbQuery("SELECT * FROM tbl_warehouse WHERE id_warehouse = '".$id)."'";
 				if( dbNumRows($qs) == 1 )
 				{
 					$rs = dbFetchObject($qs);
@@ -67,7 +67,7 @@
 				if( $i < $n ){ $set .= ", "; }
 				$i++;
 			}
-			return dbQuery("UPDATE tbl_warehouse SET ".$set." WHERE id_warehouse = ".$id);
+			return dbQuery("UPDATE tbl_warehouse SET ".$set." WHERE id_warehouse = '".$id."'");
 		}		
 		
 		public function deleteWarehouse($id)
@@ -86,7 +86,7 @@
 		public function isWarehouseEmpty($id)
 		{
 			$sc = TRUE;
-			$qs = dbQuery("SELECT id_zone FROM tbl_zone WHERE id_warehouse = ".$id);
+			$qs = dbQuery("SELECT id_zone FROM tbl_zone WHERE id_warehouse = '".$id."'");
 			if( dbNumRows($qs) > 0 )
 			{
 				$sc = FALSE;
@@ -97,13 +97,13 @@
 		
 		private function actionDelete($id)
 		{
-			return dbQuery("DELETE FROM tbl_warehouse WHERE id_warehouse = ".$id);	
+			return dbQuery("DELETE FROM tbl_warehouse WHERE id_warehouse = '".$id."'");	
 		}
 		
-		public function isExists($code)
+		public function isExists($id)
 		{
 			$sc = FALSE;
-			$qs = dbQuery("SELECT id_warehouse FROM tbl_warehouse	WHERE code = '".$code."'");
+			$qs = dbQuery("SELECT code FROM tbl_warehouse WHERE id_warehouse = '".$id."'");
 			if( dbNumRows($qs) > 0 )
 			{
 				$sc = TRUE;

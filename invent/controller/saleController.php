@@ -2,92 +2,124 @@
 require "../../library/config.php";
 require "../function/tools.php";
 
-if( isset($_GET['delete_event_sale']) && isset( $_GET['id_event_sale']) )
+//------------------------- Add Login
+if( isset( $_GET['addUser'] ) )
 {
-	$qs = dbQuery("DELETE FROM tbl_event_sale WHERE id_event_sale = ".$_GET['id_event_sale']);
-	if($qs)
+	$sc 	= "success";
+	$id 	= $_POST['id'];	
+	$userName	= trim( $_POST['userName'] );
+	$password	= md5( trim( $_POST['password'] ) );
+	$active 	= $_POST['active'];
+	$arr = array("user_name" => $userName, "password" => $password, "active" => $active);
+	$sale = new sale();
+	$rs 	= $sale->update($id, $arr);
+	if( $rs === FALSE )
 	{
-		echo "success";
-	}else{
-		echo "fail";
+		$sc = "fail";
 	}
+	echo $sc;	
 }
 
-if( isset($_GET['update_event_sale']) && isset($_POST['id_event_sale']) )
+
+
+
+//------------------------- Update login
+if( isset( $_GET['updateUser'] ) )
 {
-	$qs = dbQuery("UPDATE tbl_event_sale SET id_employee = ".$_POST['id_employee'].", id_zone = ".$_POST['id_zone'].", active = ".$_POST['active']." WHERE id_event_sale = ".$_POST['id_event_sale']);
-	if($qs)
+	$sc 	= "success";
+	$id 	= $_POST['id'];	
+	$userName	= trim( $_POST['userName'] );
+	$password	= "";
+	$active 	= $_POST['active'];
+	if( $userName != "" )
 	{
-		echo "success";
-	}else{
-		echo "fail";
+		$arr = array("user_name" => $userName, "active" => $active);
 	}
+	else
+	{
+		$arr = array("user_name" => $userName, "password" => $password, "active" => $active);
+	}
+	$sale = new sale();
+	$rs 	= $sale->update($id, $arr);
+	if( $rs === FALSE )
+	{
+		$sc = "fail";
+	}
+	echo $sc;	
 }
 
-if( isset( $_GET['add_event_sale'] ) && isset($_POST['id_employee']) )
+
+
+
+//---------------------------- Delete Sale
+if( isset( $_GET['deleteSale'] ) )
 {
-	$qs = dbQuery("INSERT INTO tbl_event_sale (id_employee, id_zone, active) VALUES (".$_POST['id_employee'].", ".$_POST['id_zone'].", ".$_POST['active'].")");
-	if($qs)
+	$sc = "success";
+	$id = $_POST['id'];
+	$emp	= getCookie('user_id');
+	$sale = new sale();
+	$rs = $sale->delete($id, $emp);
+	if( $rs === FALSE )
 	{
-		echo "success";
-	}else{
-		echo "fail";
+		$sc = "fail";
 	}
+	echo $sc;
 }
 
-if(isset($_GET['check_event_sale']) && isset($_POST['id_employee']))
+
+
+
+//----------------------------- Undelete sale
+if( isset( $_GET['unDeleteSale'] ) )
 {
-	if(isset($_POST['id_event_sale']))
+	$sc = "success";
+	$id  = $_POST['id'];
+	$sale = new sale();
+	$emp	= getCookie("user_id");
+	$rs = $sale->unDelete($id, $emp);
+	if( $rs === FALSE )
 	{
-		$qs = dbQuery("SELECT id_event_sale FROM tbl_event_sale	WHERE id_zone = ".$_POST['id_zone']." AND id_event_sale != ".$_POST['id_event_sale']);
-	}else{
-		$qs = dbQuery("SELECT id_event_sale FROM tbl_event_sale	WHERE id_zone = ".$_POST['id_zone']);
+		$sc = "fail";
 	}
-	if(dbNumRows($qs) > 0 )
+	echo $sc;
+}
+
+
+
+if( isset( $_GET['checkUserName'] ) )
+{
+	$sc = "duplicate";
+	$id = $_POST['id'];
+	$userName = $_POST['userName'];
+	$sale = new sale();
+	if( $sale->validUserName($id, $userName) === TRUE )
 	{
-		echo 1;
-	}else{
-		echo 0;
+		$sc = "ok";
 	}
+	echo $sc;
 }
 
-if(isset($_GET['add'])&&isset($_POST['id_employee'])){
-	$id_employee = $_POST['id_employee'];
-	$id_group = $_POST['id_group'];
-	$row = dbNumRows("SELECT id_employee FROM tbl_sale WHERE id_employee = $id_employee");
-	if($row>0){
-		$message = "พนักงานคนนี้เป็นพนักงานขายอยู่แล้ว";
-		header("location: ../index.php?content=sale&error=$message");
-	}else{
-	if(dbQuery("INSERT INTO tbl_sale(id_employee, id_group) VALUES ( $id_employee, $id_group)")){
-		$message = "เพิ่มพนักงานขายเรียบร้อยแล้ว";
-		header("location: ../index.php?content=sale&message=$message");
-		}
+if( isset( $_GET['deleteSaleGroup'] ) )
+{
+	$sc = 'fail';
+	$code = $_POST['code'];
+	$qs = dbQuery("DELETE FROM tbl_sale_group WHERE code = '".$code."'");
+	if( $qs === TRUE )
+	{
+		$sc = 'success';	
 	}
+	echo $sc;
 }
 
-if(isset($_GET['edit'])&&isset($_POST['id_sale'])){
-	$id_sale = $_POST['id_sale'];
-	$id_group = $_POST['id_group'];
-	$sql = dbQuery("UPDATE tbl_sale SET id_group = $id_group WHERE id_sale = $id_sale");
-	if(!$sql){
-		$message= "แก้ไขข้อมูลไม่สำเร็จ";
-		header("location: ../index.php?content=sale&error=$message");
-	}else if($sql){
-		$message = "ปรับปรุงข้อมูลพนักงานขายเรียบร้อยแล้ว";
-		header("location: ../index.php?content=sale&message=$message");
-	}
+
+if( isset( $_GET['clearFilter'] ) )
+{
+	deleteCookie('sCode');
+	deleteCookie('sName');
+	deleteCookie('stCode');
+	deleteCookie('stName');
+	echo 'success';	
 }
 
-if(isset($_GET['delete'])&&isset($_GET['id_sale'])){
-	$id_sale = $_GET['id_sale'];
-	if(dbQuery("DELETE FROM tbl_sale WHERE id_sale = $id_sale")){
-		$message = "ลบพนักงานขายเรียบร้อยแล้ว";
-		header("location: ../index.php?content=sale&message=$message");
-	}else{
-		$message= "ลบพนักงานขายไม่สำเร็จ";
-		header("location: ../index.php?content=sale&error=$message");
-	}
-}
 	
 ?>

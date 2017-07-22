@@ -242,6 +242,7 @@
                         <li><a href="index.php?content=product"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข สินค้า</a></li>
                         <li><a href="index.php?content=category"><i class="fa fa-bookmark"></i>&nbsp; เพิ่ม/แก้ไข หมวดหมู่</a></li>
                         <li><a href="index.php?content=product_group"><i class="fa fa-archive"></i>&nbsp; เพิ่ม/แก้ไข กลุ่มสินค้า</a></li>
+                        <li><a href="index.php?content=unit"><i class="fa fa-cube"></i>&nbsp; เพิ่ม/แก้ไข หน่วยนับ</a></li>
                         <li><a href="index.php?content=color"><i class="fa fa-tint"></i>&nbsp; เพิ่ม/แก้ไข สี</a></li>
                         <li><a href="index.php?content=size"><i class="fa fa-tag"></i>&nbsp; เพิ่ม/แก้ไข ไซด์</a></li>
                         <li><a href="index.php?content=attribute"><i class="fa fa-leaf"></i>&nbsp; เพิ่ม/แก้ไข คุณลักษณะ</a></li>
@@ -271,12 +272,21 @@
                     <li class="dropdown-submenu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users"></i>&nbsp; พนักงาน</a>
                       <ul class="dropdown-menu">
                         <li><a href="index.php?content=Employee"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข พนักงาน</a></li>
+                        <li><a href="index.php?content=sale_group"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข ทีมขาย</a></li>
                         <li><a href="index.php?content=sale"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข พนักงานขาย</a></li>
                         <li><a href="index.php?content=support"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข  รายชื่ออภินันทนาการ</a></li>
                       </ul>
                     </li>
+                    
                     <li class="divider"></li>
-                    <li><a href="index.php?content=supplier"><i class='fa fa-users'></i>&nbsp; เพิ่ม/แก้ไข รายชื่อผู้ขาย</a></li>
+                    	
+                    <li class="dropdown-submenu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users"></i>&nbsp; ผู้จำหน่าย</a>
+                    	<ul class="dropdown-menu">
+                        	<li><a href="index.php?content=supplier"><i class='fa fa-user'></i>&nbsp; เพิ่ม/แก้ไข ผู้จำหน่าย</a></li>
+                            <li><a href="index.php?content=supplier_group"><i class='fa fa-users'></i>&nbsp; เพิ่ม/แก้ไข กลุ่มผู้จำหน่าย</a></li>
+                        </ul>
+                    </li>
+                    
                     <li class="divider"></li>
                     <li><a href="index.php?content=sender"><i class="fa fa-truck"></i>&nbsp; เพิ่ม/แก้ไข รายชื่อผู้จัดส่ง</a></li>
                     <li><a href="index.php?content=transport"><i class="fa fa-truck"></i>&nbsp; เชื่อมโยงการจัดส่งของลูกค้า</a></li>

@@ -25,13 +25,15 @@
 			{
 				if( $i != 1 ) //---- Skip first row
 				{
-					$code = trim( $rs['A'] );
-					$name = trim( $rs['B'] );
-					$active = trim($rs['E'] );
-					if( $warehouse->isExists($code) === FALSE )
+					$id			= trim( $rs['A'] );
+					$code 	= trim( $rs['B'] );
+					$name 	= trim( $rs['C'] );
+					$active 	= trim($rs['F'] );
+					if( $warehouse->isExists($id) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
+								'id_warehouse'			=> $id,
 								'code'		=> $code,
 								'warehouse_name'		=> $name,
 								'active'	=> $active == '' ? 1 : 0
@@ -42,10 +44,11 @@
 					{
 						//--- If exists do update
 						$arr = array(
+								'code'		=> $code,
 								'warehouse_name' 	=> $rs['C'],
 								'active'		=> $active == '' ? 1 : 0
 								);
-						$warehouse->update( $code, $arr);
+						$warehouse->update( $id, $arr);
 					}	/// end if
 				}//-- end if not first row
 				$i++;	

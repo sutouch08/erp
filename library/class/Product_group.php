@@ -21,18 +21,14 @@ class product_group {
 				$values  .= $i == 1 ? "'".$value."'" : ", '".$value."'";	
 				$i++;
 			}
-			$qs = dbQuery("INSERT INTO tbl_product_group (".$fields.") VALUES (".$values.")");
-			if( $qs )
-			{
-				$sc = dbInsertId();	
-			}
+			$sc = dbQuery("INSERT INTO tbl_product_group (".$fields.") VALUES (".$values.")");
 		}
 		
 		return $sc;			
 	}
 	
 	
-	public function update( $code, array $ds)
+	public function update( $id, array $ds)
 	{
 		$sc 	= FALSE;
 		$set 	= '';
@@ -45,17 +41,16 @@ class product_group {
 				$set .= $i == 1 ? $field." = '".$value."'" : ", ".$field." = '".$value."'";
 				$i++;	
 			}
-			$sc = dbQuery("UPDATE tbl_product_group SET ". $set ." WHERE code = '".$code."'");
+			$sc = dbQuery("UPDATE tbl_product_group SET ". $set ." WHERE id = '".$id."'");
 		}
-		
 		return $sc;
 	}
 	
 	
-	public function isExists($code)
+	public function isExists($id)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT code FROM tbl_product_group WHERE code = '".$code."'");
+		$qs = dbQuery("SELECT code FROM tbl_product_group WHERE id = '".$id."'");
 		if( dbNumRows($qs) > 0 )
 		{
 			$sc = TRUE;	

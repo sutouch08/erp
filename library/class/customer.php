@@ -31,7 +31,7 @@ class customer {
 	{
 		if( $id != '' )
 		{
-			$qs = dbQuery("SELECT * FROM tbl_customers WHERE id = ".$id);
+			$qs = dbQuery("SELECT * FROM tbl_customers WHERE id = '".$id."'");
 			if( dbNumRows($qs) == 1 )
 			{
 				$rs = dbFetchObject($qs);
@@ -80,13 +80,13 @@ class customer {
 				$values	.= $i == 1 ? "'". $value ."'" : ", '". $value ."'";
 				$i++;	
 			}
-			$sc = dbQuery("INSERT INTO tbl_customers (".$fields.") VALUES (".$values.")");
+			$sc = dbQuery("INSERT INTO tbl_customer (".$fields.") VALUES (".$values.")");
 		}
 		return $sc;			
 	}
 	
 	
-	public function update($cid, array $ds)
+	public function update($id, array $ds)
 	{
 		$sc = FALSE;
 		if( count( $ds ) > 0 )
@@ -98,21 +98,36 @@ class customer {
 				$set .= $i == 1 ? $field . " = '" . $value . "'" : ", ".$field . " = '" . $value . "'";
 				$i++;	
 			}
-			$sc = dbQuery("UPDATE tbl_customers SET " . $set . " WHERE cid = ".$cid);
+			$sc = dbQuery("UPDATE tbl_customer SET " . $set . " WHERE id = '".$id."'");
 		}
 		return $sc;
 	}
 	
-	public function isExists($cid)
+	public function isExists($id)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT id FROM tbl_customers WHERE cid = '".$cid."'");
+		$qs = dbQuery("SELECT id FROM tbl_customer WHERE id = '".$id."'");
 		if( dbNumRows($qs) > 0 )
 		{
 			$sc = TRUE;	
 		}
 		return $sc;
 	}
+	
+	
+	
+	public function getCustomerCode($id)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT code FROM tbl_customer WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
 	
 	public function getCustomerId($code)
 	{

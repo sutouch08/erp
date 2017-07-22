@@ -551,6 +551,10 @@ switch($page){
 			$content = 'product_group.php';
 			$pageTitle = 'เพิ่ม/แก้ไข กลุ่มสินค้า';
 			break;
+		case "unit" : 
+			$content = 'unit.php';
+			$pageTitle = 'หน่วยนับ';
+			break;
 		case 'color':
 			$content = 'color.php';
 			$pageTitle = 'รายการสี';
@@ -622,6 +626,10 @@ switch($page){
 			$content = "employee.php";
 			$pageTitle = "พนักงาน";
 			break;
+		case "sale_group" : 
+			$content = "sale_group.php";
+			$pageTitle = "ทีมขาย";
+			break;	
 		case "sale";
 			$content = "sale.php";
 			$pageTitle = "พนักงานขาย";
@@ -634,12 +642,18 @@ switch($page){
 			$content = "support.php";
 			$pageTitle = "รายการอภนันทนาการ";
 			break;
-	
-	//*****  อื่นๆ  *****//
+		//******** ผู้จำหน่าย  *******//
 		case 'supplier' :
 			$content 		= "supplier.php";
-			$pageTitle	= "ผู้ขาย";
-		break;	
+			$pageTitle	= "ผู้จำหน่าย";
+		break;
+		case 'supplier_group' : 
+			$content 		= 'supplier_group.php';
+			$pageTitle	= 'กลุ่มผู้จำหน่าย';
+			break;
+	
+	//*****  อื่นๆ  *****//
+			
 		case "sender" :
 			$content = "sender.php";
 			$pageTitle = "ผู้ให้บริการจัดส่ง";

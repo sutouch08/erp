@@ -89,10 +89,10 @@
                     	<td class="middle text-center"><?php echo $no; ?></td>
                         <td class="middle"><?php echo $rs->code; ?></td>
                         <td class="middle"><?php echo $rs->name; ?></td>
-                        <td class="middle text-center"><?php echo number_format( $cg->countMember($rs->id) ); ?></td>
+                        <td class="middle text-center"><?php echo number_format( $cg->countMember($rs->code) ); ?></td>
                         <td class="middle text-right">
                         <?php if( $delete ) : ?>
-                        	<button type="button" class="btn btn-sm btn-danger" onClick="deleteGroup(<?php echo $rs->id; ?>, '<?php echo $rs->name; ?>')"><i class="fa fa-trash"></i></button>
+                        	<button type="button" class="btn btn-sm btn-danger" onClick="deleteGroup('<?php echo $rs->id; ?>', '<?php echo $rs->name; ?>')"><i class="fa fa-trash"></i></button>
                         <?php endif; ?>
                         </td>
                     </tr>
@@ -100,7 +100,7 @@
 <?php		endwhile; ?>
 <?php	else : ?>
 				<tr>
-                	<td colspan="6" align="center"><h4>ไม่พบรายการ</h4></td>
+                	<td colspan="5" align="center"><h4>ไม่พบรายการ</h4></td>
 				</tr>
 <?php	endif; ?>          
                 </tbody>                

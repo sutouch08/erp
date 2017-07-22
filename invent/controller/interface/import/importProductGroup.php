@@ -26,14 +26,15 @@
 			{
 				if( $i > 1 )  //--- Skip first row
 				{
-					$code = trim( $rs['A'] );
+					$id = trim( $rs['A'] );
 					
-					if( $pg->isExists($code) === FALSE )
+					if( $pg->isExists($id) === FALSE )
 					{
 						//---- If not exists do insert
 						$ds = array(
-									"code"	=> $code,
-									"name"	=> $rs['B']									
+									"id"			=> $id,
+									"code"	=> $rs['B'],
+									"name"	=> $rs['C']
 									);
 						$pg->add($ds);
 					}
@@ -41,9 +42,10 @@
 					{
 						//--- if exists do update
 						$ds = array( 
-									"name"	=> $rs['B']									
+									"code"	=> $rs['B'],
+									"name"	=> $rs['C']									
 									);
-						$pg->update($code, $ds);
+						$pg->update($id, $ds);
 						
 					}//-- end if;
 				}//--- end if;

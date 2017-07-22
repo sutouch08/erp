@@ -1,8 +1,8 @@
 <?php
 
 	$result 	= 'success';
-	$path		= getConfig('IMPORT_CUSTOMER_AREA_PATH');
-	$move		= getConfig('MOVE_CUSTOMER_AREA_PATH');
+	$path		= getConfig('IMPORT_SUPPLIER_GROUP_PATH');
+	$move		= getConfig('MOVE_SUPPLIER_GROUP_PATH');
 	
 	$sc	= opendir($path);
 	if( $sc !== FALSE )
@@ -19,32 +19,32 @@
 			$excel		= $reader->load($fileName);
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
 			
-			$area	= new customer_area();
+			$sp	= new supplier_group();
+			
 			$i 	= 1;
 			foreach ( $collection as $rs )
 			{
 				if( $i != 1 ) //---- Skip first row
 				{
-					$id = trim( $rs['A'] );
-					$code = trim( $rs['B'] );
-					if( $area->isExists( $id ) === FALSE )
+					$id 	= trim( $rs['A'] );
+					if( $sp->isExists( $id ) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
-								'id'			=> $id,
-								'code'		=> $code,
-								'name'		=> trim( $rs['C'] )
+								'id'					=> $id,
+								'code'				=> trim( $rs['B'] ),
+								'name'				=> trim( $rs['C'] )				
 								);
-						$area->add($arr);	
+						$sp->add($arr);	
 					}
 					else
 					{
 						//--- If exists do update
 						$arr = array(
-								'code'		=> $code,
-								'name' 	=> trim( $rs['C'] )
+								'code'				=> trim( $rs['B'] ),
+								'name'				=> trim( $rs['C'] )					
 								);
-						$area->update( $id, $arr);
+						$sp->update( $id, $arr);
 					}	/// end if
 				}//-- end if not first row
 				$i++;	

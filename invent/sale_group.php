@@ -1,5 +1,5 @@
 <?php
-	$id_tab 		= 67;
+	$id_tab 		= 68;
 	$id_profile 	= $_COOKIE['profile_id'];
     $pm 			= checkAccess($id_profile, $id_tab);
 	$view 		= $pm['view'];
@@ -13,24 +13,24 @@
         </div>
         <div class="col-sm-6">
         	<p class="pull-right top-p">
-            	<button class="btn btn-sm btn-success" onClick="syncCustomerArea()"><i class="fa fa-refresh"></i> อัพเดตข้อมูล</button>
+            	<button class="btn btn-sm btn-success" onClick="syncMaster()"><i class="fa fa-refresh"></i> อัพเดตข้อมูล</button>
             </p>
         </div>
     </div>
     <hr/>
-<?php	$caCode 	= isset( $_POST['caCode'] ) ? trim( $_POST['caCode'] ) : ( getCookie('caCode') ? trim( getCookie('caCode') ) : '' ); 		?>
-<?php	$caName		= isset( $_POST['caName'] ) ? trim( $_POST['caName'] ) : ( getCookie('caName') ? trim( getCookie('caName') ) : '' ); 	?>    
+<?php	$stCode 	= isset( $_POST['stCode'] ) ? trim( $_POST['stCode'] ) : ( getCookie('stCode') ? trim( getCookie('stCode') ) : '' ); 		?>
+<?php	$stName		= isset( $_POST['stName'] ) ? trim( $_POST['stName'] ) : ( getCookie('stName') ? trim( getCookie('stName') ) : '' ); 	?>    
     
     
     <form id="searchForm" method="post">
     <div class="row">
     	<div class="col-sm-3">
         	<label>รหัสกลุ่ม</label>
-            <input type="text" class="form-control input-sm text-center search-box" name="caCode" id="caCode" placeholder="ค้นหารหัสกลุ่ม" value="<?php echo $caCode; ?>"  />
+            <input type="text" class="form-control input-sm text-center search-box" name="stCode" id="stCode" placeholder="ค้นหารหัสทีมขาย" value="<?php echo $stCode; ?>"  />
         </div>
         <div class="col-sm-3">
         	<label>ชื่อกลุ่ม</label>
-            <input type="text" class="form-control input-sm text-center search-box" name="caName" id="caName" placeholder="ค้นหารชื่อกลุ่ม" value="<?php echo $caName; ?>" autofocus />
+            <input type="text" class="form-control input-sm text-center search-box" name="stName" id="stName" placeholder="ค้นหารชื่อทีมขาย" value="<?php echo $stName; ?>" autofocus />
         </div>
         <div class="col-sm-2">
         	<label class="display-block not-show">Apply</label>
@@ -46,26 +46,25 @@
     <hr class="margin-top-15" />
     
 <?php 
-	$where	= "WHERE id != '' ";
-	if( $caCode != '' )
+	$where	= "WHERE id != 0 ";
+	if( $stCode != '' )
 	{
-		createCookie('caCode', $caCode);
-		$where .= "AND code LIKE '%". $caCode ."%' ";
+		createCookie('stCode', $stCode);
+		$where .= "AND code LIKE '%". $stCode ."%' ";
 	}
 	
-	if( $caName != '' )
+	if( $stName != '' )
 	{
-		createCookie('caName', $caName);
-		$where .= "AND name LIKE '%". $caName ."%' ";
+		createCookie('stName', $stName);
+		$where .= "AND name LIKE '%". $stName ."%' ";
 	}
-	$where .= "ORDER BY code ASC";
 	
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
-	$paginator->Per_Page('tbl_customer_area', $where, $get_rows);
-	$paginator->display($get_rows, 'index.php?content=area');
+	$paginator->Per_Page('tbl_sale_group', $where, $get_rows);
+	$paginator->display($get_rows, 'index.php?content=group');
 	
-	$qs = dbQuery("SELECT * FROM tbl_customer_area ".$where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
+	$qs = dbQuery("SELECT * FROM tbl_sale_group ".$where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 ?>    
 	<div class="row">
     	<div class="col-sm-12">
@@ -73,8 +72,8 @@
             	<thead>
                 	<tr>
                     	<th class="width-10 text-center">ลำดับ</th>
-                        <th class="width-20">รหัสกลุ่ม</th>
-                        <th class="width-50">ชื่อกลุ่ม</th>
+                        <th class="width-20">รหัสทีมขาย</th>
+                        <th class="width-50">ชื่อทีมขาย</th>
                         <th class="width-10 text-center">สมาชิก</th>
                         <th class="width-10"></th>
                     </tr>
@@ -82,16 +81,16 @@
                 <tbody>
 <?php	if( dbNumRows($qs) > 0 ) : ?>
 <?php		$no = row_no(); ?>
-<?php		$ca = new customer_area(); ?>
+<?php		$st = new sale_team(); ?>
 <?php		while( $rs = dbFetchObject($qs) ) : ?>
-					<tr class="font-size-12" id="row_<?php echo $rs->id; ?>">
+					<tr class="font-size-12" id="row_<?php echo $rs->code; ?>">
                     	<td class="middle text-center"><?php echo $no; ?></td>
                         <td class="middle"><?php echo $rs->code; ?></td>
                         <td class="middle"><?php echo $rs->name; ?></td>
-                        <td class="middle text-center"><?php echo number_format( $ca->countMember($rs->code) ); ?></td>
+                        <td class="middle text-center"><?php echo number_format( $st->countMember($rs->code) ); ?></td>
                         <td class="middle text-right">
                         <?php if( $delete ) : ?>
-                        	<button type="button" class="btn btn-sm btn-danger" onClick="deleteArea('<?php echo $rs->id; ?>', '<?php echo $rs->name; ?>')"><i class="fa fa-trash"></i></button>
+                        	<button type="button" class="btn btn-sm btn-danger" onClick="deleteGroup('<?php echo $rs->code; ?>', '<?php echo $rs->name; ?>')"><i class="fa fa-trash"></i></button>
                         <?php endif; ?>
                         </td>
                     </tr>
@@ -99,7 +98,7 @@
 <?php		endwhile; ?>
 <?php	else : ?>
 				<tr>
-                	<td colspan="5" align="center"><h4>ไม่พบรายการ</h4></td>
+                	<td colspan="6" align="center"><h4>ไม่พบรายการ</h4></td>
 				</tr>
 <?php	endif; ?>          
                 </tbody>                
@@ -108,4 +107,4 @@
     </div>
     
 </div><!--/ Container -->
-<script src="script/customer_area.js"></script>
+<script src="script/sale_group.js"></script>

@@ -173,7 +173,7 @@
 </form>
 <hr class="margin-top-10"/>
 <?php 
-	$where 	= "WHERE id_warehouse != 0 ";
+	$where 	= "WHERE id_warehouse != '' ";
 	if( $whCode != '' )
 	{	
 		createCookie('whCode', $whCode);
@@ -233,10 +233,10 @@
                     <td class="text-center middle"><?php echo isActived($rs->active); ?></td>
                     <td align="right" class="middle">
                     <?php if( $edit ) : ?>	
-                        <button type="button" class="btn btn-sm btn-warning" onclick="edit(<?php echo $rs->id_warehouse; ?>)"><i class="fa fa-pencil"></i></button>
+                        <button type="button" class="btn btn-sm btn-warning" onclick="edit('<?php echo $rs->id_warehouse; ?>')"><i class="fa fa-pencil"></i></button>
 					<?php endif; ?>
                     <?php if( $delete ) : ?>                       
-                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteWarehouse(<?php echo $rs->id_warehouse; ?>)"><i class="fa fa-trash"></i></button>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteWarehouse('<?php echo $rs->id_warehouse; ?>')"><i class="fa fa-trash"></i></button>
 					<?php endif; ?>                        
                     </td>
                 </tr>  

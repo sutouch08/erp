@@ -4,6 +4,38 @@ require "../../library/functions.php";
 require "../function/tools.php";
 
 
+if( isset( $_GET['deleteGroup'] ) )
+{
+	$sc = "success";
+	$id = $_POST['id'];
+	$sp = new supplier_group();
+	$code = $sp->getGroupCode($id);
+	if( $code !== FALSE )
+	{
+		if( $sp->delete($id) === FALSE )
+		{
+			$sc = "ลบกลุ่มไม่สำเร็จ";	
+		}
+	}
+	else
+	{
+		$sc = "ไม่พบกลุ่มที่ต้องการลบ";	
+	}
+	echo $sc;	
+}
+
+
+
+
+
+if( isset( $_GET['clearFilter'] ) )
+{
+	deleteCookie('spCode');
+	deleteCookie('spName');
+	echo "success";	
+}
+
+
 if( isset( $_GET['add_new'] ) )
 {	
 	$qs = dbQuery("INSERT INTO tbl_supplier (code, name, credit_term, active) VALUES ('".$_POST['code']."', '".$_POST['name']."', ".$_POST['credit_term'].", ".$_POST['status'].")");

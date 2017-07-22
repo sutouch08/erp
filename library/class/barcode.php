@@ -8,10 +8,10 @@ public function add(array $ds)
 	$sc = FALSE;
 	if( count($ds) > 0 )
 	{
-		if( $this->isExists( $ds['barcode'] ) === FALSE )
+		if( $this->isExists( $ds['id'] ) === FALSE )
 		{
-			$qs = "INSERT INTO tbl_barcode (barcode, reference, unit_code, unit_qty) VALUES ";
-			$qs .= "('".$ds['barcode']."', '".$ds['reference']."', '".$ds['unit_code']."', ".$ds['unit_qty'].")";
+			$qs = "INSERT INTO tbl_barcode (id, barcode, reference, unit_code, unit_qty) VALUES ";
+			$qs .= "('".$ds['id']."', '".$ds['barcode']."', '".$ds['reference']."', '".$ds['unit_code']."', ".$ds['unit_qty'].")";
 			$sc = dbQuery($qs);	
 		}
 	}
@@ -19,7 +19,7 @@ public function add(array $ds)
 	return $sc;
 }
 
-public function update($code, array $ds)
+public function update($id, array $ds)
 {
 	$sc = FALSE;
 	if( count( $ds ) > 0 )
@@ -31,23 +31,23 @@ public function update($code, array $ds)
 			$set .= $i== 1 ? $field ." = '".$value."'" : ", ".$field . " = '".$value."'";
 			$i++;	
 		}
-		$sc = dbQuery("UPDATE tbl_barcode SET ".$set." WHERE barcode = '".$code."'");		
+		$sc = dbQuery("UPDATE tbl_barcode SET ".$set." WHERE id = '".$id."'");		
 	}
 	
 	return $sc;
 }
 	
 	
-public function delete($code)
+public function delete($id)
 {
-	return dbQuery("DELETE FROM tbl_barcode WHERE barcode = '" .$code."'");	
+	return dbQuery("DELETE FROM tbl_barcode WHERE id = '" .$id."'");	
 }
 
 
-public function isExists($code)
+public function isExists($id)
 {
 	$sc = FALSE;
-	$qs = dbQuery("SELECT barcode FROM tbl_barcode WHERE barcode = '".$code."'");
+	$qs = dbQuery("SELECT barcode FROM tbl_barcode WHERE id = '".$id."'");
 	if( dbNumRows($qs) > 0 )
 	{
 		$sc = TRUE;

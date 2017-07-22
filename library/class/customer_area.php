@@ -8,7 +8,7 @@ class customer_area
 	{
 		if( $id != '' )
 		{
-			$qs = dbQuery("SELECT * FROM tbl_customer_area WHERE id = ".$id);
+			$qs = dbQuery("SELECT * FROM tbl_customer_area WHERE id = '".$id."'");
 			if( dbNumRows($qs) == 1 )
 			{
 				$rs 				= dbFetchObject($qs);
@@ -24,9 +24,9 @@ class customer_area
 		$sc = FALSE;
 		if( count( $ds ) > 0 )
 		{
-			if( $this->isExists($ds['code']) === FALSE )
+			if( $this->isExists($ds['id']) === FALSE )
 			{
-				$sc = dbQuery("INSERT INTO tbl_customer_area (code, name) VALUES ('".$ds['code']."', '".$ds['name']."')");
+				$sc = dbQuery("INSERT INTO tbl_customer_area (id, code, name) VALUES ('".$ds['id']."', '".$ds['code']."', '".$ds['name']."')");
 			}
 		}
 		
@@ -34,16 +34,16 @@ class customer_area
 	}
 	
 	
-	public function update($code, array $ds)
+	public function update($id, array $ds)
 	{
-		return dbQuery("UPDATE tbl_customer_area SET name = '".$ds['name']."' WHERE code = '".$code."'");	
+		return dbQuery("UPDATE tbl_customer_area SET code = '".$ds['code']."', name = '".$ds['name']."' WHERE id = '".$id."'");	
 	}
 	
 	
-	public function isExists($code)
+	public function isExists($id)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT * FROM tbl_customer_area WHERE code = '".$code."'");
+		$qs = dbQuery("SELECT * FROM tbl_customer_area WHERE id = '".$id."'");
 		if( dbNumRows($qs) > 0 )
 		{
 			$sc = TRUE;
@@ -53,13 +53,13 @@ class customer_area
 	
 	public function delete($id)
 	{
-		return dbQuery("DELETE FROM tbl_customer_area WHERE id = ".$id);
+		return dbQuery("DELETE FROM tbl_customer_area WHERE id = '".$id."'");
 	}
 	
-	public function hasMember($id)
+	public function hasMember($code)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT id_customers FROM tbl_customer WHERE area_id = ".$id);
+		$qs = dbQuery("SELECT id_customer FROM tbl_customer WHERE area_code = '".$code."'");
 		if( dbNumRows($qs) > 0 )
 		{
 			$sc = TRUE;
@@ -67,12 +67,28 @@ class customer_area
 		return $sc;
 	}
 	
-	public function countMember($id)
+	public function countMember($code)
 	{
-		$qs = dbQuery("SELECT COUNT(*) FROM tbl_customers WHERE area_id = ".$id);
+		$qs = dbQuery("SELECT COUNT(*) FROM tbl_customer WHERE area_code = '".$code."'");
 		list( $sc ) = dbFetchArray($qs);
 		return  $sc;			
 	}
+	
+	
+	
+	
+	public function getAreaCode($id)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT code FROM tbl_customer_area WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);	
+		}
+		return $sc;
+	}
+	
+	
 	
 	public function getAreaId($code)
 	{

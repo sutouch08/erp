@@ -36,16 +36,15 @@
 			{
 				if( $i > 1 ) //--- skip first row
 				{
-					$code = trim( $rs['A'] );
-					$date	 = PHPExcel_Shared_Date::ExcelToPHPObject($rs['E']);
+					$id = trim( $rs['A'] );
 					
-					if( $unit->isExists($code) === FALSE )
+					if( $unit->isExists($id) === FALSE )
 					{
 						//---- If not exists do insert
 						$ds = array(
-										"code"	=> $code,
-										"name"	=> $rs['B'],
-										"date_upd"	=> $date->format('Y-m-d')
+										"id"			=> $id,
+										"code"	=> $rs['B'],
+										"name"	=> $rs['C']
 										);
 						$unit->add($ds);	
 					}
@@ -53,10 +52,10 @@
 					{
 						//--- If exists do update
 						$ds = array(
-									"name"	=> $rs['B'],
-									"date_upd"	=> $date->format('Y-m-d')
+									"code"	=> $rs['B'],
+									"name"	=> $rs['C']
 									);
-						$unit->update($code, $ds);
+						$unit->update($id, $ds);
 					}	
 				}
 				

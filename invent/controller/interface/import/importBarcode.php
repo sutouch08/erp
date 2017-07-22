@@ -25,15 +25,17 @@
 			{
 				if( $i != 1 ) //---- Skip first row
 				{
-					$code = trim( $rs['A'] );
-					if( $barcode->isExists($code) === FALSE )
+					$id = trim( $rs['A'] );
+					$code = trim( $rs['B'] );
+					if( $barcode->isExists($id) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
+								'id'				=> $id,
 								'barcode'	=> $code,
-								'reference'	=> trim( $rs['B'] ),
-								'unit_code'	=> $rs['C'],
-								'unit_qty'		=> $rs['D']
+								'reference'	=> trim( $rs['C'] ),
+								'unit_code'	=> $rs['D'],
+								'unit_qty'		=> $rs['E']
 								);
 						$barcode->add($arr);	
 					}
@@ -41,9 +43,10 @@
 					{
 						//--- If exists do update
 						$arr = array(
-								'reference'	=> trim( $rs['B'] ),
-								'unit_code'	=> $rs['C'],
-								'unit_qty'		=> $rs['D']
+								'barcode'	=> $code,
+								'reference'	=> trim( $rs['C'] ),
+								'unit_code'	=> $rs['D'],
+								'unit_qty'		=> $rs['E']
 								);
 						$barcode->update( $code, $arr);
 					}	/// end if

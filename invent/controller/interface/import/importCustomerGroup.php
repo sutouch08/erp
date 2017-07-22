@@ -25,12 +25,15 @@
 			{
 				if( $i != 1 ) //---- Skip first row
 				{
-					if( $group->isExists( trim( $rs['A'] )) === FALSE )
+					$id = trim( $rs['A'] );
+					$code = trim( $rs['B'] );
+					if( $group->isExists( $id ) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
-								'code'		=> trim( $rs['A'] ),
-								'name'		=> trim( $rs['B'] )
+								'id'			=> $id,
+								'code'		=> $code,
+								'name'		=> trim( $rs['C'] )
 								);
 						$group->add($arr);	
 					}
@@ -38,9 +41,10 @@
 					{
 						//--- If exists do update
 						$arr = array(
-								'name' 	=> trim( $rs['B'] )
+								'code'		=> $code,
+								'name' 	=> $rs['C']
 								);
-						$group->update( trim( $rs['A'] ), $arr);
+						$group->update( $id, $arr);
 					}	/// end if
 				}//-- end if not first row
 				$i++;	

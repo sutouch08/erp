@@ -96,12 +96,12 @@
 	<?php if( dbNumRows($qs) > 0 ) : ?>
     <?php	$no = row_no(); ?>
     <?php 	while( $rs = dbFetchObject($qs) ) : ?>
-    <?php		$unit = new unit($rs->unit_code); ?>
+    <?php		$unit = new unit(); ?>
     			<tr style="font-size:14px;" id="row_<?php echo $rs->barcode; ?>">
                 	<td align="center"><?php echo $no; ?></td>
                     <td><?php echo $rs->barcode; ?></td>
                     <td><?php echo $rs->reference; ?></td>
-                    <td align="center"><?php echo $unit->name; ?></td>
+                    <td align="center"><?php echo $unit->getName($rs->unit_code); ?></td>
                     <td align="center"><?php echo number_format($rs->unit_qty, 2); ?></td>
                     <td align="right">
                     <?php if( $delete ) : ?>
