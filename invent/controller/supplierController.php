@@ -27,11 +27,43 @@ if( isset( $_GET['deleteGroup'] ) )
 
 
 
+if( isset( $_GET['deleteSupplier'] ) )
+{
+	$sc = 'success';
+	$id = $_POST['id'];
+	$emp	= getCookie('user_id');
+	$sp = new supplier();
+	$rs = $sp->delete($id, $emp);
+	if( $rs === FALSE )
+	{
+		$sc = 'ลบผู้ขายไม่สำเร็จ';
+	}
+	echo $sc;
+}
+
+
+
+if( isset( $_GET['unDelete'] ) )
+{
+	$sc = "success";
+	$id = $_POST['id'];
+	$emp = getCookie('user_id');
+	$sp = new supplier();
+	if( $sp->unDelete($id, $emp) === FALSE )
+	{
+		$sc = "ยกเลิกการลบไม่สำเร็จ";
+	}
+	echo $sc;
+}
+
+
+
 
 if( isset( $_GET['clearFilter'] ) )
 {
 	deleteCookie('spCode');
 	deleteCookie('spName');
+	deleteCookie('spGroup');
 	echo "success";	
 }
 

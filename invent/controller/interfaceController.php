@@ -73,4 +73,11 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['supplierGroup'] ) )
 	include "interface/import/importSupplierGroup.php";	
 }
 
+
+//------------------  Supplier  -----------------------//
+if( isset( $_GET['syncMaster'] ) && isset( $_GET['supplier'] ) )
+{
+	include "interface/import/importSupplier.php";	
+}
+
 ?>
