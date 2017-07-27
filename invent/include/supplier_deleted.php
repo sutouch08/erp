@@ -23,10 +23,10 @@
 	
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
-	$paginator->Per_Page("tbl_supplier LEFT JOIN tbl_supplier_group ON tbl_supplier.group_code = tbl_supplier_group.code", $where, $get_rows);
+	$paginator->Per_Page("tbl_supplier LEFT JOIN tbl_supplier_group ON tbl_supplier.id_group = tbl_supplier_group.id", $where, $get_rows);
 	$paginator->display($get_rows, 'index.php?content=supplier');
 	
-	$qr = "SELECT tbl_supplier.*, tbl_supplier_group.name AS group_name FROM tbl_supplier LEFT JOIN tbl_supplier_group ON tbl_supplier.group_code = tbl_supplier_group.code ";
+	$qr = "SELECT tbl_supplier.*, tbl_supplier_group.name AS group_name FROM tbl_supplier LEFT JOIN tbl_supplier_group ON tbl_supplier.id_group = tbl_supplier_group.id ";
 	//echo $qr . $where;
 	$qs = dbQuery( $qr . $where . " LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 ?>
@@ -39,9 +39,9 @@
                     	<th class="width-5 text-center">ลำดับ</th>
                         <th class="width-10">รหัส</th>
                         <th class="width-35">ชื่อผู้จำหน่าย</th>
-                        <th class="width-20">ชื่อกลุ่ม</th>
-                        <th class="width-10 text-center">วงเงิน</th>
-                        <th class="width-10 text-center">เครดิต</th>
+                        <th class="width-20">กลุ่ม</th>
+                        <th class="width-10 text-center">ผู้ลบ</th>
+                        <th class="width-10 text-center">วันที่ลบ</th>
                         <th ></th>
                     </tr>
                 </thead>
@@ -54,8 +54,8 @@
                         <td class="middle"><?php echo $rs->code; ?></td>
                         <td class="middle"><?php echo $rs->name; ?></td>
                         <td class="middle"><?php echo $rs->group_name; ?></td>
-                        <td class="middle text-center"><?php echo number_format($rs->credit_amount, 2); ?></td>
-                        <td class="middle text-center"><?php echo $rs->credit_term; ?></td>
+                        <td class="middle text-center"><?php echo employee_name($rs->emp); ?></td>
+                        <td class="middle text-center"><?php echo thaiDate($rs->date_upd, '/'); ?></td>
                         <td class="middle text-right">
                         <?php if( $delete ) : ?>
                         	<button type="button" class="btn btn-sm btn-info" onClick="unDelete('<?php echo $rs->id; ?>', '<?php echo $rs->name; ?>')">ยกเลิกการลบ</button>

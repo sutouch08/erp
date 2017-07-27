@@ -66,8 +66,8 @@ function syncMaster(){
 
 function deleteRow(id, name){
 	swal({
-		title: 'คุณแน่ใจว่าต้องการลบ',
-		text: 'คุณต้องการลบ '+ name +' ?',
+		title: 'คุณแน่ใจ ?',
+		text: 'คุณต้องการลบ "'+ name +'" หรือไม่ ?',
 		type: 'warning',
 		showCancelButton: true,
 		confirmButtonColor: '#DD6B55',
@@ -97,22 +97,34 @@ function deleteRow(id, name){
 	
 }
 
-function unDelete(id){
-	load_in();
-	$.ajax({
-		url:"controller/supplierController.php?unDelete",
-		type:"POST", cache:"false", data:{ "id" : id },
-		success: function(rs){
-			load_out();
-			var rs = $.trim(rs);
-			if( rs == "success" ){	
-				swal({ title: "Success", text: "ยกเลิกการลบเรียบร้อยแล้ว", type: "success", timer: 1000 });
-				$("#row_"+id).remove();
-			}else{
-				swal("ข้อผิดพลาด", rs, "error");
-			}
-		}
-	});				
+function unDelete(id, name){
+	swal({
+		title: 'คุณแน่ใจ ?',
+		text: 'คุณต้องการยกเลิกการลบ "'+ name +'" หรือไม่ ?',
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#5D9CEC',
+		confirmButtonText: 'ใช่, ฉันต้องการ',
+		cancelButtonText: 'ยกเลิก',
+		closeOnConfirm: false
+		}, 
+		function(){
+			load_in();
+			$.ajax({
+				url:"controller/supplierController.php?unDelete",
+				type:"POST", cache:"false", data:{ "id" : id },
+				success: function(rs){
+					load_out();
+					var rs = $.trim(rs);
+					if( rs == "success" ){	
+						swal({ title: "Success", text: "ยกเลิกการลบเรียบร้อยแล้ว", type: "success", timer: 1000 });
+						$("#row_"+id).remove();
+					}else{
+						swal("ข้อผิดพลาด", rs, "error");
+					}
+				}
+			});	
+		});	
 }
 
 

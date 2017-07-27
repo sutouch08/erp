@@ -65,10 +65,10 @@ class customer_group
 	
 	
 	
-	public function hasMember($code)
+	public function hasMember($id)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT id_customer FROM tbl_customer WHERE group_code = '".$code."'");
+		$qs = dbQuery("SELECT id_customer FROM tbl_customer WHERE id_group = '".$id."'");
 		if( dbNumRows($qs) > 0 )
 		{
 			$sc = TRUE;
@@ -78,9 +78,9 @@ class customer_group
 	
 	
 	
-	public function countMember($code)
+	public function countMember($id)
 	{
-		$qs = dbQuery("SELECT COUNT(*) FROM tbl_customer WHERE group_code = '".$code."'");
+		$qs = dbQuery("SELECT COUNT(*) FROM tbl_customer WHERE id_group = '".$id."'");
 		list( $sc ) = dbFetchArray($qs);
 		return  $sc;
 	}
@@ -104,6 +104,29 @@ class customer_group
 	{
 		$sc = 0;
 		$qs = dbQuery("SELECT id FROM tbl_customer_group WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);	
+		}
+		return $sc;
+	}
+	
+	public function getGroupNameByCode($code)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT name FROM tbl_customer_group WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);	
+		}
+		return $sc;
+	}
+	
+	
+	public function getGroupName($id)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT name FROM tbl_customer_group WHERE id = '".$id."'");
 		if( dbNumRows($qs) == 1 )
 		{
 			list( $sc ) = dbFetchArray($qs);	

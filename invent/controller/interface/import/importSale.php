@@ -20,6 +20,7 @@
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
 			
 			$sa	= new sale();
+			$sg	= new sale_group();
 			
 			$i 	= 1;
 			foreach ( $collection as $rs )
@@ -34,7 +35,7 @@
 								'id'					=> $id,
 								'code'				=> trim( $rs['B'] ),
 								'name'				=> trim( $rs['C'] ),
-								'group_code'	=> trim( $rs['O'] )					
+								'id_group'		=> $sg->getSaleGroupId( trim( $rs['O'] ) )
 								);
 						$sa->add($arr);	
 					}
@@ -44,7 +45,7 @@
 						$arr = array(
 								'code'				=> trim( $rs['B'] ),
 								'name'				=> trim( $rs['C'] ),
-								'group_code'	=> trim( $rs['O'] )					
+								'id_group'		=> $sg->getSaleGroupId( trim( $rs['O'] ) )
 								);
 						$sa->update( $id, $arr);
 					}	/// end if

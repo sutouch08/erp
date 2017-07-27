@@ -15,15 +15,14 @@
         </div>
         <div class="col-sm-6">
             <p class="pull-right top-p">
-		<?php if( isset( $_GET['edit'] ) OR isset( $_GET['view_detail'] ) ) : ?>
+		<?php if( isset( $_GET['edit'] ) OR isset( $_GET['deleted'] ) ) : ?>
         		<button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i> กลับ</button>
         <?php endif; ?>        
-        <?php if( ! isset( $_GET['add'] ) && ! isset( $_GET['edit'] ) && ! isset( $_GET['view_detail'] ) ) : ?>        
+        <?php if( ! isset( $_GET['add'] ) && ! isset( $_GET['edit'] ) && ! isset( $_GET['deleted'] ) ) : ?>   
+        		<button type="button" class="btn btn-sm btn-warning" onclick="goDeleted()"> รายการที่ถูกลบ</button>          
                 <button class="btn btn-sm btn-success" onclick="syncCustomer()"><i class="fa fa-refresh"></i> อัพเดตข้อมูล</button>
         <?php endif; ?>
-        <?php if( isset( $_GET['edit'] ) && isset( $_GET['id'] ) ) : ?>
-        		<button type="button" class="btn btn-sm btn-success" onclick="saveEdit()"><i class="fa fa-save"></i> บันทึก</button>
-        <?php endif; ?>
+
             </p>
         </div>
     </div>
@@ -33,9 +32,9 @@ if( isset( $_GET['edit'] ) )
 {
 	include 'include/customer_edit.php';
 }
-else if( isset( $_GET['view_detail'] ) )
+else if( isset( $_GET['deleted'] ) )
 {
-	
+	include 'include/customer_deleted.php';
 }
 else
 {
@@ -45,3 +44,4 @@ else
 
 </div><!--/ Container -->
 <script src="script/customer.js"></script>
+<script src="script/customer_address.js"></script>

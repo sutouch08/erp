@@ -20,6 +20,7 @@
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
 			
 			$sp	= new supplier();
+			$sg	= new supplier_group();
 			
 			$i 	= 1;
 			foreach ( $collection as $rs )
@@ -33,11 +34,11 @@
 						$arr = array(
 								'id'					=> $id,
 								'code'				=> trim( $rs['B'] ),
-								'name'				=> trim( $rs['D'] ),
-								'group_code'	=> trim( $rs['AN'] ),
-								'credit_amount'	=> $rs['AQ'],
-								'credit_term'		=> $rs['AR'],
-								'active'			=> trim( $rs['S'] ) == '' ? 1 : 0
+								'name'				=> trim( $rs['C'] ),
+								'id_group'		=> $sg->getGroupId( trim( $rs['AK'] ) ),
+								'credit_amount'	=> $rs['AP'],
+								'credit_term'		=> $rs['AQ'],
+								'active'			=> trim( $rs['Q'] ) == '' ? 1 : 0
 								);
 						$sp->add($arr);	
 					}
@@ -46,11 +47,11 @@
 						//--- If exists do update
 						$arr = array(
 								'code'				=> trim( $rs['B'] ),
-								'name'				=> trim( $rs['D'] ),
-								'group_code'	=> trim( $rs['AN'] ),
-								'credit_amount'	=> $rs['AQ'],
-								'credit_term'		=> $rs['AR'],
-								'active'			=> trim( $rs['S'] ) == '' ? 1 : 0
+								'name'				=> trim( $rs['C'] ),
+								'id_group'		=> $sg->getGroupId( trim( $rs['AK'] ) ),
+								'credit_amount'	=> $rs['AP'],
+								'credit_term'		=> $rs['AQ'],
+								'active'			=> trim( $rs['Q'] ) == '' ? 1 : 0
 								);
 						$sp->update( $id, $arr);
 					}	/// end if

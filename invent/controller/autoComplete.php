@@ -397,18 +397,19 @@ if( isset($_REQUEST['term']) && isset( $_GET['get_customer'] ) )
 	$text = trim($_REQUEST['term']);
 	if( $text == "*" )	
 	{ 
-		$qs = dbQuery("SELECT id_customer, customer_code, first_name, last_name FROM tbl_customer ORDER BY customer_code");
+		$qs = dbQuery("SELECT id, code, name FROM tbl_customer ORDER BY code");
 	}
 	else
 	{
-		$qs = dbQuery("SELECT id_customer, customer_code, first_name, last_name FROM tbl_customer WHERE customer_code LIKE '%".$text."%' OR first_name LIKE '%".$text."%' OR last_name LIKE '%".$text."%'");
+		$qs = dbQuery("SELECT id, code, name FROM tbl_customer WHERE code LIKE '%".$text."%' OR name LIKE '%".$text."%'");
 	}
+	
 	if(dbNumRows($qs) > 0 )
 	{
 		$data = array();
 		while($rs = dbFetchArray($qs) )
 		{
-			$data[] = $rs['customer_code']." | ".$rs['first_name']." ".$rs['last_name']." | ".$rs['id_customer'];
+			$data[] = $rs['code']." | ".$rs['name']." | ".$rs['id'];
 		}
 	}
 	else

@@ -184,6 +184,18 @@ function clearFilter(){
 	});
 }
 
+
+function clearDeletedFilter(){
+	$.ajax({
+		url:"controller/saleController.php?clearFilter",
+		type:"GET", cache:"false",success: function(rs){
+			goDeleted();
+		}
+	});
+}
+
+
+
 function goBack(){
 	window.location.href = "index.php?content=sale";
 }
@@ -245,24 +257,38 @@ function deleteSale(id, name){
 }
 
 function unDelete(id, name){
-	$.ajax({
-		url:"controller/saleController.php?unDeleteSale",
-		type:"POST", cache:"false", data:{ "id" : id },
-		success: function(rs){
-			var rs = $.trim(rs);
-			if( rs == 'success' ){
-				swal({ 
-					title: 'สำเร็จ',
-					text: 'ยกเลิกการลบ '+ name + ' เรียบร้อยแล้ว',
-					type: 'success',
-					timer: 1000
-					});
-					$("#row_"+id).remove();
-			}else{
-				swal("ข้อผิดพลาด !", rs, "error");	
+	swal({
+		title: 'คุณแน่ใจ ?',
+		text: 'คุณต้องการยกเลิกการลบ "'+ name +'" หรือไม่ ?',
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#5D9CEC',
+		confirmButtonText: 'ใช่, ฉันต้องการ',
+		cancelButtonText: 'ยกเลิก',
+		closeOnConfirm: false
+		}, 
+		function(){
+			$.ajax({
+			url:"controller/saleController.php?unDeleteSale",
+			type:"POST", cache:"false", data:{ "id" : id },
+			success: function(rs){
+				var rs = $.trim(rs);
+				if( rs == 'success' ){
+					swal({ 
+						title: 'สำเร็จ',
+						text: 'ยกเลิกการลบ '+ name + ' เรียบร้อยแล้ว',
+						type: 'success',
+						timer: 1000
+						});
+						$("#row_"+id).remove();
+				}else{
+					swal("ข้อผิดพลาด !", rs, "error");	
+				}
 			}
-		}
+		});	
 	});	
+	
+	
 }
 
 function setActive(status){

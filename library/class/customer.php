@@ -2,8 +2,10 @@
 class customer {
 	public $id; 				//-- id customer
 	public $code;			//-- Customer code
-	public $pre_name;		//-- Prefix name
 	public $name;			//-- Customer's name
+	public $address1;
+	public $address2;
+	public $address3;
 	public $tel;				//-- Phone No.
 	public $fax;				//-- Fax No.
 	public $mobile;			//-- Mobile No.
@@ -11,8 +13,9 @@ class customer {
 	public $tax_id;
 	public $contact;			//-- Contact Person Name
 	public $email;
-	public $group_id;		//-- Group of customer
-	public $area_id;		//-- Area of customer
+	public $id_group;		//-- Group of customer
+	public $id_area;		//-- Area of customer
+	public $id_sale;		//-- Sale of Customer	
 	public $credit;			//-- Credti Amount
 	public $term;			//-- Credit Term
 	public $address_no;	//-- address no like 75/65, 
@@ -27,18 +30,23 @@ class customer {
 	public $province;		//-- จังหวัด
 	public $zip;				//-- Post code , zip code
 	public $active;			//-- status 1 = Active,  0 = Inactive
+	public $is_deleted;
+	public $emp;				//--- employee who delete or restore
+	public $date_upd;		
 	public function __construct( $id = '')
 	{
 		if( $id != '' )
 		{
-			$qs = dbQuery("SELECT * FROM tbl_customers WHERE id = '".$id."'");
+			$qs = dbQuery("SELECT * FROM tbl_customer WHERE id = '".$id."'");
 			if( dbNumRows($qs) == 1 )
 			{
 				$rs = dbFetchObject($qs);
 				$this->id 			= $rs->id;
 				$this->code			= $rs->code;
-				$this->pre_name	= $rs->pre_name;
 				$this->name			= $rs->name;
+				$this->address1	= $rs->address1;
+				$this->address2	= $rs->address2;
+				$this->address3	= $rs->address3;
 				$this->tel				= $rs->tel;
 				$this->fax			= $rs->fax;
 				$this->mobile		= $rs->mobile;
@@ -46,8 +54,9 @@ class customer {
 				$this->tax_id		= $rs->tax_id;
 				$this->contact		= $rs->contact;
 				$this->email			= $rs->email;
-				$this->group_id	= $rs->group_id;
-				$this->area_id		= $rs->area_id;
+				$this->id_group	= $rs->id_group;
+				$this->id_area		= $rs->id_area;
+				$this->id_sale		= $rs->id_sale;
 				$this->credit		= $rs->credit;
 				$this->term			= $rs->term;
 				$this->address_no	= $rs->address_no;
@@ -62,6 +71,9 @@ class customer {
 				$this->province	= $rs->province;
 				$this->zip			= $rs->zip;
 				$this->active		= $rs->active;
+				$this->is_deleted	= $rs->is_deleted;
+				$this->emp			= $rs->emp;
+				$this->date_upd	= $rs->date_upd;
 			}
 		}
 	}
@@ -103,6 +115,27 @@ class customer {
 		return $sc;
 	}
 	
+	public function delete($id, $emp)
+	{
+		$sc = FALSE;
+		if( $this->hasTransection($id) === FALSE )
+		{
+			$sc = dbQuery("DELETE FROM tbl_customer WHERE id = '".$id."'");	
+		}
+		else
+		{
+			$sc = dbQuery("UPDATE tbl_customer SET is_deleted = 1, emp = ".$emp." WHERE id = '". $id ."'");
+		}
+		return $sc;
+	}
+	
+	
+	public function unDelete($id, $emp)
+	{
+		return dbQuery("UPDATE tbl_customer  SET is_deleted = 0, emp = ".$emp." WHERE id = '".$id."'");	
+	}
+	
+	
 	public function isExists($id)
 	{
 		$sc = FALSE;
@@ -140,7 +173,17 @@ class customer {
 		return $sc;
 	}
 	
-
+	
+	public function hasTransection($id)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id_customer FROM tbl_order WHERE id_customer = '".$id."'");
+		if( dbNumRows($qs) > 0 )
+		{
+			$sc = TRUE;
+		}
+		return $sc;		
+	}
 	
 }//--- end class
 

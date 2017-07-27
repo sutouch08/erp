@@ -62,6 +62,11 @@ class address
 	{
 		return dbQuery("DELETE FROM tbl_address WHERE id_address = ".$id);	
 	}
+	
+	public function getCustomerAddress($id_customer)
+	{
+		return dbQuery("SELECT * FROM tbl_address WHERE id_customer = '".$id_customer."'");	
+	}
 }/// end class
 
 ?>

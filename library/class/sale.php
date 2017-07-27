@@ -4,7 +4,7 @@ class sale
 	public $id;
 	public $code;
 	public $name;
-	public $group_code;
+	public $id_group;
 	public $user_name;
 	public $active;
 	public $is_delete;
@@ -21,7 +21,7 @@ class sale
 				$this->id			= $rs->id;
 				$this->code		= $rs->code;
 				$this->name		= $rs->name;
-				$this->group_code	= $rs->group_code;
+				$this->id_group = $rs->id_group;
 				$this->user_name 	= $rs->user_name;
 				$this->active	= $rs->active;
 				$this->is_delete	= $rs->is_deleted;
@@ -98,6 +98,42 @@ class sale
 			$sc = FALSE;
 		}
 		return $sc;			
+	}
+	
+	
+	public function getNameByCode($code)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT name FROM tbl_sale WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray( $qs );
+		}
+		return  $sc;
+	}
+	
+	
+	public function getSaleName($id)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT name FROM tbl_sale WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray( $qs );
+		}
+		return  $sc;
+	}
+	
+	
+	public function getSaleId($code)
+	{
+		$sc = '0000';
+		$qs = dbQuery("SELECT id FROM tbl_sale WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
 	}
 
 	

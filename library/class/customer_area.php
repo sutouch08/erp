@@ -56,10 +56,10 @@ class customer_area
 		return dbQuery("DELETE FROM tbl_customer_area WHERE id = '".$id."'");
 	}
 	
-	public function hasMember($code)
+	public function hasMember($id)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT id_customer FROM tbl_customer WHERE area_code = '".$code."'");
+		$qs = dbQuery("SELECT id_customer FROM tbl_customer WHERE id_area = '".$id."'");
 		if( dbNumRows($qs) > 0 )
 		{
 			$sc = TRUE;
@@ -67,9 +67,9 @@ class customer_area
 		return $sc;
 	}
 	
-	public function countMember($code)
+	public function countMember($id)
 	{
-		$qs = dbQuery("SELECT COUNT(*) FROM tbl_customer WHERE area_code = '".$code."'");
+		$qs = dbQuery("SELECT COUNT(*) FROM tbl_customer WHERE id_area = '".$id."'");
 		list( $sc ) = dbFetchArray($qs);
 		return  $sc;			
 	}
@@ -99,6 +99,31 @@ class customer_area
 			list( $sc ) = dbFetchArray($qs);	
 		}
 		return $sc;	
+	}
+	
+	
+	public function getAreaNameByCode($code)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT name FROM tbl_customer_area WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	
+	public function getAreaName($id)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT name FROM tbl_customer_area WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
 	}
 }
 

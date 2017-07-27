@@ -4,10 +4,13 @@ class supplier
 	public $id;
 	public $code;
 	public $name;
-	public $group_code;
+	public $id_group;
 	public $credit_amount;
 	public $credit_term;
 	public $active;
+	public $is_deleted;
+	public $emp;
+	public $date_upd;
 	
 	public function __construct($id = "")
 	{
@@ -20,13 +23,18 @@ class supplier
 				$this->id			= $rs->id;
 				$this->code	 	= $rs->code;
 				$this->name		= $rs->name;
-				$this->group_code	= $rs->group_code;
+				$this->id_group = $rs->id_group;
 				$this->credit_amount	= $rs->credit_amount;
 				$this->credit_term		= $rs->credit_term;	
 				$this->active	= $rs->active;
+				$this->is_deleted	= $rs->is_delete;
+				$this->emp		= $rs->emp;
+				$this->date_upd	= $rs->date_upd;
 			}
 		}
 	}
+	
+	
 	
 	public function add(array $ds)
 	{
@@ -50,6 +58,8 @@ class supplier
 	
 	
 	
+	
+	
 	public function update($id, array $ds)
 	{
 		$sc = FALSE;
@@ -68,6 +78,9 @@ class supplier
 	}
 	
 	
+	
+	
+	
 	public function delete($id, $emp)
 	{
 		if( $this->hasTransection($id) === FALSE )
@@ -76,31 +89,34 @@ class supplier
 		}
 		else
 		{
-			return dbQuery("UPDATE tbl_supplier SET is_deleted = 1, emp_delete = ".$emp." WHERE id = '".$id."'");	
+			return dbQuery("UPDATE tbl_supplier SET is_deleted = 1, emp = ".$emp." WHERE id = '".$id."'");	
 		}
 	}
 	
 	
-	public function unDelete($id)
+	
+	
+	public function unDelete($id, $emp)
 	{
-		return dbQuery("UPDATE tbl_supplier SET is_deleted = 0, emp_delete = ".$emp." WHERE id = '".$id."'");	
+		return dbQuery("UPDATE tbl_supplier SET is_deleted = 0, emp = ".$emp." WHERE id = '".$id."'");	
 	}
+	
+	
 	
 	
 	public function hasTransection($id)
 	{
 		$sc = FALSE;
-		$code = $this->getCode($id);
-		if( $code !== FALSE )
+		$qs = dbQuery("SELECT id FROM tbl_po WHERE id_supplier = '".$id."'");
+		if( dbNumRows($qs) > 0 )
 		{
-			$qs = dbQuery("SELECT id FROM tbl_po WHERE supplier_code = '".$code."'");
-			if( dbNumRows($qs) > 0 )
-			{
-				$sc = TRUE;
-			}
+			$sc = TRUE;
 		}
 		return $sc;
 	}
+	
+	
+	
 	
 	public function isExists($id)
 	{
@@ -113,10 +129,25 @@ class supplier
 		return $sc;
 	}
 	
+	
+	
 	public function getCode($id)
 	{
 		$sc = FALSE;
 		$qs = dbQuery("SELECT code FROM tbl_supplier WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);	
+		}
+		return $sc;
+	}
+	
+	
+	
+	public function getId($code)
+	{
+		$sc = '0000';
+		$qs = dbQuery("SELECT id FROM tbl_supplier WHERE code = '".$code."'");
 		if( dbNumRows($qs) == 1 )
 		{
 			list( $sc ) = dbFetchArray($qs);	

@@ -81,13 +81,13 @@
                 <tbody>
 <?php	if( dbNumRows($qs) > 0 ) : ?>
 <?php		$no = row_no(); ?>
-<?php		$st = new sale_team(); ?>
+<?php		$st = new sale_group(); ?>
 <?php		while( $rs = dbFetchObject($qs) ) : ?>
 					<tr class="font-size-12" id="row_<?php echo $rs->code; ?>">
                     	<td class="middle text-center"><?php echo $no; ?></td>
                         <td class="middle"><?php echo $rs->code; ?></td>
                         <td class="middle"><?php echo $rs->name; ?></td>
-                        <td class="middle text-center"><?php echo number_format( $st->countMember($rs->code) ); ?></td>
+                        <td class="middle text-center"><?php echo number_format( $st->countMember($rs->id) ); ?></td>
                         <td class="middle text-right">
                         <?php if( $delete ) : ?>
                         	<button type="button" class="btn btn-sm btn-danger" onClick="deleteGroup('<?php echo $rs->code; ?>', '<?php echo $rs->name; ?>')"><i class="fa fa-trash"></i></button>

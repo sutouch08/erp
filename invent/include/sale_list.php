@@ -82,7 +82,7 @@
                     	<td class="middle text-center"><?php echo $no; ?></td>
                         <td class="middle"><?php echo $rs->code; ?></td>
                         <td class="middle"><?php echo $rs->name; ?></td>
-                        <td class="middle"><?php echo $sg->getSaleGroupName($rs->group_code); ?></td>
+                        <td class="middle"><?php echo $sg->getSaleGroupName($rs->id_group); ?></td>
                         <td class="middle"><?php echo $rs->user_name; ?></td>
                         <td class="middle text-center"><?php echo isActived($rs->active); ?></td>
                         <td class="middle text-right">

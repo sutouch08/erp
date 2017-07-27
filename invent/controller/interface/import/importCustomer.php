@@ -22,44 +22,48 @@
 			$customer	= new customer();
 			$cg			= new customer_group();
 			$ca			= new customer_area();
+			$sale			= new sale();
 			
 			$i 	= 1;
 			foreach ( $collection as $rs )
 			{
 				if( $i != 1 ) //---- Skip first row
 				{
-					$cid 	= trim( $rs['A'] );
-					$active = $rs['S'] == '' ? 1 : 0;
-					if( $customer->isExists( $cid ) === FALSE )
+					$id 		= trim( $rs['A'] );
+					$active 	= $rs['Q'] == '' ? 1 : 0;
+					if( $customer->isExists( $id ) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
-								'cid'				=> $cid,
+								'id'					=> $id,
 								'code'				=> trim( $rs['B'] ),
-								'pre_name'		=> trim( $rs['C'] ),
-								'name'				=> trim( $rs['D'] ),
-								'tel'				=> $rs['P'],
-								'fax'				=> $rs['Q'],
-								'mobile'			=> $rs['V'],
-								'm_id'				=> $rs['W'],
-								'tax_id'			=> $rs['X'],
-								'contact'			=> $rs['AA'],
-								'email'				=> $rs['AO'],
-								'group_id'		=> $cg->getGroupId( trim( $rs['AP'] ) ),
-								'area_id'			=> $ca->getAreaId( trim( $rs['AS'] ) ),
-								'credit'			=> $rs['AU'],
-								'term'				=> $rs['AX'],
-								'address_no'	=> $rs['BK'],
-								'room_no'		=> $rs['BM'],
-								'floor_no'			=> $rs['BL'],
-								'building'			=> $rs['BN'],
-								'village_no'		=> $rs['BO'],
-								'soi'				=> $rs['BP'],
-								'road'				=> $rs['BQ'],
-								'tambon'			=> $rs['BR'],
-								'amphur'			=> $rs['BS'],
-								'province'		=> $rs['BT'],
-								'zip'				=> $rs['O'],
+								'name'				=> trim( $rs['C'] ),
+								'address1'		=> trim( $rs['E'] ),
+								'address2'		=> trim( $rs['F'] ),
+								'address3'		=> trim( $rs['G'] ),
+								'tel'				=> $rs['N'],
+								'fax'				=> $rs['O'],
+								'mobile'			=> $rs['T'],
+								'm_id'				=> $rs['U'],
+								'tax_id'			=> $rs['V'],
+								'contact'			=> $rs['AW'],
+								'email'				=> $rs['AL'],
+								'id_group'		=> $cg->getGroupId( trim( $rs['AM'] ) ),
+								'id_area'			=> $ca->getAreaId( trim( $rs['AP'] ) ),
+								'id_sale'			=> $sale->getSaleId( trim( $rs['CF'] ) ),
+								'credit'			=> $rs['AR'],
+								'term'				=> $rs['AU'],
+								'address_no'	=> $rs['BQ'],
+								'room_no'		=> $rs['BS'],
+								'floor_no'			=> $rs['BR'],
+								'building'			=> $rs['BT'],
+								'village_no'		=> $rs['BU'],
+								'soi'				=> $rs['BV'],
+								'road'				=> $rs['BW'],
+								'tambon'			=> $rs['BX'],
+								'amphur'			=> $rs['BY'],
+								'province'		=> $rs['BZ'],
+								'zip'				=> $rs['M'],
 								'active'			=> $active							
 								);
 						$customer->add($arr);	
@@ -69,33 +73,36 @@
 						//--- If exists do update
 						$arr = array(
 								'code'				=> trim( $rs['B'] ),
-								'pre_name'		=> trim( $rs['C'] ),
-								'name'				=> trim( $rs['D'] ),
-								'tel'				=> $rs['P'],
-								'fax'				=> $rs['Q'],
-								'mobile'			=> $rs['V'],
-								'm_id'				=> $rs['W'],
-								'tax_id'			=> $rs['X'],
-								'contact'			=> $rs['AA'],
-								'email'				=> $rs['AO'],
-								'group_id'		=> $cg->getGroupId( trim( $rs['AP'] ) ),
-								'area_id'			=> $ca->getAreaId( trim( $rs['AS'] ) ),
-								'credit'			=> $rs['AU'],
-								'term'				=> $rs['AX'],
-								'address_no'	=> $rs['BK'],
-								'room_no'		=> $rs['BM'],
-								'floor_no'			=> $rs['BL'],
-								'building'			=> $rs['BN'],
-								'village_no'		=> $rs['BO'],
-								'soi'				=> $rs['BP'],
-								'road'				=> $rs['BQ'],
-								'tambon'			=> $rs['BR'],
-								'amphur'			=> $rs['BS'],
-								'province'		=> $rs['BT'],
-								'zip'				=> $rs['O'],
+								'name'				=> trim( $rs['C'] ),
+								'address1'		=> trim( $rs['E'] ),
+								'address2'		=> trim( $rs['F'] ),
+								'address3'		=> trim( $rs['G'] ),
+								'tel'				=> $rs['N'],
+								'fax'				=> $rs['O'],
+								'mobile'			=> $rs['T'],
+								'm_id'				=> $rs['U'],
+								'tax_id'			=> $rs['V'],
+								'contact'			=> $rs['AW'],
+								'email'				=> $rs['AL'],
+								'id_group'		=> $cg->getGroupId( trim( $rs['AM'] ) ),
+								'id_area'			=> $ca->getAreaId( trim( $rs['AP'] ) ),
+								'id_sale'			=> $sale->getSaleId( trim( $rs['CF'] ) ),
+								'credit'			=> $rs['AR'],
+								'term'				=> $rs['AU'],
+								'address_no'	=> $rs['BQ'],
+								'room_no'		=> $rs['BS'],
+								'floor_no'			=> $rs['BR'],
+								'building'			=> $rs['BT'],
+								'village_no'		=> $rs['BU'],
+								'soi'				=> $rs['BV'],
+								'road'				=> $rs['BW'],
+								'tambon'			=> $rs['BX'],
+								'amphur'			=> $rs['BY'],
+								'province'		=> $rs['BZ'],
+								'zip'				=> $rs['M'],
 								'active'			=> $active							
 								);
-						$customer->update( $cid, $arr);
+						$customer->update( $id, $arr);
 					}	/// end if
 				}//-- end if not first row
 				$i++;	

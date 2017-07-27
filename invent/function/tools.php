@@ -3030,7 +3030,7 @@ function get_attribute_name($id_attribute){
 
 function employee_name($id_employee){
 	$name = "";
-	$qs = dbQuery("SELECT first_name, last_name FROM tbl_employee WHERE id_employee =".$id_employee);
+	$qs = dbQuery("SELECT first_name, last_name FROM tbl_employee WHERE id_employee = '".$id_employee."'");
 	if(dbNumRows($qs) > 0){
 		$rs = dbFetchArray($qs);
 		$name = $rs['first_name']." ".$rs['last_name'];

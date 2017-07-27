@@ -3,19 +3,22 @@
 <?php 	include 'include/page_error.php'; ?>
 <?php else : ?>
 <?php 	$customer = new customer($_GET['id'] );  ?>
+
 <div class="row">
 <div class="col-sm-2 padding-right-0" style="padding-top:15px;">
 <ul id="myTab1" class="setting-tabs">
-        <li class="li-block active"><a href="#page1" data-toggle="tab">หน้าที่ 1</a></li>
-        <li class="li-block"><a href="#page2" data-toggle="tab">หน้าที่ 2</a></li>
-        <li class="li-block"><a href="#page3" data-toggle="tab">หน้าที่ 3</a></li>
-        <li class="li-block"><a href="#page4" data-toggle="tab">หน้าที่ 4</a></li>
+        <li class="li-block active"><a href="#general" data-toggle="tab">ทั่วไป</a></li>
+        <li class="li-block"><a href="#address" data-toggle="tab">ที่อยู่ตามบิล</a></li>
+        <li class="li-block"><a href="#trans_address" data-toggle="tab">ที่อยู่จัดส่ง</a></li>
+        <li class="li-block"><a href="#discount" data-toggle="tab">ส่วนลด</a></li>
 </ul>
 </div>
 <div class="col-sm-10" style="padding-top:15px; border-left:solid 1px #ccc; min-height:600px; max-height:1000px;">
 <div class="tab-content">
-        <?php include 'include/customer_edit1.php'; ?>     
-        <?php include 'include/customer_edit2.php'; ?>
+        <?php include 'include/customer_general.php'; ?>     
+        <?php include 'include/customer_address.php'; ?>
+        <?php include 'include/customer_trans_address.php'; ?>
+        <?php include 'include/customer_discount.php'; ?>
 </div>
 </div><!--/ col-sm-9  -->    
 </div><!--/ row  -->

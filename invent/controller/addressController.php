@@ -32,6 +32,8 @@ if( isset( $_GET['insertAddress'] ) && isset( $_POST['id_customer'] ) )
 	echo $sc;
 }
 
+
+
 if( isset( $_GET['updateAddress'] ) && isset( $_GET['id_address'] ) )
 {
 	$sc = 'fail';
@@ -68,6 +70,68 @@ if( isset( $_GET['deleteAddress'] ) && isset( $_GET['id_address'] ) )
 		$sc = 'success';
 	}
 	echo $sc;
+}
+
+
+if( isset( $_GET['getAddress'] ) )
+{
+	$sc = "";
+	$ds = array();
+	$id_address = $_POST['id_address'];
+	$qs = dbQuery("SELECT * FROM tbl_address WHERE id_address = ".$id_address);
+	if( dbNumRows($qs) == 1 )
+	{
+		$rs = dbFetchObject($qs);
+		$arr = array(
+							'id_address'		=> $rs->id_address,
+							'Fname'			=> $rs->first_name,
+							'Lname'			=> $rs->last_name,
+							'company'		=> $rs->company,
+							'address1'		=> $rs->address1,
+							'address2'		=> $rs->address2,
+							'province'		=> $rs->city,
+							'postcode'		=> $rs->postcode,
+							'phone'			=> $rs->phone,
+							'alias'				=> $rs->alias,
+							'remark'			=> $rs->remark
+							);
+	}
+	else
+	{
+		$arr = array("nodata" => "nodata");
+	}
+	echo json_encode($arr);
+}
+
+if( isset( $_GET['getAddressTable'] ) )
+{
+	$sc = "";
+	$ds = array();
+	$id_customer = $_POST['id_customer'];
+	$qs = dbQuery("SELECT * FROM tbl_address WHERE id_customer = '".$id_customer."'");
+	if( dbNumRows($qs) > 0 )
+	{
+		while( $rs = dbFetchObject($qs) )
+		{
+			$arr = array( 
+								'id_address'		=> $rs->id_address,
+								'alias'				=> $rs->alias,
+								'name'				=> $rs->company == "" ? $rs->first_name.' '.$rs->last_name : $rs->company,
+								'address'		=> $rs->address1.' '.$rs->address2.' '.$rs->city.' '.$rs->postcode,
+								'phone'			=> $rs->phone
+								);
+			array_push($ds, $arr);
+		}
+	}
+	else
+	{
+		$arr = array( "nodata" => "nodata");
+		array_push($ds, $arr);
+	}
+	
+	$sc = json_encode($ds);
+	echo $sc;						
+			
 }
 
 if( isset( $_GET['getAddressInfo'] ) )

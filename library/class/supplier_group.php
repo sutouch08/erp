@@ -81,10 +81,10 @@ class supplier_group
 	
 	
 	
-	public function hasMember($code)
+	public function hasMember($id)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT id FROM tbl_supplier WHERE group_code = '".$code."'");
+		$qs = dbQuery("SELECT id FROM tbl_supplier WHERE id_group = '".$id."'");
 		if( dbNumRows($qs) > 0 )
 		{
 			$sc = TRUE;
@@ -94,9 +94,9 @@ class supplier_group
 	
 	
 	
-	public function countMember($code)
+	public function countMember($id)
 	{
-		$qs = dbQuery("SELECT COUNT(*) FROM tbl_supplier WHERE group_code = '".$code."'");	
+		$qs = dbQuery("SELECT COUNT(*) FROM tbl_supplier WHERE id_group = '".$id."'");	
 		list( $sc ) = dbFetchArray($qs);
 		return $sc;
 	}
@@ -110,6 +110,18 @@ class supplier_group
 		if( dbNumRows($qs) == 1 )
 		{
 			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	public function getGroupId($code)
+	{
+		$sc = '0000';
+		$qs = dbQuery("SELECT id FROM tbl_supplier_group WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray( $qs );	
 		}
 		return $sc;
 	}

@@ -23,7 +23,7 @@
         </div>
         <div class="col-sm-1 col-1-harf">
         	<label class="display-block not-show">Apply</label>
-            <button type="button" class="btn btn-sm btn-warning btn-block" onClick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
+            <button type="button" class="btn btn-sm btn-warning btn-block" onClick="clearDeletedFilter()"><i class="fa fa-retweet"></i> Reset</button>
         </div>
         
     </div>
@@ -82,7 +82,7 @@
                     	<td class="middle text-center"><?php echo $no; ?></td>
                         <td class="middle"><?php echo $rs->code; ?></td>
                         <td class="middle"><?php echo $rs->name; ?></td>
-                        <td class="middle"><?php echo $sg->getSaleGroupName($rs->group_code); ?></td>
+                        <td class="middle"><?php echo $sg->getSaleGroupName($rs->id_group); ?></td>
                         <td class="middle"><?php echo employee_name($rs->emp_delete); ?></td>
                         <td class="middle text-center"><?php echo thaiDate($rs->date_upd, '/'); ?></td>
                         <td class="middle text-right">
@@ -95,7 +95,7 @@
 <?php		endwhile; ?>
 <?php	else : ?>
 				<tr>
-                	<td colspan="6" align="center"><h4>ไม่พบรายการ</h4></td>
+                	<td colspan="7" align="center"><h4>ไม่พบรายการ</h4></td>
 				</tr>
 <?php	endif; ?>          
                 </tbody>                

@@ -37,14 +37,14 @@
         </div>
        <div class="col-sm-1">
         	<label class="display-block not-show">reset</label>
-            <button type="button" class="btn btn-sm btn-warning btn-block" onclick="clearFilter()" ><i class="fa fa-retweet"></i> Reset</button>
+            <button type="button" class="btn btn-sm btn-warning btn-block" onclick="clearDeletedFilter()" ><i class="fa fa-retweet"></i> Reset</button>
         </div>
     </div>
     </form>
 <hr class="margin-top-15"/>
 
 <?php
-	$where = "WHERE is_deleted = 0 ";
+	$where = "WHERE is_deleted = 1 ";
 	if( $cName != '' )
 	{
 		createCookie('cName', $cName);
@@ -92,10 +92,11 @@
         	<thead>
             	<th class="width-5 text-center">ลำดับ</th>
                 <th class="width-10">รหัสลูกค้า</th>
-                <th class="width-30">ชื่อ - สกุล</th>
+                <th class="width-25">ชื่อ - สกุล</th>
                 <th class="width-15 text-center">กลุ่มลูกค้า</th>
                 <th class="width-15 text-center">พื้นที่การขาย</th>
-                <th class="width-10 text-center">จังหวัด</th>
+                <th class="width-10 text-center">ผู้ลบ</th>
+                <th class="width-10 text-center">วันที่ลบ</th>
                 <th></th>
             </thead>
             <tbody>
@@ -110,39 +111,19 @@
                     <td class="middle"><?php echo $rs->name; ?></td>
                     <td class="middle text-center"><?php echo $cg->getGroupName($rs->id_group); ?></td>
                     <td class="middle text-center"><?php echo $ca->getAreaName($rs->id_area); ?></td>
-                    <td class="middle text-center"><?php echo $rs->province; ?></td>
+                    <td class="middle text-center"><?php echo employee_name($rs->emp); ?></td>
+                    <td class="middle text-center"><?php echo thaiDate($rs->date_upd); ?></td>
                     <td class="middle" align="right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-xs btn-info dropdown-toggle" data-toggle="dropdown">การกระทำ</button>
-                              <ul class="dropdown-menu text-left" role="menu">
-                                <li>
-                                    <a href="javascript:void(0)" onclick="viewDetail('<?php echo $rs->id; ?>')">
-                                    	<i class="fa fa-search"></i> รายละเอียด
-                                    </a>
-                                </li>
-                        <?php if( $edit ) : ?>
-                                <li>
-                                    <a href="javascript:void(0)" onclick="getEdit('<?php echo $rs->id; ?>')">
-                                    	<i class="fa fa-pencil"></i> แก้ไขลูกค้า
-                                    </a>
-                                </li>
-                        <?php endif; ?>                         
-                        <?php if( $delete ) : ?>
-                                <li>
-                                	<a href="javascript:void(0)" onclick="deleteCustomer('<?php echo $rs->id; ?>', '<?php echo $rs->name; ?>')">
-                                    	<i class="fa fa-trash"></i> ลบลูกค้า
-                                    </a>
-                                </li>
-                        <?php endif; ?>                            
-                              </ul>
-                        </div>
+                    <?php if( $delete ) : ?>
+                    	<button type="button" class="btn btn-sm btn-primary" onclick="unDeleteCustomer('<?php echo $rs->id; ?>')">ยกเลิกการลบ</button>
+                    <?php endif; ?>
                     </td>
                 </tr>
 	<?php	$no++; ?>                
     <?php	endwhile; ?>
     <?php else : ?>
     		<tr>
-            	<td colspan="7" align="center"><h4> ไม่พบข้อมูลตามเงื่อนไขที่กำหนด</h4></td>
+            	<td colspan="8" align="center"><h4> ไม่พบข้อมูลตามเงื่อนไขที่กำหนด</h4></td>
             </tr>
     <?php endif; ?>            	
             </tbody>

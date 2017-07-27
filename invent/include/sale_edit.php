@@ -30,7 +30,7 @@
     	<span class="form-control left-label text-right">เขตการขาย</span>
     </div>
     <div class="col-sm-8">
-    	<label class="form-control input-sm input-medium"><?php echo $sg->getSaleGroupName($sale->group_code); ?></label>
+    	<label class="form-control input-sm input-medium"><?php echo $sg->getSaleGroupName($sale->id_group); ?></label>
         <span class="help-block">ไม่สามารถแก้ไขจากตรงนี้ได้ หากต้องการแก้ไขให้ทำการแก้ไขที่ Formula แล้วทำการ Sync ข้อมูลใหม่</span>
      </div>
      
