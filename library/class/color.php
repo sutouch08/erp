@@ -1,60 +1,110 @@
 <?php
-class color{
-	
-public function __construct(){}
-
-
-public function add($code, $name)
+class color
 {
-	$sc = FALSE;
-	if( $this->isExists($code) === FALSE )
+	public $id;
+	public $code;
+	public $name;
+	public $id_group;
+	public $error;
+	public function __construct($id = "" )
 	{
-		$qs = "INSERT INTO tbl_color (color_code, color_name, position) ";
-		$qs .= "VALUES ";
-		$qs .= "('".$code."', '".$name."', ". $this->getTopPosition().")";
-		$sc = dbQuery($qs);
+		if( $id != "" )
+		{
+			$qs = dbQuery("SELECT * FROM tbl_color WHERE id = '".$id."'");
+			if( dbNumRows($qs) == 1 )
+			{
+				$rs = dbFetchObject($qs);
+				$this->id		= $rs->id;
+				$this->code	= $rs->code;
+				$this->name	= $rs->name;
+				$this->id_group = $rs->id_group;	
+			}
+		}
 	}
 	
-	return $sc;
-}
-
-
-public function isExists($code)
-{
-	$sc = FALSE;
-	$qs = dbQuery("SELECT * FROM tbl_color WHERE color_code = '".$code."'");
-	if( dbNumRows($qs) > 0 )
+	public function add(array $ds)
 	{
-		$sc = TRUE;	
-	}
-	return $sc;
-}
-
-public function getTopPosition()
-{
-	$sc = 1;
-	$qs = dbQuery("SELECT MAX(position) FROM tbl_color");
-	list( $max ) = dbFetchArray($qs);
-	if( ! is_null($max)	)
-	{
-		$sc = $max;	
+		$sc = FALSE;
+		if( count( $ds ) > 0 )
+		{
+			$fields = "";
+			$values = "";
+			$i = 1;
+			foreach( $ds as $field => $value )
+			{
+				$fields .= $i == 1 ? $field : ", ".$field;
+				$values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
+				$i++;	
+			}
+			$sc = dbQuery("INSERT INTO tbl_color (".$fields.") VALUES (".$values.")");
+		}
+		return $sc;
 	}
 	
-	return $sc;
-}
-
-public function getColorId($code)
-{
-	$sc = FALSE;
-	$qs = dbQuery("SELECT id_color FROM tbl_color WHERE color_code = '".$code."'");
-	if( dbNumRows($qs) == 1 )
+	public function update($id, array $ds)
 	{
-		list( $sc ) = dbFetchArray($qs);	
+		$sc = FALSE;
+		if( count( $ds ) > 0 )
+		{
+			$set 	= "";
+			$i		= 1;
+			foreach( $ds as $field => $value )
+			{
+				$set .= $i == 1 ? $field . " = '" . $value . "'" : ", ".$field . " = '" . $value . "'";
+				$i++;	
+			}
+			$sc = dbQuery("UPDATE tbl_color SET " . $set . " WHERE id = '".$id."'");
+		}
+		return $sc;
 	}
 	
-	return $sc;
-}
-
+	
+	public function delete($id)
+	{
+		$sc = dbQuery("DELETE FROM tbl_color WHERE id = '".$id."'");
+		if( $sc === FALSE )
+		{
+			$this->error = 'ลบรายการไม่สำเร็จ';
+		}
+		return $sc;
+	}
+	
+	public function isExists($id)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_color WHERE id = '".$id."'");
+		if( dbNumRows($qs) > 0 )
+		{
+			$sc = TRUE;	
+		}
+		return $sc;
+	}
+	
+	
+	
+	public function getGroupName($id_group)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT name FROM tbl_color_group WHERE id = '".$id_group."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);	
+		}
+		return $sc;
+	}
+	
+	
+	
+	public function changeColorGroup($id, $id_group)
+	{
+		$sc = dbQuery("UPDATE tbl_color SET id_group = '".$id_group."' WHERE id = '".$id."'");
+		if( 	$sc === FALSE )
+		{
+			$this->error = 	'เปลี่ยนกลุ่มไม่สำเร็จ';
+		}
+		return $sc;
+	}
+	
 
 
 }////

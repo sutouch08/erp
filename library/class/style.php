@@ -7,6 +7,7 @@ class style
 	public $active;
 	public $show_in_shop;
 	public $is_visual;
+	public $error = '';
 	
 	public function __construct($id = "")
 	{
@@ -67,7 +68,7 @@ class style
 	}
 	
 	
-	public function delete($id, $emp)
+	public function delete($id)
 	{
 		$sc = FALSE;
 		if( $this->hasTransection($id) === FALSE )
@@ -76,7 +77,7 @@ class style
 		}
 		else
 		{
-			$sc = dbQuery("UPDATE tbl_style SET is_deleted = 1, emp = ".$emp." WHERE id = '". $id ."'");
+			$this->error = "Transection Exists";
 		}
 		return $sc;
 	}
@@ -134,13 +135,13 @@ class style
 	{
 		$sc = FALSE;
 		//--- Stock
-		$stock	= dbNumRows( dbQuery("SELECT id_style FROM tbl_stock WHERE id_style = '".$id."'") );
+		$stock	= dbNumRows( dbQuery("SELECT id_style FROM tbl_stock AS s JOIN tbl_product AS p ON s.id_product = p.id_product WHERE id_style = '".$id."'") );
 		//--- Receive
-		$receive	= dbNumRows( dbQuery("SELECT id_style FROM tbl_receive_detail WHERE id_style = '".$id."'") );
+		$receive	= dbNumRows( dbQuery("SELECT id_style FROM tbl_receive_detail AS r JOIN tbl_product AS p ON r.id_product = p.id_product WHERE id_style = '".$id."'") );
 		//--- Order
-		$order 	= dbNumRows( dbQuery("SELECT id_style FROM tbl_order_detail WHERE id_style = '".$id."'") );
+		$order 	= dbNumRows( dbQuery("SELECT id_style FROM tbl_order_detail AS o JOIN tbl_product AS p ON o.id_product = p.id_product WHERE id_style = '".$id."'") );
 		//--- PO
-		$po		= dbNumRows( dbQuery("SELECT id_style FROM tbl_po WHERE id_style = '".$id."'") );
+		$po		= dbNumRows( dbQuery("SELECT id_style FROM tbl_po AS po JOIN tbl_product AS pd ON po.id_product = pd.id_product WHERE id_style = '".$id."'") );
 		
 		$transection		= $stock + $receive + $order + $po;
 		
