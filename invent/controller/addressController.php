@@ -24,7 +24,7 @@ if( isset( $_GET['insertAddress'] ) && isset( $_POST['id_customer'] ) )
 						'remark'			=> $_POST['remark']
 						);
 	$ad 	= new address();
-	$rs = $ad->insertAddress($data);
+	$rs = $ad->add($data);
 	if( $rs )
 	{
 		$sc = 'success';	
@@ -52,7 +52,7 @@ if( isset( $_GET['updateAddress'] ) && isset( $_GET['id_address'] ) )
 						'remark'			=> $_POST['remark']
 						);
 	$ad 	= new address();
-	$rs = $ad->updateAddress($id, $data);
+	$rs = $ad->update($id, $data);
 	if( $rs === TRUE )
 	{
 		$sc = 'success';	
@@ -64,7 +64,7 @@ if( isset( $_GET['deleteAddress'] ) && isset( $_GET['id_address'] ) )
 {
 	$sc = 'fail';
 	$ad = new address();
-	$rs = $ad->deleteAddress($_GET['id_address']);
+	$rs = $ad->delete($_GET['id_address']);
 	if( $rs === TRUE )
 	{
 		$sc = 'success';
@@ -75,6 +75,7 @@ if( isset( $_GET['deleteAddress'] ) && isset( $_GET['id_address'] ) )
 
 if( isset( $_GET['getAddress'] ) )
 {
+	include "../function/customer_helper.php";
 	$sc = "";
 	$ds = array();
 	$id_address = $_POST['id_address'];
@@ -84,6 +85,8 @@ if( isset( $_GET['getAddress'] ) )
 		$rs = dbFetchObject($qs);
 		$arr = array(
 							'id_address'		=> $rs->id_address,
+							'id_customer'	=> $rs->id_customer,
+							'customer_name'		=> customerName($rs->id_customer),
 							'Fname'			=> $rs->first_name,
 							'Lname'			=> $rs->last_name,
 							'company'		=> $rs->company,
@@ -102,6 +105,7 @@ if( isset( $_GET['getAddress'] ) )
 	}
 	echo json_encode($arr);
 }
+
 
 if( isset( $_GET['getAddressTable'] ) )
 {
@@ -133,6 +137,8 @@ if( isset( $_GET['getAddressTable'] ) )
 	echo $sc;						
 			
 }
+
+
 
 if( isset( $_GET['getAddressInfo'] ) )
 {
@@ -167,6 +173,8 @@ if( isset( $_GET['check_sender'] ) && isset( $_GET['sender_name'] ) )
 	echo dbNumRows($qs);
 }
 
+
+
 if( isset( $_GET['addNewSender'] ) && isset( $_POST['type'] ) )
 {
 	$name 		= $_POST['name'];
@@ -186,6 +194,8 @@ if( isset( $_GET['addNewSender'] ) && isset( $_POST['type'] ) )
 		echo 'fail';
 	}
 }
+
+
 
 if( isset( $_GET['updateSender'] ) && isset( $_GET['id_sender'] ) )
 {
@@ -717,13 +727,9 @@ if( isset( $_GET['printOnlineAddressSheet'] ) && isset( $_GET['id_address'] ) )
 
 if( isset($_GET['clearFilter']) )
 {
-	setcookie('name_search', '', time()-3600, '/');
-	setcookie('ad_search', '', time()-3600, '/');
-	setcookie('phone_search', '', time()-3600, '/');
-	setcookie('type_search', '', time()-3600, '/');
-	setcookie('cus_search', '', time()-3600, '/');
-	setcookie('city_search', '', time()-3600, '/');
-	setcookie('sender', '', time()-3600, '/');
+	deleteCookie('sCustomer');
+	deleteCookie('sAddress');
+	deleteCookie('sProvince');
 	echo 'success';
 }
 

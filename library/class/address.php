@@ -43,26 +43,53 @@ class address
 		}
 	}
 	
-	public function insertAddress(array $ds)
+	
+	public function add(array $ds)
 	{
-		$qs = "INSERT INTO tbl_address (id_customer, alias, company, first_name, last_name, address1, address2, city, postcode, phone, remark) VALUES ";
-		$qs .= "(".$ds['id_customer'].", '".$ds['alias']."', '".$ds['company']."', '".$ds['first_name']."', '".$ds['last_name']."', '".$ds['address1']."', '".$ds['address2']."', '".$ds['city']."', '".$ds['postcode']."', '".$ds['phone']."', '".$ds['remark']."')";
-		return dbQuery($qs);
+		$sc = FALSE;
+		if( count($ds) > 0 )
+		{
+			$fields	= "";
+			$values	= "";
+			$i			= 1;
+			foreach( $ds as $field => $value )
+			{
+				$fields	.= $i == 1 ? $field : ", ".$field;
+				$values	.= $i == 1 ? "'". $value ."'" : ", '". $value ."'";
+				$i++;	
+			}
+			$sc = dbQuery("INSERT INTO tbl_address (".$fields.") VALUES (".$values.")");
+		}
+		return $sc;			
 	}
 	
-	public function updateAddress($id, array $ds)
+	
+	public function update($id, array $ds)
 	{
-		$qs = "UPDATE tbl_address SET id_customer = ".$ds['id_customer'].",  alias = '".$ds['alias']."', company = '".$ds['company']."', first_name =  '".$ds['first_name']."', ";
-		$qs .= "last_name = '".$ds['last_name']."', address1 = '".$ds['address1']."', address2 = '".$ds['address2']."', city = '".$ds['city']."', postcode = '".$ds['postcode']."', phone = '".$ds['phone']."', remark = '".$ds['remark']."'";
-		$qs .= " WHERE id_address = ".$id;
-		return dbQuery($qs);
+		$sc = FALSE;
+		if( count( $ds ) > 0 )
+		{
+			$set 	= "";
+			$i		= 1;
+			foreach( $ds as $field => $value )
+			{
+				$set .= $i == 1 ? $field . " = '" . $value . "'" : ", ".$field . " = '" . $value . "'";
+				$i++;	
+			}
+			$sc = dbQuery("UPDATE tbl_address SET " . $set . " WHERE id_address = '".$id."'");
+		}
+		return $sc;
 	}
 	
-	public function deleteAddress($id)
+	
+	
+	public function delete($id)
 	{
-		return dbQuery("DELETE FROM tbl_address WHERE id_address = ".$id);	
+		return dbQuery("DELETE FROM tbl_address WHERE id_address = '".$id."'");
 	}
 	
+	
+
 	public function getCustomerAddress($id_customer)
 	{
 		return dbQuery("SELECT * FROM tbl_address WHERE id_customer = '".$id_customer."'");	

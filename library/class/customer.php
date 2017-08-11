@@ -8,7 +8,6 @@ class customer {
 	public $address3;
 	public $tel;				//-- Phone No.
 	public $fax;				//-- Fax No.
-	public $mobile;			//-- Mobile No.
 	public $m_id;			//-- Citizen ID
 	public $tax_id;
 	public $contact;			//-- Contact Person Name
@@ -49,7 +48,6 @@ class customer {
 				$this->address3	= $rs->address3;
 				$this->tel				= $rs->tel;
 				$this->fax			= $rs->fax;
-				$this->mobile		= $rs->mobile;
 				$this->m_id			= $rs->m_id;
 				$this->tax_id		= $rs->tax_id;
 				$this->contact		= $rs->contact;
@@ -183,6 +181,18 @@ class customer {
 			$sc = TRUE;
 		}
 		return $sc;		
+	}
+	
+	
+	public function getName($id)
+	{
+		$cs = '';
+		$qs = dbQuery("SELECT name FROM tbl_customer WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $cs ) = dbFetchArray($qs);	
+		}
+		return $cs;
 	}
 	
 }//--- end class

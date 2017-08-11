@@ -5,7 +5,6 @@ class supplier
 	public $code;
 	public $name;
 	public $id_group;
-	public $credit_amount;
 	public $credit_term;
 	public $active;
 	public $is_deleted;
@@ -24,7 +23,6 @@ class supplier
 				$this->code	 	= $rs->code;
 				$this->name		= $rs->name;
 				$this->id_group = $rs->id_group;
-				$this->credit_amount	= $rs->credit_amount;
 				$this->credit_term		= $rs->credit_term;	
 				$this->active	= $rs->active;
 				$this->is_deleted	= $rs->is_delete;

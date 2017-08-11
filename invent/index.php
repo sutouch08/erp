@@ -546,8 +546,16 @@ switch($page){
 			$content = 'style.php';
 			$pageTitle = 'เพิ่ม/แก้ไข รุ่นสินค้า';
 			break;
+		case 'kind' : 
+			$content = 'product_kind.php';
+			$pageTitle = 'เพิ่ม/แก้ไข ประเภทสินค้า';
+			break;
+		case 'type' : 
+			$content = 'product_type.php';
+			$pageTitle = 'เพิ่ม/แก้ไข ชนิดสินค้า';
+			break;
 		case 'category':
-			$content = 'category.php';
+			$content = 'product_category.php';
 			$pageTitle = 'หมวดหมู่สินค้า';
 			break;
 		case 'product_group' :
@@ -612,17 +620,29 @@ switch($page){
 			$content = "customer_transfer.php";
 			$pageTitle = "โอนย้ายลูกค้า";
 			break;
-		case "address":
-			$content = "address.php";
-			$pageTitle = "ที่อยู่";
+		case "customer_address":
+			$content = "customer_address.php";
+			$pageTitle = "เพิ่ม/แก้ไข ที่อยู่สำหรับจัดส่ง";
 			break;
-		case "group":
+		case "customer_group":
 			$content = "customer_group.php";
-			$pageTitle = "กลุ่มลูกค้า";
+			$pageTitle = "เพิ่ม/แก้ไข กลุ่มลูกค้า";
 			break;
-		case "area" :
+		case "customer_kind":
+			$content = "customer_kind.php";
+			$pageTitle = "เพิ่ม/แก้ไข ประเภทลูกค้า";
+			break;
+		case "customer_type":
+			$content = "customer_type.php";
+			$pageTitle = "เพิ่ม/แก้ไข ชนิดลูกค้า";
+			break;
+		case "customer_class":
+			$content = "customer_class.php";
+			$pageTitle = "เพิ่ม/แก้ไข เกรดลูกค้า";
+			break;
+		case "customer_area" :
 			$content = "customer_area.php";
-			$pageTitle = "เขตลูกค้า";
+			$pageTitle = "เพิ่ม/แก้ไข เขตลูกค้า";
 			break;
 		case "add_sponsor" :
 			$content = "add_sponsor.php";

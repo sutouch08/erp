@@ -40,4 +40,11 @@ function customerAreaIn($txt)
 	return $sc;
 }
 
+
+function customerName($id)
+{
+	$cs = new customer();
+	return $cs->getName($id);		
+}
+
 ?>

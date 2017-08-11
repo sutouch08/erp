@@ -3,7 +3,36 @@ require "../../library/config.php";
 require"../../library/functions.php";
 require "../function/tools.php";
 
+$cs = new autocomplete();
+//-----------------  NEW CODE  -----------------//
 
+//------- user in customer_address
+if( isset( $_GET['getCustomer'] ) )
+{
+	$txt = trim( $_REQUEST['term'] );
+	$useFelds = "id, code, name";
+	$qs = $cs->customer($txt, $useFelds);
+	$ds = array();
+	if( dbNumRows($qs) > 0 )
+	{
+		while( $rs = dbFetchObject($qs) )
+		{
+			$ds[]	= $rs->code.' | '.$rs->name.' | '.$rs->id;
+		}
+	}
+	else
+	{
+		$ds[] = 'ไม่พบข้อมูล';	
+	}
+	
+	echo json_encode($ds);
+}
+
+
+
+
+
+//------------------  OLD CODE WILL BE DELETE ------------------///
 if( isset( $_GET['get_order_reference'] ) && isset( $_REQUEST['term'] ) && isset( $_GET['id_customer'] ) )
 {
 	$txt = $_REQUEST['term'];

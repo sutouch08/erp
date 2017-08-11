@@ -262,9 +262,9 @@
                     <li class="dropdown-submenu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users"></i>&nbsp; ลูกค้า</a>
                       <ul class="dropdown-menu">
                         <li><a href="index.php?content=customer"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข ลูกค้า</a></li>
-                        <li><a href="index.php?content=address"><i class="fa fa-envelope"></i>&nbsp; เพิ่ม/แก้ไข ที่อยู่ลูกค้า</a></li>
-                        <li><a href="index.php?content=group"><i class="fa fa-users"></i>&nbsp; เพิ่ม/แก้ไข กลุ่มลูกค้า</a></li>
-                        <li><a href="index.php?content=area"><i class="fa fa-users"></i>&nbsp; เพิ่ม/แก้ไข เขตลูกค้า</a></li>
+                        <li><a href="index.php?content=customer_address"><i class="fa fa-envelope"></i>&nbsp; เพิ่ม/แก้ไข ที่อยู่ลูกค้า</a></li>
+                        <li><a href="index.php?content=customer_group"><i class="fa fa-users"></i>&nbsp; เพิ่ม/แก้ไข กลุ่มลูกค้า</a></li>
+                        <li><a href="index.php?content=customer_area"><i class="fa fa-users"></i>&nbsp; เพิ่ม/แก้ไข เขตลูกค้า</a></li>
                          <li><a href="index.php?content=customer_transfer"><i class="fa fa-retweet"></i>&nbsp; โอน/ย้าย ลูกค้า</a></li>
                          <li class="divider"></li>
                         <li><a href="index.php?content=add_sponsor"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข รายชื่อสปอนเซอร์</a></li>

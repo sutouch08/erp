@@ -38,9 +38,8 @@
                 	<tr>
                     	<th class="width-5 text-center">ลำดับ</th>
                         <th class="width-10">รหัส</th>
-                        <th class="width-35">ผู้จำหน่าย</th>
+                        <th class="width-40">ผู้จำหน่าย</th>
                         <th class="width-20">กลุ่ม</th>
-                        <th class="width-10 text-center">วงเงิน</th>
                         <th class="width-10 text-center">เครดิต</th>
                         <th ></th>
                     </tr>
@@ -54,7 +53,6 @@
                         <td class="middle"><?php echo $rs->code; ?></td>
                         <td class="middle"><?php echo $rs->name; ?></td>
                         <td class="middle"><?php echo $rs->group_name; ?></td>
-                        <td class="middle text-center"><?php echo number_format($rs->credit_amount, 2); ?></td>
                         <td class="middle text-center"><?php echo $rs->credit_term; ?></td>
                         <td class="middle text-right">
                         <?php if( $delete ) : ?>
@@ -66,7 +64,7 @@
 <?php		endwhile; ?>
 <?php	else : ?>
 				<tr>
-                	<td colspan="7" align="center"><h4>ไม่พบรายการ</h4></td>
+                	<td colspan="6" align="center"><h4>ไม่พบรายการ</h4></td>
 				</tr>
 <?php	endif; ?>          
                 </tbody>                

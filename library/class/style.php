@@ -5,15 +5,13 @@ class style
 	public $code;
 	public $name;
 	public $active;
-	public $show_in_shop;
-	public $is_visual;
 	public $error = '';
 	
 	public function __construct($id = "")
 	{
 		if( $id != "" )
 		{
-			$qs = dbQuery("SELECT * FROM tbl_style WHERE id = '".$id."'");
+			$qs = dbQuery("SELECT * FROM tbl_product_style WHERE id = '".$id."'");
 			if( dbNumRows($qs) == 1 )
 			{
 				$rs = dbFetchObject($qs);
@@ -21,8 +19,7 @@ class style
 				$this->code	= $rs->code;
 				$this->name	= $rs->name;
 				$this->active	= $rs->active;
-				$this->show_in_shop	= $rs->show_in_shop;
-				$this->is_visual		= $rs->is_visual;
+
 			}
 		}
 	}
@@ -42,7 +39,7 @@ class style
 				$values	.= $i == 1 ? "'". $value ."'" : ", '". $value ."'";
 				$i++;	
 			}
-			$sc = dbQuery("INSERT INTO tbl_style (".$fields.") VALUES (".$values.")");
+			$sc = dbQuery("INSERT INTO tbl_product_style (".$fields.") VALUES (".$values.")");
 		}
 		return $sc;	
 	}
@@ -62,7 +59,7 @@ class style
 				$set .= $i == 1 ? $field . " = '" . $value . "'" : ", ".$field . " = '" . $value . "'";
 				$i++;	
 			}
-			$sc = dbQuery("UPDATE tbl_style SET " . $set . " WHERE id = '".$id."'");
+			$sc = dbQuery("UPDATE tbl_product_style SET " . $set . " WHERE id = '".$id."'");
 		}
 		return $sc;
 	}
@@ -73,7 +70,7 @@ class style
 		$sc = FALSE;
 		if( $this->hasTransection($id) === FALSE )
 		{
-			$sc = dbQuery("DELETE FROM tbl_style WHERE id = '".$id."'");	
+			$sc = dbQuery("DELETE FROM tbl_product_style WHERE id = '".$id."'");	
 		}
 		else
 		{
@@ -82,21 +79,13 @@ class style
 		return $sc;
 	}
 	
-	
-	
-	
-	public function unDelete($id, $emp)
-	{
-		return dbQuery("UPDATE tbl_style  SET is_deleted = 0, emp = ".$emp." WHERE id = '".$id."'");	
-	}
-	
-	
+
 	
 	
 	public function isExists($id)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT id FROM tbl_style WHERE id = '".$id."'");
+		$qs = dbQuery("SELECT id FROM tbl_product_style WHERE id = '".$id."'");
 		if( dbNumRows($qs) > 0 )
 		{
 			$sc = TRUE;	
@@ -109,7 +98,7 @@ class style
 	public function getCode($id)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT code FROM tbl_style WHERE id = '".$id."'");
+		$qs = dbQuery("SELECT code FROM tbl_product_style WHERE id = '".$id."'");
 		if( dbNumRows($qs) == 1 )
 		{
 			list( $sc ) = dbFetchArray($qs);
@@ -122,7 +111,7 @@ class style
 	public function getId($code)
 	{
 		$sc = 0;
-		$qs = dbQuery("SELECT id FROM tbl_style WHERE code = '".$code."'");
+		$qs = dbQuery("SELECT id FROM tbl_product_style WHERE code = '".$code."'");
 		if( dbNumRows($qs) == 1 )
 		{
 			list( $sc ) = dbFetchArray($qs);	

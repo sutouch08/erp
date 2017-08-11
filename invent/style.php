@@ -65,10 +65,10 @@
 	
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
-	$paginator->Per_Page('tbl_style', $where, $get_rows);
+	$paginator->Per_Page('tbl_product_style', $where, $get_rows);
 	$paginator->display($get_rows, 'index.php?content=style');
 	
-	$qs = dbQuery("SELECT * FROM tbl_style ".$where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
+	$qs = dbQuery("SELECT * FROM tbl_product_style ".$where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 ?>    
 	<div class="row">
     	<div class="col-sm-12">

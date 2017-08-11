@@ -35,10 +35,9 @@
 								'id'					=> $id,
 								'code'				=> trim( $rs['B'] ),
 								'name'				=> trim( $rs['C'] ),
-								'id_group'		=> $sg->getGroupId( trim( $rs['AK'] ) ),
-								'credit_amount'	=> $rs['AP'],
-								'credit_term'		=> $rs['AQ'],
-								'active'			=> trim( $rs['Q'] ) == '' ? 1 : 0
+								'id_group'		=> $sg->getGroupId( trim( $rs['D'] ) ),
+								'credit_term'		=> $rs['F'],
+								'active'			=> trim( $rs['E'] ) == '' ? 1 : 0
 								);
 						$sp->add($arr);	
 					}
@@ -48,10 +47,9 @@
 						$arr = array(
 								'code'				=> trim( $rs['B'] ),
 								'name'				=> trim( $rs['C'] ),
-								'id_group'		=> $sg->getGroupId( trim( $rs['AK'] ) ),
-								'credit_amount'	=> $rs['AP'],
-								'credit_term'		=> $rs['AQ'],
-								'active'			=> trim( $rs['Q'] ) == '' ? 1 : 0
+								'id_group'		=> $sg->getGroupId( trim( $rs['D'] ) ),
+								'credit_term'		=> $rs['F'],
+								'active'			=> trim( $rs['E'] ) == '' ? 1 : 0
 								);
 						$sp->update( $id, $arr);
 					}	/// end if
