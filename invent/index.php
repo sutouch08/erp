@@ -6,12 +6,19 @@ if( !getConfig("CLOSED") )
 {
 checkUser();
 $user_id = $_COOKIE['user_id'];
+
 $id_profile = getProfile($user_id);
+
 $viewStockOnly = isViewStockOnly($id_profile);
+
 $id_tab = "";
+
 $fast_qc = getConfig("FAST_QC");
+
 $content = 'main.php';
-$page = (isset($_GET['content'])&& $_GET['content'] !='')?$_GET['content']:'';
+
+$page = ( isset($_GET['content'] ) && $_GET['content'] != '' ) ? $_GET['content'] : '' ;
+
 switch($page){
 		case "orderToComplete" :
 			$content = "orderToComplete.php";

@@ -95,6 +95,7 @@ class unit {
 	
 	
 	
+	
 	public function getName($code)
 	{
 		$sc = "";
@@ -105,6 +106,55 @@ class unit {
 		}
 		return $sc;
 	}
+	
+	
+	
+	
+	
+	public function getUnitId($code)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_unit WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	
+	public function getUnitCode($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT code FROM tbl_unit WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	
+	public function getUnitName($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT name FROM tbl_unit WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	
+	
 	
 }// end class
 

@@ -105,9 +105,16 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['size'] ) )
 
 
 //--------------- Product Brand ----------------//
-if( isset( $_GET['syncMaster']) && isset( $_GET['brand']))
+if( isset( $_GET['syncMaster'] ) && isset( $_GET['brand'] ) )
 {
 	include "interface/import/importBrand.php";
+}
+
+
+//---------------- Products -------------------------------//
+if( isset( $_GET['syncMaster'] ) && isset( $_GET['product'] ) )
+{
+	include "interface/import/importProduct.php";
 }
 
 

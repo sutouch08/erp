@@ -90,7 +90,50 @@ class brand
 		return $sc;
 	}
 
-
+	
+	
+	
+	
+	public function getBrandId($code)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_brand WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	
+	public function getBrandCode($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT code FROM tbl_brand WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	
+	public function getBrandName($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT name FROM tbl_brand WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
 
 
 }////

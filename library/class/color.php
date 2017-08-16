@@ -105,6 +105,43 @@ class color
 		return $sc;
 	}
 	
+	
+	
+	public function getColorId($code)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_color WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;			
+	}
+	
+	
+	
+	public function getColorCode($id)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT code FROM tbl_color WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	public function getColorName($id)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT name FROM tbl_color WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
 
 
 }////

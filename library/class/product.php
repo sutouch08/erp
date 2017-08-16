@@ -115,6 +115,21 @@ class product
 	{
 		return dbQuery("DELETE FROM tbl_product WHERE id = '".$id."'");
 	}
+	
+	
+	public function isExists($id)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_product WHERE id = '".$id."'");
+		if( dbNumRows($qs) > 0 )
+		{
+			$sc = TRUE;	
+		}
+		return $sc;
+	}
+	
+
+	
 
 	
 }//จบ class

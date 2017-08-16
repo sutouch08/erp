@@ -1,10 +1,28 @@
 <?php
 
 class product_group {
+	
+	public $id;
 	public $code;
 	public $name;
-	public $date_upd;
-	public function __construct(){}
+	
+	
+	public function __construct($id = "")
+	{
+		if( $id != "" )
+		{
+			$qs =dbQuery("SELECT * FROM tbl_product_group WHERE id = '".$id."'");
+			if( dbNumRows($qs) == 1 )
+			{
+				$rs = dbFetchObject($qs);
+				$this->id 	= $rs->id;	
+				$this->code	= $rs->code;
+				$this->name = $rs->name;
+			}
+		}
+	}
+	
+	
 	
 	public function add(array $ds)
 	{
@@ -28,6 +46,8 @@ class product_group {
 	}
 	
 	
+	
+	
 	public function update( $id, array $ds)
 	{
 		$sc 	= FALSE;
@@ -47,6 +67,8 @@ class product_group {
 	}
 	
 	
+	
+	
 	public function isExists($id)
 	{
 		$sc = FALSE;
@@ -59,8 +81,55 @@ class product_group {
 		return $sc;
 	}
 	
+	
+	
+	
+	public function getProductGroupId($code)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_product_group WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);	
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	public function getProductGroupCode($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT code FROM tbl_product_group WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);	
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	public function getProductGroupName($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT name FROM tbl_product_group WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);	
+		}
+		return $sc;
+	}
 
 	
+	
+	
+	public function getProductGroup()
+	{
+		return dbQuery("SELECT * FROM tbl_product_group");
+	}
 
 	
 }

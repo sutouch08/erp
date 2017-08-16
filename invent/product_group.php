@@ -1,5 +1,4 @@
 <?php
-	$page_name 	= "ฐานข้อมูล กลุ่มสินค้า";
 	$id_tab 			= 64;
 	$id_profile 		= $_COOKIE['profile_id'];
     $pm 				= checkAccess($id_profile, $id_tab);
@@ -13,15 +12,11 @@
 <div class="container">
 <div class="row top-row">
 	<div class="col-sm-6 top-col">
-    	<h4 class="title"><i class="fa fa-archive"></i>&nbsp;<?php echo $page_name; ?></h4>
+    	<h4 class="title"><i class="fa fa-archive"></i>&nbsp;<?php echo $pageTitle; ?></h4>
     </div>
     <div class="col-sm-6">
     	<p class="pull-right top-p" >
         <button type="button" class="btn btn-sm btn-info" onClick="syncData()"><i class="fa fa-refresh"></i> อัพเดตข้อมูล</button>
-        
-        <!--
-        <button type="button" class="btn btn-sm btn-success" onClick="addNew()"><i class="fa fa-plus"></i> เพิ่มใหม่</button>
-        -->
         </p>
     </div>
 </div><!-- / row -->
@@ -48,11 +43,6 @@
                 <td id="td<?php echo $rs['id']; ?>"><?php echo $rs['name']; ?></td>
                 <td align="center"><?php // echo number_format( productInGroup( $rs['code'] ) ); ?></td>
                 <td align="right">
-                	<!--
-                	<button type="button" class="btn btn-sm <?php echo $isDefault; ?> bs" id="btn-<?php echo $rs['code']; ?>" onClick="setAsDefault(<?php echo $rs['code']; ?>)"><i class="fa fa-check"></i> ค่าเริ่มต้น</button>
-                    
-                    <button type="button" class="btn btn-sm btn-warning" onClick="editGroup(<?php echo $rs['code']; ?>)"><i class="fa fa-pencil"></i> แก้ไข</button>
-                    -->
                     <button class="btn btn-sm btn-danger" onClick="checkDeleteGroup(<?php echo $rs['code']; ?>)"><i class="fa fa-trash"></i> ลบกลุ่ม</button>
                 </td>
             </tr>

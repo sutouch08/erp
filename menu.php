@@ -18,7 +18,7 @@
                     </ul>
                 </li>
                  <li class="divider"></li>
-                <li><a href="index.php?content=requisition">		<i class="fa fa-upload"></i>&nbsp; เบิกสินค้าเพื่อแปรรูป		</a></li>
+                <li><a href="index.php?content=requisition">		<i class="fa fa-upload"></i>&nbsp; เบิกสินค้าเพื่อแปรรูป</a></li>
                 <!--<li><a href="index.php?content=order_transform"><i class="fa fa-upload"></i>&nbsp; เบิกสินค้าเพื่อแปรสภาพ</a></li> -->
                 <li><a href="index.php?content=order_support"><i class="fa fa-upload"></i>&nbsp; เบิกอภินันทนาการ</a></li>
                 <li><a href="index.php?content=lend"><i class="fa fa-upload"></i>&nbsp; ยืมสินค้า</a></li>
@@ -31,8 +31,7 @@
                 <li><a href="index.php?content=buffer_zone"><span class="glyphicon glyphicon-tasks"></span>&nbsp; ตรวจสอบ BUFFER ZONE</a></li>
                 <li><a href="index.php?content=cancle_zone"><span class="glyphicon glyphicon-tasks"></span>&nbsp; ตรวจสอบ CANCLE ZONE</a></li>
               </ul>
-
-            </li>
+          </li>
           <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-shopping-bag"></i>&nbsp; ระบบขาย</a>
               <ul class="dropdown-menu">
                 <li><a href="index.php?content=order"><i class="fa fa-shopping-bag"></i>&nbsp; ออเดอร์</a></li>
@@ -42,9 +41,6 @@
                  <li class="divider"></li>
                 <li><a href="index.php?content=prepare"><i class="fa fa-shopping-basket"></i>&nbsp; จัดสินค้า</a></li>
                 <li><a href="index.php?content=qc"><i class="fa fa-check-square-o"></i>&nbsp; ตรวจสินค้า</a></li>
-                <?php if($fast_qc) : ?>
-                 	<li><a href="index.php?content=qc2"><i class="fa fa-check-square-o"></i>&nbsp; ตรวจสินค้า จากข้างนอก</a></li>
-                 <?php endif; ?>
                 <li><a href="index.php?content=bill"><i class="fa fa-file-text-o"></i>&nbsp; ออเดอร์รอเปิดบิล</a></li>
                 <li><a href="index.php?content=order_closed"><i class="fa fa-file-text-o"></i>&nbsp; ออเดอร์เปิดบิลแล้ว</a></li>
                  <li class="divider"></li>
@@ -241,13 +237,15 @@
                         <ul class="dropdown-menu">
                         <li><a href="index.php?content=product"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข สินค้า</a></li>
                         <li><a href="index.php?content=style"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข รุ่นสินค้า</a></li>
-                        <li><a href="index.php?content=category"><i class="fa fa-bookmark"></i>&nbsp; เพิ่ม/แก้ไข หมวดหมู่</a></li>
-                        <li><a href="index.php?content=product_group"><i class="fa fa-archive"></i>&nbsp; เพิ่ม/แก้ไข กลุ่มสินค้า</a></li>
+                        <li><a href="index.php?content=category"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข หมวดหมู่สินค้า</a></li>
+                        <li><a href="index.php?content=product_group"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข กลุ่มสินค้า</a></li>
+                        <li><a href="index.php?content=kind"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข ประเภทสินค้า</a></li>
+                        <li><a href="index.php?content=type"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข ชนิดสินค้า</a></li>
                         <li><a href="index.php?content=brand"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข ยี่ห้อสินค้า</a></li>
-                        <li><a href="index.php?content=unit"><i class="fa fa-cube"></i>&nbsp; เพิ่ม/แก้ไข หน่วยนับ</a></li>
-                        <li><a href="index.php?content=color"><i class="fa fa-tint"></i>&nbsp; เพิ่ม/แก้ไข สี</a></li>
-                        <li><a href="index.php?content=size"><i class="fa fa-tag"></i>&nbsp; เพิ่ม/แก้ไข ไซด์</a></li>
-                        <li><a href="index.php?content=attribute"><i class="fa fa-leaf"></i>&nbsp; เพิ่ม/แก้ไข คุณลักษณะ</a></li>
+                        <li><a href="index.php?content=unit"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข หน่วยนับ</a></li>
+                        <li><a href="index.php?content=color"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข สี</a></li>
+                        <li><a href="index.php?content=size"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข ไซด์</a></li>
+                        <li><a href="index.php?content=attribute"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข คุณลักษณะ</a></li>
                         <li><a href="index.php?content=barcode"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข บาร์โค้ด</a></li>
                       </ul>
             		</li>

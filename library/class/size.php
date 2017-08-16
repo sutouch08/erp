@@ -183,6 +183,49 @@ class size
 		}
 		return $sc;
 	}
+	
+	
+	
+	public function getSizeId($code)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_size WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	public function getSizeCode($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT code FROM tbl_size WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	public function getSizeName($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT name FROM tbl_size WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
 		
 
 

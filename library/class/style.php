@@ -120,6 +120,50 @@ class style
 	}
 	
 	
+	public function getStyleId($code)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_product_style WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);	
+		}
+		return $sc; 	
+	}	
+	
+	
+	
+	
+	public function getStyleCode($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT code FROM tbl_product_style WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	
+	public function getStyleName($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT name FROM tbl_product_style WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	
 	public function hasTransection($id)
 	{
 		$sc = FALSE;
