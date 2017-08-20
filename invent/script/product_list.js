@@ -23,6 +23,15 @@ function clearFilter(){
 }
 
 
+
+
+function goEdit(id){
+	window.location.href = "index.php?content=product&edit&id_style="+id;
+}
+
+
+
+
 function syncMaster(){
 	load_in();
 	$.ajax({

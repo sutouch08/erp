@@ -242,6 +242,7 @@
                         <li><a href="index.php?content=kind"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข ประเภทสินค้า</a></li>
                         <li><a href="index.php?content=type"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข ชนิดสินค้า</a></li>
                         <li><a href="index.php?content=brand"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข ยี่ห้อสินค้า</a></li>
+                        <li><a href="index.php?content=product_tab"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข แถบเสดงสินค้า</a></li>
                         <li><a href="index.php?content=unit"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข หน่วยนับ</a></li>
                         <li><a href="index.php?content=color"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข สี</a></li>
                         <li><a href="index.php?content=size"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข ไซด์</a></li>

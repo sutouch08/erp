@@ -1,33 +1,39 @@
 <?php
-
-function selectProductGroup($id = "")
-{
-	$option = '<option value="">เลือกกลุ่มสินค้า</option>';	
-	$pg = new product_group();
-	$qs = $pg->getProductGroup();
-	if( dbNumRows($qs) > 0 )
+	function showDiscount($amount, $percent)
 	{
-		while( $rs = dbFetchObject($qs) )
+		$sc = 0;
+		if( $amount > 0 && $percent == 0 )
 		{
-			$option .= '<option value="'.$rs->id.'" '.isSelected($id, $rs->id).'>'.$rs->name.'</option>';	
+			$sc = $amount;	
 		}
+		else if( $percent > 0 && $amount == 0 )
+		{
+			$sc = $percent;	
+		}
+		return $sc;
 	}
-	return $option;
-}
 
-function selectCategory($id = "")
-{
-	$option = '<option value="">เลือกหมวดหมู่สินค้า</option>';	
-	$cs = new category();
-	$qs = $cs->getCategory();
-	if( dbNumRows($qs) > 0 )
+
+	function discountType($amount, $percent)
 	{
-		while( $rs = dbFetchObject($qs) )
-		{
-			$option .= '<option value="'.$rs->id.'" '.isSelected($id, $rs->id).'>'.$rs->name.'</option>';	
-		}
+		$sc = $amount > 0 ? 'amount' : 'percent';
+		return $sc;	
 	}
-	return $option;	
-}
+	
+	
+	//------ Add Symbol
+	function viewDiscount($amount, $percent)
+	{
+		$sc = 0;
+		if( $amount > 0 && $percent == 0 )
+		{
+			$sc = number_format($amount, 2);	
+		}
+		else if( $percent > 0 && $amount == 0 )
+		{
+			$sc = $percent.'%';
+		}
+		return $sc;
+	}
 
 ?>

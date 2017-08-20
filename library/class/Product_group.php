@@ -69,6 +69,15 @@ class product_group {
 	
 	
 	
+	
+	public function delete($id)
+	{
+		return dbQuery("DELETE FROM tbl_product_group WHERE id = '".$id."'");
+	}
+	
+	
+	
+	
 	public function isExists($id)
 	{
 		$sc = FALSE;
@@ -131,6 +140,12 @@ class product_group {
 		return dbQuery("SELECT * FROM tbl_product_group");
 	}
 
+
+	public function countMember($id)
+	{
+		$qs = dbQuery("SELECT id FROM tbl_product WHERE id_group = '".$id."' GROUP BY id_style");
+		return dbNumRows($qs);
+	}
 	
 }
 

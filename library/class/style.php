@@ -186,7 +186,10 @@ class style
 	}
 	
 	
-	
+	public function getProductType($id)
+	{
+		return dbQuery("SELECT * FROM tbl_product_type WHERE id = ".$id);	
+	}
 	
 	
 }//--- End class

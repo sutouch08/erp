@@ -1,5 +1,5 @@
 <?php
-class kind 
+class type 
 {
 	public $id;
 	public $code;
@@ -9,7 +9,7 @@ class kind
 	{
 		if( $id != '' )
 		{
-			$qs = dbQuery("SELECT * FROM tbl_product_kind WHERE id = '".$id."'");
+			$qs = dbQuery("SELECT * FROM tbl_product_type WHERE id = '".$id."'");
 			if( dbNumRows($qs) == 1 )
 			{
 				$rs = dbFetchObject($qs);
@@ -35,7 +35,7 @@ class kind
 				$values	.= $i == 1 ? "'". $value ."'" : ", '". $value ."'";
 				$i++;	
 			}
-			$sc = dbQuery("INSERT INTO tbl_product_kind (".$fields.") VALUES (".$values.")");
+			$sc = dbQuery("INSERT INTO tbl_product_type (".$fields.") VALUES (".$values.")");
 		}
 		return $sc;	
 	}
@@ -55,7 +55,7 @@ class kind
 				$set .= $i == 1 ? $field . " = '" . $value . "'" : ", ".$field . " = '" . $value . "'";
 				$i++;	
 			}
-			$sc = dbQuery("UPDATE tbl_product_kind SET " . $set . " WHERE id = '".$id."'");
+			$sc = dbQuery("UPDATE tbl_product_type SET " . $set . " WHERE id = '".$id."'");
 		}
 		return $sc;
 	}
@@ -63,13 +63,13 @@ class kind
 	
 	public function delete($id)
 	{
-		return dbQuery("DELETE FROM tbl_product_kind WHERE id = '".$id."'");
+		return dbQuery("DELETE FROM tbl_product_type WHERE id = '".$id."'");
 	}
 	
 	
 	public function removeMember($id)
 	{
-		return dbQuery("UPDATE tbl_product SET id_kind = '0' WHERE id_kind = '".$id."'");
+		return dbQuery("UPDATE tbl_product SET id_type = '0' WHERE id_type = '".$id."'");
 	}
 	
 	
@@ -78,11 +78,11 @@ class kind
 		$sc = FALSE;
 		if( $id != '' )
 		{
-			$qs = dbQuery("SELECT id FROM tbl_product_kind WHERE ".$field." = '".$value."' AND id != '".$id."'");
+			$qs = dbQuery("SELECT id FROM tbl_product_type WHERE ".$field." = '".$value."' AND id != '".$id."'");
 		}
 		else
 		{
-			$qs = dbQuery("SELECT id FROM tbl_product_kind WHERE ".$field." = '".$value."'");
+			$qs = dbQuery("SELECT id FROM tbl_product_type WHERE ".$field." = '".$value."'");
 		}
 		
 		if( dbNumRows($qs) > 0 )
@@ -95,9 +95,9 @@ class kind
 		
 	
 	
-	public function getProductKind()
+	public function getProducttype()
 	{
-		return dbQuery("SELECT * FROM tbl_product_kind");	
+		return dbQuery("SELECT * FROM tbl_product_type");	
 	}
 	
 	
@@ -105,7 +105,7 @@ class kind
 	
 	public function countMember($id)
 	{
-		$qs = dbQuery("SELECT id FROM tbl_product WHERE id_kind = '".$id."' GROUP BY id_style");
+		$qs = dbQuery("SELECT id FROM tbl_product WHERE id_type = '".$id."' GROUP BY id_style");
 		return dbNumRows($qs);
 	}
 	

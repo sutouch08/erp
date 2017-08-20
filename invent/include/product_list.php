@@ -71,11 +71,13 @@
 	
 	$paginator 	= new paginator();
 	$get_rows	= get_rows();
-	$paginator->Per_Page("tbl_product AS p JOIN tbl_style AS s ON p.id_style = s.id", $where, $get_rows);
+	//$paginator->Per_Page("tbl_product AS p JOIN tbl_style AS s ON p.id_style = s.id", $where, $get_rows);
+	$paginator->Per_Page("tbl_product_style AS s JOIN tbl_product AS p ON p.id_style = s.id", $where, $get_rows);
 	$paginator->display($get_rows, 'index.php?content=product');
 	
-	$qr = "SELECT p.*, s.code AS pdCode FROM tbl_product AS p ";
-	$qr .= "JOIN tbl_style AS s ON p.id_style = s.id ";
+	$qr = "SELECT p.*, s.code AS pdCode FROM tbl_product_style AS s ";
+	$qr .= "JOIN tbl_product AS p ON p.id_style = s.id ";
+	
 	$qs = dbQuery($qr . $where . " LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 	
 ?>
@@ -108,7 +110,7 @@
                     <td><?php echo number_format($rs->price, 2); ?></td>
                     <td align="right">
                     <?php if( $edit ) : ?>
-                    	<button type="button" class="btn btn-xs btn-warning" onClick="goEdit('<?php echo $rs->id; ?>')"><i class="fa fa-pencil"></i></button>
+                    	<button type="button" class="btn btn-xs btn-warning" onClick="goEdit('<?php echo $rs->id_style; ?>')"><i class="fa fa-pencil"></i></button>
                     <?php endif; ?>
                     <?php if( $delete ) : ?>
                     	<button type="button" class="btn btn-xs btn-danger" onClick="goDelete('<?php echo $rs->id; ?>', '<?php echo $rs->pdCode; ?>')"><i class="fa fa-trash"></i></button>

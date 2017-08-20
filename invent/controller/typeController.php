@@ -3,13 +3,13 @@ require "../../library/config.php";
 require "../../library/functions.php";
 require "../function/tools.php";
 
-//------- Add new Category
-if( isset( $_GET['addCategory'] ) )
+//------- Add new type
+if( isset( $_GET['addType'] ) )
 {
 	$sc = 'success';
 	$code = $_POST['code'];
 	$name = $_POST['name'];
-	$cs = new category();
+	$cs = new type();
 	$nameExists = $cs->isExists('name', $name);
 	$codeExists	 = $cs->isExists('code', $code);
 	if( $nameExists === TRUE )
@@ -34,13 +34,13 @@ if( isset( $_GET['addCategory'] ) )
 
 
 
-if( isset( $_GET['saveEditCategory'] ) )
+if( isset( $_GET['saveEditType'] ) )
 {
 	$sc = 'success';
 	$id			= $_POST['id'];
 	$code	= $_POST['code'];
 	$name	= $_POST['name'];	
-	$cs = new category();
+	$cs = new type();
 	$nameExists = $cs->isExists('name', $name, $id);
 	$codeExists	 = $cs->isExists('code', $code, $id);
 	if( $nameExists === TRUE )
@@ -65,14 +65,14 @@ if( isset( $_GET['saveEditCategory'] ) )
 }
 
 
-if( isset( $_GET['deleteCategory'] ) )
+if( isset( $_GET['deleteType'] ) )
 {
 	$sc = 'fail';
 	$id = $_GET['id'];
-	$cs = new category();	
+	$cs = new type();	
 	if( $cs->delete($id) === TRUE )
 	{
-		//----- เปลียน id_category ในสินค้าที่อ้างถึง ให้เป็น 0
+		//----- เปลียน id_type ในสินค้าที่อ้างถึง ให้เป็น 0
 		$cs->removeMember($id);	
 		$sc = 'success';
 	}
@@ -80,12 +80,12 @@ if( isset( $_GET['deleteCategory'] ) )
 }
 
 
-//----------- Get category data for edit
+//----------- Get type data for edit
 if( isset( $_GET['getData'] ) )
 {
 	$sc = "";
 	$id = $_GET['id'];
-	$cs = new category($id);
+	$cs = new type($id);
 	if( $cs->id != '' )
 	{
 		$sc = $cs->id .' | ' . $cs->code . ' | ' . $cs->name;	
@@ -96,8 +96,8 @@ if( isset( $_GET['getData'] ) )
 
 if( isset( $_GET['clearFilter'] ) )
 {
-	deleteCookie('sCategoryCode');
-	deleteCookie('sCategoryName');
+	deleteCookie('sTypeCode');
+	deleteCookie('sTypeName');
 	echo 'done';	
 }
 

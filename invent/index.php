@@ -569,6 +569,10 @@ switch($page){
 			$content = 'product_group.php';
 			$pageTitle = 'เพิ่ม/แก้ไข กลุ่มสินค้า';
 			break;
+		case 'product_tab' :
+			$content = 'product_tab.php';
+			$pageTitle = 'เพิ่ม/แก้ไข แถบแสดงสินค้า';
+			break;
 		case "unit" :
 			$content = 'unit.php';
 			$pageTitle = 'หน่วยนับ';

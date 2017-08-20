@@ -29,7 +29,9 @@ ul.tree ul {
 }
 
 ul.tree ul {
-  margin-left:10px; /* indentation */
+  margin-left:5px; /* indentation */
+  margin-top:-5px !important;
+  padding-top:10px;
   position:relative;
 }
 
@@ -72,6 +74,9 @@ ul.tree ul li:last-child:before {
   bottom:0;
 }
 
+ul.tree ul li label {
+	margin-bottom:0px !important;
+}
 .title {
 	margin-top:0px;
 	margin-bottom:0px;		
@@ -439,44 +444,44 @@ hr{
 }
 
 .margin-right-5 {
-	margin-right:5px;	
+	margin-right:5px !important;	
 }
 
 .margin-right-10{
-	margin-right:10px;
+	margin-right:10px !important;
 }
 
 .margin-right-15 {
-	margin-right:15px;	
+	margin-right:15px !important;	
 }
 
 .margin-top-5{
-	margin-top:5px;	
+	margin-top:5px !important;	
 }
 .margin-top-10{
-	margin-top:10px;
+	margin-top:10px !important;
 }
 .margin-top-15{
-	margin-top:15px;
+	margin-top:15px !important;
 }
 .margin-left-5 {
-	margin-left:5px;
+	margin-left:5px !important;
 }
 .margin-left-10 {
-	margin-left:10px;
+	margin-left:10px !important;
 }
 .margin-left-15 {
-	margin-left:15px;
+	margin-left:15px !important;
 }
 
 .margin-bottom-5 {
 	margin-bottom:5px;
 }
 .margin-bottom-10 {
-	margin-bottom:10px;
+	margin-bottom:10px !important;
 }
 .margin-bottom-15 {
-	margin-bottom:15px;
+	margin-bottom:15px !important;
 }
 
 .middle {
