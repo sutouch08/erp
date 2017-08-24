@@ -1,4 +1,9 @@
 // JavaScript Document
+function removeItem(id, code){
+	swal('ไม่อนุญาติให้ลบ');	
+}
+
+
 
 function getItem(id){
 	$.ajax({
@@ -116,6 +121,54 @@ function setActive(id){
 				swal("Error", "Update Fail", "error");
 			}else{
 				$("#active-"+id).html(rs);	
+			}
+		}
+	});
+}
+
+
+
+
+//-----  Mapping Image with id_pa
+function doMapping()
+{
+	var id_style = $("#id_style").val();
+	$("#imageMappingTable").modal('hide');
+	load_in();
+	$.ajax({
+		url:"controller/productController.php?doMappingImageWithProductAttribute&id_style="+id_style,
+		type:"POST", cache:"false", data: $("#mappingForm").serialize(),
+		success: function(rs){
+			load_out();
+			var rs = $.trim(rs);
+			if( rs == 'success' ){
+				swal({ title: 'เรียบร้อย', text: 'จับคู่รูปภาพเรียบร้อยแล้ว', timer: 1000, type: 'success' });
+				setTimeout(function(){ window.location.href = "index.php?content=product&edit&id_product="+id_pd+"&tab=2"; }, 1100);
+			}else{
+				swal('ข้อผิดพลาด !!', 'ทำรายการไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
+			}
+		}
+	});
+}
+
+
+
+
+function setImage()
+{
+	var id_style	= $("#id_style").val();
+	load_in();
+	$.ajax({
+		url:"controller/productController.php?getImageAttributeGrid",
+		type:"POST", cache:"false", data:{ "id_style" : id_style },
+		success: function(rs){
+			load_out();
+			var rs = $.trim(rs);
+			if( rs == 'noimage' ){
+				swal('ไม่พบรูปภาพ หรือ รายการสินค้า');
+			}else{
+				$("#mappingBody").html(rs);
+				$("#imageMappingTable").modal('show');	
 			}
 		}
 	});

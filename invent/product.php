@@ -12,6 +12,7 @@
 	require 'function/kind_helper.php';
 	require 'function/type_helper.php';
 	require 'function/productTab_helper.php';
+	require 'function/date_helper.php';
 	
 	?>
 <div class="container">

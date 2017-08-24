@@ -8,6 +8,7 @@ require '../function/category_helper.php';
 require '../function/kind_helper.php';
 require '../function/type_helper.php';
 require '../function/productTab_helper.php';
+require '../function/image_helper.php';
 
 
 if( isset( $_GET['saveProduct'] ) )
@@ -21,6 +22,7 @@ if( isset( $_GET['saveProduct'] ) )
 						"id_kind"		=> $_POST['pdKind'],
 						"id_type"		=> $_POST['pdType'],
 						"id_category"	=> $_POST['pdCategory'],
+						"year"			=> $_POST['pdYear'],
 						"discount_amount"	=> $_POST['discountType'] == 'amount' ? $_POST['discount'] : 0.00,
 						"discount_percent"	=> $_POST['discountType'] == 'percent' ? $_POST['discount'] : 0.00,
 						"weight"		=> $_POST['weight'],
@@ -192,12 +194,164 @@ if( isset( $_GET['setActive'] ) )
 }
 
 
+
+
+//---------------------------------- Upload images  ------------------------//
+if( isset( $_GET['upload'] ) )
+{
+	$id_style 	= $_GET['id_style'];
+	$sc		= 'success';
+	$image	= new image();
+	//require '../../library/class/class.upload.php';
+	if( ! empty( $_FILES ) )
+	{
+		
+		$files 			= $_FILES['file'];
+		if( is_string($files['name']) )
+		{
+			$rs = $image->doUpload($files, $id_style);	
+		}
+		else if( is_array($files['name']) )
+		{
+			$fileCount = count($files['name']);
+			for($i = 0; $i < $fileCount; $i++)
+			{
+				$file = array(
+								'name' => $files['name'][$i],
+			    				'type' => $files['type'][$i],
+			    				'size' => $files['size'][$i],
+								'tmp_name' => $files['tmp_name'][$i],
+			  					'error' => $files['error'][$i]
+								);
+				$rs = $image->doUpload($file, $id_style);
+				if( $rs !== TRUE )
+				{
+					$sc = 'fail';	
+				}
+			}//--------- For Loop
+		}//----- endif
+	}
+	else
+	{
+		$sc = "no_file";
+	}//--- end if
+	echo $sc;
+}
+
+
+
+
+//------------------------  Set Cover image  ---------------//
+if( isset( $_GET['setCoverImage'] ) )
+{
+	$id_image	= $_POST['id_image'];
+	$id_style		= $_POST['id_product'];
+	$image 		= new image();
+	$rs = $image->setCover($id_style, $id_image);
+	$sc = $rs === TRUE ? 'success' : 'fail';
+	echo $sc;
+}
+
+
+
+//----------------------  Delete image  ----------------//
+
+if( isset( $_GET['removeImage'] ) )
+{
+	$sc = FALSE;
+	$id_image	= $_POST['id_image'];
+	$id_style		= $_POST['id_style'];
+	$image		= new image();
+	$isCover		= $image->isCover($id_image);
+	if( $image->delete($id_image) === TRUE )
+	{
+		if( $isCover )
+		{
+			$sc = $image->newCover($id_style);	
+		}
+		else
+		{
+			$sc = TRUE;
+		}
+	}
+	$cover = $image->getCover($id_style);
+	echo $sc === TRUE? 'success | '.$cover : 'fail';	
+}
+
+//-------------------  Load Image Table ----------------//
+if( isset( $_GET['getImageTable'] ) )
+{
+	$sc 	= array();
+	$id_style = $_POST['id_style'];
+	$pd = new product();
+	$qs 	= $pd->getProductImages($id_style);
+	$image = new image();
+	if( dbNumRows($qs) > 0 )
+	{
+		while( $rs = dbFetchArray($qs) )
+		{
+			$id_img		= $rs['id'];
+			$cover		= $rs['cover'] == 1 ? 'btn-success' : '';
+			$ds = array(
+							'id_pd'		=> $id_style,
+							'id_img'		=> $id_img,
+							'thumbImage'	=> $image->getImagePath($id_img, 3),
+							'bigImage'	=> $image->getImagePath($id_img, 4),
+							'isCover'		=> $cover
+						);
+			array_push($sc, $ds);
+		}				
+	}
+	else
+	{
+		$sc = array("noimage" => "noimage");	
+	}
+	echo json_encode($sc);
+}
+
+
+
+//---- List of image for mapping
+if( isset( $_GET['getImageAttributeGrid'] ) )
+{
+	$id_style = $_POST['id_style'];
+	echo imageAttributeGrid($id_style);	
+}
+
+//---------------- จับคู่รูปภาพกับสินค้า
+if( isset( $_GET['doMappingImageWithProductAttribute'] ) )
+{
+	$sc 		= 'success';
+	$items	= $_POST['items'];
+	$pd		= new product();
+	$image	= new image();
+	if( count($items) > 0 )
+	{
+		foreach( $items as $id_product => $id_image )
+		{
+			$arr = array("id_product" => $id_product, "id_image" => $id_image);
+			if( $pd->hasImage($id_product) )
+			{
+				$qs = $pd->updateImage($id_product, $id_image);	
+			}
+			else
+			{
+				$qs = $pd->addImage($id_product, $id_image);
+			}
+			if( ! $qs ){ $sc = 'fail'; }
+		}
+	}
+	echo $sc;
+}
+
+
 if( isset( $_GET['clearFilter'] ) )
 {
 	deleteCookie('sProductCode');
 	deleteCookie('sProductName');
 	deleteCookie('sProductGroup');
 	deleteCookie('sProductCategory');
+	deleteCookie('sProductYear');
 	echo 'done';	
 }
 

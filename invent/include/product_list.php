@@ -3,6 +3,7 @@
 	$sName	= isset( $_POST['sName'] ) ? trim( $_POST['sName'] ) : ( getCookie('sProductName') ? getCookie('sProductName') : '' );
 	$sGroup	= isset( $_POST['sGroup'] ) ? $_POST['sGroup'] : ( getCookie('sProductGroup') ? getCookie('sProductGroup') : '' );
 	$sCategory	= isset( $_POST['sCategory'] ) ? $_POST['sCategory'] : ( getCookie('sProductCategory') ? getCookie('sProductCategory') : '' );
+	$sYear	= isset( $_POST['sYear'] ) ? $_POST['sYear'] : ( getCookie('sProductYear') ? getCookie('sProductYear') : '' );
 ?>    
 <form id="searchForm" method="post">
 	<div class="row">
@@ -29,6 +30,16 @@
             	<?php echo selectCategory($sCategory); ?>
             </select>
         </div>
+        
+        <div class="col-sm-2">
+        	<label>ปีสินค้า</label>
+            <select class="form-control input-sm select-box" name="sYear" id="sYear">
+            	<option value="">ทั้งหมด</option>
+            	<?php echo selectYears($sYear); ?>
+            </select>
+        </div>
+        
+        
         <div class="col-sm-1">
         	<label class="display-block not-show">search</label>
             <button type="button" class="btn btn-sm btn-primary btn-block" onClick="getSearch()"><i class="fa fa-search"></i> ค้นหา</button>
@@ -66,8 +77,16 @@
 		createCookie('sProductCategory', $sCategory);
 		$where .= "AND p.id_category = ".$sCategory." ";	
 	}
+	
+	if( $sYear != "" )
+	{
+		createCookie('sProductYear', $sYear);
+		$where .= "AND p.year = '".$sYear."' ";	
+	}
+	
 	$where .= "GROUP BY p.id_style ";
 	$where .= "ORDER BY p.date_upd DESC";
+	
 	
 	$paginator 	= new paginator();
 	$get_rows	= get_rows();

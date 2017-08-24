@@ -221,6 +221,28 @@ class product
 	
 	
 	
+	public function hasImage($id)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id_image FROM tbl_product_image WHERE id_product = '".$id."'");
+		if( dbNumRows($qs) > 0 )
+		{
+			$sc = TRUE;	
+		}
+		return $sc;
+	}
+	
+	
+	public function addImage($id, $id_image)
+	{
+		return dbQuery("INSERT INTO tbl_product_image (id_product, id_image) VALUES ('".$id."', '".$id_image."')");	
+	}
+	
+	public function updateImage($id, $id_image)
+	{
+		return dbQuery("UPDATE tbl_product_image SET id_image = '".$id_image."' WHERE id_product = '".$id."'");	
+	}
+	
 	public function getImageId($id)
 	{
 		$sc = '';
@@ -230,6 +252,15 @@ class product
 			list( $sc ) = dbFetchArray($qs);	
 		}
 		return $sc;
+	}
+	
+	
+	
+	
+	///------- get images list of this style
+	public function getProductImages($id_style)
+	{
+		return dbQuery("SELECT * FROM tbl_image WHERE id_style = '".$id_style."'");
 	}
 	
 	
@@ -254,7 +285,46 @@ class product
 	}
 	
 	
-
+	
+	public function getStyleId($id)
+	{
+		$sc = 0;
+		$qs = dbQuery("SELECT id_style FROM tbl_product WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray( $qs);
+		}
+		return $sc;
+	}
+	
+	
+	public function getAllColors($id_style)
+	{
+		$sc = array();
+		$qs = dbQuery("SELECT p.id_color, c.code, c.name FROM tbl_product AS p JOIN tbl_color AS c ON p.id_color = c.id WHERE p.id_style = '".$id_style."' GROUP BY p.id_color ORDER BY c.code ASC");
+		if( dbNumRows($qs) > 0 )
+		{
+			while( $rs = dbFetchObject($qs) )
+			{
+				$sc[$rs->id_color]		= array("code" => $rs->code, "name" => $rs->name);	
+			}
+		}
+		return $sc;
+	}
+	
+	public function getAllSizes($id_style)
+	{
+		$sc = array();
+		$qs = dbQuery("SELECT p.id_size, s.code, s.name FROM tbl_product AS p JOIN tbl_size AS s ON p.id_size = s.id WHERE p.id_style = '".$id_style."' GROUP BY p.id_size ORDER BY s.position ASC");
+		if( dbNumRows($qs) > 0 )
+		{
+			while( $rs = dbFetchObject($qs) )
+			{
+				$sc[$rs->id_size]		= array("code" => $rs->code, "name" => $rs->name);	
+			}
+		}
+		return $sc;	
+	}
 	
 
 	

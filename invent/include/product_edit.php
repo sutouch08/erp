@@ -9,6 +9,10 @@ if( ! isset( $_GET['id_style'] ) ) :
 		$tab2				= $activeTab == 'items-list' ? 'active in' : '' ; 
 		$tab3				= $activeTab == 'images-list' ? 'active in' : '';
 ?>
+<script src="<?php echo WEB_ROOT; ?>library/js/dropzone.js"></script>
+<script src="<?php echo WEB_ROOT; ?>library/js/jquery.colorbox.js"></script>
+<link rel="stylesheet" href="<?php  echo WEB_ROOT;?>library/css/dropzone.css" />
+<link rel="stylesheet" href="<?php echo WEB_ROOT; ?>library/css/colorbox.css" />
 <div class="row">
 <div class="col-sm-2 padding-right-0" style="padding-top:15px;">
 <ul id="myTab1" class="setting-tabs">
@@ -22,6 +26,7 @@ if( ! isset( $_GET['id_style'] ) ) :
 <?php
 	include 'include/product_info.php';
 	include 'include/product_items.php';
+	include 'include/product_image.php';
 
 ?>
        

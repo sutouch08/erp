@@ -80,4 +80,22 @@ function excelDateToPhpDate($excelDate)
 	}
 }
 
+
+
+function selectYears($se="0000")
+{
+	$sc 		= '';
+	$length	= 5;
+	$startYear = getConfig('START_YEAR');
+	//$se 		= ($se == '' OR $se == '0000') ? $startYear : $se;
+	$year = ($se - $length) < $startYear ? $startYear : $se - $length;
+	$lastYear = date('Y') + $length;
+	while( $year <= $lastYear )
+	{
+		$sc .= '<option value="'.$year.'" '.isSelected($year, $se).'>'.$year.'</option>';
+		$year++;
+	}
+	return $sc;
+}
+
 ?>

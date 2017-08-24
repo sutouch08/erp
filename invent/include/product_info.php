@@ -94,6 +94,14 @@
                     <div class="divider-hidden" style="margin-top:5px; margin-bottom:5px;"></div>
                     
                     
+                    <div class="col-sm-3"><span class="form-control label-left">ปี</span></div>
+                    <div class="col-sm-9">
+                    	<select class="form-control input-sm input-large" name="pdYear" id="pdYear">
+                        	<?php echo selectYears($rs->year); ?>
+                        </select>
+                    </div>
+                    <div class="divider-hidden" style="margin-top:5px; margin-bottom:5px;"></div>
+                    
                     
                     <div class="col-sm-3"><span class="form-control label-left">แถบแสดงสินค้า</span></div>
                     <div class="col-sm-9"><?php echo productTabsTree($rs->id_style);  ?></div>

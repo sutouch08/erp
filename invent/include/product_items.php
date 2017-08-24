@@ -45,7 +45,7 @@
     <?php	if( dbNumRows($qs) > 0 ) : ?>
     <?php		while( $rs = dbFetchObject($qs) ) : 	?>
         			<tr class="font-size-12">
-                    	<td class="middle text-center"><img src="<?php echo $image->getImagePath($pd->getImageId( $rs->id), 1 ); ?>" width="40px" /></td>
+                    	<td class="middle text-center"><img src="<?php echo $image->getProductImage($rs->id, 1 ); ?>" width="40px" /></td>
                         <td class="middle"><?php echo $rs->code; ?></td>
                         <td class="middle text-center"><?php echo $rs->color; ?></td>
                         <td class="middle text-center"><?php echo $rs->size; ?></td>
@@ -175,7 +175,8 @@
                     	<div class="modal-header">
                             <h4 class="modal-title">จับคู่รูปภาพกับสินค้า</h4>
                         </div>
-                        <div class="modal-body" id="mappingBody">
+                        <div class="modal-body">
+                        <div class="table-responsive" id="mappingBody"></div>
                         
                         </div>
                         <div class="modal-footer">
