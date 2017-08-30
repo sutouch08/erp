@@ -33,9 +33,9 @@
 					{
 						//-- If not exists do insert
 						$arr = array(
-								'id_warehouse'			=> $id,
+								'id'			=> $id,
 								'code'		=> $code,
-								'warehouse_name'		=> $name,
+								'name'		=> $name,
 								'active'	=> $active == '' ? 1 : 0
 								);
 						$warehouse->add($arr);	
@@ -45,8 +45,8 @@
 						//--- If exists do update
 						$arr = array(
 								'code'		=> $code,
-								'warehouse_name' 	=> $rs['C'],
-								'active'		=> $active == '' ? 1 : 0
+								'name' 	=> $rs['C'],
+								'active'	=> $active == '' ? 1 : 0
 								);
 						$warehouse->update( $id, $arr);
 					}	/// end if

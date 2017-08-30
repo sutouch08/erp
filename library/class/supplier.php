@@ -25,7 +25,7 @@ class supplier
 				$this->id_group = $rs->id_group;
 				$this->credit_term		= $rs->credit_term;	
 				$this->active	= $rs->active;
-				$this->is_deleted	= $rs->is_delete;
+				$this->is_deleted	= $rs->is_deleted;
 				$this->emp		= $rs->emp;
 				$this->date_upd	= $rs->date_upd;
 			}
@@ -152,7 +152,34 @@ class supplier
 		}
 		return $sc;
 	}
-		
 	
+	public function getName($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT name FROM tbl_supplier WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	public function getNameByCode($code)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT name FROM tbl_supplier WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	public function search($txt)
+	{
+		return dbQuery("SELECT id, code, name FROM tbl_supplier WHERE name LIKE '%".$txt."%' OR code LIKE '%".$txt."%'");	
+	}
 }//----end class
 ?>

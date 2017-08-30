@@ -568,6 +568,7 @@ function get_product_attribute_image($id_product_attribute,$use_size){
 	
 function dbDate($date, $time = FALSE)
 {
+	$date = str_replace('/', '-', $date); 
 	if($time == true)
 	{
 		$his = date('H:i:s', strtotime($date));

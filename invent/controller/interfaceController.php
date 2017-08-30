@@ -4,6 +4,8 @@ require '../../library/functions.php';
 require "../function/tools.php";
 require "../../library/class/PHPExcel.php";
 
+
+///============================================= MASTER ==========================================///
 //---------  Sync Product Group -------//
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['product_group'] ) )
 {
@@ -118,4 +120,16 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['product'] ) )
 }
 
 
+
+///==================================================== END MASTER ==========================================///
+if( isset( $_GET['syncDocument'] ) && isset( $_GET['po'] ) )
+{
+	include "interface/import/importPO.php";	
+}
+
+///=================================================== DOCUMENTS ==========================================///
+
+
+
+///=================================================== END DOCUMENTS =======================================///
 ?>

@@ -45,7 +45,7 @@
                 <label class="form-control label-left">ชื่อคลัง : </label>
             </div>
             <div class="col-sm-8">
-            	<label class="form-control input-sm input-large"><?php echo $rs->warehouse_name; ?></label>
+            	<label class="form-control input-sm input-large"><?php echo $rs->name; ?></label>
             </div>
             <div class="divider-hidden margin-top-5 margin-bottom-5"></div>
             
@@ -109,7 +109,7 @@
             <input type="hidden" id="prepare" value="<?php echo $rs->prepare; ?>" />
             <input type="hidden" id="underZero" value="<?php echo $rs->allow_under_zero; ?>" />
             <input type="hidden" id="active" value="<?php echo $rs->active; ?>" />
-            <input type="hidden" id="id_warehouse" value="<?php echo $rs->id_warehouse; ?>" />
+            <input type="hidden" id="id_warehouse" value="<?php echo $rs->id; ?>" />
             
             <input type="hidden" id="oldCode" value="<?php echo $rs->code; ?>" />
             <input type="hidden" id="oldName" value="<?php echo $rs->warehouse; ?>" />
@@ -173,7 +173,7 @@
 </form>
 <hr class="margin-top-10"/>
 <?php 
-	$where 	= "WHERE id_warehouse != '' ";
+	$where 	= "WHERE id != '' ";
 	if( $whCode != '' )
 	{	
 		createCookie('whCode', $whCode);
@@ -182,7 +182,7 @@
 	if( $whName != '' )
 	{ 
 		createCookie('whName', $whName);
-		$where .= "AND warehouse_name LIKE '%".$whName."%' "; 
+		$where .= "AND name LIKE '%".$whName."%' "; 
 	}
 	if( $whRole != 0 )
 	{ 
@@ -222,10 +222,10 @@
 	<?php if( dbNumRows($qs) > 0 ) : ?>
     <?php	$no	= ($get_rows * ($page -1)) + 1 ;	?>
     <?php	while( $rs = dbFetchObject($qs) ) : 	?>
-    			<tr style="font-size:12px;" id="row_<?php echo $rs->id_warehouse; ?>">
+    			<tr style="font-size:12px;" id="row_<?php echo $rs->id; ?>">
                 	<td class="text-center middle"><?php echo number_format($no); ?></td>
                     <td class="text-center middle"><?php echo $rs->code; ?></td>
-                    <td class="middle"><?php echo $rs->warehouse_name; ?></td>
+                    <td class="middle"><?php echo $rs->name; ?></td>
                     <td class="text-center middle"><?php echo getWarehouseRoleName($rs->role); ?></td>
                     <td class="text-center middle"><?php echo isActived($rs->sell); ?></td>
                     <td class="text-center middle"><?php echo isActived($rs->prepare); ?></td>
@@ -233,10 +233,10 @@
                     <td class="text-center middle"><?php echo isActived($rs->active); ?></td>
                     <td align="right" class="middle">
                     <?php if( $edit ) : ?>	
-                        <button type="button" class="btn btn-sm btn-warning" onclick="edit('<?php echo $rs->id_warehouse; ?>')"><i class="fa fa-pencil"></i></button>
+                        <button type="button" class="btn btn-sm btn-warning" onclick="edit('<?php echo $rs->id; ?>')"><i class="fa fa-pencil"></i></button>
 					<?php endif; ?>
                     <?php if( $delete ) : ?>                       
-                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteWarehouse('<?php echo $rs->id_warehouse; ?>')"><i class="fa fa-trash"></i></button>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteWarehouse('<?php echo $rs->id; ?>')"><i class="fa fa-trash"></i></button>
 					<?php endif; ?>                        
                     </td>
                 </tr>  

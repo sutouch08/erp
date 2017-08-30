@@ -233,15 +233,23 @@ class product
 	}
 	
 	
+	
+	
 	public function addImage($id, $id_image)
 	{
 		return dbQuery("INSERT INTO tbl_product_image (id_product, id_image) VALUES ('".$id."', '".$id_image."')");	
 	}
 	
+	
+	
+	
 	public function updateImage($id, $id_image)
 	{
 		return dbQuery("UPDATE tbl_product_image SET id_image = '".$id_image."' WHERE id_product = '".$id."'");	
 	}
+	
+	
+	
 	
 	public function getImageId($id)
 	{
@@ -312,6 +320,8 @@ class product
 		return $sc;
 	}
 	
+	
+	
 	public function getAllSizes($id_style)
 	{
 		$sc = array();
@@ -326,6 +336,53 @@ class product
 		return $sc;	
 	}
 	
+	
+	
+	public function getNameByCode($code)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT name FROM tbl_product WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	public function getId($code)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_product WHERE code = '".$code."'");
+		if( dbNumRows($qs ) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	public function getName($id)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT name FROM tbl_product WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	public function getCode($id)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT code FROM tbl_product WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;	
+	}
 
 	
 }//จบ class

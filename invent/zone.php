@@ -200,12 +200,13 @@
             <tbody>
 	<?php if( dbNumRows($qs) > 0 ) : ?>
     <?php	$no	= row_no();	?>
+    <?php	$wh	= new warehouse(); 	?>
     <?php	while( $rs = dbFetchObject($qs) ) : ?>
             	<tr id="row_<?php echo $rs->id_zone; ?>" style="font-size:12px;">
                 	<td align="center"><?php echo number_format($no); ?></td>
                     <td><?php echo $rs->barcode_zone; ?></td>
                     <td><?php echo $rs->zone_name; ?></td>
-                    <td><?php echo get_warehouse_name_by_id($rs->id_warehouse); ?></td>
+                    <td><?php echo $wh->getName($rs->id_warehouse); ?></td>
                     <td align="center">
                     <?php if( $edit ) : ?>
                     	<button type="button" class="btn btn-sm btn-warning" onclick="editZone(<?php echo $rs->id_zone; ?>)"><i class="fa fa-pencil"></i></button>

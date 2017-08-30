@@ -14,13 +14,13 @@
 		{
 			if( $id != '' )
 			{
-				$qs = dbQuery("SELECT * FROM tbl_warehouse WHERE id_warehouse = '".$id)."'";
+				$qs = dbQuery("SELECT * FROM tbl_warehouse WHERE id = '".$id)."'";
 				if( dbNumRows($qs) == 1 )
 				{
 					$rs = dbFetchObject($qs);
-					$this->id		= 	$rs->id_warehouse;
+					$this->id		= 	$rs->id;
 					$this->code	= $rs->code;
-					$this->name	= $rs->warehouse_name;
+					$this->name	= $rs->name;
 					$this->role	= $rs->role;
 					$this->allowUnderZero	= $this->allow_under_zero == 1 ? TRUE : FALSE;
 					$this->isDefault	= $rs->is_default == 1 ? TRUE : FALSE;
@@ -67,7 +67,7 @@
 				if( $i < $n ){ $set .= ", "; }
 				$i++;
 			}
-			return dbQuery("UPDATE tbl_warehouse SET ".$set." WHERE id_warehouse = '".$id."'");
+			return dbQuery("UPDATE tbl_warehouse SET ".$set." WHERE id = '".$id."'");
 		}		
 		
 		public function deleteWarehouse($id)
@@ -86,7 +86,7 @@
 		public function isWarehouseEmpty($id)
 		{
 			$sc = TRUE;
-			$qs = dbQuery("SELECT id_zone FROM tbl_zone WHERE id_warehouse = '".$id."'");
+			$qs = dbQuery("SELECT id_zone FROM tbl_zone WHERE id = '".$id."'");
 			if( dbNumRows($qs) > 0 )
 			{
 				$sc = FALSE;
@@ -97,20 +97,57 @@
 		
 		private function actionDelete($id)
 		{
-			return dbQuery("DELETE FROM tbl_warehouse WHERE id_warehouse = '".$id."'");	
+			return dbQuery("DELETE FROM tbl_warehouse WHERE id = '".$id."'");	
 		}
 		
 		public function isExists($id)
 		{
 			$sc = FALSE;
-			$qs = dbQuery("SELECT code FROM tbl_warehouse WHERE id_warehouse = '".$id."'");
+			$qs = dbQuery("SELECT code FROM tbl_warehouse WHERE id = '".$id."'");
 			if( dbNumRows($qs) > 0 )
 			{
 				$sc = TRUE;
 			}
 			return $sc;
 		}
-			
+		
+		
+		
+		public function getCode($id)
+		{
+			$sc = "";
+			$qs = dbQuery("SELECT code FROM tbl_warehouse WHERE id = '".$id."'");
+			if( dbNumRows($qs) == 1 )
+			{
+				list( $sc ) = dbFetchArray($qs);	
+			}
+			return $sc;
+		}
+		
+		
+		public function getName($id)
+		{
+			$sc = "";
+			$qs = dbQuery("SELECT name FROM tbl_warehouse WHERE id = '".$id."'");
+			if( dbNumRows($qs) == 1 )
+			{
+				list( $sc ) = dbFetchArray($qs);	
+			}
+			return $sc;
+		}
+		
+		
+		public function getId($code)
+		{
+			$sc = '0000';
+			$qs = dbQuery("SELECT id FROM tbl_warehouse WHERE code = '".$code."'");
+			if( dbNumRows($qs) == 1 )
+			{
+				list( $sc ) = dbFetchArray($qs);
+			}
+			return $sc;
+		}
+		
 		
 	} 	//----- End class
 

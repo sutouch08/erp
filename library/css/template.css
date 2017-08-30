@@ -250,6 +250,11 @@ hr{
 .width-10 {
 	width:10%;
 }
+
+width-8 {
+	width:8%;
+}
+
 .width-5 {
 	width:5%;
 }
@@ -422,6 +427,12 @@ hr{
 .green {
 	color:green;
 }
+
+.yellow {
+	color:yellow;
+}
+
+
 .has-error{
 	border: solid 1px red !important;
 }
