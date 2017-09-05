@@ -383,7 +383,18 @@ class product
 		}
 		return $sc;	
 	}
-
+	
+	
+	public function getUnitCode($id)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT u.code FROM tbl_product AS p JOIN tbl_unit AS u ON p.id_unit = u.id WHERE p.id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);	
+		}
+		return $sc;
+	}
 	
 }//จบ class
 ?>

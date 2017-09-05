@@ -8,16 +8,21 @@ public function add(array $ds)
 	$sc = FALSE;
 	if( count($ds) > 0 )
 	{
-		if( $this->isExists( $ds['id'] ) === FALSE )
+		$fields = "";
+		$values = "";
+		$i = 1;
+		foreach($ds as $field => $value )
 		{
-			$qs = "INSERT INTO tbl_barcode (id, barcode, reference, unit_code, unit_qty) VALUES ";
-			$qs .= "('".$ds['id']."', '".$ds['barcode']."', '".$ds['reference']."', '".$ds['unit_code']."', ".$ds['unit_qty'].")";
-			$sc = dbQuery($qs);	
+			$fields .= $i == 1 ? $field : ", ".$field;
+			$values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
+			$i++;
 		}
+		$sc = dbQuery("INSERT INTO tbl_barcode (".$fields.") VALUES (".$values.")");
 	}
 	
 	return $sc;
 }
+
 
 public function update($id, array $ds)
 {
@@ -55,6 +60,17 @@ public function isExists($id)
 	return $sc;		
 }
 
+
+public function getBarcode($id_pd)
+{
+	$sc = "";
+	$qs = dbQuery("SELECT barcode FROM tbl_barcode WHERE id_product = '".$id_pd."' LIMIT 1")	;
+	if( dbNumRows($qs) == 1 )
+	{
+		list( $sc ) = dbFetchArray($qs);
+	}
+	return $sc;
+}
 
 }//// end class
 

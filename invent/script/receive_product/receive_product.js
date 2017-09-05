@@ -1,4 +1,55 @@
 // JavaScript Document
+function doExport(){
+	var id_receive_product = $("#id_receive_product").val();
+	if( id_receive_product.length > 0 )
+	{
+		load_in();
+		$.ajax({
+			url:"controller/interfaceController.php?export&BI",
+			type:"POST", cache:"false", data:{ "id_receive_product" : id_receive_product },
+			success: function(rs){
+				load_out();
+				var rs = $.trim(rs);
+				if( rs == 'success' ){
+					swal({ title: "Success", type:"success", timer: 1000 });
+				}else{
+					swal("ข้อผิดพลาด !", "ส่งข้อมูลไปยัง formula ไม่สำเร็จ", "error");
+				}
+			}
+		});
+	}else{
+		swal("id_receive_product not found");	
+	}	
+}
+
+
+
+function goDelete(id, name){
+	swal({
+		title: "คุณแน่ใจ ?",
+		text: "ต้องการยกเลิก '"+name+"' หรือไม่ ?",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: 'ใช่, ฉันต้องการ',
+		cancelButtonText: 'ไม่ใช่',
+		closeOnConfirm: false
+		}, function(){
+			$.ajax({
+				url:"controller/receiveProductController.php?cancleReceived",
+				type:"POST", cache:"false", data:{ "id_receive_product" : id },
+				success: function(rs){
+					var rs = $.trim(rs);
+					if( rs == 'success' ){
+						swal({ title: 'Deleted', type: 'success', timer: 1000 });
+						setTimeout(function(){ window.location.reload(); }, 1200);
+					}else{
+						swal("ข้อผิดพลาด !", "ลบรายการไม่สำเร็จ", "error");
+					}
+				}
+			});
+	});
+}
 
 
 function goAdd(){
@@ -10,20 +61,16 @@ function goEdit(id){
 }
 
 
+function goDetail(id){
+	window.location.href = "index.php?content=receive_product&view_detail=Y&id_receive_product="+id;	
+}
+
 function goBack(){
 	window.location.href = "index.php?content=receive_product";
 }
 
 function getSearch(){
-	var code = $("#sCode").val();
-	var PO	= $("#sPo").val();
-	var Inv	= $("#sInv").val();
-	var from	= $("#sFrom").val();
-	var to		= $("#sTo").val();
-	
-	if( ( from.length > 0 && to.length > 0 ) || code.length > 0 || PO.length > 0 || Inv.length > 0 ){
-		$("#searchForm").submit();	
-	}
+	$("#searchForm").submit();
 }
 
 
@@ -31,6 +78,10 @@ $(".search-box").keyup(function(e){
 	if( e.keyCode == 13 ){
 		getSearch();
 	}
+});
+
+$("#sStatus").change(function(e) {
+    getSearch();
 });
 
 $("#sFrom").datepicker({

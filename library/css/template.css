@@ -598,3 +598,19 @@ width-8 {
 .font-size-14 {
 	font-size: 14px;
 }
+
+.rotate-45 {
+	-webkit-transform: rotate(-45deg);
+  	-moz-transform: rotate(-45deg);
+  	-o-transform: rotate(-45deg);
+  	-ms-transform: rotate(-45deg);
+  	transform: rotate(-45deg);	
+}
+
+.rotate-30 {
+	-webkit-transform: rotate(-30deg);
+  	-moz-transform: rotate(-30deg);
+  	-o-transform: rotate(-30deg);
+  	-ms-transform: rotate(-30deg);
+  	transform: rotate(-30deg);	
+}

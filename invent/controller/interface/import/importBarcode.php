@@ -20,6 +20,7 @@
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
 			
 			$barcode 	= new barcode();
+			$pd			= new product();
 			$i 	= 1;
 			foreach ( $collection as $rs )
 			{
@@ -27,12 +28,14 @@
 				{
 					$id = trim( $rs['A'] );
 					$code = trim( $rs['B'] );
+					$id_pd = $pd->getId( trim( $rs['C'] ) );
 					if( $barcode->isExists($id) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
 								'id'				=> $id,
 								'barcode'	=> $code,
+								'id_product'	=> $id_pd,
 								'reference'	=> trim( $rs['C'] ),
 								'unit_code'	=> $rs['D'],
 								'unit_qty'		=> $rs['E']
@@ -44,6 +47,7 @@
 						//--- If exists do update
 						$arr = array(
 								'barcode'	=> $code,
+								'id_product'	=> $id_pd,
 								'reference'	=> trim( $rs['C'] ),
 								'unit_code'	=> $rs['D'],
 								'unit_qty'		=> $rs['E']

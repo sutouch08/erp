@@ -117,8 +117,41 @@
 			return dbQuery("DELETE FROM tbl_zone WHERE id_zone = ".$id);	
 		}
 		
-			
 		
+		public function getWarehouseId($id)
+		{
+			$sc = "";
+			$qs = dbQuery("SELECT id_warehouse FROM tbl_zone WHERE id_zone = ".$id);
+			if( dbNumRows($qs) == 1 )
+			{
+				list( $sc ) = dbFetchArray($qs);
+			}
+			return $sc;
+		}
+		
+		
+		public function getName($id)
+		{
+			$sc = "";
+			$qs = dbQuery("SELECT zone_name FROM tbl_zone WHERE id_zone = ".$id);
+			if( dbNumRows($qs) == 1 )
+			{
+				list( $sc ) = dbFetchArray($qs);
+			}
+			return $sc;
+		}
+		
+		
+		public function isAllowUnderZero($id_zone)
+		{
+			$sc = FALSE;
+			$qs = dbQuery("SELECT id_zone FROM tbl_zone AS z JOIN tbl_warehouse AS w ON z.id_warehouse = w.id WHERE z.id_zone = ".$id_zone." AND w.allow_under_zero = 1");	
+			if( dbNumRows($qs) > 0 )
+			{
+				$sc = TRUE;	
+			}
+			return $sc;
+		}
 	} 	//----- End class
 
 

@@ -10,6 +10,7 @@
 		public $last_login;
 		public $date_register;
 		public $active;
+		public $division;
 		public $error_message;
 public function __construct($id_employee = ""){ 
 	if($id_employee ==""){
@@ -27,6 +28,7 @@ public function __construct($id_employee = ""){
 			$this->last_login = $employee['last_login'];
 			$this->date_register = $employee['date_register'];
 			$this->active = $employee['active'];
+			$this->division = $employee['division'];
 	 }
 }
 
@@ -154,6 +156,42 @@ public function change_status($id_employee, $active){
 		$this->error_message = "เปลี่ยนสถานะพนักงานไม่สำเร็จ";
 		return false;
 	}
+}
+
+public function getDivisionCode($id_employee)
+{
+	$sc = getConfig('DEFAULT_DIVISION_CODE');
+	$qs = dbQuery("SELECT code FROM tbl_employee AS e JOIN tbl_division AS d ON e.id_division = d.id WHERE id_employee = ".$id_employee);
+	if( dbNumRows($qs) == 1 )
+	{
+		list( $sc ) = dbFetchArray($qs);	
+	}
+	return $sc;
+}
+
+
+public function getName($id)
+{
+	$sc = "";
+	$qs = dbQuery("SELECT first_name FROM tbl_employee WHERE id_employee = ".$id);
+	if( dbNumRows($qs) == 1 )
+	{
+		list( $sc ) = dbFetchArray($qs);
+	}
+	return $sc;
+}
+
+public function getSignature($id)
+{
+	$sc = $this->getName($id);
+	$imgPath = WEB_ROOT."img/employee/signature/".$id.".png";
+	$path = DOC_ROOT.$imgPath;
+	//echo $path;
+	
+	if( file_exists( $path ) ){
+		$sc = '<img src="'.$imgPath.'" style="max-width:180px; max-height:80px;" />';
+	}
+	return $sc;
 }
 		
 }

@@ -128,10 +128,43 @@ class po
 		return $sc;
 	}
 	
+	public function setStatus($reference, $status = "")
+	{
+		$sc = FALSE;
+		if( $reference != "" )
+		{
+			if( $status == "" )
+			{
+				$qs = dbQuery("SELECT received FROM tbl_po WHERE reference = '".$reference."' AND received > 0");
+				if( dbNumRows($qs) > 0 )
+				{
+					$status = 2;
+				}
+			}
+			
+			$sc = dbQuery("UPDATE tbl_po SET status = ".$status." WHERE reference = '".$reference."'");
+			
+		}
+		
+		return $sc;
+	}
+	
 	
 	public function getDetail($reference)
 	{
-		return dbQuery("SELECT * FROM tbl_po WHERE reference = '".$reference."'");	
+		return dbQuery("SELECT * FROM tbl_po WHERE reference = '".$reference."' AND isCancle = 0 AND status != 3");	
+	}
+	
+	
+	public function getSupplierId($reference)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT DISTINCT id_supplier FROM tbl_po WHERE reference = '".$reference."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
 	}
 	
 	
@@ -142,6 +175,61 @@ class po
 		if( dbNumRows($qs) > 0 )
 		{
 			$sc = TRUE;
+		}
+		return $sc;
+	}
+	
+	
+	public function search($txt)
+	{
+		return dbQuery("SELECT DISTINCT reference FROM tbl_po WHERE reference LIKE '%".$txt."%' AND status != 3 AND isCancle = 0");
+	}
+	
+	public function received($reference, $id_pd, $qty)
+	{
+		return dbQuery("UPDATE tbl_po SET received = received + ".$qty.", status = 2 WHERE reference = '".$reference."' AND id_product = '".$id_pd."'");	
+	}
+	
+	public function unReceived($reference, $id_pd, $qty)
+	{
+		$cQty = $this->getReceived($reference, $id_pd);
+		$received = $cQty - $qty < 0 ? 0 : $cQty - $qty;
+		return dbQuery("UPDATE tbl_po SET received = '".$received."' WHERE reference = '".$reference."' AND id_product = '".$id_pd."'");
+	}
+	
+	
+	public function getReceived($reference, $id_pd)
+	{
+		$sc = 0;
+		$qs = dbQuery("SELECT received FROM tbl_po WHERE reference = '".$reference."' AND id_product = '".$id_pd."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	//--- ราคาสินค้า
+	public function getPrice($reference, $id_pd)
+	{
+		$sc = 0;
+		$qs = dbQuery("SELECT price FROM tbl_po WHERE reference = '".$reference."' AND id_product = '".$id_pd."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	//--- ส่วนลดระดับรายการสินค้า เป็นเงินบาท เช่น 10% หรือ 100  
+	public function getDiscount($reference, $id_pd)
+	{
+		$sc = 0;
+		$qs = dbQuery("SELECT discount FROM tbl_po WHERE reference = '".$reference."' AND id_product = '".$id_pd."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);	
 		}
 		return $sc;
 	}

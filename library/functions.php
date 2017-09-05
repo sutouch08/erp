@@ -566,8 +566,9 @@ function get_product_attribute_image($id_product_attribute,$use_size){
 	return $image;
 }
 	
-function dbDate($date, $time = FALSE)
+function dbDate($date = "", $time = FALSE)
 {
+	$date = $date == "" ? date("Y-m-d") : $date;
 	$date = str_replace('/', '-', $date); 
 	if($time == true)
 	{
