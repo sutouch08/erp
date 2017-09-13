@@ -1,4 +1,18 @@
 <?php
+function doExportBI()
+{
+	include 'controller/interface/export/exportBI.php';
+	$cs = new receive_product();
+	$qs = $cs->getNotExportData();
+	if( dbNumRows($qs) > 0 )
+	{
+		while( $rs = dbFetchObject($qs) )
+		{
+			exportBI($rs->id);
+		}
+	}
+}
+
 
 function isStockEnough($id_receive_product)
 {

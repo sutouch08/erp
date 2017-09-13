@@ -1,4 +1,45 @@
 // JavaScript Document
+function saveGeneral(){
+	var id = $("#id_customer").val();
+	var kind = $("#kind").val();
+	var type = $("#type").val();
+	var grade = $("#class").val();
+	if( id == "" ){
+		swal("ไม่พบไอดีลูกค้า");
+		return false;
+	}
+	
+	if( kind == '0' ){
+		swal("กรุณาเลือกประเภทลูกค้า");
+		return false;
+	}
+	
+	if( type == '0' ){
+		swal("กรุณาเลือกชนิดลูกค้า");
+		return false;
+	}
+	
+	if( grade == '0' ){
+		swal("กรุณาเลือกเกรดลูกค้า");
+		return false;	
+	}
+	
+	load_in();
+	$.ajax({
+		url:"controller/customerController.php?saveGeneral",
+		type:"POST", cache:"false", data:{ "id_customer" : id, "kind" : kind, "type" : type, "class" : grade },
+		success: function(rs){
+			load_out();
+			var rs = $.trim(rs);
+			if( rs == "success" ){
+				swal({title: "Success", type: "success", timer: 1000 });
+			}else{
+				swal("ข้อผิดพลาด !", rs, "error");	
+			}
+		}
+	});
+}
+
 function deleteCustomer(id, name){
 	swal({
 		title: "คุณแน่ใจ ?",

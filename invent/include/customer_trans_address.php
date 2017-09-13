@@ -162,7 +162,7 @@
 {{/each}}	
 </script>
 <script>
-<?php $prov = getProvinceArray(); ?>
+<?php $prov = getProvinceList(); ?>
 var Province = [<?php foreach($prov as $province){ echo '"'.$province .'", '; } ?>];
 $('#province').autocomplete({
 	source: Province,

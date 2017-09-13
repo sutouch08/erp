@@ -1,9 +1,11 @@
 
 <?php 
-	include "function/customer_helper.php";
 	$cName	= isset( $_POST['cName'] ) ?  trim( $_POST['cName'] ) : ( getCookie('cName') ? getCookie('cName') : '') ; 		
- 	$cCode	= isset( $_POST['cCode'] ) ? trim( $_POST['cCode'] ) : ( getCookie('cCode') ? getCookie('cCode') : '' ); 		  
- 	$cGroup 	= isset( $_POST['cGroup'] ) ? trim( $_POST['cGroup'] ) : ( getCookie('cGroup') ? getCookie('cGroup') : '' ); 	
+ 	$cCode	= isset( $_POST['cCode'] ) ? trim( $_POST['cCode'] ) : ( getCookie('cCode') ? getCookie('cCode') : '' ); 	
+	$cKind	= isset( $_POST['cKind'] ) ? trim( $_POST['cKind'] ) : ( getCookie('cKind') ? getCookie('cKind') : '0' );
+	$cType	= isset( $_POST['cType'] ) ? trim( $_POST['cType'] ) : ( getCookie('cType') ? getCookie('cType') : '0' );
+	$cClass	= isset( $_POST['cClass'] ) ? trim( $_POST['cClass'] ) : ( getCookie('cClass') ? getCookie('cClass') : '0' );	  
+ 	$cGroup 	= isset( $_POST['cGroup'] ) ? trim( $_POST['cGroup'] ) : ( getCookie('cGroup') ? getCookie('cGroup') : '0' ); 	
 	$cArea	= isset( $_POST['cArea'] ) ? trim( $_POST['cArea'] ) : ( getCookie('cArea') ? getCookie('cArea') : '' );
  	$cProvince = isset( $_POST['cProvince'] ) ? trim( $_POST['cProvince'] ) : ( getCookie('cProvince') ? getCookie('cProvince') : '' ); 
  	
@@ -11,23 +13,47 @@
     
     <form id="searchForm" method="post">
     <div class="row">
-    	<div class="col-sm-2">
+    	<div class="col-sm-1 col-1-harf padding-5 first">
         	<label>ชื่อลูกค้า</label>
             <input type="text" class="form-control input-sm text-center search-box" name="cName" id="cName" placeholder="" value="<?php echo $cName; ?>"  />
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-1 col-1-harf padding-5">
         	<label>รหัสลูกค้า</label>
             <input type="text" class="form-control input-sm text-center search-box" name="cCode" id="cCode" placeholder="" value="<?php echo $cCode; ?>"  />
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-1 col-1-harf padding-5">
         	<label>กลุ่มลูกค้า</label>
-            <input type="text" class="form-control input-sm text-center search-box" name="cGroup" id="cGroup" placeholder="" value="<?php echo $cGroup; ?>"  />
+            <select class="form-control input-sm select-box" name="cGroup" id="cGroup">
+            <?php echo selectCustomerGroup($cGroup); ?>
+            </select>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-1 col-1-harf padding-5">
+        	<label>ประเภท</label>
+            <select class="form-control input-sm select-box" name="cKind" id="cKind">
+            <?php echo selectCustomerKind($cKind); ?>
+            </select>
+           
+        </div>
+        
+        <div class="col-sm-1 col-1-harf padding-5">
+        	<label>ชนิด</label>
+            <select class="form-control input-sm select-box" name="cType" id="cType">
+            <?php echo selectCustomerType($cType); ?>
+            </select>
+        </div>
+        <div class="col-sm-1 col-1-harf padding-5">
+        	<label>เกรด</label>
+            <select class="form-control input-sm select-box" name="cClass" id="cClass">
+            <?php echo selectCustomerClass($cKind); ?>
+            </select>
+            
+        </div>
+        <div class="col-sm-1 col-1-harf padding-5">
         	<label>พื้นที่การขาย</label>
             <input type="text" class="form-control input-sm text-center search-box" name="cArea" id="cArea" placeholder="" value="<?php echo $cArea; ?>"  />
         </div>
-        <div class="col-sm-2">
+        
+        <div class="col-sm-1 col-1-harf padding-5">
         	<label>จังหวัด</label>
             <input type="text" class="form-control input-sm text-center search-box" name="cProvince" id="cProvince" placeholder="" value="<?php echo $cProvince; ?>" />
         </div>
@@ -57,11 +83,31 @@
 		$where .= "AND code LIKE '%" . $cCode . "%' ";
 	}
 	
-	if( $cGroup != '' )
+	if( $cGroup != '0' )
 	{
 		createCookie('cGroup', $cGroup);
-		$where .= "AND group_code IN(".customerGroupIn($cGroup).") ";
+		$where .= "AND id_group = '".$cGroup."' ";
 	}
+	
+	if( $cKind !="0" )
+	{
+		createCookie('cKind', $cKind);
+		$where .= "AND id_kind = '".$cKind."' ";
+	}
+	
+	
+	if( $cType !="0" )
+	{
+		createCookie('cType', $cType);
+		$where .= "AND id_type = '".$cType."' ";
+	}
+	
+	if( $cClass !="0" )
+	{
+		createCookie('cClass', $cClass);
+		$where .= "AND id_class = '".$cClass."' ";
+	}
+	
 	
 	if( $cArea != "" )
 	{

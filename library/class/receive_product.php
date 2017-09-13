@@ -155,18 +155,19 @@ class receive_product
 		$date = $date == '' ? date('Y-m-d') : $date;
 		$Y		= date('y', strtotime($date));
 		$M		= date('m', strtotime($date));
+		$runDigit = getConfig('RUN_DIGIT');
 		$prefix = getConfig('PREFIX_RECEIVE');
 		$preRef = $prefix . '-' . $Y . $M;
 		$qs = dbQuery("SELECT MAX(reference) AS reference FROM tbl_receive_product WHERE reference LIKE '".$preRef."%' ORDER BY reference DESC");
 		list( $ref ) = dbFetchArray($qs);
 		if( ! is_null( $ref ) )
 		{
-			$runNo = mb_substr($ref, -4, NULL, 'UTF-8') + 1;
-			$reference = $prefix . '-' . $Y . $M . sprintf('%04d', $runNo);
+			$runNo = mb_substr($ref, ($runDigit*(-1)), NULL, 'UTF-8') + 1;
+			$reference = $prefix . '-' . $Y . $M . sprintf('%0'.$runDigit.'d', $runNo);
 		}
 		else
 		{
-			$reference = $prefix . '-' . $Y . $M . '0001';
+			$reference = $prefix . '-' . $Y . $M . sprintf('%0'.$runDigit.'d', '001');
 		}
 		return $reference;
 	}
@@ -189,6 +190,12 @@ class receive_product
 		return $sc;
 	}
 	
+	
+	
+	public function getNotExportData()
+	{
+		return dbQuery("SELECT id FROM tbl_receive_product WHERE isExported = 0 AND isCancle = 0");	
+	}
 }//--end class
 
 ?>

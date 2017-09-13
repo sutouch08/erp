@@ -255,22 +255,26 @@
                     	<ul class="dropdown-menu">
                         	<li><a href="index.php?content=zone"><i class="fa fa-map-marker"></i>&nbsp; เพิ่ม/แก้ไข โซนสินค้า</a></li>
                 			<li><a href="index.php?content=warehouse"><i class="fa fa-home"></i>&nbsp; เพิ่ม/แก้ไข คลังสินค้า</a></li>
+                            
                         </ul>
                     </li>
 
                     <li class="dropdown-submenu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users"></i>&nbsp; ลูกค้า</a>
                       <ul class="dropdown-menu">
                         <li><a href="index.php?content=customer"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข ลูกค้า</a></li>
-                        <li><a href="index.php?content=customer_address"><i class="fa fa-envelope"></i>&nbsp; เพิ่ม/แก้ไข ที่อยู่ลูกค้า</a></li>
-                        <li><a href="index.php?content=customer_group"><i class="fa fa-users"></i>&nbsp; เพิ่ม/แก้ไข กลุ่มลูกค้า</a></li>
-                        <li><a href="index.php?content=customer_area"><i class="fa fa-users"></i>&nbsp; เพิ่ม/แก้ไข เขตลูกค้า</a></li>
-                         <li><a href="index.php?content=customer_transfer"><i class="fa fa-retweet"></i>&nbsp; โอน/ย้าย ลูกค้า</a></li>
+                        <li><a href="index.php?content=customer_address"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข ที่อยู่ลูกค้า</a></li>
+                        <li><a href="index.php?content=customer_kind"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข ประเภทลูกค้า</a></li>
+                        <li><a href="index.php?content=customer_type"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข ชนิดลูกค้า</a></li>
+                        <li><a href="index.php?content=customer_group"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข กลุ่มลูกค้า</a></li>
+                        <li><a href="index.php?content=customer_class"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข เกรดลูกค้า</a></li>
+                        <li><a href="index.php?content=customer_area"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข เขตลูกค้า</a></li>
+                         <li><a href="index.php?content=customer_transfer"><i class="fa fa-user"></i>&nbsp; โอน/ย้าย ลูกค้า</a></li>
                          <li class="divider"></li>
                         <li><a href="index.php?content=add_sponsor"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข รายชื่อสปอนเซอร์</a></li>
                       </ul>
                     </li>
 
-                    <li class="dropdown-submenu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users"></i>&nbsp; พนักงาน</a>
+                    <li class="dropdown-submenu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>&nbsp; พนักงาน</a>
                       <ul class="dropdown-menu">
                         <li><a href="index.php?content=Employee"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข พนักงาน</a></li>
                         <li><a href="index.php?content=sale_group"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข ทีมขาย</a></li>
@@ -287,17 +291,45 @@
                             <li><a href="index.php?content=supplier_group"><i class='fa fa-users'></i>&nbsp; เพิ่ม/แก้ไข กลุ่มผู้จำหน่าย</a></li>
                         </ul>
                     </li>
+                    
+                    
+                     <li class="divider"></li>
+
+                    <li class="dropdown-submenu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-star"></i>&nbsp; การตลาด</a>
+                    	<ul class="dropdown-menu">
+                        	<li><a href="index.php?content=channels"><i class='fa fa-star'></i>&nbsp; เพิ่ม/แก้ไข ช่องทางการขาย</a></li>
+                            <li><a href="index.php?content=payment_method"><i class='fa fa-star'></i>&nbsp; เพิ่ม/แก้ไข ช่องทางการชำระเงิน</a></li>
+                        </ul>
+                    </li>
 
                     <li class="divider"></li>
-                    <li><a href="index.php?content=sender"><i class="fa fa-truck"></i>&nbsp; เพิ่ม/แก้ไข รายชื่อผู้จัดส่ง</a></li>
-                    <li><a href="index.php?content=transport"><i class="fa fa-truck"></i>&nbsp; เชื่อมโยงการจัดส่งของลูกค้า</a></li>
+                    
+                    <li class="dropdown-submenu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-truck"></i>&nbsp; จัดส่ง</a>
+                    	<ul class="dropdown-menu">
+                        	<li><a href="index.php?content=sender"><i class="fa fa-truck"></i>&nbsp; เพิ่ม/แก้ไข รายชื่อผู้จัดส่ง</a></li>
+                        	<li><a href="index.php?content=transport"><i class="fa fa-truck"></i>&nbsp; เชื่อมโยงการจัดส่งของลูกค้า</a></li>
+                        </ul>
+                    </li>
+                    
                     <li class="divider"></li>
+                    
+                    <li class="dropdown-submenu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bank"></i>&nbsp; บริษัท</a>
+                    	<ul class="dropdown-menu">
+                        	<li><a href="index.php?content=branch"><i class="fa fa-bank"></i>&nbsp; เพิ่ม/แก้ไข สาขา</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="divider"></li>
+                    
                     <li><a href="index.php?content=bank_account"><i class="fa fa-bank"></i>&nbsp; เพิ่ม/แก้ไข บัญชีธนาคาร</a></li>
+                    
                     <li class="divider"></li>
+                    
                     <li><a href="index.php?content=product_db"><i class='fa fa-database'></i>&nbsp; รายงาน รายการสินค้า</a></li>
                     <li><a href="index.php?content=export_product_db"><i class='fa fa-database'></i>&nbsp; ส่งออกรายการสินค้า นำเข้า POS</a></li>
                     <li><a href="index.php?content=export_stock_zone"><i class='fa fa-database'></i>&nbsp; ส่งออกยอดคงเหลือยกไปปลายงวด</a></li>
                     <li><a href="index.php?content=import_stock_zone"><i class='fa fa-database'></i>&nbsp; นำเข้ายอดคงเหลือยกมาต้นงวด</a></li>
+                    
             	</ul>
             </li>
 

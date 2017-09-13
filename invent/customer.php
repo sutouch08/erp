@@ -6,6 +6,8 @@
 	$edit 	= $pm['edit'];
 	$delete = $pm['delete'];
 	accessDeny($view);
+	include "function/customer_helper.php";
+	include "function/location_helper.php";
 	?>
     
 <div class="container">

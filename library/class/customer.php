@@ -12,6 +12,9 @@ class customer {
 	public $tax_id;
 	public $contact;			//-- Contact Person Name
 	public $email;
+	public $id_kind;
+	public $id_type;
+	public $id_class;
 	public $id_group;		//-- Group of customer
 	public $id_area;		//-- Area of customer
 	public $id_sale;		//-- Sale of Customer	
@@ -52,6 +55,9 @@ class customer {
 				$this->tax_id		= $rs->tax_id;
 				$this->contact		= $rs->contact;
 				$this->email			= $rs->email;
+				$this->id_kind		= $rs->id_kind;
+				$this->id_type		= $rs->id_type;
+				$this->id_class		= $rs->id_class;
 				$this->id_group	= $rs->id_group;
 				$this->id_area		= $rs->id_area;
 				$this->id_sale		= $rs->id_sale;
@@ -193,6 +199,51 @@ class customer {
 			list( $cs ) = dbFetchArray($qs);	
 		}
 		return $cs;
+	}
+	
+	
+	public function getSale($id)
+	{
+		$sc = "0000";
+		$qs = dbQuery("SELECT id_sale FROM tbl_customer WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	
+	public function getProvince($id)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT province FROM tbl_customer WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	public function searchId($txt)
+	{
+		return dbQuery("SELECT id FROM tbl_customer WHERE name LIKE '%".$txt."%'");
+	}
+	
+	public function search($txt, $fields = "")
+	{
+		if( $fields == "" )
+		{
+			return dbQuery("SELECT * FROM tbl_customer WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%'");
+		}
+		else
+		{
+			return dbQuery("SELECT ".$fields." FROM tbl_customer WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%'");	
+		}	
 	}
 	
 }//--- end class

@@ -24,9 +24,9 @@ if( ! isset( $_GET['id_style'] ) ) :
 <div class="col-sm-10" style="padding-top:15px; border-left:solid 1px #ccc; min-height:600px; max-height:1000px;">
 <div class="tab-content">
 <?php
-	include 'include/product_info.php';
-	include 'include/product_items.php';
-	include 'include/product_image.php';
+	include 'include/product/product_info.php';
+	include 'include/product/product_items.php';
+	include 'include/product/product_image.php';
 
 ?>
        

@@ -1,5 +1,190 @@
 <?php
 
+function productTabMenu($mode = 'order')
+{
+	$ajax = $mode == 'order' ? 'getOrderTabs' : 'getViewTabs';
+	$sc = '';
+	$qs = dbQuery("SELECT * FROM tbl_product_tab WHERE id_parent = 0");
+	while( $rs = dbFetchObject($qs))
+	{
+		if( hasChild($rs->id) === TRUE)
+		{
+			$sc .= '<li class="dropdown" onmouseover="expandTab((this))" onmouseout="collapseTab((this))">';
+			$sc .= '<a id="ul-'.$rs->id.'" class="dropdown-toggle" role="tab" data-toggle="tab" href="#cat-'.$rs->id.'" onClick="'.$ajax.'('.$rs->id.')" >';
+			$sc .=  $rs->name.'<span class="caret"></span></a>';
+			$sc .= 	'<ul class="dropdown-menu" role="menu" aria-labelledby="ul-'.$rs->id.'">';
+			$sc .= 	getSubTab($rs->id, $ajax);
+			$sc .=  '</ul>';
+			$sc .= '</li>';			
+		}
+		else
+		{
+			$sc .= '<li class="menu"><a href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">'.$rs->name.'</a></li>';
+		}
+		
+	}
+	$sc .= '<script>
+						function expandTab(el)
+						{
+							var className = "open";
+							if (el.classList)
+							{
+								el.classList.add(className)
+							}else if (!hasClass(el, className)){
+								el.className += " " + className
+							}
+						}
+					
+						function collapseTab(el)
+						{
+							var className = "open";
+							if (el.classList)
+							{
+								el.classList.remove(className)
+							}else if (hasClass(el, className)) {
+								var reg = new RegExp("(\\s|^)" + className + "(\\s|$)")
+								el.className=el.className.replace(reg, " ")
+							}
+						}
+						
+						//--------------------------------  โหลดรายการสินค้าสำหรับดูยอดคงเหลือ  -----------------------------//
+					function getViewTabs(id) 
+					{
+						var output = $("#cat-" + id);
+						$(".tab-pane").removeClass("active");
+						$(".menu").removeClass("active");
+						if (output.html() == "") {
+							load_in();
+							$.ajax({
+								url: "controller/orderController.php?getProductsInViewTab",
+								type: "POST",
+								cache: "false",
+								data: { "id": id },
+								success: function(rs) {
+									load_out();
+									var rs = $.trim(rs);
+									if (rs != "no_product") {
+										output.html(rs);
+									} else {
+										output.html("<center><h4>ไม่พบสินค้าในหมวดหมู่ที่เลือก</h4></center>");
+									}
+								}
+							});
+						}
+						
+						output.addClass("active");
+					}
+					
+					//--------------------------------  โหลดรายการสินค้าสำหรับจิ้มสั่งสินค้า  -----------------------------//
+					function getOrderTabs(id) {
+						var output = $("#cat-" + id);
+						$(".tab-pane").removeClass("active");
+						$(".menu").removeClass("active");
+						if (output.html() == "") {
+							load_in();
+							$.ajax({
+								url: "controller/orderController.php?getProductsInOrderTab",
+								type: "POST",
+								cache: "false",
+								data: { "id": id },
+								success: function(rs) {
+									load_out();
+									var rs = $.trim(rs);
+									if (rs != "no_product") {
+										output.html(rs);
+									} else {
+										output.html("<center><h4>ไม่พบสินค้าในหมวดหมู่ที่เลือก</h4></center>");
+										$(".tab-pane").removeClass("active");
+										output.addClass("active");
+									}
+								}
+							});
+						}
+						output.addClass("active");
+					}
+				</script>';
+	return $sc;
+
+}
+
+//-- this function to view category product in order page
+function getSubTab($parent, $ajax)
+{
+	$sc = '';
+	$qs = dbQuery("SELECT * FROM tbl_product_tab WHERE id_parent = ".$parent);
+	
+	if( dbNumRows($qs) > 0 )
+	{
+		while( $rs = dbFetchObject($qs) )
+		{
+			if( hasChild($rs->id) === TRUE ) //----- ถ้ามี sub category 
+			{
+				$sc .= '<li class="dropdown-submenu" >';
+				$sc .= '<a id="ul-'.$rs->id.'" class="dropdown-toggle" href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">';
+				$sc .=  $rs->name.'</a>';
+				$sc .= 	'<ul class="dropdown-menu" role="menu" aria-labelledby="ul-'.$rs->id.'">';
+				$sc .= 	getSubTab($rs->id, $ajax);
+				$sc .=  '</ul>';
+				$sc .= '</li>';
+			}
+			else
+			{
+				$sc .= '<li class="menu"><a href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">'.$rs->name.'</a></li>';
+			}
+			
+		}
+	}
+	return $sc;
+}
+
+
+//-- this function to view category product in order page
+function getSubCategoryTab($parent, $ajax)
+{
+	$sc = '';
+	$qs = dbQuery("SELECT * FROM tbl_product_tab WHERE id_parent = ".$parent);
+	
+	if( dbNumRows($qs) > 0 )
+	{
+		while( $rs = dbFetchObject($qs) )
+		{
+			if( hasChild($rs->id) === TRUE ) //----- ถ้ามี sub category 
+			{
+				$sc .= '<li class="dropdown-submenu" >';
+				$sc .= '<a id="ul-'.$rs->id.'" class="dropdown-toggle" href="#cat-'.$rs->id.'" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">';
+				$sc .=  $rs->name.'</a>';
+				$sc .= 	'<ul class="dropdown-menu" role="menu" aria-labelledby="ul-'.$rs->id.'">';
+				$sc .= 	subCategoryTab($rs->id, $ajax);
+				$sc .=  '</ul>';
+				$sc .= '</li>';
+			}
+			else
+			{
+				$sc .= '<li class="menu"><a href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">'.$rs->name.'</a></li>';
+			}
+			
+		}
+	}
+	return $sc;
+}
+
+
+
+function getProductTabs()
+{
+	$sc = '';
+	$qs = dbQuery("SELECT * FROM tbl_product_tab WHERE id != 0"); 
+	while($rs = dbFetchObject($qs))
+	{
+		$sc .= '<div class="tab-pane" id="cat-'.$rs->id.'"></div>';
+	}
+	
+	return $sc;
+}
+
+
+
+
 function selectLevel($level = '' )
 {
 	$sc = '<option value="">ทั้งหมด</option>';
@@ -325,7 +510,7 @@ function productTabChild($id_parent, $id_style, $parent, $se )
 				$sc .= '<i class="fa fa-'.$ep.'-square-o" id="catbox-'.$rs->id.'" onClick="toggleTree('.$rs->id.')"></i>';
 				$sc .= '<label class="padding-10"><input type="checkbox" class="margin-right-10" name="tabs[]" value="'.$rs->id.'" '. $isChecked .' />' .$rs->name. '</label>';
 				$sc .= '<ul id="catchild-'.$rs->id.'" class="'.$ex.'">';
-				$sc .= getChild($rs->id, $id) ;		
+				$sc .= productTabChild($rs->id, $id_style, $parent, $se) ;		
 				$sc .= '</ul>';	
 			}
 			else

@@ -7,11 +7,14 @@
 	$edit 				= $pm['edit'];
 	$delete 			= $pm['delete'];
 	accessDeny($view);
+	include "function/receive_product_helper.php";
+	include 'function/vat_helper.php';
 ?>
 
 <div class="container">
 <!-- page place holder -->
 <?php
+doExportBI();
 
 if( isset( $_GET['add'] ) )
 {

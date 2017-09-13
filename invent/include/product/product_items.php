@@ -189,4 +189,4 @@
             </form>    				
 </div><!--/ tab-pane #tab2 -->
 
-<script src="script/product_items.js"></script>
+<script src="script/product/product_items.js"></script>

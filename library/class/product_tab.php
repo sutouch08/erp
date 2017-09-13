@@ -249,6 +249,11 @@ class product_tab
 		$qs = dbQuery("SELECT * FROM tbl_tab_product WHERE id_product_tab = ".$id);
 		return dbNumRows($qs);	
 	}
+	
+	public function getStyleInTab($id)
+	{
+		return dbQuery("SELECT id_style FROM tbl_tab_product WHERE id_product_tab = ".$id);
+	}	
 }//--- end class
 
 ?>

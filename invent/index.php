@@ -691,7 +691,18 @@ switch($page){
 			break;
 
 	//*****  อื่นๆ  *****//
-
+		case "channels" :
+			$content = "channels.php";
+			$pageTitle = "ช่องทางการขาย";
+			break;
+		case "payment_method" :
+			$content = "payment_method.php";
+			$pageTitle = "ช่องทางการชำระเงิน";
+			break;
+		case "branch" : 
+			$content = "branch.php";
+			$pageTitle = "สาขา";
+			break;
 		case "sender" :
 			$content = "sender.php";
 			$pageTitle = "ผู้ให้บริการจัดส่ง";

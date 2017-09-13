@@ -133,7 +133,18 @@ if( isset( $_GET['syncDocument'] ) && isset( $_GET['po'] ) )
 
 if( isset( $_GET['export'] ) && isset( $_GET['BI'] ) )
 {
+	include '../function/vat_helper.php';
 	include "interface/export/exportBI.php";	
+	$id_receive_product = $_POST['id_receive_product'];
+	$BI = exportBI($id_receive_product);
+	if( $BI === TRUE )
+	{
+		echo "success";
+	}
+	else
+	{
+		echo $BI;
+	}
 }
 
 ///=================================================== END DOCUMENTS =======================================///

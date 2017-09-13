@@ -3,6 +3,25 @@ require "../../library/config.php";
 require "../../library/functions.php";
 require "../function/tools.php";
 
+if( isset( $_GET['saveGeneral'] ) )
+{
+	$sc = 'success';
+	$id = $_POST['id_customer'];
+	$cs = new customer();
+	$arr = array(
+						"id_kind"	=> $_POST['kind'],
+						"id_type"	=> $_POST['type'],
+						"id_class"	=> $_POST['class']
+						);
+	if( $cs->update($id, $arr) === FALSE )
+	{
+		$sc = 'บันทึกรายการไม่สำเร็จ';	
+	}
+	echo $sc;
+}
+
+
+
 if( isset( $_GET['unDeleteCustomer'] ) )
 {
 	$sc 				= 'success';
@@ -117,6 +136,9 @@ if( isset( $_GET['clearFilter'] ) )
 	deleteCookie('cName');
 	deleteCookie('cCode');
 	deleteCookie('cGroup');
+	deleteCookie('cKind');
+	deleteCookie('cType');
+	deleteCookie('cClass');
 	deleteCookie('cArea');
 	deleteCookie('cProvince');
 	echo "success";	

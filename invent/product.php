@@ -43,15 +43,15 @@
 	
 	if( isset( $_GET['edit'] ) )
 	{
-		include 'include/product_edit.php';
+		include 'include/product/product_edit.php';
 	}
 	else if( isset( $_GET['deleted'] ) )
 	{
-		include 'include/product_deleted.php';
+		include 'include/product/product_deleted.php';
 	}
 	else
 	{
-		include 'include/product_list.php';	
+		include 'include/product/product_list.php';	
 	}
 
 ?>
@@ -59,7 +59,7 @@
 
 </div><!--/ Container -->
 
-<script src="script/product.js"></script>
+<script src="script/product/product.js"></script>
 
 
 

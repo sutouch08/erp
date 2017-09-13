@@ -76,4 +76,4 @@
 	{{/if}}
 {{/each}}
 </script>         
-<script src="script/product_image.js"></script>
+<script src="script/product/product_image.js"></script>

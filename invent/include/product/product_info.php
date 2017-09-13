@@ -246,4 +246,4 @@
             </form>
             </div><!--/ tab-pane #tab1 -->
 <?php endif; ?>	            
-<script src="script/product_info.js"></script>
+<script src="script/product/product_info.js"></script>

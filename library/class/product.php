@@ -181,8 +181,7 @@ class product
 	}
 	
 	
-	
-	
+		
 	
 	
 	public function getDescription($id_style)
@@ -210,6 +209,13 @@ class product
 		return $sc;
 	}
 	
+	
+	
+	public function isDisactiveAll($id_style)
+	{
+		$qs = dbQuery("SELECT id FROM tbl_product WHERE id_style = '".$id_style."' AND active = 1");
+		return dbNumRows($qs) > 0 ? FALSE : TRUE;	
+	}
 	
 	
 	
@@ -271,6 +277,8 @@ class product
 		return dbQuery("SELECT * FROM tbl_image WHERE id_style = '".$id_style."'");
 	}
 	
+	
+		
 	
 	//---- get Status of specific field
 	public function getStatus($id, $field)
@@ -336,6 +344,13 @@ class product
 		return $sc;	
 	}
 	
+	public function countAttribute($id_style)
+	{
+		$color = dbNumRows(dbQuery("SELECT id FROM tbl_product WHERE id_style = '".$id_style."' AND id_color != '0' AND id_color != '' GROUP BY id_style"));
+		$size = dbNumRows(dbQuery("SELECT id FROM tbl_product WHERE id_style = '".$id_style."' AND id_size != '0' AND id_size != '' GROUP BY id_style"));
+		return $color + $size;
+	}
+	
 	
 	
 	public function getNameByCode($code)
@@ -396,5 +411,80 @@ class product
 		return $sc;
 	}
 	
+	public function getStylePrice($id_style)
+	{
+		$sc = 0;
+		$qs = dbQuery("SELECT MAX( price ) AS price FROM tbl_product WHERE id_style = '".$id_style."'");
+		list( $price ) = dbFetchArray($qs);
+		if( ! is_null( $price ) )
+		{
+			$sc = $price;
+		}
+		return $sc;
+	}
+	
+	public function getPrice($id)
+	{
+		$sc = 0;
+		$qs = dbQuery("SELECT price FROM tbl_product WHERE id_product = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+	
+	public function isCountStock($id_style)
+	{
+		$sc = TRUE;
+		$qs = dbQuery("SELECT id FROM tbl_product WHERE id_style = '".$id_style."' AND count_stock = 0");
+		if( dbNumRows($qs) > 0 )
+		{
+			$sc = FALSE;
+		}
+		return $sc;
+	}
+	
+	
+	//--- ยอดรวมทุกคลังทุกโซนทั้งขายได้และไม่ได้
+	public function getStock($id)
+	{
+		$stock = new stock();
+		return $stock->getStock($id);	
+	}
+	
+	//---- ยอดรวมสินค้าที่สั่งได้
+	public function getSellStock($id)
+	{
+		$order = new order();
+		$stock = new stock();
+		$cancle = new cancle_zone();
+		$sellStock = $stock->getSellStock($id);
+		$reservStock = $order->getReservQty($id);
+		$cancleQty = $cancle->getCancleQty($id);
+		$availableStock = $sellStock - $reservStock + $cancleQty;
+		return $availableStock < 0 ? 0 : $availableStock;
+	}
+	
+	
+	
+	//---- ยอดรวมของรุ่นสินค้าที่สั่งได้
+	public function getStyleSellStock($id_style)
+	{
+		$order = new order();
+		$stock = new stock();
+		$cancle = new cancle_zone();
+		$sellStock = $stock->getStyleSellStock($id_style);
+		$reservStock = $order->getStyleReservQty($id_style);
+		$cancleQty = $cancle->getStyleCancleQty($id_style);
+		
+		$availableStock = $sellStock - $reservStock + $cancleQty;
+		
+		return $availableStock < 0 ? 0 : $availableStock;
+		
+	}
+	
+	
+		
 }//จบ class
 ?>

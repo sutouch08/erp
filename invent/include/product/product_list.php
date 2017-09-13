@@ -149,4 +149,4 @@
 </div>
 
 
-<script src="script/product_list.js"></script>
+<script src="script/product/product_list.js"></script>

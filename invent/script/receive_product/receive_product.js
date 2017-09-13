@@ -13,7 +13,7 @@ function doExport(){
 				if( rs == 'success' ){
 					swal({ title: "Success", type:"success", timer: 1000 });
 				}else{
-					swal("ข้อผิดพลาด !", "ส่งข้อมูลไปยัง formula ไม่สำเร็จ", "error");
+					swal("ข้อผิดพลาด !", rs, "error");
 				}
 			}
 		});

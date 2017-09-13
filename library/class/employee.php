@@ -1,68 +1,69 @@
 <?php
-	class employee{
-		public $id_employee;
-		public $id_profile;
-		public $first_name;
-		public $last_name;
-		public $full_name;
-		public $email;
-		public $password;
-		public $last_login;
-		public $date_register;
-		public $active;
-		public $division;
-		public $error_message;
-public function __construct($id_employee = ""){ 
-	if($id_employee ==""){
-			$this->id_employee = "";
-	 }else{
-			$sql = dbQuery("SELECT * FROM tbl_employee WHERE id_employee = $id_employee");
-			$employee = dbFetchArray($sql);
-			$this->id_employee = $employee['id_employee'];
-			$this->id_profile = $employee['id_profile'];
-			$this->first_name = $employee['first_name'];
-			$this->last_name = $employee['last_name'];
-			$this->full_name = $employee['first_name']." ".$employee['last_name'];
-			$this->email = $employee['email'];
-			$this->password = $employee['password'];
-			$this->last_login = $employee['last_login'];
-			$this->date_register = $employee['date_register'];
-			$this->active = $employee['active'];
-			$this->division = $employee['division'];
-	 }
-}
-
-
-public function get_id_sale($id_employee){
-	$sql = dbQuery("SELECT id_sale FROM tbl_sale WHERE id_employee=$id_employee");
-	$row = dbNumRows($sql);	
-	if($row==1){
-			list($id_sale) = dbFetchArray($sql);
-	}else{
-			$id_sale = 0;
-	}
-		return $id_sale;
-}
-
-		
-public function addEmployee(array $data){ ////เพิ่มพนักงานใหม่
-	$qs = "INSERT INTO tbl_employee (id_profile, first_name, last_name, email, password, last_login, date_register, s_key, active) ";
-	$qs .= "VALUES (".$data['id_profile'].", '".$data['first_name']."', '".$data['last_name']."', '".$data['email']."', '".$data['password']."', NOW(), NOW(), '".$data['s_key']."', ".$data['active'].")";
-	$qs = dbQuery($qs);
-	if($qs)
-	{
-		return dbInsertId();
-	}else{
-		return false;
-	}
-}
-
-
-public function editEmployee(array $data)
+class employee
 {
-	$qs = dbQuery("UPDATE tbl_employee SET first_name = '".$data['first_name']."', last_name = '".$data['last_name']."', email = '".$data['email']."', id_profile = ".$data['id_profile'].", active = ".$data['active']." WHERE id_employee = ".$data['id_employee']);
-	return $qs;
-}
+	public $id_employee;
+	public $id_profile;
+	public $first_name;
+	public $last_name;
+	public $full_name;
+	public $email;
+	public $password;
+	public $last_login;
+	public $date_register;
+	public $s_key;
+	public $active;
+	public $id_division;
+	public $error_message;
+
+
+	public function __construct($id = "")
+	{
+		if( $id != "" )
+		{
+			$qs = dbQuery("SELECT * FROM tbl_employee WHERE id_employee = ".$id);
+			if( dbNumRows($qs) == 1 )
+			{
+				while( $rs = dbFetchObject($qs) )
+				{
+					$this->id_employee	= $rs->id_employee;
+					$this->id_profile		= $rs->id_profile;
+					$this->first_name		= $rs->first_name;
+					$this->last_name		= $rs->last_name;
+					$this->full_name		= $rs->first_name.' '.$rs->last_name;
+					$this->email				= $rs->email;
+					$this->password		= $rs->password;
+					$this->date_register	= $rs->date_register;
+					$this->last_login		= $rs->last_login;
+					$this->s_key			= $rs->s_key;
+					$this->active			= $rs->active;
+					$this->id_division		= $rs->id_division;
+				}
+			}
+		}
+	}
+	
+
+	////เพิ่มพนักงานใหม่
+	public function addEmployee(array $data){ 
+		$qs = "INSERT INTO tbl_employee ";
+		$qs .= "(id_profile, first_name, last_name, email, password, last_login, date_register, s_key, active) ";
+		$qs .= "VALUES (".$data['id_profile'].", '".$data['first_name']."', '".$data['last_name']."', ";
+		$qs .= "'".$data['email']."', '".$data['password']."', NOW(), NOW(), '".$data['s_key']."', ".$data['active'].")";
+		$qs = dbQuery($qs);
+		if($qs)
+		{
+			return dbInsertId();
+		}else{
+			return false;
+		}
+	}
+
+
+	public function editEmployee(array $data)
+	{
+		$qs = dbQuery("UPDATE tbl_employee SET first_name = '".$data['first_name']."', last_name = '".$data['last_name']."', email = '".$data['email']."', id_profile = ".$data['id_profile'].", active = ".$data['active']." WHERE id_employee = ".$data['id_employee']);
+		return $qs;
+	}
 
 
 public function deleteEmployee($id_employee){
@@ -192,6 +193,12 @@ public function getSignature($id)
 		$sc = '<img src="'.$imgPath.'" style="max-width:180px; max-height:80px;" />';
 	}
 	return $sc;
+}
+
+
+public function searchId($txt)
+{
+	return dbQuery("SELECT id_employee FROM tbl_employee WHERE first_name LIKE '%".$txt."%' OR last_name LIKE '%".$txt."%'");	
 }
 		
 }

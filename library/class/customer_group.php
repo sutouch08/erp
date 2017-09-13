@@ -133,6 +133,11 @@ class customer_group
 		}
 		return $sc;
 	}
+	
+	public function getData()
+	{
+		return dbQuery("SELECT * FROM tbl_customer_group");	
+	}
 }
 
 ?>

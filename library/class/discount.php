@@ -7,7 +7,19 @@ class discount
 	}
 	
 	
+	public function getDiscount($id_pd, $id_cus, $qty, $payment = "credit")
+	{
+		$sc = array(
+							"discount"	=> 40, //-- ส่วนลด
+							"unit"			=> "percent", //-- หน่วย
+							"type"			=> "item", //--- item = ที่รายการ bill = ท้ายบิล
+							"pCode"		=> "MD-1701001",
+							"idRule"		=> "1"
+							);
+		return $sc;						
+	}
 	
+	/*
 	public function add(array $ds)
 	{
 		$sc = FALSE;
@@ -78,6 +90,9 @@ class discount
 		}
 		return $sc;
 	}
+	
+	*/
+	
 	
 }//-- end class
 

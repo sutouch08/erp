@@ -19,7 +19,6 @@ class style
 				$this->code	= $rs->code;
 				$this->name	= $rs->name;
 				$this->active	= $rs->active;
-
 			}
 		}
 	}
@@ -93,8 +92,7 @@ class style
 		return $sc;
 	}
 	
-	
-	
+		
 	public function getCode($id)
 	{
 		$sc = FALSE;
@@ -186,10 +184,19 @@ class style
 	}
 	
 	
-	public function getProductType($id)
+	public function search($txt, $fields="")
 	{
-		return dbQuery("SELECT * FROM tbl_product_type WHERE id = ".$id);	
+		if( $fields == "" )
+		{
+			return dbQuery("SELECT * FROM tbl_product_style WHERE active = 1 AND code LIKE '%".$txt."'");
+		}
+		else
+		{
+			return dbQuery("SELECT ".$fields." FROM tbl_product_style WHERE active = 1 code LIKE '%".$txt."%'");
+		}
+			
 	}
+	
 	
 	
 }//--- End class
