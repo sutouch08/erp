@@ -3,6 +3,22 @@ class state
 {
 	public function __construct(){}
 	
+	//--- 1 = รอชำระเงิน
+	//--- 2 = แจ้งชำระเงิน
+	//--- 3 = รอจัดสินค้า
+	//--- 4 = กำลังจัดสินค้า
+	//--- 5 = รอแพ็ค
+	//--- 6 = กำลังแพ็ค
+	//--- 7 = รอเปิดบิล
+	//--- 8 = รอการจัดส่ง
+	//--- 9 = กำลังจัดส่ง
+	//--- 10 = จัดส่งแล้ว
+	//--- 11 = ยกเลิก
+	public function add($id_order, $id_state, $id_employee)
+	{
+		return dbQuery("INSERT INTO tbl_order_state (id_order, id_state, id_employee) VALUES (".$id_order.", ".$id_state.", ".$id_employee.")");
+	}
+	
 	public function getName($id)
 	{
 		$sc = 1;
@@ -14,6 +30,7 @@ class state
 		return $sc;
 	}
 	
+	
 	public function getColor($id)
 	{
 		$sc = "";
@@ -24,6 +41,8 @@ class state
 		}
 		return $sc;
 	}
+	
+	
 	
 	public function getOrderStateList($id_order)
 	{

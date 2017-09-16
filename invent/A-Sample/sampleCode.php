@@ -43,6 +43,35 @@
             </li>
         </ul>
 </div>
-                   
+              
+              
+<script>
+function Delete(id, name){
+	swal({
+		title: "คุณแน่ใจ ?",
+		text: "ต้องการลบ '"+name+"' หรือไม่ ?",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: 'ใช่, ฉันต้องการลบ',
+		cancelButtonText: 'ยกเลิก',
+		closeOnConfirm: false
+		}, function(){
+			$.ajax({
+				url:"controller/customerController.php?deleteCustomer",
+				type:"POST", cache:"false", data:{ "id_customer" : id },
+				success: function(rs){
+					var rs = $.trim(rs);
+					if( rs == 'success' ){
+						swal({ title: 'Deleted', text: 'ลบลูกค้าเรียบร้อยแล้ว', type: 'success', timer: 1000 });
+						$("#row_"+id).remove();
+					}else{
+						swal("ข้อผิดพลาด !", "ลบลูกค้าไม่สำเร็จ", "error");
+					}
+				}
+			});
+	});
+}
+</script>                   
 
 

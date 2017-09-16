@@ -159,6 +159,8 @@ public function change_status($id_employee, $active){
 	}
 }
 
+
+//----------------------------------------------------- New Code ----------------------------//
 public function getDivisionCode($id_employee)
 {
 	$sc = getConfig('DEFAULT_DIVISION_CODE');
@@ -200,7 +202,25 @@ public function searchId($txt)
 {
 	return dbQuery("SELECT id_employee FROM tbl_employee WHERE first_name LIKE '%".$txt."%' OR last_name LIKE '%".$txt."%'");	
 }
-		
+
+
+//--- will be return id_employee and id_profile
+public function whoUseThisKey($s_key)
+{
+	$sc = FALSE;
+	$qs = dbQuery("SELECT id_employee, id_profile FROM tbl_employee WHERE s_key = '".$s_key."'");
+	if( dbNumRows($qs) == 1 )
+	{
+		$sc = dbFetchObject($qs);
+	}
+	return $sc;
 }
+
+
+
+
+
+
+}//--- Enc classs
 
 ?>

@@ -11,3 +11,5 @@ function removeError(el, label, message){
 	label.removeClass("red");
 	label.text(message);	
 }
+
+

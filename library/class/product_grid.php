@@ -49,7 +49,7 @@ class product_grid extends product
 	
 	private function gridHeader(array $colors)
 	{
-		$sc = '<tr style="font-size:12px;"><td>&nbsp;</td>';
+		$sc = '<tr class="font-size-12"><td>&nbsp;</td>';
 		foreach( $colors as $color )
 		{
 			$sc .= '<td class="text-center middle"><strong>'.$color['code'] . '<br/>'. $color['name'].'</strong></td>';
@@ -120,8 +120,8 @@ class product_grid extends product
 			$sc 	.= 	$qty === FALSE && $active === TRUE ? '' : ( ($qty < 1 || $active !== TRUE ) ? $txt : $qty);
 			$sc 	.= '</td>';
 	
-			$sc 	.= '<td class="middle" style="width:100px; padding-right:10px; border-left:0px;">';
-			$sc 	.= $isVisual === FALSE ? '<center><span style="color:blue; font-size:10px;">('.($stock < 0 ? 0 : $stock).')</span></center>':'';
+			$sc 	.= '<td class="middle" class="one-attribute">';
+			$sc 	.= $isVisual === FALSE ? '<center><span class="font-size-10 blue">('.($stock < 0 ? 0 : $stock).')</span></center>':'';
 			$sc 	.= '<input type="text" class="form-control input-sm order-grid" name="qty[0]['.$id.']" id="qty_'.$id.'" onkeyup="valid_qty($(this), '.($qty === FALSE ? 1000000 : $qty).')" '.$disabled.' />';
 			$sc 	.= '</td>';
 				
@@ -190,10 +190,10 @@ class product_grid extends product
 				{
 					$sc .= '<td class="order-grid">Not Available</td>';
 				}			
-			}//--- End foreach $colors
+			} //--- End foreach $colors
 			
 			$sc .= '</tr>';			
-		}//--- end foreach $sizes
+		} //--- end foreach $sizes
 	$sc .= '</table>';
 	return $sc;
 	}

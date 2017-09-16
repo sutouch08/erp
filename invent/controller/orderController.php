@@ -34,16 +34,65 @@ if( isset( $_GET['addNew'] ) )
 
 
 
-if( isset( $_GET['addToOrder'] ) )
+if( isset( $_GET['saveOrder'] ) )
+{
+	$order = new order();
+	$rs = $order->changeStatus($_POST['id_order'], 1);
+	if( $rs === TRUE )
+	{
+		//--- 1 = รอการชำระเงิน
+		$order->stateChange($_POST['id_order'], 1);
+	}
+	echo ($rs === TRUE ) ? 'success' : 'Save order fail, Please try again';	
+}
+
+
+if( isset( $_GET['updateOrder'] ) )
 {
 	$id_order = $_POST['id_order'];
-	$ds = $_POST['qty'];
-	$result = TRUE;
+	$recal = isset( $_GET['recal'] ) ? $_GET['recal'] : 0;
+	$order = new order();
+	if( $recal == 0 )
+	{
+		$arr = array("remark" => $_POST['remark']);
+		$rs = $order->update($id_order, $arr);
+	}
+	else
+	{
+		$customer = new customer($_POST['id_customer']);
+		$arr = array(
+						"date_add"	=> dbDate($_POST['date_add']),
+						"id_customer"	=> $customer->id,
+						"id_sale"		=> $customer->id_sale,
+						"id_payment"	=> $_POST['id_payment'],
+						"id_channels"	=> $_POST['id_channels'],
+						"emp_upd"		=> getCookie('user_id'),
+						"remark"		=> $_POST['remark']
+						);
+		//--- update order header first
+		$rs = $order->update($id_order, $arr);
+		
+		//----- ถ้ายังไม่มีรายการ ไม่ต้องคำนวณใหม่	
+		if( $rs === TRUE && $order->hasDetails($id_order) === TRUE )
+		{
+			//$order->recalculateDiscount($id_order, $arr); 	
+		}			
+	}
+	
+	echo $rs === TRUE ? 'success' : 'fail';
+}
+
+if( isset( $_GET['addToOrder'] ) )
+{
+	$ds 			= $_POST['qty'];
+	$result 		= TRUE;
+	$error 		= "";
+	$err_qty		= 0;
 	
 	if( count($ds) > 0 ){
-		$order = new order();
-		$pd = new product();
-		$stock = new stock();
+		$order	= new order($_POST['id_order']);
+		$stock 	= new stock();
+		$disc		= new discount();
 		
 		startTransection();
 		
@@ -53,18 +102,87 @@ if( isset( $_GET['addToOrder'] ) )
 			{
 				if( $qty > 0 )
 				{
+					//--- ถ้ามีสต็อกมากว่าที่สั่ง
 					if( $stock->getSellStock($id) >= $qty )
 					{
-						$arr = array(
+						$pd 			= new product($id);
 						
-									);
+						//---- ถ้ายังไม่มีรายการในออเดอร์
+						if( $order->isExistsDetail($order->id, $id) === FALSE )
+						{
+							//---- คำนวณ ส่วนลดจากนโยบายส่วนลด
+							$discount 	= $disc->getItemDiscount($pd->id, $order->id_customer, $qty, $order->id_payment, $order->id_channels);
+							
+							$arr = array(
+											"id_order"	=> $order->id,
+											"id_style"		=> $pd->id_style,
+											"id_product"	=> $id,
+											"product_code"	=> $pd->code,
+											"product_name"	=> $pd->name,
+											"price"	=> $pd->price,
+											"qty"		=> $qty,
+											"discount"	=> $discount['discount'],
+											"discount_amount" => $discount['amount'],
+											"total_amount"	=> ($pd->price * $qty) - $discount['amount'],
+											"id_rule"	=> $discount['id_rule']										
+										);
+										
+							if( $order->addDetail($arr) === FALSE )
+							{
+								$result = FALSE;	
+								$error = "Error : Insert fail";
+								$err_qty++;
+							}
+							
+						}
+						else  //--- ถ้ามีรายการในออเดอร์อยู่แล้ว
+						{
+							$detail 		= $order->getDetail($order->id, $id);
+							$qty			= $qty + $detail->qty;
+							$discount 	= $disc->getItemDiscount($pd->id, $order->id_customer, $qty, $order->id_payment, $order->id_channels);
+							$arr = array(
+												"id_product"	=> $id,
+												"qty" => $qty,
+												"discount"	=> $discount['discount'],
+												"discount_amount"	=> $discount['amount'],
+												"total_amount"	=> ($pd->price * $qty) - $discount['amount'],
+												"id_rule"	=> $discount['id_rule']
+												);
+							if( $order->updateDetail($detail->id, $arr) === FALSE )
+							{
+								$result = FALSE;
+								$error = "Error : Update Fail";
+								$err_qty++;
+							}												
+												
+						}	//--- end if isExistsDetail
 					}
-				}
-			}
+					else 	// if getStock
+					{
+						$error = "Error : สินค้าไม่เพียงพอ";
+					} 	//--- if getStock
+				}	//--- if qty > 0
+			}	//-- foreach items
+		}	//--- foreach ds
+		
+		if( $result === TRUE )
+		{
+			commitTransection();
 		}
+		else
+		{
+			dbRollback();	
+		}
+		endTransection();
 		
-		
-	}//--- if count
+	}
+	else 	//--- if count
+	{
+		$error = "Error : No items founds";
+	}
+	
+	$sc = $result ===  TRUE ? 'success' : ( $err_qty > 0 ? $error.' : '.$err_qty.' item(s)' : $error);
+	echo $sc;
 }
 
 
@@ -84,7 +202,8 @@ if( isset( $_GET['getProductGrid'] ) && isset( $_GET['pdCode'] ) )
 		$id_style = $style->getId($pdCode);
 		$sc = $grid->getOrderGrid($id_style);
 		$tableWidth	= $pd->countAttribute($id_style) == 1 ? 800 : $grid->getOrderTableWidth($id_style);
-		$sc .= ' | '.$tableWidth;
+		$sc .= ' | ' . $tableWidth;
+		$sc .= ' | ' . $id_style;
 	}
 	echo $sc;
 }
@@ -102,6 +221,7 @@ if( isset( $_GET['getOrderGrid'] ) && isset( $_GET['id_style'] ) )
 	$tableWidth	= $pd->countAttribute($id_style) == 1 ? 600 : $grid->getOrderTableWidth($id_style);
 	$sc .= ' | '.$tableWidth;
 	$sc .= ' | ' . $style->getCode($id_style);
+	$sc .= ' | ' . $id_style;
 	echo $sc;
 }
 
@@ -148,6 +268,55 @@ if( isset( $_GET['getProductsInOrderTab'] ) )
 	
 	echo $ds;
 }
+
+
+
+
+if( isset( $_GET['getDetailTable'] ) )
+{
+	$sc = "no data found";
+	$id_order	= $_GET['id_order'];
+	$order 		= new order();
+	$qs  			= $order->getDetails($id_order);
+	if( dbNumRows($qs) > 0 )
+	{
+		$no = 1;
+		$total_qty = 0;
+		$image = new image();
+		$ds = array();
+		while( $rs = dbFetchObject($qs) )
+		{
+			$arr = array(
+							"id"		=> $rs->id,
+							"no"	=> $no,
+							"imageLink"	=> $image->getProductImage($rs->id_product, 1),
+							"productCode"	=> $rs->product_code,
+							"productName"	=> $rs->product_name,
+							"price"	=> number_format($rs->price, 2),
+							"qty"	=> number_format($rs->qty),
+							"discount"	=> $rs->discount,
+							"amount"	=> number_format($rs->total_amount, 2)
+							);
+			array_push($ds, $arr);
+			$total_qty += $rs->qty;
+			$no++;
+		}
+		$arr = array("total" => number_format($total_qty)); 
+		array_push($ds, $arr);
+		$sc = json_encode($ds);
+	}
+	echo $sc;
+}
+
+//----- Delete detail row
+if( isset( $_GET['removeDetail'] ) )
+{
+	$id 	= $_POST['id_order_detail'];
+	$order = new order();
+	$rs = $order->deleteDetail($id);
+	echo $rs === TRUE ? 'success' : 'Can not delete please try again';		
+}
+
 
 
 if( isset( $_GET['getCustomer'] ) && isset( $_REQUEST['term'] ) )

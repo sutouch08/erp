@@ -9,11 +9,13 @@ function getProductGrid(){
 			success: function(rs){
 				load_out();
 				var rs = rs.split(' | ');
-				if( rs.length == 2 ){
+				if( rs.length == 3 ){
 					var grid = rs[0];
 					var width = rs[1];
+					var id_style = rs[2];
 					$("#modal").css("width", width +"px");
 					$("#modalTitle").html(pdCode);
+					$("#id_style").val(id_style);
 					$("#modalBody").html(grid);
 					grid_init();
 					$("#orderGrid").modal('show');
@@ -35,12 +37,14 @@ function getOrderGrid(id_style){
 		success: function(rs){
 			load_out();
 			var rs = rs.split(' | ');
-			if( rs.length == 3 ){
+			if( rs.length == 4 ){
 				var grid = rs[0];
 				var width = rs[1];
 				var pdCode = rs[2];
+				var id_style = rs[3];
 				$("#modal").css("width", width +"px");
 				$("#modalTitle").html(pdCode);
+				$("#id_style").val(id_style);
 				$("#modalBody").html(grid);
 				grid_init();
 				$("#orderGrid").modal('show');
@@ -49,7 +53,6 @@ function getOrderGrid(id_style){
 			}
 		}
 	});
-	
 }
 
 

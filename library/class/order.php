@@ -61,7 +61,7 @@ class order
 		}
 	}
 	
-	
+	//---- Add new order
 	public function add(array $ds)
 	{
 		$sc = FALSE;
@@ -81,7 +81,85 @@ class order
 		return $sc;
 	}
 	
-	public function getDetail($id)
+	
+	
+	//----- Update order
+	public function update($id, array $ds)
+	{
+		$sc = FALSE;
+		if( count( $ds ) > 0 )
+		{
+			$set = "";
+			$i = 1;
+			foreach( $ds as $field => $value )
+			{
+				$set .= $i == 1 ? $field ." = '".$value."'" : ", ". $field." = '".$value."'";
+				$i++;
+			}
+			$sc = dbQuery("UPDATE tbl_order SET ". $set ." WHERE id = ".$id);
+		}
+		return $sc;
+	}
+	
+	
+	
+	public function addDetail(array $ds)
+	{
+		$sc = FALSE;
+		if( count( $ds ) > 0 )
+		{
+			$fields = "";
+			$values = "";
+			$i = 1;
+			foreach( $ds as $field => $value )
+			{
+				$fields .= $i == 1 ? $field : ", ".$field;
+				$values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
+				$i++;	
+			}
+			$sc = dbQuery("INSERT INTO tbl_order_detail (".$fields.") VALUES (".$values.")");
+		}
+		return $sc;
+	}
+	
+	
+	
+	//--- Update order detail With id_order_detail
+	public function updateDetail($id, array $ds)
+	{
+		$sc = FALSE;
+		if( count( $ds ) > 0 )
+		{
+			$set = "";
+			$i = 1;
+			foreach( $ds as $field => $value )
+			{
+				$set .= $i == 1 ? $field ." = '".$value."'" : ", ". $field." = '".$value."'";
+				$i++;
+			}
+			$sc = dbQuery("UPDATE tbl_order_detail SET ". $set ." WHERE id = ".$id);
+		}
+		return $sc;
+	}
+	
+	
+	
+	public function deleteDetail($id)
+	{
+		return dbQuery("DELETE FROM tbl_order_detail WHERE id = ".$id);	
+	}
+	
+	//---- Get 1 row in order_detail
+	public function getDetail($id_order, $id_pd)
+	{
+		$qs = dbQuery("SELECT * FROM tbl_order_detail WHERE id_order = ".$id_order." AND id_product = '".$id_pd."'");
+		return dbNumRows($qs) == 1 ? dbFetchObject($qs) : FALSE;
+	}
+	
+	
+	
+	//---- get all detail in order
+	public function getDetails($id)
 	{
 		if( $id !== "" )
 		{
@@ -118,6 +196,8 @@ class order
 	}
 	
 	
+	//---
+	
 	public function hasDetails($id)
 	{
 		$sc = FALSE;
@@ -151,6 +231,13 @@ class order
 	}
 	
 	
+	public function isExistsDetail($id_order, $id_pd)
+	{
+		$qs = dbQuery("SELECT id FROM tbl_order_detail WHERE id_order = ".$id_order." AND id_product = '".$id_pd."'");
+		return dbNumRows($qs) == 1 ? TRUE : FALSE;	
+	}
+	
+	
 	
 	public function cancleDetail($id)
 	{
@@ -166,6 +253,29 @@ class order
 	}
 	
 	
+	
+	//----- Change status 
+	public function changeStatus($id, $status)
+	{
+		$id_emp = getCookie('user_id');
+		return dbQuery("UPDATE tbl_order SET status = ".$status.", emp_upd = ".$id_emp." WHERE id = ".$id);
+	}
+	
+	
+	
+	public function stateChange($id, $state)
+	{
+		$id_emp = getCookie('user_id');
+		$cs = new state();
+		if( $cs->add($id, $state, $id_emp) === TRUE )
+		{
+			return dbQuery("UPDATE tbl_order SET state = ".$state.", emp_upd = ".$id_emp." WHEE id = ".$id);
+		}
+		else
+		{
+			return FALSE;	
+		}
+	}
 	
 	//-----------------  New Reference --------------//
 	public function getNewReference($date = '')

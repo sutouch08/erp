@@ -169,8 +169,7 @@ hr{
 	margin-right:-10px;
 }
 .padding-0 {
-	padding-left:0px;
-	padding-right:0px;	
+	padding: 0px !important;
 }
 
 .padding-left-0 {
@@ -654,4 +653,10 @@ td.order-grid{
 	padding:5px !important;
 	vertical-align:middle;
 	text-align:center;
+}
+
+td.one-attribute{
+	width: 100px;
+	padding-right: 10px !important;
+	border-left: 0px;	
 }

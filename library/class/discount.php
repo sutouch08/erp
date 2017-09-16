@@ -7,16 +7,28 @@ class discount
 	}
 	
 	
-	public function getDiscount($id_pd, $id_cus, $qty, $payment = "credit")
+	public function getItemDiscount($id_pd, $id_cus, $qty, $id_payment, $id_channels)
 	{
+		$pd = new product($id_pd);
+		$discount = 40;
 		$sc = array(
-							"discount"	=> 40, //-- ส่วนลด
-							"unit"			=> "percent", //-- หน่วย
-							"type"			=> "item", //--- item = ที่รายการ bill = ท้ายบิล
-							"pCode"		=> "MD-1701001",
-							"idRule"		=> "1"
+							"discount"	=> '40%', //-- ส่วนลด
+							"amount"		=> $qty * ( $pd->price * ($discount * 0.01 ) ), 
+							"id_rule"		=> "1" //---  id of discount rule
 							);
 		return $sc;						
+	}
+	
+	public function getBillDiscount($id_order)
+	{
+		$sc = array(
+							"discount_step_1" => 	10,
+							"unit_step_1"	 => "percent",
+							"discount_stem_2"	=> 5,
+							"unit_step_2"	=> "percent",
+							"id_rule"				=> "2"
+							);
+		return $sc;
 	}
 	
 	/*
