@@ -165,11 +165,24 @@ class customer {
 	}
 	
 	
+	public function getCode($id)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT code FROM tbl_customer WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
 	
-	public function getCustomerId($code)
+	
+	
+	
+	public function getId($code)
 	{
 		$sc = 0;
-		$qs = dbQuery("SELECT id FROM tbl_customers WHERE code = '".$code."'");
+		$qs = dbQuery("SELECT id FROM tbl_customer WHERE code = '".$code."'");
 		if( dbNumRows($qs) == 1 )
 		{
 			list( $sc ) = dbFetchArray($qs);	

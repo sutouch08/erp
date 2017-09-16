@@ -30,34 +30,40 @@ class order
 	{
 		if( $id != "" )
 		{
-			$qs = dbQuery("SELECT * FROM tbl_order WHERE id = ".$id);
-			if( dbNumRows($qs) == 1 )
-			{
-				$rs = dbFetchObject($qs);	
-				$this->id		= $rs->id;
-				$this->bookcode	= $rs->bookcode;
-				$this->reference	= $rs->reference;
-				$this->id_customer	= $rs->id_customer;
-				$this->id_sale		= $rs->id_sale;
-				$this->id_employee	= $rs->id_employee;
-				$this->id_payment		= $rs->id_payment;
-				$this->id_channels	= $rs->id_channels;
-				$this->id_cart		= $rs->id_cart;
-				$this->state			= $rs->state;
-				$this->isPaid		= $rs->isPaid;
-				$this->isExpire		= $rs->isExpire;
-				$this->isCancle		= $rs->isCancle;
-				$this->status		= $rs->status;
-				$this->bDiscText	= $rs->bDiscText;
-				$this->bDiscAmount	= $rs->bDiscAmount;
-				$this->policyCode	= $rs->policyCode;
-				$this->date_add	= $rs->date_add;
-				$this->date_upd	= $rs->date_upd;
-				$this->emp_upd	= $rs->emp_upd;	
-				$this->isExported	= $rs->isExported;	
-				$this->id_branch	= $rs->id_branch;
-				$this->remark		= $rs->remark;		
-			}
+			$this->getData($id);
+		}
+	}
+	
+	
+	public function getData($id)
+	{
+		$qs = dbQuery("SELECT * FROM tbl_order WHERE id = ".$id);
+		if( dbNumRows($qs) == 1 )
+		{
+			$rs = dbFetchObject($qs);	
+			$this->id		= $rs->id;
+			$this->bookcode	= $rs->bookcode;
+			$this->reference	= $rs->reference;
+			$this->id_customer	= $rs->id_customer;
+			$this->id_sale		= $rs->id_sale;
+			$this->id_employee	= $rs->id_employee;
+			$this->id_payment		= $rs->id_payment;
+			$this->id_channels	= $rs->id_channels;
+			$this->id_cart		= $rs->id_cart;
+			$this->state			= $rs->state;
+			$this->isPaid		= $rs->isPaid;
+			$this->isExpire		= $rs->isExpire;
+			$this->isCancle		= $rs->isCancle;
+			$this->status		= $rs->status;
+			$this->bDiscText	= $rs->bDiscText;
+			$this->bDiscAmount	= $rs->bDiscAmount;
+			$this->policyCode	= $rs->policyCode;
+			$this->date_add	= $rs->date_add;
+			$this->date_upd	= $rs->date_upd;
+			$this->emp_upd	= $rs->emp_upd;	
+			$this->isExported	= $rs->isExported;	
+			$this->id_branch	= $rs->id_branch;
+			$this->remark		= $rs->remark;		
 		}
 	}
 	
@@ -325,6 +331,14 @@ class order
 	}
 	
 	
+	//--- Use In class discount สำหรับ เก็บยอดรวมสินค้าในเงื่อนไขเดียวกัน กรณีที่จำนวนสั่งหรือมูลค่าสั่งซื้อ สามารถรวมกันได้
+	public function getSumOrderStyleQty($id_order, $id_style)
+	{
+		$qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_order_detail WHERE id_order = '".$id_order."' AND id_style = '".$id_style."'");
+		list( $qty ) = dbFetchArray($qs);
+		return is_null( $qty ) ? 0 : $qty;
+	}
+	
 	
 	public function getNotExportData()
 	{
@@ -341,12 +355,54 @@ class order
 		return is_null( $qty ) ? 0 : $qty;
 	}
 	
+	
+	
+	
 	public function getStyleReservQty($id_style)
 	{
 		$qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_order_detail WHERE id_style = '".$id_style."' AND valid = 0");	
 		list( $qty ) = dbFetchArray($qs);
 		return is_null( $qty ) ? 0 : $qty;
 	}
+	
+	
+	
+	public function calculateDiscount($id, array $ds = array())
+	{
+		$sc = TRUE;
+		if( count( $ds ) > 0 )
+		{
+			$this->getData($id);
+			$disc = new discount();
+			$qs = $this->getDetails($id);
+			if( dbNumRows($qs) > 0 )
+			{
+				while( $rs = dbFetchObject($qs) )
+				{
+					$discount = $disc->getItemRecalDiscount($id, $rs->id_product, $rs->price, $this->id_customer, $rs->qty, $this->id_payment, $this->id_channels, $this->date_add);
+					
+					$arr = array(
+								"discount" => $discount['discount'],
+								"discount_amount"	=> $discount['amount'],
+								"total_amount" => ($rs->qty * $rs->price) - $discount['amount'],
+								"id_rule"	=> $discount['id_rule']
+								);
+								
+					$cs = $this->updateDetail($rs->id, $arr);
+					
+					if( $cs === FALSE )
+					{
+						$sc = FALSE;
+					}
+					
+				} //--- End while
+				
+			} //--- End if dbNumRows
+			
+		}	//--- End if count
+		
+		return $sc;
+	}	//--- End function
 	
 }//--- End Class
 

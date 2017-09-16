@@ -120,6 +120,13 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['product'] ) )
 }
 
 
+//---------------- Customer Credit -------------------------------//
+if( isset( $_GET['syncMaster'] ) && isset( $_GET['customerCredit'] ) )
+{
+	include "interface/import/importCustomerCredit.php";
+}
+
+
 
 ///==================================================== END MASTER ==========================================///
 

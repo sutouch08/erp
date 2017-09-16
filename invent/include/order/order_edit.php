@@ -46,6 +46,9 @@ $order = isset( $_GET['id_order'] ) ? new order( $_GET['id_order'] ) : new order
 <hr/>
 <?php include 'include/order/order_state.php'; ?>
 
+<hr/>
+<?php include 'include/order/order_detail.php'; ?>
+
 <script src="script/order/order_edit.js"></script>
 <?php endif; //--- isset $_GET['id_order']  ?>
 

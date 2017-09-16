@@ -29,9 +29,8 @@
                         <th class="width-15">รหัสอ้างอิง</th>
                         <th class="width-5 text-center" >สี</th>
                         <th class="width-5 text-center">ไซส์</th>
-                        <th class="width-5 text-center">ต้นทุน</th>
-                        <th class="width-5 text-center">ราคา</th>
-                        <th class="width-5 text-center">ส่วนลด</th>
+                        <th class="width-8 text-center">ต้นทุน</th>
+                        <th class="width-8 text-center">ราคา</th>
                         <th class="width-10 text-center">สต็อก</th>
                         <th class="width-5 text-center">เซลล์</th>
                         <th class="width-5 text-center" >ตัวแทน</th>
@@ -51,7 +50,6 @@
                         <td class="middle text-center"><?php echo $rs->size; ?></td>
                         <td class="middle text-center"><?php echo number_format($rs->cost, 2); ?></td>
                         <td class="middle text-center"><?php echo number_format($rs->price, 2); ?></td>
-                        <td class="middle text-center"><?php echo viewDiscount($rs->discount_amount, $rs->discount_percent); ?></td>
                         <td class="middle text-center"><?php echo isActived($rs->count_stock); ?></td>
                         <td class="middle text-center">
                         	<a href="javascript:void(0)" id="showInSale-<?php echo $rs->id; ?>" onclick="setShowInSale('<?php echo $rs->id; ?>')">
@@ -90,7 +88,7 @@
 	<?php		endwhile; 	?>                        
     <?php	else : 	?>
     				<tr>
-                    	<td colspan="14" class="text-center middle">
+                    	<td colspan="13" class="text-center middle">
                         	<h4 style="text-align:center; color:#AAA;"><i class="fa fa-tags fa-2x"></i> No SKU Now</h4>
                         </td>
                     </tr>

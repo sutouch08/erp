@@ -5,6 +5,21 @@ require "../function/tools.php";
 include '../function/order_helper.php';
 include '../function/customer_helper.php';
 
+if( isset( $_GET['test_discount'] ) )
+{
+	$id_pd = '00001';
+	$id_cus = '1566';
+	$qty = 5;
+	$id_order = 1;
+	$id_payment = 1;
+	$id_channels = 1;
+	$disc = new discount();
+	$rs = $disc->getItemRecalDiscount($id_order, $id_pd, $id_cus, $qty, $id_payment, $id_channels);
+	//$rs = $disc->getItemDiscount($id_pd, $id_cus, $qty, $id_payment, $id_channels);
+	print_r( $rs );
+	//echo $rs;
+}
+
 if( isset( $_GET['addNew'] ) )
 {
 	$sc = "สร้างออเดอร์ไม่สำเร็จ";
@@ -47,6 +62,8 @@ if( isset( $_GET['saveOrder'] ) )
 }
 
 
+
+
 if( isset( $_GET['updateOrder'] ) )
 {
 	$id_order = $_POST['id_order'];
@@ -75,12 +92,15 @@ if( isset( $_GET['updateOrder'] ) )
 		//----- ถ้ายังไม่มีรายการ ไม่ต้องคำนวณใหม่	
 		if( $rs === TRUE && $order->hasDetails($id_order) === TRUE )
 		{
-			//$order->recalculateDiscount($id_order, $arr); 	
+			$order->calculateDiscount($id_order, $arr); 
 		}			
 	}
 	
 	echo $rs === TRUE ? 'success' : 'fail';
 }
+
+
+
 
 if( isset( $_GET['addToOrder'] ) )
 {
@@ -111,7 +131,7 @@ if( isset( $_GET['addToOrder'] ) )
 						if( $order->isExistsDetail($order->id, $id) === FALSE )
 						{
 							//---- คำนวณ ส่วนลดจากนโยบายส่วนลด
-							$discount 	= $disc->getItemDiscount($pd->id, $order->id_customer, $qty, $order->id_payment, $order->id_channels);
+							$discount 	= $disc->getItemDiscount($pd->id, $order->id_customer, $qty, $order->id_payment, $order->id_channels, $order->date_add);
 							
 							$arr = array(
 											"id_order"	=> $order->id,
@@ -139,7 +159,7 @@ if( isset( $_GET['addToOrder'] ) )
 						{
 							$detail 		= $order->getDetail($order->id, $id);
 							$qty			= $qty + $detail->qty;
-							$discount 	= $disc->getItemDiscount($pd->id, $order->id_customer, $qty, $order->id_payment, $order->id_channels);
+							$discount 	= $disc->getItemDiscount($pd->id, $order->id_customer, $qty, $order->id_payment, $order->id_channels, $order->date_add);
 							$arr = array(
 												"id_product"	=> $id,
 												"qty" => $qty,
@@ -282,6 +302,8 @@ if( isset( $_GET['getDetailTable'] ) )
 	{
 		$no = 1;
 		$total_qty = 0;
+		$total_discount = 0;
+		$total_amount = 0;
 		$image = new image();
 		$ds = array();
 		while( $rs = dbFetchObject($qs) )
@@ -299,9 +321,15 @@ if( isset( $_GET['getDetailTable'] ) )
 							);
 			array_push($ds, $arr);
 			$total_qty += $rs->qty;
+			$total_discount = $rs->discount_amount;
+			$total_amount = $rs->total_amount;
 			$no++;
 		}
-		$arr = array("total" => number_format($total_qty)); 
+		$arr = array(
+					"total_qty" => number_format($total_qty),
+					"total_discount" => number_format($total_discount, 2),
+					"total_amount" => number_format($total_amount, 2)
+				); 
 		array_push($ds, $arr);
 		$sc = json_encode($ds);
 	}

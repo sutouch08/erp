@@ -269,6 +269,7 @@
                         <li><a href="index.php?content=customer_class"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข เกรดลูกค้า</a></li>
                         <li><a href="index.php?content=customer_area"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข เขตลูกค้า</a></li>
                          <li><a href="index.php?content=customer_transfer"><i class="fa fa-user"></i>&nbsp; โอน/ย้าย ลูกค้า</a></li>
+                         <li><a href="index.php?content=customer_credit"><i class="fa fa-user"></i> &nbsp; วงเงินเครดิต</a></li>
                          <li class="divider"></li>
                         <li><a href="index.php?content=add_sponsor"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข รายชื่อสปอนเซอร์</a></li>
                       </ul>

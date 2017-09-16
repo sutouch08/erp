@@ -48,7 +48,6 @@
 											"id_brand"	=> $bd->getBrandId( $rs['I'] ),
 											"cost"			=> $rs['D'],
 											"price"		=> $rs['M'],
-											"discount_amount"	=> $rs['N'],
 											"id_unit"		=> $un->getUnitId( $rs['H'] ),
 											"is_visual"	=> $isVisual,
 											"active"		=> $active							
@@ -67,7 +66,6 @@
 											"id_brand"	=> $bd->getBrandId( $rs['I'] ),
 											"cost"			=> $rs['D'],
 											"price"		=> $rs['M'],
-											"discount_amount"	=> $rs['N'],
 											"id_unit"		=> $un->getUnitId( $rs['H'] ),
 											"is_visual"	=> $isVisual,
 											"active"		=> $active							
