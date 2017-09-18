@@ -42,11 +42,13 @@ $order = isset( $_GET['id_order'] ) ? new order( $_GET['id_order'] ) : new order
     	<label>หมายเหตุ : </label>
         <label  style="font-weight:normal;"><?php echo $order->remark; ?></label>
     </div>
+    <input type="hidden" name="id_order" id="id_order" value="<?php echo $order->id; ?>" />
 </div>
 <hr/>
 <?php include 'include/order/order_state.php'; ?>
 
 <hr/>
+
 <?php include 'include/order/order_detail.php'; ?>
 
 <script src="script/order/order_edit.js"></script>

@@ -24,7 +24,7 @@ class order
 	public $isExported;	//---	ส่งออกไป Formula แล้วหรือยัง 1 = Exported | 0 = not export 
 	public $id_branch;
 	public $remark;
-	
+	public $hasNotSaveDetail = TRUE;
 	
 	public function __construct($id = "")
 	{
@@ -64,6 +64,8 @@ class order
 			$this->isExported	= $rs->isExported;	
 			$this->id_branch	= $rs->id_branch;
 			$this->remark		= $rs->remark;		
+			
+			$this->hasNotSaveDetail = $this->hasNotSaveDetail($rs->id);
 		}
 	}
 	
@@ -160,6 +162,20 @@ class order
 	{
 		$qs = dbQuery("SELECT * FROM tbl_order_detail WHERE id_order = ".$id_order." AND id_product = '".$id_pd."'");
 		return dbNumRows($qs) == 1 ? dbFetchObject($qs) : FALSE;
+	}
+	
+	
+	
+	//--------- ยอดรวมสินค้า 1 รายการ ( isSaved = 1 ) ที่บันทึกแล้ว ใช้ในกรณีคืนเครดิต
+	public function getDetailAmountSaved($id)
+	{
+		$sc = 0;
+		$qs = dbQuery("SELECT total_amount FROM tbl_order_detail WHERE id = ".$id." AND isSaved = 1");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);	
+		}
+		return $sc;
 	}
 	
 	
@@ -268,20 +284,59 @@ class order
 	}
 	
 	
+	public function hasNotSaveDetail($id)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT COUNT(*) AS qty FROM tbl_order_detail WHERE id_order = ".$id." AND isSaved = 0");
+		list( $count ) = dbFetchArray($qs);
+		if( $count > 0 )
+		{
+			$sc = TRUE;	
+		}
+		return $sc;
+	}
 	
+	public function saveDetail($id)
+	{
+		return dbQuery("UPDATE tbl_order_detail SET isSaved = 1 WHERE id_order_detail = ".$id." AND isSaved = 0");
+	}
+	
+	
+	
+	public function unSaveDetail($id)
+	{
+		return dbQuery("UPDATE tbl_order_detail SET isSaved = 0 WHERE id_order_detail = ".$id." AND isSaved = 1");
+	}
+	
+	
+	
+	
+	public function saveDetails($id)
+	{
+		return dbQuery("UPDATE tbl_order_detail SET isSaved = 1 WHERE id_order = ".$id." AND isSaved = 0");
+	}
+	
+	
+	
+	
+	
+	public function unSaveDetails($id)
+	{
+		return dbQuery("UPDATE tbl_order_detail SET isSaved = 0 WHERE id_order = ".$id." AND isSaved = 1");
+	}
+		
+		
+		
+		
 	public function stateChange($id, $state)
 	{
 		$id_emp = getCookie('user_id');
+		$rs = dbQuery("UPDATE tbl_order SET state = ".$state.", emp_upd = ".$id_emp." WHEE id = ".$id);
 		$cs = new state();
-		if( $cs->add($id, $state, $id_emp) === TRUE )
-		{
-			return dbQuery("UPDATE tbl_order SET state = ".$state.", emp_upd = ".$id_emp." WHEE id = ".$id);
-		}
-		else
-		{
-			return FALSE;	
-		}
+		$cs->add($id, $state, $id_emp);
+		return $rs;
 	}
+		
 	
 	//-----------------  New Reference --------------//
 	public function getNewReference($date = '')
@@ -315,6 +370,21 @@ class order
 		return is_null( $amount ) ? 0.00 : $amount;
 	}
 	
+	
+	public function getTotalAmountNotSave($id)
+	{
+		$qs = dbQuery("SELECT SUM(total_amount) AS amount FROM tbl_order_detail WHERE id_order = '".$id."' AND isSaved = 0");
+		list( $amount ) = dbFetchArray($qs);
+		return is_null( $amount ) ? 0.00 : $amount;
+	}
+	
+	
+	public function getTotalAmountSaved($id)
+	{
+		$qs = dbQuery("SELECT SUM(total_amount) AS amount FROM tbl_order_detail WHERE id_order = '".$id."' AND isSaved = 1");
+		list( $amount ) = dbFetchArray($qs);
+		return is_null( $amount ) ? 0.00 : $amount;
+	}	
 	
 	public function orderQty($id)
 	{

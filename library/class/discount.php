@@ -193,14 +193,16 @@ class discount
 							
 								//---- คำนวณยอดสั่งใหม่
 								$order_qty = $order->getSumOrderStyleQty($id_order, $pd->id_style);
-								
-								if( ( $order_qty > 0 && $rs->qty <= $order_qty ) OR ( $order_amount > 0 && $rs->amount <= ( $order_qty * $price) ) )
+								$order_amount = $order_qty * $price;
+								if( ( $order_qty > 0 && $rs->qty <= $order_qty ) OR ( $order_amount > 0 && $rs->amount <= $order_amount ) )
 								{
-									$data = $this->get_item_price_disc($pd->id, $price, $cs->id, $order_qty, $order_amount, $id_payment, $id_channels, $date);
+									
+									$data = $this->get_item_price_disc($pd->id, $price, $cs->id, $order_qty, $id_payment, $id_channels, $date);
 									$discount 	=	$data['amount'] / $order_qty; 	//--- ทำย้อนกลับ เพื่อหาส่วนลดที่ดีที่สุด
 									$price_rule 	= ( $discount > $setPrice ) ? $data['id_rule'] : $price_rule;
 									$setPrice 	= $discount > $setPrice ? $discount : $setPrice;
 								}
+								
 						}
 						else if( ( ( $rs->qty > 0 && $rs->qty <= $qty) OR ( $rs->amount > 0 && $rs->amount <= ($qty * $price) ) ) && $rs->canGroup == 0 )
 						{				
@@ -229,8 +231,8 @@ class discount
 							{
 								
 								$order_qty = $order->getSumOrderStyleQty($id_order, $pd->id_style);
-								
-								if( ( $order_qty > 0 && $rs->qty <= $order_qty ) OR ( $order_amount > 0 && $rs->amount <= ($order_qty * $price)) )
+								$order_amount = $order_qty * $price;
+								if( ( $order_qty > 0 && $rs->qty <= $order_qty ) OR ( $order_amount > 0 && $rs->amount <= $order_amount ) )
 								{
 									
 									$data = $this->get_item_disc($pd->id, $price, $cs->id, $order_qty, $id_payment, $id_channels, $date); 
@@ -449,6 +451,8 @@ class discount
 			
 			$qr .= "AND r.active = 1 AND r.isDeleted = 0";
 			
+			//echo $qr;
+			
 			$qs = dbQuery($qr);
 			
 			if( dbNumRows($qs) > 0 )
@@ -502,79 +506,6 @@ class discount
 		return $sc;
 	}
 	
-	/*
-	public function add(array $ds)
-	{
-		$sc = FALSE;
-		if( count( $ds ) > 0 )
-		{
-			$fields	= "";
-			$values	= "";
-			$i	= 1;
-			foreach( $ds as $field => $value )
-			{
-				$fields	.= $i == 1 ? $field : ", ".$field;
-				$values	.= $i == 1 ? "'".$value."'" : ", '".$value."'";
-				$i++;	
-			}
-			$sc = dbQuery("INSERT INTO tbl_customer_discount (".$fields.") VALUES (".$values.")");
-		}
-		return $sc;
-	}
-	
-	
-	
-	
-	public function update($id, array $ds)
-	{
-		$sc = FALSE;
-		if( count( $ds ) > 0 )
-		{
-			$set	= "";
-			$i 		= 1;
-			foreach( $ds as $field => $value )
-			{
-				$set .= $i == 1 ? $field." = '".$value."'" : ", ".$field." = '".$value."'";
-				$i++;
-			}
-			$sc = dbQuery("UPDATE tbl_customer_discount SET ".$set." WHERE id = '".$id."'");
-		}
-		return $sc;
-	}
-	
-	
-	
-	public function delete($id)
-	{
-		return dbQuery("DELETE FROM tbl_customer_discount WHERE id = ".$id);	
-	}
-	
-	//--------------------- เฉพาะกรณีที่ใช้กลุ่มสินค้าในการอ้างอิงเท่านั้น ---------------------//
-	public function getDiscountIdByGroup($id_customer, $id_group)
-	{
-		$sc = FALSE;
-		$qs = dbQuery("SELECT id FROM tbl_customer_discount WHERE id_customer = '".$id_customer."' AND id_product_group = '".$id_group."'");
-		if( dbNumRows($qs) == 1 )
-		{
-			list( $sc ) = dbFetchArray($qs);
-		}
-		return $sc;
-	}
-	
-	
-	//----------------- ตรวจสอบว่า มีส่วนลดกับกลุ่มสินค้าสำหรับลูกค้าค้นนี้อยู่หรือไม่------------//
-	public function isExistsGroupDiscount($id_customer, $id_group)
-	{
-		$sc = FALSE;
-		$qs = dbQuery("SELECT discount FROM tbl_customer_discount WHERE id_customer = '".$id_customer."' AND id_product_group = '".$id_group."'");
-		if( dbNumRows($qs) > 0 )
-		{
-			$sc = TRUE;	
-		}
-		return $sc;
-	}
-	
-	*/
 	
 	
 }//-- end class

@@ -5,6 +5,7 @@ class payment_method
 	public $code;
 	public $name;
 	public $isDefault;
+	public $hasTerm;
 	public function __construct($id = '')
 	{
 		if( $id != '' )
@@ -17,6 +18,7 @@ class payment_method
 				$this->code 	= $rs->code;
 				$this->name	 	= $rs->name;	
 				$this->isDefault = $rs->isDefault;
+				$this->hasTerm = $rs->hasTerm;
 			}
 		}
 	}
@@ -71,6 +73,14 @@ class payment_method
 		}
 		return $sc;
 	}
+	
+	
+	public function setTerm($id, $val)
+	{
+		return dbQuery("UPDATE tbl_payment_method SET hasTerm = ".$val." WHERE id = ".$id);
+	}
+	
+	
 	
 	public function clearDefault()
 	{

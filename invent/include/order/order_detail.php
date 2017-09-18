@@ -1,4 +1,19 @@
 <!--------------------------------- Order Detail ----------------->
+<?php 
+	$allowEditDisc = getConfig('ALLOW_EDIT_DISCOUNT');
+	$allowEditPrice = getConfig('ALLOW_EDIT_PRICE');
+?>
+
+<!------------------- ปุ่มแก้ไขราคาและส่วนลด ------------->
+<?php 
+if( ( $allowEditDisc == 1 OR $allowEditPrice == 1 ) && $order->state < 4 )
+{
+ 	include 'include/order/order_discount_bar.php';
+}
+?>
+<!------------------- / ปุ่มแก้ไขราคาและส่วนลด / ------------->
+
+<form id="discount-form">
 <div class="row">
 	<div class="col-sm-12">
     	<table class="table table-striped border-1">
@@ -32,9 +47,21 @@
                 </td>
                 <td class="middle"><?php echo $rs->product_code; ?></td>
                 <td class="middle"><?php echo $rs->product_name; ?></td>
-                <td class="middle text-center"><?php echo number_format($rs->price, 2); ?></td>
+                <td class="middle text-center">
+                <?php if( $allowEditPrice && $order->state < 4 ) : ?>
+                	
+                	<input type="text" class="form-control input-sm text-center price-box hide" id="price_<?php echo $rs->id; ?>" name="price[<?php echo $rs->id; ?>]" value="<?php echo $rs->price; ?>" />
+                    </div>
+                <?php endif; ?>
+                <span class="price-label" id="price-label-<?php echo $rs->id; ?>">	<?php echo number_format($rs->price, 2); ?></span>
+                </td>
                 <td class="middle text-center"><?php echo number_format($rs->qty); ?></td>
-                <td class="middle text-center"><?php echo $rs->discount; ?></td>
+                <td class="middle text-center">
+                <?php if( $allowEditDisc && $order->state < 4 ) : ?>
+                    <input type="text" class="form-control input-sm text-center discount-box hide" id="disc_<?php echo $rs->id; ?>" name="disc[<?php echo $rs->id; ?>]" value="<?php echo $rs->discount; ?>" />
+                <?php endif; ?>
+                <span class="discount-label"><?php echo $rs->discount; ?></span>
+                </td>
                 <td class="middle text-right"><?php echo number_format($rs->total_amount, 2); ?></td>
                 <td class="middle text-right">
                 <?php if( $edit OR $add ) : ?>
@@ -81,7 +108,7 @@
     </div>
 </div>
 <!--------------------------------  End Order Detail ----------------->
-
+</form>
 <!------ order detail template ------>
 <script id="detail-table-template" type="text/x-handlebars-template">
 {{#each this}}

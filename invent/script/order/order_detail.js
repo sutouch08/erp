@@ -25,6 +25,7 @@ function updateDetailTable(){
 
 
 function removeDetail(id, name){
+	var id_order = $("#id_order").val();
 	swal({
 		title: "คุณแน่ใจ ?",
 		text: "ต้องการลบ '"+name+"' หรือไม่ ?",
@@ -37,7 +38,7 @@ function removeDetail(id, name){
 		}, function(){
 			$.ajax({
 				url:"controller/orderController.php?removeDetail",
-				type:"POST", cache:"false", data:{ "id_order_detail" : id },
+				type:"POST", cache:"false", data:{ "id_order_detail" : id, "id_order" : id_order },
 				success: function(rs){
 					var rs = $.trim(rs);
 					if( rs == 'success' ){

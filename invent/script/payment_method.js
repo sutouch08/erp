@@ -1,4 +1,27 @@
 // JavaScript Document
+function toggleTermAdd(i){
+	if( i == 1 ){
+		$("#btn-add-term-no").removeClass('btn-danger');
+		$("#btn-add-term-yes").addClass('btn-success');
+	}else{
+		$("#btn-add-term-yes").removeClass('btn-success');
+		$("#btn-add-term-no").addClass('btn-danger');
+	}
+	$("#hasTerm").val(i);
+}
+
+
+function toggleTermEdit(i){
+	if( i == 1 ){
+		$("#btn-edit-term-no").removeClass('btn-danger');
+		$("#btn-edit-term-yes").addClass('btn-success');
+	}else{
+		$("#btn-edit-term-yes").removeClass('btn-success');
+		$("#btn-edit-term-no").addClass('btn-danger');
+	}
+	$("#hasTerm").val(i);
+}
+
 
 function toggleDefaultAdd(i){
 	if( i == 1 ){
@@ -32,11 +55,12 @@ function getEdit(id){
 		success: function(rs){
 			var rs = $.trim(rs);
 			var arr = rs.split(' | ');
-			if( arr.length == 4 ){
+			if( arr.length == 5 ){
 				$("#id_payment_method").val( arr[0] );
 				$("#editCode").val( arr[1] );
 				$("#editName").val( arr[2] );
 				toggleDefaultEdit(arr[3]);
+				toggleTermEdit(arr[4]);
 				$("#edit-modal").modal('show');
 			}else{
 				swal("ข้อผิดพลาด !!", "ไม่พบข้อมูลที่ต้องการแก้ไข", "error");	
@@ -52,6 +76,7 @@ function saveEdit(){
 	var code = $("#editCode").val();
 	var name = $("#editName").val();
 	var isDefault = $("#isDefault").val();
+	var hasTerm = $("#hasTerm").val();
 	
 	if( code.length == 0 || name.length == 0 ){
 		swal("ข้อมูลไม่ครบถ้วน");
@@ -60,7 +85,7 @@ function saveEdit(){
 	
 	$.ajax({
 		url:"controller/paymentMethodController.php?saveEditMethod",
-		type:"POST", cache:"false", data:{ "id" : id, "code" : code, "name" : name, "isDefault" : isDefault },
+		type:"POST", cache:"false", data:{ "id" : id, "code" : code, "name" : name, "isDefault" : isDefault, "hasTerm" : hasTerm },
 		success: function(rs){
 			var rs = $.trim(rs);
 			if( rs == 'success' ){
@@ -93,6 +118,7 @@ function addNew(){
 	var code = $("#addCode").val();
 	var name = $("#addName").val();
 	var isDefault = $("#isDefault").val();
+	var hasTerm = $("#hasTerm").val();
 	if( code.length == 0 || name.length == 0 ){
 		swal("ข้อมูลไม่ครบถ้วน");
 		return false;
@@ -100,7 +126,7 @@ function addNew(){
 	
 	$.ajax({
 		url:"controller/paymentMethodController.php?addMethod",
-		type:"POST", cache:"false", data:{ "code" : code, "name" : name, "isDefault" : isDefault },
+		type:"POST", cache:"false", data:{ "code" : code, "name" : name, "isDefault" : isDefault, "hasTerm" : hasTerm },
 		success: function(rs){
 			var rs = $.trim(rs);
 			if( rs == 'success' ){

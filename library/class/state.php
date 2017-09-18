@@ -51,4 +51,18 @@ class state
 		return dbQuery($qr);	
 	}
 	
+	
+	
+	public function hasState($id_order)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_order_state WHERE id_order = ".$id_order);
+		if( dbNumRows($qs) > 0 )
+		{
+			$sc = TRUE;
+		}
+		return $sc;
+	}
+	
+	
 }//--- end class

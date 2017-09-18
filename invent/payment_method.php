@@ -85,6 +85,7 @@
                     	<th class="width-10 text-center">ลำดับ</th>
                         <th class="width-15">รหัส</th>
                         <th class="width-40">ชื่อ</th>
+                        <th class="width-10">เครดิตเทอม</th>
                         <th class="width-10 text-center">ค่าเริ่มต้น</th>
                         <th></th>
                     </tr>
@@ -98,6 +99,7 @@
                     	<td class="middle text-center"><?php echo $no; ?></td>
                         <td class="middle"><?php echo $rs->code; ?></td>
                         <td class="middle"><?php echo $rs->name; ?></td>
+                        <td class="middle text-center"><?php echo isActived($rs->hasTerm); ?></td>
                         <td class="middle text-center"><?php echo isActived($rs->isDefault); ?></td>
                         <td class="middle text-right">
                         <?php if( $edit ) : ?>
@@ -125,6 +127,7 @@
     
 
 <input type="hidden" name="isDefault" id="isDefault" value="0" />
+<input type="hidden" name="hasTerm" id="hasTerm" value="0" />
 	<!---- Modal Add --->
 	<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog" style="width:500px;">
@@ -146,8 +149,17 @@
                         <input type="text" class="form-control input-sm" id="addName" placeholder="กำหนดชื่อช่องทางการชำระเงิน" />
                         <span class="help-block red" id="addName-error"></span>
                     </div>
+                    <div class="divider-hidden"></div>
                      <div class="col-sm-12">
-                    	<label>ค่าเริ่มต้น</label>
+                    	<label>เครดิตเทอม ?</label>
+                        <div class="btn-group width-100">
+                        	<button type="button" class="btn btn-sm width-25" id="btn-add-term-yes" onclick="toggleTermAdd(1)">ใช่</button>
+                            <button type="button" class="btn btn-sm btn-danger width-25" id="btn-add-term-no" onclick="toggleTermAdd(0)">ไม่ใช่</button>
+                        </div>
+                    </div>
+                    <div class="divider-hidden"></div>
+                     <div class="col-sm-12">
+                    	<label>ค่าเริ่มต้น ?</label>
                         <div class="btn-group width-100">
                         	<button type="button" class="btn btn-sm width-25" id="btn-add-yes" onclick="toggleDefaultAdd(1)">ใช่</button>
                             <button type="button" class="btn btn-sm btn-danger width-25" id="btn-add-no" onclick="toggleDefaultAdd(0)">ไม่ใช่</button>
@@ -186,8 +198,17 @@
                         <input type="text" class="form-control input-sm" id="editName" placeholder="กำหนดชื่อช่องทางการชำระเงิน" />
                         <span class="help-block red" id="editName-error"></span>
                     </div>
+                    <div class="divider-hidden"></div>
+                    <div class="col-sm-12">
+                    	<label>เครดิตเทอม ? </label>
+                        <div class="btn-group width-100">
+                        	<button type="button" class="btn btn-sm width-25" id="btn-edit-term-yes" onclick="toggleTermEdit(1)">ใช่</button>
+                            <button type="button" class="btn btn-sm btn-danger width-25" id="btn-edit-term-no" onclick="toggleTermEdit(0)">ไม่ใช่</button>
+                        </div>
+                    </div>
+                    <div class="divider-hidden"></div>
                      <div class="col-sm-12">
-                    	<label>ค่าเริ่มต้น</label>
+                    	<label>ค่าเริ่มต้น ?</label>
                         <div class="btn-group width-100">
                         	<button type="button" class="btn btn-sm width-25" id="btn-edit-yes" onclick="toggleDefaultEdit(1)">ใช่</button>
                             <button type="button" class="btn btn-sm btn-danger width-25" id="btn-edit-no" onclick="toggleDefaultEdit(0)">ไม่ใช่</button>

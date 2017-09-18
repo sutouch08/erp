@@ -13,11 +13,61 @@ if( isset( $_GET['test_discount'] ) )
 	$id_order = 1;
 	$id_payment = 1;
 	$id_channels = 1;
+	$price = 279;
 	$disc = new discount();
-	$rs = $disc->getItemRecalDiscount($id_order, $id_pd, $id_cus, $qty, $id_payment, $id_channels);
+	$rs = $disc->getItemRecalDiscount($id_order, $id_pd, $price, $id_cus, $qty, $id_payment, $id_channels);
 	//$rs = $disc->getItemDiscount($id_pd, $id_cus, $qty, $id_payment, $id_channels);
+	echo "<br/>";
 	print_r( $rs );
 	//echo $rs;
+}
+
+
+if( isset( $_GET['updateEditDiscount'] ) )
+{
+	$order = new order($_POST['id_order']);
+	$ds = $_POST['discount'];
+	$payment = new payment_method($order->id_payment);
+	$credit = new customer_credit();
+	
+	foreach( $ds as $id => $value )
+	{
+		//----- ข้ามรายการที่ไม่ได้กำหนดค่ามา
+		if( $value != "" )
+		{
+			//--- ได้ Obj มา
+			$detail = $order->getDetail($id); 
+			
+			//--- ถ้ารายการนี้มีอยู่
+			if( $detail !== FALSE ) 
+			{
+				//---- ถ้ารายการนี้เป็นเครดิตเทอมและคำนวณยอดใช้ไปแล้ว
+				if( $payment->hasTerm == 1 && $detail->isSaved == 1)
+				{
+					//-------- ถ้ารายการที่แก้ไขมาแตกต่างกับของเก่า คืนยอดใช้ไป
+					if( $value != $detail->discount )
+					{
+						$credit->decreaseUsed($order->id_customer, $detail->total_amount);
+						$order->changeStatus($order->id, 0);
+						
+					}
+				}
+			}	//--- end if detail
+		} //--- End if value
+	}	//--- end foreach
+	
+	//---- ถ้ามีเครดิตเทอม
+	if( $payment->hasTerm == 1 )
+	{
+		//---- เปลี่ยนสถานะออเดอร์ เพื่อให้ต้องกดบันทึกอีกครั้งเพื่อตัดยอดเครดิตใหม่
+		$
+	}
+}
+
+
+if( isset( $_GET['updateEditPrice'] ) )
+{
+	print_r($_POST);	
 }
 
 if( isset( $_GET['addNew'] ) )
@@ -51,28 +101,76 @@ if( isset( $_GET['addNew'] ) )
 
 if( isset( $_GET['saveOrder'] ) )
 {
-	$order = new order();
-	$rs = $order->changeStatus($_POST['id_order'], 1);
-	if( $rs === TRUE )
+	$order 		= new order($_POST['id_order']);
+	$credit 		= new customer_credit();
+	$payment 	= new payment_method($order->id_payment);
+	$isEnought 	= TRUE;  //--- เอาไว้ตรวจสอบเครดิต ถ้าไม่พอจะเป็น FALSE;
+	$sc 			= FALSE; 
+	
+	startTransection();
+	//--- ถ้าเป็นการสั่งซื้อแบบเครดิตเทอม ให้คำนวณเครดิตคงเหลือก่อนบันทึก
+	if( $payment->hasTerm == 1 )
 	{
-		//--- 1 = รอการชำระเงิน
-		$order->stateChange($_POST['id_order'], 1);
+		$amount = $order->getTotalAmountNotSave($order->id); //---- ยอดเงินหลังหักส่วนลดทั้งออเดอร์(ไม่รวมส่วนลดท้ายบิล) ที่ยังไม่ได้บันทึก ( isSaved = 0 )
+		$isEnought = $credit->isEnough($order->id_customer, $amount); //---- ตรวจสอบว่าเครดิตผ่านหรือไม่
 	}
-	echo ($rs === TRUE ) ? 'success' : 'Save order fail, Please try again';	
+	
+	if( $isEnought === FALSE )
+	{
+		$message = 'เคดิตคงเหลือไม่เพียงพอ';
+		$sc = FALSE;
+	}
+	else
+	{
+		$rs = $order->changeStatus($order->id, 1); //--- บันทึกออเดอร์
+		$rd = $order->saveDetails($order->id);	//--- บันทึกการตัดเครดิต
+		$rm = $credit->increaseUsed($order->id_customer, $amount); //--- เพิ่มมูลค่าใช้ไป (คำนวณใน method )
+		if( $rs === TRUE && $rd === TRUE && $rm === TRUE )
+		{
+			$state = new state();
+			if( $state->hasState($order->id) === FALSE ) //--- ถ้ายังไม่มีสถานะใดๆ
+			{
+				//--- 1 = รอการชำระเงิน
+				$order->stateChange($order->id, 1);
+			}
+			$sc = TRUE;
+		}
+		else
+		{
+			$message = 'Save order fail, Please try again';	
+			$sc = FALSE;
+		}
+	}
+	
+	if( $sc === TRUE )
+	{
+		commitTransection();
+	}
+	else
+	{
+		dbRollback();	
+	}
+	endTransection();
+	
+	echo ( $sc === TRUE ) ? 'success' : $message;	
 }
+
+
+
 
 
 
 
 if( isset( $_GET['updateOrder'] ) )
 {
-	$id_order = $_POST['id_order'];
 	$recal = isset( $_GET['recal'] ) ? $_GET['recal'] : 0;
-	$order = new order();
+	$order = new order($_POST['id_order']);
+	$payment = new payment_method($order->id_payment);
+	$credit = new customer_credit();
 	if( $recal == 0 )
 	{
 		$arr = array("remark" => $_POST['remark']);
-		$rs = $order->update($id_order, $arr);
+		$rs = $order->update($order->id, $arr);
 	}
 	else
 	{
@@ -83,16 +181,29 @@ if( isset( $_GET['updateOrder'] ) )
 						"id_sale"		=> $customer->id_sale,
 						"id_payment"	=> $_POST['id_payment'],
 						"id_channels"	=> $_POST['id_channels'],
+						"status"		=> 0, //--- เปลี่ยนกลับ ให้กดบันทึกใหม่
 						"emp_upd"		=> getCookie('user_id'),
 						"remark"		=> $_POST['remark']
 						);
 		//--- update order header first
-		$rs = $order->update($id_order, $arr);
+		$rs = $order->update($order->id, $arr);
 		
 		//----- ถ้ายังไม่มีรายการ ไม่ต้องคำนวณใหม่	
-		if( $rs === TRUE && $order->hasDetails($id_order) === TRUE )
+		if( $rs === TRUE && $order->hasDetails($order->id) === TRUE )
 		{
-			$order->calculateDiscount($id_order, $arr); 
+			if( $payment->hasTerm == 1 )
+			{
+				//---- ยอดรวมสินค้าที่บันทึกไปแล้ว เพื่อเอามาคืนยอดใช้ไป
+				$amount = $order->getTotalAmountSaved($order->id);
+				
+				//----- ยกเลิกการบันทึกรายการ เพื่อจะได้คำนวณใหม่อีกที
+				$order->unSaveDetails($order->id);
+				
+				//---- คืนยอดเครดิตใช้ไป แล้วค่อยไปคำนวณใหม่ตอนบันทึก
+				$credit->decreaseUsed($order->id_customer, $amount);
+			}
+			//------ คำนวณส่วนลดใหม่
+			$order->calculateDiscount($order->id, $arr); 
 		}			
 	}
 	
@@ -113,7 +224,8 @@ if( isset( $_GET['addToOrder'] ) )
 		$order	= new order($_POST['id_order']);
 		$stock 	= new stock();
 		$disc		= new discount();
-		
+		$payment = new payment_method($order->id_payment);
+		$credit = new customer_credit();
 		startTransection();
 		
 		foreach( $ds as $items )
@@ -166,14 +278,24 @@ if( isset( $_GET['addToOrder'] ) )
 												"discount"	=> $discount['discount'],
 												"discount_amount"	=> $discount['amount'],
 												"total_amount"	=> ($pd->price * $qty) - $discount['amount'],
-												"id_rule"	=> $discount['id_rule']
+												"id_rule"	=> $discount['id_rule'],
+												"isSaved"	=> 0 //--- ย้อนกลับมาเป็นยังไม่ได้บันทึกอีกครั้ง เพื่อคำนวณเคดิตใหม่
 												);
 							if( $order->updateDetail($detail->id, $arr) === FALSE )
 							{
 								$result = FALSE;
 								$error = "Error : Update Fail";
 								$err_qty++;
-							}												
+							}				
+							else
+							{
+								//---- ถ้าเป้นเครดิตแล้วบันทึกไปแล้ว
+								if( $payment->hasTerm == 1 && $detail->isSaved == 1 )
+								{
+									//---- คืนยอดใช้ไปกลับมาก่อน เพื่อรอคำนวณ เครดิตอีกครั้งตอน บันทึก
+									$credit->decreaseUsed($order->id_customer, $detail->total_amount);
+								}
+							}	
 												
 						}	//--- end if isExistsDetail
 					}
@@ -187,6 +309,7 @@ if( isset( $_GET['addToOrder'] ) )
 		
 		if( $result === TRUE )
 		{
+			$order->changeStatus($order->id, 0); //--- เปลี่ยนกลับมาเป็นยังไม่เซฟอีกครั้ง
 			commitTransection();
 		}
 		else
@@ -340,8 +463,19 @@ if( isset( $_GET['getDetailTable'] ) )
 if( isset( $_GET['removeDetail'] ) )
 {
 	$id 	= $_POST['id_order_detail'];
-	$order = new order();
+	$id_order = $_POST['id_order'];
+	$order = new order($id_order);
+	$payment = new payment_method($order->id_payment);
+	$amount = $order->getDetailAmountSaved($id);
+	
 	$rs = $order->deleteDetail($id);
+	
+	if( $rs === TRUE && $payment->hasTerm == 1 && $amount > 0 )
+	{
+		$credit = new customer_credit();
+		$credit->decreaseUsed($order->id_customer, $amount);
+	}
+	
 	echo $rs === TRUE ? 'success' : 'Can not delete please try again';		
 }
 
@@ -358,6 +492,9 @@ if( isset( $_GET['getCustomer'] ) && isset( $_REQUEST['term'] ) )
 	}
 	echo json_encode($sc);
 }
+
+
+
 
 if( isset( $_GET['searchProducts'] ) && isset( $_REQUEST['term'] ) )
 {

@@ -16,7 +16,7 @@
                         <span class="help-block red not-show" id="sKey-error">xxx</span>
                      </div>
                      <div class="col-sm-12 text-right">
-                     	<button type="button" class="btn btn-primary" onClick="validate_credentials()" >ยืนยัน (Enter)</button>
+                     	<button type="button" class="btn btn-primary" id="btn-validate-confirm" onClick="validate_credentials()" >ยืนยัน (Enter)</button>
                      </div>
                  </div>
              </div>

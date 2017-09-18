@@ -12,6 +12,7 @@ function addToOrder(){
 				load_out();
 				if( rs == 'success' ){
 					swal({ title: 'success', type: 'success', timer: 1000 });
+					$("#btn-save-order").removeClass('hide');
 					updateDetailTable(); //--- update list of order detail
 				}else{
 					swal("Error", rs, "error");	

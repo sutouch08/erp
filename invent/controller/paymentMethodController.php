@@ -10,6 +10,7 @@ if( isset( $_GET['addMethod'] ) )
 	$code = $_POST['code'];
 	$name = $_POST['name'];
 	$isDefault = $_POST['isDefault'];
+	$hasTerm = $_POST['hasTerm'];
 	$cs = new payment_method();
 	$nameExists = $cs->isExists('name', $name);
 	$codeExists	 = $cs->isExists('code', $code);
@@ -24,7 +25,7 @@ if( isset( $_GET['addMethod'] ) )
 	
 	if( $codeExists === FALSE && $nameExists === FALSE )
 	{
-		$arr = array('code' => $code, 'name' => $name);
+		$arr = array('code' => $code, 'name' => $name, 'hasTerm' => $hasTerm);
 		if( $cs->add($arr) === FALSE )
 		{
 			$sc = 'เพิ่มรายการไม่สำเร็จ';
@@ -49,6 +50,7 @@ if( isset( $_GET['saveEditMethod'] ) )
 	$code	= $_POST['code'];
 	$name	= $_POST['name'];	
 	$isDefault = $_POST['isDefault'];
+	$hasTerm = $_POST['hasTerm'];
 	$cs = new payment_method();
 	$nameExists = $cs->isExists('name', $name, $id);
 	$codeExists	 = $cs->isExists('code', $code, $id);
@@ -63,7 +65,7 @@ if( isset( $_GET['saveEditMethod'] ) )
 	
 	if( $codeExists === FALSE && $nameExists === FALSE )
 	{
-		$arr = array('code' => $code, 'name' => $name);
+		$arr = array('code' => $code, 'name' => $name, 'hasTerm' => $hasTerm);
 		if( $cs->update($id, $arr) === FALSE )
 		{
 			$sc = 'บันทึกรายการไม่สำเร็จ';
@@ -102,7 +104,7 @@ if( isset( $_GET['getData'] ) )
 	$cs = new payment_method($id);
 	if( $cs->id != '' )
 	{
-		$sc = $cs->id .' | ' . $cs->code . ' | ' . $cs->name . ' | ' . $cs->isDefault;	
+		$sc = $cs->id .' | ' . $cs->code . ' | ' . $cs->name . ' | ' . $cs->isDefault . ' | ' .$cs->hasTerm;	
 	}
 	echo $sc;
 }

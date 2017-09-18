@@ -1,6 +1,7 @@
 <?php 
 $order = isset( $_GET['id_order'] ) ? new order( $_GET['id_order'] ) : new order();
 $disabled = isset($_GET['id_order']) ? 'disabled' : '';
+$hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hide'; 
 ?>
 <div class="row top-row">
 	<div class="col-sm-6 top-row">
@@ -13,10 +14,9 @@ $disabled = isset($_GET['id_order']) ? 'disabled' : '';
             <?php else : ?>
             <button type="button" class="btn btn-sm btn-warning" onClick="goBack()"><i class="fa fa-arrow-left"></i> กลับ</button>
             <?php endif; ?>
-            <?php if( $order->status == 0 ) : ?>
-            <button type="button" class="btn btn-sm btn-success" onclick="saveOrder(<?php echo $order->id; ?>)">
-            <i class="fa fa-save"></i> บันทึก</button>
-            <?php endif; ?>
+            <button type="button" class="btn btn-sm btn-success <?php echo $hide; ?>" id="btn-save-order" onclick="saveOrder(<?php echo $order->id; ?>)">
+            	<i class="fa fa-save"></i> บันทึก
+            </button>
         </p>
     </div>
 </div>
