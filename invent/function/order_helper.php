@@ -5,7 +5,7 @@ function stateColor($state, $status)
 	$st  = new state();
 	if( $status == 1 )
 	{
-		$sc = 'style="color:#FFF; background-color: '.$st->getColor($state).'"';
+		$sc = $st->stateColor($state);
 	}
 	return $sc;
 }
@@ -21,4 +21,48 @@ function stateName($state, $status)
 	}
 	return $sc;
 }
+
+
+
+function getSpace($amount, $length)
+{
+	$sc = '';
+	$i	= strlen($amount);
+	$m	= $length - $i;
+	while($m > 0 )
+	{
+		$sc .= '&nbsp;';
+		$m--;
+	}
+	return $sc.$amount;
+}
+
+
+function selectHour($se = '')
+{
+	$sc	= '';
+	$hour = array('00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23');
+	foreach($hour as $rs)
+	{
+		$sc .= '<option value="'.$rs.'" '.isSelected($rs, $se).'>'.$rs.'</option>';
+	}
+	return $sc;
+}
+
+
+
+function selectMin($se = '' )
+{
+	$sc = '<option value="00">00</option>';
+	$m = 59;
+	$i 	= 1;
+	while( $i <= $m )
+	{
+		$ix = $i < 10 ? '0'.$i : $i;
+		$sc .= '<option value="'.$ix.'" '.isSelected($se, $ix).'>'.$ix.'</option>';
+		$i++;	
+	}
+	return $sc;
+}
+
 ?>

@@ -1,11 +1,11 @@
-<div class="row" style="margin-left:0px; margin-right:0px; margin-bottom:5px;">
-	<div class="col-sm-4 padding-left-0">
-    	<table class="table border-1" style="margin-bottom:0px;">
+<div class="row">
+	<div class="col-sm-6">
+    	<table class="table border-1">
         <?php if( $add OR $edit OR $delete ) : ?>
         	<tr>
             	<td class="width-30 middle text-right">สถานะ : </td>
                 <td class="width-40">
-                	<select class="form-control input-xs" style="padding-top:0px; padding-bottom:0px;" id="stateList">
+                	<select class="form-control input-sm" id="stateList">
                     	<option value="0">เลือกสถานะ</option>
                  <?php if( $order->state <3 OR $edit) : ?>
                         <option value="1">รอการชำระเงิน</option>
@@ -19,7 +19,7 @@
                 </td>
                 <td class="width-30">
                 <?php if( $order->status == 1 ) : ?>
-                	<button class="btn btn-xs btn-primary btn-block" onclick="changeState()">เปลี่ยนสถานะ</button>
+                	<button class="btn btn-sm btn-primary btn-block" onclick="changeState()">เปลี่ยนสถานะ</button>
                 <?php endif; ?>
                 </td>
             </tr>
@@ -30,17 +30,19 @@
                 <td class="width-30 text-center">เวลา</td>
             </tr>
        <?php endif; ?>
-      </table>
-	</div>
 <?php $state = new state(); ?>
 <?php $qs = $state->getOrderStateList($order->id); ?>
 <?php if( dbNumRows($qs) > 0 ) : ?>
 <?php 	while( $rs = dbFetchObject($qs) ) : ?>
-	<div class="col-sm-1 col-1-harf padding-0 font-size-8" style="color:<?php echo $rs->font; ?>; background-color:<?php echo $rs->color; ?>">
-    	<center><?php echo $rs->name; ?></center>
-        <center><?php echo employee_name($rs->id_employee); ?></center>
-        <center><?php echo thaiDateTime($rs->date_upd); ?></center>
-    </div>
+			<tr class="font-size-10" style="color:<?php echo $rs->font; ?>; background-color:<?php echo $rs->color; ?>;">
+            	<td class="middle text-center"><?php echo $rs->name; ?></td>
+                <td class="middle text-center"><?php echo employee_name($rs->id_employee); ?></td>
+                <td class="middle text-center"><?php echo thaiDateTime($rs->date_upd); ?></td>
+            </tr>
 <?php	endwhile; ?>
-<?php endif; ?>   
+<?php else : ?>
+		<tr><td colspan="3" class="middle text-center font-size-18">ไม่พบรายการ</td></tr>
+<?php endif; ?>          
+        </table>
+    </div>
 </div>

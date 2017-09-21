@@ -2,6 +2,7 @@
 $order = isset( $_GET['id_order'] ) ? new order( $_GET['id_order'] ) : new order();
 $disabled = isset($_GET['id_order']) ? 'disabled' : '';
 $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hide'; 
+$online = (isset( $_GET['online'] ) OR $order->isOnline == 1 ) ? TRUE : FALSE;
 ?>
 <div class="row top-row">
 	<div class="col-sm-6 top-row">
@@ -14,14 +15,26 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
             <?php else : ?>
             <button type="button" class="btn btn-sm btn-warning" onClick="goBack()"><i class="fa fa-arrow-left"></i> กลับ</button>
             <?php endif; ?>
+            <?php if( isset( $_GET['id_order'] ) ) : ?>
             <button type="button" class="btn btn-sm btn-success <?php echo $hide; ?>" id="btn-save-order" onclick="saveOrder(<?php echo $order->id; ?>)">
             	<i class="fa fa-save"></i> บันทึก
             </button>
+            <?php endif; ?>
         </p>
     </div>
 </div>
 <hr class="margin-bottom-10" />
-<?php include 'include/order/order_add_header.php';	?>
+<?php 
+if( $online )
+{
+	include 'include/order/order_add_online_header.php';
+}
+else
+{
+	include 'include/order/order_add_header.php';	
+}
+
+?>
 <hr class="margin-top-10 margin-bottom-15" />
 
 <?php if( isset( $_GET['id_order'] ) ) : ?>

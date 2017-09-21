@@ -43,11 +43,22 @@ class state
 	}
 	
 	
+	public function stateColor($id)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT color, font FROM tbl_state WHERE id = ".$id);
+		if( dbNumRows($qs) == 1 )
+		{
+			$rs = dbFetchObject($qs);
+			$sc = 'style="color:'.$rs->font.'; background-color:'.$rs->color.';"';
+		}
+		return $sc;
+	}
 	
 	public function getOrderStateList($id_order)
 	{
-		$qr = "SELECT o.id_employee, o.date_upd, s.name, s.color FROM tbl_order_state AS o ";
-		$qr .= "JOIN tbl_state AS s ON o.id_state = s.id WHERE o.id_order = ".$id_order." ORDER BY o.date_upd DESC, s.id ASC";
+		$qr = "SELECT o.id_employee, o.date_upd, s.name, s.color, s.font FROM tbl_order_state AS o ";
+		$qr .= "JOIN tbl_state AS s ON o.id_state = s.id WHERE o.id_order = ".$id_order." ORDER BY o.date_upd ASC, s.id ASC";
 		return dbQuery($qr);	
 	}
 	

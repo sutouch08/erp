@@ -10,7 +10,10 @@ function validate_credentials(){
 			type:"POST", cache:"false", data:{ "id_tab" : id_tab, "s_key" : s_key, "field" : field },
 			success: function(rs){
 				var rs = $.trim(rs);
-				if( rs == 'allow' ){
+				if( isJson(rs) ){
+					var data = $.parseJSON(rs);
+					$("#approverName").val(data.approver);
+					$("#approveToken").val(data.token);
 					closeValidateBox();
 					callback();
 					return true;

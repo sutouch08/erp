@@ -1,17 +1,4 @@
-<!--------------------------------- Order Detail ----------------->
-<?php 
-	$allowEditDisc = getConfig('ALLOW_EDIT_DISCOUNT');
-	$allowEditPrice = getConfig('ALLOW_EDIT_PRICE');
-?>
 
-<!------------------- ปุ่มแก้ไขราคาและส่วนลด ------------->
-<?php 
-if( ( $allowEditDisc == 1 OR $allowEditPrice == 1 ) && $order->state < 4 )
-{
- 	include 'include/order/order_discount_bar.php';
-}
-?>
-<!------------------- / ปุ่มแก้ไขราคาและส่วนลด / ------------->
 
 <form id="discount-form">
 <div class="row">
@@ -25,8 +12,8 @@ if( ( $allowEditDisc == 1 OR $allowEditPrice == 1 ) && $order->state < 4 )
                 <th class="width-25">ชื่อสินค้า</th>
                 <th class="width-10 text-center">ราคา</th>
                 <th class="width-10 text-center">จำนวน</th>
-                <th class="width-10 text-center">ส่วนลด</th>
-                <th class="width-15 text-right">มูลค่า</th>
+                <th class="width-15 text-center">ส่วนลด</th>
+                <th class="width-10 text-right">มูลค่า</th>
                 <th class="width-5 text-center"></th>
             </tr>
         </thead>
@@ -64,39 +51,57 @@ if( ( $allowEditDisc == 1 OR $allowEditPrice == 1 ) && $order->state < 4 )
                 </td>
                 <td class="middle text-right"><?php echo number_format($rs->total_amount, 2); ?></td>
                 <td class="middle text-right">
-                <?php if( $edit OR $add ) : ?>
+                <?php if( ( $order->isPaid == 0 && $order->hasPayment == 0 ) && ($edit OR $add) ) : ?>
                 	<button type="button" class="btn btn-xs btn-danger" onclick="removeDetail(<?php echo $rs->id; ?>, '<?php echo $rs->product_code; ?>')"><i class="fa fa-trash"></i></button>
                 <?php endif; ?>
                 </td>
                 
             </tr>
+                 
 <?php	$total_qty += $rs->qty;	?>        
 <?php 	$total_discount += $rs->discount_amount; ?>
 <?php 	$order_amount += $rs->qty * $rs->price; ?>
 <?php	$total_amount += $rs->total_amount; ?>    
 <?php		$no++; ?>            
 <?php 	endwhile; ?>
-			<tr>
-            	<td colspan="6" rowspan="4"></td>
+<?php 	$netAmount = ( $total_amount - $order->bDiscAmount ) + $order->shipping_fee + $order->service_fee;	?>
+<?php	$rowspan = $order->isOnline == 1 ? 6 : 4;	?>
+			<tr class="font-size-12">
+            	<td colspan="6" rowspan="<?php echo $rowspan; ?>"></td>
                 <td style="border-left:solid 1px #CCC;"><b>จำนวนรวม</b></td>
                 <td class="text-right"><b><?php echo number_format($total_qty); ?></b></td>
                 <td class="text-center"><b>Pcs.</b></td>
             </tr>
-            <tr>
+           <tr class="font-size-12">
                 <td style="border-left:solid 1px #CCC;"><b>มูลค่ารวม</b></td>
-                <td class="text-right"><b><?php echo number_format($order_amount, 2); ?></b></td>
+                <td class="text-right" id="total-td" style="font-weight:bold;"><?php echo number_format($order_amount, 2); ?></td>
                 <td class="text-center"><b>THB.</b></td>
             </tr>
-            <tr>
+            <tr class="font-size-12">
                 <td style="border-left:solid 1px #CCC;"><b>ส่วนลดรวม</b></td>
-                <td class="text-right"><b><?php echo number_format($total_discount, 2); ?></b></td>
+                <td class="text-right" id="discount-td" style="font-weight:bold;"><?php echo number_format($total_discount, 2); ?></td>
                 <td class="text-center"><b>THB.</b></td>
             </tr>
-            <tr>
+            <?php if( $order->isOnline == 1 ) : ?>
+            <tr class="font-size-12">
+                <td style="border-left:solid 1px #CCC;"><b>ค่าจัดส่ง</b></td>
+                <td class="text-right" id="shipping-td" style="font-weight:bold;"><?php echo number_format($order->shipping_fee, 2); ?></td>
+                <td class="text-center"><b>THB.</b></td>
+            </tr>
+            <tr class="font-size-12">
+                <td style="border-left:solid 1px #CCC;"><b>อื่นๆ</b></td>
+                <td class="text-right" id="service-td" style="font-weight:bold;"><?php echo number_format($order->service_fee, 2); ?></td>
+                <td class="text-center"><b>THB.</b></td>
+            </tr>
+            <?php endif; ?>
+            <tr class="font-size-12">
                 <td style="border-left:solid 1px #CCC;"><b>สุทธิ</b></td>
-                <td class="text-right"><b><?php echo number_format($total_amount, 2); ?></b></td>
+                <td class="text-right" style="font-weight:bold;" id="netAmount-td"><?php echo number_format( $netAmount, 2); ?></td>
                 <td class="text-center"><b>THB.</b></td>
             </tr>
+            
+
+                 
 <?php else : ?>
 			<tr>
             	<td colspan="9" class="text-center"><h4>ไม่พบรายการ</h4></td>

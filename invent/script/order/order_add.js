@@ -58,6 +58,8 @@ var channels_id;
 var payment_id;
 var order_date;
 
+
+
 function getEdit(){
 	$(".input-header").removeAttr('disabled');
 	$("#btn-edit-order").addClass('hide');
@@ -67,6 +69,7 @@ function getEdit(){
 	payment_id = $("#paymentMethod").val();
 	order_date = $("#dateAdd").val();
 }
+
 
 
 function validUpdate(id){
@@ -118,6 +121,8 @@ function validUpdate(id){
 	}
 }
 
+
+
 function updateOrder(recal){
 	var id_order = $("#id_order").val();
 	var date_add = $("#dateAdd").val();
@@ -141,7 +146,9 @@ function updateOrder(recal){
 	
 	$.ajax({
 		url:"controller/orderController.php?updateOrder&recal="+recal,
-		type:"POST", cache:"false", data: data,
+		type:"POST", 
+		cache:"false", 
+		data: data,
 		success: function(rs){
 			load_out();
 			var rs = $.trim(rs);
@@ -157,9 +164,12 @@ function updateOrder(recal){
 
 
 
+
 function recalDiscount(){
 	updateOrder(1);	
 }
+
+
 
 //----- เพิ่มเลขที่เอกสารใหม่
 function addNew(){
@@ -169,6 +179,8 @@ function addNew(){
 	var channels 		= $("#channels").val();
 	var payment 		= $("#paymentMethod").val();
 	var remark			= $("#remark").val();
+	var isOnline			= $("#isOnline").val();
+	var customerName = $("#onlineCustomer").length == 1 ? $("#onlineCustomer").val() : '';
 	
 	if( ! isDate(dateAdd) ){
 		swal("วันที่ไม่ถูกต้อง");
@@ -182,7 +194,17 @@ function addNew(){
 	
 	$.ajax({
 		url:"controller/orderController.php?addNew",
-		type:"POST", cache:"false", data:{ "dateAdd" : dateAdd, "id_customer" : id_customer, "channels" : channels, "paymentMethod" : payment, "remark" : remark },
+		type:"POST", 
+		cache:"false", 
+		data:{ 
+				"dateAdd" : dateAdd, 
+				"id_customer" : id_customer, 
+				"channels" : channels, 
+				"paymentMethod" : payment, 
+				"remark" : remark,
+				"isOnline" : isOnline,
+				"customerName" : customerName
+		},
 		success: function(rs){
 			var rs = $.trim(rs);
 			if( ! isNaN( parseInt(rs) ) ){
@@ -224,6 +246,13 @@ $("#customer").autocomplete({
 			$(this).val('');	
 		}
 	}
+});
+
+
+
+$("#onlineCustomer").autocomplete({
+	source: "controller/orderController.php?getCustomerOnline",
+	autoFocus: true
 });
 
 

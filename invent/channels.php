@@ -85,6 +85,7 @@
                     	<th class="width-10 text-center">ลำดับ</th>
                         <th class="width-15">รหัส</th>
                         <th class="width-40">ชื่อ</th>
+                        <th class="width-10 text-center">ออนไลน์</th>
                         <th class="width-10 text-center">ค่าเริ่มต้น</th>
                         <th></th>
                     </tr>
@@ -98,6 +99,7 @@
                     	<td class="middle text-center"><?php echo $no; ?></td>
                         <td class="middle"><?php echo $rs->code; ?></td>
                         <td class="middle"><?php echo $rs->name; ?></td>
+                        <td class="middle text-center"><?php echo isActived($rs->isOnline); ?></td>
                         <td class="middle text-center"><?php echo isActived($rs->isDefault); ?></td>
                         <td class="middle text-right">
                         <?php if( $edit ) : ?>
@@ -114,7 +116,7 @@
 <?php		endwhile; ?>
 <?php	else : ?>
 				<tr>
-                	<td colspan="5" align="center"><h4>ไม่พบรายการ</h4></td>
+                	<td colspan="6" align="center"><h4>ไม่พบรายการ</h4></td>
 				</tr>
 <?php	endif; ?>
                 </tbody>
@@ -124,6 +126,7 @@
     
     
 <input type="hidden" name="isDefault" id="isDefault" value="0" />
+<input type="hidden" name="isOnline" id="isOnline" value="0" />
 
 	<!---- Modal Add --->
 	<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -140,13 +143,23 @@
                         <input type="text" class="form-control input-sm" id="addCode" placeholder="กำหนดรหัสช่องทางการขาย" />
                         <span class="help-block red" id="addCode-error"></span>
                     </div>
-                    <div class="divider-hidden"></div>
-                    <div class="col-sm-12">
+                    
+                    <div class="col-sm-12 margin-top-10">
                     	<label>ชื่อช่องทางการขาย</label>
                         <input type="text" class="form-control input-sm" id="addName" placeholder="กำหนดชื่อช่องทางการขาย" />
                         <span class="help-block red" id="addName-error"></span>
                     </div>
-                    <div class="col-sm-12">
+                    
+                    
+                     <div class="col-sm-12 margin-top-10">
+                    	<label>ออนไลน์หรือไม่</label>
+                        <div class="btn-group width-100">
+                        	<button type="button" class="btn btn-sm width-25" id="btn-add-online-yes" onclick="toggleOnlineAdd(1)">ใช่</button>
+                            <button type="button" class="btn btn-sm btn-danger width-25" id="btn-add-online-no" onclick="toggleOnlineAdd(0)">ไม่ใช่</button>
+                        </div>
+                    </div>
+                   
+                    <div class="col-sm-12 margin-top-10">
                     	<label>ค่าเริ่มต้น</label>
                         <div class="btn-group width-100">
                         	<button type="button" class="btn btn-sm width-25" id="btn-add-yes" onclick="toggleDefaultAdd(1)">ใช่</button>
@@ -180,13 +193,23 @@
                         <input type="text" class="form-control input-sm" id="editCode" placeholder="กำหนดรหัสช่องทางการขาย" />
                         <span class="help-block red" id="editCode-error"></span>
                     </div>
-                    <div class="divider-hidden"></div>
-                    <div class="col-sm-12">
+                   
+                    <div class="col-sm-12 margin-top-10">
                     	<label>ชื่อช่องทางการขาย</label>
                         <input type="text" class="form-control input-sm" id="editName" placeholder="กำหนดชื่อช่องทางการขาย" />
                         <span class="help-block red" id="editName-error"></span>
                     </div>
-                    <div class="col-sm-12">
+                    
+                    
+                    <div class="col-sm-12 margin-top-10">
+                    	<label>ออนไลน์หรือไม่</label>
+                        <div class="btn-group width-100">
+                        	<button type="button" class="btn btn-sm width-25" id="btn-edit-online-yes" onclick="toggleOnlineEdit(1)">ใช่</button>
+                            <button type="button" class="btn btn-sm btn-danger width-25" id="btn-edit-online-no" onclick="toggleOnlineEdit(0)">ไม่ใช่</button>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-12 margin-top-10">
                     	<label>ค่าเริ่มต้น</label>
                         <div class="btn-group width-100">
                         	<button type="button" class="btn btn-sm width-25" id="btn-edit-yes" onclick="toggleDefaultEdit(1)">ใช่</button>

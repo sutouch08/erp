@@ -5,331 +5,62 @@ require "../function/tools.php";
 include '../function/order_helper.php';
 include '../function/customer_helper.php';
 
-if( isset( $_GET['test_discount'] ) )
-{
-	$id_pd = '00001';
-	$id_cus = '1566';
-	$qty = 5;
-	$id_order = 1;
-	$id_payment = 1;
-	$id_channels = 1;
-	$price = 279;
-	$disc = new discount();
-	$rs = $disc->getItemRecalDiscount($id_order, $id_pd, $price, $id_cus, $qty, $id_payment, $id_channels);
-	//$rs = $disc->getItemDiscount($id_pd, $id_cus, $qty, $id_payment, $id_channels);
-	echo "<br/>";
-	print_r( $rs );
-	//echo $rs;
-}
-
-
-if( isset( $_GET['updateEditDiscount'] ) )
-{
-	$order = new order($_POST['id_order']);
-	$ds = $_POST['discount'];
-	$payment = new payment_method($order->id_payment);
-	$credit = new customer_credit();
-	
-	foreach( $ds as $id => $value )
-	{
-		//----- ข้ามรายการที่ไม่ได้กำหนดค่ามา
-		if( $value != "" )
-		{
-			//--- ได้ Obj มา
-			$detail = $order->getDetail($id); 
-			
-			//--- ถ้ารายการนี้มีอยู่
-			if( $detail !== FALSE ) 
-			{
-				//---- ถ้ารายการนี้เป็นเครดิตเทอมและคำนวณยอดใช้ไปแล้ว
-				if( $payment->hasTerm == 1 && $detail->isSaved == 1)
-				{
-					//-------- ถ้ารายการที่แก้ไขมาแตกต่างกับของเก่า คืนยอดใช้ไป
-					if( $value != $detail->discount )
-					{
-						$credit->decreaseUsed($order->id_customer, $detail->total_amount);
-						$order->changeStatus($order->id, 0);
-						
-					}
-				}
-			}	//--- end if detail
-		} //--- End if value
-	}	//--- end foreach
-	
-	//---- ถ้ามีเครดิตเทอม
-	if( $payment->hasTerm == 1 )
-	{
-		//---- เปลี่ยนสถานะออเดอร์ เพื่อให้ต้องกดบันทึกอีกครั้งเพื่อตัดยอดเครดิตใหม่
-		$
-	}
-}
-
-
-if( isset( $_GET['updateEditPrice'] ) )
-{
-	print_r($_POST);	
-}
-
+//---- เพิ่มเลขที่เอกสารใหม่
 if( isset( $_GET['addNew'] ) )
 {
-	$sc = "สร้างออเดอร์ไม่สำเร็จ";
-	$order = new order();
-	$customer = new customer( $_POST['id_customer'] );
-	$reference = $order->getNewReference();
-	$arr = array(
-					"bookcode"		=> getConfig('BOOKCODE_SO'),
-					"reference"		=> $reference,
-					"id_customer"	=> $_POST['id_customer'],
-					"id_sale"			=> $customer->id_sale,
-					"id_employee"	=> getCookie('user_id'),
-					"id_payment"	=> $_POST['paymentMethod'],
-					"id_channels"	=> $_POST['channels'],
-					"date_add"		=> dbDate($_POST['dateAdd']),
-					"remark"			=> $_POST['remark']
-					);
-	if( $order->add($arr) === TRUE )
-	{
-		$id = $order->get_id($reference);
-		$sc = $id;
-	}
-	
-	echo $sc;	
+	include 'order/new_order.php';
 }
 
 
-
-
+//----- 	บันทึกเอกสารเปลี่ยนสถานะ เป็นบันทึกแล้ว
+//-----	ถ้ามีเครดิตเทอม จะตัดยอดเครดิตด้วย
 if( isset( $_GET['saveOrder'] ) )
 {
-	$order 		= new order($_POST['id_order']);
-	$credit 		= new customer_credit();
-	$payment 	= new payment_method($order->id_payment);
-	$isEnought 	= TRUE;  //--- เอาไว้ตรวจสอบเครดิต ถ้าไม่พอจะเป็น FALSE;
-	$sc 			= FALSE; 
-	
-	startTransection();
-	//--- ถ้าเป็นการสั่งซื้อแบบเครดิตเทอม ให้คำนวณเครดิตคงเหลือก่อนบันทึก
-	if( $payment->hasTerm == 1 )
-	{
-		$amount = $order->getTotalAmountNotSave($order->id); //---- ยอดเงินหลังหักส่วนลดทั้งออเดอร์(ไม่รวมส่วนลดท้ายบิล) ที่ยังไม่ได้บันทึก ( isSaved = 0 )
-		$isEnought = $credit->isEnough($order->id_customer, $amount); //---- ตรวจสอบว่าเครดิตผ่านหรือไม่
-	}
-	
-	if( $isEnought === FALSE )
-	{
-		$message = 'เคดิตคงเหลือไม่เพียงพอ';
-		$sc = FALSE;
-	}
-	else
-	{
-		$rs = $order->changeStatus($order->id, 1); //--- บันทึกออเดอร์
-		$rd = $order->saveDetails($order->id);	//--- บันทึกการตัดเครดิต
-		$rm = $credit->increaseUsed($order->id_customer, $amount); //--- เพิ่มมูลค่าใช้ไป (คำนวณใน method )
-		if( $rs === TRUE && $rd === TRUE && $rm === TRUE )
-		{
-			$state = new state();
-			if( $state->hasState($order->id) === FALSE ) //--- ถ้ายังไม่มีสถานะใดๆ
-			{
-				//--- 1 = รอการชำระเงิน
-				$order->stateChange($order->id, 1);
-			}
-			$sc = TRUE;
-		}
-		else
-		{
-			$message = 'Save order fail, Please try again';	
-			$sc = FALSE;
-		}
-	}
-	
-	if( $sc === TRUE )
-	{
-		commitTransection();
-	}
-	else
-	{
-		dbRollback();	
-	}
-	endTransection();
-	
-	echo ( $sc === TRUE ) ? 'success' : $message;	
+	include 'order/save_order.php';
 }
 
 
 
-
-
-
-
+//----- 	แก้ไขหัวเอกสาร 
+//------ 	ถ้ามีการเปลี่ยนวันที่ /ชื่อลูกค้า /ช่องทางการชำระเงิน /ช่องทางการขาย จะทำการคำนวณส่วนลดใหม่
+//------	ถ้าการชำระเงินมีเครดิตเทอม จะคืนยอดใช้ไปก่อน แล้วค่อยบันทึกเพื่อตัดยอดเครดิตอีกที
 if( isset( $_GET['updateOrder'] ) )
 {
-	$recal = isset( $_GET['recal'] ) ? $_GET['recal'] : 0;
-	$order = new order($_POST['id_order']);
-	$payment = new payment_method($order->id_payment);
-	$credit = new customer_credit();
-	if( $recal == 0 )
-	{
-		$arr = array("remark" => $_POST['remark']);
-		$rs = $order->update($order->id, $arr);
-	}
-	else
-	{
-		$customer = new customer($_POST['id_customer']);
-		$arr = array(
-						"date_add"	=> dbDate($_POST['date_add']),
-						"id_customer"	=> $customer->id,
-						"id_sale"		=> $customer->id_sale,
-						"id_payment"	=> $_POST['id_payment'],
-						"id_channels"	=> $_POST['id_channels'],
-						"status"		=> 0, //--- เปลี่ยนกลับ ให้กดบันทึกใหม่
-						"emp_upd"		=> getCookie('user_id'),
-						"remark"		=> $_POST['remark']
-						);
-		//--- update order header first
-		$rs = $order->update($order->id, $arr);
-		
-		//----- ถ้ายังไม่มีรายการ ไม่ต้องคำนวณใหม่	
-		if( $rs === TRUE && $order->hasDetails($order->id) === TRUE )
-		{
-			if( $payment->hasTerm == 1 )
-			{
-				//---- ยอดรวมสินค้าที่บันทึกไปแล้ว เพื่อเอามาคืนยอดใช้ไป
-				$amount = $order->getTotalAmountSaved($order->id);
-				
-				//----- ยกเลิกการบันทึกรายการ เพื่อจะได้คำนวณใหม่อีกที
-				$order->unSaveDetails($order->id);
-				
-				//---- คืนยอดเครดิตใช้ไป แล้วค่อยไปคำนวณใหม่ตอนบันทึก
-				$credit->decreaseUsed($order->id_customer, $amount);
-			}
-			//------ คำนวณส่วนลดใหม่
-			$order->calculateDiscount($order->id, $arr); 
-		}			
-	}
-	
-	echo $rs === TRUE ? 'success' : 'fail';
+	include 'order/update_order.php';
 }
 
 
 
+//----- แก้ไขส่วนลดโดยพนักงาน และมีผู้อนุมัติการแก้ไข
+if( isset( $_GET['updateEditDiscount'] ) )
+{
+	include 'order/edit_discount.php';
+}
 
+
+//---- แก้ไขราคาสินค้า โดยพนักงาน และมีผู้อนุมัติการแก้ไข
+if( isset( $_GET['updateEditPrice'] ) )
+{
+	include 'order/edit_price.php';	
+}
+
+
+//----		เพิ่มรายการสินค้าเข้าออเดอร์พร้อมคำนวณส่วนลดจากนโยบายส่วนลด
 if( isset( $_GET['addToOrder'] ) )
 {
-	$ds 			= $_POST['qty'];
-	$result 		= TRUE;
-	$error 		= "";
-	$err_qty		= 0;
-	
-	if( count($ds) > 0 ){
-		$order	= new order($_POST['id_order']);
-		$stock 	= new stock();
-		$disc		= new discount();
-		$payment = new payment_method($order->id_payment);
-		$credit = new customer_credit();
-		startTransection();
-		
-		foreach( $ds as $items )
-		{
-			foreach( $items as $id => $qty )
-			{
-				if( $qty > 0 )
-				{
-					//--- ถ้ามีสต็อกมากว่าที่สั่ง
-					if( $stock->getSellStock($id) >= $qty )
-					{
-						$pd 			= new product($id);
-						
-						//---- ถ้ายังไม่มีรายการในออเดอร์
-						if( $order->isExistsDetail($order->id, $id) === FALSE )
-						{
-							//---- คำนวณ ส่วนลดจากนโยบายส่วนลด
-							$discount 	= $disc->getItemDiscount($pd->id, $order->id_customer, $qty, $order->id_payment, $order->id_channels, $order->date_add);
-							
-							$arr = array(
-											"id_order"	=> $order->id,
-											"id_style"		=> $pd->id_style,
-											"id_product"	=> $id,
-											"product_code"	=> $pd->code,
-											"product_name"	=> $pd->name,
-											"price"	=> $pd->price,
-											"qty"		=> $qty,
-											"discount"	=> $discount['discount'],
-											"discount_amount" => $discount['amount'],
-											"total_amount"	=> ($pd->price * $qty) - $discount['amount'],
-											"id_rule"	=> $discount['id_rule']										
-										);
-										
-							if( $order->addDetail($arr) === FALSE )
-							{
-								$result = FALSE;	
-								$error = "Error : Insert fail";
-								$err_qty++;
-							}
-							
-						}
-						else  //--- ถ้ามีรายการในออเดอร์อยู่แล้ว
-						{
-							$detail 		= $order->getDetail($order->id, $id);
-							$qty			= $qty + $detail->qty;
-							$discount 	= $disc->getItemDiscount($pd->id, $order->id_customer, $qty, $order->id_payment, $order->id_channels, $order->date_add);
-							$arr = array(
-												"id_product"	=> $id,
-												"qty" => $qty,
-												"discount"	=> $discount['discount'],
-												"discount_amount"	=> $discount['amount'],
-												"total_amount"	=> ($pd->price * $qty) - $discount['amount'],
-												"id_rule"	=> $discount['id_rule'],
-												"isSaved"	=> 0 //--- ย้อนกลับมาเป็นยังไม่ได้บันทึกอีกครั้ง เพื่อคำนวณเคดิตใหม่
-												);
-							if( $order->updateDetail($detail->id, $arr) === FALSE )
-							{
-								$result = FALSE;
-								$error = "Error : Update Fail";
-								$err_qty++;
-							}				
-							else
-							{
-								//---- ถ้าเป้นเครดิตแล้วบันทึกไปแล้ว
-								if( $payment->hasTerm == 1 && $detail->isSaved == 1 )
-								{
-									//---- คืนยอดใช้ไปกลับมาก่อน เพื่อรอคำนวณ เครดิตอีกครั้งตอน บันทึก
-									$credit->decreaseUsed($order->id_customer, $detail->total_amount);
-								}
-							}	
-												
-						}	//--- end if isExistsDetail
-					}
-					else 	// if getStock
-					{
-						$error = "Error : สินค้าไม่เพียงพอ";
-					} 	//--- if getStock
-				}	//--- if qty > 0
-			}	//-- foreach items
-		}	//--- foreach ds
-		
-		if( $result === TRUE )
-		{
-			$order->changeStatus($order->id, 0); //--- เปลี่ยนกลับมาเป็นยังไม่เซฟอีกครั้ง
-			commitTransection();
-		}
-		else
-		{
-			dbRollback();	
-		}
-		endTransection();
-		
-	}
-	else 	//--- if count
-	{
-		$error = "Error : No items founds";
-	}
-	
-	$sc = $result ===  TRUE ? 'success' : ( $err_qty > 0 ? $error.' : '.$err_qty.' item(s)' : $error);
-	echo $sc;
+	include 'order/add_detail.php';
 }
 
 
-//------- Attribute Grid By Search box
+
+//----- Delete detail row
+if( isset( $_GET['removeDetail'] ) )
+{
+	include 'order/delete_detail.php';
+}
+
+
+//----		Attribute Grid By Search box
 if( isset( $_GET['getProductGrid'] ) && isset( $_GET['pdCode'] ) )
 {
 	$sc = 'not exists';
@@ -372,112 +103,18 @@ if( isset( $_GET['getOrderGrid'] ) && isset( $_GET['id_style'] ) )
 //----- Echo product style list in tab
 if( isset( $_GET['getProductsInOrderTab'] ) )
 {
-	$ds = "";
-	$id_tab = $_POST['id'];
-	$cs = new product_tab();
-	$pd = new product();
-	$img = new image();
-	$stock = new stock();
-	$qs = $cs->getStyleInTab($id_tab);
-	if( dbNumRows($qs) > 0 )
-	{
-		while( $rs = dbFetchObject($qs) )
-		{
-			$style = new style($rs->id_style);
-			if( $style->active == 1 && $pd->isDisactiveAll($rs->id_style) === FALSE)
-			{
-				$ds 	.= 	'<div class="col-lg-2 col-md-2 col-sm-3 col-xs-4"	style="text-align:center;">';
-				$ds 	.= 		'<div class="product" style="padding:5px;">';
-				$ds 	.= 			'<div class="image">';
-				$ds 	.= 				'<a href="javascript:void(0)" onClick="getOrderGrid('.$rs->id_style.')">';
-				$ds 	.=					'<img class="img-responsive" src="'.$img->getImagePath($img->getCover($rs->id_style), 2).'" />';
-				$ds 	.= 				'</a>';
-				$ds	.= 			'</div>';
-				$ds	.= 			'<div class="description" style="font-size:10px; min-height:50px;">';
-				$ds	.= 				'<a href="javascript:void(0)" onClick="getOrderGrid('.$rs->id_style.')">';
-				$ds	.= 			$style->code.'<br/>'. number_format($pd->getStylePrice($rs->id_style),2);
-				$ds 	.=  		$pd->isCountStock($rs->id_style) === TRUE ? ' | <span style="color:red;">'.$pd->getStyleSellStock($rs->id_style).'</span>' : '';
-				$ds	.= 				'</a>';
-				$ds 	.= 			'</div>';
-				$ds	.= 		'</div>';
-				$ds 	.=	'</div>';
-			}
-		}
-	}
-	else
-	{
-		$ds = "no_product";
-	}
-	
-	echo $ds;
+	include 'order/product_tab.php';
 }
 
 
 
-
+//----- Echo Order detail list 
 if( isset( $_GET['getDetailTable'] ) )
 {
-	$sc = "no data found";
-	$id_order	= $_GET['id_order'];
-	$order 		= new order();
-	$qs  			= $order->getDetails($id_order);
-	if( dbNumRows($qs) > 0 )
-	{
-		$no = 1;
-		$total_qty = 0;
-		$total_discount = 0;
-		$total_amount = 0;
-		$image = new image();
-		$ds = array();
-		while( $rs = dbFetchObject($qs) )
-		{
-			$arr = array(
-							"id"		=> $rs->id,
-							"no"	=> $no,
-							"imageLink"	=> $image->getProductImage($rs->id_product, 1),
-							"productCode"	=> $rs->product_code,
-							"productName"	=> $rs->product_name,
-							"price"	=> number_format($rs->price, 2),
-							"qty"	=> number_format($rs->qty),
-							"discount"	=> $rs->discount,
-							"amount"	=> number_format($rs->total_amount, 2)
-							);
-			array_push($ds, $arr);
-			$total_qty += $rs->qty;
-			$total_discount = $rs->discount_amount;
-			$total_amount = $rs->total_amount;
-			$no++;
-		}
-		$arr = array(
-					"total_qty" => number_format($total_qty),
-					"total_discount" => number_format($total_discount, 2),
-					"total_amount" => number_format($total_amount, 2)
-				); 
-		array_push($ds, $arr);
-		$sc = json_encode($ds);
-	}
-	echo $sc;
+	include 'order/detail_table.php';
 }
 
-//----- Delete detail row
-if( isset( $_GET['removeDetail'] ) )
-{
-	$id 	= $_POST['id_order_detail'];
-	$id_order = $_POST['id_order'];
-	$order = new order($id_order);
-	$payment = new payment_method($order->id_payment);
-	$amount = $order->getDetailAmountSaved($id);
-	
-	$rs = $order->deleteDetail($id);
-	
-	if( $rs === TRUE && $payment->hasTerm == 1 && $amount > 0 )
-	{
-		$credit = new customer_credit();
-		$credit->decreaseUsed($order->id_customer, $amount);
-	}
-	
-	echo $rs === TRUE ? 'success' : 'Can not delete please try again';		
-}
+
 
 
 
@@ -495,6 +132,18 @@ if( isset( $_GET['getCustomer'] ) && isset( $_REQUEST['term'] ) )
 
 
 
+if( isset( $_GET['getCustomerOnline'] ) && isset( $_REQUEST['term'] ) )
+{
+	$sc = array();
+	$cs = new order();
+	$qs = $cs->searchOnlineCode($_REQUEST['term'] );
+	while( $rs = dbFetchObject($qs) )
+	{
+		$sc[] = $rs->online_code;
+	}
+	echo json_encode($sc);
+}
+
 
 if( isset( $_GET['searchProducts'] ) && isset( $_REQUEST['term'] ) )
 {
@@ -509,6 +158,258 @@ if( isset( $_GET['searchProducts'] ) && isset( $_REQUEST['term'] ) )
 	}
 	echo json_encode($sc);
 }
+
+
+
+//------------------------- แจ้งโอนเงินพร้อมแนบไฟล์หลักฐาน  ------------//
+if( isset( $_GET['confirmPayment'] ) )
+{
+	require "../function/bank_helper.php";
+	$sc 			= 'fail';
+	$file 			= isset( $_FILES['image'] ) ? $_FILES['image'] : FALSE;
+	$id_order 		= $_POST['id_order'];
+	$id_acc			= $_POST['id_account'];
+	$accNo			= getAccountNo($id_acc);
+	$date			= $_POST['payDate'];
+	$h				= $_POST['payHour'];
+	$m				= $_POST['payMin'];
+	$dhm			= $date .' '.$h.':'.$m.':00';
+	$payDate		= dbDate($dhm, TRUE);
+	$date_add 		= date('Y-m-d H:i:s');
+	$order			= new order($id_order);
+	
+	$id_emp			= getCookie('user_id');
+	//-------  บันทึกรายการ -----//
+	$payment = new payment(); 
+	$arr = array(
+				"id_order"	=> $order->id,
+				"order_amount"	=> $_POST['orderAmount'],
+				"pay_amount"	=> $_POST['payAmount'],
+				"paydate"	=> $payDate,
+				"id_account"	=> $id_acc,
+				"acc_no"		=> $accNo,
+				"id_employee"	=> $id_emp,
+				"date_add"	=> $date_add
+			);
+	
+	if( $payment->isExists($order->id) === FALSE )
+	{
+		$cs = $payment->add($arr);
+	}
+	else
+	{
+		$cs = $payment->update($order->id, $arr);	
+	}
+	
+	if( $cs )
+	{
+		$order->stateChange($order->id, 2); //--- แจ้งชำระเงิน
+		$sc = 'success';
+	}
+	
+	//----- Upload image -----//	
+	if( $file !== FALSE )
+	{	
+		$image_path 	= "../../img/payment/";
+		$image 			= new upload($file);
+		if($image->uploaded)
+		{
+			$image->file_new_name_body	= $order->reference;
+			$image->file_overwrite 			= TRUE;
+			$image->auto_create_dir 		= FALSE;
+			$image->image_convert 			= "jpg";
+			$image->process($image_path);
+			if( ! $image->processed)
+			{
+				$sc = $image->error;
+			}
+		}
+		$image->clean();
+	}
+	echo $sc;
+}
+
+
+
+if( isset( $_GET['updateShippingFee'] ) )
+{
+	$sc 		= 'fail';
+	$amount 	= $_POST['fee'];
+	$id			= $_POST['id_order'];
+	$order	= new order();
+	$arr 		= array("shipping_fee" => $amount);
+	if( $order->update($id, $arr) )
+	{
+		$sc = 'success';
+	}
+	echo $sc;
+}
+
+
+
+if( isset( $_GET['updateServiceFee'] ) )
+{
+	$sc = 'fail';
+	$amount	= $_POST['fee'];
+	$id			= $_POST['id_order'];
+	$order	= new order();	
+	$arr		= array("service_fee" => $amount);
+	if( $order->update($id, $arr) )
+	{
+		$sc = 'success';
+	}
+	echo $sc;
+}
+
+
+if( isset( $_GET['getSummary'] ) )
+{
+	include 'order/order_summary.php';
+}
+
+
+if( isset( $_GET['getPayAmount'] ) )
+{
+	$order = new order($_GET['id_order']);
+	$amount = $order->getTotalAmount($order->id);
+	$sc = ( $amount + $order->shipping_fee + $order->service_fee ) - $order->bDiscAmount;
+	echo $sc;
+}
+
+
+
+
+
+//------------------ return address Table  ---------------//
+if( isset( $_GET['getAddressTable'] ) )
+{
+	$sc 			= 'fail';
+	$id_order	= $_POST['id_order'];
+	$order 		= new order();
+	$code 		= $order->getOnlineCode($id_order);
+	if( $code )
+	{
+		$ds = array();
+		$ad = new online_address();
+		$qs = $ad->getAddressByCode($code);
+		if( dbNumRows($qs) > 0 )
+		{
+			while( $data = dbFetchArray($qs) )
+			{
+				$arr	= array( 
+							'id'			=> $data['id'],
+							'name'		=> $data['first_name'].' '.$data['last_name'],
+							'address'	=> $data['address1'].' '.$data['address2'].' '.$data['province'].' '.$data['postcode'],
+							'phone'	=> $data['phone'],
+							'email'		=> $data['email'],
+							'alias'		=> $data['alias'],
+							'default'	=> $data['is_default'] == 1 ? 1 : ''
+							);
+				array_push($ds, $arr);
+			}
+			$sc = json_encode($ds);
+		}
+	}
+	echo $sc;	
+}
+
+
+
+
+
+
+if( isset( $_GET['getAddressDetail']) )
+{
+	$sc = 'fail';
+	$id = $_POST['id_address'];
+	$ad = new online_address();
+	$qs = $ad->getAddress($id);
+	if( dbNumRows($qs) == 1 )
+	{
+		$rs = dbFetchObject($qs);
+		$ds = array(
+					"id"		=> $rs->id,
+					"customer_code"	=> $rs->customer_code,
+					"first_name"	=> $rs->first_name,
+					"last_name"	=> $rs->last_name,
+					"address1"	=> $rs->address1,
+					"address2"	=> $rs->address2,
+					"province"	=> $rs->province,
+					"postcode"	=> $rs->postcode,
+					"phone"		=> $rs->phone,
+					"email"			=> $rs->email,
+					"alias"			=> $rs->alias,
+					"is_default"	=> $rs->is_default
+				);
+					
+		$sc = json_encode($ds);
+	}
+	echo $sc;
+}
+
+
+
+
+
+if( isset( $_GET['saveAddress'] ) )
+{
+	$id = $_POST['id_address'];
+	$ad = new online_address();
+	if( $id != "" )
+	{
+		$arr = array(
+					"first_name"	=> $_POST['first_name'],
+					"last_name"	=> $_POST['last_name'],
+					"address1"	=> $_POST['address1'],
+					"address2"	=> $_POST['address2'],
+					"province"	=> $_POST['province'],
+					"postcode"	=> $_POST['postcode'],
+					"phone"		=> $_POST['phone'],
+					"email"			=> $_POST['email'],
+					"alias"			=> $_POST['alias']
+				);
+		$rs = $ad->update($id, $arr);
+	}
+	else
+	{
+		$arr = array(
+					"customer_code"	=> $_POST['online_code'],
+					"first_name"	=> $_POST['first_name'],
+					"last_name"	=> $_POST['last_name'],
+					"address1"	=> $_POST['address1'],
+					"address2"	=> $_POST['address2'],
+					"province"	=> $_POST['province'],
+					"postcode"	=> $_POST['postcode'],
+					"phone"		=> $_POST['phone'],
+					"email"			=> $_POST['email'],
+					"alias"			=> $_POST['alias']
+				);
+		$rs = $ad->add($arr);
+	}
+	echo $rs === TRUE ? 'success' : 'fail';
+}
+
+
+
+//--------------------- Delete Online Address  ---------------//
+if( isset( $_GET['removeAddress'] ) )
+{
+	$id = $_POST['id_address'];
+	$ad	= new online_address();
+	echo $ad->delete($id) === TRUE ? 'success' : 'fail';
+}
+
+
+
+
+if( isset( $_GET['setDefaultAddress'] ) )
+{
+	$id = $_POST['id_address'];
+	$add = new online_address();
+	$sc = $add->setDefault($id);
+	echo $sc === TRUE ? 'success' : 'fail';		
+}
+
 
 
 	

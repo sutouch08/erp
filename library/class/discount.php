@@ -102,7 +102,7 @@ class discount
 				$sc = array(
 					//--- ถ้าส่วนลดเป็นแบบกำหนดราคา ให้ใช้ส่วนต่างราคาเป็นส่วนลดเลย หากไม่ใช้ ดูว่าส่วนลดเป้น % ให้เติม % เข้าไปด้วย
 					"discount" => $disType == "price" ? $setPrice : ( $disc_unit == "percent" ? $discLabel.' %' : $discLabel ),
-					"unit"	=> $disType == "price" ? "amount" : $disc_unit,
+					"unit"	=> $disType == "price" ? "price" : $disc_unit,
 								
 					//--- เอายอดส่วนลดที่ได้ มา คูณ ด้วย จำนวนสั่ง เป้นส่วนลดทั้งหมด
 					"amount"	=> $disType == "price" ? ( $qty * $setPrice ) : ( $qty * $discAmount ),
@@ -492,19 +492,6 @@ class discount
 		return $sc;						
 	}
 	
-	
-	
-	public function getBillDiscount($id_order)
-	{
-		$sc = array(
-							"discount_step_1" => 	10,
-							"unit_step_1"	 => "percent",
-							"discount_stem_2"	=> 5,
-							"unit_step_2"	=> "percent",
-							"id_rule"				=> "2"
-							);
-		return $sc;
-	}
 	
 	
 	

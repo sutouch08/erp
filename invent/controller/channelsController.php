@@ -10,6 +10,7 @@ if( isset( $_GET['addChannels'] ) )
 	$code = $_POST['code'];
 	$name = $_POST['name'];
 	$isDefault = $_POST['isDefault'];
+	$isOnline = $_POST['isOnline'];
 	$cs = new channels();
 	$nameExists = $cs->isExists('name', $name);
 	$codeExists	 = $cs->isExists('code', $code);
@@ -25,7 +26,12 @@ if( isset( $_GET['addChannels'] ) )
 	
 	if( $codeExists === FALSE && $nameExists === FALSE )
 	{
-		$arr = array('code' => $code, 'name' => $name);
+		$arr = array(
+					'code' 	=> $code, 
+					'name' 	=> $name, 
+					'isOnline' => $isOnline
+				);
+				
 		if( $cs->add($arr) === FALSE )
 		{
 			$sc = 'เพิ่มรายการไม่สำเร็จ';
@@ -50,6 +56,7 @@ if( isset( $_GET['saveEditChannels'] ) )
 	$code	= $_POST['code'];
 	$name	= $_POST['name'];	
 	$isDefault = $_POST['isDefault'];
+	$isOnline		= $_POST['isOnline'];
 	$cs = new channels();
 	$nameExists = $cs->isExists('name', $name, $id);
 	$codeExists	 = $cs->isExists('code', $code, $id);
@@ -64,7 +71,11 @@ if( isset( $_GET['saveEditChannels'] ) )
 	
 	if( $codeExists === FALSE && $nameExists === FALSE )
 	{
-		$arr = array('code' => $code, 'name' => $name);
+		$arr = array(
+					'code' 	=> $code, 
+					'name' 	=> $name,
+					'isOnline'	=> $isOnline
+				);
 		if( $cs->update($id, $arr) === FALSE )
 		{
 			$sc = 'บันทึกรายการไม่สำเร็จ';
@@ -103,7 +114,7 @@ if( isset( $_GET['getData'] ) )
 	$cs = new channels($id);
 	if( $cs->id != '' )
 	{
-		$sc = $cs->id .' | ' . $cs->code . ' | ' . $cs->name . ' | ' .$cs->isDefault;	
+		$sc = $cs->id .' | ' . $cs->code . ' | ' . $cs->name . ' | ' .$cs->isDefault . ' | ' .$cs->isOnline;	
 	}
 	echo $sc;
 }

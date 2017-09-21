@@ -8,6 +8,8 @@
 				<h4 class="modal-title" id="validate-modal-title">รหัสลับ ผู้มีอำนาจ</h4>
                 <input type="hidden" id="validateTab" value="" />
                 <input type="hidden" id="validateField" value="" />
+                <input type="hidden" id="approverName" />
+                <input type="hidden" id="approveToken" />
 			 </div>
 			 <div class="modal-body" id="modal_body">
                  <div class="row" style="padding-bottom:15px;">

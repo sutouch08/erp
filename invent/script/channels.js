@@ -24,6 +24,32 @@ function toggleDefaultEdit(i){
 }
 
 
+
+
+function toggleOnlineAdd(i){
+	if( i == 1 ){
+		$("#btn-add-online-no").removeClass('btn-danger');
+		$("#btn-add-online-yes").addClass('btn-success');
+	}else{
+		$("#btn-add-online-yes").removeClass('btn-success');
+		$("#btn-add-online-no").addClass('btn-danger');
+	}
+	$("#isOnline").val(i);
+}
+
+
+function toggleOnlineEdit(i){
+	if( i == 1 ){
+		$("#btn-edit-online-no").removeClass('btn-danger');
+		$("#btn-edit-online-yes").addClass('btn-success');
+	}else{
+		$("#btn-edit-online-yes").removeClass('btn-success');
+		$("#btn-edit-online-no").addClass('btn-danger');
+	}
+	$("#isOnline").val(i);
+}
+
+
 // แสดง modal แก้ไขชนิดสินค้า
 function getEdit(id){
 	$.ajax({
@@ -32,11 +58,12 @@ function getEdit(id){
 		success: function(rs){
 			var rs = $.trim(rs);
 			var arr = rs.split(' | ');
-			if( arr.length == 4 ){
+			if( arr.length == 5 ){
 				$("#id_channels").val( arr[0] );
 				$("#editCode").val( arr[1] );
 				$("#editName").val( arr[2] );
-				toggleDefaultEdit(arr[3]);					
+				toggleDefaultEdit(arr[3]);	
+				toggleOnlineEdit(arr[4]);				
 				$("#edit-modal").modal('show');
 			}else{
 				swal("ข้อผิดพลาด !!", "ไม่พบข้อมูลที่ต้องการแก้ไข", "error");	
@@ -52,6 +79,7 @@ function saveEdit(){
 	var code = $("#editCode").val();
 	var name = $("#editName").val();
 	var isDefault = $("#isDefault").val();
+	var isOnline = $("#isOnline").val();
 	if( code.length == 0 || name.length == 0 ){
 		swal("ข้อมูลไม่ครบถ้วน");
 		return false;
@@ -59,7 +87,7 @@ function saveEdit(){
 	
 	$.ajax({
 		url:"controller/channelsController.php?saveEditChannels",
-		type:"POST", cache:"false", data:{ "id" : id, "code" : code, "name" : name, "isDefault" : isDefault },
+		type:"POST", cache:"false", data:{ "id" : id, "code" : code, "name" : name, "isDefault" : isDefault, "isOnline" : isOnline },
 		success: function(rs){
 			var rs = $.trim(rs);
 			if( rs == 'success' ){
@@ -92,6 +120,7 @@ function addNew(){
 	var code = $("#addCode").val();
 	var name = $("#addName").val();
 	var isDefault = $("#isDefault").val();
+	var isOnline = $("#isOnline").val();
 	if( code.length == 0 || name.length == 0 ){
 		swal("ข้อมูลไม่ครบถ้วน");
 		return false;
@@ -99,7 +128,7 @@ function addNew(){
 	
 	$.ajax({
 		url:"controller/channelsController.php?addChannels",
-		type:"POST", cache:"false", data:{ "code" : code, "name" : name, "isDefault" : isDefault },
+		type:"POST", cache:"false", data:{ "code" : code, "name" : name, "isDefault" : isDefault, "isOnline" : isOnline },
 		success: function(rs){
 			var rs = $.trim(rs);
 			if( rs == 'success' ){

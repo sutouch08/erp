@@ -9,13 +9,21 @@
 	$edit 				= $pm['edit'];
 	$delete 			= $pm['delete'];
 	accessDeny($view);
+	
 	include 'function/order_helper.php';
 	include 'function/customer_helper.php';
 	include 'function/employee_helper.php';
 	include 'function/channels_helper.php';
 	include 'function/payment_method_helper.php';
 	include 'function/productTab_helper.php';
-?>    
+	include 'function/bank_helper.php';
+	include 'function/payment_helper.php'; 
+	include 'function/shipping_helper.php';
+	include 'function/location_helper.php';
+	
+	$allowEditDisc = getConfig('ALLOW_EDIT_DISCOUNT');
+	$allowEditPrice = getConfig('ALLOW_EDIT_PRICE');
+?>
 <div class="container">
 <?php 
 

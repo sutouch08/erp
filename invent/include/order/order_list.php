@@ -17,7 +17,8 @@ $toDate	= getFilter('toDate', 'toDate', '' );
     <div class="col-sm-6">
     	<p class="pull-right top-p">
         	<?php if( $add ) : ?>
-            <button type="button" class="btn btn-sm btn-success" onclick="goAdd()"><i class="fa fa-plus"></i> เพิ่มใหม่</button>
+            <button type="button" class="btn btn-sm btn-success" onclick="goAdd()"><i class="fa fa-plus"></i> เพิ่มใหม่ [ปกติ] </button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="goAddOnline()"><i class="fa fa-plus"></i> เพิ่มใหม่ [ออนไลน์] </button>
             <?php endif; ?>
         </p>
     </div>
@@ -89,8 +90,7 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 	$get_rows	= get_rows();
 	$paginator->Per_Page('tbl_order', $where, $get_rows);
 	$paginator->display($get_rows, 'index.php?content=order');
-
-	$qs = dbQuery("SELECT * FROM tbl_order ".$where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
+	$qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 	
 ?>
 
@@ -123,7 +123,12 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status); //--- order_help.php ?>>
             	<td class="middle text-cennter pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $no; ?></td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $rs->reference; ?></td>
-                <td class="middle pointer" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo customerName($rs->id_customer); ?></td>
+                <td class="middle pointer" onclick="goEdit(<?php echo $rs->id; ?>)">
+                 	<?php if( $rs->isOnline == 1 ) : ?> 
+                   		[  <?php echo $rs->online_code; ?>  ] &nbsp; &nbsp;
+					<?php endif; ?>
+                    <?php echo customerName($rs->id_customer); ?>
+                </td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $cs->getProvince($rs->id_customer); ?></td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo number_format($order->getTotalAmount($rs->id), 2); ?></td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $ch->getName($rs->id_channels); ?></td>
@@ -131,15 +136,21 @@ $toDate	= getFilter('toDate', 'toDate', '' );
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo stateName($rs->state, $rs->status); ?></td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo thaiDate($rs->date_add); ?></td>
                 <td class="middle text-center">
-                    <div class="btn-group">
-        				<button type="button" class="btn btn-xs btn-info dropdown-toggle" data-toggle="dropdown">เพิ่มเติม</button>
-                        <ul class="dropdown-menu text-left" role="menu">
-                            <li>พนักงาน : <?php echo employee_name($rs->id_employee); ?></li>
-                            <li>ปรับปรุงล่าสุด : <?php echo thaiDate($rs->date_upd); ?></li>                            
-                        </ul>
-    				</div>
+                <button type="button" 
+                			class="btn btn-default btn-mini" 
+                            data-container="body" 
+                            data-toggle="popover" 
+                			data-placement="left" 
+                            data-trigger="focus"
+                            data-content="
+                           
+                            พนักงาน : <?php echo employee_name($rs->id_employee); ?>
+                            ปรับปรุงล่าสุด : <?php echo thaiDate($rs->date_upd); ?>                           
+                        "><i class="fa fa-bars"></i></button>
+                   
                 </td>
             </tr>
+<?php		$no++; ?>            
 <?php		endwhile; ?>                
 <?php else : ?>
 			<tr>
@@ -155,5 +166,9 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 
 
 
-
+<script>
+$(function () {
+  $('[data-toggle="popover"]').popover()
+})
+</script>
 <script src="script/order/order_list.js"></script>

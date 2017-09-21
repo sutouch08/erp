@@ -184,6 +184,19 @@ public function getName($id)
 	return $sc;
 }
 
+
+public function getFullName($id)
+{
+	$sc = "";
+	$qs = dbQuery("SELECT first_name, last_name FROM tbl_employee WHERE id_employee = ".$id);
+	if( dbNumRows($qs) == 1 )
+	{
+		$rs = dbFetchObject($qs);
+		$sc = $rs->first_name.' '.$rs->last_name;
+	}
+	return $sc;
+}
+
 public function getSignature($id)
 {
 	$sc = $this->getName($id);

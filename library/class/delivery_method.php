@@ -1,31 +1,27 @@
 <?php
-class channels
+class delivery_method
 {
 	public $id;
 	public $code;
 	public $name;
-	public $isOnline;
 	public $isDefault;
-	
-	
+	public $active;
 	public function __construct($id = '')
 	{
 		if( $id != '' )
 		{
-			$qs = dbQuery("SELECT * FROM tbl_channels WHERE id = '".$id."'");
+			$qs = dbQuery("SELECT * FROM tbl_delivery_method WHERE id = '".$id."'");
 			if( dbNumRows($qs) == 1 )
 			{
 				$rs 				= dbFetchObject($qs);
 				$this->id 		= $rs->id;
 				$this->code 	= $rs->code;
 				$this->name	 	= $rs->name;	
-				$this->isOnline	= $rs->isOnline;
-				$this->isDefault	= $rs->isDefault;
+				$this->isDefault = $rs->isDefault;
+				$this->active = $rs->active;
 			}
 		}
 	}
-	
-	
 	
 	
 	public function add(array $ds )
@@ -42,11 +38,10 @@ class channels
 				$values	.= $i == 1 ? "'". $value ."'" : ", '". $value ."'";
 				$i++;	
 			}
-			$sc = dbQuery("INSERT INTO tbl_channels (".$fields.") VALUES (".$values.")");
+			$sc = dbQuery("INSERT INTO tbl_delivery_method (".$fields.") VALUES (".$values.")");
 		}
 		return $sc;	
 	}
-	
 	
 	
 	
@@ -63,13 +58,10 @@ class channels
 				$set .= $i == 1 ? $field . " = '" . $value . "'" : ", ".$field . " = '" . $value . "'";
 				$i++;	
 			}
-			$sc = dbQuery("UPDATE tbl_channels SET " . $set . " WHERE id = '".$id."'");
+			$sc = dbQuery("UPDATE tbl_delivery_method SET " . $set . " WHERE id = '".$id."'");
 		}
 		return $sc;
 	}
-	
-	
-	
 	
 	
 	
@@ -78,42 +70,34 @@ class channels
 		$sc = FALSE;
 		if( $this->clearDefault() )
 		{
-			$sc = dbQuery("UPDATE tbl_channels SET isDefault = 1 WHERE id = ".$id);
+			$sc = dbQuery("UPDATE tbl_delivery_method SET isDefault = 1 WHERE id = ".$id);
 		}
 		return $sc;
-	}	
+	}
+	
+	
+	public function setActive($id, $val)
+	{
+		return dbQuery("UPDATE tbl_delivery_method SET active = ".$val." WHERE id = ".$id);
+	}
 	
 	
 	
 	public function clearDefault()
 	{
-		return dbQuery("UPDATE tbl_channels SET isDefault = 0");	
+		return dbQuery("UPDATE tbl_delivery_method SET isDefault = 0");	
 	}
-	
-	
-	
-	
-	
-	
-	public function setOnline($id, $val)
-	{
-		return dbQuery("UPDATE tbl_channels SET isOnline = ".$val." WHERE id = '".$id);	
-	}
-	
-	
-	
-	
 	
 	public function isExists($field, $value, $id='')
 	{
 		$sc = FALSE;
 		if( $id != '' )
 		{
-			$qs = dbQuery("SELECT id FROM tbl_channels WHERE ".$field." = '".$value."' AND id != '".$id."'");
+			$qs = dbQuery("SELECT id FROM tbl_delivery_method WHERE ".$field." = '".$value."' AND id != '".$id."'");
 		}
 		else
 		{
-			$qs = dbQuery("SELECT id FROM tbl_channels WHERE ".$field." = '".$value."'");
+			$qs = dbQuery("SELECT id FROM tbl_delivery_method WHERE ".$field." = '".$value."'");
 		}
 		
 		if( dbNumRows($qs) > 0 )
@@ -125,11 +109,9 @@ class channels
 	
 	
 	
-	
-	
 	public function delete($id)
 	{
-		return dbQuery("DELETE FROM tbl_channels WHERE id = '".$id."'");
+		return dbQuery("DELETE FROM tbl_delivery_method WHERE id = '".$id."'");
 	}
 
 	
@@ -138,7 +120,7 @@ class channels
 	public function getCode($id)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT code FROM tbl_channels WHERE id = '".$id."'");
+		$qs = dbQuery("SELECT code FROM tbl_delivery_method WHERE id = '".$id."'");
 		if( dbNumRows($qs) == 1 )
 		{
 			list( $sc ) = dbFetchArray($qs);	
@@ -148,12 +130,10 @@ class channels
 	
 	
 	
-	
-	
 	public function getId($code)
 	{
 		$sc = 0;
-		$qs = dbQuery("SELECT id FROM tbl_channels WHERE code = '".$code."'");
+		$qs = dbQuery("SELECT id FROM tbl_delivery_method WHERE code = '".$code."'");
 		if( dbNumRows($qs) == 1 )
 		{
 			list( $sc ) = dbFetchArray($qs);	
@@ -162,27 +142,23 @@ class channels
 	}
 	
 	
-	
-	
 	public function getNameByCode($code)
 	{
 		$sc = "";
-		$qs = dbQuery("SELECT name FROM tbl_channels WHERE code = '".$code."'");
+		$qs = dbQuery("SELECT name FROM tbl_delivery_method WHERE code = '".$code."'");
 		if( dbNumRows($qs) == 1 )
 		{
 			list( $sc ) = dbFetchArray($qs);
 		}
 		return $sc;
 	}
-	
-	
 	
 	
 	
 	public function getName($id)
 	{
 		$sc = "";
-		$qs = dbQuery("SELECT name FROM tbl_channels WHERE id = '".$id."'");
+		$qs = dbQuery("SELECT name FROM tbl_delivery_method WHERE id = '".$id."'");
 		if( dbNumRows($qs) == 1 )
 		{
 			list( $sc ) = dbFetchArray($qs);
@@ -191,23 +167,20 @@ class channels
 	}
 	
 	
-	
-	
 	public function getData()
 	{
-		return dbQuery("SELECT * FROM tbl_channels");	
+		return dbQuery("SELECT * FROM tbl_delivery_method");	
 	}
 	
 	
 	
-		
 	public function getDefaultId()
 	{
 		$sc = "";
-		$qs = dbQuery("SELECT id FROM tbl_channels WHERE isDefault = 1");
+		$qs = dbQuery("SELECT id FROM tbl_delivery_method WHERE isDefault = 1");
 		if( dbNumRows($qs) == 1 )
 		{
-			list( $sc ) = dbFetchArray($qs);	
+			list( $sc ) = dbFetchArray($qs);
 		}
 		return $sc;
 	}
@@ -216,8 +189,10 @@ class channels
 	
 	public function searchId($txt)
 	{
-		return dbQuery("SELECT id FROM tbl_channels WHERE name LIKE '%".$txt."%' OR code LIKE '%".$txt."%'");
+		return dbQuery("SELECT id FROM tbl_delivery_method WHERE name LIKE '%".$txt."%' OR code LIKE '%".$txt."%'");
 	}	
-}
+	
+	
+}	//--- end class
 
 ?>

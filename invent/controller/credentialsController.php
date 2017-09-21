@@ -21,7 +21,12 @@ if( isset( $_GET['validateCredentials'] ) )
 		$rs = $vd->validatePermission($id_tab, $employee->id_profile, $field); 
 		if($rs === TRUE )
 		{
-			$sc = 'allow';
+			$ds = array(
+						"allow" => "allow", 
+						"approver" => $emp->getFullName($employee->id_employee), 
+						"token" => $s_key
+					);
+			$sc = json_encode($ds);
 		}
 		else
 		{

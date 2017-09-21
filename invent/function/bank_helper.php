@@ -38,6 +38,8 @@ function getBankName($code)
 	return $sc;
 }
 
+
+
 function getAccountNo($id_account)
 {
 	$sc = FALSE;
@@ -48,6 +50,9 @@ function getAccountNo($id_account)
 	}
 	return $sc;
 }
+
+
+
 function getBankAccount($id_acc)
 {
 	$sc = '';

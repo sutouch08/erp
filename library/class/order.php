@@ -14,16 +14,23 @@ class order
 	public $isPaid;	//---	จ่ายเงินแล้วหรือยัง
 	public $isExpire;	//---	หมดอายุหรือยัง
 	public $isCancle;	//---	ยกเลิกหรือไม่
+	public $isOnline;		//--- เป็นออเดอร์ออนไลน์หรือไม่
 	public $status;	//---	บันทึกแล้วหรือยัง
 	public $bDiscText;	//---	ส่วนลดท้ายบิลเป็นข้อความเช่น 20%+5% หรือ 500 + 10%;
 	public $bDiscAmount;	//---	มูลค่าส่วนลดท้ายบิล
-	public $policyCode;	//--- 	เลขที่นโยบายส่วนลดท้ายบิล
+	public $id_rule;	//--- 	เลขที่นโยบายส่วนลดท้ายบิล
 	public $date_add;
 	public $date_upd;
 	public $emp_upd;	//---	พนักงานที่ทำรายการล่าสุด
 	public $isExported;	//---	ส่งออกไป Formula แล้วหรือยัง 1 = Exported | 0 = not export 
 	public $id_branch;
 	public $remark;
+	public $online_code;
+	public $id_shipping;
+	public $shipping_code;
+	public $shipping_fee;
+	public $service_fee;
+	public $hasPayment;
 	public $hasNotSaveDetail = TRUE;
 	
 	public function __construct($id = "")
@@ -54,26 +61,34 @@ class order
 			$this->isPaid		= $rs->isPaid;
 			$this->isExpire		= $rs->isExpire;
 			$this->isCancle		= $rs->isCancle;
+			$this->isOnline		= $rs->isOnline;
 			$this->status		= $rs->status;
 			$this->bDiscText	= $rs->bDiscText;
 			$this->bDiscAmount	= $rs->bDiscAmount;
-			$this->policyCode	= $rs->policyCode;
+			$this->id_rule		= $rs->id_rule;
 			$this->date_add	= $rs->date_add;
 			$this->date_upd	= $rs->date_upd;
 			$this->emp_upd	= $rs->emp_upd;	
 			$this->isExported	= $rs->isExported;	
 			$this->id_branch	= $rs->id_branch;
 			$this->remark		= $rs->remark;		
+			$this->online_code	= $rs->online_code; //----- รหัสอ้างอิงลูกค้าออนไลน์
+			$this->id_shipping	= $rs->id_shipping;
+			$this->shipping_code	= $rs->shipping_code;
+			$this->shipping_fee	= $rs->shipping_fee;
+			$this->service_fee	= $rs->service_fee;
+			
+			$this->hasPayment	= $this->hasPayment($rs->id);
 			
 			$this->hasNotSaveDetail = $this->hasNotSaveDetail($rs->id);
 		}
 	}
 	
 	//---- Add new order
-	public function add(array $ds)
+	public function add(array $ds = array() )
 	{
 		$sc = FALSE;
-		if( count( $ds ) > 0 )
+		if( ! empty( $ds ) )
 		{
 			$fields = "";
 			$values = "";
@@ -163,6 +178,16 @@ class order
 		$qs = dbQuery("SELECT * FROM tbl_order_detail WHERE id_order = ".$id_order." AND id_product = '".$id_pd."'");
 		return dbNumRows($qs) == 1 ? dbFetchObject($qs) : FALSE;
 	}
+	
+	
+	//---- Get 1 row in order_detail by id_order_detail
+	public function getDetailData($id)
+	{
+		$qs = dbQuery("SELECT * FROM tbl_order_detail WHERE id = ".$id);
+		return dbNumRows($qs) == 1 ? dbFetchObject($qs) : FALSE;
+	}
+	
+	
 	
 	
 	
@@ -298,14 +323,14 @@ class order
 	
 	public function saveDetail($id)
 	{
-		return dbQuery("UPDATE tbl_order_detail SET isSaved = 1 WHERE id_order_detail = ".$id." AND isSaved = 0");
+		return dbQuery("UPDATE tbl_order_detail SET isSaved = 1 WHERE id = ".$id." AND isSaved = 0");
 	}
 	
 	
 	
 	public function unSaveDetail($id)
 	{
-		return dbQuery("UPDATE tbl_order_detail SET isSaved = 0 WHERE id_order_detail = ".$id." AND isSaved = 1");
+		return dbQuery("UPDATE tbl_order_detail SET isSaved = 0 WHERE id = ".$id." AND isSaved = 1");
 	}
 	
 	
@@ -473,6 +498,33 @@ class order
 		
 		return $sc;
 	}	//--- End function
+	
+	
+	
+	public function searchOnlineCode($txt)
+	{
+		return dbQuery("SELECT DISTINCT online_code FROM tbl_order WHERE online_code LIKE '%".$txt."%'");
+	}
+	
+	
+	public function hasPayment($id)
+	{
+		$payment = new payment();
+		return $payment->isExists($id);
+	}
+	
+	
+	
+	public function getOnlineCode($id)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT online_code FROM tbl_order WHERE id = ".$id);
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
 	
 }//--- End Class
 

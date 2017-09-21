@@ -16,6 +16,32 @@ function selectPaymentMethod($id = "" )
 	return $sc;			
 }
 
+
+
+
+
+function selectOnlinePaymentMethod($id = "" )
+{
+	$sc = '';
+	$cs = new payment_method();
+	$qs = $cs->getData();
+	if( dbNumRows($qs) > 0 )
+	{
+		while( $rs = dbFetchObject($qs) )
+		{
+			if( $rs->hasTerm == 0 )
+			{
+				$sc .= '<option value="'.$rs->id.'" '.isSelected($id, $rs->id).'>'.$rs->name.'</option>';
+			}
+		}
+	}
+	return $sc;			
+}
+
+
+
+
+
 function getPaymentMethodIn($txt)
 {
 	$cs = new payment_method();
