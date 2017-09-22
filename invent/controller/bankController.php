@@ -11,13 +11,13 @@ if( isset( $_GET['addNewAccount'] ) )
 	$id		= $_POST['id_account'] == '' ? FALSE : $_POST['id_account'];
 	if( $id !== FALSE )
 	{
-		$qr = "UPDATE tbl_bank_account SET bankcode = '".$_POST['bank']."', bank_name = '".getBankName($_POST['bank'])."', branch = '".$_POST['branch']."', ";
+		$qr = "UPDATE tbl_bank_account SET bank_code = '".$_POST['bank']."', bank_name = '".getBankName($_POST['bank'])."', branch = '".$_POST['branch']."', ";
 		$qr .= "acc_name = '".$_POST['acName']."', acc_no = '".$_POST['acNo']."', active = ".$_POST['active']." WHERE id_account = ".$id;
 		$qs = dbQuery($qr);
 	}
 	else
 	{
-		$qr = "INSERT INTO tbl_bank_account (bankcode, bank_name, branch, acc_name, acc_no, active) ";
+		$qr = "INSERT INTO tbl_bank_account (bank_code, bank_name, branch, acc_name, acc_no, active) ";
 		$qr .= "VALUES ('".$_POST['bank']."', '".getBankName($_POST['bank'])."', '".$_POST['branch']."', '".$_POST['acName']."', '".$_POST['acNo']."', ".$_POST['active'].")";
 		$qs = dbQuery($qr);
 	}
@@ -59,7 +59,7 @@ if( isset( $_GET['getBankAccountTable'] ) )
 								'branch'		=> $rs['branch'],
 								'actived'		=> isActived($rs['active']),
 								'active'		=> $rs['active'],
-								'logo'			=> '<img src="'.bankLogoUrl($rs['bankcode']).'" height="20px" width="20px;" />'
+								'logo'			=> '<img src="'.bankLogoUrl($rs['bank_code']).'" height="20px" width="20px;" />'
 							);
 			array_push($ds, $arr);
 			$n++;	
@@ -76,7 +76,7 @@ if( isset( $_GET['getBankAccount'] ) )
 	if( dbNumRows($qs) == 1 )
 	{
 		$rs = dbFetchArray($qs);
-		$ds = $rs['id_account'].' | '.$rs['bankcode'].' | '.$rs['acc_name'].' | '.$rs['acc_no'].' | '.$rs['branch'].' | '.$rs['active'];
+		$ds = $rs['id_account'].' | '.$rs['bank_code'].' | '.$rs['acc_name'].' | '.$rs['acc_no'].' | '.$rs['branch'].' | '.$rs['active'];
 		$sc = $ds;						
 	}
 	echo $sc;
@@ -89,7 +89,7 @@ if( isset( $_GET['getAccountDetail'] ) )
 	if( dbNumRows($qs) == 1 )
 	{
 		$rs = dbFetchArray($qs);
-		$ds = bankLogoUrl($rs['bankcode']).' | '.$rs['bank_name'].' สาขา '.$rs['branch'].'<br/>เลขที่บัญชี '.$rs['acc_no'].'<br/> ชื่อบัญชี '.$rs['acc_name'];
+		$ds = bankLogoUrl($rs['bank_code']).' | '.$rs['bank_name'].' สาขา '.$rs['branch'].'<br/>เลขที่บัญชี '.$rs['acc_no'].'<br/> ชื่อบัญชี '.$rs['acc_name'];
 		$sc = $ds;						
 	}
 	echo $sc;

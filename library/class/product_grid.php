@@ -61,18 +61,18 @@ class product_grid extends product
 	
 	
 	
-	public function getOrderGrid($id_style)
+	public function getOrderGrid($id_style, $view = FALSE)
 	{
 		$sc = '';
 		$isVisual = $this->isCountStock($id_style) === TRUE ? FALSE : TRUE;
 		$attrs = $this->getAttribute($id_style); 
 		if( count($attrs) == 1  )
 		{
-			$sc .= $this->orderGridOneAttribute($id_style, $attrs[0], $isVisual);
+			$sc .= $this->orderGridOneAttribute($id_style, $attrs[0], $isVisual, $view);
 		}
 		else if( count( $attrs ) == 2 )
 		{
-			$sc .= $this->orderGridTwoAttribute($id_style, $isVisual);
+			$sc .= $this->orderGridTwoAttribute($id_style, $isVisual, $view);
 		}
 		return $sc;
 	}
@@ -82,7 +82,7 @@ class product_grid extends product
 
 
 
-	private function orderGridOneAttribute($id_style, $attr, $isVisual)
+	private function orderGridOneAttribute($id_style, $attr, $isVisual, $view)
 	{
 		$sc 	= '';
 		$data 	= $attr == 'color' ? $this->getAllColors($id_style) : $this->getAllSizes($id_style);
@@ -122,7 +122,10 @@ class product_grid extends product
 	
 			$sc 	.= '<td class="middle" class="one-attribute">';
 			$sc 	.= $isVisual === FALSE ? '<center><span class="font-size-10 blue">('.($stock < 0 ? 0 : $stock).')</span></center>':'';
+			if( $view === FALSE )
+			{
 			$sc 	.= '<input type="text" class="form-control input-sm order-grid" name="qty[0]['.$id.']" id="qty_'.$id.'" onkeyup="valid_qty($(this), '.($qty === FALSE ? 1000000 : $qty).')" '.$disabled.' />';
+			}
 			$sc 	.= '</td>';
 				
 			$i++;
@@ -140,7 +143,7 @@ class product_grid extends product
 
 
 
-	private function orderGridTwoAttribute($id_style, $isVisual)
+	private function orderGridTwoAttribute($id_style, $isVisual, $view)
 	{
 		
 		$colors	= $this->getAllColors($id_style);
@@ -182,7 +185,10 @@ class product_grid extends product
 					
 					$sc 	.= '<td class="order-grid">';
 					$sc 	.= $isVisual === FALSE ? '<center><span class="font-size-10 blue">('.$stock.')</span></center>' : '';
-					$sc 	.= '<input type="text" class="form-control order-grid" name="qty['.$id_color.']['.$id.']" id="qty_'.$id.'" onkeyup="valid_qty($(this), '.$limit.')" '.$disabled.' />';
+					if( $view === FALSE )
+					{
+						$sc 	.= '<input type="text" class="form-control order-grid" name="qty['.$id_color.']['.$id.']" id="qty_'.$id.'" onkeyup="valid_qty($(this), '.$limit.')" '.$disabled.' />';
+					}
 					$sc 	.= $isVisual === FALSE ? '<center>'.$available.'</center>' : '';
 					$sc 	.= '</td>';
 				}

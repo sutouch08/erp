@@ -91,7 +91,28 @@ if( isset( $_GET['getOrderGrid'] ) && isset( $_GET['id_style'] ) )
 	$pd = new product();
 	$grid = new product_grid();
 	$style = new style();
-	$sc = $grid->getOrderGrid($id_style);
+	$view = FALSE; //----- View stock ? TRUE = view stock only FALSE = order
+	$sc = $grid->getOrderGrid($id_style, $view);
+	$tableWidth	= $pd->countAttribute($id_style) == 1 ? 600 : $grid->getOrderTableWidth($id_style);
+	$sc .= ' | '.$tableWidth;
+	$sc .= ' | ' . $style->getCode($id_style);
+	$sc .= ' | ' . $id_style;
+	echo $sc;
+}
+
+
+
+
+//----- Attribute Grid By Clicking image
+if( isset( $_GET['getStockGrid'] ) && isset( $_GET['id_style'] ) )
+{
+	$sc = 'not exists';
+	$id_style = $_GET['id_style'];
+	$pd = new product();
+	$grid = new product_grid();
+	$style = new style();
+	$view = TRUE;  //--- view stock
+	$sc = $grid->getOrderGrid($id_style, $view);
 	$tableWidth	= $pd->countAttribute($id_style) == 1 ? 600 : $grid->getOrderTableWidth($id_style);
 	$sc .= ' | '.$tableWidth;
 	$sc .= ' | ' . $style->getCode($id_style);
@@ -104,6 +125,15 @@ if( isset( $_GET['getOrderGrid'] ) && isset( $_GET['id_style'] ) )
 if( isset( $_GET['getProductsInOrderTab'] ) )
 {
 	include 'order/product_tab.php';
+}
+
+
+
+
+//----- Echo product style list in tab
+if( isset( $_GET['getProductsInViewTab'] ) )
+{
+	include 'order/stock_tab.php';
 }
 
 
@@ -411,6 +441,16 @@ if( isset( $_GET['setDefaultAddress'] ) )
 }
 
 
+
+if( isset( $_GET['clearFilter'] ) )
+{
+	deleteCookie('sOrderCode');
+	deleteCookie('sOrderCus');
+	deleteCookie('sOrderEmp');
+	deleteCookie('fromDate');
+	deleteCookie('toDate');
+	echo "done";	
+}
 
 	
 ?>

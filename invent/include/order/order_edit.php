@@ -8,9 +8,13 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
     	<p class="pull-right top-p">
         	<button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i>  กลับ</button>
 			<?php if( $order->isOnline == 1 ) : ?>
+            <?php $payed = ( $order->status == 0 || $order->hasPayment == 1) ? 'disabled' : '' ;	?>
+            <button type="button" class="btn btn-sm btn-primary" onClick="payOrder()" <?php echo $payed; ?>><i class="fa fa-credit-card"></i> แจ้งชำระเงิน</button>
+            
+            <?php $shiped = ( $order->status == 0 || $order->hasPayment == 0) ? 'disabled' : '' ;	?>
+    		<button type="button" class="btn btn-sm btn-info" onClick="updateShipping()" <?php echo $shiped; ?>><i class="fa fa-truck"></i> บันทึกการจัดส่ง</button>
+            
             <?php $disabled = $order->status == 0 ? 'disabled' : '' ;	?>
-            <button type="button" class="btn btn-sm btn-primary" onClick="payOrder()" <?php echo $disabled; ?>><i class="fa fa-credit-card"></i> แจ้งชำระเงิน</button>
-    		<button type="button" class="btn btn-sm btn-info" onClick="updateShipping()" <?php echo $disabled; ?>><i class="fa fa-truck"></i> บันทึกการจัดส่ง</button>
         	<button type="button" class="btn btn-sm btn-success" onClick="getSummary()" <?php echo $disabled; ?>><i class="fa fa-list"></i> สรุปข้อมูล</button>
             <?php endif; ?>
         	<button type="button" class="btn btn-sm btn-default" onClick="printOrder()"><i class="fa fa-print"></i> พิมพ์</button>
@@ -20,7 +24,7 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
 			<?php if( ($add && $order->status == 0 && $order->id_employee == getCookie('user_id') ) OR ($edit && $order->status == 1 && $order->state < 4 ) ) : ?>
 				<?php if( $order->isOnline == 0 OR $order->hasPayment == FALSE ) : ?>
                 
-            		<button type="button" class="btn btn-sm btn-info" onclick="goAddDetail(<?php echo $order->id; ?>)"><i class="fa fa-pencil"></i> แก้ไขรายการ</button>
+            		<button type="button" class="btn btn-sm btn-warning" onclick="goAddDetail(<?php echo $order->id; ?>)"><i class="fa fa-pencil"></i> แก้ไขรายการ</button>
                     
 				<?php endif; ?>            
             <?php endif; ?>

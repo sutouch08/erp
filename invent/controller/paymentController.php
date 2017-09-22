@@ -6,6 +6,7 @@ require '../function/order_helper.php';
 require '../function/bank_helper.php';
 require '../function/payment_helper.php';
 require '../function/date_helper.php';
+include '../function/customer_helper.php';
 
 
 //------------------ ยืนยันการชำระเงิน  -----------------------//
@@ -14,13 +15,13 @@ if( isset( $_GET['confirmPayment'] ) )
 	$sc			= 'success';
 	$id_order	= $_POST['id_order'];
 	$id_emp		= getCookie('user_id');
-	$state		= 2;
+	$order	= new order();
 	startTransection();
-	$rs			= validPayment($id_order);
-	$rd			= validOrder($id_order);
-	$ra			= insertOrderState($id_order, 2, $id_emp);
-	$rc			= changeToPrepare($id_order, $id_emp);
-	if( $rs === TRUE && $rd === TRUE && $ra === TRUE && $rc === TRUE )
+	$ra = validPayment($id_order); 	//----- update tbl_payment set valid = 1
+	$rb = $order->paid($id_order);	//----- update tbl_order set isPaid = 1
+	$rc = $order->stateChange($id_order, 3);	//----- update tbl_order set state = 3, insert tbl_order_state
+	
+	if( $ra === TRUE && $rb === TRUE && $rc === TRUE )
 	{
 		commitTransection();
 	}
@@ -32,49 +33,68 @@ if( isset( $_GET['confirmPayment'] ) )
 	echo $sc;
 }
 
+
+
+
 if( isset( $_GET['removePayment'] ) )
 {
-	$sc = 'success';
-	$id_order = $_POST['id_order'];
-	$qs = dbQuery("DELETE FROM tbl_payment WHERE id_order = ".$id_order." AND valid = 0");
-	if( ! $qs ){ $sc = 'fail'; }
+	$sc = 'fail';
+	$payment = new payment();
+	if( $payment->delete($_POST['id_order']) === TRUE )
+	{
+		$sc = 'success';
+	}
 	echo $sc;
 }
+
+
+
+
+
+
+if( isset( $_GET['removeValidPayment'] ) )
+{
+	$sc = 'fail';
+	$payment = new payment();
+	if( $payment->removeValidPayment($_POST['id_order']) === TRUE )
+	{
+		$sc = 'success';
+	}
+	echo $sc;
+}
+
+
 
 //------------------  ตารางรายการรอตรวจสอบยอดชำระ  ------------//
 if( isset( $_GET['getOrderTable'] ) )
 {
 	$sc = 'fail';
-	$qs = dbQuery("SELECT * FROM tbl_payment WHERE valid = 0");
+	$payment 	= new payment();
+	$qs 			= $payment->getData();
 	if( dbNumRows($qs) > 0 )
 	{
 		$ds = array();
-		while( $rs = dbFetchArray($qs) )
+		$no = 1;
+		while( $rs = dbFetchObject($qs) )
 		{
-			$id 			= $rs['id_order'];
-			$order 		= new order($id);
-			$bank	 		= getBankAccount($rs['id_account']);
-			$amount 		= orderAmount($id);
-			$billDisc		= bill_discount($id);
-			$amount		-= $billDisc;
-			$shipFee		= getDeliveryFee($id);
-			$servFee	= getServiceFee($id);
-
-			$netAmount	=  $amount + $shipFee + $servFee;
+			$order 	= new order($rs->id_order);
+			$bank	 	= getBankAccount($rs->id_account);
+			$amount 	= ( $order->getTotalAmount($rs->id_order) - $order->bDiscAmount) + $order->shipping_fee + $order->service_fee;
+			$shipFee	 = $order->shipping_fee;
+			$servFee = $order->service_fee;
 			$arr			= array(
-									"id"						=> $id,
+									"id"						=> $order->id,
+									"no"					=> $no,
 									"reference"			=> $order->reference,
-									"customer"			=> onlineCustomerName($id),
-									"orderAmount"		=> number_format($amount, 2), //--- ค่าสินค้า
-									"deliveryAmount"	=> number_format($shipFee, 2), //--- ค่าจัดส่ง
-									"serviceAmount"	=> number_format($servFee, 2), //--- ค่าบริการ
-									"totalAmount"		=> number_format($netAmount, 2), //--- ยอดที่ต้องชำระ
-									"payAmount"			=> number_format($rs['pay_amount'], 2),   //--- ยอดโอน
+									"customer"			=> $order->isOnline == 1 ? $order->online_code : customerName($order->id_customer),
+									"orderAmount"		=> number_format($amount, 2), //--- ยอดที่ต้องชำระ
+									"payAmount"			=> number_format($rs->pay_amount, 2),   //--- ยอดโอน
 									"bankName"			=> $bank['bank_name'],
 									"accNo"				=> $bank['acc_no'],
-									"payDate"			=> thaiDateFormat($rs['paydate'], TRUE, '/')
+									"payDate"			=> thaiDateFormat($rs->paydate, TRUE, '/')
 									);
 			array_push($ds, $arr);
+			$no++;
 		}
 		$sc = json_encode($ds);
 	}
@@ -82,12 +102,51 @@ if( isset( $_GET['getOrderTable'] ) )
 }
 
 
+
+
 //--------------- ข้อมูลการชำระเงินเพื่อตรวจสอบ  ------------//
 if( isset( $_GET['getPaymentDetail'] ) )
 {
 	$sc 			= 'fail';
 	$id_order 	= $_POST['id_order'];
-	$qs 			= dbQuery("SELECT * FROM tbl_payment WHERE id_order = ".$id_order." AND valid = 0 ");
+	$payment = new payment();
+	$qs = $payment->getDetail($id_order);
+	
+	if( dbNumRows($qs) == 1 )
+	{
+		$rs		= dbFetchArray($qs);
+		$order	= new order($id_order);
+		$bank	 	= getBankAccount($rs['id_account']);
+		$img		= imageUrl($order->reference);
+
+		$ds 	= array(
+						"id"			=> $id_order,
+						"orderAmount"	=> number_format($rs['order_amount'], 2),
+						"payAmount"		=> number_format($rs['pay_amount'], 2),
+						"payDate"		=> thaiDateFormat($rs['paydate'], TRUE, '/'),
+						"bankName"		=> $bank['bank_name'],
+						"branch"			=> $bank['branch'],
+						"accNo"			=> $bank['acc_no'],
+						"accName"		=> $bank['acc_name'],
+						"date_add"	=> thaiDateTime($rs['date_add']),
+						"imageUrl"		=> $img === FALSE ? '' : $img,
+						"valid"				=> "no"
+						);
+		$sc = json_encode($ds);
+	}
+	echo $sc;
+}
+
+
+
+
+
+//--------------- ข้อมูลการชำระเงินที่ยืนยันแล้ว  ------------//
+if( isset( $_GET['getValidPaymentDetail'] ) )
+{
+	$id_order 	= $_POST['id_order'];
+	$payment = new payment();
+	$qs = $payment->getValidDetail($id_order);
 	if( dbNumRows($qs) == 1 )
 	{
 		$rs		= dbFetchArray($qs);
@@ -112,6 +171,13 @@ if( isset( $_GET['getPaymentDetail'] ) )
 	echo $sc;
 }
 
+
+
+
+
+
+
+
 //--------------- ข้อมูลการชำระเงินเพื่อตรวจสอบ  ------------//
 if( isset( $_GET['viewPaymentDetail'] ) )
 {
@@ -135,11 +201,43 @@ if( isset( $_GET['viewPaymentDetail'] ) )
 						"accNo"			=> $bank['acc_no'],
 						"accName"		=> $bank['acc_name'],
 						"date_add"	=> $rs['date_add'] == '0000-00-00 00:00:00' ? '' : thaiDateTime($rs['date_add']),
-						"imageUrl"		=> $img === FALSE ? '' : $img
+						"imageUrl"		=> $img === FALSE ? '' : $img,
+						"valid"				=> "no"
 						);
 		$sc = json_encode($ds);
 	}
 	echo $sc;
+}
+
+
+
+
+
+if( isset( $_GET['searchBankAccount'] ) )
+{
+	$sc = array();
+	$bank = new bank_account();
+	$qs = $bank->search($_REQUEST['term'], "bank_name, branch, acc_name, acc_no");
+	while( $rs = dbFetchObject($qs) )
+	{
+		$sc[] = $rs->bank_name .' | '. $rs->acc_no .' | '. $rs->branch .' | '. $rs->acc_name;
+	}
+	echo json_encode($sc);
+}
+
+
+
+
+
+
+if( isset( $_GET['clearFilter'] ) )
+{
+	deleteCookie('sPaymentCode');
+	deleteCookie('sPaymentCus');
+	deleteCookie('sAcc');
+	deleteCookie('fromDate');
+	deleteCookie('toDate');
+	echo "done";
 }
 
 

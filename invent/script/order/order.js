@@ -24,7 +24,10 @@ function goAddDetail(id){
 }
 
 
-function goAddDetailOnline(id){
-	window.location.href = "index.php?content=order&online=Y&add=Y&id_order="+id;	
+
+
+
+function goViewStock(){
+	window.location.href = "index.php?content=order&view_stock=Y";
 }
 

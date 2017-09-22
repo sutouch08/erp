@@ -12,3 +12,22 @@ $("#toDate").datepicker({
 		$("#fromDate").datepicker("option", "maxDate", ds);
 	}
 });
+
+
+
+function getSearch(){
+	$("#searchForm").submit();		
+}
+
+
+
+$(".search-box").keyup(function(e) {
+    if( e.keyCode == 13 ){
+		getSearch();
+	}
+});
+
+
+function clearFilter(){
+	$.get("controller/orderController.php?clearFilter", function(){ goBack(); });
+}

@@ -1,10 +1,11 @@
 <?php
 	$order 		= new order($_POST['id_order']);
-	$credit 		= new customer_credit();
+	$credit 	= new customer_credit();
 	$payment 	= new payment_method($order->id_payment);
 	$isEnought 	= TRUE;  //--- เอาไว้ตรวจสอบเครดิต ถ้าไม่พอจะเป็น FALSE;
-	$sc 			= FALSE; 
-	
+	$sc 		= FALSE; 
+	$approv		= isset($_POST['approv']) ? $_POST['approv'] : FALSE;
+
 	startTransection();
 	//--- ถ้าเป็นการสั่งซื้อแบบเครดิตเทอม ให้คำนวณเครดิตคงเหลือก่อนบันทึก
 	if( $payment->hasTerm == 1 )
@@ -13,9 +14,9 @@
 		$isEnought = $credit->isEnough($order->id_customer, $amount); //---- ตรวจสอบว่าเครดิตผ่านหรือไม่
 	}
 	
-	if( $isEnought === FALSE )
+	if( $isEnought === FALSE && $approv === FALSE )
 	{
-		$message = 'เคดิตคงเหลือไม่เพียงพอ';
+		$message = 'credit limited';
 		$sc = FALSE;
 	}
 	else

@@ -60,6 +60,39 @@ class payment
 	
 	
 	
+	
+	public function delete($id_order)
+	{
+		return dbQuery("DELETE FROM tbl_payment WHERE id_order = ".$id_order);
+	}
+	
+	
+	
+	public function removeValidPayment($id_order)
+	{
+		$sc = FALSE;
+		startTransection();
+		if( $this->delete($id_order) )
+		{
+			$order = new order();
+			if( $order->unPaid($id_order) )
+			{
+				commitTransection();
+				$sc = TRUE;
+			}
+			else
+			{
+				dbRollback();	
+			}
+		}
+		endTransection();	
+		return $sc;
+	}
+	
+	
+	
+	
+	
 	public function isExists($id_order)
 	{
 		$sc = FALSE;
@@ -71,6 +104,36 @@ class payment
 		return $sc;
 	}
 	
+	
+	
+	
+	
+	public function getData()
+	{
+		return dbQuery("SELECT * FROM tbl_payment WHERE valid = 0");
+	}
+	
+	
+	
+	
+	public function getDetail($id_order)
+	{
+		return dbQuery("SELECT * FROM tbl_payment WHERE id_order = ".$id_order." AND valid = 0");
+	}
+	
+	
+	
+	
+	public function getValidDetail($id_order)
+	{
+		return dbQuery("SELECT * FROM tbl_payment WHERE id_order = ".$id_order." AND valid = 1");	
+	}
+	
+	
+	public function valid($id_order)
+	{
+		return dbQuery("UPDATE tbl_payment SET valid = 1 WHERE id_order = ".$id_order);	
+	}
 	
 }
 	

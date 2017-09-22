@@ -15,12 +15,13 @@ $usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE ) ? 'hide' : 
     </div>
 	<div class="col-sm-8">
     	<p class="pull-right top-p">
-        <input type="text" class="form-control input-sm input-small inline text-center" id="shippingFee" value="<?php echo $order->shipping_fee; ?>" <?php echo $dship; ?> />
-        <button type="button" class="btn btn-sm btn-warning <?php echo $ebtn; ?>" id="btn-edit-shipping-fee" onClick="activeShippingFee()">แก้ไขค่าขนส่ง</button>
+        <label class="inline padding-10" style="font-weight:normal;">ค่าจัดส่ง</label>
+        <input type="text" class="form-control input-sm input-mini inline text-center" id="shippingFee" value="<?php echo $order->shipping_fee; ?>" <?php echo $dship; ?> />
+        <button type="button" class="btn btn-sm btn-warning <?php echo $ebtn; ?>" id="btn-edit-shipping-fee" onClick="activeShippingFee()" <?php echo $payed; ?>>แก้ไขค่าขนส่ง</button>
         <button type="button" class="btn btn-sm btn-success <?php echo $ubtn; ?>" id="btn-update-shipping-fee" onClick="updateShippingFee()">บันทึกค่าขนส่ง</button>
-        <label class="inline not-show padding-10">spacer</label>
-       	<input type="text" class="form-control input-sm input-small inline text-ccenter" id="serviceFee" value="<?php echo $order->service_fee; ?>"  <?php echo $dser; ?> />
-        <button type="button" class="btn btn-sm btn-warning <?php echo $esbtn; ?>" id="btn-edit-service-fee" onClick="activeServiceFee()">แก้ไขค่าบริการ</button>
+        <label class="inline padding-10" style="margin-left:20px; font-weight:normal;">ค่าบริการ</label>
+       	<input type="text" class="form-control input-sm input-mini inline text-center" id="serviceFee" value="<?php echo $order->service_fee; ?>"  <?php echo $dser; ?> />
+        <button type="button" class="btn btn-sm btn-warning <?php echo $esbtn; ?>" id="btn-edit-service-fee" onClick="activeServiceFee()" <?php echo $payed; ?>>แก้ไขค่าบริการ</button>
         <button type="button" class="btn btn-sm btn-primary <?php echo $usbtn; ?>" id="btn-update-service-fee" onClick="updateServiceFee()">บันทึกค่าบริการ</button>
         </p>
     </div>

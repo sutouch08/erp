@@ -16,6 +16,7 @@ $toDate	= getFilter('toDate', 'toDate', '' );
     </div>
     <div class="col-sm-6">
     	<p class="pull-right top-p">
+        	<button type="button" class="btn btn-sm btn-info" onclick="goViewStock()"><i class="fa fa-search"></i> ดูสต็อกคงเหลือ</button>
         	<?php if( $add ) : ?>
             <button type="button" class="btn btn-sm btn-success" onclick="goAdd()"><i class="fa fa-plus"></i> เพิ่มใหม่ [ปกติ] </button>
             <button type="button" class="btn btn-sm btn-primary" onclick="goAddOnline()"><i class="fa fa-plus"></i> เพิ่มใหม่ [ออนไลน์] </button>
@@ -24,6 +25,7 @@ $toDate	= getFilter('toDate', 'toDate', '' );
     </div>
 </div>
 <hr class="margin-bottom-15" />
+<form id="searchForm" method="post">
 <div class="row">
 	<div class="col-sm-2 padding-5 first">
     	<label>เลขที่เอกสาร</label>
@@ -51,9 +53,11 @@ $toDate	= getFilter('toDate', 'toDate', '' );
         	<label class="display-block not-show">Apply</label>
             <button type="button" class="btn btn-sm btn-warning btn-block" onClick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
         </div>
-    
 </div>
+</form>
+
 <hr class="margin-top-10 margin-bottom-10"/>
+
 <?php
 	$where = "WHERE id != 0 ";
 	//--- Reference
@@ -128,6 +132,9 @@ $toDate	= getFilter('toDate', 'toDate', '' );
                    		[  <?php echo $rs->online_code; ?>  ] &nbsp; &nbsp;
 					<?php endif; ?>
                     <?php echo customerName($rs->id_customer); ?>
+                    <?php if( $pm->hasTerm($rs->id_payment) === FALSE && $rs->isPaid == 0 ) : ?>
+                    	<span class="red font-size-14 padding-10" style="margin-left:10px; background-color:#FFF;">ยังไม่ชำระเงิน</span>
+                    <?php endif; ?>
                 </td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $cs->getProvince($rs->id_customer); ?></td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo number_format($order->getTotalAmount($rs->id), 2); ?></td>

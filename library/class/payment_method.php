@@ -1,3 +1,4 @@
+
 <?php
 class payment_method
 {
@@ -6,6 +7,7 @@ class payment_method
 	public $name;
 	public $isDefault;
 	public $hasTerm;
+	
 	public function __construct($id = '')
 	{
 		if( $id != '' )
@@ -22,6 +24,7 @@ class payment_method
 			}
 		}
 	}
+	
 	
 	public function add(array $ds )
 	{
@@ -45,6 +48,8 @@ class payment_method
 	
 	
 	
+	
+	
 	public function update($id, array $ds)
 	{
 		$sc = FALSE;
@@ -64,6 +69,9 @@ class payment_method
 	
 	
 	
+	
+	
+	
 	public function setDefault($id)
 	{
 		$sc = FALSE;
@@ -75,6 +83,11 @@ class payment_method
 	}
 	
 	
+	
+	
+	
+	
+	
 	public function setTerm($id, $val)
 	{
 		return dbQuery("UPDATE tbl_payment_method SET hasTerm = ".$val." WHERE id = ".$id);
@@ -82,10 +95,16 @@ class payment_method
 	
 	
 	
+	
+	
+	
 	public function clearDefault()
 	{
 		return dbQuery("UPDATE tbl_payment_method SET isDefault = 0");	
 	}
+	
+	
+	
 	
 	public function isExists($field, $value, $id='')
 	{
@@ -108,12 +127,31 @@ class payment_method
 	
 	
 	
+	
+	
+	public function hasTerm($id)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_payment_method WHERE id = ".$id." AND hasTerm = 1");
+		if( dbNumRows($qs) == 1 )
+		{
+			$sc = TRUE;	
+		}
+		return $sc;
+	}
+	
+	
+	
+	
+	
 	public function delete($id)
 	{
 		return dbQuery("DELETE FROM tbl_payment_method WHERE id = '".$id."'");
 	}
 
 	
+
+
 
 	
 	public function getCode($id)
@@ -129,6 +167,8 @@ class payment_method
 	
 	
 	
+	
+	
 	public function getId($code)
 	{
 		$sc = 0;
@@ -139,6 +179,9 @@ class payment_method
 		}
 		return $sc;	
 	}
+	
+	
+	
 	
 	
 	public function getNameByCode($code)
@@ -154,6 +197,9 @@ class payment_method
 	
 	
 	
+	
+	
+	
 	public function getName($id)
 	{
 		$sc = "";
@@ -166,10 +212,16 @@ class payment_method
 	}
 	
 	
+	
+	
+	
 	public function getData()
 	{
 		return dbQuery("SELECT * FROM tbl_payment_method");	
 	}
+	
+	
+	
 	
 	public function getDefaultId()
 	{
@@ -181,6 +233,9 @@ class payment_method
 		}
 		return $sc;
 	}
+	
+	
+	
 	
 	public function searchId($txt)
 	{

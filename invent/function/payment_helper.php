@@ -12,11 +12,10 @@ function imageUrl($reference)
 
 
 
-
-
 function validPayment($id_order)
 {
-	return dbQuery("UPDATE tbl_payment SET valid = 1 WHERE id_order = ".$id_order);
+	$payment = new payment();
+	return $payment->valid($id_order);
 }
 
 

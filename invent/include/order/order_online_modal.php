@@ -97,7 +97,9 @@
     				<div class="col-sm-12" style="padding-top:15px; padding-bottom:15px; border-top:solid 1px #ccc; ">
                     	<table style="width:100%; border:0px;">
                         <tr>
-                        	<td width="25%" style="vertical-align:text-top;"><img src="<?php echo bankLogoUrl($rs['bankcode']); ?>" height="50px"/></td>
+                        	<td width="25%" style="vertical-align:text-top;">
+                            <img src="<?php echo bankLogoUrl($rs['bank_code']); ?>" height="50px"/>
+                            </td>
                             <td>
 									<?php echo $rs['bank_name']; ?> สาขา  <?php echo $rs['branch']; ?> <br/>
                                     เลขที่บัญชี <?php echo $rs['acc_no']; ?> <br/>

@@ -356,7 +356,7 @@ class order
 	public function stateChange($id, $state)
 	{
 		$id_emp = getCookie('user_id');
-		$rs = dbQuery("UPDATE tbl_order SET state = ".$state.", emp_upd = ".$id_emp." WHEE id = ".$id);
+		$rs = dbQuery("UPDATE tbl_order SET state = ".$state.", emp_upd = ".$id_emp." WHERE id = ".$id);
 		$cs = new state();
 		$cs->add($id, $state, $id_emp);
 		return $rs;
@@ -524,6 +524,20 @@ class order
 			list( $sc ) = dbFetchArray($qs);
 		}
 		return $sc;
+	}
+	
+	
+	
+	public function paid($id)
+	{
+		return dbQuery("UPDATE tbl_order SET isPaid = 1 WHERE id = ".$id);	
+	}
+	
+	
+	
+	public function unPaid($id)
+	{
+		return dbQuery("UPDATE tbl_order SET isPaid = 0 WHERE id = ".$id);	
 	}
 	
 }//--- End Class

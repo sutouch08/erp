@@ -35,9 +35,9 @@ else if( isset( $_GET['edit'] ) )
 {
 	include 'include/order/order_edit.php';
 }
-else if( isset( $_GET['view_detail'] ) )
+else if( isset( $_GET['view_stock'] ) )
 {
-	include 'include/order/order_detail.php';
+	include 'include/order/order_view_stock.php';
 }
 else
 {

@@ -59,4 +59,19 @@ function getBankAccount($id_acc)
 	$qs = dbQuery("SELECT * FROM tbl_bank_account WHERE id_account = ".$id_acc);
 	return dbFetchArray($qs);	
 }
+
+
+function selectBankAccountNo($id='')
+{
+	$sc = '<opton value="">โปรดเลือก</option>';
+	$acc = new bank_account();
+	$qs = $acc->getData();
+	while( $rs = dbFetchObject($qs) )
+	{
+		$sc .= '<option value="'.$rs->id_account.'" '.isSelected($id, $rs->id_account).'>'.$rs->acc_no.'</option>';
+	}
+	return $sc;
+}
+
+
 ?>
