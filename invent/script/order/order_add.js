@@ -33,9 +33,6 @@ function saveOrder(id){
 			if( rs == 'success' ){
 				swal({ title: 'Saved', type: 'success', timer: 1000 });
 				setTimeout(function(){ goEdit(id) }, 1200);	
-			}else if( rs =='credit limited'){
-				
-				
 			}else{
 				swal("Error ! ", rs , "error");
 			}

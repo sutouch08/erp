@@ -12,12 +12,16 @@ if( isset( $_GET['addNew'] ) )
 }
 
 
+
+
 //----- 	บันทึกเอกสารเปลี่ยนสถานะ เป็นบันทึกแล้ว
 //-----	ถ้ามีเครดิตเทอม จะตัดยอดเครดิตด้วย
 if( isset( $_GET['saveOrder'] ) )
 {
 	include 'order/save_order.php';
 }
+
+
 
 
 
@@ -31,6 +35,8 @@ if( isset( $_GET['updateOrder'] ) )
 
 
 
+
+
 //----- แก้ไขส่วนลดโดยพนักงาน และมีผู้อนุมัติการแก้ไข
 if( isset( $_GET['updateEditDiscount'] ) )
 {
@@ -38,11 +44,15 @@ if( isset( $_GET['updateEditDiscount'] ) )
 }
 
 
+
+
 //---- แก้ไขราคาสินค้า โดยพนักงาน และมีผู้อนุมัติการแก้ไข
 if( isset( $_GET['updateEditPrice'] ) )
 {
 	include 'order/edit_price.php';	
 }
+
+
 
 
 //----		เพิ่มรายการสินค้าเข้าออเดอร์พร้อมคำนวณส่วนลดจากนโยบายส่วนลด
@@ -53,11 +63,15 @@ if( isset( $_GET['addToOrder'] ) )
 
 
 
+
+
 //----- Delete detail row
 if( isset( $_GET['removeDetail'] ) )
 {
 	include 'order/delete_detail.php';
 }
+
+
 
 
 //----		Attribute Grid By Search box
@@ -81,6 +95,8 @@ if( isset( $_GET['getProductGrid'] ) && isset( $_GET['pdCode'] ) )
 	}
 	echo $sc;
 }
+
+
 
 
 //----- Attribute Grid By Clicking image
@@ -194,69 +210,7 @@ if( isset( $_GET['searchProducts'] ) && isset( $_REQUEST['term'] ) )
 //------------------------- แจ้งโอนเงินพร้อมแนบไฟล์หลักฐาน  ------------//
 if( isset( $_GET['confirmPayment'] ) )
 {
-	require "../function/bank_helper.php";
-	$sc 			= 'fail';
-	$file 			= isset( $_FILES['image'] ) ? $_FILES['image'] : FALSE;
-	$id_order 		= $_POST['id_order'];
-	$id_acc			= $_POST['id_account'];
-	$accNo			= getAccountNo($id_acc);
-	$date			= $_POST['payDate'];
-	$h				= $_POST['payHour'];
-	$m				= $_POST['payMin'];
-	$dhm			= $date .' '.$h.':'.$m.':00';
-	$payDate		= dbDate($dhm, TRUE);
-	$date_add 		= date('Y-m-d H:i:s');
-	$order			= new order($id_order);
-	
-	$id_emp			= getCookie('user_id');
-	//-------  บันทึกรายการ -----//
-	$payment = new payment(); 
-	$arr = array(
-				"id_order"	=> $order->id,
-				"order_amount"	=> $_POST['orderAmount'],
-				"pay_amount"	=> $_POST['payAmount'],
-				"paydate"	=> $payDate,
-				"id_account"	=> $id_acc,
-				"acc_no"		=> $accNo,
-				"id_employee"	=> $id_emp,
-				"date_add"	=> $date_add
-			);
-	
-	if( $payment->isExists($order->id) === FALSE )
-	{
-		$cs = $payment->add($arr);
-	}
-	else
-	{
-		$cs = $payment->update($order->id, $arr);	
-	}
-	
-	if( $cs )
-	{
-		$order->stateChange($order->id, 2); //--- แจ้งชำระเงิน
-		$sc = 'success';
-	}
-	
-	//----- Upload image -----//	
-	if( $file !== FALSE )
-	{	
-		$image_path 	= "../../img/payment/";
-		$image 			= new upload($file);
-		if($image->uploaded)
-		{
-			$image->file_new_name_body	= $order->reference;
-			$image->file_overwrite 			= TRUE;
-			$image->auto_create_dir 		= FALSE;
-			$image->image_convert 			= "jpg";
-			$image->process($image_path);
-			if( ! $image->processed)
-			{
-				$sc = $image->error;
-			}
-		}
-		$image->clean();
-	}
-	echo $sc;
+	include 'order/confirm_payment.php';
 }
 
 
@@ -277,6 +231,9 @@ if( isset( $_GET['updateShippingFee'] ) )
 
 
 
+
+
+
 if( isset( $_GET['updateServiceFee'] ) )
 {
 	$sc = 'fail';
@@ -292,10 +249,14 @@ if( isset( $_GET['updateServiceFee'] ) )
 }
 
 
+
+
 if( isset( $_GET['getSummary'] ) )
 {
 	include 'order/order_summary.php';
 }
+
+
 
 
 if( isset( $_GET['getPayAmount'] ) )
@@ -439,6 +400,16 @@ if( isset( $_GET['setDefaultAddress'] ) )
 	$sc = $add->setDefault($id);
 	echo $sc === TRUE ? 'success' : 'fail';		
 }
+
+
+
+//--- เปลี่ยนสถานะของออเดอร์โดยคน
+if( isset( $_GET['stateChange']))
+{
+	include 'order/order_state.php';
+}
+
+
 
 
 

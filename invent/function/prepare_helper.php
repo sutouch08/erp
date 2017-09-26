@@ -1,59 +1,48 @@
-<?php 
-function prepareOrder($id_order)
+<?php
+
+function stockInZone($id_pd)
 {
-	$id_user = getCookie("user_id");
-	$qs = dbQuery("SELECT id_prepare, id_employee FROM tbl_prepare WHERE id_order = ".$id_order);
+	$sc = "";
+	$stock = new stock();
+	$qs = $stock->stockInZone($id_pd);
 	if( dbNumRows($qs) > 0 )
 	{
-		list( $id_prepare, $id_emp ) = dbFetchArray($qs);
-		if( $id_emp == -1 )
+		while( $rs = dbFetchObject($qs))
 		{
-			$qr = dbQuery("UPDATE tbl_prepare SET id_employee = ".$id_user." WHERE id_prepare = ".$id_prepare);
+			$sc .= $rs->name .' : '. number($rs->qty).' <br/>';
 		}
 	}
-	else
-	{
-		$qr = dbQuery("INSERT INTO tbl_prepare( id_order, id_employee, start ) VALUES ( ".$id_order.", ".$id_user.", '".date("Y-m-d H:i:s")."')");	
-	}
+
+	return $sc;
 }
 
-function getStockInZone($id_zone, $id_pa)
+
+
+
+
+function prepareFromZone($id_order, $id_pd)
 {
-	$sc = 0;
-	$qs = dbQuery("SELECT qty FROM tbl_stock WHERE id_zone = ".$id_zone." AND id_product_attribute = ".$id_pa);
-	if( dbNumRows($qs) > 0 )
+	$sc = "";
+	$prepare = new prepare();
+	$qs = $prepare->prepareFromZone($id_order, $id_pd);
+	if( dbNumRows($qs) > 0)
 	{
-		list( $sc ) = dbFetchArray($qs);
+		while($rs = dbFetchObject($qs))
+		{
+			$sc .= $rs->name.' : '.number($rs->qty).'<br/>';
+		}
 	}
 	return $sc;
 }
 
-function getBufferQty($id_order, $id_pa)
+
+
+//---- 	ออเดอร์ที่กำลังจัดเป็นของฉันหรือเปล่า
+function isMine($id_order)
 {
-	$sc = 0;
-	$qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_buffer WHERE id_order = ".$id_order." AND id_product_attribute = ".$id_pa." GROUP BY id_product_attribute");
-	if( dbNumRows($qs) == 1 )
-	{
-		list( $sc ) = dbFetchArray($qs);	
-	}
-	return $sc;
+	$id_emp	= getCookie('user_id');
+	$state = new state();
+	echo $state->hasEmployeeState($id_order, 4, $id_emp);
 }
-
-function setValidDetail($id_order, $id_pa, $valid)
-{
-	return dbQuery("UPDATE tbl_order_detail SET valid_detail = ".$valid." WHERE id_order = ".$id_order." AND id_product_attribute = ".$id_pa);	
-}
-
-function setValidAllDetail($id_order, $valid)
-{
-	return dbQuery("UPDATE tbl_order_detail SET valid_detail = ".$valid." WHERE id_order = ".$id_order);	
-}
-
-function endPrepare($id_order)
-{
-	return  dbQuery("UPDATE tbl_prepare SET end = '".date("Y-m-d H:i:s")."' WHERE id_order = ".$id_order);	
-}
-
-
 
 ?>

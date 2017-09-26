@@ -4,7 +4,7 @@
 	$payment 	= new payment_method($order->id_payment);
 	$isEnought 	= TRUE;  //--- เอาไว้ตรวจสอบเครดิต ถ้าไม่พอจะเป็น FALSE;
 	$sc 		= FALSE; 
-	$approv		= isset($_POST['approv']) ? $_POST['approv'] : FALSE;
+
 
 	startTransection();
 	//--- ถ้าเป็นการสั่งซื้อแบบเครดิตเทอม ให้คำนวณเครดิตคงเหลือก่อนบันทึก
@@ -16,7 +16,7 @@
 	
 	if( $isEnought === FALSE && $approv === FALSE )
 	{
-		$message = 'credit limited';
+		$message = 'วงเงินคงเหลือไม่เพียงพอ';
 		$sc = FALSE;
 	}
 	else

@@ -19,7 +19,7 @@ public function add(array $ds)
 		}
 		$sc = dbQuery("INSERT INTO tbl_barcode (".$fields.") VALUES (".$values.")");
 	}
-	
+
 	return $sc;
 }
 
@@ -34,19 +34,21 @@ public function update($id, array $ds)
 		foreach( $ds as $field => $value )
 		{
 			$set .= $i== 1 ? $field ." = '".$value."'" : ", ".$field . " = '".$value."'";
-			$i++;	
+			$i++;
 		}
-		$sc = dbQuery("UPDATE tbl_barcode SET ".$set." WHERE id = '".$id."'");		
+		$sc = dbQuery("UPDATE tbl_barcode SET ".$set." WHERE id = '".$id."'");
 	}
-	
+
 	return $sc;
 }
-	
-	
+
+
 public function delete($id)
 {
-	return dbQuery("DELETE FROM tbl_barcode WHERE id = '" .$id."'");	
+	return dbQuery("DELETE FROM tbl_barcode WHERE id = '" .$id."'");
 }
+
+
 
 
 public function isExists($id)
@@ -57,8 +59,10 @@ public function isExists($id)
 	{
 		$sc = TRUE;
 	}
-	return $sc;		
+	return $sc;
 }
+
+
 
 
 public function getBarcode($id_pd)
@@ -68,6 +72,18 @@ public function getBarcode($id_pd)
 	if( dbNumRows($qs) == 1 )
 	{
 		list( $sc ) = dbFetchArray($qs);
+	}
+	return $sc;
+}
+
+
+public function getDetail($barcode)
+{
+	$sc = FALSE;
+	$qs = dbQuery("SELECT * FROM tbl_barcode WHERE barcode = '".$barcode."'");
+	if( dbNumRows($qs) == 1 )
+	{
+		$sc = dbFetchObject($qs);
 	}
 	return $sc;
 }

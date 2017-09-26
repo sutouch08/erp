@@ -123,7 +123,7 @@ switch($page){
 			$pageTitle = "ฝากขาย";
 			break;
 		case "prepare":
-			$content = "product_prepare.php";
+			$content = "prepare.php";
 			$pageTitle = "จัดสินค้า";
 			break;
 		case "qc":

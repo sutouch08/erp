@@ -6,7 +6,7 @@
 		public $barcode;
 		public $name;
 		public $id_warehouse;
-				
+
 		public function __construct($id='')
 		{
 			if( is_numeric($id) )
@@ -22,8 +22,8 @@
 				}
 			}
 		}
-		
-		
+
+
 		public function add(array $ds)
 		{
 			$fields 	= '';
@@ -48,8 +48,8 @@
 				return FALSE;
 			}
 		}
-		
-		
+
+
 		public function update($id, array $ds)
 		{
 			$set = '';
@@ -62,22 +62,22 @@
 				$i++;
 			}
 			return dbQuery("UPDATE tbl_zone SET ".$set." WHERE id_zone = ".$id);
-		}		
-		
-		
+		}
+
+
 		public function deleteZone($id)
 		{
 			if( $this->isZoneEmpty($id) === TRUE && $this->isExistsTransection($id) === FALSE )
 			{
-				return $this->actionDelete($id);	
+				return $this->actionDelete($id);
 			}
 			else
 			{
 				return FALSE;
 			}
 		}
-		
-		
+
+
 		public function isZoneEmpty($id)
 		{
 			$sc = TRUE;
@@ -88,8 +88,8 @@
 			}
 			return $sc;
 		}
-		
-		
+
+
 		public function isExistsTransection($id)
 		{
 			$sc = FALSE;
@@ -108,16 +108,18 @@
 				$sc = TRUE;
 			}
 			return $sc;
-		}		
-		
-		
-		
+		}
+
+
+
 		private function actionDelete($id)
 		{
-			return dbQuery("DELETE FROM tbl_zone WHERE id_zone = ".$id);	
+			return dbQuery("DELETE FROM tbl_zone WHERE id_zone = ".$id);
 		}
-		
-		
+
+
+
+
 		public function getWarehouseId($id)
 		{
 			$sc = "";
@@ -128,8 +130,23 @@
 			}
 			return $sc;
 		}
-		
-		
+
+
+
+
+		public function getId($barcode)
+		{
+			$sc = FALSE;
+			$qs = dbQuery("SELECT id_zone FROM tbl_zone WHERE barcode_zone ='".$barcode."'");
+			if( dbNumRows($qs) == 1 )
+			{
+				list( $sc ) = dbFetchArray($qs);
+			}
+			return $sc;
+		}
+
+
+
 		public function getName($id)
 		{
 			$sc = "";
@@ -140,18 +157,25 @@
 			}
 			return $sc;
 		}
-		
-		
+
+
+
+
+
 		public function isAllowUnderZero($id_zone)
 		{
 			$sc = FALSE;
-			$qs = dbQuery("SELECT id_zone FROM tbl_zone AS z JOIN tbl_warehouse AS w ON z.id_warehouse = w.id WHERE z.id_zone = ".$id_zone." AND w.allow_under_zero = 1");	
+			$qs = dbQuery("SELECT id_zone FROM tbl_zone AS z JOIN tbl_warehouse AS w ON z.id_warehouse = w.id WHERE z.id_zone = ".$id_zone." AND w.allow_under_zero = 1");
 			if( dbNumRows($qs) > 0 )
 			{
-				$sc = TRUE;	
+				$sc = TRUE;
 			}
 			return $sc;
 		}
+
+
+
+
 	} 	//----- End class
 
 

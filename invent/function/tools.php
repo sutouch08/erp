@@ -1,4 +1,4 @@
-<?php  
+<?php
 //----ใช้สำหรับรับค่าจาก searchForm ต่างๆ
 function getFilter($postName, $cookieName, $defaultValue = "")
 {
@@ -20,12 +20,12 @@ function employee_in($txt)
 		{
 			$in .= $rs['id_employee'];
 			if( $i != $row ){ $in .= ', '; }
-			$i++;	
+			$i++;
 		}
 	}
 	else
 	{
-		$in = FALSE; 
+		$in = FALSE;
 	}
 	return $in;
 }
@@ -45,7 +45,7 @@ function createCookie($name, $value, $time = 3600, $path = '/')
 //----------------------------  ลบ cookie
 function deleteCookie($name, $path = '/')
 {
-	return setcookie($name, '', time()-3600, $path);	
+	return setcookie($name, '', time()-3600, $path);
 }
 
 
@@ -56,7 +56,7 @@ function getCookie($name)
 {
 	if( isset( $_COOKIE[$name] ) )
 	{
-		return $_COOKIE[$name];	
+		return $_COOKIE[$name];
 	}
 	else
 	{
@@ -85,7 +85,7 @@ function setError($name, $value)
 {
 	session_start();
      $_SESSION[$name] = $value;
-     session_write_close();   
+     session_write_close();
 }
 
 
@@ -96,9 +96,9 @@ function getError($name)
 {
 	 session_start();
      $var = isset( $_SESSION[$name] ) ? $_SESSION[$name] : FALSE;
-     session_write_close(); 
+     session_write_close();
 	 unset($_SESSION[$name]);
-     return $var; 
+     return $var;
 }
 
 
@@ -117,7 +117,7 @@ function checkError()
 	 }
 	 unset($_SESSION[$name]);
 	}
-	session_write_close(); 
+	session_write_close();
 }
 
 
@@ -132,6 +132,12 @@ function ac_format($number)
 }
 
 
+
+
+function number($number, $digit = 0)
+{
+	return number_format($number, $digit);
+}
 
 
 function DateDiff($strDate1,$strDate2)
@@ -168,8 +174,8 @@ function thaiDateTime($date='')
 		list($color) = dbFetchArray($sql);
 		return $color;
 	}
-	
-	
+
+
 
 
 function selectEmployeeGroup($selected="", $title = "------ เลือก ------"){
@@ -180,7 +186,7 @@ function selectEmployeeGroup($selected="", $title = "------ เลือก ----
 		$i = 0;
 		while($i<$row){
 			list($id_profile, $profile_name) = dbFetchArray($sql);
-			echo"<option value='$id_profile' "; if($id_profile == $selected){ echo"selected='selected'";} echo">$profile_name</option>"; 
+			echo"<option value='$id_profile' "; if($id_profile == $selected){ echo"selected='selected'";} echo">$profile_name</option>";
 			$i++;
 		}
 }
@@ -219,15 +225,15 @@ function orderStateList($id_order)
 	$id_profile = getCookie('profile_id');
     $pm 		= checkAccess($id_profile, $id_tab);
 	$edit 		= $pm['edit'];
-	$delete 	= $pm['delete'];	
+	$delete 	= $pm['delete'];
 	$sc 		= '<option value="0"> ---- สถานะ ---- </option>';
 	$sc 		.= $edit == 1 ? '<option value="1">รอการชำระเงิน</option>' : '';
 	$sc 		.= $edit == 1 ? '<option value="3">รอจัดสินค้า</option>' : '';
 	$sc 		.= $delete == 1 ? '<option value="8">ยกเลิก</option>' : '';
-	
-	return $sc;	
+
+	return $sc;
 }
-	
+
 
 
 function reorder($p_from, $p_to){
@@ -260,7 +266,7 @@ function employee_name($id_employee){
 
 
 //-----------------  คืนยอดงบประมาณคงเหลือ  ---------------//
-function return_budget($id_order) 
+function return_budget($id_order)
 {
 	$sc 		= TRUE;
 	$order	= new order($id_order);
@@ -272,38 +278,38 @@ function return_budget($id_order)
 	{
 		$amount = $order->getCurrentOrderAmount($id_order);
 	}
-	
+
 	if($order->role == 7 )
-	{ 
+	{
 		require_once 'support_helper.php';
 		$id_budget	= get_id_support_budget_by_order($id_order);
 		$balance 	= get_support_balance($id_budget);
 		$balance 	+= $amount;
-		
+
 		//-----  ปรับปรุงยอดคงเหลือในงบประมาณ
-		$ra	= update_support_balance($id_budget, $balance); 
-		
+		$ra	= update_support_balance($id_budget, $balance);
+
 		//----- ปรับปรุงยอดออเดอร์ใน order_sponsor
-		$rb	= update_order_support_amount($id_order, 0.00 );			
-		
-		if( ! $ra OR ! $rb ){ $sc = FALSE; }		
+		$rb	= update_order_support_amount($id_order, 0.00 );
+
+		if( ! $ra OR ! $rb ){ $sc = FALSE; }
 	}
-	
+
 	if($order->role == 4 )
 	{
 		require_once "sponsor_helper.php";
 		$id_budget	= get_id_sponsor_budget_by_order($id_order);
 		$balance 	= get_sponsor_balance($id_budget);
 		$balance 	+= $amount;
-		
+
 		//-----  ปรับปรุงงบคงเหลือ
-		$ra	= update_sponsor_balance($id_budget, $balance);	
-		
-		//-----  ปรับปรุงยอดออเดอร์ใน order_sponsor	
-		$rb	= update_order_sponsor_amount($id_order, 0.00 );						
-		
+		$ra	= update_sponsor_balance($id_budget, $balance);
+
+		//-----  ปรับปรุงยอดออเดอร์ใน order_sponsor
+		$rb	= update_order_sponsor_amount($id_order, 0.00 );
+
 		if( ! $ra OR ! $rb ){ $sc = FALSE; }
-	}	
+	}
 	return $sc;
 }
 
@@ -312,19 +318,19 @@ function return_budget($id_order)
 
 
 //----------------------  ตัดยอดงบประมาณตามออเดอร์ที่เปลี่ยนสถานะจากยกเลิกเป็นสถานะ รอชำระเงิน หรือ รอจัดสินค้า
-function apply_budget($id_order) 					
+function apply_budget($id_order)
 {
 	$sc 		= TRUE;
 	$order	 = new order($id_order);
 	if($order->role == 7 )
-	{ 
+	{
 		$id_budget	= get_id_support_budget_by_order($id_order);
 		$balance 	= get_support_balance($id_budget);
 		$amount 		= $order->getCurrentOrderAmount($id_order);
 		$balance 	+= $amount * -1;
-		$sc 			= update_support_balance($id_budget, $balance); 
+		$sc 			= update_support_balance($id_budget, $balance);
 	}
-	
+
 	if($order->role == 4 )
 	{
 		$id_budget 	= get_id_sponsor_budget_by_order($id_order);
@@ -332,7 +338,7 @@ function apply_budget($id_order)
 		$amount 		= $order->getCurrentOrderAmount($id_order);
 		$balance 	+= $amount * -1;
 		$sc 			= update_sponsor_balance($id_budget, $balance);
-	}	
+	}
 	return $sc;
 }
 
@@ -358,7 +364,7 @@ function profile_name($id_profile)
 
 function clearToken($token)
 {
-	setcookie("file_download_token", $token, time() +3600,"/");	
+	setcookie("file_download_token", $token, time() +3600,"/");
 }
 
 ?>

@@ -24,6 +24,23 @@ function stateName($state, $status)
 
 
 
+//---	ชื่อของ role
+function roleName($role)
+{
+	$sc = "";
+	$order = new order();
+	$qs = $order->roleName($role);
+	if( dbNumRows($qs) == 1 )
+	{
+		list( $sc ) = dbFetchArray($qs);
+	}
+	return $sc;	
+}
+
+
+
+
+
 function getSpace($amount, $length)
 {
 	$sc = '';
@@ -60,7 +77,7 @@ function selectMin($se = '' )
 	{
 		$ix = $i < 10 ? '0'.$i : $i;
 		$sc .= '<option value="'.$ix.'" '.isSelected($se, $ix).'>'.$ix.'</option>';
-		$i++;	
+		$i++;
 	}
 	return $sc;
 }

@@ -17,7 +17,7 @@
 		</div>
 	</div>
 </div>
-    
+
 </form>
 
 
@@ -43,8 +43,8 @@
             </li>
         </ul>
 </div>
-              
-              
+
+
 <script>
 function Delete(id, name){
 	swal({
@@ -52,7 +52,7 @@ function Delete(id, name){
 		text: "ต้องการลบ '"+name+"' หรือไม่ ?",
 		type: "warning",
 		showCancelButton: true,
-		confirmButtonColor: "#DD6B55",
+		confirmButtonColor: "#FA5858",
 		confirmButtonText: 'ใช่, ฉันต้องการลบ',
 		cancelButtonText: 'ยกเลิก',
 		closeOnConfirm: false
@@ -72,6 +72,4 @@ function Delete(id, name){
 			});
 	});
 }
-</script>                   
-
-
+</script>

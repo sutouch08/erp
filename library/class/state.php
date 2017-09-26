@@ -1,8 +1,8 @@
-<?php 
-class state 
+<?php
+class state
 {
 	public function __construct(){}
-	
+
 	//--- 1 = รอชำระเงิน
 	//--- 2 = แจ้งชำระเงิน
 	//--- 3 = รอจัดสินค้า
@@ -18,19 +18,27 @@ class state
 	{
 		return dbQuery("INSERT INTO tbl_order_state (id_order, id_state, id_employee) VALUES (".$id_order.", ".$id_state.", ".$id_employee.")");
 	}
-	
+
+
+
+
+
 	public function getName($id)
 	{
 		$sc = 1;
 		$qs = dbQuery("SELECT name FROM tbl_state WHERE id = ".$id);
 		if( dbNumRows($qs) == 1 )
 		{
-			list( $sc ) = dbFetchArray($qs);	
+			list( $sc ) = dbFetchArray($qs);
 		}
 		return $sc;
 	}
-	
-	
+
+
+
+
+
+
 	public function getColor($id)
 	{
 		$sc = "";
@@ -41,8 +49,12 @@ class state
 		}
 		return $sc;
 	}
-	
-	
+
+
+
+
+
+
 	public function stateColor($id)
 	{
 		$sc = "";
@@ -54,16 +66,23 @@ class state
 		}
 		return $sc;
 	}
-	
+
+
+
+
+
+
 	public function getOrderStateList($id_order)
 	{
 		$qr = "SELECT o.id_employee, o.date_upd, s.name, s.color, s.font FROM tbl_order_state AS o ";
 		$qr .= "JOIN tbl_state AS s ON o.id_state = s.id WHERE o.id_order = ".$id_order." ORDER BY o.date_upd ASC, s.id ASC";
-		return dbQuery($qr);	
+		return dbQuery($qr);
 	}
-	
-	
-	
+
+
+
+
+
 	public function hasState($id_order)
 	{
 		$sc = FALSE;
@@ -74,6 +93,21 @@ class state
 		}
 		return $sc;
 	}
-	
-	
+
+
+
+	public function hasEmployeeState($id_order, $id_state, $id_emp)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT * FROM tbl_order_state WHERE id_order = ".$id_order." AND id_state = ".$id_state." AND id_employee = ".$id_emp);
+		if( dbNumRows($qs) > 0)
+		{
+			$sc = TRUE;
+		}
+
+		return $sc;
+	}
+
+
+
 }//--- end class
