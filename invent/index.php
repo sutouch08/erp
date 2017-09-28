@@ -127,18 +127,10 @@ switch($page){
 			$pageTitle = "จัดสินค้า";
 			break;
 		case "qc":
-			$content = "product_qc.php";
+			$content = "qc.php";
 			$pageTitle = "ตรวจสินค้า";
 			break;
-		case "qc2":
-			if($fast_qc){
-				$content = "product_qc2.php";
-				$pageTitle = "ตรวจสินค้า";
-			}else{
-				$content = "product_qc.php";
-				$pageTitle = "ตรวจสินค้า";
-			}
-			break;
+		
 		case "bill":
 			$content = "bill.php";
 			$pageTitle = "รายการรอเปิดบิล";
@@ -553,11 +545,11 @@ switch($page){
 			$content = 'style.php';
 			$pageTitle = 'เพิ่ม/แก้ไข รุ่นสินค้า';
 			break;
-		case 'kind' : 
+		case 'kind' :
 			$content = 'product_kind.php';
 			$pageTitle = 'เพิ่ม/แก้ไข ประเภทสินค้า';
 			break;
-		case 'type' : 
+		case 'type' :
 			$content = 'product_type.php';
 			$pageTitle = 'เพิ่ม/แก้ไข ชนิดสินค้า';
 			break;
@@ -655,7 +647,7 @@ switch($page){
 			$content = "customer_area.php";
 			$pageTitle = "เพิ่ม/แก้ไข เขตลูกค้า";
 			break;
-		case "customer_credit" : 
+		case "customer_credit" :
 			$content = "customer_credit.php";
 			$pageTitle = "วงเงินเครดิตคงเหลือ";
 			break;
@@ -703,7 +695,7 @@ switch($page){
 			$content = "payment_method.php";
 			$pageTitle = "ช่องทางการชำระเงิน";
 			break;
-		case "branch" : 
+		case "branch" :
 			$content = "branch.php";
 			$pageTitle = "สาขา";
 			break;

@@ -90,12 +90,18 @@ class prepare
 
 
 
+
+    //--- จัดสินค้ามาจากที่ไหนบ้าง
     public function prepareFromZone($id_order, $id_pd)
     {
       $qr = "SELECT zone_name AS name, qty FROM tbl_prepare JOIN tbl_zone ON tbl_prepare.id_zone = tbl_zone.id_zone ";
       $qr .= "WHERE id_order = ".$id_order." AND id_product = '".$id_pd."'";
       return dbQuery($qr);
     }
+
+
+
+
 
 
 

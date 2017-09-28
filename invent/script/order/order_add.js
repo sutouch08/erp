@@ -10,12 +10,13 @@ function addToOrder(){
 			type:"POST", cache:"false", data: $("#orderForm").serializeArray(),
 			success: function(rs){
 				load_out();
+				var rs = $.trim(rs);
 				if( rs == 'success' ){
 					swal({ title: 'success', type: 'success', timer: 1000 });
 					$("#btn-save-order").removeClass('hide');
 					updateDetailTable(); //--- update list of order detail
 				}else{
-					swal("Error", rs, "error");	
+					swal("Error", rs, "error");
 				}
 			}
 		});
@@ -32,7 +33,7 @@ function saveOrder(id){
 			var rs = $.trim(rs);
 			if( rs == 'success' ){
 				swal({ title: 'Saved', type: 'success', timer: 1000 });
-				setTimeout(function(){ goEdit(id) }, 1200);	
+				setTimeout(function(){ goEdit(id) }, 1200);
 			}else{
 				swal("Error ! ", rs , "error");
 			}
@@ -46,9 +47,9 @@ function countInput(){
 	var qty = 0;
 	$(".order-grid").each(function(index, element) {
         if( $(this).val() != '' ){
-			qty++;	
+			qty++;
 		}
-    });	
+    });
 	return qty;
 }
 
@@ -63,7 +64,7 @@ var order_date;
 function getEdit(){
 	$(".input-header").removeAttr('disabled');
 	$("#btn-edit-order").addClass('hide');
-	$("#btn-update-order").removeClass('hide');	
+	$("#btn-update-order").removeClass('hide');
 	customer_id = $("#id_customer").val();
 	channels_id = $("#channels").val();
 	payment_id = $("#paymentMethod").val();
@@ -82,13 +83,13 @@ function validUpdate(id){
 		swal("วันที่ไม่ถูกต้อง");
 		return false;
 	}
-	
+
 	//--- ตรวจสอบลูกค้า
 	if( id_customer == "" || customer == "" ){
 		swal("ชื่อลูกค้าไม่ถูกต้อง");
 		return false;
 	}
-	
+
 	//--- ตรวจสอบความเปลี่ยนแปลงที่สำคัญ
 	if( (date_add != order_date) || ( id_customer != customer_id ) || ( id_channels != channels_id ) || ( id_payment != payment_id ) ){
 		var recal = 1; //--- ระบุว่าต้องคำนวณส่วนลดใหม่
@@ -114,7 +115,7 @@ function validUpdate(id){
 					updateOrder(recal);
 				}
 		});
-	
+
 	}else{
 		var recal = 0; //---- ระบุว่าไม่ต้องคำนวณส่วนลดใหม่
 		updateOrder(recal);
@@ -132,7 +133,7 @@ function updateOrder(recal){
 	var remark = $("#remark").val();
 	if(recal == 1 ){
 		data = {
-					 "id_order" : id_order, 
+					 "id_order" : id_order,
 					 "date_add"	: date_add,
 					 "id_customer" : id_customer,
 					 "id_channels" : id_channels,
@@ -143,11 +144,11 @@ function updateOrder(recal){
 		data = { "id_order" : id_order, "remark" : remark };
 	}
 	load_in();
-	
+
 	$.ajax({
 		url:"controller/orderController.php?updateOrder&recal="+recal,
-		type:"POST", 
-		cache:"false", 
+		type:"POST",
+		cache:"false",
 		data: data,
 		success: function(rs){
 			load_out();
@@ -156,7 +157,7 @@ function updateOrder(recal){
 				swal({title: 'Done !', type: 'success', timer: 1000 });
 				setTimeout(function(){ window.location.reload(); }, 1200);
 			}else{
-				swal({ title: "Error!", text: rs, type: 'error'});	
+				swal({ title: "Error!", text: rs, type: 'error'});
 			}
 		}
 	});
@@ -166,7 +167,7 @@ function updateOrder(recal){
 
 
 function recalDiscount(){
-	updateOrder(1);	
+	updateOrder(1);
 }
 
 
@@ -174,33 +175,33 @@ function recalDiscount(){
 //----- เพิ่มเลขที่เอกสารใหม่
 function addNew(){
 	var dateAdd 		= $("#dateAdd").val();
-	var id_customer 	= $("#id_customer").val();	
+	var id_customer 	= $("#id_customer").val();
 	var customer 		= $("#customer").val();
 	var channels 		= $("#channels").val();
 	var payment 		= $("#paymentMethod").val();
 	var remark			= $("#remark").val();
 	var isOnline			= $("#isOnline").val();
 	var customerName = $("#onlineCustomer").length == 1 ? $("#onlineCustomer").val() : '';
-	
+
 	if( ! isDate(dateAdd) ){
 		swal("วันที่ไม่ถูกต้อง");
 		return false;
 	}
-	
+
 	if( id_customer == "" || customer == "" ){
 		swal("ชื่อลูกค้าไม่ถูกต้อง");
 		return false;
 	}
-	
+
 	$.ajax({
 		url:"controller/orderController.php?addNew",
-		type:"POST", 
-		cache:"false", 
-		data:{ 
-				"dateAdd" : dateAdd, 
-				"id_customer" : id_customer, 
-				"channels" : channels, 
-				"paymentMethod" : payment, 
+		type:"POST",
+		cache:"false",
+		data:{
+				"dateAdd" : dateAdd,
+				"id_customer" : id_customer,
+				"channels" : channels,
+				"paymentMethod" : payment,
 				"remark" : remark,
 				"isOnline" : isOnline,
 				"customerName" : customerName
@@ -210,11 +211,11 @@ function addNew(){
 			if( ! isNaN( parseInt(rs) ) ){
 				goAddDetail(rs);
 			}else{
-				swal("ข้อผิดพลาด", rs, "error");	
+				swal("ข้อผิดพลาด", rs, "error");
 			}
 		}
 	});
-	
+
 }
 
 
@@ -243,7 +244,7 @@ $("#customer").autocomplete({
 			$("#customer").val(name);
 		}else{
 			$("#id_customer").val('');
-			$(this).val('');	
+			$(this).val('');
 		}
 	}
 });
