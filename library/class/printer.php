@@ -1,7 +1,7 @@
 <?php
 class printer
 {
-public $page;	
+public $page;
 public $total_page		= 1;
 public $current_page	= 1;
 public $page_width 	= 200;
@@ -20,36 +20,46 @@ public $title_size 		= "h4";
 public $content_border = 2;
 public $pattern			= array();
 public $footer			= true;
+public $custom_header = '';
 
 public $header_row	= array();
 
 public $sub_header	= "";
-private $loader = "<script>	
-						var load_time;  function load_in(){ $('#xloader').modal('show'); console.log('load_in'); var time = 0; 
+private $loader = "<script>
+						var load_time;  function load_in(){ $('#xloader').modal('show'); console.log('load_in'); var time = 0;
 						load_time = window.setInterval(function(){ if(time < 90){ time++; }else{ time += 0.01; } $('#preloader').css('width', time+'%');}, 1000); }
 						function load_out(){ $('#xloader').modal('hide'); window.clearInterval(load_time); $('#preloader').css('width', '0%'); console.log('load_out'); }
 						</script>";
+
+
 
 public function __construct()
 {
 	return true;
 }
 
+
+
+
+
 public function config(array $data)
 {
 	foreach($data as $key=>$val)
 	{
-		$this->$key = $val;	
+		$this->$key = $val;
 	}
 	if(!$this->footer)
 	{
 		$this->row += $this->footer_row;
-		$this->footer_row = 0;	
+		$this->footer_row = 0;
 	}
 	$this->row -= ($this->sub_total_row + $this->ex_row + $this->header_rows);
 	$this->total_page = ceil($this->total_row/$this->row);
 	return true;
 }
+
+
+
 
 public function doc_header($pageTitle = 'print pages')
 {
@@ -61,13 +71,14 @@ public function doc_header($pageTitle = 'print pages')
 	$header .= "	<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
 	$header .= "	<link rel='icon' href='../favicon.ico' type='image/x-icon' />";
 	$header .= "	<title>". $pageTitle ."</title>";
-	$header .= "	<link href='".WEB_ROOT."library/css/bootstrap.css' rel='stylesheet'>";
-	$header .= "	<link href='".WEB_ROOT."library/css/font-awesome.css' rel='stylesheet'>";
-	$header .= "	<link href='".WEB_ROOT."library/css/bootflat.min.css' rel='stylesheet'>";
-	$header .= "<link href='".WEB_ROOT."library/css/jquery-ui-1.10.4.custom.min.css' rel='stylesheet'  />";
-	$header .= "<script src='".WEB_ROOT."library/js/jquery.min.js'></script>";
-	$header .= "<script src='".WEB_ROOT."library/js/jquery-ui-1.10.4.custom.min.js'></script>";
-	$header .= "<script src='".WEB_ROOT."library/js/bootstrap.min.js'></script> ";
+	$header .= "	<link href='".WEB_ROOT."library/css/bootstrap.css' rel='stylesheet' />";
+	$header .= "	<link href='".WEB_ROOT."library/css/font-awesome.css' rel='stylesheet' />";
+	$header .= "	<link href='".WEB_ROOT."library/css/bootflat.min.css' rel='stylesheet' />";
+	$header .= "	<link href='".WEB_ROOT."library/css/template.css' rel='stylesheet' />";
+	$header .= "	<link href='".WEB_ROOT."library/css/jquery-ui-1.10.4.custom.min.css' rel='stylesheet'  />";
+	$header .= "	<script src='".WEB_ROOT."library/js/jquery.min.js'></script>";
+	$header .= "	<script src='".WEB_ROOT."library/js/jquery-ui-1.10.4.custom.min.js'></script>";
+	$header .= "	<script src='".WEB_ROOT."library/js/bootstrap.min.js'></script> ";
 	$header .= "	<style> .page_layout{ border: solid 1px #AAA; border-radius:5px; 	} @media print{ 	.page_layout{ border: none; } } 	</style>";
 	$header .= $this->loader;
 	$header .= "	</head>";
@@ -85,44 +96,66 @@ public function doc_header($pageTitle = 'print pages')
 	$header .= "	<script> load_in(); </script>";
 	$header .= "	<div class='hidden-print' style='margin-top:10px; padding-bottom:10px; padding-right:5mm; width:200mm; margin-left:auto; margin-right:auto; text-align:right'>";
 	$header .= "	<button class='btn btn-primary' onclick='print()'><i class='fa fa-print'></i>&nbspพิมพ์</button>";
-	$header .= "	</div><div style='width:100%'>";	
+	$header .= "	</div><div style='width:100%'>";
 	return $header;
 }
+
+
+
+
 
 public function add_title($title)
 {
 	$this->title = $title;
 }
 
-public function set_pattern($pattern) //// กำหนดรูปแบบ CSS ให้กับ td 
+
+
+
+
+
+public function set_pattern($pattern) //// กำหนดรูปแบบ CSS ให้กับ td
 {
-	$this->pattern = $pattern;	
+	$this->pattern = $pattern;
 }
+
+
+
+
+
 
 public function print_sub_total(array $data)
 {
 	$rs = "<table class='table' style='margin-bottom:0px;'>";
 	foreach($data as $value)
-	{	
+	{
 		foreach($value as $val)
 		{
 			$rs .= "<tr style='height:".$this->row_height."mm; line-height:".$this->row_height."mm;'>";
 			$rs .= $val;
 			$rs .= "</tr>";
-		}	
+		}
 	}
 	$rs .= "</table>";
 	return $rs;
 }
+
+
+
+
 
 public function add_subheader($sub_header)
 {
 	$this->sub_header = $this->thead($sub_header);
 }
 
+
+
+
+
 public function thead(array $dataset)
 {
-	$thead	= "<table class='table' style='margin-bottom:-2px;'>"; 
+	$thead	= "<table class='table' style='margin-bottom:-2px;'>";
 	$thead 	.= "<thead>";
 	$thead	.= "<tr style='height:".$this->row_height."mm; line-height:".$this->row_height."mm; font-size:10px;'>";
 	foreach($dataset as $data)
@@ -136,21 +169,34 @@ public function thead(array $dataset)
 	return $thead;
 }
 
+
+
+
+
 public function doc_footer()
 {
 	return "</div><script>$(window).load(function(){ load_out(); });</script></body></html>";
 }
 
+
+
+
+
 public function add_header(array $data)
 {
 	$i = 0;
 	foreach($data as $label => $value)
-	{	
+	{
 		$this->header_row[$i] = array($label => $value);
 		$i++;
 	}
 	return true;
 }
+
+
+
+
+
 
 public function print_header()
 {
@@ -171,6 +217,31 @@ public function print_header()
 	return $header;
 }
 
+
+
+public function add_custom_header($html)
+{
+	$this->custom_header = $html;
+}
+
+
+
+
+public function print_custom_header()
+{
+	$height = ($this->header_rows * $this->row_height) +1;
+	$sc = '<div style="width:'.$this->content_width.'mm; min-height:'.$height.'mm; margin:auto; margin-bottom:2mm; border:solid 2px #ccc; border-radius: 10px;">';
+	$sc .= $this->custom_header;
+	$sc .= '</div>';
+	return $sc;
+}
+
+
+
+
+
+
+
 public function add_content($data)
 {
 	$content = "<div style='width:".$this->content_width."mm; margin:auto; margin-bottom:2mm; border:solid 2px #ccc; border-radius: 10px;' >";
@@ -179,19 +250,36 @@ public function add_content($data)
 	return $content;
 }
 
+
+
+
+
+
+
 public function page_start()
 {
 	$page_break = "page-break-after:always;";
 	if($this->current_page == $this->total_page)
 	{
-		$page_break = ""; 
+		$page_break = "";
 	}
 	return "<div class='page_layout' style='width:".$this->page_width."mm; padding-top:5mm; height:".$this->page_height."mm; margin:auto; ".$page_break."'>"; //// page start
 }
+
+
+
+
+
+
 public function page_end()
 {
-	return "</div><div class='hidden-print' style='height: 5mm; width:".$this->page_width."'></div>";	
+	return "</div><div class='hidden-print' style='height: 5mm; width:".$this->page_width."'></div>";
 }
+
+
+
+
+
 
 public function top_page()
 {
@@ -202,10 +290,16 @@ public function top_page()
 	$top .= "</div>"; /// top end;
 	if( $this->header_rows )
 	{
-		$top .= $this->print_header();
+
+		$top .= $this->custom_header == '' ? $this->print_header() : $this->print_custom_header();
 	}
 	return $top;
 }
+
+
+
+
+
 
 public function content_start()
 {
@@ -214,10 +308,20 @@ public function content_start()
 	return  "<div style='width:".$this->content_width."mm; height:".$height."mm; margin:auto; margin-bottom:2mm; ".$border." border-radius: 10px;'>";
 }
 
+
+
+
+
+
+
 public function content_end()
 {
-	return "</div>";	
+	return "</div>";
 }
+
+
+
+
 
 public function print_row($data)
 {
@@ -239,15 +343,27 @@ public function print_row($data)
 	$row .= "</tr>";
 	return $row;
 }
+
+
+
+
 public function table_start()
 {
-	return $this->sub_header;	
+	return $this->sub_header;
 }
+
+
+
+
 
 public function table_end()
 {
-	return "</table>";	
+	return "</table>";
 }
+
+
+
+
 
 
 public function set_footer(array $data)
@@ -257,7 +373,7 @@ public function set_footer(array $data)
 		return false;
 	}else{
 		$c = count($data);
-		$box_width = 100/$c;	
+		$box_width = 100/$c;
 		$height = $this->footer_row * $this->row_height;
 		$row1 = $this->row_height;
 		$row2 = 5;
@@ -280,11 +396,19 @@ public function set_footer(array $data)
 	}
 }
 
+
+
+
+
 public function print_barcode($barcode, $css = "")
 {
 	if($css == ""){ $css = "width: 100px;"; }
 	return "<img src='".WEB_ROOT."library/class/barcode/barcode.php?text=".$barcode."' style='".$css."' />";
 }
+
+
+
+
 
 }//// end class
 ?>

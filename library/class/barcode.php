@@ -77,6 +77,13 @@ public function getBarcode($id_pd)
 }
 
 
+
+public function getBarcodes($id_pd)
+{
+	return dbQuery("SELECT * FROM tbl_barcode WHERE id_product = '".$id_pd."'");
+}
+
+
 public function getDetail($barcode)
 {
 	$sc = FALSE;

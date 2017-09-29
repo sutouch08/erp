@@ -1,9 +1,7 @@
 <?php
 class box
 {
-  public function __construct(){
-
-  }
+  public function __construct(){ }
 
 
 
@@ -20,6 +18,17 @@ class box
   }
 
 
+
+  public function getBoxNo($id_box)
+  {
+    $sc = 1;
+    $qs = dbQuery("SELECT box_no FROM tbl_box WHERE id_box = ".$id_box);
+    if( dbNumRows($qs) == 1 )
+    {
+      list( $sc ) = dbFetchArray($qs);
+    }
+    return $sc;
+  }
 
 
 
@@ -42,7 +51,8 @@ class box
   public function add($barcode, $id_order)
   {
     $sc = FALSE;
-    $qs = dbQuery("INSERT INTO tbl_box (barcode, id_order) VALUES ('".$barcode."', ".$id_order.")");
+    $no = $this->getNextNo($id_order);
+    $qs = dbQuery("INSERT INTO tbl_box (barcode, id_order, box_no) VALUES ('".$barcode."', ".$id_order.", ".$no.")");
     if( $qs === TRUE )
     {
       $sc = dbInsertId();
@@ -51,6 +61,20 @@ class box
   }
 
 
+
+
+  public function getNextNo($id_order)
+  {
+    $sc = 1;
+    $qs = dbQuery("SELECT MAX(box_no) FROM tbl_box WHERE id_order = ".$id_order);
+    if( dbNumRows($qs) == 1 )
+    {
+      list($sc) = dbFetchArray($qs);
+      $sc++;
+    }
+
+    return $sc;
+  }
 
 
 

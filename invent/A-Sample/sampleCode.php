@@ -72,4 +72,13 @@ function Delete(id, name){
 			});
 	});
 }
+
+
+
+function print_po()
+{
+	var center = ($(document).width() - 800) /2;
+	var id_po = $("#id_po").val();
+	window.open("controller/poController.php?print_po&id_po="+id_po, "_blank", "width=800, height=900. left="+center+", scrollbars=yes");
+}
 </script>

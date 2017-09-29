@@ -102,47 +102,57 @@ switch($page){
 			$content = "order.php";
 			$pageTitle= "ออเดอร์";
 			break;
+			
 		case "order_online" :
 			$content = "order_online.php";
 			$pageTitle = "online Sale";
 			break;
+
 		case "sponsor";
 			$content = "sponsor.php";
 			$pageTitle = "สปอนเซอร์สโมสร";
 			break;
+
 		case "order_sponsor";
 			$content = "order_sponsor.php";
 			$pageTitle = "สปอนเซอร์สโมสร";
 			break;
+
 		case "order_support" :
 			$content = "order_support.php";
 			$pageTitle = "เบิกอภินันทนาการ";
 			break;
+
 		case "consignment";
 			$content = "consignment.php";
 			$pageTitle = "ฝากขาย";
 			break;
+
 		case "prepare":
 			$content = "prepare.php";
 			$pageTitle = "จัดสินค้า";
 			break;
+
 		case "qc":
 			$content = "qc.php";
 			$pageTitle = "ตรวจสินค้า";
 			break;
-		
+
 		case "bill":
 			$content = "bill.php";
 			$pageTitle = "รายการรอเปิดบิล";
 			break;
+
 		case "order_closed" :
 			$content = "order_closed.php";
 			$pageTitle = "รายการเปิดบิลแล้ว";
 			break;
+
 		case "order_monitor" :
 			$content = "order_monitor.php";
 			$pageTitle = "ตรวจสอบออเดอร์";
 			break;
+
 		case "request" :
 			$content = "order_request.php";
 			$pageTitle = "ร้องขอสินค้า";

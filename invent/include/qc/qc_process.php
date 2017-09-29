@@ -19,7 +19,7 @@
 $order = new order($_GET['id_order']);
 
 //--- ถ้าสถานะเลยกำลังตรวจไปแล้ว ให้ disabled ปุ่มต่าง ไม่ให้กดได้
-$active = $order->state == 6 ? '' : 'disabled';
+$active = ( $order->state == 6 || $order->state == 5 ) ? '' : 'disabled';
 
 $qc = new qc();
 
@@ -52,6 +52,21 @@ include 'include/qc/qc_incomplete_list.php';
 include 'include/qc/qc_complete_list.php';
 
 ?>
+
+<?php
+
+$qr = dbQuery("SELECT id_product FROM tbl_prepare WHERE id_order = ".$order->id." GROUP BY id_product");
+$bac = new barcode();
+while( $res = dbFetchObject($qr))
+{
+  $qm = $bac->getBarcodes($res->id_product);
+  while( $rm = dbFetchObject($qm))
+  {
+    echo '<input type="hidden" class="'.$rm->barcode.'" id="'.$rm->id_product.'" value="'.$rm->unit_qty.'"/>';
+  }
+}
+
+ ?>
 
 <script src="script/qc/qc_process.js"></script>
 <script src="script/qc/qc_control.js"></script>

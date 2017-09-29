@@ -24,7 +24,10 @@ function closeOrder(){
           swal({title:'Success', type:'success', timer:1000});
           $('#btn-close').attr('disabled', 'disabled');
           $(".zone").attr('disabled', 'disabled');
-          $(".item")..attr('disabled', 'disabled');
+          $(".item").attr('disabled', 'disabled');
+          
+        }else{
+          swal("Error!", rs, "error");
         }
       }
     });
@@ -32,6 +35,24 @@ function closeOrder(){
 
 }
 
+
+
+
+
+function forceClose(){
+  swal({
+    title: "คุณแน่ใจ ?",
+    text: "ต้องการบังคับจบออเดอร์นี้หรือไม่ ?",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#FA5858",
+    confirmButtonText: 'บังคับจบ',
+    cancelButtonText: 'ยกเลิก',
+    closeOnConfirm: false
+    }, function(){
+      closeOrder();
+  });
+}
 
 //--- บันทึกยอดตรวจนับที่ยังไม่ได้บันทึก
 function saveQc(option){
@@ -44,10 +65,9 @@ function saveQc(option){
   ds.push({"name" : "id_order", "value" : id_order});
   ds.push({"name" : "id_box", "value" : id_box});
   $(".hidden-qc").each(function(index, element){
-    var barcode = $(this).attr('id');
-    var value = $(this).val();
-    var id_product = $("#id-"+barcode).val();
+    var id_product = $(this).attr('id');
     var name = "product["+id_product+"]";
+    var value = $(this).val();
     ds.push( {"name" : name, "value" : value }); //----- discount each row
   });
 
@@ -62,8 +82,8 @@ function saveQc(option){
           //--- เอาสีน้ำเงินออกเพื่อให้รู้ว่าบันทึกแล้ว
           $(".blue").removeClass('blue');
 
-          //--- แสดงผลลัพธ์เฉพาะกรณีบันทึกปกติ
-          if( option == 0){
+          //---
+          if(option == 0){
             swal({title:'Saved', type:'success', timer:1000});
           }
 
@@ -110,33 +130,33 @@ function qcProduct(){
   var barcode = $("#barcode-item").val();
   $("#barcode-item").val('');
 
-  if($("#"+barcode).length == 1 ){
+  if($("."+barcode).length == 1 ){
+
+      var id = $("."+barcode).attr('id');
+      var qty = parseInt($("."+barcode).val());
 
 
-
-    //--- ย้ายรายการที่กำลังตรวจขึ้นมาบรรทัดบนสุด
-    $("#incomplete-table").prepend($("#row-"+barcode));
 
 
 
     //--- จำนวนที่จัดมา
-    var prepared = parseInt( removeCommas( $("#prepared-"+barcode).text() ) );
+    var prepared = parseInt( removeCommas( $("#prepared-"+id).text() ) );
 
     //--- จำนวนที่ตรวจไปแล้วยังไม่บันทึก
-    var notsave = parseInt( removeCommas( $("#"+barcode).val() ) ) + 1;
+    var notsave = parseInt( removeCommas( $("#"+id).val() ) ) + qty;
 
     //--- จำนวนที่ตรวจแล้วทั้งหมด (รวมที่ยังไม่บันทึก) ของสินค้านี้
-    var qc_qty = parseInt( removeCommas( $("#qc-"+barcode).text() ) ) + 1;
+    var qc_qty = parseInt( removeCommas( $("#qc-"+id).text() ) ) + qty;
 
     //--- จำนวนสินค้าที่ตรวจแล้วทั้งออเดอร์ (รวมที่ยังไม่บันทึกด้วย)
-    var all_qty = parseInt( removeCommas( $("#all_qty").text() ) ) + 1;
+    var all_qty = parseInt( removeCommas( $("#all_qty").text() ) ) + qty;
 
     //--- ถ้าจำนวนที่ตรวจแล้ว
     if(qc_qty <= prepared){
 
-      $("#"+barcode).val(notsave);
+      $("#"+id).val(notsave);
 
-      $("#qc-"+barcode).text(addCommas(qc_qty));
+      $("#qc-"+id).text(addCommas(qc_qty));
 
       //--- อัพเดตจำนวนในกล่อง
       updateBox(qc_qty);
@@ -145,17 +165,22 @@ function qcProduct(){
       $("#all_qty").text( addCommas(all_qty));
 
       //--- เปลียนสีแถวที่ถูกตรวจแล้ว
-      $("#row-"+barcode).addClass('blue');
+      $("#row-"+id).addClass('blue');
+
+
+      //--- ย้ายรายการที่กำลังตรวจขึ้นมาบรรทัดบนสุด
+      $("#incomplete-table").prepend($("#row-"+id));
+
 
       //--- ถ้ายอดตรวจครบตามยอดจัดมา
       if( qc_qty == prepared ){
 
         //--- ย้ายบรรทัดนี้ลงข้างล่าง(รายการที่ครบแล้ว)
-        $("#complete-table").append($("#row-"+barcode));
-        $("#row-"+barcode).removeClass('incomplete');
+        $("#complete-table").append($("#row-"+id));
+        $("#row-"+id).removeClass('incomplete');
       }
 
-      console.log($(".incomplete").length);
+
       if($(".incomplete").length == 0 ){
         showCloseButton();
       }
@@ -239,6 +264,7 @@ function confirmSaveBeforeChangeBox(){
   		closeOnConfirm: false
   		}, function(){
   			saveQc(1);
+        setTimeout(function(){ $('barcode-box').focus();},1500);
   	});
   }else {
     changeBox();

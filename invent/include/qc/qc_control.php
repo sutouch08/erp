@@ -21,7 +21,7 @@
 
   <div class="col-sm-2">
     <label class="display-block not-show">submit</label>
-    <button type="button" class="btn btn-sm btn-success btn-block" onclick="saveQc(0)" <?php echo $active; ?>>
+    <button type="button" class="btn btn-sm btn-success btn-block item" onclick="saveQc(0)" <?php echo $active; ?>>
       <i class="fa fa-save"></i> บันทึก
     </button>
   </div>

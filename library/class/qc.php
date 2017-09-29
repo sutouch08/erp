@@ -50,7 +50,7 @@ class qc
   //--- รายการกล่องทั้งหมดที่ตรวจในออเดอร์ที่กำหนด
   public function getBoxList($id_order)
   {
-    $qr = "SELECT b.id_box, SUM(qty) AS qty FROM tbl_box AS b ";
+    $qr = "SELECT b.id_box,b.box_no, SUM(qty) AS qty FROM tbl_box AS b ";
     $qr .= "LEFT JOIN tbl_qc AS q ON b.id_box = q.id_box AND b.id_order = q.id_order ";
     $qr  .= "WHERE b.id_order = ".$id_order." GROUP BY b.id_box";
     return dbQuery($qr);
@@ -62,11 +62,11 @@ class qc
   //--- รายการที่ยังไม่ได้ตรวจหรือยังตรวจไม่ครบ
   public function getIncompleteList($id_order)
   {
-    $qr = "SELECT p.id_product, o.product_code, o.product_name, o.qty AS order_qty, SUM(p.qty) AS prepared, ";
-    $qr .= "(SELECT SUM(qty) FROM tbl_qc WHERE id_order = ".$id_order." AND id_product = p.id_product) AS qc ";
-    $qr .= "FROM tbl_prepare AS p JOIN tbl_order_detail AS o ON p.id_order = o.id_order AND p.id_product = o.id_product ";
-    $qr .= "LEFT JOIN tbl_qc AS q ON p.id_order = q.id_order AND p.id_product = q.id_product ";
-    $qr .= "WHERE p.id_order = ".$id_order." GROUP BY p.id_product HAVING ( prepared > qc OR ISNULL(qc) )";
+    $qr = "SELECT o.id_product, o.product_code, o.product_name, o.qty AS order_qty, ";
+    $qr .= "(SELECT SUM(qty) FROM tbl_prepare WHERE id_order = ".$id_order." AND id_product = o.id_product) AS prepared, ";
+    $qr .= "(SELECT SUM(qty) FROM tbl_qc WHERE id_order = ".$id_order." AND id_product = o.id_product) AS qc ";
+    $qr .= "FROM tbl_order_detail AS o ";
+    $qr .= "WHERE o.id_order = ".$id_order." GROUP BY o.id_product HAVING ( prepared > qc OR ISNULL(qc) )";
 
     return dbQuery($qr);
   }
@@ -76,11 +76,11 @@ class qc
   //--- รายการที่ตรวจครบแล้ว
   public function getCompleteList($id_order)
   {
-    $qr = "SELECT p.id_product, o.product_code, o.product_name, o.qty AS order_qty, SUM(p.qty) AS prepared, ";
-    $qr .= "(SELECT SUM(qty) FROM tbl_qc WHERE id_order = ".$id_order." AND id_product = p.id_product) AS qc ";
-    $qr .= "FROM tbl_prepare AS p JOIN tbl_order_detail AS o ON p.id_order = o.id_order AND p.id_product = o.id_product ";
-    $qr .= "LEFT JOIN tbl_qc AS q ON p.id_order = q.id_order AND p.id_product = q.id_product ";
-    $qr .= "WHERE p.id_order = ".$id_order." GROUP BY p.id_product HAVING prepared <= qc ";
+    $qr = "SELECT o.id_product, o.product_code, o.product_name, o.qty AS order_qty, ";
+    $qr .= "(SELECT SUM(qty) FROM tbl_prepare WHERE id_order = ".$id_order." AND id_product = o.id_product) AS prepared, ";
+    $qr .= "(SELECT SUM(qty) FROM tbl_qc WHERE id_order = ".$id_order." AND id_product = o.id_product) AS qc ";
+    $qr .= "FROM tbl_order_detail AS o ";
+    $qr .= "WHERE o.id_order = ".$id_order." GROUP BY o.id_product HAVING prepared <= qc ";
 
     return dbQuery($qr);
   }
@@ -126,6 +126,19 @@ class qc
     {
       return $this->add($id_order, $id_box, $id_product, $qty);
     }
+  }
+
+
+
+
+  //--- พิมพ์ packing list
+  public function getPackingList($id_order, $id_box)
+  {
+    $qr = "SELECT o.product_code, o.product_name, SUM(q.qty) AS qty ";
+    $qr .= "FROM tbl_qc AS q JOIN tbl_order_detail AS o ON q.id_order = o.id_order AND q.id_product = o.id_product ";
+    $qr .= "WHERE q.id_order = ".$id_order." AND q.id_box = ".$id_box." GROUP BY q.id_product";
+
+    return dbQuery($qr);
   }
 
 
