@@ -102,6 +102,11 @@ class prepare
 
 
 
+    public function getPreparedData($id_order, $id_product)
+    {
+      return dbQuery("SELECT * FROM tbl_prepare WHERE id_order = ".$id_order." AND id_product = '".$id_product."'");
+    }
+
 
 
 

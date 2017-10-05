@@ -21,7 +21,10 @@ class size
 			}
 		}
 	}
-	
+
+
+
+
 	public function add(array $ds)
 	{
 		$sc = FALSE;
@@ -34,13 +37,16 @@ class size
 			{
 				$fields .= $i == 1 ? $field : ", ".$field;
 				$values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_size (".$fields.") VALUES (".$values.")");
 		}
 		return $sc;
 	}
-	
+
+
+
+
 	public function update($id, array $ds)
 	{
 		$sc = FALSE;
@@ -51,14 +57,17 @@ class size
 			foreach( $ds as $field => $value )
 			{
 				$set .= $i == 1 ? $field . " = '" . $value . "'" : ", ".$field . " = '" . $value . "'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("UPDATE tbl_size SET " . $set . " WHERE id = '".$id."'");
 		}
 		return $sc;
 	}
-	
-	
+
+
+
+
+
 	public function delete($id)
 	{
 		$pos = $this->getPosition($id);
@@ -73,28 +82,34 @@ class size
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
+
+
 	public function updateDeletePosition($pos)
 	{
-		return dbQuery("UPDATE tbl_size SET position = position - 1 WHERE position > ".$pos);	
+		return dbQuery("UPDATE tbl_size SET position = position - 1 WHERE position > ".$pos);
 	}
-	
-	
+
+
+
+
 	public function isExists($id)
 	{
 		$sc = FALSE;
 		$qs = dbQuery("SELECT id FROM tbl_size WHERE id = '".$id."'");
 		if( dbNumRows($qs) > 0 )
 		{
-			$sc = TRUE;	
+			$sc = TRUE;
 		}
 		return $sc;
 	}
-	
-	
-		
+
+
+
+
+
 	public function getNextPosition()
 	{
 		$sc = 0;
@@ -104,10 +119,12 @@ class size
 		{
 			$sc = $max;
 		}
-		return $sc + 1;			
+		return $sc + 1;
 	}
-	
-	
+
+
+
+
 	public function getMaxPosition()
 	{
 		$sc = 1;
@@ -119,8 +136,11 @@ class size
 		}
 		return $sc;
 	}
-	
-	
+
+
+
+
+
 	public function getMinPosition()
 	{
 		$sc = 1;
@@ -132,7 +152,10 @@ class size
 		}
 		return $sc;
 	}
-	
+
+
+
+
 	public function decresePosition($id, $pos)
 	{
 		$sc = FALSE;
@@ -144,9 +167,10 @@ class size
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
+
 	public function incresePosition($id, $pos)
 	{
 		$sc = FALSE;
@@ -158,8 +182,10 @@ class size
 		}
 		return $sc;
 	}
-	
-	
+
+
+
+
 	public function getIdByPos($pos)
 	{
 		$id = 1;
@@ -168,11 +194,13 @@ class size
 		{
 			list( $id ) = dbFetchArray($qs);
 		}
-		
+
 		return $id;
 	}
-	
-	
+
+
+
+
 	public function getPosition($id)
 	{
 		$sc = 1;
@@ -183,9 +211,9 @@ class size
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function getSizeId($code)
 	{
 		$sc = FALSE;
@@ -196,10 +224,10 @@ class size
 		}
 		return $sc;
 	}
-	
-	
-	
-	
+
+
+
+
 	public function getSizeCode($id)
 	{
 		$sc = '';
@@ -210,10 +238,10 @@ class size
 		}
 		return $sc;
 	}
-	
-	
-	
-	
+
+
+
+
 	public function getSizeName($id)
 	{
 		$sc = '';
@@ -224,9 +252,79 @@ class size
 		}
 		return $sc;
 	}
-	
-	
-		
+
+
+
+
+
+
+	public function getId($code)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_size WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+
+
+
+
+	public function getCode($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT code FROM tbl_size WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+
+
+
+
+	public function getName($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT name FROM tbl_size WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+
+
+
+
+	public function getGroupCode($id_size)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT g.code FROM tbl_size AS s JOIN tbl_size_group AS g ON s.id_group = g.id WHERE s.id = '".$id_size."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+
+		return $sc;
+	}
+
+
+	public function getGroupName($id_size)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT g.name FROM tbl_size AS s JOIN tbl_size_group AS g ON s.id_group = g.id WHERE s.id = '".$id_size."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+
+		return $sc;
+	}
+
 
 
 }////

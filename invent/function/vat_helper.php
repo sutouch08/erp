@@ -15,6 +15,9 @@ function removeVAT($amount, $vat=7)
 
 
 
+
+
+
 function addVAT($amount, $vat = 7)
 {
 	if( $vat != 0 )
@@ -31,6 +34,10 @@ function addVAT($amount, $vat = 7)
 
 
 
+
+
+
+
 function getVatRate($vatType=1)
 {
 	switch( $vatType )
@@ -44,7 +51,7 @@ function getVatRate($vatType=1)
 		case 3 :
 			$VAT = 0;
 		break;
-		case 4 : 
+		case 4 :
 			$VAT = 0;
 		break;
 		case 5 :
@@ -57,6 +64,11 @@ function getVatRate($vatType=1)
 	return $VAT;
 }
 
+
+
+
+
+
 function getVatAmount($amount, $VAT, $exVAT = TRUE)
 {
 	$sc = 0;
@@ -68,7 +80,7 @@ function getVatAmount($amount, $VAT, $exVAT = TRUE)
 		}
 		else
 		{
-			$sc = $amount - ( $amount * ( ( 100 + $VAT ) * 0.01 ) );
+			$sc = $amount - ( $amount / ( ( 100 + $VAT ) * 0.01 ) );
 		}
 	}
 	return $sc;

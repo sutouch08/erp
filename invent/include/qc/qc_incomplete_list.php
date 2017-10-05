@@ -54,14 +54,14 @@
           <td colspan="6" class="text-center">
             <div id="force-bar" class="<?php echo $show_force; ?>">
               <label style="margin-right:10px;">
-                <input type="checkbox" class="item" style="margin-right:10px;" id="chk-force-close" <?php echo $active; ?> /> สินค้าไม่ครบ
+                <input type="checkbox" class="close-order" style="margin-right:10px;" id="chk-force-close" <?php echo $active; ?> /> สินค้าไม่ครบ
               </label>
-              <button type="button" class="btn btn-sm btn-success hide item" id="btn-force-close" onclick="forceClose()" <?php echo $active; ?>>
+              <button type="button" class="btn btn-sm btn-success hide close-order" id="btn-force-close" onclick="forceClose()" <?php echo $active; ?>>
                 บังคับจบ
               </button>
             </div>
             <div class="<?php echo $show_close; ?>" id="close-bar">
-              <button type="button" class="btn btn-sm btn-success item" id="btn-close" onclick="closeOrder()" <?php echo $active; ?>>
+              <button type="button" class="btn btn-sm btn-success close-order" id="btn-close" onclick="closeOrder()" <?php echo $active; ?>>
                 ตรวจเสร็จแล้ว
               </button>
             </div>

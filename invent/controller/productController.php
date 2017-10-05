@@ -14,7 +14,7 @@ require '../function/image_helper.php';
 if( isset( $_GET['saveProduct'] ) )
 {
 	$sc = 'success';
-	$id_style = $_POST['id_style']; 	
+	$id_style = $_POST['id_style'];
 	$tabs		= $_POST['tabs']; //---- will be receive in array
 	$pd = new product();
 	$tab = new product_tab();
@@ -23,8 +23,6 @@ if( isset( $_GET['saveProduct'] ) )
 						"id_type"		=> $_POST['pdType'],
 						"id_category"	=> $_POST['pdCategory'],
 						"year"			=> $_POST['pdYear'],
-						"discount_amount"	=> $_POST['discountType'] == 'amount' ? $_POST['discount'] : 0.00,
-						"discount_percent"	=> $_POST['discountType'] == 'percent' ? $_POST['discount'] : 0.00,
 						"weight"		=> $_POST['weight'],
 						"width"		=> $_POST['width'],
 						"length"		=> $_POST['length'],
@@ -37,8 +35,8 @@ if( isset( $_GET['saveProduct'] ) )
 						"active"		=> $_POST['active'],
 						"emp"			=> getCookie('user_id') //---- Who last edit products
 						);
-						
-	$rs = $pd->updateProducts($id_style, $arr);						
+
+	$rs = $pd->updateProducts($id_style, $arr);
 	if( $rs === TRUE )
 	{
 		$pd->updateDescription($id_style, $_POST['description']);
@@ -48,9 +46,9 @@ if( isset( $_GET['saveProduct'] ) )
 	{
 		$sc = 'บันทึกข้อมูลไม่สำเร็จ';
 	}
-	
+
 	echo $sc;
-	
+
 }
 
 
@@ -70,7 +68,7 @@ if( isset( $_GET['saveItem'] ) )
 	{
 		$sc = 'บันทึกข้อมูลไม่สำเร็จ';
 	}
-	echo $sc;						
+	echo $sc;
 }
 
 //------ Get Item Data for Edit
@@ -94,7 +92,7 @@ if( isset( $_GET['getItem'] ) )
 	{
 		$sc = 'ไม่พบข้อมูลที่ต้องการแก้ไข';
 	}
-	echo $sc;	
+	echo $sc;
 }
 
 
@@ -105,13 +103,13 @@ if( isset( $_GET['setShowInSale'] ) )
 	$pd = new product();
 	$field = 'show_in_sale';
 	$val = $pd->getStatus($id, $field) == 1 ? 0 : 1; //-- switch current value
-	if( $pd->setStatus($id, $field, $val) === TRUE )	
+	if( $pd->setStatus($id, $field, $val) === TRUE )
 	{
 		$sc = isActived($val);
 	}
 	else
 	{
-		$sc = 'fail';	
+		$sc = 'fail';
 	}
 	echo $sc;
 }
@@ -124,13 +122,13 @@ if( isset( $_GET['setShowInCustomer'] ) )
 	$pd = new product();
 	$field = 'show_in_customer';
 	$val = $pd->getStatus($id, $field) == 1 ? 0 : 1; //-- switch current value
-	if( $pd->setStatus($id, $field, $val) === TRUE )	
+	if( $pd->setStatus($id, $field, $val) === TRUE )
 	{
 		$sc = isActived($val);
 	}
 	else
 	{
-		$sc = 'fail';	
+		$sc = 'fail';
 	}
 	echo $sc;
 }
@@ -142,13 +140,13 @@ if( isset( $_GET['setShowInOnline'] ) )
 	$pd = new product();
 	$field = 'show_in_online';
 	$val = $pd->getStatus($id, $field) == 1 ? 0 : 1; //-- switch current value
-	if( $pd->setStatus($id, $field, $val) === TRUE )	
+	if( $pd->setStatus($id, $field, $val) === TRUE )
 	{
 		$sc = isActived($val);
 	}
 	else
 	{
-		$sc = 'fail';	
+		$sc = 'fail';
 	}
 	echo $sc;
 }
@@ -162,13 +160,13 @@ if( isset( $_GET['setCanSell'] ) )
 	$pd = new product();
 	$field = 'can_sell';
 	$val = $pd->getStatus($id, $field) == 1 ? 0 : 1; //-- switch current value
-	if( $pd->setStatus($id, $field, $val) === TRUE )	
+	if( $pd->setStatus($id, $field, $val) === TRUE )
 	{
 		$sc = isActived($val);
 	}
 	else
 	{
-		$sc = 'fail';	
+		$sc = 'fail';
 	}
 	echo $sc;
 }
@@ -182,13 +180,13 @@ if( isset( $_GET['setActive'] ) )
 	$pd = new product();
 	$field = 'active';
 	$val = $pd->getStatus($id, $field) == 1 ? 0 : 1; //-- switch current value
-	if( $pd->setStatus($id, $field, $val) === TRUE )	
+	if( $pd->setStatus($id, $field, $val) === TRUE )
 	{
 		$sc = isActived($val);
 	}
 	else
 	{
-		$sc = 'fail';	
+		$sc = 'fail';
 	}
 	echo $sc;
 }
@@ -205,11 +203,11 @@ if( isset( $_GET['upload'] ) )
 	//require '../../library/class/class.upload.php';
 	if( ! empty( $_FILES ) )
 	{
-		
+
 		$files 			= $_FILES['file'];
 		if( is_string($files['name']) )
 		{
-			$rs = $image->doUpload($files, $id_style);	
+			$rs = $image->doUpload($files, $id_style);
 		}
 		else if( is_array($files['name']) )
 		{
@@ -226,7 +224,7 @@ if( isset( $_GET['upload'] ) )
 				$rs = $image->doUpload($file, $id_style);
 				if( $rs !== TRUE )
 				{
-					$sc = 'fail';	
+					$sc = 'fail';
 				}
 			}//--------- For Loop
 		}//----- endif
@@ -267,7 +265,7 @@ if( isset( $_GET['removeImage'] ) )
 	{
 		if( $isCover )
 		{
-			$sc = $image->newCover($id_style);	
+			$sc = $image->newCover($id_style);
 		}
 		else
 		{
@@ -275,7 +273,7 @@ if( isset( $_GET['removeImage'] ) )
 		}
 	}
 	$cover = $image->getCover($id_style);
-	echo $sc === TRUE? 'success | '.$cover : 'fail';	
+	echo $sc === TRUE? 'success | '.$cover : 'fail';
 }
 
 //-------------------  Load Image Table ----------------//
@@ -300,11 +298,11 @@ if( isset( $_GET['getImageTable'] ) )
 							'isCover'		=> $cover
 						);
 			array_push($sc, $ds);
-		}				
+		}
 	}
 	else
 	{
-		$sc = array("noimage" => "noimage");	
+		$sc = array("noimage" => "noimage");
 	}
 	echo json_encode($sc);
 }
@@ -315,7 +313,7 @@ if( isset( $_GET['getImageTable'] ) )
 if( isset( $_GET['getImageAttributeGrid'] ) )
 {
 	$id_style = $_POST['id_style'];
-	echo imageAttributeGrid($id_style);	
+	echo imageAttributeGrid($id_style);
 }
 
 //---------------- จับคู่รูปภาพกับสินค้า
@@ -332,7 +330,7 @@ if( isset( $_GET['doMappingImageWithProductAttribute'] ) )
 			$arr = array("id_product" => $id_product, "id_image" => $id_image);
 			if( $pd->hasImage($id_product) )
 			{
-				$qs = $pd->updateImage($id_product, $id_image);	
+				$qs = $pd->updateImage($id_product, $id_image);
 			}
 			else
 			{
@@ -352,7 +350,7 @@ if( isset( $_GET['clearFilter'] ) )
 	deleteCookie('sProductGroup');
 	deleteCookie('sProductCategory');
 	deleteCookie('sProductYear');
-	echo 'done';	
+	echo 'done';
 }
 
 ?>

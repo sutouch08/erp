@@ -4,8 +4,9 @@
 ////////////////////////////////
 function selectWarehouse($se = 0 )
 {
+	$warehouse = new warehouse();
 	$sc = '<option value="0">โปรดเลือก</option>';
-	$qs = dbQuery("SELECT id, code, name FROM tbl_warehouse");
+	$qs = $warehouse->getDatas();
 	if( dbNumRows($qs) > 0 )
 	{
 		while( $rs = dbFetchObject($qs) )
@@ -16,10 +17,16 @@ function selectWarehouse($se = 0 )
 	return $sc;
 }
 
+
+
+
+
 function selectWarehouseRole($se = 0)
 {
+	$warehouse = new warehouse();
+	$qs = $warehouse->getRoleDatas();
 	$sc = '<option value="0">โปรดเลือก</option>';
-	$qs = dbQuery("SELECT * FROM tbl_warehouse_role");
+
 	if(dbNumRows($qs) > 0 )
 	{
 		while( $rs = dbFetchObject($qs) )
@@ -27,131 +34,107 @@ function selectWarehouseRole($se = 0)
 			$sc .= '<option value="'.$rs->id.'" '.isSelected($rs->id, $se).'>'.$rs->name.'</option>';
 		}
 	}
-	return $sc;		
+	return $sc;
 }
+
+
+
+
 
 function getWarehouseRoleName($id)
 {
-	$sc = '';
-	$qs = dbQuery("SELECT name FROM tbl_warehouse_role WHERE id = ".$id);
-	if( dbNumRows($qs) == 1 )
-	{
-		list( $sc ) = dbFetchArray($qs);	
-	}
-	return $sc;
+	$warehouse = new warehouse();
+	return $warehouse->getRoleName($id);
 }
+
+
+
+
 
 function isExistsWarehouseCode($code, $id = "")
 {
-	$sc = FALSE;
-	
-	if( $id != "" )
-	{
-		$qs = dbQuery("SELECT id FROM tbl_warehouse WHERE code = '".$code."' AND id != '".$id."'");
-	}
-	else
-	{
-		$qs = dbQuery("SELECT id FROM tbl_warehouse WHERE code = '".$code."'");
-	}
-	if( dbNumRows($qs) > 0 )
-	{
-		$sc = TRUE;	
-	}
-	
-	return $sc;
+	$warehouse = new warehouse();
+	return $warehouse->isExistsWarehouseCode($code, $id);
 }
+
+
+
+
 
 function isExistsWarehouseName($name, $id="")
 {
-	$sc = FALSE;
-	if( $id != "" )
-	{
-		$qs = dbQuery("SELECT id FROM tbl_warehouse WHERE warehouse_name = '".$name."' AND id != '".$id."'");
-	}
-	else
-	{
-		$qs = dbQuery("SELECT id FROM tbl_warehouse WHERE warehouse_name = '".$name."'");	
-	}
-	if( dbNumRows($qs) > 0 )
-	{
-		$sc = TRUE;
-	}
-	
-	return $sc;
+	$wh = new warehouse();
+	return $wh->isExistsWarehouseName($name, $id);
 }
+
+
+
+
 
 function getWarehouseDetail($id)
 {
-	return dbQuery("SELECT * FROM tbl_warehouse WHERE id = '".$id."'");
+	$wh = new warehouse();
+	return $wh->getWarehouseDetail($id);
 }
+
+
+
+
+
 
 function isEmptyWarehouse($id)
 {
-	$sc = TRUE;
-	$qs = dbQuery("SELECT id_zone FROM tbl_zone WHERE id = '".$id."'");
-	if( dbNumRows($qs) > 0 )
-	{
-		$sc = FALSE;	
-	}
-	
-	return $sc;
+	$wh = new warehouse();
+	return $wh->isEmptyWarehouse($id);
 }
+
+
+
 
 function getWarehouseCode($id)
 {
-	$sc = "";
-	$qs = dbQuery("SELECT code FROM tbl_warehouse WHERE id = '".$id."'");
-	if( dbNumRows($qs) == 1 )
-	{
-		list( $sc ) = dbFetchArray($qs);
-	}
-	return $sc;
+	$wh = new warehouse();
+	return $wh->getCode($id);
 }
+
+
+
 
 
 //-------------- คลังนี้สามารถติดลบได้หรือไม่
 function isAllowUnderZero($id)
 {
-	$sc = FALSE;
-	$qs = dbQuery("SELECT allow_under_zero FROM tbl_warehouse WHERE allow_under_zero = 1 AND id = '".$id."'");
-	if( dbNumRows($qs) == 1 )
-	{
-		$sc = TRUE;	
-	}
-	return $sc;		
+	$wh = new warehouse();
+	return $wh->isAllowUnderZero($id);
 }
+
+
+
+
 
 function isAllowPrepare($id)
 {
-	$sc = FALSE;
-	$qs = dbQuery("SELECT prepare FROM tbl_warehouse WHERE id = '".$id."' AND prepare = 1 ");
-	if( dbNumRows($qs) == 1 )
-	{
-		$sc = TRUE;	
-	}
-	return $sc;
+	$wh = new warehouse();
+	return $wh->isAllowPrepare($id);
 }
+
+
+
+
 
 function isAllowSell($id)
 {
-	$sc = FALSE;
-	$qs = dbQuery("SELECT sell FROM tbl_warehouse WHERE id = '".$id."' AND sell = 1");
-	if( dbNumRows($qs) == 1 )
-	{
-		$sc = TRUE; 
-	}
-	return $sc;
+	$wh = new warehouse();
+	return $wh->isAllowSell($id);
 }
+
+
+
 
 function isWarehouseActive($id)
 {
-	$sc = FALSE;
-	$qs = dbQuery("SELECT active FROM tbl_warehouse WHERE id = '".$id."' AND active = 1");
-	if( dbNumRows($qs) == 1 )
-	{
-		$sc = TRUE;
-	}
-	return $sc;
+	$wh = new warehouse();
+	return $wh->isWarehouseActive($id);
 }
 
 

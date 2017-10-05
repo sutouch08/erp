@@ -6,7 +6,7 @@
 	$edit 				= $pm['edit'];
 	$delete 			= $pm['delete'];
 	accessDeny($view);
-	
+
 ?>
 <div class="container">
 <div class="row top-row">
@@ -17,7 +17,7 @@
     	<p class="pull-right top-p" >
 	<?php if( $add ) : ?>
     		<button type="button" class="btn btn-sm btn-success" onclick="goAdd()"><i class="fa fa-plus"></i> เพิ่มใหม่</button>
-    <?php endif; ?>        
+    <?php endif; ?>
         </p>
     </div>
 </div><!-- / row -->
@@ -116,15 +116,15 @@
 <?php		endwhile; ?>
 <?php	else : ?>
 				<tr>
-                	<td colspan="5" align="center"><h4>ไม่พบรายการ</h4></td>
+                	<td colspan="6" align="center"><h4>ไม่พบรายการ</h4></td>
 				</tr>
 <?php	endif; ?>
                 </tbody>
             </table>
         </div>
     </div>
-    
-    
+
+
 
 <input type="hidden" name="isDefault" id="isDefault" value="0" />
 <input type="hidden" name="hasTerm" id="hasTerm" value="0" />
@@ -173,9 +173,9 @@
 			</div>
 		</div>
 	</div>
-    
-    
-    
+
+
+
     <!---- Modal Edit --->
 	<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog" style="width:500px;">

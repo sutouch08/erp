@@ -15,12 +15,12 @@ function productTabMenu($mode = 'order')
 			$sc .= 	'<ul class="dropdown-menu" role="menu" aria-labelledby="ul-'.$rs->id.'">';
 			$sc .= 	getSubTab($rs->id, $ajax);
 			$sc .=  '</ul>';
-			$sc .= '</li>';			
+			$sc .= '</li>';
 		}
 		else
 		{
 			$sc .= '<li class="menu"><a href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">'.$rs->name.'</a></li>';
-		}	
+		}
 	}
 	return $sc;
 
@@ -31,12 +31,12 @@ function getSubTab($parent, $ajax)
 {
 	$sc = '';
 	$qs = dbQuery("SELECT * FROM tbl_product_tab WHERE id_parent = ".$parent);
-	
+
 	if( dbNumRows($qs) > 0 )
 	{
 		while( $rs = dbFetchObject($qs) )
 		{
-			if( hasChild($rs->id) === TRUE ) //----- ถ้ามี sub category 
+			if( hasChild($rs->id) === TRUE ) //----- ถ้ามี sub category
 			{
 				$sc .= '<li class="dropdown-submenu" >';
 				$sc .= '<a id="ul-'.$rs->id.'" class="dropdown-toggle" href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">';
@@ -50,7 +50,7 @@ function getSubTab($parent, $ajax)
 			{
 				$sc .= '<li class="menu"><a href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">'.$rs->name.'</a></li>';
 			}
-			
+
 		}
 	}
 	return $sc;
@@ -62,12 +62,12 @@ function getSubCategoryTab($parent, $ajax)
 {
 	$sc = '';
 	$qs = dbQuery("SELECT * FROM tbl_product_tab WHERE id_parent = ".$parent);
-	
+
 	if( dbNumRows($qs) > 0 )
 	{
 		while( $rs = dbFetchObject($qs) )
 		{
-			if( hasChild($rs->id) === TRUE ) //----- ถ้ามี sub category 
+			if( hasChild($rs->id) === TRUE ) //----- ถ้ามี sub category
 			{
 				$sc .= '<li class="dropdown-submenu" >';
 				$sc .= '<a id="ul-'.$rs->id.'" class="dropdown-toggle" href="#cat-'.$rs->id.'" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">';
@@ -81,7 +81,7 @@ function getSubCategoryTab($parent, $ajax)
 			{
 				$sc .= '<li class="menu"><a href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">'.$rs->name.'</a></li>';
 			}
-			
+
 		}
 	}
 	return $sc;
@@ -92,12 +92,12 @@ function getSubCategoryTab($parent, $ajax)
 function getProductTabs()
 {
 	$sc = '';
-	$qs = dbQuery("SELECT * FROM tbl_product_tab WHERE id != 0"); 
+	$qs = dbQuery("SELECT * FROM tbl_product_tab WHERE id != 0");
 	while($rs = dbFetchObject($qs))
 	{
 		$sc .= '<div class="tab-pane" id="cat-'.$rs->id.'"></div>';
 	}
-	
+
 	return $sc;
 }
 
@@ -129,7 +129,7 @@ function parentIn($txt)
 			$sc .= $i == 1 ? $rs->id : ", ".$rs->id;
 		}
 	}
-	
+
 	return $sc;
 }
 
@@ -149,19 +149,19 @@ function getTabsTree($id = 0, $script = TRUE)
 	{
 		$sc .= '<li class="'. ($i == 1 ? '' : 'margin-top-15').'">';
 		$i++;
-		
+
 		//----- Next Level
 		if( hasChild($rs->id) === TRUE )
 		{
 			$sc .= '<i class="fa fa-plus-square-o" id="catbox-'.$rs->id.'" onClick="toggleTree('.$rs->id.')"></i>';
 			$sc .= '<label class="padding-10"><input type="radio" class="margin-right-10" name="tabs" value="'.$rs->id.'" '. isChecked($id, $rs->id) .' />'.$rs->name.'</label>';
 			$sc .= '<ul id="catchild-'.$rs->id.'" class="hide">';
-			$sc .= getChild($rs->id, $id) ;		
-			$sc .= '</ul>';	
+			$sc .= getChild($rs->id, $id) ;
+			$sc .= '</ul>';
 		}
 		else
 		{
-			$sc .= '<label class="padding-10"><input type="radio" class="margin-right-10" name="tabs" value="'.$rs->id.'" '. isChecked($id, $rs->id) .' />'.$rs->name.'</label>';		
+			$sc .= '<label class="padding-10"><input type="radio" class="margin-right-10" name="tabs" value="'.$rs->id.'" '. isChecked($id, $rs->id) .' />'.$rs->name.'</label>';
 		}//---- has sub cate
 		$sc .= '</li>';
 	}
@@ -217,12 +217,12 @@ function getEditTabsTree($id, $script = TRUE)
 				$sc .= '<i class="fa fa-'.$ep.'-square-o" id="edit-catbox-'.$rs->id.'" onClick="toggleEditTree('.$rs->id.')"></i>';
 				$sc .= '<label class="padding-10"><input type="radio" class="margin-right-10" name="tabs" value="'.$rs->id.'" '. isChecked($id_parent, $rs->id) .' />'.$rs->name.'</label>';
 				$sc .= '<ul id="edit-catchild-'.$rs->id.'" class="'.$ex.'">';
-				$sc .= getEditChild($rs->id, $parent, $id_parent, $id) ;		
-				$sc .= '</ul>';	
+				$sc .= getEditChild($rs->id, $parent, $id_parent, $id) ;
+				$sc .= '</ul>';
 			}
 			else
 			{
-				$sc .= '<label class="padding-10"><input type="radio" class="margin-right-10" name="tabs" value="'.$rs->id.'" '. isChecked($id_parent, $rs->id) .' />'.$rs->name.'</label>';			
+				$sc .= '<label class="padding-10"><input type="radio" class="margin-right-10" name="tabs" value="'.$rs->id.'" '. isChecked($id_parent, $rs->id) .' />'.$rs->name.'</label>';
 			}//---- has sub cate
 			$sc .= '</li>';
 		}
@@ -284,7 +284,7 @@ function getChild($id_parent, $id )
 	$qs = dbQuery("SELECT * FROM tbl_product_tab WHERE id_parent = ".$id_parent);
 	if( dbNumRows($qs) > 0 )
 	{
-		
+
 		while( $rs = dbFetchObject($qs) )
 		{
 				$sc .= '<li>';
@@ -294,12 +294,12 @@ function getChild($id_parent, $id )
 				$sc .= '<i class="fa fa-plus-square-o" id="catbox-'.$rs->id.'" onClick="toggleTree('.$rs->id.')"></i>';
 				$sc .= '<label class="padding-10"><input type="radio" class="margin-right-10" name="tabs" value="'.$rs->id.'" '. isChecked($id, $rs->id) .' />' .$rs->name. '</label>';
 				$sc .= '<ul id="catchild-'.$rs->id.'" class="hide">';
-				$sc .= getChild($rs->id, $id) ;		
-				$sc .= '</ul>';	
+				$sc .= getChild($rs->id, $id) ;
+				$sc .= '</ul>';
 			}
 			else
 			{
-				$sc .= '<label class="padding-10"><input type="radio" class="margin-right-10" name="tabs" value="'.$rs->id.'" '. isChecked($id, $rs->id) .' />'.$rs->name. '</label>';		
+				$sc .= '<label class="padding-10"><input type="radio" class="margin-right-10" name="tabs" value="'.$rs->id.'" '. isChecked($id, $rs->id) .' />'.$rs->name. '</label>';
 			}//---- has sub cate
 			$sc .= '</li>';
 		}
@@ -315,7 +315,7 @@ function getEditChild($id_parent, $parent, $id, $id_tab )
 	$qs = dbQuery("SELECT * FROM tbl_product_tab WHERE id_parent = ".$id_parent);
 	if( dbNumRows($qs) > 0 )
 	{
-		
+
 		while( $rs = dbFetchObject($qs) )
 		{
 			if( $rs->id != $id_tab )
@@ -326,17 +326,17 @@ function getEditChild($id_parent, $parent, $id, $id_tab )
 				//----- Next Level
 				if( hasEditChild($rs->id, $id_tab) === TRUE )
 				{
-					
+
 					$sc .= '<i class="fa fa-'.$ep.'-square-o" id="edit-catbox-'.$rs->id.'" onClick="toggleEditTree('.$rs->id.')"></i>';
 					$sc .= '<label class="padding-10"><input type="radio" class="margin-right-10" name="tabs" value="'.$rs->id.'" '. isChecked($id, $rs->id) .' />' .$rs->name. '</label>';
 					$sc .= '<ul id="edit-catchild-'.$rs->id.'" class="'.$ex.'">';
-					$sc .= getEditChild($rs->id, $parent, $id, $id_tab) ;		
-					$sc .= '</ul>';						
+					$sc .= getEditChild($rs->id, $parent, $id, $id_tab) ;
+					$sc .= '</ul>';
 				}
 				else //-- if hasChild
 				{
-					$sc .= '<label class="padding-10"><input type="radio" class="margin-right-10" name="tabs" value="'.$rs->id.'" '. isChecked($id, $rs->id) .' />'.$rs->name. '</label>';		
-				}//---- if has Child 
+					$sc .= '<label class="padding-10"><input type="radio" class="margin-right-10" name="tabs" value="'.$rs->id.'" '. isChecked($id, $rs->id) .' />'.$rs->name. '</label>';
+				}//---- if has Child
 				$sc .= '</li>';
 			}
 		}//--- end while
@@ -349,13 +349,13 @@ function getEditChild($id_parent, $parent, $id, $id_tab )
 function productTabsTree($id_style = 0, $script = TRUE)
 {
 	$cs = new product_tab();
-	
+
 	//----- รายการที่ติ๊ก
 	$se = $cs->getStyleTabsId($id_style);
-	
+
 	//------- รายการที่ต้อง expan
 	$parent = $cs->getParentTabsId($id_style);
-	
+
 	$sc	= '<ul class="tree">';
 	$sc 	.= '<li>';
 	$sc 	.= '<i class="fa fa-minus-square-o" id="catbox-0" onClick="toggleTree(0)"></i>';
@@ -365,10 +365,10 @@ function productTabsTree($id_style = 0, $script = TRUE)
 	$i = 1;
 	while( $rs = dbFetchObject($qs) )
 	{
-		$isChecked = isset( $se[$rs->id] ) ? 'checked' : ''; 
+		$isChecked = isset( $se[$rs->id] ) ? 'checked' : '';
 		$sc .= '<li class="'. ($i == 1 ? '' : 'margin-top-15').'">';
 		$i++;
-		
+
 		$ex = isset( $parent[$rs->id] ) ? '' : 'hide';
 		$ep = isset( $parent[$rs->id] ) ? 'minus' : 'plus';
 		//----- Next Level
@@ -377,12 +377,12 @@ function productTabsTree($id_style = 0, $script = TRUE)
 			$sc .= '<i class="fa fa-'.$ep.'-square-o" id="catbox-'.$rs->id.'" onClick="toggleTree('.$rs->id.')"></i>';
 			$sc .= '<label class="padding-10"><input type="checkbox" class="margin-right-10" name="tabs[]" value="'.$rs->id.'" '. $isChecked .' />'.$rs->name.'</label>';
 			$sc .= '<ul id="catchild-'.$rs->id.'" class="'.$ex.'">';
-			$sc .= productTabChild($rs->id, $id_style, $parent, $se) ;		
-			$sc .= '</ul>';	
+			$sc .= productTabChild($rs->id, $id_style, $parent, $se) ;
+			$sc .= '</ul>';
 		}
 		else
 		{
-			$sc .= '<label class="padding-10"><input type="checkbox" class="margin-right-10" name="tabs[]" value="'.$rs->id.'" '. isChecked($id_style, $rs->id) .' />'.$rs->name.'</label>';		
+			$sc .= '<label class="padding-10"><input type="checkbox" class="margin-right-10" name="tabs[]" value="'.$rs->id.'" '. $isChecked .' />'.$rs->name.'</label>';
 		}//---- has sub cate
 		$sc .= '</li>';
 	}
@@ -416,25 +416,25 @@ function productTabChild($id_parent, $id_style, $parent, $se )
 	$qs = dbQuery("SELECT * FROM tbl_product_tab WHERE id_parent = ".$id_parent);
 	if( dbNumRows($qs) > 0 )
 	{
-		
+
 		while( $rs = dbFetchObject($qs) )
 		{
 				$sc .= '<li>';
 				//----- Next Level
 				$ex = isset( $parent[$rs->id] ) ? '' : 'hide';
 				$ep = isset( $parent[$rs->id] ) ? 'minus' : 'plus';
-				$isChecked = isset( $se[$rs->id] ) ? 'checked' : ''; 
+				$isChecked = isset( $se[$rs->id] ) ? 'checked' : '';
 			if( hasChild($rs->id) === TRUE )
 			{
 				$sc .= '<i class="fa fa-'.$ep.'-square-o" id="catbox-'.$rs->id.'" onClick="toggleTree('.$rs->id.')"></i>';
 				$sc .= '<label class="padding-10"><input type="checkbox" class="margin-right-10" name="tabs[]" value="'.$rs->id.'" '. $isChecked .' />' .$rs->name. '</label>';
 				$sc .= '<ul id="catchild-'.$rs->id.'" class="'.$ex.'">';
-				$sc .= productTabChild($rs->id, $id_style, $parent, $se) ;		
-				$sc .= '</ul>';	
+				$sc .= productTabChild($rs->id, $id_style, $parent, $se) ;
+				$sc .= '</ul>';
 			}
 			else
 			{
-				$sc .= '<label class="padding-10"><input type="checkbox" class="margin-right-10" name="tabs[]" value="'.$rs->id.'" '. $isChecked .' />'.$rs->name. '</label>';		
+				$sc .= '<label class="padding-10"><input type="checkbox" class="margin-right-10" name="tabs[]" value="'.$rs->id.'" '. $isChecked .' />'.$rs->name. '</label>';
 			}//---- has sub cate
 			$sc .= '</li>';
 		}
@@ -450,7 +450,7 @@ function isInTab($id_style, $id_tab)
 	$qs = dbQuery("SELECT * FROM tbl_tab_product WHERE id_style = ".$id_style." AND id_product_tab = ".$id_tab);
 	if( dbNumRows($qs) > 0 )
 	{
-		$sc = TRUE;	
+		$sc = TRUE;
 	}
 	return $sc;
 }

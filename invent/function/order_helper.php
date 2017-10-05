@@ -1,4 +1,16 @@
 <?php
+
+//---	ถ้าเป็นลูกค้าออไลน์ ให้ใส่ชื่อลูกค้าออนไลน์ไปด้วย
+function orderCustomerName($id_customer, $online_code)
+{
+	$customer = new customer();
+	$name = $customer->getName($id_customer);
+	return $online_code != '' ? '[ '.$online_code.'] '.$name : $name;
+}
+
+
+
+
 function stateColor($state, $status)
 {
 	$sc = '';
@@ -34,11 +46,25 @@ function roleName($role)
 	{
 		list( $sc ) = dbFetchArray($qs);
 	}
-	return $sc;	
+	return $sc;
 }
 
 
 
+
+//--- แสดงป้ายส่วนลด
+function discountLabel($disc)
+{
+	$arr = explode('%', $disc);
+	if( count($arr) > 1)
+	{
+		return number_format(trim($arr[0]),2).' %';
+	}
+	else
+	{
+		return number_format($arr[0],2);
+	}
+}
 
 
 function getSpace($amount, $length)

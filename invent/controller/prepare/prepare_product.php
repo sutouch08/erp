@@ -13,6 +13,8 @@
   $buffer = new buffer();
   $order = new order($id_order);
   $prepare = new prepare();
+  $product = new product();
+  $zone = new zone();
 
   if( $order->state == 4)
   {
@@ -46,7 +48,7 @@
             $ra = $stock->updateStockZone($id_zone, $pd->id_product, $qty * -1);
 
             //---	เพิ่มยอดเข้า buffer
-            $rb = $buffer->updateBuffer($id_order, $pd->id_product, $id_zone, $qty);
+            $rb = $buffer->updateBuffer($id_order, $product->getStyleId($pd->id_product), $pd->id_product, $id_zone, $zone->getWarehouseId($id_zone), $qty);
 
             //--- เพิ่มรายการจัดสินค้าเข้าตารางจัด
             $rc = $prepare->updatePrepare($id_order, $pd->id_product, $id_zone, $qty);

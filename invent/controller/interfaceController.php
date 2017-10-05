@@ -134,14 +134,15 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['customerCredit'] ) )
 ///=================================================== DOCUMENTS ==========================================///
 if( isset( $_GET['syncDocument'] ) && isset( $_GET['po'] ) )
 {
-	include "interface/import/importPO.php";	
+	include "interface/import/importPO.php";
 }
 
 
+//---	Export ใบรับสินค้าเข้า
 if( isset( $_GET['export'] ) && isset( $_GET['BI'] ) )
 {
 	include '../function/vat_helper.php';
-	include "interface/export/exportBI.php";	
+	include "interface/export/exportBI.php";
 	$id_receive_product = $_POST['id_receive_product'];
 	$BI = exportBI($id_receive_product);
 	if( $BI === TRUE )
@@ -154,5 +155,16 @@ if( isset( $_GET['export'] ) && isset( $_GET['BI'] ) )
 	}
 }
 
+
+
+//---	Export Sale order
+if( isset( $_GET['export']) && isset( $_GET['SO']))
+{
+	include '../function/vat_helper.php';
+	include 'interface/export/exportSO.php';
+	$id_order = $_POST['id_order'];
+	$SO = exportSO($id_order);
+	echo $SO === TRUE ? 'success' : $SO;
+}
 ///=================================================== END DOCUMENTS =======================================///
 ?>

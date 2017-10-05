@@ -1,12 +1,12 @@
 <?php
-//-------------  Product Tab 
+//-------------  Product Tab
 //--------------- คือ แถบแสดงรายการสินค้า ในหน้าสั่งซื้อ ใช้สำหรับจัดหมวดหมู่ เพื่อให้ง่ายต่อการ สั่งซื้อ
 class product_tab
 {
 	public $id;
 	public $name;
 	public $id_parent;
-	
+
 	public function __construct($id = "")
 	{
 		if( $id != "" )
@@ -21,8 +21,8 @@ class product_tab
 			}
 		}
 	}
-	
-	
+
+
 		public function add(array $ds)
 	{
 		$sc = FALSE;
@@ -35,14 +35,14 @@ class product_tab
 			{
 				$fields	.= $i == 1 ? $field : ", ".$field;
 				$values	.= $i == 1 ? "'". $value ."'" : ", '". $value ."'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_product_tab (".$fields.") VALUES (".$values.")");
 		}
-		return $sc;			
+		return $sc;
 	}
-	
-	
+
+
 	public function update($id, array $ds)
 	{
 		$sc = FALSE;
@@ -53,70 +53,80 @@ class product_tab
 			foreach( $ds as $field => $value )
 			{
 				$set .= $i == 1 ? $field . " = '" . $value . "'" : ", ".$field . " = '" . $value . "'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("UPDATE tbl_product_tab SET " . $set . " WHERE id = '".$id."'");
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function updateChild($id, $id_parent)
 	{
 		return dbQuery("UPDATE tbl_product_tab SET id_parent = ".$id_parent." WHERE id_parent = ".$id);
 	}
-	
-	
-	
+
+
+
 	public function delete($id)
 	{
 		return dbQuery("DELETE FROM tbl_product_tab WHERE id = '".$id."'");
 	}
-	
-	
-	
-	public function updateTabsProduct($id_style, array $ds)
+
+
+
+	public function updateTabsProduct($id_style, array $ds = array())
 	{
 		$sc = TRUE;
-		
-		startTransection();
-		if( $this->dropTabsProduct($id_style) === TRUE )
+
+		if( !empty($ds))
 		{
-			foreach( $ds as $id )
+			startTransection();
+			if( $this->dropTabsProduct($id_style) === TRUE )
 			{
-				if( $this->addTabsProduct($id_style, $id) === FALSE )
+				foreach( $ds as $id )
 				{
-					$sc = FALSE;	
+					if( $this->addTabsProduct($id_style, $id) === FALSE )
+					{
+						$sc = FALSE;
+					}
 				}
 			}
+
+			if( $sc === TRUE )
+			{
+				commitTransection();
+			}
+			else
+			{
+				dbRollback();
+			}
+
+			endTransection();
 		}
-		if( $sc === TRUE )
-		{
-			commitTransection();
-		}
-		else
-		{
-			dbRollback();
-		}
-		endTransection();				
-		
+
 		return $sc;
 	}
-	
-	
+
+
+
+
 	public function addTabsProduct($id_style, $id_tab)
 	{
 		return dbQuery("INSERT INTO tbl_tab_product (id_style, id_product_tab) VALUES ('".$id_style."', '".$id_tab."')");
 	}
-	
+
+
+
+
 	public function dropTabsProduct($id_style)
 	{
-		return dbQuery("DELETE FROM tbl_tab_product WHERE id_style = '".$id_style."'");	
+		return dbQuery("DELETE FROM tbl_tab_product WHERE id_style = '".$id_style."'");
 	}
-	
-	
-	
+
+
+
 	public function isExists($field, $val, $id='')
 	{
 		$sc = FALSE;
@@ -128,16 +138,16 @@ class product_tab
 		{
 			$qs = dbQuery("SELECT id FROM tbl_product_tab WHERE ".$field." = '".$val."'");
 		}
-		
+
 		if( dbNumRows($qs) > 0 )
 		{
-			$sc = TRUE;	
+			$sc = TRUE;
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function getName($id)
 	{
 		$sc = "TOP LEVEL";
@@ -146,12 +156,12 @@ class product_tab
 		{
 			list( $sc ) = dbFetchArray($qs);
 		}
-		
+
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function getParentId($id)
 	{
 		$sc = 0;
@@ -162,8 +172,8 @@ class product_tab
 		}
 		return $sc;
 	}
-	
-	
+
+
 	public function getAllParent($id)
 	{
 		$sc = array();
@@ -175,9 +185,9 @@ class product_tab
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	//-------- เอารายการใน tbl_tab_product มา
 	public function getStyleTabsId($id_style)
 	{
@@ -195,7 +205,7 @@ class product_tab
 
 
 
-	
+
 	//-------- เอารายการใน tbl_tab_product มา
 	public function getParentTabsId($id_style)
 	{
@@ -208,13 +218,13 @@ class product_tab
 				$id_tab = $this->getParentId($id);
 				while( $id_tab > 0 )
 				{
-					$sc[$id_tab] = $id_tab;	
+					$sc[$id_tab] = $id_tab;
 					$id_tab = $this->getParentId($id_tab);
 				}
 			}
 			return $sc;
 		}
-		
+
 		$qs = dbQuery("SELECT id_product_tab FROM tbl_tab_product WHERE id_style = '".$id_style."'");
 		if( dbNumRows($qs) > 0 )
 		{
@@ -225,35 +235,35 @@ class product_tab
 		}
 		return $sc;
 	}
-	
-	
+
+
 	public function getParentList($id = 0)
 	{
 		//----- Parent cannot be yoursalfe
 		return dbQuery("SELECT * FROM tbl_product_tab WHERE id != ".$id);
 	}
-	
-	
+
+
 	//-----------------  Search Result
 	public function getSearchResult($txt)
 	{
 		return dbQuery("SELECT * FROM tbl_product_tab WHERE name LIKE '%".$txt."%'");
-			
+
 	}
-	
-	
-	
-	
+
+
+
+
 	public function countMember($id)
 	{
 		$qs = dbQuery("SELECT * FROM tbl_tab_product WHERE id_product_tab = ".$id);
-		return dbNumRows($qs);	
+		return dbNumRows($qs);
 	}
-	
+
 	public function getStyleInTab($id)
 	{
 		return dbQuery("SELECT id_style FROM tbl_tab_product WHERE id_product_tab = ".$id);
-	}	
+	}
 }//--- end class
 
 ?>

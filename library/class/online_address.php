@@ -11,14 +11,14 @@ class online_address
 				$rs = dbFetchArray($qs);
 				foreach( $rs as $key => $value )
 				{
-					$this->$key = $value;	
+					$this->$key = $value;
 				}
 			}
 		}
 	}
-	
-	
-		
+
+
+
 	public function add( array $ds = array() )
 	{
 		$sc = FALSE;
@@ -31,18 +31,18 @@ class online_address
 			{
 				$fields .= $i == 1 ? $field : ", ".$field;
 				$values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_address_online (".$fields.") VALUES (".$values.")");
 		}
 		return $sc;
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	public function update($id, array $ds)
 	{
 		$sc = FALSE;
@@ -59,35 +59,35 @@ class online_address
 		}
 		return $sc;
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	public function delete($id)
 	{
 		return dbQuery("DELETE FROM tbl_address_online WHERE id = ".$id);
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public function getCode($id)
 	{
 		$sc = '';
-		$qs = dbQuery("SELECT customer_code FROM tbl_address_online WHERE id = ".$id);	
+		$qs = dbQuery("SELECT customer_code FROM tbl_address_online WHERE id = ".$id);
 		if( dbNumRows($qs) == 1 )
 		{
 			list( $sc ) = dbFetchArray($qs);
 		}
 		return $sc;
 	}
-	
-	
-	
-	
+
+
+
+
 	public function setDefault($id)
 	{
 		$code = $this->getCode($id);
@@ -95,25 +95,39 @@ class online_address
 		$qr = dbQuery("UPDATE tbl_address_online SET is_default = 0 WHERE id != ".$id." AND customer_code = '".$code."'");
 		return ( $qs === TRUE && $qr === TRUE ) ? TRUE : FALSE;
 	}
-	
-	
-	
+
+
+
 	public function getAddress($id)
 	{
-		return dbQuery("SELECT * FROM tbl_address_online WHERE id = ".$id);	
+		return dbQuery("SELECT * FROM tbl_address_online WHERE id = ".$id);
 	}
-	
-	
-	
-	
+
+
+
+
 	public function getAddressByCode(	$online_code)
 	{
 		return dbQuery("SELECT * FROM tbl_address_online WHERE customer_code = '".$online_code."'");
 	}
-	
-	
-	
-	
+
+
+
+
+	public function getProvince($online_code)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT province FROM tbl_address_online WHERE customer_code = '".$online_code."' LIMIT 1");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+
+		return $sc;
+	}
+
+
+
 }
 
 ?>

@@ -65,6 +65,22 @@ function getCookie($name)
 }
 
 
+//---	ตัดข้อความแล้วเติม ... ข้างหลัง
+function limitText($str, $length)
+{
+	$txt = '...';
+	if( strlen($str) > $length)
+	{
+		return substr_replace($str, $txt, $length);
+	}
+	else
+	{
+		return $str;
+	}
+}
+
+
+
 
 //-------------------------  ส่งกลับ id_profile
 function getProfile($id_employee)

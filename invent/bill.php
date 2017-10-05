@@ -1,4 +1,4 @@
-
+<script src="script/bill/bill.js"></script>
 <div class="container">
 <?php
 	$id_tab = 19;
@@ -16,10 +16,11 @@
 	require 'function/bill_helper.php';
 	require 'function/customer_helper.php';
 	include 'function/employee_helper.php';
+	include 'function/vat_helper.php';
 
 	if( isset( $_GET['view_detail']))
 	{
-
+		include 'include/bill/bill_detail.php';
 	}
 	else
 	{
@@ -33,4 +34,3 @@
 
 
 </div><!--/ container -->
-<script src="script/bill/bill.js"></script>

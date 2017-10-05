@@ -25,7 +25,8 @@ function closeOrder(){
           $('#btn-close').attr('disabled', 'disabled');
           $(".zone").attr('disabled', 'disabled');
           $(".item").attr('disabled', 'disabled');
-          
+          $(".close").attr('disabled', 'disabled');
+
         }else{
           swal("Error!", rs, "error");
         }
@@ -84,7 +85,13 @@ function saveQc(option){
 
           //---
           if(option == 0){
-            swal({title:'Saved', type:'success', timer:1000});
+
+            swal({
+              title:'Saved',
+              type:'success',
+              timer:1000
+            });
+
           }
 
           //--- รีเซ็ตจำนวนที่ยังไม่ได้บันทึก
@@ -95,7 +102,15 @@ function saveQc(option){
 
           //--- ถ้ามาจากการเปลี่ยนกล่อง
           if( option == 1){
-              changeBox();
+
+            swal({
+              title:'Saved',
+              type:'success',
+              timer:1000
+            } );
+
+            setTimeout(function(){ changeBox(); }, 1200);
+
           }
 
           //--- ถ้ามาจากการกดปุ่ม ตรวจเสร็จแล้ว หรือ ปุ่มบังคับจบ
@@ -229,9 +244,7 @@ function getBox(){
         if( ! isNaN( parseInt(rs) ) ){
           $("#id_box").val(rs);
           $("#barcode-box").attr('disabled', 'disabled');
-          $("#barcode-item").removeAttr('disabled');
-          $("#btn-submit").removeAttr('disabled');
-          $("#btn-change-box").removeAttr('disabled');
+          $(".item").removeAttr('disabled');
           $("#barcode-item").focus();
           updateBoxList();
         }else{
@@ -264,7 +277,6 @@ function confirmSaveBeforeChangeBox(){
   		closeOnConfirm: false
   		}, function(){
   			saveQc(1);
-        setTimeout(function(){ $('barcode-box').focus();},1500);
   	});
   }else {
     changeBox();
@@ -276,6 +288,7 @@ function confirmSaveBeforeChangeBox(){
 
 
 function changeBox(){
+
   $("#id_box").val('');
   $("#barcode-item").val('');
   $(".item").attr('disabled', 'disabled');

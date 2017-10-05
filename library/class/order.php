@@ -687,6 +687,81 @@ class order
 		return dbQuery("SELECT name FROM tbl_order_role WHERE id = ".$role);
 	}
 
+
+
+
+	public function getState($id)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT state FROM tbl_order WHERE id = ".$id);
+		if( dbNumRows($qs) == 1)
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+
+		return $sc;
+	}
+
+
+
+
+
+	//---	บันทึกขายสินค้าตามยอดที่ได้
+	//---	หาก ออเดอร์มากกว่ายอด ตรวจ ใช้ยอดตรวจ บันทึกขาย
+	//---	หากยอดตรวจมากกว่าออเดอร์ ใช้ยอดจากออเดอร์ บันทึกขาย
+	public function sold($id, array $ds = array())
+	{
+		$sc = FALSE;
+
+		if( ! empty($ds))
+		{
+			$fields = "";
+			$values = "";
+			$i = 1;
+			foreach($ds as $field => $value)
+			{
+				$fields .= $i == 1 ? $field : ", ".$field;
+				$values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
+				$i++;
+			}
+
+			$sc = dbQuery("INSERT INTO tbl_order_sold (".$fields.") VALUES (".$values.")");
+		}
+
+		return $sc;
+	}
+
+
+
+
+
+
+
+	//---	รายการที่บันทึกขายไว้ เพื่อส่งออกไป Formula
+	public function getSoldDetails($id)
+	{
+		return dbQuery("SELECT * FROM tbl_order_sold WHERE id_order = ".$id);
+	}
+
+	//---	เรียกยอดขายรวมทั้งออเดอร์ แบบ รวม VAT หรือ ไม่รวม VAT
+	public function getTotalSoldAmount($id, $inc = TRUE)
+	{
+
+		if( $inc === TRUE)
+		{
+			$qr = "SELECT SUM(total_amount_inc) AS amount FROM tbl_order_sold WHERE id_order = ".$id;
+		}
+		else
+		{
+			$qr = "SELECT SUM(total_amount_ex) AS amount FROM tbl_order_sold WHERE id_order = ".$id;
+		}
+		$qs = dbQuery($qr);
+
+		list( $amount ) = dbFetchArray($qs);
+
+		return is_null($amount) ? 0 : $amount;
+	}
+
 }//--- End Class
 
 ?>

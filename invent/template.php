@@ -68,24 +68,8 @@ function row_no()
 
 </head>
 
-<body style='padding-top:0px;' onLoad="checkerror();">
+<body style='padding-top:0px;'>
 <input type="hidden" name="id_user" id="id_user" value="<?php echo $_COOKIE['user_id']; ?>" />
-<?php
-if(isset($_GET['error'])){
-	$error_message = $_GET['error'];
-	echo "<input type='hidden' id='error' value='$error_message' />";
-}
-if(isset($_GET['message'])){
-	$message = $_GET['message'];
-	echo "<input type='hidden' id='success' value='$message' />";
-}
-if(isset($_GET['warning'])){
-	$message = $_GET['warning'];
-	echo "<input type='hidden' id='warning' value='$message' />";
-}
-checkError();
-
-?>
 
     <div id="wrapper">
     <?php if(!isset($_GET['nomenu'])) : ?>

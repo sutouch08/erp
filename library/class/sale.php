@@ -10,6 +10,9 @@ class sale
 	public $is_delete;
 	public $emp_delete;
 	public $date_upd;
+
+
+
 	public function __construct($id = "")
 	{
 		if( $id != "" )
@@ -27,10 +30,15 @@ class sale
 				$this->is_delete	= $rs->is_deleted;
 				$this->emp_delete	= $rs->emp_delete;
 				$this->date_upd	= $rs->date_upd;
-			}	
+			}
 		}
 	}
-	
+
+
+
+
+
+
 	public function add(array $ds)
 	{
 		$sc = FALSE;
@@ -47,9 +55,15 @@ class sale
 			}
 			$sc = dbQuery("INSERT INTO tbl_sale (".$fields.") VALUES (".$values.")");
 		}
+		
 		return $sc;
 	}
-	
+
+
+
+
+
+
 	public function update($id, array $ds)
 	{
 		$sc = FALSE;
@@ -60,35 +74,57 @@ class sale
 			foreach( $ds as $field => $value )
 			{
 				$set .= $i == 1 ? $field . " = '".$value."'" : ", ". $field . " = '".$value."'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("UPDATE tbl_sale SET ".$set." WHERE id = '".$id."'");
 		}
+
 		return $sc;
 	}
-	
-	
+
+
+
+
+
+
+
+
 	public function delete( $id , $emp)
 	{
-		return  dbQuery("UPDATE tbl_sale SET is_deleted = 1, emp_delete = ".$emp." WHERE id = '".$id."'");	
+		return  dbQuery("UPDATE tbl_sale SET is_deleted = 1, emp_delete = ".$emp." WHERE id = '".$id."'");
 	}
-	
+
+
+
+
+
+
 	public function unDelete( $id, $emp )
 	{
 		return dbQuery("UPDATE tbl_sale SET is_deleted = 0, emp_delete = ".$emp." WHERE id = '".$id."'");
 	}
-	
+
+
+
+
+
 	public function isExists($id)
 	{
 		$sc = FALSE;
 		$qs = dbQuery("SELECT id FROM tbl_sale WHERE id = '".$id."'");
 		if( dbNumRows($qs) > 0 )
 		{
-			$sc = TRUE;	
+			$sc = TRUE;
 		}
+
 		return $sc;
 	}
-	
+
+
+
+
+
+
 	public function validUserName($id, $userName)
 	{
 		$sc = TRUE;
@@ -97,10 +133,15 @@ class sale
 		{
 			$sc = FALSE;
 		}
-		return $sc;			
+
+		return $sc;
 	}
-	
-	
+
+
+
+
+
+
 	public function getNameByCode($code)
 	{
 		$sc = "";
@@ -109,10 +150,15 @@ class sale
 		{
 			list( $sc ) = dbFetchArray( $qs );
 		}
+
 		return  $sc;
 	}
-	
-	
+
+
+
+
+
+
 	public function getSaleName($id)
 	{
 		$sc = "";
@@ -121,10 +167,14 @@ class sale
 		{
 			list( $sc ) = dbFetchArray( $qs );
 		}
+
 		return  $sc;
 	}
-	
-	
+
+
+
+
+
 	public function getSaleId($code)
 	{
 		$sc = '0000';
@@ -133,11 +183,65 @@ class sale
 		{
 			list( $sc ) = dbFetchArray($qs);
 		}
+
 		return $sc;
 	}
 
-	
+
+
+
+
+
+
+
+
+
+	public function getName($id)
+	{
+		$sc = "";
+		$qs = dbQuery("SELECT name FROM tbl_sale WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray( $qs );
+		}
+
+		return  $sc;
+	}
+
+
+
+
+
+	public function getId($code)
+	{
+		$sc = '0000';
+		$qs = dbQuery("SELECT id FROM tbl_sale WHERE code = '".$code."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+
+		return $sc;
+	}
+
+
+
+
+
+	public function getCode($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT code FROM tbl_sale WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1)
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+
+		return $sc;
+	}
+
+
 }//--- end class
-	
+
 
 ?>

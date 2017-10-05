@@ -2,8 +2,9 @@
 class movement
 {
 	public function __construct(){}
-	
-	
+
+
+
 	public function move_in($reference, $id_warehouse, $id_zone, $id_pd, $qty, $date_upd)
 	{
 		if( $this->isMoveInExists($reference, $id_warehouse, $id_zone, $id_pd) )
@@ -21,11 +22,13 @@ class movement
 			$qr .= "(reference, id_warehouse, id_zone, id_product, move_in, date_upd) ";
 			$qr .= "VALUES ";
 			$qr .= "('".$reference."', '".$id_warehouse."', '".$id_zone."', '".$id_pd."', '".$qty."', '".$date_upd."')";
-			return dbQuery($qr);	
+			return dbQuery($qr);
 		}
 	}
-	
-	
+
+
+
+
 	public function move_out($reference, $id_warehouse, $id_zone, $id_pd, $qty, $date_upd)
 	{
 		if( $this->isMoveOutExists($reference, $id_warehouse, $id_zone, $id_pd) )
@@ -43,12 +46,14 @@ class movement
 			$qr .= "(reference, id_warehouse, id_zone, id_product, move_out, date_upd) ";
 			$qr .= "VALUES ";
 			$qr .= "('".$reference."', '".$id_warehouse."', '".$id_zone."', '".$id_pd."', '".$qty."', '".$date_upd."')";
-			return dbQuery($qr);	
+			return dbQuery($qr);
 		}
 	}
-	
-	
-	
+
+
+
+
+
 	private function isMoveInExists($reference, $id_warehouse, $id_zone, $id_pd)
 	{
 		$sc = FALSE;
@@ -65,7 +70,11 @@ class movement
 		}
 		return $sc;
 	}
-	
+
+
+
+
+
 	private function isMoveOutExists($reference, $id_warehouse, $id_zone, $id_pd)
 	{
 		$sc = FALSE;
@@ -82,17 +91,24 @@ class movement
 		}
 		return $sc;
 	}
-	
+
+
+
+
+
 	public function dropMovement($reference)
 	{
 		return dbQuery("DELETE FROM tbl_stock_movement WHERE reference = '".$reference."'");
 	}
-	
+
+
+
+
 	public function removeMovement($reference, $id_pd)
 	{
-		return dbQuery("DELETE FROM tbl_stock_movement WHERE reference = '".$reference."' AND id_product = '".$id_pd."'");	
+		return dbQuery("DELETE FROM tbl_stock_movement WHERE reference = '".$reference."' AND id_product = '".$id_pd."'");
 	}
-	
+
 }//--- end class
-	
+
 ?>
