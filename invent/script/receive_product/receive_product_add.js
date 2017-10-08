@@ -18,13 +18,13 @@ function receiveProduct(){
 		if( count == 1 ){
 			var cqty = input.val() == "" ? 0 : parseInt(input.val());
 			qty += cqty;
-			input.val(qty);		
-			$("#qty").val(1);	
+			input.val(qty);
+			$("#qty").val(1);
 		}else{
 			swal({
-				title: "ข้อผิดพลาด !", 
-				text: "บาร์โค้ดไม่ถูกต้องหรือสินค้าไม่ตรงกับใบสั่งซื้อ", 
-				type: "error"}, 
+				title: "ข้อผิดพลาด !",
+				text: "บาร์โค้ดไม่ถูกต้องหรือสินค้าไม่ตรงกับใบสั่งซื้อ",
+				type: "error"},
 				function(){
 					setTimeout( function(){ $("#barcode")	.focus(); }, 1000 );
 				});
@@ -33,6 +33,9 @@ function receiveProduct(){
 		bc.focus();
 	}
 }
+
+
+
 
 
 function save(){
@@ -48,12 +51,12 @@ function save(){
 
 	if( id_rec == "" )
 	{
-	
+
 		if( count == 0 ){
 			swal("ข้อผิดพลาด !", "ไม่พบรายการ", "error");
 			return false;
 		}
-		
+
 		//---- validate Date
 		if( ! isDate(date) ){
 			var message = "วันที่ไม่ถูกต้อง";
@@ -62,7 +65,7 @@ function save(){
 		}else{
 			removeError($("#dateAdd"), $("#date-error"), "");
 		}
-		
+
 		//--- validate PO Reference
 		if( po.length == 0  ){
 			var message = "กรุณาระบุใบสั่งซื้อ";
@@ -71,7 +74,7 @@ function save(){
 		}else{
 			removeError($("#poCode"), $("#po-error"),"");
 		}
-		
+
 		//--- validate zone
 		if( zoneName.length == 0 || id_zone == "" ){
 			var message = "กรุณาระบุโซนรับเข้า";
@@ -80,7 +83,7 @@ function save(){
 		}else{
 			removeError($("#zoneName"), $("#zone-error"), "");
 		}
-		
+
 		var receive = $("#receiveForm").serializeArray();
 		//load_in();
 		$.ajax({
@@ -110,8 +113,8 @@ function save(){
 							}
 						});
 					}else{
-						swal("id_receive_product not found");	
-					}	
+						swal("id_receive_product not found");
+					}
 					//swal({title: "บันทึกสำเร็จ", type: "success", timer: 1000 });
 					//
 				}else{
@@ -125,6 +128,10 @@ function save(){
 }
 
 
+
+
+
+
 function checkLimit(){
 	var limit = $("#overLimit").val();
 	var over = 0;
@@ -135,29 +142,45 @@ function checkLimit(){
 		var qty = parseInt($("#receive-"+barcode).val() );
 		if( ! isNaN(limit) && ! isNaN( qty ) ){
 			if( qty > limit ){
-				over++;	
+				over++;
 			}
-		} 
-    });	
+		}
+    });
 	if( over > 0 ){
-		getApprove();	
+		getApprove();
 	}else{
 		save();
 	}
 }
 
 
+
+
+
+
 $("#sKey").keyup(function(e) {
     if( e.keyCode == 13 ){
-		doApprove();	
+		doApprove();
 	}
 });
 
+
+
+
+
 function getApprove(){
-	$("#approveModal").modal("show");	
+	$("#approveModal").modal("show");
 }
 
+
+
+
+
 $("#approveModal").on('shown.bs.modal', function(){ $("#sKey").focus(); });
+
+
+
+
 
 
 function doApprove(){
@@ -185,6 +208,10 @@ function doApprove(){
 	}
 }
 
+
+
+
+
 function leave(){
 	swal({
 		title: 'ยกเลิกข้อมูลนี้ ?',
@@ -196,8 +223,12 @@ function leave(){
 	}, function(){
 		goBack();
 	});
-			
+
 }
+
+
+
+
 
 function getData(){
 	var po = $("#poCode").val();
@@ -220,11 +251,15 @@ function getData(){
 				});
 			}else{
 				swal("ข้อผิดพลาด !", rs, "error");
-				$("#receiveTable").html('');	
+				$("#receiveTable").html('');
 			}
 		}
 	});
 }
+
+
+
+
 
 function getEdit(){
 	var id = $("#id_receive_product").val();
@@ -241,10 +276,12 @@ function getEdit(){
 				$("#remark").removeAttr('disabled');
 			}
 		}
-	});	
+	});
 	$("#btn-edit").addClass('hide');
 	$("#btn-update").removeClass('hide');
 }
+
+
 
 
 
@@ -257,24 +294,38 @@ $("#supplier").autocomplete({
 		var arr = rs.split(' | ');
 		if( arr.length == 2 ){
 			$(this).val(arr[0]);
-			$("#id_supplier").val(arr[1]);	
+			$("#id_supplier").val(arr[1]);
 		}else{
 			$(this).val('');
-			$("#id_supplier").val('');	
+			$("#id_supplier").val('');
 		}
 	}
 });
+
+
+
+
+
 
 $("#poCode").autocomplete({
 	source: "controller/receiveProductController.php?search_po",
 	autoFocus: true
 });
 
+
+
+
+
+
 $("#poCode").focusout(function(e) {
     if( $(this).val().length > 0 ){
-		getData();	
+		getData();
 	}
 });
+
+
+
+
 
 
 $("#zoneName").autocomplete({
@@ -285,7 +336,7 @@ $("#zoneName").autocomplete({
 		var arr = rs.split(' | ');
 		if( arr.length == 2 ){
 			$("#id_zone").val(arr[1]);
-			$("#zoneName").val(arr[0]);		
+			$("#zoneName").val(arr[0]);
 		}else{
 			$("#id_zone").val('');
 			$("#zoneName").val('');
@@ -293,13 +344,20 @@ $("#zoneName").autocomplete({
 	}
 });
 
+
+
+
+
 $("#dateAdd").datepicker({ dateFormat: 'dd-mm-yy'});
+
+
+
 
 
 $("#barcode").keyup(function(e) {
     if( e.keyCode == 13 ){
 		if( $(this).val() != "" ){
-			receiveProduct();	
+			receiveProduct();
 		}
 	}
 });
@@ -307,14 +365,14 @@ $("#barcode").keyup(function(e) {
 
 
 
+
+
 function sumReceive(){
-	
+
 	var qty = 0;
 	$(".receive-box").each(function(index, element) {
         var cqty = isNaN( parseInt( $(this).val() ) ) ? 0 : parseInt( $(this).val() );
 		qty += cqty;
-    });	
+    });
 	$("#total-receive").text( addCommas(qty) );
 }
-
-

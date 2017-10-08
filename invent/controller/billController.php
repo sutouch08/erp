@@ -76,11 +76,6 @@ if( isset( $_GET['confirmOrder']))
 		$message = 'เปิดบิลไม่สำเร็จ เนื่องจากสถานะออเดอร์ถูกเปลี่ยนไปแล้ว';
 	}
 
-	if( $sc === TRUE )
-	{
-		$order->exportSO($order->id);
-	}
-
 	echo $sc === TRUE ? 'success' : $message;
 
 }

@@ -10,7 +10,7 @@
 </div>
 
 <hr />
-<?php 
+<?php
 //--- function getFilter in function/tools.php
 $sCode 	= getFilter('sCode', 'sPaymentCode', '');	//---	reference
 $sCus	 	= getFilter('sCus', 'sPaymentCus', '' );	//---	customer
@@ -59,35 +59,35 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 		createCookie('sOrderCode', $sCode);
 		$where .= "AND o.reference LIKE '%".$sCode."%' ";
 	}
-	
+
 	//--- Customer
 	if( $sCus != "" )
 	{
 		createCookie('sOrderCus', $sCus);
 		$where .= "AND ( o.id_customer IN(".getCustomerIn($sCus).") OR o.online_code LIKE '%".$sCus."%') "; //--- function/customer_helper.php
 	}
-	
+
 	//--- Employee
 	if( $sAcc != "" )
 	{
 		createCookie('sAcc', $sAcc);
 		$where .= "AND (a.bank_name LIKE '%".$sAcc."%' OR a.branch LIKE '%".$sAcc."%' OR a.acc_name LIKE '%".$sAcc."%' OR a.acc_no LIKE '%".$sAcc."%') ";
 	}
-	
+
 	if( $fromDate != "" && $toDate != "" )
 	{
 		createCookie('fromDate', $fromDate);
 		createCookie('toDate', $toDate);
-		$where .= "AND p.paydate >= '".fromDate($fromDate)."' AND p.paydate <= '". toDate($toDate)."' ";	
+		$where .= "AND p.paydate >= '".fromDate($fromDate)."' AND p.paydate <= '". toDate($toDate)."' ";
 	}
-	
+
 	$where .= "ORDER BY p.paydate DESC";
-	
+
 	$qx = "SELECT p.*, o.reference, o.id_customer, o.online_code, o.isOnline FROM ";
 	$qr = "tbl_payment AS p ";
 	$qr .= "JOIN tbl_order AS o ON p.id_order = o.id ";
 	$qr .= "JOIN tbl_bank_account AS a ON p.id_account = a.id_account ";
-	
+
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
 	$paginator->Per_Page($qr, $where, $get_rows);
@@ -128,15 +128,17 @@ $toDate	= getFilter('toDate', 'toDate', '' );
                 <td class="text-center"><?php echo thaiDateFormat($rs->paydate, TRUE, '/'); ?></td>
                 <td class="text-right">
                 	<button type="button" class="btn btn-xs btn-warning" onclick="viewValidDetail(<?php echo $rs->id_order; ?>)"><i class="fa fa-eye"></i></button>
-                    <button type="button" class="btn btn-xs btn-danger" onclick="removeValidPayment(<?php echo $rs->id_order; ?>)"><i class="fa fa-trash"></i></button>
+                  <button type="button" class="btn btn-xs btn-danger" onclick="removeValidPayment(<?php echo $rs->id_order; ?>, '<?php echo $rs->reference; ?>')">
+										<i class="fa fa-trash"></i>
+									</button>
                 </td>
             </tr>
-<?php	$no++;	?>            
+<?php	$no++;	?>
 <?php 	endwhile; ?>
 
 <?php else : ?>
 		<tr><td colspan="10" class="text-center"><h4>ไม่พบรายการ</h4></td></tr>
-<?php endif; ?>        
+<?php endif; ?>
         </tbody>
     </table>
     </div>

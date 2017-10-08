@@ -10,6 +10,10 @@ function sender_name($id_sender)
 	return $name;
 }
 
+
+
+
+
 function getSender($id)
 {
 	$sc = FALSE;
@@ -20,6 +24,10 @@ function getSender($id)
 	}
 	return $sc;
 }
+
+
+
+
 
 
 function sender_in($txt) /// return id_sender LIKE IN( *** return value ***)
@@ -34,26 +42,37 @@ function sender_in($txt) /// return id_sender LIKE IN( *** return value ***)
 		{
 			$in .= $rs['id_sender'];
 			if( $i != $row ){ $in .= ', '; }
-			$i++;	
+			$i++;
 		}
 	}
 	else
 	{
-		$in = false; 
+		$in = false;
 	}
 	return $in;
 }
 
+
+
+
+
+
 function countAddress($id_customer)
 {
-	$qs = dbQuery("SELECT id_address FROM tbl_address WHERE id_customer = ".$id_customer);
-	return dbNumRows($qs);	
+	$qs = dbQuery("SELECT id_address FROM tbl_address WHERE id_customer = '".$id_customer."'");
+	return dbNumRows($qs);
 }
+
+
+
+
+
+
 
 function countSender($id_customer)
 {
 	$sd = 0;
-	$qs = dbQuery("SELECT * FROM tbl_transport WHERE id_customer = ".$id_customer);
+	$qs = dbQuery("SELECT * FROM tbl_transport WHERE id_customer = '".$id_customer."'");
 	if( dbNumRows($qs) == 1 )
 	{
 		$rs = dbFetchArray($qs);
@@ -65,37 +84,57 @@ function countSender($id_customer)
 	return $sd;
 }
 
+
+
+
+
+
 function countBoxes($id_order)
 {
 	$qs = dbQuery("SELECT id_box FROM tbl_box WHERE id_order = ".$id_order);
-	return dbNumRows($qs);	
+	return dbNumRows($qs);
 }
+
+
+
+
+
 
 function getAllCustomerAddress($id_customer)
 {
 	$sc = FALSE;
-	$qs = dbQuery("SELECT * FROM tbl_address WHERE id_customer = ".$id_customer);
+	$qs = dbQuery("SELECT * FROM tbl_address WHERE id_customer = '".$id_customer."'");
 	if( dbNumRows($qs) > 0 )
 	{
-		$sc = $qs; 	
+		$sc = $qs;
 	}
 	return $sc;
 }
 
+
+
+
+
+
 function getAllSender($id_customer)
 {
 	$sc = FALSE;
-	$qs = dbQuery("SELECT * FROM tbl_transport WHERE id_customer = ".$id_customer);
+	$qs = dbQuery("SELECT * FROM tbl_transport WHERE id_customer = '".$id_customer."'");
 	if( dbNumRows($qs) > 0 )
 	{
 		$sc = dbFetchArray($qs);
 	}
 	return $sc;
 }
+
+
+
+
+
 function getMainSender($id_customer)
 {
 	$sc = 0;
-	$qs = dbQuery("SELECT main_sender FROM tbl_transport WHERE id_customer = ".$id_customer);
+	$qs = dbQuery("SELECT main_sender FROM tbl_transport WHERE id_customer = '".$id_customer."'");
 	if( dbNumRows($qs) == 1 )
 	{
 		list( $sc ) = dbFetchArray($qs);
@@ -103,16 +142,28 @@ function getMainSender($id_customer)
 	return $sc;
 }
 
+
+
+
+
+
+
 function getidAddress($id_customer)
 {
 	$sc = 0;
-	$qs = dbQuery("SELECT id_address FROM tbl_address WHERE id_customer = ".$id_customer." LIMIT 1 ");
+	$qs = dbQuery("SELECT id_address FROM tbl_address WHERE id_customer = '".$id_customer."' LIMIT 1 ");
 	if( dbNumRows($qs) == 1 )
 	{
-		list( $sc ) = dbFetchArray($qs);	
+		list( $sc ) = dbFetchArray($qs);
 	}
 	return $sc;
 }
+
+
+
+
+
+
 
 function getAddress($id)
 {
@@ -120,7 +171,7 @@ function getAddress($id)
 	$qs = dbQuery("SELECT * FROM tbl_address WHERE id_address = ".$id);
 	if( dbNumRows($qs) == 1 )
 	{
-		$sc = dbFetchArray($qs);	
+		$sc = dbFetchArray($qs);
 	}
 	return $sc;
 }

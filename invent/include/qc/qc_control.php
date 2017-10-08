@@ -26,9 +26,12 @@
     </button>
   </div>
   <div class="col-sm-2 col-sm-offset-1">
-    <h3 id="all_qty" class="title middle text-center" style="height:55px; background-color:black; color:white; padding-top:10px; margin-top:0px;">
-      <?php echo number($qc->totalQc($order->id)); ?>
-    </h3>
+    <div class="title middle text-center" style="height:55px; background-color:black; color:white; padding-top:20px; margin-top:0px;">
+      <h4 id="all_qty" style="display:inline;">
+        <?php echo number($qc->totalQc($order->id)); ?>
+      </h4>
+      <h4 style="display:inline;"> / <?php echo number(getSumQty($order->id)); ?></h4>
+    </div>
   </div>
 
   <input type="hidden" id="id_order" value="<?php echo $order->id; ?>"/>

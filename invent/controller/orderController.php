@@ -25,7 +25,7 @@ if( isset( $_GET['saveOrder'] ) )
 
 
 
-//----- 	แก้ไขหัวเอกสาร 
+//----- 	แก้ไขหัวเอกสาร
 //------ 	ถ้ามีการเปลี่ยนวันที่ /ชื่อลูกค้า /ช่องทางการชำระเงิน /ช่องทางการขาย จะทำการคำนวณส่วนลดใหม่
 //------	ถ้าการชำระเงินมีเครดิตเทอม จะคืนยอดใช้ไปก่อน แล้วค่อยบันทึกเพื่อตัดยอดเครดิตอีกที
 if( isset( $_GET['updateOrder'] ) )
@@ -49,7 +49,7 @@ if( isset( $_GET['updateEditDiscount'] ) )
 //---- แก้ไขราคาสินค้า โดยพนักงาน และมีผู้อนุมัติการแก้ไข
 if( isset( $_GET['updateEditPrice'] ) )
 {
-	include 'order/edit_price.php';	
+	include 'order/edit_price.php';
 }
 
 
@@ -154,7 +154,7 @@ if( isset( $_GET['getProductsInViewTab'] ) )
 
 
 
-//----- Echo Order detail list 
+//----- Echo Order detail list
 if( isset( $_GET['getDetailTable'] ) )
 {
 	include 'order/detail_table.php';
@@ -239,7 +239,7 @@ if( isset( $_GET['updateServiceFee'] ) )
 	$sc = 'fail';
 	$amount	= $_POST['fee'];
 	$id			= $_POST['id_order'];
-	$order	= new order();	
+	$order	= new order();
 	$arr		= array("service_fee" => $amount);
 	if( $order->update($id, $arr) )
 	{
@@ -287,7 +287,7 @@ if( isset( $_GET['getAddressTable'] ) )
 		{
 			while( $data = dbFetchArray($qs) )
 			{
-				$arr	= array( 
+				$arr	= array(
 							'id'			=> $data['id'],
 							'name'		=> $data['first_name'].' '.$data['last_name'],
 							'address'	=> $data['address1'].' '.$data['address2'].' '.$data['province'].' '.$data['postcode'],
@@ -301,7 +301,7 @@ if( isset( $_GET['getAddressTable'] ) )
 			$sc = json_encode($ds);
 		}
 	}
-	echo $sc;	
+	echo $sc;
 }
 
 
@@ -332,7 +332,7 @@ if( isset( $_GET['getAddressDetail']) )
 					"alias"			=> $rs->alias,
 					"is_default"	=> $rs->is_default
 				);
-					
+
 		$sc = json_encode($ds);
 	}
 	echo $sc;
@@ -398,8 +398,11 @@ if( isset( $_GET['setDefaultAddress'] ) )
 	$id = $_POST['id_address'];
 	$add = new online_address();
 	$sc = $add->setDefault($id);
-	echo $sc === TRUE ? 'success' : 'fail';		
+	echo $sc === TRUE ? 'success' : 'fail';
 }
+
+
+
 
 
 
@@ -420,8 +423,8 @@ if( isset( $_GET['clearFilter'] ) )
 	deleteCookie('sOrderEmp');
 	deleteCookie('fromDate');
 	deleteCookie('toDate');
-	echo "done";	
+	echo "done";
 }
 
-	
+
 ?>

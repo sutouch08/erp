@@ -74,6 +74,30 @@ class online_address
 
 
 
+	public function getDefaultId($code)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT id FROM tbl_address_online WHERE customer_code = '".$code."' AND is_default = 1");
+
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		else  //---	เผื่อว่ามีที่อยู่แต่ไม่ได้ตั้งเป็น default ไว้
+		{
+			$qs = dbQuery("SELECT id FROM tbl_address_online WHERE customer_code = '".$code."'");
+			if( dbNumRows($qs) > 0)
+			{
+				list( $sc ) = dbFetchArray($qs);
+			}
+		}
+
+		return $sc;
+	}
+
+
+
+
 	public function getCode($id)
 	{
 		$sc = '';

@@ -45,7 +45,7 @@ if( isset( $_GET['getBoxList']))
 
 if( isset( $_GET['printBox']))
 {
-	include 'qc/print_box.php';
+	include '../print/packing/print_box.php';
 }
 
 ?>

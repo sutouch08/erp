@@ -34,7 +34,7 @@
 		$HDISCSTR	= $order->bDiscText;	//--	ข้อความ ส่วนลดท้ายบิลเป็น % หรือยอดเงิน เช่น 10%+5% , 200+3%
 		$DISCAMT1	= $order->bDiscAmount;		//--	มูลค่าส่วนลดท้ายบิล เป็นจำนวนเงินบาท
 		$AMT			= round( $order->getTotalSoldAmount($order->id, FALSE), 2);	//--	มูลค่าสินค้าไม่รวม VAT (เป็นยอดรวมทั้งบิล) FALSE = ไม่รวม VAT decmal 15,2
-		$VATAMT		= round( getVatAmount( $order->getTotalSoldAmount($order->id,TRUE ), FALSE);	//--	มูลค่าภาษี (เป็นยอดรวมทั้งบิล) TRUE = VAT นอก FALSE = VAT ใน decmal 14,2
+		$VATAMT		= round( getVatAmount( $order->getTotalSoldAmount($order->id,TRUE ), getVatRate($VATTYPE), FALSE),2 );	//--	มูลค่าภาษี (เป็นยอดรวมทั้งบิล) TRUE = VAT นอก FALSE = VAT ใน decmal 14,2
 		$QCCURRENCY	= "";		//--	รหัสหน่วยเงิน
 		$XRATE		= "";			//--	อัตราแลกเปลี่ยนหน่วยเงิน
 		$DISCAMTK	= "";			//--	มูลค่าส่วนลดท้ายบิล เป็นจำนวนเงิน ตามหน่วยเงินที่คีย์
@@ -189,8 +189,8 @@
 				$excel->getActiveSheet()->setCellValue('M'.$row, $DUEDATE);
 				$excel->getActiveSheet()->setCellValueExplicit('N'.$row, $QCCOOR, PHPExcel_Cell_DataType::TYPE_STRING);
 
-				$excel->getActiveSheet()->setCellValueExplicit('O'.$row, $HASRET, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('P'.$row, $DETAIL, PHPExcel_Cell_DataType::TYPE_STRING);
+				$excel->getActiveSheet()->setCellValueExplicit('O'.$row, $QCEMPL, PHPExcel_Cell_DataType::TYPE_STRING);
+				$excel->getActiveSheet()->setCellValueExplicit('P'.$row, $CREDTERM, PHPExcel_Cell_DataType::TYPE_STRING);
 				$excel->getActiveSheet()->setCellValueExplicit('Q'.$row, $VATISOUT, PHPExcel_Cell_DataType::TYPE_STRING);
 				$excel->getActiveSheet()->setCellValueExplicit('R'.$row, $VATTYPE, PHPExcel_Cell_DataType::TYPE_STRING);
 				$excel->getActiveSheet()->setCellValueExplicit('S'.$row, $HDISCSTR, PHPExcel_Cell_DataType::TYPE_STRING);
@@ -208,7 +208,7 @@
 				$excel->getActiveSheet()->setCellValue('AE'.$row, $rs->qty);
 				$excel->getActiveSheet()->setCellValueExplicit('AF'.$row, $pd->getUnitCode($rs->id_product) , PHPExcel_Cell_DataType::TYPE_STRING);
 				$excel->getActiveSheet()->setCellValue('AG'.$row, 1);
-				$excel->getActiveSheet()->setCellValue('AH'.$row, $rs->price );
+				$excel->getActiveSheet()->setCellValue('AH'.$row, $rs->price_inc );
 				$excel->getActiveSheet()->setCellValueExplicit('AI'.$row, $rs->discount_label, PHPExcel_Cell_DataType::TYPE_STRING );
 				$excel->getActiveSheet()->setCellValue('AJ'.$row, $PRICEKE);
 				$excel->getActiveSheet()->setCellValue('AK'.$row, $DISCAMTIK);
@@ -253,6 +253,7 @@
 		{
 			$sc =  "ERROR : ".$e->getMessage();
 		}
+
 		return $sc;
 	}
 

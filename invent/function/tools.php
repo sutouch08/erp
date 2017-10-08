@@ -1,35 +1,18 @@
 <?php
+
+
+function goBackButton()
+{
+		return '<button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i> กลับ</button>';
+}
+
+
 //----ใช้สำหรับรับค่าจาก searchForm ต่างๆ
 function getFilter($postName, $cookieName, $defaultValue = "")
 {
 	$sc = isset( $_POST[$postName] ) ? trim( $_POST[$postName] ) : ( getCookie($cookieName) ? getCookie($cookieName) : $defaultValue );
 	return $sc;
 }
-
-
-//-----------------------  ส่งกลับ id_employee ที่คั่นด้วย , เพื่อนำไปใช้กับ query
-function employee_in($txt)
-{
-	$qs = dbQuery("SELECT id_employee FROM tbl_employee WHERE first_name LIKE '%".$txt."%' OR last_name LIKE '%".$txt."%'");
-	$row = dbNumRows($qs);
-	if( $row > 0 )
-	{
-		$in = '';
-		$i = 1;
-		while($rs = dbFetchArray($qs))
-		{
-			$in .= $rs['id_employee'];
-			if( $i != $row ){ $in .= ', '; }
-			$i++;
-		}
-	}
-	else
-	{
-		$in = FALSE;
-	}
-	return $in;
-}
-
 
 
 

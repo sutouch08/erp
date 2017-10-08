@@ -19,15 +19,16 @@ $dbName = 'warrix_erp';
 
 $thisFile = str_replace('\\', '/', __FILE__);
 $docRoot = $_SERVER['DOCUMENT_ROOT'];
-$webRoot  = str_replace(array($docRoot, 'library/config.php'), '', $thisFile); 
+$webRoot  = str_replace(array($docRoot, 'library/config.php'), '', $thisFile);
 $srvRoot  = str_replace('library/config.php', '', $thisFile);
 define('DOC_ROOT', $docRoot);
 define('WEB_ROOT', $webRoot);
 define('SRV_ROOT', $srvRoot);
-define("IMG_DIR",  WEB_ROOT."img/");
-define("LIB_ROOT", SRV_ROOT."library/");
+define('IMG_DIR',  WEB_ROOT.'img/');
+define('LIB_ROOT', SRV_ROOT.'library/');
 define("COOKIE_PATH", WEB_ROOT);
 define("CLASS_ROOT", SRV_ROOT."library/class/");
+define('HELPER_ROOT', SRV_ROOT.'invent/function/');
 require_once 'database.php';
 
 function myAutoLoad($pClassName)

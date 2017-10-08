@@ -13,9 +13,11 @@ class bill
     $qr .= "(SELECT SUM(qty) FROM tbl_qc WHERE id_order = ".$id_order." AND id_product = o.id_product) AS qc ";
     $qr .= "FROM tbl_order_detail AS o ";
     $qr .= "WHERE o.id_order = ".$id_order." GROUP BY o.id_product";
-    
+
     return dbQuery($qr);
   }
-}
+
+
+} //--- End class
 
  ?>

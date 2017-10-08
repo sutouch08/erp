@@ -45,6 +45,17 @@
 </div>
 
 
+<?php
+
+$paginator	= new paginator();
+$get_rows	= get_rows();
+$paginator->Per_Page('tbl_order', $where, $get_rows);
+$paginator->display($get_rows, 'index.php?content=order');
+$qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
+
+
+ ?>
+
 <script>
 function Delete(id, name){
 	swal({
@@ -72,6 +83,8 @@ function Delete(id, name){
 			});
 	});
 }
+
+
 
 
 

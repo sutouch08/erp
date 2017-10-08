@@ -68,7 +68,7 @@ public function isExists($id)
 public function getBarcode($id_pd)
 {
 	$sc = "";
-	$qs = dbQuery("SELECT barcode FROM tbl_barcode WHERE id_product = '".$id_pd."' LIMIT 1")	;
+	$qs = dbQuery("SELECT barcode FROM tbl_barcode WHERE id_product = '".$id_pd."' AND unit_qty = 1 LIMIT 1")	;
 	if( dbNumRows($qs) == 1 )
 	{
 		list( $sc ) = dbFetchArray($qs);

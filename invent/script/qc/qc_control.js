@@ -92,6 +92,8 @@ function saveQc(option){
               timer:1000
             });
 
+            setTimeout(function(){ $("#barcode-item").focus();}, 2000);
+
           }
 
           //--- รีเซ็ตจำนวนที่ยังไม่ได้บันทึก

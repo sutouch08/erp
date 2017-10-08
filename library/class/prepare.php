@@ -91,6 +91,16 @@ class prepare
 
 
 
+    public function getOrderPrepared($id_order)
+    {
+      $qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_prepare WHERE id_order = ".$id_order);
+      list( $qty ) = dbFetchArray($qs);
+
+      return is_null($qty) ? 0 : $qty;
+    }
+
+
+
     //--- จัดสินค้ามาจากที่ไหนบ้าง
     public function prepareFromZone($id_order, $id_pd)
     {

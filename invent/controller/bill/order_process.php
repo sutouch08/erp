@@ -95,11 +95,13 @@
 
             //--- ข้อมูลสำหรับบันทึกยอดขาย
             $arr = array(
+                    'id_order'  => $order->id,
                     'reference' => $order->reference,
                     'id_role'   => $order->role,
                     'role_name' => $role->name,
                     'payment'   => $payment->name,
                     'channels'  => $channels->name,
+                    'id_product'  => $product->id,
                     'product_code'  => $product->code,
                     'product_name'  => $product->name,
                     'color'         => $color->getCode($product->id_color),
@@ -154,7 +156,7 @@
             );
 
             //--- 3. บันทึกยอดขาย
-            $rd = $order->sold($order->id, $arr);
+            $rd = $order->sold($arr);
 
 
             if( $rb === FALSE OR $rc === FALSE OR $rd === FALSE )

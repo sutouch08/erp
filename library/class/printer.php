@@ -126,7 +126,7 @@ public function set_pattern($pattern) //// กำหนดรูปแบบ CSS
 
 public function print_sub_total(array $data)
 {
-	$rs = "<table class='table' style='margin-bottom:0px;'>";
+	$rs = '<table class="table" style="margin-bottom:0px;">';
 	foreach($data as $value)
 	{
 		foreach($value as $val)
@@ -190,6 +190,7 @@ public function add_header(array $data)
 		$this->header_row[$i] = array($label => $value);
 		$i++;
 	}
+
 	return true;
 }
 
