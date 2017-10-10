@@ -9,6 +9,7 @@
 		$total_qty = 0;
 		$total_discount = 0;
 		$total_amount = 0;
+		$total_order = 0;
 		$image = new image();
 		$ds = array();
 		while( $rs = dbFetchObject($qs) )
@@ -26,15 +27,17 @@
 							);
 			array_push($ds, $arr);
 			$total_qty += $rs->qty;
-			$total_discount = $rs->discount_amount;
-			$total_amount = $rs->total_amount;
+			$total_discount += $rs->discount_amount;
+			$total_amount += $rs->total_amount;
+			$total_order += $rs->qty * $rs->price;
 			$no++;
 		}
 		$arr = array(
 					"total_qty" => number_format($total_qty),
+					"order_amount" => number_format($total_order, 2),
 					"total_discount" => number_format($total_discount, 2),
 					"total_amount" => number_format($total_amount, 2)
-				); 
+				);
 		array_push($ds, $arr);
 		$sc = json_encode($ds);
 	}

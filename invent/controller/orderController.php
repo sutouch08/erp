@@ -79,8 +79,31 @@ if( isset( $_GET['getProductGrid'] ) && isset( $_GET['pdCode'] ) )
 {
 	$sc = 'not exists';
 	$pdCode = trim($_GET['pdCode']);
-	$qr = "SELECT s.code FROM tbl_product AS p JOIN tbl_product_style AS s ON p.id_style = s.id ";
-	$qr .= "WHERE p.active = 1 AND p.can_sell = 1 AND is_deleted = 0 GROUP BY p.id_style";
+	$qr = "SELECT code FROM tbl_product_style WHERE code = '".$pdCode."' active = 1 AND can_sell = 1 AND is_deleted = 0";
+	$qs = dbQuery($qr);
+	if( dbNumRows($qs) > 0 )
+	{
+		$pd = new product();
+		$grid = new product_grid();
+		$style = new style();
+		$id_style = $style->getId($pdCode);
+		$sc = $grid->getOrderGrid($id_style);
+		$tableWidth	= $pd->countAttribute($id_style) == 1 ? 800 : $grid->getOrderTableWidth($id_style);
+		$sc .= ' | ' . $tableWidth;
+		$sc .= ' | ' . $id_style;
+	}
+	echo $sc;
+}
+
+
+
+
+//----		Attribute Grid By Search box in sale page
+if( isset( $_GET['getSaleProductGrid'] ) && isset( $_GET['pdCode'] ) )
+{
+	$sc = 'not exists';
+	$pdCode = trim($_GET['pdCode']);
+	$qr = "SELECT code FROM tbl_product_style WHERE code = '".$pdCode."' AND active = 1 AND can_sell = 1 AND is_deleted = 0 AND show_in_sale = 1";
 	$qs = dbQuery($qr);
 	if( dbNumRows($qs) > 0 )
 	{
@@ -154,6 +177,16 @@ if( isset( $_GET['getProductsInViewTab'] ) )
 
 
 
+//----- Echo product style list in tab Use in sale order
+if( isset( $_GET['getSaleProductsInOrderTab'] ) )
+{
+	include 'order/sale_product_tab.php';
+}
+
+
+
+
+
 //----- Echo Order detail list
 if( isset( $_GET['getDetailTable'] ) )
 {
@@ -178,6 +211,9 @@ if( isset( $_GET['getCustomer'] ) && isset( $_REQUEST['term'] ) )
 
 
 
+
+
+
 if( isset( $_GET['getCustomerOnline'] ) && isset( $_REQUEST['term'] ) )
 {
 	$sc = array();
@@ -191,12 +227,46 @@ if( isset( $_GET['getCustomerOnline'] ) && isset( $_REQUEST['term'] ) )
 }
 
 
+
+
+if( isset( $_GET['getSaleCustomer'] ) && isset( $_REQUEST['term'] ) )
+{
+	$sc = array();
+	$cs = new customer();
+	$qs = $cs->search($_REQUEST['term'], "id, name");
+	while( $rs = dbFetchObject($qs) )
+	{
+		$sc[] = $rs->name .' | '. $rs->id;
+	}
+	echo json_encode($sc);
+}
+
+
+
+//---	autocomplete for search box in order page
 if( isset( $_GET['searchProducts'] ) && isset( $_REQUEST['term'] ) )
 {
 	$sc = array();
-	$qr = "SELECT s.code FROM tbl_product AS p JOIN tbl_product_style AS s ON p.id_style = s.id ";
-	$qr .= "WHERE s.code LIKE '%".$_REQUEST['term']."%' AND p.active = 1 AND p.is_deleted = 0 AND p.can_sell = 1 ";
-	$qr .= "GROUP BY p.id_style";
+	$qr  = "SELECT code FROM tbl_product_style WHERE code LIKE '%".$_REQUEST['term']."%' OR name LIKE '%".$_REQUEST['term']."%' ";
+	$qr .= "AND active = 1 AND can_sell = 1 AND is_deleted = 0";
+	$qs = dbQuery($qr);
+	while( $rs = dbFetchObject($qs) )
+	{
+		$sc[] = $rs->code;
+	}
+	echo json_encode($sc);
+}
+
+
+
+
+//---	autocomplete for search box in sale page
+if( isset( $_GET['searchSaleProducts'] ) && isset( $_REQUEST['term'] ) )
+{
+	$sc = array();
+	$qr  = "SELECT code FROM tbl_product_style WHERE (code LIKE '%".$_REQUEST['term']."%' OR name LIKE '%".$_REQUEST['term']."%') ";
+	$qr .= "AND active = 1 AND can_sell = 1 AND is_deleted = 0 AND show_in_sale = 1 ";
+
 	$qs = dbQuery($qr);
 	while( $rs = dbFetchObject($qs) )
 	{

@@ -25,7 +25,7 @@ a:hover, a:focus {
 
 }
 
-.search-full, .search-input { 
+.search-full, .search-input {
 	background: #c0392b;
 }
 
@@ -65,7 +65,7 @@ a:hover, a:focus {
 
 
 .navbar-nav > li > a {
-	color:#fff;
+	/*color:#fff; */
 }
 
 .nav > li.active, .nav > li > a:hover, .nav > li > a:focus, .nav > li:hover > a  {
@@ -83,7 +83,7 @@ a:hover, a:focus {
 .search-box:hover .form-control {
 	background:#e74c3c;
 }
-.search-box:hover .btn-nobg { 
+.search-box:hover .btn-nobg {
 	color:#e74c3c;
 }
 
@@ -103,7 +103,7 @@ a:hover, a:focus {
 
 .product:hover {
 	border: 1px  solid #e74c3c;
-	
+
 }
 
 
@@ -113,7 +113,7 @@ a:hover, a:focus {
 
 .pager2 a {
     border: 1px solid #e74c3c;
-	
+
 }
 
 .pager2 a.selected {
@@ -175,10 +175,10 @@ a:hover, a:focus {
 
 
 .panel-default > .panel-heading {
-	
-	
+
+
 	border-top: 4px  solid #e74c3c;
-	
+
 	}
 
 
@@ -232,7 +232,7 @@ a:hover, a:focus {
 }
 
 #pager2 span {
-    border: 2px solid #c0392b 
+    border: 2px solid #c0392b
 }
 
 .orderStep li.active a {
@@ -255,4 +255,3 @@ darkcoilor {
 citecolor {
 	color:#e74c3c !important;
 }
-

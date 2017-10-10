@@ -5681,7 +5681,7 @@ button.close {
 }
 @media (max-width: 767px) {
   .visible-xs {
-    display: block !important;
+    display: inline-block !important;
   }
   table.visible-xs {
     display: table;

@@ -237,11 +237,17 @@ class product_tab
 	}
 
 
+
+
+
 	public function getParentList($id = 0)
 	{
 		//----- Parent cannot be yoursalfe
 		return dbQuery("SELECT * FROM tbl_product_tab WHERE id != ".$id);
 	}
+
+
+
 
 
 	//-----------------  Search Result
@@ -254,16 +260,43 @@ class product_tab
 
 
 
+
+
 	public function countMember($id)
 	{
 		$qs = dbQuery("SELECT * FROM tbl_tab_product WHERE id_product_tab = ".$id);
 		return dbNumRows($qs);
 	}
 
+
+
+
+
 	public function getStyleInTab($id)
 	{
-		return dbQuery("SELECT id_style FROM tbl_tab_product WHERE id_product_tab = ".$id);
+		$qr = "SELECT t.id_style FROM tbl_tab_product AS t ";
+		$qr .= "JOIN tbl_product_style AS p ON t.id_style = p.id ";
+		$qr .= "WHERE p.active = 1 AND p.can_sell = 1 AND is_deleted = 0 ";
+		$qr .= "AND id_product_tab = ".$id;
+
+		return dbQuery($qr);
 	}
+
+
+
+
+
+	public function getStyleInSaleTab($id)
+	{
+		$qr = "SELECT t.id_style FROM tbl_tab_product AS t ";
+		$qr .= "JOIN tbl_product_style AS p ON t.id_style = p.id ";
+		$qr .= "WHERE p.active = 1 AND p.can_sell = 1 AND p.is_deleted = 0 AND p.show_in_sale = 1 ";
+		$qr .= "AND id_product_tab = ".$id;
+
+		return dbQuery($qr);
+	}
+
+
 }//--- end class
 
 ?>

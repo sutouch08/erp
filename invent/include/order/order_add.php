@@ -1,11 +1,11 @@
-<?php 
+<?php
 $order = isset( $_GET['id_order'] ) ? new order( $_GET['id_order'] ) : new order();
 $disabled = isset($_GET['id_order']) ? 'disabled' : '';
-$hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hide'; 
+$hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hide';
 $online = (isset( $_GET['online'] ) OR $order->isOnline == 1 ) ? TRUE : FALSE;
 ?>
 <div class="row top-row">
-	<div class="col-sm-6 top-row">
+	<div class="col-sm-6 top-col">
     	<h4 class="title"><i class="fa fa-shopping-bag"></i> <?php echo $pageTitle; ?></h4>
     </div>
     <div class="col-sm-6">
@@ -24,14 +24,14 @@ $online = (isset( $_GET['online'] ) OR $order->isOnline == 1 ) ? TRUE : FALSE;
     </div>
 </div>
 <hr class="margin-bottom-10" />
-<?php 
+<?php
 if( $online )
 {
 	include 'include/order/order_add_online_header.php';
 }
 else
 {
-	include 'include/order/order_add_header.php';	
+	include 'include/order/order_add_header.php';
 }
 
 ?>
@@ -64,13 +64,13 @@ else
 </div><!---/ row -->
 <hr style='border-color:#CCC; margin-top: 0px; margin-bottom:0px;' />
 <div class='row'>
-	<div class='col-sm-12'>		
+	<div class='col-sm-12'>
 		<div class='tab-content' style="min-height:1px; padding:0px;">
 		<?php echo getProductTabs(); ?>
 		</div>
 	</div>
 </div>
-<!------------------------------------ End Category Menu ------------------------------------>	
+<!------------------------------------ End Category Menu ------------------------------------>
 
 <?php include 'include/order/order_detail.php'; ?>
 

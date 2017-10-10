@@ -1,35 +1,16 @@
-<?php 
-	$page_menu = "invent_customer";
-	$page_name = "กำหนดสิทธิ์";
+<?php
+
 	$id_tab = 29;
-	$id_profile = $_COOKIE['profile_id'];
-   $pm = checkAccess($id_profile, $id_tab);
+  $pm = checkAccess($id_profile, $id_tab);
 	$view = $pm['view'];
 	$add = $pm['add'];
 	$edit = $pm['edit'];
 	$delete = $pm['delete'];
 	accessDeny($view);
-  	if($add==1){ $can_add = "";}else{ $can_add = "style='display:none;'"; }
+  if($add==1){ $can_add = "";}else{ $can_add = "style='display:none;'"; }
 	if($edit==1){ $can_edit = "";}else{ $can_edit = "style='display:none;'"; }
-	if($delete==1){ $can_delete = "";}else{ $can_delete ="style='display:none;'"; }	
-	function isAccess($id_profile, $id_tab){
-		$sql = dbQuery("SELECT tbl_access.view, tbl_access.add, tbl_access.edit, tbl_access.delete FROM tbl_access WHERE id_profile = '$id_profile' AND id_tab = '$id_tab'");
-		$rw = dbNumRows($sql);
-		if($rw > 0){
-			while($rs = dbFetchArray($sql)){
-				$ac['view'] = $rs['view'];
-				$ac['add'] = $rs['add'];
-				$ac['edit'] = $rs['edit'];
-				$ac['delete'] = $rs['delete'];
-			}
-		}else{
-				$ac['view'] = 0;
-				$ac['add'] = 0;
-				$ac['edit'] = 0;
-				$ac['delete'] = 0;
-		}
-		return $ac;
-	}
+	if($delete==1){ $can_delete = "";}else{ $can_delete ="style='display:none;'"; }
+	
 	?>
 <div class="container">
 <!-- page place holder -->
@@ -67,7 +48,7 @@
     <th style="width:10%; text-align:center">	<input type="checkbox" id="delete_all" /><label for="delete_all" style="vertical-align:middle">&nbsp;&nbsp;ลบ</label></th>
     <th style="width:10%; text-align:center">	<input type="checkbox" id="check_all" /><label for="check_all" style="vertical-align:middle">&nbsp;&nbsp;ทั้งหมด</label></th>
     </thead>
-    <tbody>    
+    <tbody>
     <?php while($rd = dbFetchArray($qs) ) : ?>
     	 <?php $group = $rd['id_group']; ?>
     	<tr >
@@ -108,13 +89,13 @@
      </tbody>
     </table>
     <?php endif; ?>
-<?php else : ?>    
-	
-<?php 
+<?php else : ?>
+
+<?php
 	$sql = dbQuery("SELECT * FROM tbl_profile WHERE id_profile != 1");
 	$row = dbNumRows($sql);
 	$n = 1;
-	if($row>0) : 
+	if($row>0) :
 ?>
     <table class="table table-striped">
     <thead><th style="widht: 10%; text-align:center">ลำดับ</th><th style="width:75%;">โปรไฟล์</th><th style="width:15%; text-align:right">&nbsp;</th></thead>
@@ -131,7 +112,7 @@
     <?php endwhile; ?>
     </table>
     <?php endif; ?>
-<?php endif; ?>	
+<?php endif; ?>
 </form>
 </div>
 </div>
@@ -142,11 +123,11 @@ function group_view_check(el, id)
 	if(el.is(":checked")){
 		$(".view"+id).each(function(index, element) {
 			$(this).prop("checked",true);
-		});	
+		});
 	}else{
 		$(".view"+id).each(function(index, element) {
 			$(this).prop("checked",false);
-		});	
+		});
 	}
 }
 
@@ -155,11 +136,11 @@ function group_add_check(el, id)
 	if(el.is(":checked")){
 		$(".add"+id).each(function(index, element) {
 			$(this).prop("checked",true);
-		});	
+		});
 	}else{
 		$(".add"+id).each(function(index, element) {
 			$(this).prop("checked",false);
-		});	
+		});
 	}
 }
 
@@ -168,11 +149,11 @@ function group_edit_check(el, id)
 	if(el.is(":checked")){
 		$(".edit"+id).each(function(index, element) {
 			$(this).prop("checked",true);
-		});	
+		});
 	}else{
 		$(".edit"+id).each(function(index, element) {
 			$(this).prop("checked",false);
-		});	
+		});
 	}
 }
 
@@ -181,16 +162,16 @@ function group_delete_check(el, id)
 	if(el.is(":checked")){
 		$(".delete"+id).each(function(index, element) {
 			$(this).prop("checked",true);
-		});	
+		});
 	}else{
 		$(".delete"+id).each(function(index, element) {
 			$(this).prop("checked",false);
-		});	
+		});
 	}
 }
 
 function group_all_check(el, id)
-{	
+{
 	if(el.is(":checked")){
 		var view = $("#view_group"+id);
 		var add = $("#add_group"+id);
@@ -203,8 +184,8 @@ function group_all_check(el, id)
 		edit.prop("checked", true);
 		group_edit_check(edit, id);
 		del.prop("checked", true);
-		group_delete_check(del, id);		
-		
+		group_delete_check(del, id);
+
 	}else{
 		$(".all"+id).each(function(index, element) {
 			if($(this).is(":checked"))
@@ -213,12 +194,12 @@ function group_all_check(el, id)
 			}else{
 				return false;
 			}
-		});	
+		});
 	}
 }
 /*
 function group_all_check(el, id)
-{	
+{
 	if(el.is(":checked")){
 		$(".all"+id).each(function(index, element) {
 			if($(this).is(":checked"))
@@ -227,7 +208,7 @@ function group_all_check(el, id)
 			}else{
 				$(this).trigger("click");
 			}
-		});	
+		});
 	}else{
 		$(".all"+id).each(function(index, element) {
 			if($(this).is(":checked"))
@@ -236,7 +217,7 @@ function group_all_check(el, id)
 			}else{
 				return false;
 			}
-		});	
+		});
 	}
 }*/
 
@@ -313,6 +294,6 @@ function check(el, id_tab){
 }
 
 function save(){
-	$("#right_form").submit();	
+	$("#right_form").submit();
 }
 </script>

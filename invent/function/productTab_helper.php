@@ -2,7 +2,7 @@
 
 function productTabMenu($mode = 'order')
 {
-	$ajax = $mode == 'order' ? 'getOrderTabs' : 'getViewTabs';
+	$ajax = $mode == 'order' ? 'getOrderTabs' : ($mode == 'sale' ? 'getSaleOrderTabs' : 'getViewTabs');
 	$sc = '';
 	$qs = dbQuery("SELECT * FROM tbl_product_tab WHERE id_parent = 0");
 	while( $rs = dbFetchObject($qs))

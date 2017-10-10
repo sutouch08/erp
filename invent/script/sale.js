@@ -8,24 +8,26 @@ function addUser(){
 	var password = $("#password").val();
 	var repassword = $("#re-password").val();
 	var active = $("#active").val();
-	
+
 	if( 	login.length == 0 && password.length > 0 )
 	{
 		var message = "User name ต้องไม่ว่างเปล่า";
 		addError($("#userName"), $("#userName-error"), message);
-		return;	
+		return;
 	}
 	if( login.length > 0 && ( password.length == 0 || repassword.length == 0 )){
 		matchPassword();
 		return;
 	}
-	
+
 	if( lengthError == 1 || matchError == 1 || loginError == 1 ){
 		validUserName();
 		validPassword();
 		matchPassword();
 		return;
 	}
+
+
 	load_in();
 	$.ajax({
 		url:"controller/saleController.php?addUser",
@@ -36,18 +38,22 @@ function addUser(){
 			if( rs == "success" ){
 				swal({ title: "Success", text: "ปรับปรุงข้อมูลเรียบร้อยแล้ว", type: "success", timer: 1000 });
 			}else{
-				swal("ข้อผิดพลาด!", rs, "error");	
+				swal("ข้อผิดพลาด!", rs, "error");
 			}
 		}
-	});	
+	});
 }
+
+
+
+
 
 function updateUser(){
 	var id 		= $("#id").val();
 	var login 		= $.trim($("#userName").val());
 	var active 	= $("#active").val();
 	if( lengthError == 1 ){
-		validUserName();	
+		validUserName();
 		return;
 	}
 	load_in();
@@ -60,11 +66,16 @@ function updateUser(){
 			if( rs == "success" ){
 				swal({ title: "Success", text: "ปรับปรุงข้อมูลเรียบร้อยแล้ว", type: "success", timer: 1000 });
 			}else{
-				swal("ข้อผิดพลาด!", rs, "error");	
+				swal("ข้อผิดพลาด!", rs, "error");
 			}
 		}
-	});	
+	});
 }
+
+
+
+
+
 
 function saveEdit(){
 	if($("#password").length > 0 ){
@@ -73,6 +84,9 @@ function saveEdit(){
 		updateUser();
 	}
 }
+
+
+
 
 function validUserName(){
 	var user = $.trim( $("#userName").val() );
@@ -100,14 +114,16 @@ function validUserName(){
 		});
 	}else{
 		message = "กำหนด Login สำหรับเข้าระบบ ไม่เกิน 20 ตัวอักษร";
-		removeError($("#userName"), $("#userName-error"), message);	
+		removeError($("#userName"), $("#userName-error"), message);
 		loginError = 0;
 	}
 }
 
 
+
+
 function validPassword(){
-	var password = $.trim($("#password").val());	
+	var password = $.trim($("#password").val());
 	if( password.length > 0 ){
 		if( password.length >= minLength ){
 			var message = "กำหนดรหัสผ่าน ความยาวอย่างน้อย "+minLength+" ตัวอักษร";
@@ -121,10 +137,13 @@ function validPassword(){
 	}
 }
 
+
+
+
 function matchPassword(){
 	var password = $.trim( $("#password").val() );
 	var rePassword = $.trim( $("#re-password").val() );
-	if( password != "" ){	
+	if( password != "" ){
 		if( password == rePassword ){
 			var message = "รหัสผ่านตรงกัน";
 			removeError($("#re-password"), $("#re-password-error"), message);
@@ -136,6 +155,9 @@ function matchPassword(){
 		}
 	}
 }
+
+
+
 
 $("#userName").keyup(function(e) {
     validUserName();
@@ -160,10 +182,10 @@ function getSearch(){
 	var sCode = $.trim( $("#sCode").val() );
 	var sName	= $.trim( $("#sName").val() );
 	var stName	= $.trim( $("#stName").val() );
-	
+
 	if( sCode != "" || sName != "" || stName != "" )
 	{
-		$("#searchForm").submit();	
+		$("#searchForm").submit();
 	}
 }
 
@@ -172,7 +194,7 @@ function goDeleted(){
 }
 
 function getEdit(id){
-	window.location.href = "index.php?content=sale&edit&id="+id;	
+	window.location.href = "index.php?content=sale&edit&id="+id;
 }
 
 function clearFilter(){
@@ -217,10 +239,10 @@ function syncMaster(){
 				});
 				setTimeout(function(){ window.location.reload(); }, 1200);
 			}else{
-				swal("ข้อผิดพลาด !!", rs , "warning");	
+				swal("ข้อผิดพลาด !!", rs , "warning");
 			}
 		}
-	});	
+	});
 }
 
 function deleteSale(id, name){
@@ -240,7 +262,7 @@ function deleteSale(id, name){
 					success: function(rs){
 						var rs = $.trim(rs);
 						if( rs == 'success' ){
-							swal({ 
+							swal({
 									title: 'สำเร็จ',
 									text: 'ลบ '+ name + ' เรียบร้อยแล้ว',
 									type: 'success',
@@ -248,12 +270,12 @@ function deleteSale(id, name){
 							});
 							$("#row_"+id).remove();
 						}else{
-							swal("ข้อผิดพลาด !", rs, "error");	
+							swal("ข้อผิดพลาด !", rs, "error");
 						}
 					}
 				});
-	});	
-	
+	});
+
 }
 
 function unDelete(id, name){
@@ -266,7 +288,7 @@ function unDelete(id, name){
 		confirmButtonText: 'ใช่, ฉันต้องการ',
 		cancelButtonText: 'ยกเลิก',
 		closeOnConfirm: false
-		}, 
+		},
 		function(){
 			$.ajax({
 			url:"controller/saleController.php?unDeleteSale",
@@ -274,7 +296,7 @@ function unDelete(id, name){
 			success: function(rs){
 				var rs = $.trim(rs);
 				if( rs == 'success' ){
-					swal({ 
+					swal({
 						title: 'สำเร็จ',
 						text: 'ยกเลิกการลบ '+ name + ' เรียบร้อยแล้ว',
 						type: 'success',
@@ -282,13 +304,13 @@ function unDelete(id, name){
 						});
 						$("#row_"+id).remove();
 				}else{
-					swal("ข้อผิดพลาด !", rs, "error");	
+					swal("ข้อผิดพลาด !", rs, "error");
 				}
 			}
-		});	
-	});	
-	
-	
+		});
+	});
+
+
 }
 
 function setActive(status){
@@ -314,5 +336,5 @@ function addError(el, label, message){
 function removeError(el, label, message){
 	el.removeClass("has-error");
 	label.removeClass("red");
-	label.text(message);	
+	label.text(message);
 }

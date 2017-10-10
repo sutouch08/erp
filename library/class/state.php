@@ -110,4 +110,12 @@ class state
 
 
 
+	public function getCurrentStateLabel($id_order)
+	{
+		$qr = "SELECT o.id_employee, o.date_upd, s.name, s.color, s.font FROM tbl_order AS o ";
+		$qr .= "JOIN tbl_state AS s ON o.state = s.id WHERE o.id = ".$id_order;
+		return dbQuery($qr);
+	}
+
+
 }//--- end class
