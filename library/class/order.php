@@ -30,7 +30,7 @@ class order
 	public $shipping_code;
 	public $shipping_fee;
 	public $service_fee;
-	public $hasPayment;
+	public $hasPayment;	//---	แจ้งชำระแล้วหรือไม่
 	public $is_so;
 	public $hasNotSaveDetail = TRUE;
 
@@ -794,6 +794,21 @@ class order
 		list( $qty ) = dbFetchArray($qs);
 
 		return is_null($qty) ? 0 : $qty;
+	}
+
+
+
+	//---	ชื่อผู้ที่เปิดบิล
+	public function getBilledEmployee($reference)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT emp_upd FROM tbl_order_sold WHERE reference = '".$reference."' LIMIT 1");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+
+		return $sc;
 	}
 
 }//--- End Class

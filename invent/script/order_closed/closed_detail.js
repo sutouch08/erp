@@ -1,4 +1,9 @@
 function doExport(){
+
+	if($("#id_order").length == 0){
+		swal('Error !', 'ไม่พบข้อมูล กรุณาตรวจสอบว่าออเดอร์อยู่ในสถานะเปิดบิลแล้วหรือยัง', 'error');
+		return false;
+	}
 	var id_order = $("#id_order").val();
 	load_in();
 	$.ajax({

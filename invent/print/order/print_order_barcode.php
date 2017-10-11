@@ -54,6 +54,7 @@ $total_page  = $print->total_page;
 $total_qty 	 = 0;
 $total_amount 		= 0;
 $total_discount 	= 0;
+$total_order = 0;
 
 $bill_discount		= $order->bDiscAmount;
 
@@ -146,6 +147,7 @@ while($total_page > 0 )
       $total_qty      += $qty;
       $total_amount   += $amount;
       $total_discount += $discount_amount;
+      $total_order    += $qty * $price;
     }
     else
     {
@@ -163,9 +165,9 @@ while($total_page > 0 )
   if($print->current_page == $print->total_page)
   {
     $qty  = number($total_qty);
-    $amount = number($total_amount,2);
+    $amount = number($total_order,2);
     $total_discount_amount = number($total_discount+$bill_discount,2);
-    $net_amount = number( ($total_amount + $order->shipping_fee + $order->service_fee) - ($total_discount + $bill_discount), 2);
+    $net_amount = number( ($total_amount + $order->shipping_fee + $order->service_fee) - $bill_discount, 2);
     $service_fee = number($order->service_fee, 2);
     $shipping_fee = number($order->shipping_fee, 2);
 

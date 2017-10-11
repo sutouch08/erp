@@ -1,5 +1,7 @@
 <?php
   $bill = new bill();
+  $payment  = new payment_method($order->id_payment);
+  $credit = new customer_credit();
 
   //--- ใช้งาน ทรานเซ็คชั่น
   startTransection();
@@ -7,13 +9,20 @@
   //---	เปลี่ยนสถานะออเดอร์เป็นเปิดบิลแล้ว
   $ra = $order->stateChange($order->id, 8);
 
-  //--- รายละเอียดการเปิดบิล
+  //--- มีเครดิตหรือไม่
+  $term = $payment->hasTerm($order->id_payment);
+
+  //--- ถ้าเป็นเครดิต ดึงเครดิตที่ถูกใช้ไปของออเดอร์นี้มาตั้งไว้ก่อน บั
+  //--- นทึกขายแล้วค่อยตัดออก ส่วนที่เหลือให้คืนกลับให้ลูกค้า
+  $useCredit = $term === TRUE ? $order->getTotalAmount($order->id) : 0;
+
+  //--- รายละเอียดการเปิดบิล เปรียบเทียบกันระหว่างสั่งซื้อ กับ ตรวจสินค้า
   $qs = $bill->getBillDetail($order->id);
+
   if( dbNumRows($qs) > 0)
   {
     $customer = new customer($order->id_customer);
     $employee = new employee($order->id_employee);
-    $payment  = new payment_method($order->id_payment);
     $channels = new channels($order->id_channels);
     $role     = new order_role($order->role);
     $vat      = getConfig('VAT');
@@ -68,6 +77,7 @@
 
           //--- ถ้ายอดใน buffer น้อยกว่าหรือเท่ากับยอดสั่งซื้อ (แยกแต่ละโซน น้อยกว่าหรือเท่ากับยอดสั่ง (ซึ่งควรเป็นแบบนี้))
             $buffer_qty = $rm->qty <= $sell_qty ? $rm->qty : $sell_qty;
+
             //--- ทำยอดให้เป็นลบเพื่อตัดยอดออก เพราะใน function  ใช้การบวก
             $qty = $buffer_qty * (-1);
 
@@ -123,7 +133,7 @@
                     'sell_inc'  => $ds->total_amount / $ds->qty,
                     'qty'       => $buffer_qty,
                     'discount_label'  => $ds->discount,
-                    'discount_amount' => $ds->discount_amount / $ds->qty,
+                    'discount_amount' => ($ds->discount_amount / $ds->qty) * $buffer_qty,
                     'total_amount_ex' => removeVAT( ($ds->total_amount / $ds->qty) * $buffer_qty, $vat),
                     'total_amount_inc'  => ($ds->total_amount / $ds->qty) * $buffer_qty,
                     'total_cost_ex'   => removeVAT(($product->cost * $buffer_qty), $vat),
@@ -158,6 +168,11 @@
             //--- 3. บันทึกยอดขาย
             $rd = $order->sold($arr);
 
+            //--- ถ้ามีการใช้เครดิต ตัดยอดเครดิตใช้ไป
+            if( $term === TRUE && $useCredit > 0 )
+            {
+              $useCredit -= $arr['total_amount_inc'];
+            }
 
             if( $rb === FALSE OR $rc === FALSE OR $rd === FALSE )
             {
@@ -181,6 +196,14 @@
   }
 
 
+  //--- ถ้าเป็นออเดอร์ที่มีการใช้เครดิต และ ออเดอร์ได้ของไม่ครบตามที่สั่ง
+  //--- ให้คืนยอดใช้ไปให้ลูกค้า
+  if( $term === TRUE && $useCredit > 0)
+  {
+    $credit->decreaseUsed($order->id_customer, $useCredit);
+  }
+
+
   if( $sc === TRUE )
   {
     commitTransection();
@@ -193,6 +216,8 @@
   }
 
   endTransection();
+
+
 
 
  ?>

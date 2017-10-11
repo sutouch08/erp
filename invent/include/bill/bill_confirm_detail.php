@@ -24,7 +24,7 @@
 
 <?php $bill = new bill(); ?>
 <?php $pd = new product(); ?>
-<?php $qs = $bill->getBillDetail($order->id); ?>
+<?php $qs = $bill->getBilledDetail($order->id); ?>
 <div class="row">
   <div class="col-sm-12">
     <table class="table table-bordered">
@@ -51,7 +51,8 @@
         $totalPrice = 0;
 ?>
 <?php   while( $rs = dbFetchObject($qs)) :  ?>
-        <tr class="font-size-12">
+<?php     $color = ($rs->order_qty == $rs->qc) ? '' : 'red'; ?>
+        <tr class="font-size-12 <?php echo $color; ?>">
           <td class="text-center">
             <?php echo $no; ?>
           </td>
