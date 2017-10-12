@@ -13,11 +13,14 @@ function dateSelect($se = '')
 		if( $i == 60 )
 		{
 			$i = 0;
-			$h++; 
+			$h++;
 		}
 	}
 	return $option;
 }
+
+
+
 
 function thaiDateFormat($date, $time = FALSE , $sep = '-')
 {
@@ -37,16 +40,20 @@ function thaiDateFormat($date, $time = FALSE , $sep = '-')
 	return $date;
 }
 
-function thaiTextDateFormat($date, $time = FALSE) 
+
+
+
+
+function thaiTextDateFormat($date, $time = FALSE)
 {
 	$Y 	= date('Y', strtotime($date));
 	$m 	= date('m', strtotime($date));
 	$d 	= date('d', strtotime($date));
-	
+
 	$Y 	= $Y < 2200 ? $Y+543 : $Y+0;  //----- เปลี่ยน ค.ศ. เป็น พ.ศ. ---//
 	$t 		= date('H:i', strtotime($date));
-	
-	switch( $m ) 
+
+	switch( $m )
 	{
 		case "01": $m 	= "ม.ค."; break;
 		case "02": $m 	= "ก.พ."; break;
@@ -65,6 +72,10 @@ function thaiTextDateFormat($date, $time = FALSE)
 	return $newDate;
 }
 
+
+
+
+
 //------- แปลงวันที่ใน excel เป็นวันที่ใน php
 function excelDateToPhpDate($excelDate)
 {
@@ -74,11 +85,13 @@ function excelDateToPhpDate($excelDate)
 	}
 	else
 	{
-		$days = $excelDate - 2 ; // ตัดหัวตัดท้าย	
+		$days = $excelDate - 2 ; // ตัดหัวตัดท้าย
 		$base = date('1900-01-01');
 		return date('Y-m-d', strtotime("+ $days day $base"));
 	}
 }
+
+
 
 
 
@@ -97,5 +110,17 @@ function selectYears($se="0000")
 	}
 	return $sc;
 }
+
+
+
+
+function dbYear($year)
+{
+	$year = date('Y', strtotime($year));
+	$year = $year > 2500 ? $year - 543 : $year;
+	return $year;
+}
+
+
 
 ?>

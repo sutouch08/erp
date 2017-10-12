@@ -102,15 +102,10 @@ switch($page){
 			$content = "order.php";
 			$pageTitle= "ออเดอร์";
 			break;
-			
+
 		case "order_online" :
 			$content = "order_online.php";
 			$pageTitle = "online Sale";
-			break;
-
-		case "sponsor";
-			$content = "sponsor.php";
-			$pageTitle = "สปอนเซอร์สโมสร";
 			break;
 
 		case "order_sponsor";
@@ -595,18 +590,11 @@ switch($page){
 			$content 	= 'brand.php';
 			$pageTitle = 'เพิ่ม/แก้ไข ยี่ห้อสินค้า';
 			break;
-		case "attribute":
-			$content = "attribute.php";
-			$pageTitle = "คุณลักษณะ";
-			break;
 		case "barcode" :
 			$content = "barcode.php";
 			$pageTitle = "บาร์โค้ด";
 			break;
-		case "attribute_gen":
-			$content = "attribute_gen.php";
-			$pageTitle = "สร้างรายการสินค้าอัตโนมัติ";
-			break;
+
 
 
 
@@ -661,9 +649,9 @@ switch($page){
 			$content = "customer_credit.php";
 			$pageTitle = "วงเงินเครดิตคงเหลือ";
 			break;
-		case "add_sponsor" :
-			$content = "add_sponsor.php";
-			$pageTitle = "สปอนเซอร์";
+		case "sponsor" :
+			$content = "sponsor.php";
+			$pageTitle = "เพิ่ม/แก้ไข งบสปอนเซอร์";
 			break;
 	//*****  พนักงาน  *****//
 		case "Employee":

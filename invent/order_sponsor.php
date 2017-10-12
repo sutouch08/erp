@@ -1,8 +1,7 @@
 <script src="<?php echo WEB_ROOT; ?>library/js/clipboard.min.js"></script>
 <script src="<?php echo WEB_ROOT; ?>library/js/jquery.md5.js"></script>
 <?php
-	$page_name	= "ออเดอร์";
-	$id_tab 		= 14;
+	$id_tab 		= 15;
   $pm 				= checkAccess($id_profile, $id_tab);
 	$view 			= $pm['view'];
 	$add 				= $pm['add'];
@@ -21,7 +20,6 @@
 	include 'function/shipping_helper.php';
 	include 'function/location_helper.php';
 
-	$allowEditDisc = getConfig('ALLOW_EDIT_DISCOUNT');
 	$allowEditPrice = getConfig('ALLOW_EDIT_PRICE');
 ?>
 <div class="container">
@@ -29,22 +27,18 @@
 
 if( isset( $_GET['add'] ) )
 {
-	include 'include/order/order_add.php';
+	include 'include/sponsor/sponsor_add.php';
 }
 else if( isset( $_GET['edit'] ) )
 {
-	include 'include/order/order_edit.php';
-}
-else if( isset( $_GET['view_stock'] ) )
-{
-	include 'include/order/order_view_stock.php';
+	include 'include/sponsor/sponsor_edit.php';
 }
 else
 {
-	include 'include/order/order_list.php';
+	include 'include/sponsor/sponsor_list.php';
 }
 
 ?>
 
 </div><!--/container-->
-<script src="script/order/order.js"></script>
+<script src="script/sponsor/sponsor.js"></script>

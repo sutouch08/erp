@@ -1,4 +1,7 @@
 <input type="hidden" id="id_order" value="<?php echo $order->id; ?>" />
+<input type="hidden" id="online_code" value="<?php echo $order->online_code; ?>" />
+<input type="hidden" id="id_customer" value="<?php echo $order->id_customer; ?>" />
+
 <div class="row">
   <div class="col-sm-2">
     <label class="font-size-14 blod"><?php echo $order->reference; ?></label>
@@ -23,7 +26,7 @@
     <button type="button" class="btn btn-sm btn-info" onclick="printAddress()"><i class="fa fa-print"></i> ใบนำส่ง</button>
     <button type="button" class="btn btn-sm btn-primary" onclick="printOrder()"><i class="fa fa-print"></i> Packing List </button>
     <button type="button" class="btn btn-sm btn-success" onclick="printOrderBarcode()"><i class="fa fa-print"></i> Packing List (barcode)</button>
-    <button type="button" class="btn btn-sm btn-warning" onclick="getBoxList()"><i class="fa fa-print"></i> Packing List (ปะหน้ากล่อง)</button>
+    <button type="button" class="btn btn-sm btn-warning" onclick="showBoxList()"><i class="fa fa-print"></i> Packing List (ปะหน้ากล่อง)</button>
   </div>
 </div>
 <hr/>
@@ -172,3 +175,26 @@
     </table>
   </div>
 </div>
+
+
+<!--************** Address Form Modal ************-->
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="addressModal" aria-hidden="true">
+  <div class="modal-dialog" style="width:500px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="colse" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body" id="info_body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-primary" onclick="printSelectAddress()"><i class="fa fa-print"></i> พิมพ์</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php include 'include/order_closed/box_list.php';  ?>
+
+<script src="script/print/print_address.js"></script>
+<script src="script/print/print_order.js"></script>
