@@ -6,7 +6,7 @@
   <div class="col-sm-6">
     <p class="pull-right top-p">
     <?php if( $add ) : ?>
-      <button type="button" class="btn btn-sm btn-success" onclick="goAdd()"><i class="fa fa-plus"></i> เพิ่มใหม่</button>
+      <button type="button" class="btn btn-sm btn-success" onclick="goAdd()"><i class="fa fa-plus"></i> เพิ่มผู้รับใหม่</button>
     <?php endif; ?>
     </p>
   </div>
@@ -18,12 +18,6 @@
 //--  ค้นหาชื่อผู้รับ
 $sName = getFilter('sName', 'sSponsorName', '');
 
-//--- ค้นหาเลขที่เอกสาร/สัญญา
-$sCode = getFilter('sCode', 'sSponsorCode', '');
-
-//--- ค้นหาตามปีงบประมาณ
-$sYear = getFilter('sYear', 'sYear', '');
-
 //--- ค้นหาตามสถานะ
 $sActive = getFilter('sActive', 'sActive', 2);
 
@@ -34,22 +28,12 @@ $btn_dactive  = $sActive == 0 ? 'btn-primary' : '';
 
 <form id="searchForm" method="post">
 <div class="row">
-  <div class="col-sm-3 padding-5 first">
+  <div class="col-sm-3">
     <label>ผู้รับ</label>
     <input type="text" class="form-control input-sm text-center search-box" id="sName" name="sName" value="<?php echo $sName; ?>" placeholder="กรองตามชื่อผู้รับ" autofocus />
   </div>
 
-  <div class="col-sm-2 padding-5">
-    <label>เลขที่เอกสาร/เลขที่สัญญา</label>
-    <input type="text" class="form-control input-sm text-center search-box" id="sCode" name="sCode" value="<?php echo $sCode; ?>" placeholder="กรองตามเอกสาร/สัญญา" />
-  </div>
-
-  <div class="col-sm-2 padding-5">
-    <label>ปีงบประมาณ</label>
-    <input type="text" class="form-control input-sm text-center search-box" id="sYear" name="sYear" value="<?php echo $sYear; ?>" placeholder="กรองตามปีงบประมาณ" />
-  </div>
-
-  <div class="col-sm-3 padding-5">
+  <div class="col-sm-3">
     <label class="display-block not-show">active</label>
     <div class="btn-group width-100">
       <button type="button" class="btn btn-sm <?php echo $btn_all; ?> width-33" id="btn_all" onclick="toggleActive(2)">ทั้งหมด</button>
@@ -58,12 +42,12 @@ $btn_dactive  = $sActive == 0 ? 'btn-primary' : '';
     </div>
   </div>
 
-<div class="col-sm-1 padding-5">
+<div class="col-sm-2">
   <label class="display-block not-show">apply</label>
   <button type="button" class="btn btn-sm btn-primary btn-block" onclick="getSearch()"><i class="fa fa-search"></i> ค้นหา</button>
 </div>
 
-<div class="col-sm-1 padding-5 last">
+<div class="col-sm-2">
   <label class="display-block not-show">reset</label>
   <button type="button" class="btn btn-sm btn-warning btn-block" onclick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
 </div>
@@ -81,20 +65,7 @@ $btn_dactive  = $sActive == 0 ? 'btn-primary' : '';
   if( $sName != '')
   {
     createCookie('sSponsorName', $sName);
-    $where .= "AND name LIKE '%".$sName."' ";
-  }
-
-  if( $sCode != '')
-  {
-    createCookie('sSponsorCode', $sCode);
-    $where .= "AND reference LIKE '%".$sCode."' ";
-  }
-
-  if( $sYear != '')
-  {
-    createCookie('sYear', $sYear);
-
-    $where .= "AND year = '".dbYear($sYear)."' ";
+    $where .= "AND name LIKE '%".$sName."%' ";
   }
 
   if( $sActive != 2)
@@ -103,6 +74,68 @@ $btn_dactive  = $sActive == 0 ? 'btn-primary' : '';
     $where .= "AND active = ".$sActive." ";
   }
 
+  $where .= "ORDER BY name ASC";
+
+  $paginator = new paginator();
+  $get_rows  = get_rows();
+  $paginator->Per_Page('tbl_sponsor', $where, $get_rows);
+  $paginator->display($get_rows, 'index.php?content=sponsor');
+
+  $qs = dbQuery("SELECT * FROM tbl_sponsor " .$where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
+
  ?>
 
+ <div class="row">
+   <div class="col-sm-12">
+     <table class="table table-striped border-1">
+       <thead>
+         <tr class="font-size-12">
+           <th class="width-5 text-center">ลำดับ</th>
+           <th class="width-35">ผู้รับ</th>
+           <th class="width-10 text-center">ปีงบประมาณ</th>
+           <th class="width-10 text-center">งบประมาณ</th>
+           <th class="width-10 text-center">ใช้ไป</th>
+           <th class="width-10 text-center">คงเหลือ</th>
+           <th class=""></th>
+         </tr>
+       </thead>
+       <tbody>
+<?php if( dbNumRows($qs) > 0) : ?>
+  <?php $no = row_no(); ?>
+  <?php while( $rs = dbFetchObject($qs)) : ?>
+  <?php   $bd = new sponsor_budget($rs->id_budget); ?>
+      <tr class="font-size-12">
+        <td class="middle text-center"><?php echo $no; ?></td>
+        <td class="middle"><?php echo $rs->name; ?></td>
+        <td class="middle text-center"><?php echo $bd->year; ?></td>
+        <td class="middle text-center"><?php echo number($bd->budget, 2); ?></td>
+        <td class="middle text-center"><?php echo number($bd->used, 2); ?></td>
+        <td class="middle text-center"><?php echo number($bd->balance, 2); ?></td>
+        <td class="middle text-right">
+          <button type="button" class="btn btn-xs btn-info" onclick="getDetail(<?php echo $rs->id; ?>)"><i class="fa fa-eye"></i></button>
+          <?php if( $edit ) : ?>
+          <button type="button" class="btn btn-xs btn-warning" onclick="goEdit(<?php echo $rs->id; ?>)"><i class="fa fa-pencil"></i></button>
+        <?php endif; ?>
+          <?php if( $delete ) : ?>
+            <button type="button" class="btn btn-xs btn-danger" onclick="remove(<?php echo $rs->id; ?>)"><i class="fa fa-trash"></i></butoon>
+          <?php endif; ?>
+        </td>
+      </tr>
+
+  <?php $no++; ?>
+<?php endwhile; ?>
+
+<?php else : ?>
+  <tr>
+    <td colspan="7" class="middle text-center"><h4>ไม่พบรายการ</h4></td>
+  </tr>
+<?php endif; ?>
+
+       </tbody>
+     </table>
+   </div>
+ </div>
+
 </div><!-- Container -->
+
+<script src="script/sponsor_budget/sponsor_budget_list.js"></script>

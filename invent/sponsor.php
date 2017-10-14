@@ -15,9 +15,15 @@
   if( isset( $_GET['add']))
   {
 
-    include 'include/sponsor_budget/sponsor_budget_list.php';
+    include 'include/sponsor_budget/sponsor_budget_add.php';
 
   }
+	else if( isset( $_GET['edit']))
+	{
+
+		include 'include/sponsor_budget/sponsor_budget_edit.php';
+
+	}
   else if( isset( $_GET['view_detail']))
   {
 

@@ -1,4 +1,4 @@
-<?php 
+<?php
 class customer_credit
 {
 	public $id_customer;
@@ -8,7 +8,7 @@ class customer_credit
 	public $used;
 	public $balance;
 	public $date_upd;
-	
+
 	public function __construct($id = "")
 	{
 		if( $id != "" )
@@ -16,8 +16,8 @@ class customer_credit
 			$this->getData($id);
 		}
 	}
-	
-	
+
+
 	public function getData($id)
 	{
 		$qs = dbQuery("SELECT * FROM tbl_customer_credit WHERE id_customer = '".$id."'");
@@ -29,11 +29,14 @@ class customer_credit
 			$this->name  	= $rs->name;
 			$this->credit	= $rs->credit;
 			$this->used	 	= $rs->used;
-			$this->balance	= $rs->balance;			
+			$this->balance	= $rs->balance;
 		}
 	}
-	
-	
+
+
+
+
+
 	public function add(array $ds = array() )
 	{
 		$sc = FALSE;
@@ -52,7 +55,11 @@ class customer_credit
 		}
 		return $sc;
 	}
-	
+
+
+
+
+
 	public function update($id, array $ds = array() )
 	{
 		$sc = FALSE;
@@ -68,9 +75,9 @@ class customer_credit
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function isExists($code)
 	{
 		$sc = FALSE;
@@ -81,9 +88,12 @@ class customer_credit
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
+
+
+
 	public function getId($code)
 	{
 		$sc = FALSE;
@@ -94,8 +104,12 @@ class customer_credit
 		}
 		return $sc;
 	}
-	
-	
+
+
+
+
+
+
 	public function getBalance($id)
 	{
 		$sc = 0;
@@ -106,31 +120,39 @@ class customer_credit
 		}
 		return $sc;
 	}
-	
-	
+
+
+
+
+
 	public function increaseUsed( $id, $amount = 0 )
 	{
 		$sc = dbQuery("UPDATE tbl_customer_credit SET used = used + ".$amount." WHERE id_customer = '".$id."'");
-		if( $sc ) 
-		{
-			$sc = $this->calculate($id);
-		}
-		return $sc;
-	}
-	
-	
-	public function decreaseUsed( $id, $amount = 0 )
-	{
-		$sc = dbQuery("UPDATE tbl_customer_credit SET used = used - ".$amount." WHERE id_customer = '".$id."'");	
 		if( $sc )
 		{
 			$sc = $this->calculate($id);
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
+
+
+	public function decreaseUsed( $id, $amount = 0 )
+	{
+		$sc = dbQuery("UPDATE tbl_customer_credit SET used = used - ".$amount." WHERE id_customer = '".$id."'");
+		if( $sc )
+		{
+			$sc = $this->calculate($id);
+		}
+		return $sc;
+	}
+
+
+
+
+
 	public function isEnough($id, $amount)
 	{
 		$sc = FALSE;
@@ -141,12 +163,16 @@ class customer_credit
 		}
 		return $sc;
 	}
+
+
+
+
 	
 	public function calculate($id)
 	{
 		return dbQuery("UPDATE tbl_customer_credit SET balance = credit - used WHERE id_customer = '".$id."'");
 	}
-	
+
 }
 
 ?>

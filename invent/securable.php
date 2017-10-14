@@ -10,12 +10,30 @@
   if($add==1){ $can_add = "";}else{ $can_add = "style='display:none;'"; }
 	if($edit==1){ $can_edit = "";}else{ $can_edit = "style='display:none;'"; }
 	if($delete==1){ $can_delete = "";}else{ $can_delete ="style='display:none;'"; }
-	
+	function isAccess($id_profile, $id_tab){
+		$sql = dbQuery("SELECT tbl_access.view, tbl_access.add, tbl_access.edit, tbl_access.delete FROM tbl_access WHERE id_profile = '$id_profile' AND id_tab = '$id_tab'");
+		$rw = dbNumRows($sql);
+		if($rw > 0){
+			while($rs = dbFetchArray($sql)){
+				$ac['view'] = $rs['view'];
+				$ac['add'] = $rs['add'];
+				$ac['edit'] = $rs['edit'];
+				$ac['delete'] = $rs['delete'];
+			}
+		}else{
+				$ac['view'] = 0;
+				$ac['add'] = 0;
+				$ac['edit'] = 0;
+				$ac['delete'] = 0;
+		}
+		return $ac;
+	}
+
 	?>
 <div class="container">
 <!-- page place holder -->
 <div class="row" style="height:30px;">
-	<div class="col-sm-8" style="margin-top:10px;"><h4 class="title"><i class="fa fa-unlock-alt"></i>&nbsp;<?php echo $page_name; ?></h4>
+	<div class="col-sm-8" style="margin-top:10px;"><h4 class="title"><i class="fa fa-unlock-alt"></i>&nbsp;<?php echo $pageTitle; ?></h4>
 	</div>
     <div class="col-sm-4">
        <p class="pull-right" style="margin-bottom:0px;">
