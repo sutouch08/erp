@@ -1,5 +1,5 @@
 <?php
-	$order 		= new order($_POST['id_order']);
+	
 	$credit 	= new customer_credit();
 	$payment 	= new payment_method($order->id_payment);
 	$isEnought 	= TRUE;  //--- เอาไว้ตรวจสอบเครดิต ถ้าไม่พอจะเป็น FALSE;

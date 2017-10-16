@@ -175,13 +175,11 @@ function recalDiscount(){
 //----- เพิ่มเลขที่เอกสารใหม่
 function addNew(){
 	var dateAdd 		= $("#dateAdd").val();
-	var id_customer 	= $("#id_customer").val();
+	var role 				= $('#role').val();
+	var id_customer = $("#id_customer").val();
 	var customer 		= $("#customer").val();
-	var channels 		= $("#channels").val();
-	var payment 		= $("#paymentMethod").val();
 	var remark			= $("#remark").val();
-	var isOnline			= $("#isOnline").val();
-	var customerName = $("#onlineCustomer").length == 1 ? $("#onlineCustomer").val() : '';
+	var id_budget	  = $('#id_budget').val();
 
 	if( ! isDate(dateAdd) ){
 		swal("วันที่ไม่ถูกต้อง");
@@ -189,7 +187,7 @@ function addNew(){
 	}
 
 	if( id_customer == "" || customer == "" ){
-		swal("ชื่อลูกค้าไม่ถูกต้อง");
+		swal("ผู้รับไม่ถูกต้อง");
 		return false;
 	}
 
@@ -199,12 +197,14 @@ function addNew(){
 		cache:"false",
 		data:{
 				"dateAdd" : dateAdd,
+				"role"		: role,
 				"id_customer" : id_customer,
-				"channels" : channels,
-				"paymentMethod" : payment,
+				"channels" : 0,
+				"paymentMethod" : 0,
 				"remark" : remark,
-				"isOnline" : isOnline,
-				"customerName" : customerName
+				"isOnline" : 0,
+				"id_budget" : id_budget,
+				"customerName" : ''
 		},
 		success: function(rs){
 			var rs = $.trim(rs);
@@ -231,19 +231,23 @@ $("#dateAdd").datepicker({
 
 
 $("#customer").autocomplete({
-	source: "controller/orderController.php?getCustomer",
+	source: "controller/sponsorController.php?getSponsorCustomer&date="+$('#dateAdd').val(),
 	autoFocus: true,
 	close: function(){
 		var rs = $.trim($(this).val());
 		var arr = rs.split(' | ');
 		if( arr.length == 3 ){
-			var code = arr[0];
-			var name = arr[1];
-			var id = arr[2];
-			$("#id_customer").val(id);
+			var id_budget = arr[2];
+			var id_customer = arr[1];
+			var name = arr[0];
+			$("#id_customer").val(id_customer);
 			$("#customer").val(name);
+			$('#id_budget').val(id_budget);
+			getBudgetBalance(id_customer);
 		}else{
 			$("#id_customer").val('');
+			$('#id_budget').val(0);
+			$('#balance').val(0.00);
 			$(this).val('');
 		}
 	}
@@ -251,10 +255,19 @@ $("#customer").autocomplete({
 
 
 
-$("#onlineCustomer").autocomplete({
-	source: "controller/orderController.php?getCustomerOnline",
-	autoFocus: true
-});
+function getBudgetBalance(id_customer)
+{
+	$.ajax({
+		url:'controller/sponsorController.php?getBudgetBalance',
+		type:'GET',
+		cache:'false',
+		data:{'id_customer' : id_customer},
+		success:function(rs){
+			$('#balance').val(rs);
+		}
+	});
+}
+
 
 
 

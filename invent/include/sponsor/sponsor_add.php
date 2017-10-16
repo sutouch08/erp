@@ -1,8 +1,8 @@
 <?php
 $order = isset( $_GET['id_order'] ) ? new order( $_GET['id_order'] ) : new order();
+$sp = new sponsor();
 $disabled = isset($_GET['id_order']) ? 'disabled' : '';
 $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hide';
-$online = (isset( $_GET['online'] ) OR $order->isOnline == 1 ) ? TRUE : FALSE;
 ?>
 <div class="row top-row">
 	<div class="col-sm-6 top-col">
@@ -25,14 +25,8 @@ $online = (isset( $_GET['online'] ) OR $order->isOnline == 1 ) ? TRUE : FALSE;
 </div>
 <hr class="margin-bottom-10" />
 <?php
-if( $online )
-{
-	include 'include/order/order_add_online_header.php';
-}
-else
-{
-	include 'include/order/order_add_header.php';
-}
+
+	include 'include/sponsor/sponsor_add_header.php';
 
 ?>
 <hr class="margin-top-10 margin-bottom-15" />
@@ -47,11 +41,7 @@ else
     	<button type="button" class="btn btn-sm btn-primary btn-block" onclick="getProductGrid()"><i class="fa fa-tags"></i> แสดงสินค้า</button>
     </div>
     <div class="col-sm-5"></div>
-    <div class="col-sm-2">
-    	<button type="button" class="btn btn-sm btn-info btn-block" onclick="recalDiscount()">
-        	<i class="fa fa-calculator"></i> คำนวณส่วนลดใหม่</button>
-        </button>
-    </div>
+    
 </div>
 <hr class="margin-top-15 margin-bottom-0" />
 <!----------------------------------------- Category Menu ---------------------------------->

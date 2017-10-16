@@ -32,6 +32,7 @@ class order
 	public $service_fee;
 	public $hasPayment;	//---	แจ้งชำระแล้วหรือไม่
 	public $is_so;
+	public $id_budget = 0; //--- ไอดี ของงบประมาณ (กรณี อภินันท์ หรือ สปอนเซอร์)
 	public $hasNotSaveDetail = TRUE;
 
 	public function __construct($id = "")
@@ -432,12 +433,12 @@ class order
 
 
 	//-----------------  New Reference --------------//
-	public function getNewReference($date = '')
+	public function getNewReference($role = 1,$date = '')
 	{
 		$date = $date == '' ? date('Y-m-d') : $date;
 		$Y		= date('y', strtotime($date));
 		$M		= date('m', strtotime($date));
-		$prefix = getConfig('PREFIX_ORDER');
+		$prefix = $this->getPrefix($role);
 		$runDigit = getConfig('RUN_DIGIT'); //--- รันเลขที่เอกสารกี่หลัก
 		$preRef = $prefix . '-' . $Y . $M;
 		$qs = dbQuery("SELECT MAX(reference) AS reference FROM tbl_order WHERE reference LIKE '".$preRef."%' ORDER BY reference DESC");
@@ -455,6 +456,39 @@ class order
 	}
 
 
+
+	public function getPrefix($role)
+	{
+		switch($role){
+			case 1 :
+				$prefix = getConfig('PREFIX_ORDER');
+				break;
+			case 2 :
+				$prefix = getConfig('PREFIX_CONSIGNMENT');
+				break;
+			case 3 :
+				$prefix = getConfig('PREFIX_SUPPORT');
+				break;
+			case 4 :
+				$prefix = getConfig('PREFIX_SPONSOR');
+				break;
+			case 5 :
+				$prefix = getConfig('PREFIX_TRANSFORM');
+				break;
+			case 6 :
+				$prefix = getConfig('PREFIX_LEND');
+				break;
+			case 7 :
+				$prefix = getConfig('PREFIX_REQUISITION');
+				break;
+			default :
+					$prefix = getConfig('PREFIX_ORDER');
+				break;
+		}
+
+		return $prefix;
+
+	}
 
 
 	public function getReference($id)
@@ -806,6 +840,22 @@ class order
 		if( dbNumRows($qs) == 1 )
 		{
 			list( $sc ) = dbFetchArray($qs);
+		}
+
+		return $sc;
+	}
+
+
+
+
+
+	public function isExitsTransection($id_customer, $role)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_order_sold WHERE id_customer = '".$id_customer."' AND id_role = ".$role." LIMIT 1");
+		if( dbNumRows($qs) > 0 )
+		{
+			$sc = TRUE;
 		}
 
 		return $sc;

@@ -62,7 +62,7 @@ class sponsor_budget
 
 
 
-  public function update($id, array $ds)
+  public function update($id, array $ds = array())
 	{
 		$sc = FALSE;
 		if( ! empty( $ds ) )
@@ -74,6 +74,7 @@ class sponsor_budget
 				$set .= $i == 1 ? $field . " = '" . $value . "'" : ", ".$field . " = '" . $value . "'";
 				$i++;
 			}
+      
 			$sc = dbQuery("UPDATE tbl_sponsor_budget SET " . $set . " WHERE id = '".$id."'");
 		}
 
@@ -97,7 +98,7 @@ class sponsor_budget
       $qs = dbQuery("SELECT id FROM tbl_sponsor_budget WHERE id_sponsor = ".$id_sponsor." AND year = '".$year."'");
     }
 
-    
+
     if( dbNumRows($qs) > 0)
     {
       $sc = TRUE;
@@ -128,6 +129,55 @@ class sponsor_budget
   public function getSponsorBudgetYear($id_sponsor)
   {
     return dbQuery("SELECT id, year FROM tbl_sponsor_budget WHERE id_sponsor = ".$id_sponsor);
+  }
+
+
+
+
+
+  public function increaseUsed( $id, $amount = 0 )
+	{
+		$sc = dbQuery("UPDATE tbl_sponsor_budget SET used = used + ".$amount." WHERE id = ".$id);
+		if( $sc )
+		{
+			$sc = $this->calculate($id);
+		}
+		return $sc;
+	}
+
+
+
+
+
+	public function decreaseUsed( $id, $amount = 0 )
+	{
+		$sc = dbQuery("UPDATE tbl_sponsor_budget SET used = used - ".$amount." WHERE id = ".$id);
+		if( $sc )
+		{
+			$sc = $this->calculate($id);
+		}
+		return $sc;
+	}
+
+
+  public function getBalance($id)
+  {
+    $sc = 0;
+    $qs = dbQuery("SELECT balance FROM tbl_sponsor_budget WHERE id = ".$id);
+    if( dbNumRows($qs) == 1)
+    {
+      list( $sc ) = dbFetchArray($qs);
+    }
+
+    return $sc;
+  }
+
+
+
+  public function isEnought($id, $amount)
+  {
+    $balance = $this->getBalance($id);
+    return  $amount <= $balance ? TRUE : FALSE;
   }
 
 }

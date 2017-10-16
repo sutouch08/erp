@@ -157,7 +157,7 @@ class customer_credit
 	{
 		$sc = FALSE;
 		$balance = $this->getBalance($id);
-		if( $amount < $balance )
+		if( $amount <= $balance )
 		{
 			$sc = TRUE;
 		}
@@ -167,7 +167,7 @@ class customer_credit
 
 
 
-	
+
 	public function calculate($id)
 	{
 		return dbQuery("UPDATE tbl_customer_credit SET balance = credit - used WHERE id_customer = '".$id."'");

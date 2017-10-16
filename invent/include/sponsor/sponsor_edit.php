@@ -1,4 +1,4 @@
-<?php 
+<?php
 $order = isset( $_GET['id_order'] ) ? new order( $_GET['id_order'] ) : new order();
 $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hide';
 ?>
@@ -58,7 +58,7 @@ else
 
 <!------------------- ปุ่มแก้ไขราคาและส่วนลด ------------->
 <?php
-if( ( $allowEditDisc == 1 OR $allowEditPrice == 1 ) && $order->state < 4 )
+if( $allowEditPrice == 1 && $order->state < 4 )
 {
  	include 'include/order/order_discount_bar.php';
 }

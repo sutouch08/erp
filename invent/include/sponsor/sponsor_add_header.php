@@ -2,32 +2,30 @@
 <div class="row">
 	<div class="col-sm-2">
     	<label>เลขที่เอกสาร</label>
-        <label class="form-control input-sm text-center" <?php echo $disabled; ?>><?php echo $order->reference; ?></label>
+        <label class="form-control input-sm text-center" style="margin-bottom:0px;" <?php echo $disabled; ?>><?php echo $order->reference; ?></label>
     </div>
+
     <div class="col-sm-2">
     	<label>วันที่</label>
         <input type="text" class="form-control input-sm text-center input-header" id="dateAdd" value="<?php echo thaiDate($order->date_add); ?>" <?php echo $disabled; ?> />
     </div>
+
     <div class="col-sm-4">
-    	<label>ลูกค้า [ในระบบ]</label>
+    	<label>ผู้รับ</label>
         <input type="text" class="form-control input-sm text-center input-header" id="customer" value="<?php echo customerName($order->id_customer); ?>"  <?php echo $disabled; ?>/>
     </div>
-    <div class="col-sm-2">
-    	<label>ช่องทาง</label>
-        <select class="form-control input-sm input-header" id="channels" <?php echo $disabled; ?>>
-        <?php echo selectOfflineChannels($order->id_channels); ?>
-        </select>
+
+		<div class="col-sm-2">
+    	<label>งบประมาณคงเหลือ</label>
+      <input type="text" class="form-control input-sm text-center input-header" id="balance" disabled/>
     </div>
-    <div class="col-sm-2 margin-bottom-5">
-    	<label>การชำระเงิน</label>
-        <select class="form-control input-sm input-header" id="paymentMethod" <?php echo $disabled; ?>>
-        <?php echo selectPaymentMethod($order->id_payment); ?>
-        </select>
-    </div>
+
+
     <div class="col-sm-10">
     	<label>หมายเหตุ</label>
         <input type="text" class="form-control input-sm input-header" id="remark" value="<?php echo $order->remark; ?>" <?php echo $disabled; ?> />
     </div>
+
     <div class="col-sm-2">
     <label class="display-block not-show">btn</label>
     <?php if( isset( $_GET['id_order'] ) && $order->state < 8): ?>
@@ -39,4 +37,7 @@
     </div>
 </div>
 <input type="hidden" id="id_customer" value="<?php echo $order->id_customer; ?>" />
+<input type="hidden" id="id_sponsor" value="<?php echo $sp->getId($order->id_customer); ?>" />
+<input type="hidden" id="id_budget" value="<?php echo $order->id_budget; ?>" />
+<input type="hidden" id="role" value="4" />
 <input type="hidden" id="isOnline" value="0" />

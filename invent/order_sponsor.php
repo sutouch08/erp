@@ -21,6 +21,7 @@
 	include 'function/location_helper.php';
 
 	$allowEditPrice = getConfig('ALLOW_EDIT_PRICE');
+	$allowEditDisc = getConfig('ALLOW_EDIT_DISCOUNT');
 ?>
 <div class="container">
 <?php

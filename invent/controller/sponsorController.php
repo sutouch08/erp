@@ -77,14 +77,15 @@ if( isset($_GET['updateBudget']))
 	$id = $_POST['id_budget'];
 	$bd = new sponsor_budget($id);
 	$id_sponsor = $_POST['id_sponsor'];
-	$year = $_POST['year'];
+	$year = dbYear($_POST['year']);
+
 	if( $bd->isExistsYear($id_sponsor, $year, $id) === FALSE )
 	{
 		$arr = array(
 						'reference' => trim($_POST['reference']),
 						'start' => dbDate($_POST['fromDate']),
 						'end'	=> dbDate($_POST['toDate']),
-						'year' => dbYear($_POST['year']),
+						'year' => $year,
 						'budget'	=> $_POST['budget'],
 						'remark'	=> $_POST['remark']
 					);
@@ -95,8 +96,9 @@ if( isset($_GET['updateBudget']))
 		{
 			$arr['active'] = 0;
 		}
-		
+
 		$rs = $bd->update($id, $arr);
+
 		if( $rs === TRUE )
 		{
 			$bd->calculate($id);
@@ -109,6 +111,8 @@ if( isset($_GET['updateBudget']))
 		echo 'ปีงบประมาณซ้ำ กรุณาเลือกใหม่';
 	}
 }
+
+
 
 
 
@@ -135,6 +139,15 @@ if( isset( $_GET['approveBudget']))
 
 
 
+//---	Delete sponsor
+if( isset($_GET['deleteSponsor']))
+{
+	$id = $_POST['id_sponsor'];
+}
+
+
+
+
 
 //---	set using budget
 if( isset( $_GET['setActiveBudget']))
@@ -147,6 +160,10 @@ if( isset( $_GET['setActiveBudget']))
 
 	echo $rs === TRUE ? 'success' : 'เปลี่ยนงบประมาณไม่สำเร็จ';
 }
+
+
+
+
 
 
 
@@ -171,12 +188,33 @@ if( isset( $_GET['getBudgetData']))
 
 
 
+
+
+
+//---	check transection before delete
+if( isset($_GET['checkTransection']))
+{
+	$id_customer = $_GET['id_customer'];
+	$role = 4; //---- สปอนเซอร์
+	$order = new order();
+	$rs = $order->isExitsTransection($id_customer, $role);
+
+	echo $rs === TRUE ? 'transection_exists' : 'no_transection';
+}
+
+
+
+
+
+
+
 //---	ค้นหารายชื่อลูกค้าเพื่อเพิ่มผู้รับ
 if( isset( $_GET['getCustomer']) && $_REQUEST['term'])
 {
 	$sc = array();
 	$cs = new customer();
 	$qs = $cs->search(trim($_REQUEST['term']), 'id, code, name');
+
 	while( $rs = dbFetchObject($qs))
 	{
 		$sc[] = $rs->code .' | ' . $rs->name . ' | ' . $rs->id;
@@ -186,6 +224,40 @@ if( isset( $_GET['getCustomer']) && $_REQUEST['term'])
 }
 
 
+
+
+//---	ค้นรายชื่อผู้รับสปอนเซอร์ ใช้ในการสั่งออเดอร์
+if( isset($_GET['getSponsorCustomer']))
+{
+	$date = dbDate($_GET['date']);
+	$sc = array();
+	$cs = new sponsor();
+	$qs = $cs->getSponsorAndBudgetBalance(trim($_REQUEST['term']), $date);
+	if(dbNumRows($qs) > 0)
+	{
+		while( $rs = dbFetchObject($qs))
+		{
+			$sc[] = $rs->name. ' | '. $rs->id_customer . ' | '. $rs->id_budget;
+		}
+
+	}
+	else
+	{
+		$sc[] = 'ไม่พบข้อมูล';
+	}
+
+	echo json_encode($sc);
+
+}
+
+
+
+if( isset( $_GET['getBudgetBalance']))
+{
+	$id_customer = $_GET['id_customer'];
+	$sp = new sponsor();
+	echo number($sp->getBudgetBalanceByCustomer($id_customer), 2);
+}
 
 
 

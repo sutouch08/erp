@@ -176,6 +176,7 @@ function recalDiscount(){
 function addNew(){
 	var dateAdd 		= $("#dateAdd").val();
 	var id_customer 	= $("#id_customer").val();
+	var role 				= $('#role').val();
 	var customer 		= $("#customer").val();
 	var channels 		= $("#channels").val();
 	var payment 		= $("#paymentMethod").val();
@@ -200,6 +201,7 @@ function addNew(){
 		data:{
 				"dateAdd" : dateAdd,
 				"id_customer" : id_customer,
+				"role"	: role,
 				"channels" : channels,
 				"paymentMethod" : payment,
 				"remark" : remark,

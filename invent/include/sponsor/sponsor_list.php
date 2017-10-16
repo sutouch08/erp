@@ -102,14 +102,13 @@ $toDate		= getFilter('toDate', 'toDate', '' );
         	<thead>
             	<tr class="font-size-10">
                 	<th class="width-5 text-center">ลำดับ</th>
-                    <th class="width-8 text-center">เลขที่เอกสาร</th>
+                    <th class="width-10 text-center">เลขที่เอกสาร</th>
                     <th class="text-center">ลูกค้า</th>
-                    <th class="width-8 text-center">ยอดเงิน</th>
-                    <th class="width-8 text-center">ช่องทางขาย</th>
-                    <th class="width-8 text-center">การชำระเงิน</th>
-                    <th class="width-8 text-center">สถานะ</th>
-                    <th class="width-8 text-center">วันที่</th>
-                    <th class="width-5 text-center"></th>
+                    <th class="width-10 text-center">ยอดเงิน</th>
+                    <th class="width-10 text-center">สถานะ</th>
+                    <th class="width-15 text-center">พนักงาน</th>
+										<th class="width-10 text-center">วันที่</th>
+										<th class="width-10 text-center">ปรับปรุง</th>
                 </tr>
             </thead>
             <tbody>
@@ -122,42 +121,20 @@ $toDate		= getFilter('toDate', 'toDate', '' );
 <?php	while( $rs = dbFetchObject($qs) ) : ?>
 
 			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status); //--- order_help.php ?>>
-            	<td class="middle text-cennter pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $no; ?></td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $rs->reference; ?></td>
-                <td class="middle pointer" onclick="goEdit(<?php echo $rs->id; ?>)">
-                 	<?php if( $rs->isOnline == 1 ) : ?>
-                   		[  <?php echo $rs->online_code; ?>  ] &nbsp; &nbsp;
-					<?php endif; ?>
-                    <?php echo customerName($rs->id_customer); ?>
-                    <?php if( $pm->hasTerm($rs->id_payment) === FALSE && $rs->isPaid == 0 ) : ?>
-                    	<span class="red font-size-14 padding-10" style="margin-left:10px; background-color:#FFF;">ยังไม่ชำระเงิน</span>
-                    <?php endif; ?>
-                </td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo number_format($order->getTotalAmount($rs->id), 2); ?></td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $ch->getName($rs->id_channels); ?></td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $pm->getName($rs->id_payment); ?></td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo stateName($rs->state, $rs->status); ?></td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo thaiDate($rs->date_add); ?></td>
-                <td class="middle text-center">
-                <button type="button"
-                			class="btn btn-default btn-mini"
-                            data-container="body"
-                            data-toggle="popover"
-                			data-placement="left"
-                            data-trigger="focus"
-                            data-content="
-
-                            พนักงาน : <?php echo employee_name($rs->id_employee); ?>
-                            ปรับปรุงล่าสุด : <?php echo thaiDate($rs->date_upd); ?>
-                        "><i class="fa fa-bars"></i></button>
-
-                </td>
-            </tr>
+        <td class="middle text-cennter pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $no; ?></td>
+        <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $rs->reference; ?></td>
+        <td class="middle pointer" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo customerName($rs->id_customer); ?></td>
+        <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo number_format($order->getTotalAmount($rs->id), 2); ?></td>
+        <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo stateName($rs->state, $rs->status); ?></td>
+				<td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo employee_name($rs->id_employee); ?></td>
+        <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo thaiDate($rs->date_add); ?></td>
+        <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo thaiDate($rs->date_upd); ?></td>
+      </tr>
 <?php		$no++; ?>
 <?php		endwhile; ?>
 <?php else : ?>
 			<tr>
-            	<td colspan="10" class="text-center"><h4>ไม่พบรายการ</h4></td>
+            	<td colspan="8" class="text-center"><h4>ไม่พบรายการ</h4></td>
             </tr>
 <?php endif; ?>
             </tbody>

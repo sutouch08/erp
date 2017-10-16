@@ -114,11 +114,11 @@ function selectYears($se="0000")
 
 
 
-function dbYear($year)
+function dbYear($year = '')
 {
-	$year = date('Y', strtotime($year));
-	$year = $year > 2500 ? $year - 543 : $year;
-	return $year;
+	$Y = $year == '' ? date('Y') : $year;
+	$Y = $Y > 2500 ? $Y - 543 : $Y;
+	return $Y;
 }
 
 

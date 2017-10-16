@@ -18,7 +18,20 @@ if( isset( $_GET['addNew'] ) )
 //-----	ถ้ามีเครดิตเทอม จะตัดยอดเครดิตด้วย
 if( isset( $_GET['saveOrder'] ) )
 {
-	include 'order/save_order.php';
+	$order 		= new order($_POST['id_order']);
+
+	//---	ถ้าเป็นการขาย
+	if( $order->role == 1)
+	{
+		include 'order/save_order.php';
+	}
+
+	//---	ถ้าเป็นสปอนเซอร์
+	if( $order->role == 4)
+	{
+		include 'order/save_sponsor.php';
+	}
+
 }
 
 
@@ -49,7 +62,15 @@ if( isset( $_GET['updateEditDiscount'] ) )
 //---- แก้ไขราคาสินค้า โดยพนักงาน และมีผู้อนุมัติการแก้ไข
 if( isset( $_GET['updateEditPrice'] ) )
 {
-	include 'order/edit_price.php';
+	$order 		= new order($_POST['id_order']);
+	if( $order->role == 1)
+	{
+		include 'order/edit_order_price.php';
+	}
+	if( $order->role == 4)
+	{
+		include 'order/edit_sponsor_price.php';
+	}
 }
 
 
@@ -68,7 +89,19 @@ if( isset( $_GET['addToOrder'] ) )
 //----- Delete detail row
 if( isset( $_GET['removeDetail'] ) )
 {
-	include 'order/delete_detail.php';
+	$id 	= $_POST['id_order_detail'];
+	$id_order = $_POST['id_order'];
+	$order = new order($id_order);
+	if( $order->role == 1)
+	{
+		include 'order/delete_order_detail.php';
+	}
+
+	if( $order->role == 4 )
+	{
+		include 'order/delete_sponsor_detail.php';
+	}
+
 }
 
 
@@ -208,6 +241,10 @@ if( isset( $_GET['getCustomer'] ) && isset( $_REQUEST['term'] ) )
 	}
 	echo json_encode($sc);
 }
+
+
+
+
 
 
 

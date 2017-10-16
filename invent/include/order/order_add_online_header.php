@@ -12,13 +12,13 @@
     	<label>ลูกค้า [ ในระบบ ]</label>
         <input type="text" class="form-control input-sm text-center input-header" id="customer" value="<?php echo customerName($order->id_customer); ?>"  <?php echo $disabled; ?>/>
     </div>
-    
+
     <div class="col-sm-3 padding-5">
     	<label>ลูกค้า [ ออนไลน์ ]</label>
         <input type="text" class="form-control input-sm text-center input-header" id="onlineCustomer" value="<?php echo $order->online_code; ?>"  <?php echo $disabled; ?>/>
     </div>
-    
-    
+
+
     <div class="col-sm-1 col-1-harf padding-5">
     	<label>ช่องทาง</label>
         <select class="form-control input-sm input-header" id="channels" <?php echo $disabled; ?>>
@@ -37,7 +37,7 @@
     </div>
     <div class="col-sm-2">
     <label class="display-block not-show">btn</label>
-    <?php if( isset( $_GET['id_order'] ) && $order->state < 8): ?>	
+    <?php if( isset( $_GET['id_order'] ) && $order->state < 8): ?>
     	<button type="button" class="btn btn-sm btn-warning btn-block" id="btn-edit-order" onclick="getEdit()">แก้ไข</button>
         <button type="button" class="btn btn-sm btn-success btn-block hide" id="btn-update-order" onclick="validUpdate()">บันทึก</button>
     <?php else : ?>
@@ -46,4 +46,5 @@
     </div>
 </div>
 <input type="hidden" id="id_customer" value="<?php echo $order->id_customer; ?>" />
+<input type="hidden" id="role" value="1" />
 <input type="hidden" id="isOnline" value="1" />

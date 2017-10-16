@@ -1,4 +1,4 @@
-<?php  
+<?php
 
 //--- function getFilter in function/tools.php
 $sCode 	= getFilter('sCode', 'sOrderCode', '');	//---	reference
@@ -35,7 +35,7 @@ $toDate	= getFilter('toDate', 'toDate', '' );
     	<label>ลูกค้า</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sCus" id="sCus" value="<?php echo $sCus; ?>" />
     </div>
-    
+
     <div class="col-sm-2 padding-5">
     	<label>พนักงาน</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sEmp" id="sEmp" value="<?php echo $sEmp; ?>" />
@@ -66,36 +66,36 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 		createCookie('sOrderCode', $sCode);
 		$where .= "AND reference LIKE '%".$sCode."%' ";
 	}
-	
+
 	//--- Customer
 	if( $sCus != "" )
 	{
 		createCookie('sOrderCus', $sCus);
 		$where .= "AND id_customer IN(".getCustomerIn($sCode).") "; //--- function/customer_helper.php
 	}
-	
+
 	//--- Employee
 	if( $sEmp != "" )
 	{
 		createCookie('sOrderEmp', $sEmp);
 		$where .= "AND id_employee IN(".getEmployeeIn($sEmp).") "; //--- function/employee_helper.php
 	}
-	
+
 	if( $fromDate != "" && $toDate != "" )
 	{
 		createCookie('fromDate', $fromDate);
 		createCookie('toDate', $toDate);
-		$where .= "AND date_add >= '".fromDate($fromDate)."' AND date_add <= '". toDate($toDate)."' ";	
+		$where .= "AND date_add >= '".fromDate($fromDate)."' AND date_add <= '". toDate($toDate)."' ";
 	}
-	
+
 	$where .= "ORDER BY reference DESC";
-	
+
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
 	$paginator->Per_Page('tbl_order', $where, $get_rows);
 	$paginator->display($get_rows, 'index.php?content=order');
 	$qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
-	
+
 ?>
 
 <div class="row">
@@ -128,13 +128,13 @@ $toDate	= getFilter('toDate', 'toDate', '' );
             	<td class="middle text-cennter pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $no; ?></td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $rs->reference; ?></td>
                 <td class="middle pointer" onclick="goEdit(<?php echo $rs->id; ?>)">
-                 	<?php if( $rs->isOnline == 1 ) : ?> 
+                 	<?php if( $rs->isOnline == 1 ) : ?>
                    		[  <?php echo $rs->online_code; ?>  ] &nbsp; &nbsp;
-					<?php endif; ?>
-                    <?php echo customerName($rs->id_customer); ?>
-                    <?php if( $pm->hasTerm($rs->id_payment) === FALSE && $rs->isPaid == 0 ) : ?>
-                    	<span class="red font-size-14 padding-10" style="margin-left:10px; background-color:#FFF;">ยังไม่ชำระเงิน</span>
-                    <?php endif; ?>
+									<?php endif; ?>
+                  <?php echo customerName($rs->id_customer); ?>
+                  <?php if( $rs->role == 1 && $pm->hasTerm($rs->id_payment) === FALSE && $rs->isPaid == 0 ) : ?>
+                  	<span class="red font-size-14 padding-10" style="margin-left:10px; background-color:#FFF;">ยังไม่ชำระเงิน</span>
+                  <?php endif; ?>
                 </td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $cs->getProvince($rs->id_customer); ?></td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo number_format($order->getTotalAmount($rs->id), 2); ?></td>
@@ -143,33 +143,34 @@ $toDate	= getFilter('toDate', 'toDate', '' );
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo stateName($rs->state, $rs->status); ?></td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo thaiDate($rs->date_add); ?></td>
                 <td class="middle text-center">
-                <button type="button" 
-                			class="btn btn-default btn-mini" 
-                            data-container="body" 
-                            data-toggle="popover" 
-                			data-placement="left" 
+                <button type="button"
+                			class="btn btn-default btn-mini"
+                            data-container="body"
+                            data-toggle="popover"
+														data-html="true"
+                			data-placement="left"
                             data-trigger="focus"
                             data-content="
-                           
-                            พนักงาน : <?php echo employee_name($rs->id_employee); ?>
-                            ปรับปรุงล่าสุด : <?php echo thaiDate($rs->date_upd); ?>                           
+
+                            พนักงาน : <?php echo employee_name($rs->id_employee); ?><br/>
+                            ปรับปรุงล่าสุด : <?php echo thaiDate($rs->date_upd); ?>
                         "><i class="fa fa-bars"></i></button>
-                   
+
                 </td>
             </tr>
-<?php		$no++; ?>            
-<?php		endwhile; ?>                
+<?php		$no++; ?>
+<?php		endwhile; ?>
 <?php else : ?>
 			<tr>
             	<td colspan="9" class="text-center"><h4>ไม่พบรายการ</h4></td>
             </tr>
-<?php endif; ?>            
+<?php endif; ?>
             </tbody>
         </table>
     </div>
 </div>
-	
-	
+
+
 
 
 
