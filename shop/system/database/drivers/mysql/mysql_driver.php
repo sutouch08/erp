@@ -132,8 +132,8 @@ class CI_DB_mysql_driver extends CI_DB {
 
 		// Error suppression is necessary mostly due to PHP 5.5+ issuing E_DEPRECATED messages
 		$this->conn_id = ($persistent === TRUE)
-			? mysql_pconnect($this->hostname, $this->username, $this->password, $client_flags)
-			: mysql_connect($this->hostname, $this->username, $this->password, TRUE, $client_flags);
+		? mysql_pconnect($this->hostname, $this->username, $this->password, $client_flags)
+		: mysql_connect($this->hostname, $this->username, $this->password, TRUE, $client_flags);
 
 		// ----------------------------------------------------------------
 
@@ -143,8 +143,8 @@ class CI_DB_mysql_driver extends CI_DB {
 			log_message('error', 'Unable to select database: '.$this->database);
 
 			return ($this->db_debug === TRUE)
-				? $this->display_error('db_unable_to_select', $this->database)
-				: FALSE;
+			? $this->display_error('db_unable_to_select', $this->database)
+			: FALSE;
 		}
 
 		if (isset($this->stricton) && is_resource($this->conn_id))
@@ -158,14 +158,14 @@ class CI_DB_mysql_driver extends CI_DB {
 				$this->simple_query(
 					'SET SESSION sql_mode =
 					REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
-					@@sql_mode,
-					"STRICT_ALL_TABLES,", ""),
-					",STRICT_ALL_TABLES", ""),
-					"STRICT_ALL_TABLES", ""),
-					"STRICT_TRANS_TABLES,", ""),
-					",STRICT_TRANS_TABLES", ""),
-					"STRICT_TRANS_TABLES", "")'
-				);
+						@@sql_mode,
+						"STRICT_ALL_TABLES,", ""),
+						",STRICT_ALL_TABLES", ""),
+						"STRICT_ALL_TABLES", ""),
+						"STRICT_TRANS_TABLES,", ""),
+						",STRICT_TRANS_TABLES", ""),
+						"STRICT_TRANS_TABLES", "")'
+					);
 			}
 		}
 
@@ -489,5 +489,7 @@ class CI_DB_mysql_driver extends CI_DB {
 		// where the connection has already been closed for some reason.
 		@mysql_close($this->conn_id);
 	}
+
+	
 
 }

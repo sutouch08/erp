@@ -19,13 +19,16 @@ function itemName($id_pa)
 }
 
 /// ส่งกลับรายชื่อสีต่างๆของสินค้าเป็น Object
-function get_product_colors($id_pd)
+function get_product_colors($id)
 {
 	$colors = FALSE ;
 	$c 		=& get_instance();
-	$c->db->select('tbl_product_attribute.id_color, color_code, color_name')->from('tbl_color')->join('tbl_product_attribute', 'tbl_product_attribute.id_color = tbl_color.id_color');
-	$c->db->where('id_product', $id_pd)->group_by('tbl_product_attribute.id_color');
-	$rs 		= $c->db->get();
+	$rs = $c->db->select('tbl_color.*
+				')
+			->join('tbl_color','tbl_color.id = tbl_product.id_color')
+			->where('tbl_product.id_style',$id)
+			->get('tbl_product');	
+
 	if( $rs->num_rows() > 0 )
 	{
 		$colors	= $rs->result();
@@ -33,13 +36,19 @@ function get_product_colors($id_pd)
 	return $colors;
 }
 
-function get_product_sizes($id_pd)
+function get_product_sizes($id)
 {
 	$sizes = FALSE; 
-	$c 	=& get_instance();
-	$c->db->select('tbl_product_attribute.id_size, size_name')->from('tbl_size')->join('tbl_product_attribute', 'tbl_product_attribute.id_size = tbl_size.id_size');
-	$c->db->where('id_product', $id_pd)->group_by('tbl_product_attribute.id_size');
-	$rs	= $c->db->get();
+	$c 		=& get_instance();
+	$rs = $c->db->select('tbl_product.id as product_id,
+				tbl_size.id,
+				tbl_size.name
+				')
+			
+			->join('tbl_size','tbl_size.id = tbl_product.id_size')
+			->where('tbl_product.id_style',$id)
+			->get('tbl_product');	
+
 	if( $rs->num_rows() > 0 )
 	{
 		$sizes = $rs->result();	
@@ -47,44 +56,9 @@ function get_product_sizes($id_pd)
 	return $sizes;
 }
 
-function get_product_attributes($id_pd)
+function getSizesSelected($id_style,$color_select)
 {
-	$attrs = FALSE;
-	$c		=& get_instance();
-	$c->db->select('tbl_product_attribute.id_attribute, attribute_name')->from('tbl_attribute')->join('tbl_product_attribute', 'tbl_product_attribute.id_attribute = tbl_attribute.id_attribute');
-	$c->db->where('id_product', $id_pd)->group_by('tbl_product_attribute.id_attribute');
-	$rs 	= $c->db->get();
-	if( $rs->num_rows() > 0 )
-	{
-		$attrs = $rs->result();
-	}
-	return $attrs;
-}
 
-function has_attribute($id_pd, $attribute = 'color')
-{
-	$rs = FALSE;	
-	switch( $attribute )
-	{
-		case 'color' :
-		$attr = 'id_color';
-		break;
-		case 'size' :
-		$attr = 'id_size';
-		break;
-		case 'attribute' :
-		$attr = 'id_attribute';
-		break;
-		default :
-		$attr = 'id_color';
-		break;
-	}
-	$qs = get_instance()->db->where('id_product', $id_pd)->where($attr.' !=', 0)->limit(1)->get('tbl_product_attribute');
-	if( $qs->num_rows() == 1 )
-	{
-		$rs = TRUE; 
-	}
-	return $rs;
 }
 
 function get_discount($id_cus = 0, $id_pd = 0)
@@ -174,33 +148,34 @@ function itemPrice($id_pa)
 	return $price;
 }
 
-function sell_price($price = 0, $discount = 0, $discount_type = 'percentage')
+function sell_price($price = 0, $discount_amount = 0 , $discount_percent = 0)
 {
-	if( $discount_type === 'percentage' OR $discount_type === 'percent' )
+	if( $discount_percent !== 0 && $price !== 0)
 	{
-		$discount = $price * ($discount * 0.01);
+		$discount = $price * ($discount_percent * 0.01);
 	}
-	return $price - $discount;
+	return ($price - $discount) - $discount_amount ;
 }
 
-function discountAmount($id_pa, $qty, $id_cus)
+function discountAmount($id_pd=0, $qty=0,$price=0)
 {
-	$dca = 0;
-	if( is_numeric($id_cus) )
-	{
-		$id_pd 	= getIdProduct($id_pa);
-		$price 	= itemPrice($id_pa);
-		$dis 		= get_discount($id_cus, $id_pd);
-		$disc 	= $dis['discount'];
-		$type 	= $dis['type'];
-		$dca		= $type == 'percent' ? $qty * ($price * ($disc * 0.01)) : $qty * $disc;
-	}
-	return $dca;
+
+	
 }
 
-function discount_label($dis = 0, $type = 'percentage')
+function discount_label($discount_amount = 0, $discount_percent = 0)
 {
-	$discount 	= $type == 'percentage' ? $dis.' %' : $dis.' '.getConfig('CURRENCY');
+	if($discount_percent > 0  && $discount_amount <= 0){
+		$discount 	= $discount_percent.' %';
+	}else if ($discount_amount > 0 && $discount_percent <= 0 ) {
+		$discount 	= number_format($discount_amount,2,'.','').' '.getConfig('CURRENCY');
+	}else if($discount_amount > 0 && $discount_percent > 0){
+		$discount 	= $discount_percent.' %'.' AND '.number_format($discount_amount,2,'.','').' '.getConfig('CURRENCY');
+	}else{
+		$discount = null;
+	}
+
+	
 	return $discount;
 }
 
@@ -209,35 +184,90 @@ function is_new_product($id_pd)
 	$is 			= FALSE;
 	$new_days = getConfig('NEW_PRODUCT_DATE');
 	$date 		= beforeDate($new_days);
-	$rs = get_instance()->db->select('id_product')->where('id_product', $id_pd)->where('date_add >', $date)->get('tbl_product');
+	$rs = get_instance()->db->select('id')->where('id', $id_pd)->where('date_upd >', $date)->get('tbl_product');
 	if( $rs->num_rows() == 1 )
 	{
 		$is		= TRUE; 
 	}
 	return $is;
+
 }
 
 function get_id_cover_image($id_pd)
 {
 	$id_image = 0;
-	$rs = get_instance()->db->where('id_product', $id_pd)->where('cover', 1)->get('tbl_image');
+	$rs = get_instance()->db->where('id_style', $id_pd)->where('cover', 1)->get('tbl_image');
 	if( $rs->num_rows() > 0 )
 	{
-		$id_image = $rs->row()->id_image;	
+		$id_image = $rs->row()->id;	
 	}
 	return $id_image;
 }
 
-function get_id_image($id_pa)
+function get_id_image($id_pd,$size = 2)
 {
-	$id_image = 0;
-	$rs = get_instance()->db->where('id_product_attribute', $id_pa)->get('tbl_product_attribute_image');
-	if( $rs->num_rows() > 0 )
-	{
-		$id_image = $rs->row()->id_image;
-	}
-	return $id_image;
+	$id_pd = (int)$id_pd;
+
+	get_instance()->load->library('product');
+	$qs = get_instance()->db->select('id_image')
+		->where('id_product',$id_pd)
+		->get('tbl_product_image');
+
+		if( $qs->num_rows() > 0 )
+		{
+			$id_image  = $qs->result_array()[0]['id_image'];
+		}else{
+			$id_image = '';
+		}
+		
+		return get_image_path($id_image,$size);
+		// return $id_image;
+		
 }
+
+function get_image_path($id, $use_size = 2)
+{
+		$count		= strlen($id);
+		$arr		= str_split($id);
+		$path		= base_url()."img/product";
+		$n			= 0;
+		while( $n < $count )
+		{
+			$path .= '/' . $arr[$n];
+			$n++;
+		}
+		$path	.= '/';
+		$size		= '_default';
+		switch( $use_size )
+		{
+			case 1 :
+				$size = '_mini';
+			break;
+			case 2 :
+				$size = '_default';
+			break;
+			case 3 :
+				$size = '_medium';
+			break;
+			case 4 :
+				$size = '_lage';
+			break;
+		}
+		
+		if( $count == 0 )
+		{
+			//----- If image no found
+			$path .= 'no_image' . $size . '.jpg';
+		}
+		else
+		{
+			//---- if image found
+			$path .= 'product' . $size . '_'. $id .'.jpg';
+		}
+		
+		return $path;
+}
+
 
 function prefix_image($size = 2)
 {
@@ -284,36 +314,6 @@ function no_image($size = 2)
 	return $img;
 }
 
-function get_image_path($id_image, $use_size = 2)
-{
-	$count = strlen($id_image);
-	$path = str_split($id_image);
-	$image_path = base_url().'img/product';
-	$file_path	= FILE_PATH.'img/product';
-	$n = 0;
-	while($n<$count)
-	{
-		$image_path .= "/".$path[$n];
-		$file_path .= '/'.$path[$n];
-		$n++;
-	}
-	$image_path .= "/";
-	$file_path	.= '/';
-	$image	= '';
-	$pre_fix = prefix_image($use_size);
-	$image_path .= $pre_fix.$id_image.".jpg";
-	$file_path .= $pre_fix.$id_image.'.jpg';
-	if(file_exists($file_path))
-	{
-		$image = $image_path;
-	}
-	else
-	{
-		$image = no_image($use_size);
-	}
-	
-	return $image;
-}
 
 function get_image_file($id_image, $size = '2')
 {
@@ -461,6 +461,30 @@ function apply_stock_filter($qty = 0)
 	}
 	return $qty;
 }
+
+
+
+function getGridByStyle($id_style=0)
+{
+	$c 		=& get_instance();
+	$rs = $c->db->select('tbl_color.id,tbl_color.color_name,tbl_size.id_size,tbl_size.size_name')
+		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+		->join('tbl_color','tbl_color.id = tbl_product.id_color')
+		->where('tbl_product.id_style',$id_style)
+		->get('tbl_product');
+
+		if( $rs->num_rows() > 0 )
+		{
+			return $rs->result();	
+		}
+		else
+		{
+			return FALSE;
+		}	
+	
+}
+
+
 
 
 ?>

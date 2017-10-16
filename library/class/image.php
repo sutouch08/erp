@@ -85,8 +85,7 @@ class image
 	}
 	
 	
-	//--- return image path
-	public function getProductImage($id, $size)
+	public function getProductImage($id,$size)
 	{
 		$qs = dbQuery("SELECT id_image FROM tbl_product_image WHERE id_product = '".$id."'");
 		if( dbNumRows($qs) > 0 )

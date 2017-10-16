@@ -6,75 +6,127 @@ class Product_model extends CI_Model
 		parent::__construct();	
 	}
 	
-	public function getAvailableQty($id_pa)
+	public function getProduct($parent=0,$child=0,$sub_child=0)
+	{
+		
+		$data = [
+			'parent' => $parent,
+			'child' => $child,
+			'sub_child'=>$sub_child
+		];
+
+		$url='http://localhost/ci_rest_server/index.php/api/product/product/product_by_menu';
+							
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);	
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $data);	
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array('x-api-key: 1234'));
+
+		$html = curl_exec($curl);
+		curl_close ($curl);
+
+		return  json_decode($html);
+	}
+
+	public function getAvailableQty($id_pd)
 	{
 		$qty 		= 0; 
-		$move 	= $this->moveQty($id_pa);
-		$cancle 	= $this->cancleQty($id_pa);
-		$order	= $this->orderQty($id_pa);
-		$rs 		= $this->db->select_sum('qty')->join('tbl_zone', 'tbl_zone.id_zone = tbl_stock.id_zone')->where('id_product_attribute', $id_pa)->where('id_warehouse !=', 2)->get('tbl_stock');
+		$move 	    = $this->moveQty($id_pd);
+		$cancle 	= $this->cancleQty($id_pd);
+		$order	    = $this->orderQty($id_pd);
+		$rs 		= $this->db->select_sum('qty')->join('tbl_zone', 'tbl_zone.id_zone = tbl_stock.id_zone')->where('id_product', $id_pd)->where('id_warehouse !=', 2)->get('tbl_stock');
+
 		if( $rs->num_rows() == 1 && !is_null($rs->row()->qty))
 		{
 			$qty = $rs->row()->qty;
 		}
 		$qty 	= ($qty + $move + $cancle) - $order;
-		
+
 		return $qty;	
 	}
-	
-	public function cancleQty($id_pa)
+
+	public function getAvailableQty_OnGrid($id_style,$id_color,$id_size)
 	{
-		$qty 	= 0;
-		$rs 	= $this->db->select_sum('qty')->where('id_product_attribute', $id_pa)->get('tbl_cancle');
-		if( $rs->num_rows() == 1 && !is_null($rs->row()->qty) )
+
+		$qty 		= 0; 
+		$move 	    = $this->moveQty($id_style);
+		$cancle 	= $this->cancleQty($id_style);
+		$order	    = $this->orderQty($id_style);
+
+
+		$rs = $this->db->query("SELECT SUM(qty) AS qty FROM tbl_product INNER JOIN tbl_stock ON CAST(tbl_product.id AS UNSIGNED) = tbl_stock.id_product INNER JOIN tbl_zone ON tbl_zone.id_zone = tbl_stock.id_zone WHERE tbl_product.id IN (SELECT tbl_product.id FROM tbl_product WHERE tbl_product.id_style = $id_style AND tbl_product.id_color = $id_color AND tbl_product.id_size = $id_size )");
+
+		// $qty 		= 0; 
+		// $move 	    = $this->moveQty($sub_query);
+		// $cancle 		= $this->cancleQty($sub_query);
+		// $order	    = $this->orderQty($sub_query);
+
+
+		if( $rs->num_rows() == 1 && !is_null($rs->row()))
 		{
 			$qty = $rs->row()->qty;
 		}
-		return $qty;
+		$qty 	= ($qty + $move + $cancle) - $order;
+
+		return $qty ;	
 	}
-	
+
+	public function cancleQty($id_pa)
+	{
+		// $qty 	= 0;
+		// $rs 	= $this->db->select_sum('qty')->where('id_product_attribute', $id_pa)->get('tbl_cancle');
+		// if( $rs->num_rows() == 1 && !is_null($rs->row()->qty) )
+		// {
+		// 	$qty = $rs->row()->qty;
+		// }
+		// return $qty;
+		return 0;
+	}
+
 	public function moveQty($id_pa)
 	{
-		$qty = 0;
-		$rs 	= $this->db->select_sum('qty_move')->where('id_product_attribute', $id_pa)->get('tbl_move');
-		if( $rs->num_rows() == 1 && !is_null($rs->row()->qty_move))
-		{
-			$qty = $rs->row()->qty_move;
-		}
-		return $qty;
+		// $qty = 0;
+		// $rs 	= $this->db->select_sum('qty_move')->where('id_product_attribute', $id_pa)->get('tbl_move');
+		// if( $rs->num_rows() == 1 && !is_null($rs->row()->qty_move))
+		// {
+		// 	$qty = $rs->row()->qty_move;
+		// }
+		// return $qty;
+		return 0;
 	}
-	
+
 	public function orderQty($id_pa)
 	{
-		$qty = 0;
-		$this->db->select_sum('product_qty')->from('tbl_order_detail');
-		$this->db->join('tbl_order', 'tbl_order.id_order = tbl_order_detail.id_order');
-		$this->db->where('id_product_attribute', $id_pa)->where('valid_detail', 0);
-		$this->db->where_not_in('current_state', array('6', '7', '8', '9'));
-		$rs	= $this->db->get();
-		if( $rs->num_rows() == 1 && !is_null($rs->row()->product_qty) )
-		{
-			$qty = $rs->row()->product_qty;
-		}
-		return $qty;
+
+		return 0;
 	}
-	
+
 	public function getProductDetail($id)
 	{
-		$rs = $this->db->where('id_product', $id)->get('tbl_product');
-		if( $rs->num_rows() == 1 )
-		{
-			return $rs->row();
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
-	
-	public function productImages($id_pd)
-	{
-		$rs = $this->db->where('id_product', $id_pd)->get('tbl_image');
+		$rs  = $this->db->select('tbl_product.id as product_id,
+			tbl_product.price as product_price,
+			tbl_product_style.id as style_id,
+			tbl_product_style.code as style_code,
+			tbl_product_style.name as style_name,
+			promotion.discount_percent,
+			promotion.discount_amount,
+			tbl_color.id as id_color,
+			tbl_color.code as code_color,
+			tbl_color.name as color_name,
+			tbl_color.id_group,
+			tbl_size.id as size_id,
+			tbl_size.name as size_name,
+			')
+		->join('tbl_product_style' , 'tbl_product_style.id = tbl_product.id_style','left')
+		->join('tbl_color','tbl_color.id = tbl_product.id_color','left')
+		->join('promotion','promotion.id_product = tbl_product.id','left')
+		->join('tbl_size','tbl_size.id = tbl_product.id_size','left')
+		->where('tbl_product.id',$id)
+		->get('tbl_product');		
+
+
 		if( $rs->num_rows() > 0 )
 		{
 			return $rs->result();	
@@ -84,138 +136,244 @@ class Product_model extends CI_Model
 			return FALSE;
 		}
 	}
-	
-	public function getAttrs($id_pd)
+
+	public function productImages($id_pd)
 	{
-		$color 	= $this->hasAttr($id_pd, 'color') === TRUE ? 1 : 0;
-		$size		= $this->hasAttr($id_pd, 'size') === TRUE ? 1 : 0;
-		$attr		= $this->hasAttr($id_pd, 'attribute') === TRUE ? 1 : 0;
-		$attrs 	= $color + $size + $attr;
-		$rs		= FALSE;
-		if( $color == 1 && $size == 0 && $attr == 0){ $rs = array('length' => 1, 'horizontal' => 'color', 'vertical' => '', 'tab' => ''); }
-		if( $color == 0 && $size == 1 && $attr == 0){ $rs = array('length' => 1, 'horizontal' => 'size', 'vertical' => '', 'tab' => ''); }
-		if( $color == 0 && $size == 0 && $attr == 1){ $rs = array('length' => 1, 'horizontal' => 'attribute', 'vertical' => '', 'tab' => ''); }		
-		if( $color == 1 && $size == 1 && $attr == 0){ $rs = array('length' => 2, 'horizontal' => 'color', 'vertical' => 'size', 'tab' => ''); }
-		if( $color == 1 && $size == 0 && $attr == 1){ $rs = array('length' => 2, 'horizontal' => 'color', 'vertical' => 'attribute', 'tab' => ''); }
-		if( $color == 0 && $size == 1 && $attr == 1){ $rs = array('length' => 2, 'horizontal' => 'attribute', 'vertical' => 'size', 'tab' => ''); }		
-		if( $color == 1 && $size == 1 && $attr == 1){ $rs = array('length' => 3, 'horizontal' => 'color', 'vertical' => 'size', 'tab' => 'attribute'); }
-		
-		return $rs;		
-	}
-	
-	public function hasAttr($id_pd, $attribute = 'color')
-	{
-		$rs = FALSE;	
-		switch( $attribute )
-		{
-			case 'color' :
-			$attr = 'id_color';
-			break;
-			case 'size' :
-			$attr = 'id_size';
-			break;
-			case 'attribute' :
-			$attr = 'id_attribute';
-			break;
-			default :
-			$attr = 'id_color';
-			break;
-		}
-		$qs = get_instance()->db->where('id_product', $id_pd)->where($attr.' !=', 0)->limit(1)->get('tbl_product_attribute');
-		if( $qs->num_rows() == 1 )
-		{
-			$rs = TRUE; 
-		}
-		return $rs;	
-	}
-	
-	public function getHeaderRow($id_pd, $horizontal = 'color', $vertical = 'size')
-	{
-		$qs 	= 'SELECT id_'.$horizontal.' AS id FROM tbl_product_attribute WHERE id_product = '.$id_pd.' GROUP BY id_'.$horizontal.' ORDER BY id_'.$horizontal.' ASC';
-		$rs	= $this->db->query($qs);
+		$rs = $this->db->where('id_style', $id_pd)->get('tbl_image');
 		if( $rs->num_rows() > 0 )
 		{
-			return $rs->result();
-		}
-		else
-		{
-			return FALSE;	
-		}
-	}
-	
-	public function getVertical($id_pd, $vertical)
-	{
-		$qv = 'SELECT tbl_'.$vertical.'.id_'.$vertical.' AS id ';
-		$qv .= 'FROM tbl_product_attribute JOIN tbl_'.$vertical.' ON tbl_product_attribute.id_'.$vertical.' = tbl_'.$vertical.'.id_'.$vertical;
-		$qv .= ' WHERE id_product = '.$id_pd.' GROUP BY tbl_'.$vertical.'.id_'.$vertical.' ORDER BY position ASC';	
-		$rs = $this->db->query($qv);
-		if( $rs->num_rows() > 0 )
-		{
-			return $rs->result();
+			return $rs->result();	
 		}
 		else
 		{
 			return FALSE;
 		}
 	}
-	
-	public function getHorizontal($id_pd, $horizontal)
-	{
-		$qh = 'SELECT tbl_'.$horizontal.'.id_'.$horizontal.' AS id ';
-		$qh .= 'FROM tbl_product_attribute JOIN tbl_'.$horizontal.' ON tbl_product_attribute.id_'.$horizontal.' = tbl_'.$horizontal.'.id_'.$horizontal;
-		$qh .= ' WHERE id_product = '.$id_pd.' GROUP BY tbl_'.$horizontal.'.id_'.$horizontal.' ORDER BY position ASC';
-		$rs = $this->db->query($qh);
-		if( $rs->num_rows() > 0 )
-		{
-			return $rs->result();
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
-	
-	public function getTabs($id_pd, $tab = 'attribute')
-	{
-		$qs = 'SELECT tbl_'.$tab.'.id_'.$tab.' AS id ';
-		$qs .= 'FROM tbl_product_attribute JOIN tbl_'.$tab.' ON tbl_product_attribute.id_'.$tab.' = tbl_'.$tab.'.id_'.$tab;
-		$qs .= ' WHERE id_product = '.$id_pd.' GROUP BY tbl_'.$tab.'.id_'.$tab.' ORDER BY position ASC';
-		$rs = $this->db->query($qs);
-		if( $rs->num_rows() > 0 )
-		{
-			return $rs->result();
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
-	
-	public function get_id_product_attribute_by_attrs($id_pd, $horizontal = 'color', $id_horizontal = 0, $vertical = '', $id_vertical = 0, $tab = '', $id_tab = 0)
-	{
-		$qs = 'SELECT id_product_attribute AS id_pa FROM tbl_product_attribute WHERE id_product = '.$id_pd.' AND id_'.$vertical.' = '.$id_vertical.' AND id_'.$horizontal.' = '.$id_horizontal.' AND id_'.$tab.' = '.$id_tab;	
-		$rs	= $this->db->query($qs);
-		if( $rs->num_rows() > 0 )
-		{
-			return $rs->row();
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
-	
+
 	public function getProductInfo($id_pd)
 	{
 		$info = '';
 		$rs = $this->db->select('product_detail')->where('id_product', $id_pd)->get('tbl_product_detail');
-		if( $rs->num_rows() == 1 )
+		if( $rs->num_rows() == 1)
 		{
 			$info = $rs->row()->product_detail;
 		}
 		return $info;
 	}
-	
+
+
+	public function moreItem($offset,$parent=0,$child=0,$sub_child=0)
+	{	
+
+		if($parent != 0 && $child == 0 && $sub_child == 0){
+			$rs  = $this->db->select('tbl_product.id as product_id,
+				tbl_product.code as product_code,
+				tbl_product.name as product_name,
+				tbl_product.price as product_price,
+				promotion.discount_percent,
+				promotion.discount_amount,
+				tbl_style.id as style_id,
+				tbl_style.code as style_code,
+				tbl_style.name as style_name,
+				')
+			->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
+			->join('product_online','product_online.id_product = tbl_product.id')
+			->join('promotion','promotion.id_product = product_online.id_product','left')
+			->where('product_online.id_parent_menu',$parent)
+			->where('tbl_product.show_in_online',1)
+			->where('tbl_product.is_deleted',0)
+			->where('tbl_product.active',1)
+			->order_by('tbl_product.id_category', 'desc')
+			->limit(20,$offset)
+			->get('tbl_product');
+
+		}else if($parent != 0 && $child != 0 && $sub_child == 0){
+			$rs  = $this->db->select('tbl_product.id as product_id,
+				tbl_product.code as product_code,
+				tbl_product.name as product_name,
+				tbl_product.price as product_price,
+				promotion.discount_percent,
+				promotion.discount_amount,
+				tbl_style.id as style_id,
+				tbl_style.code as style_code,
+				tbl_style.name as style_name,
+				')
+			->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
+			->join('product_online','product_online.id_product = tbl_product.id')
+			->join('promotion','promotion.id_product = product_online.id_product','left')
+			->where('product_online.id_parent_menu',$parent)
+			->where('product_online.id_child_menu',$child)
+			->where('tbl_product.show_in_online',1)
+			->where('tbl_product.is_deleted',0)
+			->where('tbl_product.active',1)
+			->order_by('tbl_product.id_category', 'desc')
+			->limit(20,$offset)
+			->get('tbl_product');
+
+		}else if($parent != 0 && $child != 0 && $sub_child != 0){
+			$rs  = $this->db->select('tbl_product.id as product_id,
+				tbl_product.code as product_code,
+				tbl_product.name as product_name,
+				tbl_product.price as product_price,
+				promotion.discount_percent,
+				promotion.discount_amount,
+				tbl_style.id as style_id,
+				tbl_style.code as style_code,
+				tbl_style.name as style_name,
+				')
+			->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
+			->join('product_online','product_online.id_product = tbl_product.id')
+			->join('promotion','promotion.id_product = product_online.id_product','left')
+			->where('product_online.id_parent_menu',$parent)
+			->where('product_online.id_child_menu',$child)
+			->where('product_online.id_subchild_menu',$sub_child)
+			->where('tbl_product.show_in_online',1)
+			->where('tbl_product.is_deleted',0)
+			->where('tbl_product.active',1)
+			->order_by('tbl_product.id_category', 'desc')
+			->limit(20,$offset)
+			->get('tbl_product');
+
+		}
+
+		if( $rs->num_rows() > 0 )
+		{
+			return $rs->result();	
+		}
+		else
+		{
+			return FALSE;
+		}	
+	}
+
+	public function grid($id_style)
+	{
+		$rs = $this->db->select('tbl_style.code,tbl_style.name,tbl_color.id_color,tbl_color.color_name,tbl_size.id_size,tbl_size.size_name')
+		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+		->join('tbl_style','tbl_style.id = tbl_product.id_style')
+		->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
+		->where('tbl_product.id_style',$id_style)
+		->get('tbl_product');
+
+		if( $rs->num_rows() > 0 )
+		{
+			return $rs->result();	
+		}
+		else
+		{
+			return FALSE;
+		}	
+	}
+
+
+	public function getSizeByColor($select_color,$id_style)
+	{
+
+
+		$rs = $this->db->select('tbl_size.id_size,tbl_size.size_name')
+		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+		->where('tbl_product.id_style',$id_style)
+		->where('tbl_product.id_color',$select_color)
+		->get('tbl_product');
+
+		if( $rs->num_rows() > 0 )
+		{
+			return $rs->result();	
+		}
+		else
+		{
+			return FALSE;
+		}	
+
+
+	}
+
+	public function getProdctFormGrid($id_style,$id_size,$id_color){
+		$rs = $this->db->select("tbl_product.id")
+		->where('tbl_product.id_style',$id_style)
+		->where('tbl_product.id_size',$id_size)
+		->where('tbl_product.id_color',$id_color)
+		->get('tbl_product');
+
+		return  $rs->result()[0];
+
+	}
+
+	public function getColorGroup($data_product)
+	{
+		$data =[];
+		foreach ($data_product as $key => $value) {
+			$data[$key] = $value->style_id; 
+		}
+
+		$url='http://localhost/ci_rest_server/index.php/api/product/product/color';
+							
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);	
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $data);	
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array('x-api-key: 1234'));
+
+		$html = curl_exec($curl);
+		curl_close ($curl);
+
+		return  json_decode($html);
+		// return $html;
+	}
+
+	public function  getSizeGroup($data_product)
+	{
+		$data =[];
+		foreach ($data_product as $key => $value) {
+			$data[$key] = $value->style_id; 
+		}
+
+		$url='http://localhost/ci_rest_server/index.php/api/product/product/size';
+							
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);	
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $data);	
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array('x-api-key: 1234'));
+
+		$html = curl_exec($curl);
+		curl_close ($curl);
+
+		return  json_decode($html);
+		// return $html;
+	} 
+
+
+	public function  filter($parent='',$child='',$sub_child='',$color='',$size='',$minPrice=0,$maxPrice=5000)
+	{
+		$data =[
+			"parent"=>$parent,
+			"child"=>$child,
+			"sub_child"=>$sub_child,
+			"color"=>serialize($color),
+			"size"=>serialize($size),
+			"minPrice"=>$minPrice,
+			"maxPrice"=>$maxPrice
+		];
+
+		$url='http://localhost/ci_rest_server/index.php/api/product/product/product_filter';
+							
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);	
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $data);	
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array('x-api-key: 1234'));
+
+		$html = curl_exec($curl);
+		curl_close ($curl);
+
+		return  json_decode($html);
+		// return $data;
+	} 
+
 }/// End class
 
 ?>

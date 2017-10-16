@@ -4447,7 +4447,7 @@ tbody.collapse.in {
 .dropdown-menu > li > a:focus {
     color: #262626;
     text-decoration: none;
-    background-color: #f5f5f5;
+    background-color: #DA631D;
 }
 
 .dropdown-menu > .active > a,
@@ -7261,7 +7261,7 @@ button.close {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 1040;
+    z-index: 1000;
     background-color: #000;
 }
 

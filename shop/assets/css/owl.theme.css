@@ -42,17 +42,31 @@
     *display: inline; /*IE7 life-saver */
 }
 
-.owl-theme .owl-controls .owl-page span {
-    display: block;
-    width: 12px;
-    height: 12px;
-    margin: 5px 7px;
-    filter: Alpha(Opacity=50); /*IE7 fix*/
-    opacity: 0.5;
-    -webkit-border-radius: 20px;
-    -moz-border-radius: 20px;
-    border-radius: 20px;
-    background: #869791;
+
+@media only screen 
+and (min-device-width : 320px)
+and (min-width : 390px) 
+{
+  .owl-theme .owl-controls .owl-page span {
+    display: none;
+  }
+}
+@media only screen 
+and (min-device-width: 380px) 
+and (min-width : 400px) 
+{
+    .owl-theme .owl-controls .owl-page span {
+        display: block;
+        width: 12px;
+        height: 12px;
+        margin: 5px 7px;
+        filter: Alpha(Opacity=50); /*IE7 fix*/
+        opacity: 0.5;
+        -webkit-border-radius: 20px;
+        -moz-border-radius: 20px;
+        border-radius: 20px;
+        background: #869791;
+    }
 }
 
 .owl-theme .owl-controls .owl-page.active span,

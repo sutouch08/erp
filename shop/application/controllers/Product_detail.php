@@ -1,29 +1,50 @@
 <?php
 class Product_detail extends CI_Controller
 {
-	public $home;
 	public $layout = "include/template";
 	public $title = "รายละเอียดสินค้า";
-	public $id_customer;
 	
 	public function __construct()
 	{
 		parent::__construct();		
-		$this->load->model("product_model");
-		$this->home = base_url()."product_detail";
-		$this->id_customer = getIdCustomer();		
+		$this->load->model("main_model");
+		$this->load->model('product_model');
+		$this->load->model('cart_model');
+		$this->load->model('Menu_model');
+		$this->load->model('Member_model');
+
+		$this->home = base_url()."shop/main";
+
+		$this->customer     =   $this->Member_model->getIdAndRole();//great or member
+		$this->id_cart 	    = getIdCart($this->customer->id);
+		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
+		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);
 	}
 	
-	public function index($id_pd)
+	public function product($id)
 	{
-		$this->load->helper('value');
-		$this->load->model('product_model');
-		$data['pd'] 	= $this->product_model->getProductDetail($id_pd);
-		$data['images']	= $this->product_model->productImages($id_pd);
-		//$data['pinfo']	= $this->product->model->getProductInfo($id_pd);
-		$data['view']					= 'product_detail';
+
+		$h = 5;
+		$id_pd = sprintf("%0".$h."d",$id);
+
+		$data['title']			= 'Product Details';
+		$data['product'] 		= $this->product_model->getProductDetail($id_pd);
+		$data['images']			= $this->product_model->productImages($data['product'][0]->style_id);
+
+		// echo "<pre>";
+		// print_r($data['images']);
+		// exit();
+
+		// $data['grid']			= $this->product_model->grid($data['product'][0]->style_id);
 		
-		$this->load->view($this->layout, $data);
+		$data['view']			= 'product_detail';
+		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
+		$data['customer']       = $this->customer;
+		$data['id_cart']		= $this->id_cart;
+		$data['cart_qty']		= $this->cart_qty;
+		$data['menus']			=  $this->Menu_model->menus();
+
+		$this->load->view($this->layout, $data);	
 	}
 	
 }

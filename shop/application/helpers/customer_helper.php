@@ -1,4 +1,5 @@
 <?php
+
 function get_customer_discount($id_cus, $id_pd)
 {
 	$disc = 0;  /// ส่งคืนส่วนลดที่ดีที่สุด เป็น เปอร์เซ็นต์ เสมอ
@@ -25,20 +26,16 @@ function get_customer_discount($id_cus, $id_pd)
 }
 
 
-function getIdCustomer()
+function getBank()
 {
-	$id_customer = 0;
-	$c =& get_instance();
-	if( !$c->input->cookie("id_customer") )
+	$rs = get_instance()->db->select('tbl_bank_account.*')
+	->where('tbl_bank_account.active',1)
+	->get('tbl_bank_account');
+	if( $rs->num_rows() > 0 )
 	{
-		$id_customer = uniqid();
-		$c->input->set_cookie("id_customer", $id_customer, (3600*24*14));
+		return $rs->result();
 	}
-	else
-	{
-		$id_customer = $c->input->cookie("id_customer");
-	}
-	return $id_customer;
+	
 }
 
 function customerName($id)

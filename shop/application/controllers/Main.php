@@ -2,107 +2,109 @@
 class Main extends CI_Controller
 {
 
-	public $home;
 	public $layout = "include/template";
-	public $title = "ยินดีต้อนรับ";
-	public $id_customer;
-	public $id_cart;
-	public $cart_value;
-	public $cart_items;
-	public $cart_qty;
+	public $title  = "ยินดีต้อนรับ";
 	
 	public function __construct()
 	{
-		parent::__construct();		
+
+		@parent::__construct();		
 		
 		$this->load->model("main_model");
 		$this->load->model('product_model');
 		$this->load->model('cart_model');
-		$this->home = base_url()."shop/main";
-		$this->id_customer = getIdCustomer();
-		$this->id_cart 	= getIdCart($this->id_customer);
-		$this->cart_value	= $this->cart_model->cartValue($this->id_cart);
+		$this->load->model('Menu_model');
+		$this->load->model('Member_model');
+
+		@$this->home = base_url()."shop/main";
+		//$this->customer api success
+		$this->customer     = $this->Member_model->getIdAndRole();//great or member
+		$this->id_cart 	    = getIdCart($this->customer->id);
+		
+		//get data by auth
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
 		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);
 		
 	}
 	
-	public function index()
+	public function index($id=0)
 	{
-		$data['title']				= $this->title;
-		$data['new_arrivals'] 	= $this->main_model->new_arrivals();
-		$data['features']		= $this->main_model->features();
-		$data['cart_items']		= $this->cart_items;
-		$data['view'] 			= 'main';			
+		$data['title']			= $this->title;
+		$data['cart_items']		= $this->cart_items==''?$this->cart_items=[]:$this->cart_items;
+		$data['id_customer']    = $this->customer->id;
+		$data['id_cart']		= $this->id_cart;
+		$data['cart_qty']		= $this->cart_qty;
+		$data['view'] 			= 'main';	
+
+		//get newProduct data from api by curl
+		$data['new_arrivals'] 	= $this->main_model->new_arrivals()==''?[]:$this->main_model->new_arrivals();
+
+		//get features data from api by curl
+		$data['features']		= $this->main_model->features()==''?[]:$this->main_model->features();
+
+		// echo "<pre>";
+		// print_r($data['features']);
+		// exit();
 		
-		$this->load->view($this->layout, $data);
-	}
+		//api success
+		$data['menus']          =  $this->Menu_model->menus();
+		
+
 	
-	public function productDetail($id_pd)
-	{
-		$data['title']		= 'Product Details';
-		$data['pd'] 	= $this->product_model->getProductDetail($id_pd);
-		$data['images']	= $this->product_model->productImages($id_pd);
-		$data['count_attrs']	= $this->product_model->getAttrs($id_pd);
-		$data['cart_items']		= $this->cart_items;
-		$data['product_info']	= $this->product_model->getProductInfo($id_pd);
-		$data['view']				= 'product_detail';
-		
-		$this->load->view($this->layout, $data);	
+		$this->load->view("include/template", $data);
+	
 	}
-		
+
+
 	public function loadMoreFeatures()
 	{
-		$this->load->model('main_model');
+		// $this->load->model('main_model');
 		$data = array();
 		if( $this->input->post('offset') )
 		{
 			$result = $this->main_model->moreFeatures($this->input->post('offset'));
 			if( $result !== FALSE )
 			{
+				// print_r($result);
 				foreach( $result as $rs )
 				{
 					$promo = 0;
-					if( $rs->discount != 0 OR is_new_product($rs->id_product) )
+					if( $rs->discount_amount > 0 || $rs->discount_percent > 0 )
 					{
 						$promo = 1;
 					}
+					$sp = sell_price($rs->product_price, $rs->discount_amount, $rs->discount_percent);
 					$arr = array(
-								'link'				=>	'main/productDetail/'.$rs->id_product,
-								'image_path'		=> get_image_path(get_id_cover_image($rs->id_product), 3),
-								'promotion'		=> $promo,
-								'new_product'	=> is_new_product($rs->id_product) === TRUE ? 1 : 0,
-								'discount'			=> intval($rs->discount),
-								'discount_label'	=> discount_label($rs->discount, $rs->discount_type),
-								'product_code'	=> $rs->product_code,
-								'product_name'	=> $rs->product_name,
-								'sell_price'		=> sell_price($rs->product_price, $rs->discount, $rs->discount_type),
-								'price'				=> $rs->product_price
-						);	
+						'link'				=>	'main/productDetail/'.$rs->product_id,
+						'image_path'		=> get_image_path(get_id_cover_image($rs->product_id), 3),
+						'style_id'			=> $rs->style_id,
+						'promotion'			=> $promo,
+						'new_product'		=> is_new_product($rs->product_id),
+						'discount'			=> $rs->discount_amount+$rs->discount_percent,
+						'discount_amount'	=> number_format($rs->discount_amount,2,'.',''),
+						'discount_percent'	=> number_format($rs->discount_percent,2,'.',''),
+						'discount_label'	=> discount_label($rs->discount_amount, $rs->discount_percent),
+						'available_qty'    => apply_stock_filter($this->product_model->getAvailableQty($rs->product_id)), 
+						'product_code'		=> $rs->style_code,
+						'product_name'		=> $rs->style_name,
+						'sell_price'		=> number_format($sp),
+						'price'				=> number_format($rs->product_price,2,'.','')
+					);	
 					array_push($data, $arr);
-				}
-				echo json_encode($data);
+				}//foreach 
+
+				print_r(json_encode($data));
+			}//$result !== FALSE 
+			else{
+				echo "none";
 			}
-			else
-			{
-				echo 'none';	
-			}
-		}
-		else
-		{
-			echo 'none';
-		}
-	}
+			
+		}//$this->input->post('offset')
+		
+	}//function loadmore
 	
-	public function cart($id)
-	{
-		$data['title']				= 'Cart detail';
-		$data['cart_items']		= $this->cart_items;
-		$data['view'] 			= 'cart';			
-		
-		$this->load->view($this->layout, $data);
-		
-	}
+	
+	
 	
 }/// end class
 

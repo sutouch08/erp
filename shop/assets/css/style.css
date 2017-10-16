@@ -60,6 +60,48 @@
 /* FOUNDATION
 /* =============================================================== */
 
+#instructions{padding: 10px 0; background:yellow; color:brown;}
+#employee-info-div{
+    width:40%; 
+    float:right; 
+    padding:5px; 
+    background:wheat; 
+    color:blue;
+}
+
+.button-sent-email {
+    transform-style: preserve-3d;
+}
+
+.button-sent-email:after {
+    top: -100%;
+    left: 0px;
+    width: 100%;
+    padding:8px;
+    position: absolute;
+    background: #2ecc61;
+    border-radius: 3px;
+    transform-origin: left bottom;
+    transform: rotateX(90deg);
+    font-family: FontAwesome;
+    content:"\f003 \00a0 \00a0 Send Email";
+}
+.button-sent-email:hover {
+    transform-origin: center bottom;
+    transform: rotateX(-92deg) translateY(100%);
+    -webkit-transition-duration: 0.5s; 
+    transition-duration: 0.5s;
+}
+
+.header-main:hover{
+    color:purple;
+    transform: scale(1.1);
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+}
+
 a {
     color: #454545;
     text-decoration: none;
@@ -535,7 +577,7 @@ legend {
 /* CUSTOMIZE NAVBAR
 /* =============================================================== */
 .navbar-toggle {
-    background: rgba(0, 0, 0, 0.2);
+   /* background: rgba(0, 0, 0, 0.2);*/
 }
 
 .navbar-tshop {
@@ -1099,8 +1141,9 @@ legend {
 }
 
 .old-price {
-    color: #666666;
-    font-size: 14px;
+    /*color: #666666;*/
+    color: #C51A1A;
+;    font-size: 14px;
     font-weight: normal;
     text-decoration: line-through;
 }
@@ -2458,7 +2501,7 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
 .style2 .section-title, .section-title.style2 {
     font-size: 42px;
     font-weight: lighter;
-    line-height: 44px;
+    line-height: 40px;
     margin: 10px 0 20px;
     padding: 0;
     position: relative;
@@ -2473,18 +2516,18 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
     background: #DDDDDD;
     content: "";
     display: block;
-    height: 1px;
-    margin-left: 20%;
+    height: 2px;
+    margin-left: 15%;
     position: absolute;
     top: 28px;
-    width: 60%;
+    width: 70%;
     z-index: 1;
 }
 
 .section-title-style2 span, .section-title.style2 span {
     background: #FFFFFF;
     display: inline-block;
-    padding: 10px;
+    padding: 5px;
     position: relative;
     width: auto;
     z-index: 2;
@@ -2509,7 +2552,7 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
 }
 
 #productslider .item {
-    margin: 0 15px 15px;
+    margin: 0 15px 5px;
 }
 
 .item {
@@ -2521,7 +2564,7 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
     -o-transition: all 0.3s ease 0s;
     -ms-transition: all 0.3s ease 0s;
     margin-bottom: 15px;
-    height: 480px;
+    height: 450px;
 }
 
 #SimilarProductSlider .item {
@@ -2756,8 +2799,8 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
 
 .description {
     margin: 0 auto;
-    min-height: 107px;
-    max-width: 235px;
+    min-height: 20px;
+    max-width: 200px;
 }
 
 .list-view .description {
@@ -2778,7 +2821,7 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
     font-size: 16px;
     font-weight: lighter;
     height: 100%;
-    padding: 3px 10px;
+    padding: 3px 7px;
 }
 
 .discount {
@@ -2793,7 +2836,7 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
     height: 100%;
     padding: 3px 5px;
 }
-
+s
 .item h4 {
     margin: 0;
     min-height: 45px;
@@ -2807,19 +2850,19 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
 
 .item h4 a {
     font-family: 'Source Sans Pro', sans-serif;
-    font-weight: 700;
-    color: #3a3a3a;
+    font-weight: 800;
+    color: #051104;
     text-decoration: none;
     text-transform: uppercase;
-    font-size: 16px;
+    font-size: 18px;
 
 }
 
 .description p {
-    color: #888888;
+    color: #797A79;
     font-size: 14px;
-    min-height: 55px;
-    max-height: 90px;
+    min-height: 30px;
+    max-height: 70px;
     overflow: hidden;
     line-height: 18px;
 }
@@ -2827,7 +2870,7 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
 .price {
     font-size: 18px;
     font-weight: bold;
-    color: #454545;
+    color: #051104;
 }
 
 .action-control {
@@ -2844,7 +2887,7 @@ h1.bolder-style.dark, h1.bolder-style.dark a {
 
 .cart a {
     font-size: 20px;
-    color: #454545;
+    color: #454475;
     margin: 0 0;
     display: inline-block;
     transition: all 0.3s ease-out 0s;
@@ -5250,29 +5293,29 @@ div.quickview {
 
     .newsletter {
       border: 0;
-    }
-    #subscribe {
-        border: solid 1px #ddd;
-    }
+  }
+  #subscribe {
+    border: solid 1px #ddd;
+}
 
 
-    .modal-dialog {
-        background: #fff none repeat scroll 0 0;
-        margin: 6% auto;
-        max-width: 95%;
-        overflow: auto;
-        width: 100%;
-    }
+.modal-dialog {
+    background: #fff none repeat scroll 0 0;
+    margin: 6% auto;
+    max-width: 95%;
+    overflow: auto;
+    width: 100%;
+}
 
-    #modalAds .modal-dialog {
-        display: block;
-        margin: 10% auto;
-        max-width: 94%;
-        min-height: 340px;
-        overflow: auto;
-        padding: 10px 0;
-        position: relative;
-    }
+#modalAds .modal-dialog {
+    display: block;
+    margin: 10% auto;
+    max-width: 94%;
+    min-height: 340px;
+    overflow: auto;
+    padding: 10px 0;
+    position: relative;
+}
 
 
 
@@ -5919,6 +5962,7 @@ div.quickview {
     cursor: pointer;
     transition: 0.3s ease;
     opacity: 1;
+    padding-right:40px;
 }
 
 .owl-has-nav:hover {

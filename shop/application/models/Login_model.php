@@ -6,9 +6,20 @@ class Login_model extends CI_Model
 		parent::__construct();
 	}
 	
-	public function getUser($user, $pass)
+	public function userValidation($user, $pass)
 	{
-		$rs = $this->db->where("user_name", $user)->where("password", $pass)->get("tbl_user");
+		$rs = $this->db->where("username", $user)->where("password", $pass)->get("account_customer_online");
+		if($rs->num_rows() == 1 )
+		{
+			return $rs->result()[0];
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public function getUserInfo($id_user){
+		$rs = $this->db->where("id_customer", $id_user)->get("customer_online");
 		if($rs->num_rows() == 1 )
 		{
 			return $rs->row();
@@ -21,16 +32,30 @@ class Login_model extends CI_Model
 	
 	public function loged($id_user)
 	{
-		return $this->db->where("id", $id_user)->update("tbl_user", array("last_login" => NOW()));	
+		date_default_timezone_set('Asia/Bangkok');
+
+		return $this->db->where("id_customer_online", $id_user)->update("account_customer_online", array("status"=>'1',"last_login" => date("Y-m-d H:i:s")));	
+	}
+	public function loged_out($id_user){
+		return $this->db->where("id_customer_online", $id_user)->update("account_customer_online", array("status"=>'0'));	
+	}
+
+	public function switch_cart_item($id_cart_great,$id_cart_member){
+		return $this->db->where("id_cart_online",$id_cart_great)->update("cart_product_online", array("id_cart_online"=>$id_cart_member));
 	}
 	
-	public function update_cart($id_c, $id_customer)
-	{
-		return $this->db->where("id_customer", $id_c)->update("tbl_cart", array("id_customer" => $id_customer));	
+	public function getIdCartMember($id_member){
+		$rs = $this->db->select('id_cart')->where("id_customer", $id_member)->get("cart_online");
+		if($rs->num_rows() == 1 )
+		{
+			return $rs->row()->id_cart;
+		}
+		else
+		{
+			return false;
+		}
 	}
-	
-	
-	
+
 }/// end class
 
 ?>

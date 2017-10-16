@@ -4,50 +4,35 @@
 <link href="<?php echo base_url(); ?>shop/assets/css/cart-nav.css" rel="stylesheet">
 <link href="<?php echo base_url(); ?>shop/assets/css/product-details-5.css" rel="stylesheet">
 
-    <!-- gall-item Gallery for gallery page -->
-<link href="<?php echo base_url(); ?>shop/assets/plugins/magnific/magnific-popup.css" rel="stylesheet">
+<!-- gall-item Gallery for gallery page -->
+<!-- <link href="<?php echo base_url(); ?>shop/assets/plugins/magnific/magnific-popup.css" rel="stylesheet"> -->
 <?php $this->load->view('module/product_detail'); ?>
 <?php $this->load->view('module/product_info'); ?>
 <!-- include carousel slider plugin  -->
 <script src="<?php echo base_url(); ?>shop/assets/js/owl.carousel.min.js"></script>
 
-<script src="<?php echo base_url(); ?>shop/assets/plugins/magnific/jquery.magnific-popup.min.js"></script>
-
-
-<!-- 
-<script src="<?php echo base_url(); ?>shop/assets/js/bootstrap.touchspin.js"></script>
-
-include touchspin.js // touch friendly input spinner component   -->
-<!--
-<script src="<?php echo base_url(); ?>shop/assets/js/script.js"></script>
-
- include custom script for site  -->
-
-<script src="<?php echo base_url(); ?>shop/assets/plugins/rating/bootstrap-rating.min.js"></script>
-
 <script>
+    // [].slice.call(document.querySelectorAll('nav.nav-narrow-svg > a')).forEach(function (el) {
+    //     el.addEventListener('click', function (ev) {
+    //         ev.preventDefault();
+    //     });
+    // });
 
-    // For Demo purposes only
-    [].slice.call(document.querySelectorAll('nav.nav-narrow-svg > a')).forEach(function (el) {
-        el.addEventListener('click', function (ev) {
-            ev.preventDefault();
-        });
-    });
+    $(document).ready(function(){
+        
+        var pic = $(".image");
+
+        pic.owlCarousel({
+           items: 3, 
+           nav: true, 
+           dots: true,
+           loop: false,
+           rewind: false,
+           autoPlay: 3000, 
+       });
 
     // productShowCase  carousel
-    var pic = $(".product-images-carousel");
-
-    pic.owlCarousel({
-        autoPlay: false,
-        lazyLoad: true,
-        navigation: false,
-        paginationSpeed: 1000,
-        goToFirstSpeed: 2000,
-        singleItem: true,
-        autoHeight: true
-
-
-    });
+    
 
     // Custom Navigation Events
     $(".product-images-carousel-wrapper nav.slider-nav .next").click(function () {
@@ -57,6 +42,8 @@ include touchspin.js // touch friendly input spinner component   -->
         pic.trigger('owl.prev');
     })
 
+
+});
 </script>
 <script>
  /*   $(function () {
@@ -85,15 +72,11 @@ include touchspin.js // touch friendly input spinner component   -->
 </script>
 
 
-<script src="<?php echo base_url(); ?>shop/assets/plugins/intense-images-master/intense.js"></script>
-
-<script>
-    var elements = document.querySelectorAll('.zoom-image-overly');
-    Intense(elements);
-</script>
+<!-- <script src="<?php echo base_url(); ?>shop/assets/plugins/intense-images-master/intense.js"></script> -->
 
 
-<script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/js/skrollr.min.js"></script>
+
+ <script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/js/skrollr.min.js"></script>
 <script type="text/javascript">
     var isMobile = function () {
         //console.log("Navigator: " + navigator.userAgent);
@@ -114,7 +97,6 @@ include touchspin.js // touch friendly input spinner component   -->
 
 
 </script>
-
 
 <!-- Reveal Animations When You Scroll  -->
 <script src="<?php echo base_url(); ?>shop/assets/js/wow.min.js"></script>
