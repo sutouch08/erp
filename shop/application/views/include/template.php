@@ -5,7 +5,7 @@ $this->load->view("include/footer");
 ?>
 
 <?php //this is session for modal grid ?>
-<script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/plugins/icheck-1.x/icheck.min.js"></script>
+</script>
 <div class="modal fade" id="orderGrid" >
 	<div class="modal-dialog" id="mainGrid">
 		<div class="modal-content">

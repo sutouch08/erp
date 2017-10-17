@@ -6,17 +6,17 @@
   <link rel="shortcut icon" href="<?php echo base_url(); ?>shop/assets/ico/warrix.ico">
   <title><?php if( isset( $title )){ echo $title; }else{ echo 'Welcome'; } ?></title>
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="<?php echo base_url(); ?>library/css/jquery-ui-1.10.4.custom.min.css" />
-  <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>library/css/sweet-alert.css">
+  <link rel="stylesheet" href="<?php echo base_url(); ?>shop/assets/css/jquery-ui-1.10.4.custom.min.css" />
+  <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>shop/assets/css/sweet-alert.css">
   <link href="<?php echo base_url(); ?>shop/assets/bootstrap/css/bootstrap.css" rel="stylesheet">
 
   <!-- Custom styles for this template -->
   <link href="<?php echo base_url(); ?>shop/assets/css/style.css" rel="stylesheet">
-  <script src="<?php echo base_url(); ?>library/js/jquery.min.js"></script>
-  <script src="<?php echo base_url(); ?>library/js/sweet-alert.js"></script>
-  <!-- <script src="<?php echo ROOT_PATH; ?>library/js/jquery.cookie.js"></script> -->
-  <!-- <script src="<?php echo base_url(); ?>library/js/handlebars-v3.js"></script>  -->
-  <script src="<?php echo base_url(); ?>library/js/jquery-ui-1.10.4.custom.min.js"></script>
+  <script src="<?php echo base_url(); ?>shop/assets/js/jquery.min.js"></script>
+  <script src="<?php echo base_url(); ?>shop/assets/js/sweet-alert.js"></script>
+  <!-- <script src="<?php echo ROOT_PATH; ?>assets/js/jquery.cookie.js"></script> -->
+  <!-- <script src="<?php echo base_url(); ?>assets/js/handlebars-v3.js"></script>  -->
+  <script src="<?php echo base_url(); ?>shop/assets/js/jquery-ui-1.10.4.custom.min.js"></script>
   
   
   <style>

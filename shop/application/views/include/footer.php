@@ -9,6 +9,7 @@
   <div class="footer" style="padding-bottom:10px">
     <div class="container hidden-xs">
       <CENTER>
+        <?php echo base_url(); ?>
         <div style="padding-top:10px;" >
           <img height="50" src="<?php echo base_url(); ?>shop/images/button-google-play.png" alt="img"> 
 
@@ -60,8 +61,8 @@
 
   <!-- Placed at the end of the document so the pages load faster -->
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script> -->
-  <script src="<?php echo base_url(); ?>library/js/sweet-alert.js"></script>
-  <script src="<?php echo base_url(); ?>library/js/handlebars-v3.js"></script> 
+  <script src="<?php echo base_url(); ?>shop/assets/js/sweet-alert.js"></script>
+  <script src="<?php echo base_url(); ?>shop/assets/js/handlebars-v3.js"></script> 
   <script src="<?php echo base_url(); ?>shop/assets/bootstrap/js/bootstrap.min.js"></script>
   <!-- include  parallax plugin -->
   <script type="text/javascript" src="<?php echo base_url(); ?>shop/assets/js/jquery.parallax-1.1.js"></script>

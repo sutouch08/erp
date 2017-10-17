@@ -89,8 +89,8 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 		Link for out of base url
 |---------------------------------------------
 */
-define('ROOT_PATH', '/invent/');
-define('IMG_PATH', '/invent/img/product');
-define('FILE_PATH', $_SERVER['DOCUMENT_ROOT'].'/invent/');
-define('SHOP_PATH', '/invent/shop/');
+define('ROOT_PATH', '/shop/');
+define('IMG_PATH', '/shop/img/product');
+define('FILE_PATH', $_SERVER['DOCUMENT_ROOT'].'/shop/');
+define('SHOP_PATH', '/shop/shop/');
 

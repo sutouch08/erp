@@ -1,6 +1,6 @@
 
 <a onclick="openNav()" id="btn_filter" class="btn_filter hidden-lg hidden-md hidden-sm"><i class="fa fa-filter" aria-hidden="true"></i></a>
-
+<script type="text/javascript" src="<?php echo base_url(); ?>/shop/assets/plugins/icheck-1.x/icheck.min.js">
 <script src="<?php echo base_url(); ?>shop/assets/js/nouislider.js"></script>
 <link rel="stylesheet" href="<?php echo base_url(); ?>shop/assets/css/nouislider.min.css" />
 
