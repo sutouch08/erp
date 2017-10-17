@@ -1,6 +1,6 @@
 <?php
 $approver  = new approver();
-$doc_type = 'SP-BUDGET'; //--- งบประมาณสปอนเซอร์
+$doc_type = 'SU-BUDGET'; //--- งบประมาณสปอนเซอร์
 $apv = $approver->getApprover($doc_type, getCookie('user_id'));
 ?>
 <div class="row">
@@ -49,7 +49,7 @@ $apv = $approver->getApprover($doc_type, getCookie('user_id'));
           </a>
         </td>
         <td class="middle text-right">
-          <?php if( $apv !== FALSE && !isset( $_GET['view_detail']) ) : ?>
+          <?php if( $apv !== FALSE && !isset( $_GET['view_detail'])) : ?>
             <?php if( $rs->active == 0) : ?>
               <button type="button" class="btn btn-xs btn-default" onclick="setActive(<?php echo $rs->id; ?>,<?php echo $apv->id_employee; ?>, '<?php echo $apv->approve_key; ?>',1)">
                 อนุมัติ
@@ -134,4 +134,4 @@ $apv = $approver->getApprover($doc_type, getCookie('user_id'));
 </div>
 
 
-<script src="script/sponsor_budget/budget_list.js"></script>
+<script src="script/support_budget/budget_list.js"></script>

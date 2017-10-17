@@ -16,9 +16,10 @@
 
 <?php
 //--  ค้นหาชื่อผู้รับ
-$sName = getFilter('sName', 'sSponsorName', '');
-$sYear = getFilter('sYear', 'sSponsorYear', '');
+$sName = getFilter('sName', 'sSupportName', '');
 
+//---  ค้นหาตามปี
+$sYear = getFilter('sYear', 'sSupportYear', '');
 ?>
 
 <form id="searchForm" method="post">
@@ -30,7 +31,7 @@ $sYear = getFilter('sYear', 'sSponsorYear', '');
 
   <div class="col-sm-2">
     <label>ปีงบประมาณ</label>
-    <input type="text" class="form-control input-sm text-center search-box" id="sYear" name="sYear" value="<?php echo $sYear; ?>" placeholder="กรองตามปีงบประมาณ" autofocus />
+    <input type="text" class="form-control input-sm text-center search-box" id="sYear" name="sYear" value="<?php echo $sYear; ?>" placeholder="กรองตามปีงบประมาณ"  />
   </div>
 
 
@@ -52,31 +53,30 @@ $sYear = getFilter('sYear', 'sSponsorYear', '');
 <hr class="margin-top-10 margin-bottom-10"/>
 
 <?php
-  $where = "WHERE tbl_sponsor.id != 0 ";
+  $where = "WHERE tbl_support.id != 0 ";
 
   if( $sName != '')
   {
-    createCookie('sSponsorName', $sName);
+    createCookie('sSupportName', $sName);
     $where .= "AND name LIKE '%".$sName."%' ";
   }
 
   if( $sYear != '')
   {
-    createCookie('sSponsorYear', $sYear);
+    createCookie('sSupportYear', $sYear);
     $where .= "AND year = '".dbYear($sYear)."' ";
   }
 
-
   $where .= "ORDER BY name ASC";
 
-  $table = "tbl_sponsor LEFT JOIN tbl_sponsor_budget ON tbl_sponsor.id_budget = tbl_sponsor_budget.id ";
+  $table = "tbl_support LEFT JOIN tbl_support_budget ON tbl_support.id_budget = tbl_support_budget.id ";
 
   $paginator = new paginator();
   $get_rows  = get_rows();
   $paginator->Per_Page($table, $where, $get_rows);
-  $paginator->display($get_rows, 'index.php?content=sponsor');
+  $paginator->display($get_rows, 'index.php?content=support');
 
-  $qs = dbQuery("SELECT tbl_sponsor.* FROM ".$table . $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
+  $qs = dbQuery("SELECT tbl_support.* FROM " .$table . $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 
  ?>
 
@@ -98,7 +98,7 @@ $sYear = getFilter('sYear', 'sSponsorYear', '');
 <?php if( dbNumRows($qs) > 0) : ?>
   <?php $no = row_no(); ?>
   <?php while( $rs = dbFetchObject($qs)) : ?>
-  <?php   $bd = new sponsor_budget($rs->id_budget); ?>
+  <?php   $bd = new support_budget($rs->id_budget); ?>
       <tr class="font-size-12">
         <td class="middle text-center"><?php echo $no; ?></td>
         <td class="middle"><?php echo $rs->name; ?></td>
@@ -112,7 +112,7 @@ $sYear = getFilter('sYear', 'sSponsorYear', '');
           <button type="button" class="btn btn-xs btn-warning" onclick="goEdit(<?php echo $rs->id; ?>)"><i class="fa fa-pencil"></i></button>
         <?php endif; ?>
           <?php if( $delete ) : ?>
-            <button type="button" class="btn btn-xs btn-danger" onclick="removeSponsor(<?php echo $rs->id; ?>, '<?php echo $rs->id_customer; ?>', '<?php echo $rs->name; ?>')"><i class="fa fa-trash"></i></butoon>
+            <button type="button" class="btn btn-xs btn-danger" onclick="removeSupport(<?php echo $rs->id; ?>, '<?php echo $rs->id_employee; ?>', '<?php echo $rs->name; ?>')"><i class="fa fa-trash"></i></butoon>
           <?php endif; ?>
         </td>
       </tr>
@@ -133,4 +133,4 @@ $sYear = getFilter('sYear', 'sSponsorYear', '');
 
 </div><!-- Container -->
 
-<script src="script/sponsor_budget/sponsor_budget_list.js"></script>
+<script src="script/support_budget/support_budget_list.js"></script>

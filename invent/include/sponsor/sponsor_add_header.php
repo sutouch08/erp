@@ -10,16 +10,20 @@
         <input type="text" class="form-control input-sm text-center input-header" id="dateAdd" value="<?php echo thaiDate($order->date_add); ?>" <?php echo $disabled; ?> />
     </div>
 
-    <div class="col-sm-4">
-    	<label>ผู้รับ</label>
+    <div class="col-sm-3">
+    	<label>ผู้รับ[สโมสร/ผู้รับการสนันสนุน]</label>
         <input type="text" class="form-control input-sm text-center input-header" id="customer" value="<?php echo customerName($order->id_customer); ?>"  <?php echo $disabled; ?>/>
     </div>
 
 		<div class="col-sm-2">
     	<label>งบประมาณคงเหลือ</label>
-      <input type="text" class="form-control input-sm text-center input-header" id="balance" disabled/>
+      <input type="text" class="form-control input-sm text-center input-header" id="balance" value="<?php echo $bd->getBalance($order->id_budget); ?>" disabled/>
     </div>
 
+		<div class="col-sm-3">
+			<label>ผู้เบิก[คนสั่ง]</label>
+			<input type="text" class="form-control input-sm text-center input-header" id="employee" value="<?php echo employee_name($order->id_employee); ?>" <?php echo $disabled; ?> />
+		</div>
 
     <div class="col-sm-10">
     	<label>หมายเหตุ</label>
@@ -39,5 +43,6 @@
 <input type="hidden" id="id_customer" value="<?php echo $order->id_customer; ?>" />
 <input type="hidden" id="id_sponsor" value="<?php echo $sp->getId($order->id_customer); ?>" />
 <input type="hidden" id="id_budget" value="<?php echo $order->id_budget; ?>" />
+<input type="hidden" id="id_employee" value="<?php echo $order->id_employee; ?>" />
 <input type="hidden" id="role" value="4" />
 <input type="hidden" id="isOnline" value="0" />

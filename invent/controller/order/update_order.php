@@ -1,11 +1,16 @@
 <?php
+	//---	คำนวนส่วนลดใหม่หรือไม่ 1 = คำนวนใหม่ 0 = ไม่ต้องคำนวณ
 	$recal = isset( $_GET['recal'] ) ? $_GET['recal'] : 0;
+
 	$order = new order($_POST['id_order']);
+
 	$payment = new payment_method($order->id_payment);
+
 	$credit = new customer_credit();
+
 	if( $recal == 0 )
 	{
-		$arr = array("remark" => $_POST['remark']);
+		$arr = array(	"remark" => $_POST['remark']);
 		$rs = $order->update($order->id, $arr);
 	}
 	else
@@ -23,25 +28,25 @@
 						);
 		//--- update order header first
 		$rs = $order->update($order->id, $arr);
-		
-		//----- ถ้ายังไม่มีรายการ ไม่ต้องคำนวณใหม่	
+
+		//----- ถ้ายังไม่มีรายการ ไม่ต้องคำนวณใหม่
 		if( $rs === TRUE && $order->hasDetails($order->id) === TRUE )
 		{
 			if( $payment->hasTerm == 1 )
 			{
 				//---- ยอดรวมสินค้าที่บันทึกไปแล้ว เพื่อเอามาคืนยอดใช้ไป
 				$amount = $order->getTotalAmountSaved($order->id);
-				
+
 				//----- ยกเลิกการบันทึกรายการ เพื่อจะได้คำนวณใหม่อีกที
 				$order->unSaveDetails($order->id);
-				
+
 				//---- คืนยอดเครดิตใช้ไป แล้วค่อยไปคำนวณใหม่ตอนบันทึก
 				$credit->decreaseUsed($order->id_customer, $amount);
 			}
 			//------ คำนวณส่วนลดใหม่
-			$order->calculateDiscount($order->id, $arr); 
-		}			
+			$order->calculateDiscount($order->id, $arr);
+		}
 	}
-	
+
 	echo $rs === TRUE ? 'success' : 'fail';
 ?>

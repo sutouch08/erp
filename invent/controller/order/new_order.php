@@ -24,6 +24,16 @@
 	//---	วันที่เอกสาร
 	$date_add = dbDate($_POST['dateAdd']);
 
+	//---	พนักงาน
+	//---	กรณีออเดอร์ขาย คือคนที่ทำการสั่งด้วยตัวเองหน้าเว็บ
+	//---	กรณีอภินันท์หรือ สปอนเซอร์จะเป็นชื่อคนสั่งให้เบิก
+	$id_employee = isset($_POST['id_employee']) ? $_POST['id_employee'] : getCookie('user_id');
+
+	//---	ผู้ทำรายการ
+	//--- ผู้ทำรายการคือคนที่ทำงานทั้งสั่งเองและสั่งตามคำสั่งของคนอื่น
+	//---	ผูํ้ทำรายการจะถูกบันทึกแยกไว้ที่ tbl_order_user
+	$id_user = getCookie('user_id');
+
 	//---	id_budget
 	$id_budget = isset( $_POST['id_budget']) ? $_POST['id_budget'] : 0;
 
@@ -37,7 +47,7 @@
 					"role"				=> $role,
 					"id_customer"	=> $_POST['id_customer'],
 					"id_sale"			=> $customer->id_sale,
-					"id_employee"	=> getCookie('user_id'),
+					"id_employee"	=> $id_employee,
 					"id_payment"	=> $id_payment,
 					"id_channels"	=> $id_channels,
 					"isOnline"		=> $isOnline,
@@ -53,6 +63,8 @@
 	{
 		$id = $order->get_id($reference);
 		$sc = $id;
+		//---	เพิ่มผู้ทำรายการแยกตางหาก
+		$order->insertUser($id, $id_user);
 	}
 
 	echo $sc;

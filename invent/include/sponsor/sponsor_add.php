@@ -1,6 +1,7 @@
 <?php
 $order = isset( $_GET['id_order'] ) ? new order( $_GET['id_order'] ) : new order();
 $sp = new sponsor();
+$bd = new sponsor_budget();
 $disabled = isset($_GET['id_order']) ? 'disabled' : '';
 $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hide';
 ?>
@@ -41,7 +42,7 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
     	<button type="button" class="btn btn-sm btn-primary btn-block" onclick="getProductGrid()"><i class="fa fa-tags"></i> แสดงสินค้า</button>
     </div>
     <div class="col-sm-5"></div>
-    
+
 </div>
 <hr class="margin-top-15 margin-bottom-0" />
 <!----------------------------------------- Category Menu ---------------------------------->

@@ -43,7 +43,17 @@ if( isset( $_GET['saveOrder'] ) )
 //------	ถ้าการชำระเงินมีเครดิตเทอม จะคืนยอดใช้ไปก่อน แล้วค่อยบันทึกเพื่อตัดยอดเครดิตอีกที
 if( isset( $_GET['updateOrder'] ) )
 {
-	include 'order/update_order.php';
+	$order = new order($_POST['id_order']);
+	if( $order->role == 1)
+	{
+		include 'order/update_order.php';
+	}
+
+	if( $order->role == 4)
+	{
+		include 'order/update_sponsor.php';
+	}
+
 }
 
 

@@ -35,6 +35,7 @@ class order
 	public $id_budget = 0; //--- ไอดี ของงบประมาณ (กรณี อภินันท์ หรือ สปอนเซอร์)
 	public $hasNotSaveDetail = TRUE;
 
+
 	public function __construct($id = "")
 	{
 		if( $id != "" )
@@ -849,17 +850,52 @@ class order
 
 
 
-	public function isExitsTransection($id_customer, $role)
+	public function isExitsTransection($id, $role)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT id FROM tbl_order_sold WHERE id_customer = '".$id_customer."' AND id_role = ".$role." LIMIT 1");
-		if( dbNumRows($qs) > 0 )
+
+		//---	ขายหรือสปอนเซอร์ (อ้างอิงจาก id_customer)
+		if( $role == 1 OR $role == 4)
+		{
+			$qs = dbQuery("SELECT id FROM tbl_order_sold WHERE id_customer = '".$id."' AND id_role = ".$role." LIMIT 1");
+			$qr = dbQuery("SELECT id FROM tbl_order WHERE id_customer = '".$id."' AND role = ".$role." LIMIT 1");
+		}
+
+		//--- อภินันท์ หรือ เบิก (อ้างอิงจาก id_employee)
+		if( $role == 3 OR $role == 7 )
+		{
+			$qs = dbQuery("SELECT id FROM tbl_order_sold WHERE id_employee = '".$id."' AND id_role = ".$role." LIMIT 1");
+			$qr = dbQuery("SELECT id FROM tbl_order WHERE id_employee = '".$id."' AND role = ".$role." LIMIT 1");
+		}
+		if( dbNumRows($qs) > 0 OR dbNumRows($qr) > 0)
 		{
 			$sc = TRUE;
 		}
 
 		return $sc;
 	}
+
+
+
+	public function insertUser($id_order, $id_user)
+	{
+		return dbQuery("INSERT INTO tbl_order_user (id_order, id_user) VALUES (".$id_order.", ".$id_user.")");
+	}
+
+
+
+	public function getOrderUser($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT id_user FROM tbl_order_user WHERE id_order = '".$id."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+
+		return $sc;
+	}
+
 
 }//--- End Class
 

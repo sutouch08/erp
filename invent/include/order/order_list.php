@@ -59,7 +59,7 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 <hr class="margin-top-10 margin-bottom-10"/>
 
 <?php
-	$where = "WHERE id != 0 ";
+	$where = "WHERE role = 1 ";
 	//--- Reference
 	if( $sCode != "" )
 	{

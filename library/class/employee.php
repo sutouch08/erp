@@ -41,10 +41,10 @@ class employee
 			}
 		}
 	}
-	
+
 
 	////เพิ่มพนักงานใหม่
-	public function addEmployee(array $data){ 
+	public function addEmployee(array $data){
 		$qs = "INSERT INTO tbl_employee ";
 		$qs .= "(id_profile, first_name, last_name, email, password, last_login, date_register, s_key, active) ";
 		$qs .= "VALUES (".$data['id_profile'].", '".$data['first_name']."', '".$data['last_name']."', ";
@@ -131,7 +131,7 @@ public function check_s_key($s_key, $id_employee = ""){
 	if($id_employee !=""){
 	$row = dbNumRows(dbQuery("SELECT s_key FROM tbl_employee WHERE s_key = '$s_key' AND s_key !='' AND id_employee != $id_employee"));
 	}else{
-	$row = dbNumRows(dbQuery("SELECT s_key FROM tbl_employee WHERE s_key = '$s_key' AND s_key !='' "));	
+	$row = dbNumRows(dbQuery("SELECT s_key FROM tbl_employee WHERE s_key = '$s_key' AND s_key !='' "));
 	}
 	if($row>0){ $rs = false; }else{ $rs = true; }
 	return $rs;
@@ -167,7 +167,7 @@ public function getDivisionCode($id_employee)
 	$qs = dbQuery("SELECT code FROM tbl_employee AS e JOIN tbl_division AS d ON e.id_division = d.id WHERE id_employee = ".$id_employee);
 	if( dbNumRows($qs) == 1 )
 	{
-		list( $sc ) = dbFetchArray($qs);	
+		list( $sc ) = dbFetchArray($qs);
 	}
 	return $sc;
 }
@@ -176,7 +176,7 @@ public function getDivisionCode($id_employee)
 public function getName($id)
 {
 	$sc = "";
-	$qs = dbQuery("SELECT first_name FROM tbl_employee WHERE id_employee = ".$id);
+	$qs = dbQuery("SELECT first_name FROM tbl_employee WHERE id_employee = '".$id."'");
 	if( dbNumRows($qs) == 1 )
 	{
 		list( $sc ) = dbFetchArray($qs);
@@ -188,7 +188,7 @@ public function getName($id)
 public function getFullName($id)
 {
 	$sc = "";
-	$qs = dbQuery("SELECT first_name, last_name FROM tbl_employee WHERE id_employee = ".$id);
+	$qs = dbQuery("SELECT first_name, last_name FROM tbl_employee WHERE id_employee = '".$id."'");
 	if( dbNumRows($qs) == 1 )
 	{
 		$rs = dbFetchObject($qs);
@@ -203,7 +203,7 @@ public function getSignature($id)
 	$imgPath = WEB_ROOT."img/employee/signature/".$id.".png";
 	$path = DOC_ROOT.$imgPath;
 	//echo $path;
-	
+
 	if( file_exists( $path ) ){
 		$sc = '<img src="'.$imgPath.'" style="max-width:180px; max-height:80px;" />';
 	}
@@ -213,7 +213,15 @@ public function getSignature($id)
 
 public function searchId($txt)
 {
-	return dbQuery("SELECT id_employee FROM tbl_employee WHERE first_name LIKE '%".$txt."%' OR last_name LIKE '%".$txt."%'");	
+	return dbQuery("SELECT id_employee FROM tbl_employee WHERE first_name LIKE '%".$txt."%' OR last_name LIKE '%".$txt."%'");
+}
+
+
+
+
+public function search($fields, $txt)
+{
+	return dbQuery("SELECT ".$fields." FROM tbl_employee WHERE first_name LIKE '%".$txt."%' OR last_name LIKE '%".$txt."%'");
 }
 
 

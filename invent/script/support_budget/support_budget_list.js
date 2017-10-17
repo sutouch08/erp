@@ -19,12 +19,12 @@ function getSearch(){
 
 
 function clearFilter(){
-  $.get('controller/sponsorController.php?clearFilter', function(){ goBack(); });
+  $.get('controller/supportController.php?clearFilter', function(){ goBack(); });
 }
 
 
 
-function removeSponsor(id, id_customer, name){
+function removeSupport(id, id_employee, name){
   swal({
     title:'ยืนยันการลบ',
     text:'ต้องการลบ '+name+' หรือไม่ ?',
@@ -36,14 +36,14 @@ function removeSponsor(id, id_customer, name){
     closeOnConfirm:false
   }, function(){
     $.ajax({
-      url:'controller/sponsorController.php?checkTransection',
+      url:'controller/supportController.php?checkTransection',
       type:'GET',
       cache:'false',
-      data:{'id_customer' : id_customer},
+      data:{'id_employee' : id_employee},
       success:function(rs){
         var rs = $.trim(rs);
         if(rs == 'no_transection'){
-          deleteSponsor(id);
+          deleteSupport(id);
         }else{
           swal({
             title: 'Error !',
@@ -58,13 +58,13 @@ function removeSponsor(id, id_customer, name){
 
 
 
-//--- Delete Sponsor person
-function deleteSponsor(id){
+//--- Delete Support person
+function deleteSupport(id){
   $.ajax({
-    url:'controller/sponsorController.php?deleteSponsor',
+    url:'controller/supportController.php?deleteSupport',
     type:'POST',
     cache:'false',
-    data:{'id_sponsor' : id },
+    data:{'id_support' : id },
     success:function(rs){
       var rs = $.trim(rs);
       if( rs == 'success'){
@@ -74,10 +74,7 @@ function deleteSponsor(id){
           timer:1000
         });
 
-        setTimeout(function(){
-          goBack();
-        }, 1200);
-
+        setTimeout(function(){ goBack();}, 1200);
       }else{
         swal({
           title: 'Error',

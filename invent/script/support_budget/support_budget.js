@@ -1,28 +1,27 @@
 function goBack(){
-  window.location.href = 'index.php?content=sponsor';
+  window.location.href = 'index.php?content=support';
 }
 
 
 
 
-//--  Add new sponsor person
+//--  Add new support person
 function goAdd(){
-  window.location.href = 'index.php?content=sponsor&add=Y';
+  window.location.href = 'index.php?content=support&add=Y';
 }
 
 
 
-//--- Edit sponsor  and budget
+//--- Edit support  and budget
 function goEdit(id){
-  window.location.href = 'index.php?content=sponsor&edit=Y&id_sponsor='+id;
+  window.location.href = 'index.php?content=support&edit=Y&id_support='+id;
 }
 
 
 
-
-//--- go to Detail pageTitle
+//--- go to detail page
 function getDetail(id){
-  window.location.href = 'index.php?content=sponsor&view_detail=Y&id_sponsor='+id;
+  window.location.href = 'index.php?content=support&view_detail=Y&id_support='+id;
 }
 
 

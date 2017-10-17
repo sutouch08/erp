@@ -73,43 +73,7 @@ if( isset($_GET['addNewBudget']))
 
 if( isset($_GET['updateBudget']))
 {
-
-	$id = $_POST['id_budget'];
-	$bd = new sponsor_budget($id);
-	$id_sponsor = $_POST['id_sponsor'];
-	$year = dbYear($_POST['year']);
-
-	if( $bd->isExistsYear($id_sponsor, $year, $id) === FALSE )
-	{
-		$arr = array(
-						'reference' => trim($_POST['reference']),
-						'start' => dbDate($_POST['fromDate']),
-						'end'	=> dbDate($_POST['toDate']),
-						'year' => $year,
-						'budget'	=> $_POST['budget'],
-						'remark'	=> $_POST['remark']
-					);
-
-		//---	ถ้ามีการแก้ไขเพิ่มยอดงบประมาณต้องได้รับการอนุมัติก่อนใช้งาน
-		//---	เป็นสถานะเป็นรออนุมัติ
-		if( $bd->budget < $_POST['budget'])
-		{
-			$arr['active'] = 0;
-		}
-
-		$rs = $bd->update($id, $arr);
-
-		if( $rs === TRUE )
-		{
-			$bd->calculate($id);
-		}
-
-		echo $rs === FALSE ? 'แก้ไขงบประมาณไม่สำเร็จ' : 'success';
-	}
-	else
-	{
-		echo 'ปีงบประมาณซ้ำ กรุณาเลือกใหม่';
-	}
+	include 'sponsor/sponsor_budget_update.php';
 }
 
 
@@ -142,7 +106,7 @@ if( isset( $_GET['approveBudget']))
 //---	Delete sponsor
 if( isset($_GET['deleteSponsor']))
 {
-	$id = $_POST['id_sponsor'];
+	include 'sponsor/sponsor_delete.php';
 }
 
 
@@ -251,6 +215,29 @@ if( isset($_GET['getSponsorCustomer']))
 }
 
 
+//---	ค้นหาพนักงาน
+if( isset( $_GET['getEmployee']))
+{
+	$sc = array();
+	$emp = new employee();
+	$qs = $emp->search('id_employee, first_name, last_name', trim($_REQUEST['term']));
+	if( dbNumRows($qs) > 0)
+	{
+		while($rs = dbFetchObject($qs))
+		{
+			$sc[] = $rs->first_name.' '.$rs->last_name. ' | ' .$rs->id_employee;
+		}
+
+	}
+	else
+	{
+		$sc[] = 'ไม่พบข้อมูล';
+	}
+
+	echo json_encode($sc);
+}
+
+
 
 if( isset( $_GET['getBudgetBalance']))
 {
@@ -278,7 +265,7 @@ if( isset( $_GET['isExistsSponsor']))
 if( isset($_GET['clearFilter']))
 {
 	deleteCookie('sSponsorName');
-	deleteCookie('sActive');
+	deleteCookie('sSponsorYear');
 	echo 'done';
 }
 ?>

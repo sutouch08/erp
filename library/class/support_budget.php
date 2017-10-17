@@ -1,10 +1,10 @@
 <?php
-class sponsor_budget
+class support_budget
 {
   public $id;
   public $reference;
-  public $id_sponsor;
-  public $id_customer;
+  public $id_support;
+  public $id_employee;
   public $start;
   public $end;
   public $year;
@@ -28,7 +28,7 @@ class sponsor_budget
 
   public function getData($id)
   {
-    $qs = dbQuery("SELECT * FROM tbl_sponsor_budget WHERE id = ".$id);
+    $qs = dbQuery("SELECT * FROM tbl_support_budget WHERE id = ".$id);
     if( dbNumRows($qs) == 1 )
     {
       $rs = dbFetchArray($qs);
@@ -54,7 +54,7 @@ class sponsor_budget
 				$values	.= $i == 1 ? "'". $value ."'" : ", '". $value ."'";
 				$i++;
 			}
-			$sc = dbQuery("INSERT INTO tbl_sponsor_budget (".$fields.") VALUES (".$values.")");
+			$sc = dbQuery("INSERT INTO tbl_support_budget (".$fields.") VALUES (".$values.")");
 		}
 
 		return $sc === TRUE ? dbInsertId() : FALSE;
@@ -75,7 +75,7 @@ class sponsor_budget
 				$i++;
 			}
 
-			$sc = dbQuery("UPDATE tbl_sponsor_budget SET " . $set . " WHERE id = '".$id."'");
+			$sc = dbQuery("UPDATE tbl_support_budget SET " . $set . " WHERE id = '".$id."'");
 		}
 
 		return $sc;
@@ -85,26 +85,26 @@ class sponsor_budget
 
 
 
-  public function deleteSponsorBudget($id_sponsor)
+  public function deleteSupportBudget($id_support)
   {
     $id_emp = getCookie('user_id');
-    return dbQuery("UPDATE tbl_sponsor_budget SET is_deleted = 1, emp_deleted = ".$id_emp." WHERE id_sponsor = ".$id_sponsor);
+    return dbQuery("UPDATE tbl_support_budget SET is_deleted = 1, emp_deleted = ".$id_emp." WHERE id_support = ".$id_support);
   }
 
 
 
 
   //--- ตรวจสอบว่าปีซ้ำหรือไม่
-  public function isExistsYear($id_sponsor, $year, $id_budget = FALSE)
+  public function isExistsYear($id_support, $year, $id_budget = FALSE)
   {
     $sc = FALSE;
     if( $id_budget !== FALSE )
     {
-      $qs = dbQuery("SELECT id FROM tbl_sponsor_budget WHERE id_sponsor = ".$id_sponsor." AND year = '".$year."' AND id != ".$id_budget);
+      $qs = dbQuery("SELECT id FROM tbl_support_budget WHERE id_support = ".$id_support." AND year = '".$year."' AND id != ".$id_budget);
     }
     else
     {
-      $qs = dbQuery("SELECT id FROM tbl_sponsor_budget WHERE id_sponsor = ".$id_sponsor." AND year = '".$year."'");
+      $qs = dbQuery("SELECT id FROM tbl_support_budget WHERE id_support = ".$id_support." AND year = '".$year."'");
     }
 
 
@@ -123,21 +123,21 @@ class sponsor_budget
   //--- คำนวนงบประมาณคงเหลือใหม่
   public function calculate($id)
   {
-    return dbQuery("UPDATE tbl_sponsor_budget SET balance = budget - used WHERE id = ".$id);
+    return dbQuery("UPDATE tbl_support_budget SET balance = budget - used WHERE id = ".$id);
   }
 
 
 
-  public function getBudgetList($id_sponsor)
+  public function getBudgetList($id_support)
   {
-    return dbQuery("SELECT * FROM tbl_sponsor_budget WHERE id_sponsor = ".$id_sponsor);
+    return dbQuery("SELECT * FROM tbl_support_budget WHERE id_support = ".$id_support);
   }
 
 
 
-  public function getSponsorBudgetYear($id_sponsor)
+  public function getSupportBudgetYear($id_support)
   {
-    return dbQuery("SELECT id, year FROM tbl_sponsor_budget WHERE id_sponsor = ".$id_sponsor);
+    return dbQuery("SELECT id, year FROM tbl_support_budget WHERE id_support = ".$id_support);
   }
 
 
@@ -146,7 +146,7 @@ class sponsor_budget
 
   public function increaseUsed( $id, $amount = 0 )
 	{
-		$sc = dbQuery("UPDATE tbl_sponsor_budget SET used = used + ".$amount." WHERE id = ".$id);
+		$sc = dbQuery("UPDATE tbl_support_budget SET used = used + ".$amount." WHERE id = ".$id);
 		if( $sc )
 		{
 			$sc = $this->calculate($id);
@@ -160,7 +160,7 @@ class sponsor_budget
 
 	public function decreaseUsed( $id, $amount = 0 )
 	{
-		$sc = dbQuery("UPDATE tbl_sponsor_budget SET used = used - ".$amount." WHERE id = ".$id);
+		$sc = dbQuery("UPDATE tbl_support_budget SET used = used - ".$amount." WHERE id = ".$id);
 		if( $sc )
 		{
 			$sc = $this->calculate($id);
@@ -172,7 +172,7 @@ class sponsor_budget
   public function getBalance($id)
   {
     $sc = 0;
-    $qs = dbQuery("SELECT balance FROM tbl_sponsor_budget WHERE id = '".$id."'");
+    $qs = dbQuery("SELECT balance FROM tbl_support_budget WHERE id = '".$id."'");
     if( dbNumRows($qs) == 1)
     {
       list( $sc ) = dbFetchArray($qs);

@@ -76,8 +76,9 @@ function getEdit(){
 function validUpdate(id){
 	var date_add = $("#dateAdd").val();
 	var id_customer = $("#id_customer").val();
-	var id_channels = $("#channels").val();
-	var id_payment = $("#paymentMethod").val();
+	var employee = $("#employee").val();
+	var id_employee = $("#id_employee").val();
+
 	//---- ตรวจสอบวันที่
 	if( ! isDate(date_add) ){
 		swal("วันที่ไม่ถูกต้อง");
@@ -90,66 +91,39 @@ function validUpdate(id){
 		return false;
 	}
 
-	//--- ตรวจสอบความเปลี่ยนแปลงที่สำคัญ
-	if( (date_add != order_date) || ( id_customer != customer_id ) || ( id_channels != channels_id ) || ( id_payment != payment_id ) ){
-		var recal = 1; //--- ระบุว่าต้องคำนวณส่วนลดใหม่
-		swal({
-			title: "คำเติอน !",
-			text: "การเปลี่ยนแปลงนี้ต้องคำนวณส่วนลดใหม่ ต้องการบันทึกหรือไม่ ?",
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#3BAFDA",
-			confirmButtonText: 'ต้องการ',
-			cancelButtonText: 'ยกเลิก',
-			closeOnConfirm: true
-			}, function(){
-				if( date_add !== order_date ){
-					var initialData = {
-						"title" : "อนุมัติเปลี่ยนแปลงวันที่",
-						"id_tab" : 80,  //--- แก้ไขวันที่เอกสาร
-						"field" : "", //--- add/edit/delete ถ้าอันไหนเป็น 1 ถือว่ามีสิทธิ์ /// ถ้าต้องการเฉพาะให้ระบุเป็น  add, edit หรือ delete
-						"callback" : function(){ updateOrder(recal); }
-					}
-					showValidateBox(initialData);
-				}else{
-					updateOrder(recal);
-				}
-		});
-
-	}else{
-		var recal = 0; //---- ระบุว่าไม่ต้องคำนวณส่วนลดใหม่
-		updateOrder(recal);
+	//--	ตรวจสอบพนักงาน
+	if( id_employee = '' || employee == ''){
+		swal('ผู้เบิกไม่ถูกต้อง');
+		return false;
 	}
+
+	updateOrder();
 }
 
 
 
-function updateOrder(recal){
+function updateOrder(){
 	var id_order = $("#id_order").val();
 	var date_add = $("#dateAdd").val();
 	var id_customer = $("#id_customer").val();
-	var id_channels = $("#channels").val();
-	var id_payment = $("#paymentMethod").val();
+	var id_budget = $('#id_budget').val();
 	var remark = $("#remark").val();
-	if(recal == 1 ){
-		data = {
-					 "id_order" : id_order,
-					 "date_add"	: date_add,
-					 "id_customer" : id_customer,
-					 "id_channels" : id_channels,
-					 "id_payment" : id_payment,
-					 "remark" : remark
-		};
-	}else{
-		data = { "id_order" : id_order, "remark" : remark };
-	}
+	var id_employee = $("#id_employee").val();
+
 	load_in();
 
 	$.ajax({
-		url:"controller/orderController.php?updateOrder&recal="+recal,
+		url:"controller/orderController.php?updateOrder",
 		type:"POST",
 		cache:"false",
-		data: data,
+		data:{
+					 "id_order" : id_order,
+					 "date_add"	: date_add,
+					 "id_customer" : id_customer,
+					 "id_budget" : id_budget,
+					 "id_employee" : id_employee,
+					 "remark" : remark
+		} ,
 		success: function(rs){
 			load_out();
 			var rs = $.trim(rs);
@@ -180,6 +154,8 @@ function addNew(){
 	var customer 		= $("#customer").val();
 	var remark			= $("#remark").val();
 	var id_budget	  = $('#id_budget').val();
+	var employee 		= $('#employee').val();
+	var id_employee = $('#id_employee').val();
 
 	if( ! isDate(dateAdd) ){
 		swal("วันที่ไม่ถูกต้อง");
@@ -188,6 +164,12 @@ function addNew(){
 
 	if( id_customer == "" || customer == "" ){
 		swal("ผู้รับไม่ถูกต้อง");
+		return false;
+	}
+
+	if( id_employee == '' || employee == '')
+	{
+		swal('ผู้เบิกไม่ถูกต้อง');
 		return false;
 	}
 
@@ -204,6 +186,7 @@ function addNew(){
 				"remark" : remark,
 				"isOnline" : 0,
 				"id_budget" : id_budget,
+				"id_employee" : id_employee,
 				"customerName" : ''
 		},
 		success: function(rs){
@@ -252,6 +235,28 @@ $("#customer").autocomplete({
 		}
 	}
 });
+
+
+
+
+$("#employee").autocomplete({
+	source: "controller/sponsorController.php?getEmployee",
+	autoFocus: true,
+	close: function(){
+		var rs = $.trim($(this).val());
+		var arr = rs.split(' | ');
+		if( arr.length == 2 ){
+			var name = arr[0];
+			var id = arr[1];
+			$("#id_employee").val(id);
+			$("#employee").val(name);
+		}else{
+			$("#id_employee").val('');
+			$(this).val('');
+		}
+	}
+});
+
 
 
 

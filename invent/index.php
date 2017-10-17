@@ -651,7 +651,7 @@ switch($page){
 			break;
 		case "sponsor" :
 			$content = "sponsor.php";
-			$pageTitle = "เพิ่ม/แก้ไข งบสปอนเซอร์";
+			$pageTitle = "เพิ่ม/แก้ไข รายชื่อสปอนเซอร์";
 			break;
 	//*****  พนักงาน  *****//
 		case "Employee":
@@ -672,7 +672,7 @@ switch($page){
 			break;
 		case "support" :
 			$content = "support.php";
-			$pageTitle = "รายการอภนันทนาการ";
+			$pageTitle = "เพิ่ม/แก้ไข รายชื่ออภินันทนาการ";
 			break;
 		//******** ผู้จำหน่าย  *******//
 		case 'supplier' :

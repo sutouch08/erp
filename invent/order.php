@@ -48,3 +48,4 @@ else
 
 </div><!--/container-->
 <script src="script/order/order.js"></script>
+<script src="script/print/print_order.js"></script>

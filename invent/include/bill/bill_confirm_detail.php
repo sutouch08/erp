@@ -14,7 +14,6 @@
 
 <div class="row">
   <div class="col-sm-12 text-right">
-    <button type="button" class="btn btn-sm btn-info" onclick="printAddress()"><i class="fa fa-file-text-o"></i> พิมพ์ใบปะหน้า</button>
     <?php if( $edit || $add ) : ?>
       <button type="button" class="btn btn-sm btn-primary" id="btn-confirm-order" onclick="confirmOrder()">เปิดบิลและตัดสต็อก</button>
     <?php endif; ?>
