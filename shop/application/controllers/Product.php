@@ -41,27 +41,21 @@ class Product extends CI_Controller
 		$data['product']	    = $product;
 		$this->product_qty      = count($product);
 
-		$colorGroup = $this->product_model->getColorGroup($data['product']);
-		$colorSize  = $this->product_model->getSizeGroup($data['product']);
+		$data['color']   = $this->product_model->getColorGroup($data['product']);
+		$data['size']    = $this->product_model->getSizeGroup($data['product']);
 
-
-		$id 					= [];
-		$data['color']          = "";
-		$data['size']			= [];
-		
-		$data['color']  = empty($colorGroup)?[]:$colorGroup;
-		$data['size']   = empty($colorSize)?[]:$colorSize;
-		
 		// echo "<pre>";
-		// print_r($data['product']);
+		// print_r($data['color']);
 		// exit();
+	
 
 		//filter data 
 		//form submit
 		if($this->input->get()){
-			
+
 			$color = $this->input->get('color',true);
 			$size  = $this->input->get('size',true);
+
 			if(empty($color))
 			{
 				$color = [];
@@ -76,12 +70,24 @@ class Product extends CI_Controller
 					array_push($size,$value->id);
 				}
 			}
+			
 
 			$minPrice = $this->input->get('minPrice',true);
 			$maxPrice = $this->input->get('maxPrice',true);
 
-			$data['product'] = $this->product_model->filter($parent,$child,$sub_child,$color,$size,$minPrice,$maxPrice);
+			$id_style  = [];
+			foreach ($data['product'] as $key => $value) {
+				if ($value->style_id) {
+					array_push($id_style,$value->style_id);
+				}
+				
+			}
 
+			$data['product'] = $this->product_model->filterItem($id_style,$color,$size,$minPrice,$maxPrice);
+
+			// echo "<pre>";
+			// print_r($color);
+			// exit();
 			
 		}//if get filter
 

@@ -303,8 +303,9 @@ class Product_model extends CI_Model
 	{
 		$data =[];
 		foreach ($data_product as $key => $value) {
-			$data[$key] = $value->style_id; 
+			array_push($data,$value->style_id); 
 		}
+		
 
 		$url='http://localhost/ci_rest_server/index.php/api/product/product/color';
 							
@@ -319,7 +320,7 @@ class Product_model extends CI_Model
 		curl_close ($curl);
 
 		return  json_decode($html);
-		// return $html;
+		// return $data;
 	}
 
 	public function  getSizeGroup($data_product)
@@ -346,12 +347,10 @@ class Product_model extends CI_Model
 	} 
 
 
-	public function  filter($parent='',$child='',$sub_child='',$color='',$size='',$minPrice=0,$maxPrice=5000)
+	public function  filterItem($id_style='',$color='',$size='',$minPrice=0,$maxPrice=5000)
 	{
 		$data =[
-			"parent"=>$parent,
-			"child"=>$child,
-			"sub_child"=>$sub_child,
+			"id_style"=>serialize($id_style),
 			"color"=>serialize($color),
 			"size"=>serialize($size),
 			"minPrice"=>$minPrice,

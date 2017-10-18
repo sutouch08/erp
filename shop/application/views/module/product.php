@@ -1,6 +1,6 @@
 
 <a onclick="openNav()" id="btn_filter" class="btn_filter hidden-lg hidden-md hidden-sm"><i class="fa fa-filter" aria-hidden="true"></i></a>
-<script type="text/javascript" src="<?php echo base_url(); ?>/shop/assets/plugins/icheck-1.x/icheck.min.js">
+<script type="text/javascript" src="<?php echo base_url(); ?>/shop/assets/plugins/icheck-1.x/icheck.min.js"></script>
 <script src="<?php echo base_url(); ?>shop/assets/js/nouislider.js"></script>
 <link rel="stylesheet" href="<?php echo base_url(); ?>shop/assets/css/nouislider.min.css" />
 
@@ -14,7 +14,8 @@
        <div class="input-group">
         <?php if (!empty($color)): ?>
         <?php foreach (@$color as $c): ?>
-          <input type="checkbox" name="color[]" value="<?= $c->id ?>"> <?php print_r($c->name) ?><br>
+          <input type="checkbox" name="color[]" value="<?= $c->id_group ?>"> 
+          <?php print_r($c->group_name) ?><br>
         <?php endforeach ?>
         <?php endif ?>
       </div>
@@ -47,6 +48,7 @@
         <h3>NO RESULT!</h3>
       </div>
     <?php else: ?>  
+
     <?php foreach($product as $item ) : ?>
       <?php   $link   = base_url().'shop/product_detail/product/'.$item->product_id; ?>
       <div class="item col-lg-3 col-md-3 col-sm-4 col-xs-6 features" >
@@ -112,8 +114,6 @@
 <div id="myNav" class="overlay" style="z-index:1000">
 
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()" style="margin:0px;padding:0px">&times;</a>
-
-  
   <div class="overlay-content" style="margin-bottom:50px;color:red;margin-top:0px;padding-top:0px">
 
    <form action="">
