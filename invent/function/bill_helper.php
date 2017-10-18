@@ -153,11 +153,10 @@ function get_header($order)
 	else if( $order->role == 3)
 	{
 		$header	= array(
-									"ผู้รับ"	=> $customer->getName($order->id_customer),
+									"ผู้เบิก"	=> $customer->getName($order->id_customer),
 									"วันที่"	=> thaiDate($order->date_add),
-									"ผู้เบิก"	=> employee_name($order->id_employee),
-									"เลขที่เอกสาร"	=> $order->reference,
-									"ผู้ดำเนินการ" 	=> employee_name($order->getOrderUser($order->id))
+									"ผู้ดำเนินการ"	=> employee_name($order->id_employee),
+									"เลขที่เอกสาร"	=> $order->reference
 									);
 	}
 

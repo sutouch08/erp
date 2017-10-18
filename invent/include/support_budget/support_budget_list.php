@@ -112,7 +112,7 @@ $sYear = getFilter('sYear', 'sSupportYear', '');
           <button type="button" class="btn btn-xs btn-warning" onclick="goEdit(<?php echo $rs->id; ?>)"><i class="fa fa-pencil"></i></button>
         <?php endif; ?>
           <?php if( $delete ) : ?>
-            <button type="button" class="btn btn-xs btn-danger" onclick="removeSupport(<?php echo $rs->id; ?>, '<?php echo $rs->id_employee; ?>', '<?php echo $rs->name; ?>')"><i class="fa fa-trash"></i></butoon>
+            <button type="button" class="btn btn-xs btn-danger" onclick="removeSupport(<?php echo $rs->id; ?>, '<?php echo $rs->id_customer; ?>', '<?php echo $rs->name; ?>')"><i class="fa fa-trash"></i></butoon>
           <?php endif; ?>
         </td>
       </tr>

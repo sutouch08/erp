@@ -1,7 +1,15 @@
 <?php
 	$sc 			= "สร้างออเดอร์ไม่สำเร็จ";
 	$order 		= new order();
-	$customer = new customer( $_POST['id_customer'] );
+
+	//---	ถ้าเป็นออเดอร์ขายหรือสปอนเซอร์ จะมี id_customer
+	$customer = isset( $_POST['id_customer']) ? new customer( $_POST['id_customer'] ) : FALSE;
+
+	//---	ถ้าเป็นออเดอร์ขายหรือสปอนเซอร์ จะมี id_customer
+	$id_customer = $customer === FALSE ? '' : $customer->id;
+
+	//---	ถ้าเป็นออเดอร์ขาย จะมี id_sale
+	$id_sale = $customer === FALSE ? '' : $customer->id_sale;
 
 	//---	เป็นออเดอร์ออนไลน์หรือไม่
 	$isOnline = isset($_POST['isOnline']) ? ($_POST['isOnline'] == 1 ? 1 : 0) : 0;
@@ -26,7 +34,7 @@
 
 	//---	พนักงาน
 	//---	กรณีออเดอร์ขาย คือคนที่ทำการสั่งด้วยตัวเองหน้าเว็บ
-	//---	กรณีอภินันท์หรือ สปอนเซอร์จะเป็นชื่อคนสั่งให้เบิก
+	//---	กรณีสปอนเซอร์จะเป็นชื่อคนสั่งให้เบิก
 	$id_employee = isset($_POST['id_employee']) ? $_POST['id_employee'] : getCookie('user_id');
 
 	//---	ผู้ทำรายการ
@@ -45,8 +53,8 @@
 					"bookcode"		=> getConfig('BOOKCODE_SO'),
 					"reference"		=> $reference,
 					"role"				=> $role,
-					"id_customer"	=> $_POST['id_customer'],
-					"id_sale"			=> $customer->id_sale,
+					"id_customer"	=> $id_customer,
+					"id_sale"			=> $id_sale,
 					"id_employee"	=> $id_employee,
 					"id_payment"	=> $id_payment,
 					"id_channels"	=> $id_channels,

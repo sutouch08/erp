@@ -1,6 +1,6 @@
 function saveSupport(){
-  var id_employee = $('#id_employee').val();
-  var name        = $('#employee').val();
+  var id_customer = $('#id_customer').val();
+  var name        = $('#customer').val();
   var reference   = $('#reference').val();
   var budget      = $('#budget').val() == '' ? 0.00 : $('#budget').val();
   var fromDate    = $('#fromDate').val();
@@ -9,13 +9,13 @@ function saveSupport(){
   var remark      = $('#remark').val();
 
   //--- ตรวจสอบชือผู้รับสปอนเซอร์
-  if( id_employee == '' || name == ''){
-    $('#employee-error').removeClass('hidden');
-    $('#employee').addClass('has-error');
+  if( id_customer == '' || name == ''){
+    $('#customer-error').removeClass('hidden');
+    $('#customer').addClass('has-error');
     return false;
   }else{
-    $('#employee-error').addClass('hidden');
-    $('#employee').removeClass('has-error');
+    $('#customer-error').addClass('hidden');
+    $('#customer').removeClass('has-error');
   }
 
   //--- ตรวจสอบวันที่
@@ -45,7 +45,7 @@ function saveSupport(){
     type:'POST',
     cache:'false',
     data:{
-      'id_employee' : id_employee,
+      'id_customer' : id_customer,
       'name'        : name,
       'reference'   : reference,
       'budget'      : budget,
@@ -99,8 +99,8 @@ function clearFields(){
 
 
 
-$('#employee').autocomplete({
-  source:'controller/supportController.php?getEmployee',
+$('#customer').autocomplete({
+  source:'controller/supportController.php?getCustomer',
   autoFocus:true,
   close:function(){
     var rs = $(this).val().split(' | ');
@@ -110,7 +110,7 @@ $('#employee').autocomplete({
       $(this).val(name);
       checkDuplicate(id);
     }else{
-      $('#id_employee').val('');
+      $('#id_customer').val('');
       $(this).val('');
     }
   }
@@ -124,15 +124,15 @@ $('#employee').autocomplete({
 function checkDuplicate(id){
   $.ajax({
     url:'controller/supportController.php?isExistsSupport',
-    type:'POST', cache:'false', data:{'id_employee':id},
+    type:'POST', cache:'false', data:{'id_customer':id},
     success:function(rs){
       var rs = $.trim(rs);
       if(rs == 'ok'){
-        $('#id_employee').val(id);
+        $('#id_customer').val(id);
         $('#reference').focus();
       }else if( ! isNaN(parseInt(rs))){
-        $('#id_employee').val('');
-        $('#employee').val('');
+        $('#id_customer').val('');
+        $('#customer').val('');
         swal({
           title:'Duplicated !',
           text:'มีรายชื่อนี้อยู่ในผู้รับอภินันท์แล้ว ต้องการเพิ่มงบประมาณหรือไม่',
@@ -146,8 +146,8 @@ function checkDuplicate(id){
           window.location.href = 'index.php?content=support&edit=Y&id_support='+rs;
         });
       }else{
-        $('#id_employee').val('');
-        $('#employee').val('');
+        $('#id_customer').val('');
+        $('#customer').val('');
       }
     }
   });

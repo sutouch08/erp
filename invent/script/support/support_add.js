@@ -55,8 +55,6 @@ function countInput(){
 
 
 var customer_id;
-var channels_id;
-var payment_id;
 var order_date;
 
 
@@ -66,8 +64,6 @@ function getEdit(){
 	$("#btn-edit-order").addClass('hide');
 	$("#btn-update-order").removeClass('hide');
 	customer_id = $("#id_customer").val();
-	channels_id = $("#channels").val();
-	payment_id = $("#paymentMethod").val();
 	order_date = $("#dateAdd").val();
 }
 
@@ -75,9 +71,8 @@ function getEdit(){
 
 function validUpdate(id){
 	var date_add = $("#dateAdd").val();
+	var customer = $("#customer").val();
 	var id_customer = $("#id_customer").val();
-	var employee = $("#employee").val();
-	var id_employee = $("#id_employee").val();
 
 	//---- ตรวจสอบวันที่
 	if( ! isDate(date_add) ){
@@ -85,14 +80,9 @@ function validUpdate(id){
 		return false;
 	}
 
-	//--- ตรวจสอบลูกค้า
-	if( id_customer == "" || customer == "" ){
-		swal("ชื่อลูกค้าไม่ถูกต้อง");
-		return false;
-	}
 
 	//--	ตรวจสอบพนักงาน
-	if( id_employee = '' || employee == ''){
+	if( id_customer = '' || customer == ''){
 		swal('ผู้เบิกไม่ถูกต้อง');
 		return false;
 	}
@@ -108,7 +98,6 @@ function updateOrder(){
 	var id_customer = $("#id_customer").val();
 	var id_budget = $('#id_budget').val();
 	var remark = $("#remark").val();
-	var id_employee = $("#id_employee").val();
 
 	load_in();
 
@@ -121,7 +110,6 @@ function updateOrder(){
 					 "date_add"	: date_add,
 					 "id_customer" : id_customer,
 					 "id_budget" : id_budget,
-					 "id_employee" : id_employee,
 					 "remark" : remark
 		} ,
 		success: function(rs){
@@ -154,8 +142,8 @@ function addNew(){
 	var customer 		= $("#customer").val();
 	var remark			= $("#remark").val();
 	var id_budget	  = $('#id_budget').val();
-	var employee 		= $('#employee').val();
-	var id_employee = $('#id_employee').val();
+	var customer 		= $('#customer').val();
+	var id_customer = $('#id_customer').val();
 
 	if( ! isDate(dateAdd) ){
 		swal("วันที่ไม่ถูกต้อง");
@@ -167,7 +155,7 @@ function addNew(){
 		return false;
 	}
 
-	if( id_employee == '' || employee == '')
+	if( id_customer == '' || customer == '')
 	{
 		swal('ผู้เบิกไม่ถูกต้อง');
 		return false;
@@ -186,7 +174,7 @@ function addNew(){
 				"remark" : remark,
 				"isOnline" : 0,
 				"id_budget" : id_budget,
-				"id_employee" : id_employee,
+				"id_customer" : id_customer,
 				"customerName" : ''
 		},
 		success: function(rs){
@@ -214,7 +202,7 @@ $("#dateAdd").datepicker({
 
 
 $("#customer").autocomplete({
-	source: "controller/sponsorController.php?getSponsorCustomer&date="+$('#dateAdd').val(),
+	source: "controller/supportController.php?getSupportCustomer&date="+$('#dateAdd').val(),
 	autoFocus: true,
 	close: function(){
 		var rs = $.trim($(this).val());
@@ -239,31 +227,13 @@ $("#customer").autocomplete({
 
 
 
-$("#employee").autocomplete({
-	source: "controller/sponsorController.php?getEmployee",
-	autoFocus: true,
-	close: function(){
-		var rs = $.trim($(this).val());
-		var arr = rs.split(' | ');
-		if( arr.length == 2 ){
-			var name = arr[0];
-			var id = arr[1];
-			$("#id_employee").val(id);
-			$("#employee").val(name);
-		}else{
-			$("#id_employee").val('');
-			$(this).val('');
-		}
-	}
-});
-
 
 
 
 function getBudgetBalance(id_customer)
 {
 	$.ajax({
-		url:'controller/sponsorController.php?getBudgetBalance',
+		url:'controller/supportController.php?getBudgetBalance',
 		type:'GET',
 		cache:'false',
 		data:{'id_customer' : id_customer},
@@ -284,7 +254,7 @@ $("#pd-box").autocomplete({
 
 $('#pd-box').keyup(function(e){
 	if(e.keyCode == 13){
-		getProductGrid(); //--- function in sponsor_grid.js
+		getProductGrid(); //--- function in support_grid.js
 	}
 })
 

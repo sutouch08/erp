@@ -26,6 +26,12 @@ if( isset( $_GET['saveOrder'] ) )
 		include 'order/save_order.php';
 	}
 
+	//--- ถ้าเป็นการเบิกอภินันท์
+	if( $order->role == 3)
+	{
+		include 'order/save_support.php';
+	}
+
 	//---	ถ้าเป็นสปอนเซอร์
 	if( $order->role == 4)
 	{
@@ -54,6 +60,11 @@ if( isset( $_GET['updateOrder'] ) )
 		include 'order/update_sponsor.php';
 	}
 
+	if( $order->role == 3)
+	{
+		include 'order/update_support.php';
+	}
+
 }
 
 
@@ -73,14 +84,25 @@ if( isset( $_GET['updateEditDiscount'] ) )
 if( isset( $_GET['updateEditPrice'] ) )
 {
 	$order 		= new order($_POST['id_order']);
+
+	//---	ขาย
 	if( $order->role == 1)
 	{
 		include 'order/edit_order_price.php';
 	}
+
+	//--- เบิกอภินันท์
+	if( $order->role == 3)
+	{
+		include 'order/edit_support_price.php';
+	}
+
+	//---	เบิกสปอนเซอร์
 	if( $order->role == 4)
 	{
 		include 'order/edit_sponsor_price.php';
 	}
+
 }
 
 
@@ -102,9 +124,15 @@ if( isset( $_GET['removeDetail'] ) )
 	$id 	= $_POST['id_order_detail'];
 	$id_order = $_POST['id_order'];
 	$order = new order($id_order);
+
 	if( $order->role == 1)
 	{
 		include 'order/delete_order_detail.php';
+	}
+
+	if( $order->role == 3)
+	{
+		include 'order/delete_support_detail.php';
 	}
 
 	if( $order->role == 4 )
@@ -122,7 +150,7 @@ if( isset( $_GET['getProductGrid'] ) && isset( $_GET['pdCode'] ) )
 {
 	$sc = 'not exists';
 	$pdCode = trim($_GET['pdCode']);
-	$qr = "SELECT code FROM tbl_product_style WHERE code = '".$pdCode."' active = 1 AND can_sell = 1 AND is_deleted = 0";
+	$qr = "SELECT code FROM tbl_product_style WHERE code = '".$pdCode."' AND active = 1 AND can_sell = 1 AND is_deleted = 0";
 	$qs = dbQuery($qr);
 	if( dbNumRows($qs) > 0 )
 	{
@@ -538,6 +566,7 @@ if( isset( $_GET['clearFilter'] ) )
 	deleteCookie('sOrderCode');
 	deleteCookie('sOrderCus');
 	deleteCookie('sOrderEmp');
+	deleteCookie('sOrderUser');
 	deleteCookie('fromDate');
 	deleteCookie('toDate');
 	echo "done";

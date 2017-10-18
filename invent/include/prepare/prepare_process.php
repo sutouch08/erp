@@ -35,8 +35,10 @@ else if($order->state != 4)
   <div class="col-sm-2">
     <label>เลขที่ : <?php echo $order->reference; ?></label>
   </div>
-  <div class="col-sm-4">
-    <label>ลูกค้า : <?php echo customerName($order->id_customer); ?></label>
+  <div class="col-sm-5">
+    <label>ลูกค้า/ผู้เบิก/ผู้ยืม : &nbsp;
+  <?php echo customerName($order->id_customer);  ?>
+    </label>
   </div>
   <div class="col-sm-3">
     <label>วันที่ : <?php echo thaiDate($order->date_add); ?></label>
@@ -56,5 +58,6 @@ else if($order->state != 4)
 <?php include 'include/prepare/prepare_completed_list.php'; ?>
 
 <script src="script/prepare/prepare_process.js"></script>
+<script src="script/beep.js"></script>
 
 <?php endif; ?>

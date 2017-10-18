@@ -854,19 +854,9 @@ class order
 	{
 		$sc = FALSE;
 
-		//---	ขายหรือสปอนเซอร์ (อ้างอิงจาก id_customer)
-		if( $role == 1 OR $role == 4)
-		{
-			$qs = dbQuery("SELECT id FROM tbl_order_sold WHERE id_customer = '".$id."' AND id_role = ".$role." LIMIT 1");
-			$qr = dbQuery("SELECT id FROM tbl_order WHERE id_customer = '".$id."' AND role = ".$role." LIMIT 1");
-		}
+		$qs = dbQuery("SELECT id FROM tbl_order_sold WHERE id_customer = '".$id."' AND id_role = ".$role." LIMIT 1");
+		$qr = dbQuery("SELECT id FROM tbl_order WHERE id_customer = '".$id."' AND role = ".$role." LIMIT 1");
 
-		//--- อภินันท์ หรือ เบิก (อ้างอิงจาก id_employee)
-		if( $role == 3 OR $role == 7 )
-		{
-			$qs = dbQuery("SELECT id FROM tbl_order_sold WHERE id_employee = '".$id."' AND id_role = ".$role." LIMIT 1");
-			$qr = dbQuery("SELECT id FROM tbl_order WHERE id_employee = '".$id."' AND role = ".$role." LIMIT 1");
-		}
 		if( dbNumRows($qs) > 0 OR dbNumRows($qr) > 0)
 		{
 			$sc = TRUE;

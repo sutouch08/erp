@@ -16,10 +16,10 @@
 <hr/>
 <div class="row">
   <div class="col-sm-4 col-sm-offset-4 margin-top-10">
-    <label>ผู้รับ</label>
-    <input type="text" class="form-control input-sm" name="employee" id="employee" placeholder="กำหนดผู้รับโดยเลือกจากชื่อลูกค้า(จำเป็น)" autofocus />
+    <label>ผู้รับ[ลูกค้า]</label>
+    <input type="text" class="form-control input-sm" name="customer" id="customer" placeholder="กำหนดผู้รับโดยเลือกจากชื่อลูกค้า(จำเป็น)" autofocus />
     <span class="required">*</span>
-    <span class="help-block red hidden" id="employee-error">จำเป็นต้องระบุ</span>
+    <span class="help-block red hidden" id="customer-error">จำเป็นต้องระบุ</span>
   </div>
 
   <div class="col-sm-4 col-sm-offset-4 margin-top-10">
@@ -54,7 +54,7 @@
 
   <div class="divider-hidden"></div>
 
-  <input type="hidden" name="id_employee" id="id_employee" />
+  <input type="hidden" name="id_customer" id="id_customer" />
 
 </div><!--row-->
 

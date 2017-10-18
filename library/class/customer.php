@@ -314,11 +314,11 @@ class customer {
 	{
 		if( $fields == "" )
 		{
-			return dbQuery("SELECT * FROM tbl_customer WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%'");
+			return dbQuery("SELECT * FROM tbl_customer WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%' AND active = 1");
 		}
 		else
 		{
-			return dbQuery("SELECT ".$fields." FROM tbl_customer WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%'");
+			return dbQuery("SELECT ".$fields." FROM tbl_customer WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%' AND active = 1");
 		}
 	}
 

@@ -1,7 +1,7 @@
 <?php $sp = new support($_GET['id_support']); ?>
 <?php $bd = new support_budget($sp->id_budget); ?>
 <input type="hidden" name="id_support" id="id_support" value="<?php echo $sp->id; ?>" />
-<input type="hidden" name="id_employee" id="id_employee" value="<?php echo $sp->id; ?>" />
+<input type="hidden" name="id_customer" id="id_customer" value="<?php echo $sp->id_customer; ?>" />
 <div class="row">
   <div class="col-sm-4">
     <label>ผู้รับ</label>

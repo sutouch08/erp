@@ -252,7 +252,7 @@ function reorder($p_from, $p_to){
 function employee_name($id_emp)
 {
 	$emp = new employee();
-	return $emp->getName($id_emp);
+	return $emp->getFullName($id_emp);
 }
 
 

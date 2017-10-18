@@ -46,6 +46,7 @@ if( isset( $_GET['clearFilter']))
 {
 	deleteCookie('sOrderCode');
 	deleteCookie('sOrderCus');
+	deleteCookie('sOrderEmp');
 	deleteCookie('fromDate');
 	deleteCookie('toDate');
 	echo 'done';

@@ -4,7 +4,7 @@ class support
 
   public $id;
   public $name;
-  public $id_employee;
+  public $id_customer;
   public $year;
 
   public function __construct($id = '')
@@ -30,9 +30,9 @@ class support
   }
 
 
-  public function getDataByEmployee($id_employee)
+  public function getDataByCustomer($id_customer)
   {
-    $qs = dbQuery("SELECT * FROM tbl_support WHERE id_employee = '".$id_employee."'");
+    $qs = dbQuery("SELECT * FROM tbl_support WHERE id_customer = '".$id_customer."'");
     if( dbNumRows($qs) == 1 )
     {
       $rs = dbFetchArray($qs);
@@ -93,13 +93,13 @@ class support
     return dbQuery("DELETE FROM tbl_support WHERE id = ".$id);
   }
 
-  
 
 
-  public function isExistsEmployee($id_employee)
+
+  public function isExistsCustomer($id_customer)
   {
     $sc = FALSE;
-    $qs = dbQuery("SELECT id FROM tbl_support WHERE id_employee = '".$id_employee."'");
+    $qs = dbQuery("SELECT id FROM tbl_support WHERE id_customer = '".$id_customer."'");
     if( dbNumRows($qs) > 0)
     {
       $sc = TRUE;
@@ -112,10 +112,10 @@ class support
 
 
 
-  public function getId($id_employee)
+  public function getId($id_customer)
   {
     $sc = 0;
-    $qs = dbQuery("SELECT id FROM tbl_support WHERE id_employee = '".$id_employee."'");
+    $qs = dbQuery("SELECT id FROM tbl_support WHERE id_customer = '".$id_customer."'");
     if( dbNumRows($qs) == 1 )
     {
       list( $sc ) = dbFetchArray($qs);
@@ -130,7 +130,7 @@ class support
 
   public function getSupportAndBudgetBalance($txt, $date)
   {
-    $qr = "SELECT s.id_employee, s.name, s.id_budget, b.balance FROM tbl_support AS s ";
+    $qr = "SELECT s.id_customer, s.name, s.id_budget, b.balance FROM tbl_support AS s ";
     $qr .= "LEFT JOIN tbl_support_budget AS b ON s.id_budget = b.id ";
     $qr .= "WHERE b.active = 1 AND b.is_deleted = 0 AND s.name LIKE '%".$txt."%' ";
     $qr .= "AND b.start <= '".fromDate($date)."' AND b.end >= '".toDate($date)."'";
@@ -139,12 +139,12 @@ class support
   }
 
 
-  public function getBudgetBalanceByEmployee($id_employee)
+  public function getBudgetBalanceByCustomer($id_customer)
   {
     $sc = 0;
     $qr  = "SELECT balance FROM tbl_support AS s ";
     $qr .= "JOIN tbl_support_budget AS b ON s.id_budget = b.id ";
-    $qr .= "WHERE s.id_employee = '".$id_employee."'";
+    $qr .= "WHERE s.id_customer = '".$id_customer."'";
 
     $qs = dbQuery($qr);
     if( dbNumRows($qs) == 1)

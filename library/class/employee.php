@@ -221,7 +221,7 @@ public function searchId($txt)
 
 public function search($fields, $txt)
 {
-	return dbQuery("SELECT ".$fields." FROM tbl_employee WHERE first_name LIKE '%".$txt."%' OR last_name LIKE '%".$txt."%'");
+	return dbQuery("SELECT ".$fields." FROM tbl_employee WHERE (first_name LIKE '%".$txt."%' OR last_name LIKE '%".$txt."%') AND active = 1");
 }
 
 

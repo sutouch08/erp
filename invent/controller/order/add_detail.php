@@ -12,11 +12,19 @@
 		$credit = new customer_credit();
 		startTransection();
 
+		//---	ขาย ขายออนไลน์
 		if($order->role == 1)
 		{
 			include 'order/add_order_detail.php';
 		}
 
+		//---	เบิกอภินันท์
+		if( $order->role == 3)
+		{
+			include 'order/add_support_detail.php';
+		}
+
+		//--	สปอนเซอร์
 		if( $order->role == 4)
 		{
 			include 'order/add_sponsor_detail.php';

@@ -1,6 +1,6 @@
 function saveBudget(){
   var id_support  = $('#id_support').val();
-  var id_employee = $('#id_employee').val();
+  var id_customer = $('#id_customer').val();
   var reference   = $('#reference').val();
   var budget      = $('#budget').val();
   var fromDate    = $('#fromDate').val();
@@ -166,7 +166,7 @@ function updateBudget(){
 
 function addBudget(){
   var id_support  = $('#id_support').val();
-  var id_employee = $('#id_employee').val();
+  var id_customer = $('#id_customer').val();
   var reference   = $('#reference').val();
   var budget      = $('#budget').val();
   var fromDate    = $('#fromDate').val();
@@ -181,7 +181,7 @@ function addBudget(){
     cache: 'fasle',
     data:{
       'id_support'  : id_support,
-      'id_employee' : id_employee,
+      'id_customer' : id_customer,
       'reference'   : reference,
       'budget'      : budget,
       'fromDate'    : fromDate,

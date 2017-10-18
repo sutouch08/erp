@@ -2,16 +2,16 @@
 $result = TRUE;
 $message = '';
 
-$id = $_POST['id_employee'];
+$id = $_POST['id_customer'];
 $sp = new support();
 
 //---	ตรวจสอบก่อนว่ามีลูกค้าคนตี้อยู่ในรายชื่อสปอนเซอร์แล้วหรือยัง
 //---	ถ้ายังไม่มีเพิ่มใหม่
-if( $sp->isExistsEmployee($id) === FALSE )
+if( $sp->isExistsCustomer($id) === FALSE )
 {
   $arr = array(
           'name'	=> $_POST['name'],
-          'id_employee'	=> $id
+          'id_customer'	=> $id
           );
 
   //---	เพิ่มรายชื่อสปอนเซอร์ก่อน
@@ -24,7 +24,7 @@ if( $sp->isExistsEmployee($id) === FALSE )
     $arr = array(
             'reference'		=> $_POST['reference'],
             'id_support'	=> $id_support,
-            'id_employee'	=> $id,
+            'id_customer'	=> $id,
             'start'				=> dbDate($_POST['fromDate']),
             'end'					=> dbDate($_POST['toDate']),
             'year'				=> $_POST['year'],

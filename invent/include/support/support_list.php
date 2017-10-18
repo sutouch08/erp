@@ -2,10 +2,8 @@
 
 //--- function getFilter in function/tools.php
 $sCode 	= getFilter('sCode', 'sOrderCode', '');	//---	reference
-$sCus	 	= getFilter('sCus', 'sOrderCus', '' );	//---	customer
-$sEmp		= getFilter('sEmp', 'sOrderEmp', '' );	//---	Employee
-//$sPaymet	= getFilter('sPayment', 'sOrderPaymentMethod', '' ); //--- Payment Method
-//$sChannels	= getFilter('sChannels', 'sOrderChannels', '' ); 	//---	Sales Channels
+$sEmp		= getFilter('sEmp', 'sOrderEmp', '' );	//---	ผู้ทำรายการ
+$sCus		= getFilter('sUser', 'sOrderCus', ''); //---	ผู้เบิก
 $fromDate	= getFilter('fromDate', 'fromDate', '' );
 $toDate		= getFilter('toDate', 'toDate', '' );
 
@@ -29,15 +27,17 @@ $toDate		= getFilter('toDate', 'toDate', '' );
     	<label>เลขที่เอกสาร</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sCode" id="sCode" value="<?php echo $sCode; ?>" />
     </div>
+
     <div class="col-sm-2 padding-5">
-    	<label>ลูกค้า</label>
+    	<label>ผู้เบิก [พนักงาน]</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sCus" id="sCus" value="<?php echo $sCus; ?>" />
     </div>
 
-    <div class="col-sm-2 padding-5">
-    	<label>พนักงาน</label>
+		<div class="col-sm-2 padding-5">
+    	<label>ผู้ทำรายการ [พนักงาน]</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sEmp" id="sEmp" value="<?php echo $sEmp; ?>" />
     </div>
+
     <div class="col-sm-2 padding-5">
     	<label class="display-block">วันที่</label>
         <input type="text" class="form-control input-sm text-center input-discount" name="fromDate" id="fromDate" value="<?php echo $fromDate; ?>" placeholder="เริ่มต้น" />
@@ -57,7 +57,7 @@ $toDate		= getFilter('toDate', 'toDate', '' );
 <hr class="margin-top-10 margin-bottom-10"/>
 
 <?php
-	$where = "WHERE role = 4 ";
+	$where = "WHERE role = 3 ";
 	//--- Reference
 	if( $sCode != "" )
 	{
@@ -65,19 +65,21 @@ $toDate		= getFilter('toDate', 'toDate', '' );
 		$where .= "AND reference LIKE '%".$sCode."%' ";
 	}
 
-	//--- Customer
+	//--- ผู้เบิก
 	if( $sCus != "" )
 	{
 		createCookie('sOrderCus', $sCus);
-		$where .= "AND id_customer IN(".getCustomerIn($sCode).") "; //--- function/customer_helper.php
+		$where .= "AND id_customer IN(".getCustomerIn($sCus).") "; //--- function/customer_helper.php
 	}
 
-	//--- Employee
+
+	//--- ผู้ทำรายการ
 	if( $sEmp != "" )
 	{
 		createCookie('sOrderEmp', $sEmp);
 		$where .= "AND id_employee IN(".getEmployeeIn($sEmp).") "; //--- function/employee_helper.php
 	}
+
 
 	if( $fromDate != "" && $toDate != "" )
 	{
@@ -87,6 +89,7 @@ $toDate		= getFilter('toDate', 'toDate', '' );
 	}
 
 	$where .= "ORDER BY reference DESC";
+
 
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
@@ -103,10 +106,10 @@ $toDate		= getFilter('toDate', 'toDate', '' );
             	<tr class="font-size-10">
                 	<th class="width-5 text-center">ลำดับ</th>
                     <th class="width-10 text-center">เลขที่เอกสาร</th>
-                    <th class="text-center">ลูกค้า</th>
+                    <th class="text-center">ผู้เบิก[พนักงาน]</th>
                     <th class="width-10 text-center">ยอดเงิน</th>
                     <th class="width-10 text-center">สถานะ</th>
-                    <th class="width-15 text-center">พนักงาน</th>
+                    <th class="width-15 text-center">ผู้ทำรายการ</th>
 										<th class="width-10 text-center">วันที่</th>
 										<th class="width-10 text-center">ปรับปรุง</th>
                 </tr>
@@ -116,8 +119,6 @@ $toDate		= getFilter('toDate', 'toDate', '' );
 <?php	$no 		= row_no();			?>
 <?php	$cs 		= new customer(); ?>
 <?php	$order 	= new order(); ?>
-<?php	$ch 		= new channels(); ?>
-<?php	$pm		= new payment_method(); ?>
 <?php	while( $rs = dbFetchObject($qs) ) : ?>
 
 			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status); //--- order_help.php ?>>
@@ -144,5 +145,4 @@ $toDate		= getFilter('toDate', 'toDate', '' );
 
 
 
-
-<script src="script/order/order_list.js"></script><!--- ใช้ของ order เพราะว่าเหมือนกันหมด -->
+<script src="script/order/order_list.js"></script><!--- ใช้ของ order -->

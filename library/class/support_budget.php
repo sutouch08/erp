@@ -4,7 +4,7 @@ class support_budget
   public $id;
   public $reference;
   public $id_support;
-  public $id_employee;
+  public $id_customer;
   public $start;
   public $end;
   public $year;

@@ -24,7 +24,7 @@ function clearFilter(){
 
 
 
-function removeSupport(id, id_employee, name){
+function removeSupport(id, id_customer, name){
   swal({
     title:'ยืนยันการลบ',
     text:'ต้องการลบ '+name+' หรือไม่ ?',
@@ -39,7 +39,7 @@ function removeSupport(id, id_employee, name){
       url:'controller/supportController.php?checkTransection',
       type:'GET',
       cache:'false',
-      data:{'id_employee' : id_employee},
+      data:{'id_customer' : id_customer},
       success:function(rs){
         var rs = $.trim(rs);
         if(rs == 'no_transection'){

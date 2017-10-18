@@ -58,7 +58,7 @@
   $qs = dbQuery("SELECT * FROM tbl_order ". $where ." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 
  ?>
- 
+
 <div class="row">
   <div class="col-sm-12">
     <table class="table table-striped border-1">
@@ -66,7 +66,7 @@
         <tr>
           <th class="width-5 text-center">ลำดับ</th>
           <th class="width-15">เลขที่เอกสาร</th>
-          <th class="width-25">ลูกค้า</th>
+          <th class="width-25">ลูกค้า/ผู้รับ/ผู้เบิก</th>
           <th class="width-10 text-center">ยอดเงิน</th>
           <th class="width-10 text-center">รูปแบบ</th>
           <th class="width-15 text-center">พนักงาน</th>
@@ -91,7 +91,7 @@
           </td>
 
           <td class="pointer hide-text" onclick="goDetail(<?php echo $rs->id; ?>)">
-            <?php echo ($rs->role == 1 || $rs->role == 2 || $rs->role == 4 ) ? customerName($rs->id_customer) : employee_name($rs->id_employee); ?>
+            <?php echo customerName($rs->id_customer); ?>
           </td>
 
           <td class="pointer text-center" onclick="goDetail(<?php echo $rs->id; ?>)">

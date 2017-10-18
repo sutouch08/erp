@@ -7,16 +7,19 @@ function doPrepare(){
   var qty   = $("#qty").val();
 
   if( id_zone == ""){
+    beep();
     swal("Error!", "Zone not found Please change zone and try again", "error");
     return false;
   }
 
   if( barcode.length == 0){
+    beep();
     swal("Error!", "Invalid Barcode Please scan barcode again", "error");
     return false;
   }
 
   if( isNaN(parseInt(qty))){
+    beep();
     swal("Error!", "Ivalid Qty, Please Input Number Only");
     return false;
   }
@@ -61,6 +64,7 @@ function doPrepare(){
           }
 
         }else{
+          beep();
           swal("Error!", rs, "error");
           $("#qty").val(1);
           $("#barcode-item").val('');
@@ -88,6 +92,7 @@ function finishPrepare(){
         swal({title: "Success", type:"success", timer: 1000});
         setTimeout(function(){ goBack();}, 1200);
       }else{
+        beep();
         swal("Error!", rs, "error");
       }
     }
@@ -137,6 +142,7 @@ $("#barcode-zone").keyup(function(e){
               $("#qty").focus();
               $("#qty").select();
             }else{
+              beep();
               swal("Error!", rs, "error");
               $("#id_zone").val('');
             }

@@ -7,7 +7,7 @@ $order = new order();
 
 
 //---	ตรวจสอบทรานเซ็คชั้นก่อนลบ
-$rs = $order->isExitsTransection($sp->id_employee, 3);
+$rs = $order->isExitsTransection($sp->id_customer, 3);
 
 //---	ถ้าไม่มีทรานเซ็คชั่น
 if( $rs === FALSE )
