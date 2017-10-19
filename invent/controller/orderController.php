@@ -26,6 +26,12 @@ if( isset( $_GET['saveOrder'] ) )
 		include 'order/save_order.php';
 	}
 
+	//---	ฝากขาย
+	if( $order->role == 2)
+	{
+		include 'order/save_consign.php';
+	}
+
 	//--- ถ้าเป็นการเบิกอภินันท์
 	if( $order->role == 3)
 	{
@@ -50,20 +56,31 @@ if( isset( $_GET['saveOrder'] ) )
 if( isset( $_GET['updateOrder'] ) )
 {
 	$order = new order($_POST['id_order']);
+
+	//---	ขาย
 	if( $order->role == 1)
 	{
 		include 'order/update_order.php';
 	}
 
+	//---	ฝากขาย
+	if( $order->role == 2)
+	{
+		include 'order/update_consign.php';
+	}
+
+	//---	เบิกอภินันท์
+	if( $order->role == 3)
+	{
+		include 'order/update_support.php';
+	}
+
+	//---	สปอนเซอร์
 	if( $order->role == 4)
 	{
 		include 'order/update_sponsor.php';
 	}
 
-	if( $order->role == 3)
-	{
-		include 'order/update_support.php';
-	}
 
 }
 
@@ -74,7 +91,17 @@ if( isset( $_GET['updateOrder'] ) )
 //----- แก้ไขส่วนลดโดยพนักงาน และมีผู้อนุมัติการแก้ไข
 if( isset( $_GET['updateEditDiscount'] ) )
 {
-	include 'order/edit_discount.php';
+	$order = new order($_POST['id_order']);
+	if( $order->role == 2)
+	{
+		include 'order/edit_consign_gp.php';
+	}
+
+	if( $order->role == 1)
+	{
+		include 'order/edit_discount.php';
+	}
+
 }
 
 
@@ -89,6 +116,12 @@ if( isset( $_GET['updateEditPrice'] ) )
 	if( $order->role == 1)
 	{
 		include 'order/edit_order_price.php';
+	}
+
+	//---	ฝากขาย
+	if( $order->role == 2)
+	{
+		include 'order/edit_consign_price.php';
 	}
 
 	//--- เบิกอภินันท์
@@ -125,9 +158,15 @@ if( isset( $_GET['removeDetail'] ) )
 	$id_order = $_POST['id_order'];
 	$order = new order($id_order);
 
+	//---
 	if( $order->role == 1)
 	{
 		include 'order/delete_order_detail.php';
+	}
+
+	if( $order->role == 2)
+	{
+		include 'order/delete_consign_detail.php';
 	}
 
 	if( $order->role == 3)

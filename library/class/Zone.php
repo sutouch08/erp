@@ -6,12 +6,13 @@
 		public $barcode;
 		public $name;
 		public $id_warehouse;
+		public $id_customer;
 
-		public function __construct($id='')
+		public function __construct($id = '')
 		{
-			if( is_numeric($id) )
+			if( $id != '' )
 			{
-				$qs = dbQuery("SELECT * FROM tbl_zone WHERE id_zone = ".$id);
+				$qs = dbQuery("SELECT * FROM tbl_zone WHERE id_zone = '".$id."'");
 				if( dbNumRows($qs) == 1 )
 				{
 					$rs = dbFetchObject($qs);
@@ -19,9 +20,11 @@
 					$this->barcode	= $rs->barcode_zone;
 					$this->name	= $rs->zone_name;
 					$this->id_warehouse = $rs->id_warehouse;
+					$this->id_customer = $rs->id_customer;
 				}
 			}
 		}
+
 
 
 		public function add(array $ds)
@@ -233,6 +236,42 @@
 			return $sc;
 		}
 
+
+
+		public function searchId($txt)
+		{
+			//---	role = 2 คือ คลังฝากขาย
+			$qr  = "SELECT id_zone FROM tbl_zone WHERE zone_name LIKE '%".$txt."%'";
+
+			return dbQuery($qr);
+		}
+
+
+
+		public function searchConsignZoneId($txt)
+		{
+			//---	role = 2 คือ คลังฝากขาย
+			$qr  = "SELECT id_zone FROM tbl_zone AS z ";
+			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
+			$qr .= "WHERE w.role = 2 AND w.active = 1 AND zone_name LIKE '%".$txt."%' ";
+
+			return dbQuery($qr);
+		}
+
+
+
+		public function searchConsignZone($txt, $id_customer)
+		{
+			//---	role = 2 คือ คลังฝากขาย
+			$qr  = "SELECT z.* FROM tbl_zone AS z ";
+			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
+			$qr .= "WHERE w.role = 2 ";
+			$qr .= "AND w.active = 1 ";
+			$qr .= "AND z.id_customer = '".$id_customer."' ";
+			$qr .= "AND z.zone_name LIKE '%".$txt."%' ";
+
+			return dbQuery($qr);
+		}
 
 
 	} 	//----- End class

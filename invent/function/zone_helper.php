@@ -1,4 +1,11 @@
 <?php
+
+function zoneName($id)
+{
+	$zone = new zone($id);
+	return $zone->name;
+}
+
 function isExistsZoneCode($code, $id = '')
 {
 	$zone = new zone();
@@ -24,5 +31,51 @@ function getZoneDetail($id)
 	return $zone->getZoneDetail($id);
 }
 
+
+
+function getZoneIn($txt)
+{
+	$cs = new zone();
+	$qs = $cs->searchId($txt);
+	if( dbNumRows($qs) > 0 )
+	{
+		$i = 1;
+		$sc = "";
+		while( $rs = dbFetchObject($qs) )
+		{
+			$sc .= $i == 1 ? $rs->id : ", ".$rs->id;
+			$i++;
+		}
+	}
+	else
+	{
+		$sc = "0";
+	}
+	return $sc;
+}
+
+
+
+
+function getConsignZoneIn($txt)
+{
+	$cs = new zone();
+	$qs = $cs->searchConsignZoneId($txt);
+	if( dbNumRows($qs) > 0 )
+	{
+		$i = 1;
+		$sc = "";
+		while( $rs = dbFetchObject($qs) )
+		{
+			$sc .= $i == 1 ? $rs->id : ", ".$rs->id;
+			$i++;
+		}
+	}
+	else
+	{
+		$sc = "0";
+	}
+	return $sc;
+}
 
 ?>

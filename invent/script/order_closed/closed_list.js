@@ -50,3 +50,9 @@ function getSearch(){
 function clearFilter(){
   $.get('controller/orderClosedController.php?clearFilter', function(){ goBack();});
 }
+
+
+$(document).ready(function() {
+	//---	reload ทุก 5 นาที
+	setTimeout(function(){ goBack(); }, 300000);
+});

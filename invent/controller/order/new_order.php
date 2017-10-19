@@ -21,7 +21,7 @@
 	$customerName = isset( $_POST['customerName']) ? $_POST['customerName'] : '';
 
 	//---	เป็นเอกสารที่ออก SO หรือไม่ (default = 1)
-	$is_so 		= isset($_POST['is_so'])? $is_so : 1;
+	$is_so 		= isset($_POST['is_so'])? $_POST['is_so'] : 1;
 
 	//---	ช่องทางการขาย
 	$id_channels = isset( $_POST['channels']) ? $_POST['channels'] : 0;
@@ -45,6 +45,12 @@
 	//---	id_budget
 	$id_budget = isset( $_POST['id_budget']) ? $_POST['id_budget'] : 0;
 
+	//---	id_zone กรณีเป็นฝากขาย
+	$id_zone = isset( $_POST['id_zone']) ? $_POST['id_zone'] : FALSE;
+
+	//---	กรณีที่เป็นฝากขายอาจมี GP ด้วย
+	$gp = isset( $_POST['gp']) ? $_POST['gp'] : 0;
+
 	//--- รันเลขที่เอกสารตามประเภทเอาสาร
 	$reference = $order->getNewReference($role, $date_add);
 
@@ -63,7 +69,8 @@
 					"remark"			=> $_POST['remark'],
 					"online_code"	=> $customerName,
 					"is_so"				=> $is_so,
-					"id_budget"		=> $id_budget
+					"id_budget"		=> $id_budget,
+					"gp"					=> $gp
 					);
 
 	//---	เพิ่มเอกสารใหม่
@@ -73,6 +80,13 @@
 		$sc = $id;
 		//---	เพิ่มผู้ทำรายการแยกตางหาก
 		$order->insertUser($id, $id_user);
+
+		//---	ถ้าเป็นฝากขาย เพิ่มข้อมูลพื้นที่เก็บด้วย
+		if( $role == 2)
+		{
+			$consign = new consign();
+			$consign->add($id, $id_zone);
+		}
 	}
 
 	echo $sc;

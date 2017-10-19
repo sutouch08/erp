@@ -16,7 +16,7 @@ $("#toDate").datepicker({
 
 
 function getSearch(){
-	$("#searchForm").submit();		
+	$("#searchForm").submit();
 }
 
 
@@ -31,3 +31,9 @@ $(".search-box").keyup(function(e) {
 function clearFilter(){
 	$.get("controller/orderController.php?clearFilter", function(){ goBack(); });
 }
+
+
+$(document).ready(function() {
+	//---	reload ทุก 5 นาที
+	setTimeout(function(){ goBack(); }, 300000);
+});

@@ -34,19 +34,19 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
 <?php include 'include/order/order_panel.php'; ?>
 
 
-<!--------------------------------- Order Detail ----------------->
+<!--- Order Detail ----------------->
 
-<!------------------- ปุ่มแก้ไขราคาและส่วนลด ------------->
+<!--- ปุ่มแก้ไขราคาและส่วนลด ------------->
 <?php
 if( $allowEditPrice == 1 && $order->state < 4 )
 {
  	include 'include/order/order_discount_bar.php';
 }
 ?>
-<!------------------- / ปุ่มแก้ไขราคาและส่วนลด / ------------->
+<!--- / ปุ่มแก้ไขราคาและส่วนลด / ------------->
 
 <?php include 'include/order/order_detail.php'; ?>
-<!------------- End order detail -------------------------------->
+<!--- End order detail -------------------------------->
 
 
 

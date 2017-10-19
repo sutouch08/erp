@@ -138,5 +138,11 @@ function isWarehouseActive($id)
 }
 
 
+function warehouseName($id)
+{
+	$wh = new warehouse();
+	return $wh->getName($id);
+}
+
 
 ?>

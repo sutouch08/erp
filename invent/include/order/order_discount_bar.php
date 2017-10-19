@@ -1,9 +1,21 @@
 <?php if( $order->hasPayment == 0 && $order->isPaid == 0 ) : ?>
 <div class="row">
 	<div class="col-sm-12 margin-top-5 margin-bottom-5">
-		<?php if( $allowEditDisc && $order->role == 1) : ?>
-    	<button type="button" class="btn btn-sm btn-default" id="btn-edit-discount" onclick="showDiscountBox()">แก้ไขส่วนลด</button>
-      <button type="button" class="btn btn-sm btn-primary hide" id="btn-update-discount" onClick="getApprove('discount')">บันทึกส่วนลด</button>
+		<?php if( $allowEditDisc && ($order->role == 1 OR $order->role == 2)) : ?>
+    	<button type="button" class="btn btn-sm btn-default" id="btn-edit-discount" onclick="showDiscountBox()">
+				<?php if($order->role == 2) : ?>
+					แก้ไข GP
+				<?php else : ?>
+					แก้ไขส่วนลด
+				<?php endif; ?>
+			</button>
+      <button type="button" class="btn btn-sm btn-primary hide" id="btn-update-discount" onClick="getApprove('discount')">
+				<?php if( $order->role == 2) : ?>
+					บันทึก GP
+				<?php else : ?>
+					บันทึกส่วนลด
+				<?php endif; ?>
+			</button>
 		<?php endif; ?>
 		<?php if( $allowEditPrice) : ?>
       <button type="button" class="btn btn-sm btn-default" id="btn-edit-price" onClick="showPriceBox()">แก้ไขราคา</button>

@@ -162,8 +162,17 @@ if( isset( $_GET['export']) && isset( $_GET['SO']))
 {
 	include '../function/vat_helper.php';
 	include 'interface/export/exportSO.php';
-	$id_order = $_POST['id_order'];
-	$SO = exportSO($id_order);
+	$order = new order($_POST['id_order']);
+	if( $order->role == 2 && $order->is_so == 0 )
+	{
+		//---	โอนคลัง
+		$SO = exportTR($order->id);
+	}
+	else
+	{
+		$SO = exportSO($order->id);
+	}
+
 	echo $SO === TRUE ? 'success' : $SO;
 }
 ///=================================================== END DOCUMENTS =======================================///

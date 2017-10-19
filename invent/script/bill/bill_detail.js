@@ -26,7 +26,9 @@ function confirmOrder(){
   load_in();
   $.ajax({
     url: 'controller/billController.php?confirmOrder',
-    type:'POST', cache:'false', data:{'id_order' : id_order},
+    type:'POST',
+    cache:'false',
+    data:{'id_order' : id_order},
     success:function(rs){
       load_out();
       var rs = $.trim(rs);

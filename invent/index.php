@@ -118,8 +118,8 @@ switch($page){
 			$pageTitle = "เบิกอภินันทนาการ";
 			break;
 
-		case "consignment";
-			$content = "consignment.php";
+		case "order_consign";
+			$content = "order_consign.php";
 			$pageTitle = "ฝากขาย";
 			break;
 

@@ -1,7 +1,5 @@
 <?php
 
-	$order = new order($_POST['id_order']);
-
 	$bd 	 = new support_budget();
 
 	//---	เตรียมข้อมูลสำหรับ update

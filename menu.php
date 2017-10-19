@@ -36,7 +36,7 @@
               <ul class="dropdown-menu">
                 <li><a href="index.php?content=order"><i class="fa fa-shopping-bag"></i>&nbsp; ออเดอร์</a></li>
                 <li><a href="index.php?content=order_sponsor"><i class="fa fa-ticket"></i>&nbsp; สปอนเซอร์ สโมสร</a></li>
-                <li><a href="index.php?content=consignment"><i class="fa fa-cloud-upload"></i>&nbsp; ฝากขาย</a></li>
+                <li><a href="index.php?content=order_consign"><i class="fa fa-cloud-upload"></i>&nbsp; ฝากขาย</a></li>
                 <li><a href="index.php?content=order_online"><i class="fa fa-desktop"></i>&nbsp; ขายออนไลน์</a></li>
                  <li class="divider"></li>
                 <li><a href="index.php?content=prepare"><i class="fa fa-shopping-basket"></i>&nbsp; จัดสินค้า</a></li>

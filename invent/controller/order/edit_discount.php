@@ -1,6 +1,5 @@
 <?php
 
-$order 		= new order($_POST['id_order']);
 	$ds 			= $_POST['discount'];
 	$approver	= $_POST['approver'];
 	$token		= $_POST['token'];
@@ -15,22 +14,22 @@ $order 		= new order($_POST['id_order']);
 		if( $value != "" )
 		{
 			//--- ได้ Obj มา
-			$detail = $order->getDetailData($id); 
-			
+			$detail = $order->getDetailData($id);
+
 			//--- ถ้ารายการนี้มีอยู่
-			if( $detail !== FALSE ) 
+			if( $detail !== FALSE )
 			{
 				//---- ถ้ารายการนี้เป็นเครดิตเทอมและคำนวณยอดใช้ไปแล้ว
 				if( $payment->hasTerm == 1 && $detail->isSaved == 1)
 				{
 					//--- คืนยอดใช้ไปก่อน แล้วจะไปคำนวณใหม่อีกทีตอนบันทึก
 					$credit->decreaseUsed($order->id_customer, $detail->total_amount);
-					
+
 					//---- ระบุสถานะเป็นยังไม่ตัดยอดเครดิต
 					$order->unsaveDetail($detail->id);
-					
+
 				}	//---- end if hasTerm
-				
+
 				//------ คำนวณส่วนลดใหม่
 				$disc 	= explode('%', $value);
 				$disc[0]	= trim( $disc[0] ); //--- ตัดช่องว่างออก
@@ -38,14 +37,14 @@ $order 		= new order($_POST['id_order']);
 				$discountLabel = count( $disc ) == 1 ? $disc[0] : $disc[0].'%';
 				$total_discount = $detail->qty * $discount; //---- ส่วนลดรวม
 				$total_amount = ( $detail->qty * $detail->price ) - $total_discount; //--- ยอดรวมสุดท้าย
-				
+
 				$arr = array(
 							"discount" => $discountLabel,
 							"discount_amount"	=> $detail->qty * $discount,
 							"total_amount" => $total_amount ,
 							"id_rule"	=> 0
 						);
-								
+
 				$cs = $order->updateDetail($id, $arr);
 				$log_data = array(
 											"reference"		=> $order->reference,
@@ -60,8 +59,8 @@ $order 		= new order($_POST['id_order']);
 			}	//--- end if detail
 		} //--- End if value
 	}	//--- end foreach
-	
-	
+
+
 	//---- ถ้ามีเครดิตเทอม
 	if( $payment->hasTerm == 1 )
 	{
@@ -69,5 +68,5 @@ $order 		= new order($_POST['id_order']);
 		$order->changeStatus($order->id, 0);
 	}
 	echo 'success';
-	
+
 	?>

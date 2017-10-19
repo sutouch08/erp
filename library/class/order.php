@@ -33,6 +33,7 @@ class order
 	public $hasPayment;	//---	แจ้งชำระแล้วหรือไม่
 	public $is_so;
 	public $id_budget = 0; //--- ไอดี ของงบประมาณ (กรณี อภินันท์ หรือ สปอนเซอร์)
+	public $gp = 0.00;
 	public $hasNotSaveDetail = TRUE;
 
 
@@ -167,6 +168,27 @@ class order
 			}
 			$sc = dbQuery("UPDATE tbl_order_detail SET ". $set ." WHERE id = ".$id);
 		}
+		return $sc;
+	}
+
+
+
+	//---	update all detail in order
+	public function updateDetails($id_order, array $ds = array())
+	{
+		$sc = FALSE;
+		if( count( $ds ) > 0 )
+		{
+			$set = "";
+			$i = 1;
+			foreach( $ds as $field => $value )
+			{
+				$set .= $i == 1 ? $field ." = '".$value."'" : ", ". $field." = '".$value."'";
+				$i++;
+			}
+			$sc = dbQuery("UPDATE tbl_order_detail SET ". $set ." WHERE id_order = ".$id_order);
+		}
+
 		return $sc;
 	}
 
@@ -434,7 +456,7 @@ class order
 
 
 	//-----------------  New Reference --------------//
-	public function getNewReference($role = 1,$date = '')
+	public function getNewReference($role = 1, $date = '')
 	{
 		$date = $date == '' ? date('Y-m-d') : $date;
 		$Y		= date('y', strtotime($date));

@@ -18,6 +18,12 @@
 			include 'order/add_order_detail.php';
 		}
 
+		//--- ฝากขาย
+		if( $order->role == 2)
+		{
+			include 'order/add_consign_detail.php';
+		}
+
 		//---	เบิกอภินันท์
 		if( $order->role == 3)
 		{

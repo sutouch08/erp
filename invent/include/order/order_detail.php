@@ -12,7 +12,13 @@
                 <th class="width-25">ชื่อสินค้า</th>
                 <th class="width-10 text-center">ราคา</th>
                 <th class="width-10 text-center">จำนวน</th>
-                <th class="width-15 text-center">ส่วนลด</th>
+                <th class="width-15 text-center">
+									<?php if( $order->role == 2 ) : ?>
+										GP
+									<?php else : ?>
+										ส่วนลด
+									<?php endif; ?>
+									</th>
                 <th class="width-10 text-right">มูลค่า</th>
                 <th class="width-5 text-center"></th>
             </tr>
@@ -27,6 +33,8 @@
 <?php	$order_amount = 0; ?>
 <?php	$image = new image(); ?>
 <?php	while( $rs = dbFetchObject($detail) ) : ?>
+<?php 	$discount = $order->role == 2 ? $rs->gp : $rs->discount; ?>
+<?php 	$discLabel = $order->role == 2 ? $rs->gp .' %' : $rs->discount; ?>
 			<tr class="font-size-10" id="row_<?php echo $rs->id; ?>">
             	<td class="middle text-center"><?php echo $no; ?></td>
                 <td class="middle text-center padding-0">
@@ -36,7 +44,7 @@
                 <td class="middle"><?php echo $rs->product_name; ?></td>
                 <td class="middle text-center">
                 <?php if( $allowEditPrice && $order->state < 4 ) : ?>
-                	
+
                 	<input type="text" class="form-control input-sm text-center price-box hide" id="price_<?php echo $rs->id; ?>" name="price[<?php echo $rs->id; ?>]" value="<?php echo $rs->price; ?>" />
                     </div>
                 <?php endif; ?>
@@ -45,9 +53,10 @@
                 <td class="middle text-center"><?php echo number_format($rs->qty); ?></td>
                 <td class="middle text-center">
                 <?php if( $allowEditDisc && $order->state < 4 ) : ?>
-                    <input type="text" class="form-control input-sm text-center discount-box hide" id="disc_<?php echo $rs->id; ?>" name="disc[<?php echo $rs->id; ?>]" value="<?php echo $rs->discount; ?>" />
+                    <input type="text" class="form-control input-sm text-center discount-box hide" id="disc_<?php echo $rs->id; ?>" name="disc[<?php echo $rs->id; ?>]" value="<?php echo $discount; ?>" />
                 <?php endif; ?>
-                <span class="discount-label"><?php echo $rs->discount; ?></span>
+                <span class="discount-label"><?php echo $discLabel; ?></span>
+
                 </td>
                 <td class="middle text-right"><?php echo number_format($rs->total_amount, 2); ?></td>
                 <td class="middle text-right">
@@ -55,14 +64,14 @@
                 	<button type="button" class="btn btn-xs btn-danger" onclick="removeDetail(<?php echo $rs->id; ?>, '<?php echo $rs->product_code; ?>')"><i class="fa fa-trash"></i></button>
                 <?php endif; ?>
                 </td>
-                
+
             </tr>
-                 
-<?php	$total_qty += $rs->qty;	?>        
+
+<?php	$total_qty += $rs->qty;	?>
 <?php 	$total_discount += $rs->discount_amount; ?>
 <?php 	$order_amount += $rs->qty * $rs->price; ?>
-<?php	$total_amount += $rs->total_amount; ?>    
-<?php		$no++; ?>            
+<?php	$total_amount += $rs->total_amount; ?>
+<?php		$no++; ?>
 <?php 	endwhile; ?>
 <?php 	$netAmount = ( $total_amount - $order->bDiscAmount ) + $order->shipping_fee + $order->service_fee;	?>
 <?php	$rowspan = $order->isOnline == 1 ? 6 : 4;	?>
@@ -99,15 +108,15 @@
                 <td class="text-right" style="font-weight:bold;" id="netAmount-td"><?php echo number_format( $netAmount, 2); ?></td>
                 <td class="text-center"><b>THB.</b></td>
             </tr>
-            
 
-                 
+
+
 <?php else : ?>
 			<tr>
             	<td colspan="9" class="text-center"><h4>ไม่พบรายการ</h4></td>
             </tr>
 <?php endif; ?>
-		
+
         </tbody>
         </table>
     </div>
@@ -155,7 +164,7 @@
             <?php if( $edit OR $add ) : ?>
             	<button type="button" class="btn btn-xs btn-danger" onclick="removeDetail({{ id }}, '{{ productCode }}')"><i class="fa fa-trash"></i></button>
             <?php endif; ?>
-            </td>              
+            </td>
         </tr>
 	{{/if}}
 {{/each}}

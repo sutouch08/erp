@@ -47,7 +47,7 @@ $("#toDate").datepicker({
 
 
 
-//---- Reload page every minute
+//---- Reload page every 5 minute
 $(document).ready(function(){
-  setInterval(function(){ goBack();}, 60000);
+  setInterval(function(){ goBack();}, 300000);
 });

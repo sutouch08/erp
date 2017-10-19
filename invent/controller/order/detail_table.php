@@ -1,8 +1,7 @@
 <?php
 	$sc = "no data found";
-	$id_order	= $_GET['id_order'];
-	$order 		= new order();
-	$qs  			= $order->getDetails($id_order);
+	$order 		= new order($_GET['id_order']);
+	$qs  			= $order->getDetails($order->id);
 	if( dbNumRows($qs) > 0 )
 	{
 		$no = 1;
@@ -22,7 +21,7 @@
 							"productName"	=> $rs->product_name,
 							"price"	=> number_format($rs->price, 2),
 							"qty"	=> number_format($rs->qty),
-							"discount"	=> $rs->discount,
+							"discount"	=> ($order->role == 2 ? $rs->gp .' %' : $rs->discount),
 							"amount"	=> number_format($rs->total_amount, 2)
 							);
 			array_push($ds, $arr);

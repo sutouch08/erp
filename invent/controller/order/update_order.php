@@ -2,8 +2,6 @@
 	//---	คำนวนส่วนลดใหม่หรือไม่ 1 = คำนวนใหม่ 0 = ไม่ต้องคำนวณ
 	$recal = isset( $_GET['recal'] ) ? $_GET['recal'] : 0;
 
-	$order = new order($_POST['id_order']);
-
 	$payment = new payment_method($order->id_payment);
 
 	$credit = new customer_credit();

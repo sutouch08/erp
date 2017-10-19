@@ -53,3 +53,10 @@ $("#toDate").datepicker({
     $("#fromDate").datepicker("option", "maxDate", sd);
   }
 });
+
+
+
+$(document).ready(function() {
+	//---	reload ทุก 5 นาที
+	setTimeout(function(){ goBack(); }, 300000);
+});
