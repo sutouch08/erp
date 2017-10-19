@@ -44,11 +44,6 @@ class Product extends CI_Controller
 		$data['color']   = $this->product_model->getColorGroup($data['product']);
 		$data['size']    = $this->product_model->getSizeGroup($data['product']);
 
-		// echo "<pre>";
-		// print_r($data['color']);
-		// exit();
-	
-
 		//filter data 
 		//form submit
 		if($this->input->get()){
@@ -56,14 +51,19 @@ class Product extends CI_Controller
 			$color = $this->input->get('color',true);
 			$size  = $this->input->get('size',true);
 
+			// echo "<pre>";
+			// print_r($this->input->get('color',true));
+			// exit();
+			
 			if(empty($color))
 			{
 				$color = [];
 				foreach ($data['color'] as $key => $value) {
-					array_push($color,$value->id);
+					array_push($color,$value->id_group);
 				}
 
 			}
+			
 			if(empty($size)){
 				$size = [];
 				foreach ($data['size'] as $key => $value) {
@@ -75,6 +75,13 @@ class Product extends CI_Controller
 			$minPrice = $this->input->get('minPrice',true);
 			$maxPrice = $this->input->get('maxPrice',true);
 
+			// echo "<pre>";
+			// print_r($color);
+			// print_r($size);
+			// exit();
+
+			
+
 			$id_style  = [];
 			foreach ($data['product'] as $key => $value) {
 				if ($value->style_id) {
@@ -83,6 +90,10 @@ class Product extends CI_Controller
 				
 			}
 
+			// echo "<pre>";
+			// print_r($id_style);
+			// exit();
+			
 			$data['product'] = $this->product_model->filterItem($id_style,$color,$size,$minPrice,$maxPrice);
 
 			// echo "<pre>";
@@ -110,6 +121,7 @@ class Product extends CI_Controller
 		if( $this->input->post('offset') )
 		{
 			$result = $this->product_model->moreItem($this->input->post('offset'),$this->input->post('parent',true),$this->input->post('child',true),$this->input->post('sub_child',true));
+
 			if( $result !== FALSE )
 			{
 				foreach( $result as $rs )
@@ -121,8 +133,8 @@ class Product extends CI_Controller
 					}
 					$sp = sell_price($rs->product_price, $rs->discount_amount, $rs->discount_percent);
 					$arr = array(
-						'link'				=>	'main/productDetail/'.$rs->product_id,
-						'image_path'		=> get_image_path(get_id_cover_image($rs->product_id), 3),
+						'link'				=>	base_url().'shop/product_detail/product/'.$rs->product_id,
+						'image_path'		=> get_id_image((int)$rs->product_id,4),
 						'style_id'			=> $rs->style_id,
 						'promotion'			=> $promo,
 						'new_product'		=> is_new_product($rs->product_id),
@@ -141,7 +153,7 @@ class Product extends CI_Controller
 				print_r(json_encode($data));
 			}//$result !== FALSE 
 			else{
-				print_r([]);
+				pprint_r(json_encode($result));
 			}
 			
 		}//$this->input->post('offset')

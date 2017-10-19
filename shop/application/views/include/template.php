@@ -244,7 +244,7 @@ $(document).ready(function(){
 						{
 
 							$dataAppend += "<td ><input type='text' name='inputQty[]'  style='margin-bottom:0px;'><span name='av[]' id='"+value['id_color']+'_'+value['id_size']+"' style='font-size:10px;color:#DA631D'></span></td>";
-							av(id_style,value['id_color'],value['id_size']);
+							// av(id_style,value['id_color'],value['id_size']);
 							// $('span[name=av[]')append(av);
 						}else{
 							$dataAppend += "<td></td>";
@@ -314,6 +314,10 @@ $(document).ready(function(){
 th,td  {
 	max-width: 100px;
 	word-wrap: break-word;
+}
+
+input{
+	width: calc(100% - 10px);
 }
 
 .promo_field{

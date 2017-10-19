@@ -105,49 +105,18 @@ class Product_model extends CI_Model
 
 	public function getProductDetail($id)
 	{
-		$rs  = $this->db->select('tbl_product.id as product_id,
-			tbl_product.price as product_price,
-			tbl_product_style.id as style_id,
-			tbl_product_style.code as style_code,
-			tbl_product_style.name as style_name,
-			promotion.discount_percent,
-			promotion.discount_amount,
-			tbl_color.id as id_color,
-			tbl_color.code as code_color,
-			tbl_color.name as color_name,
-			tbl_color.id_group,
-			tbl_size.id as size_id,
-			tbl_size.name as size_name,
-			')
-		->join('tbl_product_style' , 'tbl_product_style.id = tbl_product.id_style','left')
-		->join('tbl_color','tbl_color.id = tbl_product.id_color','left')
-		->join('promotion','promotion.id_product = tbl_product.id','left')
-		->join('tbl_size','tbl_size.id = tbl_product.id_size','left')
-		->where('tbl_product.id',$id)
-		->get('tbl_product');		
-
-
-		if( $rs->num_rows() > 0 )
-		{
-			return $rs->result();	
-		}
-		else
-		{
-			return FALSE;
-		}
+		$url = "http://localhost/ci_rest_server/index.php/api/product/product/ProductDetail/?id=".$id;
+		$this->curl->create($url);
+		$this->curl->http_header('x-api-key','1234');
+		return  json_decode($this->curl->execute());
 	}
 
 	public function productImages($id_pd)
 	{
-		$rs = $this->db->where('id_style', $id_pd)->get('tbl_image');
-		if( $rs->num_rows() > 0 )
-		{
-			return $rs->result();	
-		}
-		else
-		{
-			return FALSE;
-		}
+		$url = "http://localhost/ci_rest_server/index.php/api/product/product/product_images/?id=".$id_pd;
+		$this->curl->create($url);
+		$this->curl->http_header('x-api-key','1234');
+		return  json_decode($this->curl->execute());
 	}
 
 	public function getProductInfo($id_pd)
@@ -164,128 +133,29 @@ class Product_model extends CI_Model
 
 	public function moreItem($offset,$parent=0,$child=0,$sub_child=0)
 	{	
+		$this->curl->create('http://localhost/ci_rest_server/index.php/api/product/product/moreProduct/?offset='.$offset.'&parrent='.$parent.'&child='.$child.'&sub_child='.$sub_child);
+		$this->curl->http_header('x-api-key','1234');
+		return  json_decode($this->curl->execute());	
 
-		if($parent != 0 && $child == 0 && $sub_child == 0){
-			$rs  = $this->db->select('tbl_product.id as product_id,
-				tbl_product.code as product_code,
-				tbl_product.name as product_name,
-				tbl_product.price as product_price,
-				promotion.discount_percent,
-				promotion.discount_amount,
-				tbl_style.id as style_id,
-				tbl_style.code as style_code,
-				tbl_style.name as style_name,
-				')
-			->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
-			->join('product_online','product_online.id_product = tbl_product.id')
-			->join('promotion','promotion.id_product = product_online.id_product','left')
-			->where('product_online.id_parent_menu',$parent)
-			->where('tbl_product.show_in_online',1)
-			->where('tbl_product.is_deleted',0)
-			->where('tbl_product.active',1)
-			->order_by('tbl_product.id_category', 'desc')
-			->limit(20,$offset)
-			->get('tbl_product');
-
-		}else if($parent != 0 && $child != 0 && $sub_child == 0){
-			$rs  = $this->db->select('tbl_product.id as product_id,
-				tbl_product.code as product_code,
-				tbl_product.name as product_name,
-				tbl_product.price as product_price,
-				promotion.discount_percent,
-				promotion.discount_amount,
-				tbl_style.id as style_id,
-				tbl_style.code as style_code,
-				tbl_style.name as style_name,
-				')
-			->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
-			->join('product_online','product_online.id_product = tbl_product.id')
-			->join('promotion','promotion.id_product = product_online.id_product','left')
-			->where('product_online.id_parent_menu',$parent)
-			->where('product_online.id_child_menu',$child)
-			->where('tbl_product.show_in_online',1)
-			->where('tbl_product.is_deleted',0)
-			->where('tbl_product.active',1)
-			->order_by('tbl_product.id_category', 'desc')
-			->limit(20,$offset)
-			->get('tbl_product');
-
-		}else if($parent != 0 && $child != 0 && $sub_child != 0){
-			$rs  = $this->db->select('tbl_product.id as product_id,
-				tbl_product.code as product_code,
-				tbl_product.name as product_name,
-				tbl_product.price as product_price,
-				promotion.discount_percent,
-				promotion.discount_amount,
-				tbl_style.id as style_id,
-				tbl_style.code as style_code,
-				tbl_style.name as style_name,
-				')
-			->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
-			->join('product_online','product_online.id_product = tbl_product.id')
-			->join('promotion','promotion.id_product = product_online.id_product','left')
-			->where('product_online.id_parent_menu',$parent)
-			->where('product_online.id_child_menu',$child)
-			->where('product_online.id_subchild_menu',$sub_child)
-			->where('tbl_product.show_in_online',1)
-			->where('tbl_product.is_deleted',0)
-			->where('tbl_product.active',1)
-			->order_by('tbl_product.id_category', 'desc')
-			->limit(20,$offset)
-			->get('tbl_product');
-
-		}
-
-		if( $rs->num_rows() > 0 )
-		{
-			return $rs->result();	
-		}
-		else
-		{
-			return FALSE;
-		}	
 	}
 
 	public function grid($id_style)
 	{
-		$rs = $this->db->select('tbl_style.code,tbl_style.name,tbl_color.id_color,tbl_color.color_name,tbl_size.id_size,tbl_size.size_name')
-		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
-		->join('tbl_style','tbl_style.id = tbl_product.id_style')
-		->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
-		->where('tbl_product.id_style',$id_style)
-		->get('tbl_product');
+		$url = "http://localhost/ci_rest_server/index.php/api/product/product/product_grid/?id=".$id_style;
+		$this->curl->create($url);
+		$this->curl->http_header('x-api-key','1234');
+		return  json_decode($this->curl->execute());
 
-		if( $rs->num_rows() > 0 )
-		{
-			return $rs->result();	
-		}
-		else
-		{
-			return FALSE;
-		}	
 	}
 
 
 	public function getSizeByColor($select_color,$id_style)
 	{
 
-
-		$rs = $this->db->select('tbl_size.id_size,tbl_size.size_name')
-		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
-		->where('tbl_product.id_style',$id_style)
-		->where('tbl_product.id_color',$select_color)
-		->get('tbl_product');
-
-		if( $rs->num_rows() > 0 )
-		{
-			return $rs->result();	
-		}
-		else
-		{
-			return FALSE;
-		}	
-
-
+		$url = "http://localhost/ci_rest_server/index.php/api/product/product/izeByColor/?style=".$id_style."&color=".$select_color;
+		$this->curl->create($url);
+		$this->curl->http_header('x-api-key','1234');
+		return  json_decode($this->curl->execute());
 	}
 
 	public function getProdctFormGrid($id_style,$id_size,$id_color){

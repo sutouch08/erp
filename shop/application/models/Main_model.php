@@ -23,44 +23,10 @@ class Main_model extends CI_Model
 	
 	public function moreFeatures($offset)
 	{
+		$this->curl->create('http://localhost/ci_rest_server/index.php/api/product/product/moreFeatures/?offset='.$offset);
+		$this->curl->http_header('x-api-key','1234');
+		return  json_decode($this->curl->execute());
 		
-		$rs  = $this->db->select('tbl_product.id as product_id,
-			tbl_product.code as product_code,
-			tbl_product.name as product_name,
-			tbl_product.price as product_price,
-			promotion.discount_percent,
-			promotion.discount_amount,
-			tbl_style.id as style_id,
-			tbl_style.code as style_code,
-			tbl_style.name as style_name,
-			tbl_color.id_color,
-			tbl_color.color_code,
-			tbl_color.color_name,
-			tbl_size.id_size,
-			tbl_size.size_name
-			')
-		->join('product_online','product_online.id_product_online = tbl_product.id')
-		->join('promotion','promotion.id_product = product_online.id_product','left')
-		->join('tbl_style' , 'tbl_style.id = tbl_product.id_style')
-		->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
-		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
-
-		->where('tbl_product.show_in_online',1)
-		->where('tbl_product.is_deleted',0)
-		->where('tbl_product.active',1)
-		->limit(8,0)
-		->order_by('tbl_product.price', 'desc')
-		->limit(10,$offset)
-		->get('tbl_product');		
-		
-		if( $rs->num_rows() > 0 )
-		{
-			return $rs->result();	
-		}
-		else
-		{
-			return FALSE;
-		}	
 	}//moreFeatures
 
 	public function moreItemByMenu($offset,$parent,$child,$sub_child)

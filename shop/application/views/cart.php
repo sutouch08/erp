@@ -252,7 +252,7 @@
 </div>
 <!-- /.main-container -->
 
-<?php require('include/payment_modal.php'); ?>
+
 <script>
   function promotionCode(event) {
     var x = $("#inputCode").val();

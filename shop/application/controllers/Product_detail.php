@@ -15,7 +15,7 @@ class Product_detail extends CI_Controller
 
 		$this->home = base_url()."shop/main";
 
-		$this->customer     =   $this->Member_model->getIdAndRole();//great or member
+		$this->customer     = $this->Member_model->getIdAndRole();//great or member
 		$this->id_cart 	    = getIdCart($this->customer->id);
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
 		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);

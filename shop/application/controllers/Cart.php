@@ -10,13 +10,17 @@ class Cart extends CI_Controller
 	public function __construct()
 	{
 		parent:: __construct();
+		$this->load->model("main_model");
 		$this->load->model('product_model');
 		$this->load->model('cart_model');
 		$this->load->model('Menu_model');
+		$this->load->model('Member_model');
+		
 		$this->home = base_url()."shop/main";
-		$this->customer     = getIdCustomer();
+
+		$this->id_customer  = $this->Member_model->getIdAndRole();//great or member
 		$this->bank 		= getBank();
-		$this->id_cart 	    = getIdCart($this->customer['id']);
+		$this->id_cart 	    = getIdCart($this->id_customer->id);
 		$this->cart_value	= 0;
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
 		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);
@@ -39,7 +43,7 @@ class Cart extends CI_Controller
 		
 		$data['item_in_cart']  = $this->cart_model->getItemInCart($this->id_cart);
 		$data['transport']	   = $this->cart_model->getTrans($data['item_in_cart'],$this->id_cart);
-		$data['address']	   = $this->cart_model->getAddress($this->customer);
+		$data['address']	   = $this->cart_model->getAddress($this->id_customer->id);
 		$data['bank']		   = $this->bank ;
 		
 		

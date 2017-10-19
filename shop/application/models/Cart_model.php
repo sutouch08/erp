@@ -22,8 +22,8 @@ class Cart_model extends CI_Model
 	public function getItemInCart($id_cart){
 		$rs = $this->db->select('cart_product_online.qty,
 			tbl_product.id,
-			tbl_style.code,
-			tbl_style.name,
+			tbl_product_style.code,
+			tbl_product_style.name,
 			tbl_product.price,
 			promotion.discount_percent,
 			promotion.discount_amount,
@@ -36,9 +36,9 @@ class Cart_model extends CI_Model
 		
 		->join('tbl_product','tbl_product.id = cart_product_online.id_product')
 		->join('promotion','promotion.id_product = tbl_product.id','left')
-		->join('tbl_style','tbl_style.id = tbl_product.id_style')
-		->join('tbl_color','tbl_color.id_color = tbl_product.id_color')
-		->join('tbl_size','tbl_size.id_size = tbl_product.id_size')
+		->join('tbl_product_style','tbl_product_style.id = tbl_product.id_style')
+		->join('tbl_color','tbl_color.id = tbl_product.id_color')
+		->join('tbl_size','tbl_size.id = tbl_product.id_size')
 		->where('cart_product_online.id_cart_online',$id_cart)
 		->get('cart_product_online');
 

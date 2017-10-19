@@ -9,7 +9,6 @@
   <div class="footer" style="padding-bottom:10px">
     <div class="container hidden-xs">
       <CENTER>
-        <?php echo base_url(); ?>
         <div style="padding-top:10px;" >
           <img height="50" src="<?php echo base_url(); ?>shop/images/button-google-play.png" alt="img"> 
 
