@@ -159,13 +159,28 @@ class Product_model extends CI_Model
 	}
 
 	public function getProdctFormGrid($id_style,$id_size,$id_color){
-		$rs = $this->db->select("tbl_product.id")
-		->where('tbl_product.id_style',$id_style)
-		->where('tbl_product.id_size',$id_size)
-		->where('tbl_product.id_color',$id_color)
-		->get('tbl_product');
+		$data = [
+			'id_style' => $id_style,
+			'id_size' => $id_size,
+			'id_color'=>$id_color
+		];
 
-		return  $rs->result()[0];
+		$url='http://localhost/ci_rest_server/index.php/api/product/product/ProdctFormGrid';
+							
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);	
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $data);	
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array('x-api-key: 1234'));
+
+		$html = curl_exec($curl);
+		curl_close ($curl);
+
+		return  json_decode($html);
+		// return $html;
+
+		
 
 	}
 

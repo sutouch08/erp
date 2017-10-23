@@ -1,4 +1,4 @@
-<?php include_once("ga.php") ?>
+
 <?php if (empty($_SESSION['id_customer'])): ?>
 <CENTER>
 	<div class="well col-lg-12" style="margin-top:100px">

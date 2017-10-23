@@ -15,7 +15,7 @@ class Register extends CI_Controller
 
 		$this->home = base_url()."shop/main";
 
-		$this->id_customer  = $this->Member_model->getIdAndRole();//great or member
+		$this->id_customer  = $this->Member_model->Validate_Great();//great or member
 
 		$this->id_cart 	    = getIdCart($this->id_customer->id);
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
@@ -25,7 +25,7 @@ class Register extends CI_Controller
 	public function index()
 	{
 		$data['title']			= $this->title;
-		$data['menus'] =  $this->Menu_model->menus();
+		$data['menus'] 			=  $this->Menu_model->menus();
 		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
 		$data['cart_qty']		= $this->cart_qty;
 		if(isset($_SESSION['id_customer'])){
@@ -36,34 +36,74 @@ class Register extends CI_Controller
 		$this->load->view("include/template", $data);
 	}
 
+	public function getData(){
+
+		@$ID    = $_GET['ID'];
+		@$type  = $_GET['TYPE'];
+
+		switch ($type) {
+			case "Proviance":
+				$result = $this->Register_model->proviance();
+			break;
+			case "District":
+				$result = $this->Register_model->district($ID);
+			break;
+			case "Subdistrict":
+				$result = $this->Register_model->subdistrict($ID);
+			break;
+			case "Postcode":
+				$result = $this->Register_model->postcode($ID);
+			break;
+			default:
+			
+		}
+		
+		print_r(json_encode($result));
+	}//functiom
+
+	//********************************************************************
+	//                        REGISTER
+	//********************************************************************
+
 	public function register(){
+
 		$data['title']			= $this->title;
 		$data['cart_items']		= $this->cart_items==''?$this->cart_items=array():$this->cart_items;
 		$data['menus'] =  $this->Menu_model->menus();
+
 		if(@$this->session->userdata('id_customer')){
 			$data['view'] 			= 'main';	
 			$this->load->view("include/template", $data);
-		}else{
+		}
+		else
+		{
+			$data['register']['ip_address'] = 
+			array(
+				"ip_address"=>$this->input->ip_address()
+			);
 
-			$data['customer'] = array(
+			$data['register']['customer'] =
+			 array(
 				"fname"    =>$this->input->post('fname',true),
 				"lname"    =>$this->input->post('lname',true),
 				"birthdate"=>$this->input->post('birthDate',true),
 				"tel"      =>$this->input->post('tel',true),
 				"sex"      =>$this->input->post('sex',true),
 				"status"   =>"0",
-				);
+			);
 
-			$data['account'] = array(
+			$data['register']['account'] = 
+			array(
 				"id_customer_online"	=>"",
 				"username"	=>$this->input->post('userName',true),
 				"password"	=>md5(md5(md5($this->input->post('password',true)))),
 				"email"		=>$this->input->post('email',true),
 				"status"	=>"1",
 				"last_login"=>date("Y-m-d H:i:s"),
-				);
+			);
 
-			$data['address'] = array(
+			$data['register']['address'] = 
+			array(
 				"id_customer_online"	=>"",
 				"id_great"				=>"",
 				"address_no"			=>$this->input->post('addr',true),
@@ -71,15 +111,12 @@ class Register extends CI_Controller
 				"district"				=>$this->input->post('District',true),
 				"proviance"				=>$this->input->post('Proviance',true),
 				"postcode"				=>$this->input->post('Postcode',true),
-				);
+			);
 
-			$ck = $this->Register_model->checkDuplicate($this->input->post('userName',true));
-			
-			if($ck == "notDup"){
-				$regis_status = $this->Register_model->register($data);
-				// echo $ck." ".$regis_status;
 
-				if($regis_status == "success"){
+				$regis_status = $this->Register_model->register($data['register']);
+				
+				if($regis_status->status == "success"){
 					$data['view'] 			= 'module/member_info';	
 					$data['regis_status']   = "Register Success !";
 				}else{
@@ -88,61 +125,12 @@ class Register extends CI_Controller
 				}
 
 				$this->load->view("include/template", $data);
-			}else{
-				// echo "dup ".$ck;
-				// on duplicate
-				$data['regis_status']   = "Duplicate Data USERNAME !";
-				$data['view'] 			= 'module/register';	
+			
+		}//else
+	}//function
 
-				$this->load->view("include/template", $data);
-			}
-		}
-	}	
-
-	public function add_address(){
-		$add_addr =[];
-		$id_customer   = $this->id_customer->id;
-		$role = $this->id_customer['role'];
-		
-		if ($this->input->post()) {
 	
-		$data = Array
-			(
-			    "fname" =>$this->input->post("fname",true), 
-			    "lname" =>$this->input->post("lname",true), 
-			    "tel" =>$this->input->post("tel",true), 
-			    "addr" =>$this->input->post("addr",true), 
-			    "Proviance" =>$this->input->post("Proviance",true), 
-			    "District" =>$this->input->post("District",true), 
-			    "Subdistrict" =>$this->input->post("Subdistrict",true), 
-			    "Postcode" => $this->input->post("Postcode",true)
-			);
 
-
-		$add_addr = $this->Register_model->addMemberAddr($id_customer,$role,$data);
-		}
-		print_r(json_encode($add_addr));
-	
-	}
-
-	public function getData(){
-
-		@$ID    = $_GET['ID'];
-		@$type  = $_GET['TYPE'];
-		
-		if($type =='Proviance'){
-			$result = $this->Register_model->proviance();
-		}else if($type=='District') {
-			$result = $this->Register_model->district($ID);
-		} else if($type=='Subdistrict'){
-			$result = $this->Register_model->subdistrict($ID);
-
-		} else if($type=='Postcode'){
-			$result = $this->Register_model->postcode($ID);
-		}
-		print_r(json_encode($result));
-	}//functiom
-		
 }//class
 
 ?>

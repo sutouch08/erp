@@ -1,4 +1,4 @@
- function cal_trans() {
+  function cal_trans() {
     load_in();
     console.log("calulate");
     $.ajax({

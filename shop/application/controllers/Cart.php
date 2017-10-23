@@ -18,19 +18,13 @@ class Cart extends CI_Controller
 		
 		$this->home = base_url()."shop/main";
 
-		$this->id_customer  = $this->Member_model->getIdAndRole();//great or member
+		$this->id_customer  = $this->Member_model->Validate_Great();//great or member
 		$this->bank 		= getBank();
 		$this->id_cart 	    = getIdCart($this->id_customer->id);
 		$this->cart_value	= 0;
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
 		$this->cart_qty		= $this->cart_model->cartQty($this->id_cart);
 	}
-	
-	public function index()
-	{
-
-	}
-	
 	
 	public function cart($id=0)
 	{
@@ -161,6 +155,27 @@ class Cart extends CI_Controller
 		}
 		
 		
+	}
+
+	public function addToCart()
+	{	
+		$data    = $this->input->post('dataChoosed',true);
+		$data_insert = [];
+
+		foreach ($data as $item) {
+			if($item['qty'] > 0)
+			{
+				$product = $this->product_model->getProdctFormGrid($item['id_style'],$item['id_size'],$item['id_color']);
+				array_push($data_insert,array("id_cart_online"=>$this->id_cart,"id_product"=>$product->id,"qty"=>$item['qty']));
+
+			}
+		}
+
+		$insert_status = $this->cart_model->addToCart($data_insert);
+		// $this->db->insert('cart_product_online', $data_insert); 
+
+		print_r($insert_status);
+		// print_r($data_insert);
 	}
 
 

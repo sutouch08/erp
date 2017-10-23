@@ -116,27 +116,27 @@ $(document).ready(function(){
 							};
 		    i++;
 		});
-		
+		// console.log(attributes);
 		$.ajax({
-			url:"<?php echo base_url(); ?>shop/product/addToCart",
+			url:"<?php echo base_url(); ?>shop/cart/addToCart",
 			type:"POST",
 			cache: "false",
 			data: {
 				'dataChoosed':attributes,
 			},
 			success: function(rs){
-
-				if( rs == 'success' )
-				{
-					 $('#orderGrid').modal('toggle');
-					swal({ title: 'Success', title : 'Add to cart successfully', timer: 2000, type: 'success' });
+				console.log(rs);
+				// if( rs == 'success' )
+				// {
+				// 	 $('#orderGrid').modal('toggle');
+				// 	swal({ title: 'Success', title : 'Add to cart successfully', timer: 2000, type: 'success' });
 					
-				}
-				else
-				{
-					 $('#orderGrid').modal('toggle');
-					swal({ title: 'ไม่สำเร็จ', title : 'เพิ่มสินค้าลงตะกร้าไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', type: 'error' });	
-				}
+				// }
+				// else
+				// {
+				// 	 $('#orderGrid').modal('toggle');
+				// 	swal({ title: 'ไม่สำเร็จ', title : 'เพิ่มสินค้าลงตะกร้าไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', type: 'error' });	
+				// }
 			},error: function(XMLHttpRequest, textStatus, errorThrown) {
 				swal({ title: 'ไม่สำเร็จ', title : 'การเชื่อมต่อกับฐานข้อมูลมีปัณหา กรุณาลองใหม่ !!', type: 'error' });	
 				load_out();
@@ -193,7 +193,7 @@ $(document).ready(function(){
 			data: { "id_style" : id_style },
 			success: function(rs){
 				load_out();
-				// console.log(product_name);
+				// console.log(JSON.parse(rs));
 				
 				var arr = Object.keys(JSON.parse(rs)).map(function(k) { 
 					return JSON.parse(rs)[k] 
@@ -243,7 +243,7 @@ $(document).ready(function(){
 						if(value['color_name'] == v)
 						{
 
-							$dataAppend += "<td ><input type='text' name='inputQty[]'  style='margin-bottom:0px;'><span name='av[]' id='"+value['id_color']+'_'+value['id_size']+"' style='font-size:10px;color:#DA631D'></span></td>";
+							$dataAppend += "<td ><input type='text' name='inputQty[]'  style='margin-bottom:0px;'><span name='av[]' id='"+value['color_id']+'_'+value['size_id']+"' style='font-size:10px;color:#DA631D'></span></td>";
 							// av(id_style,value['id_color'],value['id_size']);
 							// $('span[name=av[]')append(av);
 						}else{

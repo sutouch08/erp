@@ -18,7 +18,7 @@ class Product extends CI_Controller
 		
 		$this->home = base_url()."shop/main";
 
-		$this->id_customer  = $this->Member_model->getIdAndRole();//great or member
+		$this->id_customer  = $this->Member_model->Validate_Great();//great or member
 		$this->id_cart 	    = getIdCart($this->id_customer->id);
 		$this->cart_value	= $this->cart_value	= 0;
 		$this->cart_items 	= $this->cart_model->getCartProduct($this->id_cart);
@@ -181,25 +181,7 @@ class Product extends CI_Controller
 	}
 
 
-	public function addToCart()
-	{	
-		$data    = $this->input->post('dataChoosed',true);
-		$data_insert = [];
-
-		foreach ($data as $item) {
-			if($item['qty'] > 0)
-			{
-				$id_product = $this->product_model->getProdctFormGrid($item['id_style'],$item['id_size'],$item['id_color']);
-				array_push($data_insert,array("id_cart_product_online"=>'',"id_cart_online"=>$this->id_cart,"id_product"=>$id_product->id,"qty"=>$item['qty'],"date_add"=>''));
-			}
-		}
-		$insert_status = $this->cart_model->addToCart($data_insert);
-		// $this->db->insert('cart_product_online', $data_insert); 
-
-		print_r($insert_status);
-		
-	}
-
+	
 	public function getAvailable_qty(){
 		$qty = $this->product_model->getAvailableQty_OnGrid($this->input->post('id_style',true),$this->input->post('id_color',true),$this->input->post('id_size',true));
 		print_r($qty);

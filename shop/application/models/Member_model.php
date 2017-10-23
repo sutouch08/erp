@@ -26,7 +26,7 @@ class Member_model extends CI_Model
 		}
 	}
 
-	public function getIdAndRole()
+	public function Validate_Great()
 	{
 		
 
@@ -35,10 +35,10 @@ class Member_model extends CI_Model
 		//not member
 
 		$data = [
-			'ip_address', $this->input->ip_address()
+			'ip_address'=>$this->input->ip_address()
 		];
 
-		$url='http://localhost/ci_rest_server/index.php/api/users/users/getVisitor';
+		$url='http://localhost/ci_rest_server/index.php/api/users/users/Validate_Great';
 
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL, $url);
@@ -51,6 +51,7 @@ class Member_model extends CI_Model
 		curl_close ($curl);
 
 		return  json_decode($html);
+		// return $html;
 
 		
 	}else{

@@ -18,7 +18,7 @@ class Main extends CI_Controller
 
 		@$this->home = base_url()."shop/main";
 		//$this->customer api success
-		$this->customer     = $this->Member_model->getIdAndRole();//great or member
+		$this->customer     = $this->Member_model->Validate_Great();//great or member
 		$this->id_cart 	    = getIdCart($this->customer->id);
 		
 		//get data by auth
