@@ -14,18 +14,22 @@ foreach( $ds as $items )
         //---- ถ้ายังไม่มีรายการในออเดอร์
         if( $order->isExistsDetail($order->id, $id) === FALSE )
         {
+          $discount['discount'] = $order->gp.' %';
+          $discount['amount']   = ($pd->price * ($order->gp * 0.01)) * $qty;
 
           $arr = array(
-                  "id_order"	=> $order->id,
-                  "id_style"		=> $pd->id_style,
-                  "id_product"	=> $id,
-                  "product_code"	=> $pd->code,
-                  "product_name"	=> $pd->name,
-                  "price"	=> $pd->price,
-                  "qty"		=> $qty,
-                  "total_amount"	=> ($pd->price * $qty),
-                  "gp"  => $order->gp
-                );
+                    "id_order"	      => $order->id,
+                    "id_style"		    => $pd->id_style,
+                    "id_product"	    => $id,
+                    "product_code"    => $pd->code,
+                    "product_name"    => $pd->name,
+                    "price"	          => $pd->price,
+                    "qty"		          => $qty,
+                    "discount"	      => $discount['discount'],
+                    "discount_amount" => $discount['amount'],
+                    "total_amount"	  => ($pd->price * $qty) - $discount['amount'],
+                    "gp"              => $order->gp
+                      );
 
           if( $order->addDetail($arr) === FALSE )
           {
@@ -37,13 +41,23 @@ foreach( $ds as $items )
         }
         else  //--- ถ้ามีรายการในออเดอร์อยู่แล้ว
         {
-          $detail 		= $order->getDetail($order->id, $id);
+          $detail 	= $order->getDetail($order->id, $id);
           $qty			= $qty + $detail->qty;
+
+          $discount['discount'] = $order->gp.' %';
+          $discount['amount']   = ($pd->price * ($order->gp * 0.01)) * $qty;
+
+
           $arr = array(
-                    "qty" => $qty,
-                    "total_amount"	=> ($pd->price * $qty),
-                    "isSaved"	=> 0 //--- ย้อนกลับมาเป็นยังไม่ได้บันทึกอีกครั้ง เพื่อคำนวณเคดิตใหม่
-                    );
+                  "id_product"      => $id,
+                  "qty"             => $qty,
+                  "discount"	      => $discount['discount'],
+                  "discount_amount"	=> $discount['amount'],
+                  "total_amount"	  => ($pd->price * $qty) - $discount['amount'],
+                  "isSaved"	        => 0, //--- ย้อนกลับมาเป็นยังไม่ได้บันทึกอีกครั้ง
+                  "gp"              => $order->gp
+                  );
+
           if( $order->updateDetail($detail->id, $arr) === FALSE )
           {
             $result = FALSE;

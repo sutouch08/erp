@@ -120,7 +120,12 @@ switch($page){
 
 		case "order_consign";
 			$content = "order_consign.php";
-			$pageTitle = "ฝากขาย";
+			$pageTitle = "ฝากขาย [ใบกำกับภาษี]";
+			break;
+
+		case "order_consignment";
+			$content = "order_consignment.php";
+			$pageTitle = "ฝากขาย [โอนคลัง]";
 			break;
 
 		case "prepare":

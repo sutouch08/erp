@@ -160,20 +160,25 @@ if( isset( $_GET['export'] ) && isset( $_GET['BI'] ) )
 //---	Export Sale order
 if( isset( $_GET['export']) && isset( $_GET['SO']))
 {
-	include '../function/vat_helper.php';
-	include 'interface/export/exportSO.php';
 	$order = new order($_POST['id_order']);
+
+	include '../function/vat_helper.php';
+
 	if( $order->role == 2 && $order->is_so == 0 )
 	{
 		//---	โอนคลัง
-		$SO = exportTR($order->id);
+		include 'interface/export/exportConsignTR.php';
+		//---	โอนคลัง
+		$sc = exportConsignTR($order->id);
 	}
 	else
 	{
-		$SO = exportSO($order->id);
+		//---	เอกสารใบสั่งขาย
+		include 'interface/export/exportSO.php';
+		$sc = exportSO($order->id);
 	}
 
-	echo $SO === TRUE ? 'success' : $SO;
+	echo $sc === TRUE ? 'success' : $sc;
 }
 ///=================================================== END DOCUMENTS =======================================///
 ?>

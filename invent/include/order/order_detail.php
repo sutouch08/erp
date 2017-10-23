@@ -159,7 +159,7 @@
             <td class="middle text-center">{{ price }}</td>
             <td class="middle text-center">{{ qty }}</td>
             <td class="middle text-center">{{ discount }}</td>
-            <td class="middle text-center">{{ amount }}</td>
+            <td class="middle text-right">{{ amount }}</td>
             <td class="middle text-right">
             <?php if( $edit OR $add ) : ?>
             	<button type="button" class="btn btn-xs btn-danger" onclick="removeDetail({{ id }}, '{{ productCode }}')"><i class="fa fa-trash"></i></button>

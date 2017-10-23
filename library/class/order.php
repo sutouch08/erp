@@ -46,6 +46,59 @@ class order
 	}
 
 
+
+
+
+
+
+	public function getBookCode($role = 1, $is_so = 1)
+	{
+		switch ($role) {
+			//---  ขายสินค้า
+			case 1 :
+				$bookcode = getConfig('BOOKCODE_ORDER');
+				break;
+
+			//-- ฝากขาย เปิดใบกำกับ/ is_so = 1,  เปิดใบโอนสินค้า/ is_so = 0
+			case 2 :
+				$bookcode = $is_so == 0 ? getConfig('BOOKCODE_CONSIGNMENT') : getConfig('BOOKCODE_ORDER');
+				break;
+
+			//---	เบิกอภินันท์
+			case 3 :
+				$bookcode = getConfig('BOOKCODE_SUPPORT');
+				break;
+
+			//---	เบิกสปอนเซอร์
+			case 4 :
+				$bookcode = getConfig('BOOKCODE_SPONSOR');
+				break;
+
+			//---	เบิกแปรสภาพ
+			case 5 :
+				$bookcode = getConfig('BOOKCODE_TRANSFORM');
+				break;
+
+			//---	ยืมสินค้า
+			case 6 :
+				$bookcode = getConfig('BOOKCODE_LEND');
+				break;
+
+			default:
+				$bookcode = getConfig('BOOKCODE_ORDER');
+				break;
+		}
+
+		return $bookcode;
+	}
+
+
+
+
+
+
+
+
 	public function getData($id)
 	{
 		$qs = dbQuery("SELECT * FROM tbl_order WHERE id = ".$id);
@@ -62,6 +115,9 @@ class order
 			$this->hasNotSaveDetail = $this->hasNotSaveDetail($this->id);
 		}
 	}
+
+
+
 
 
 
@@ -456,12 +512,12 @@ class order
 
 
 	//-----------------  New Reference --------------//
-	public function getNewReference($role = 1, $date = '')
+	public function getNewReference($role = 1, $date = '', $is_so = 1)
 	{
 		$date = $date == '' ? date('Y-m-d') : $date;
 		$Y		= date('y', strtotime($date));
 		$M		= date('m', strtotime($date));
-		$prefix = $this->getPrefix($role);
+		$prefix = $this->getPrefix($role, $is_so);
 		$runDigit = getConfig('RUN_DIGIT'); //--- รันเลขที่เอกสารกี่หลัก
 		$preRef = $prefix . '-' . $Y . $M;
 		$qs = dbQuery("SELECT MAX(reference) AS reference FROM tbl_order WHERE reference LIKE '".$preRef."%' ORDER BY reference DESC");
@@ -480,14 +536,15 @@ class order
 
 
 
-	public function getPrefix($role)
+	public function getPrefix($role, $is_so)
 	{
 		switch($role){
 			case 1 :
 				$prefix = getConfig('PREFIX_ORDER');
 				break;
 			case 2 :
-				$prefix = getConfig('PREFIX_CONSIGNMENT');
+                               //--- ฝากขาย [ใบกำกับภาษี]     //--- ฝากขาย [โอนคลัง]
+				$prefix = $is_so == 1 ? getConfig('PREFIX_CONSIGN') : getConfig('PREFIX_CONSIGNMENT');
 				break;
 			case 3 :
 				$prefix = getConfig('PREFIX_SUPPORT');

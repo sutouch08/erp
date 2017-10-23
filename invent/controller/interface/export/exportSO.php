@@ -18,7 +18,7 @@
 		$QCSECT		= $emp->getDivisionCode($order->id_employee); 	//-- รหัสแผนก
 		$QCJOB		= ""; 	//--  รหัสโครงการ (ถ้ามี)
 		$STAT			= "";	//-- 	สถานะของเอกสาร ปกติว่างไว้,  C = CANCEL
-		$QCBOOK 	= $order->bookcode;		//--	รหัสเล่มเอกสาร
+		$QCBOOK 	= $order->getBookCode($order->role, $order->is_so);		//--	รหัสเล่มเอกสาร
 		$CODE			= "";	//--	เลขที่เอกสาร ถ้าว่างไว้ระบบจะ gen ให้เอง
 		$REFNO	 	= $order->reference;		//--	เลขที่อ้างอิง (เลขที่เอกสารใน Smart Invent)
 		$DATE			= thaiDate($order->date_add, '/');	//--	วันที่ของเอกสาร
@@ -239,7 +239,7 @@
 			}
 		}
 
-		$file_name = $path."SO-".date('YmdHis').".xls";
+		$file_name = $path.$order->reference.'-'.date('YmdHis').".xls";
 		//header('Content-Type: application/vnd.ms-excel'); /// form excel5 xls
 		//header('Content-Disposition: attachment;filename="'.$file_name.'"');
 		$writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');

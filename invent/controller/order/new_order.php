@@ -51,12 +51,16 @@
 	//---	กรณีที่เป็นฝากขายอาจมี GP ด้วย
 	$gp = isset( $_POST['gp']) ? $_POST['gp'] : 0;
 
+	//--- รหัสเล่มเอกสาร [อ้างอิงจาก formula]
+	//--- ถ้าเป็นฝากขายแบบโอนคลัง ยืมสินค้า เบิกแปรสภาพ เบิกสินค้า (ไม่เปิดใบกำกับ เปิดใบโอนคลังแทน) นอกนั้น เปิด SO
+	$bookcode = $order->getBookCode($role, $is_so);
+
 	//--- รันเลขที่เอกสารตามประเภทเอาสาร
-	$reference = $order->getNewReference($role, $date_add);
+	$reference = $order->getNewReference($role, $date_add, $is_so);
 
 	//--- เตรียมข้อมูลสำหรับเพิ่มเอกสารใหม่
 	$arr = array(
-					"bookcode"		=> getConfig('BOOKCODE_SO'),
+					"bookcode"		=> $bookcode,
 					"reference"		=> $reference,
 					"role"				=> $role,
 					"id_customer"	=> $id_customer,

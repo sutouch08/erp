@@ -62,7 +62,7 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 <hr class="margin-top-10 margin-bottom-10"/>
 
 <?php
-	$where = "WHERE role = 2 AND is_so = 1 ";
+	$where = "WHERE role = 2 AND is_so = 0 ";
 	//--- Reference
 	if( $sCode != "" )
 	{

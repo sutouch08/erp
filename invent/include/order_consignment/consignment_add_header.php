@@ -47,6 +47,6 @@
 <input type="hidden" id="id_customer" value="<?php echo $order->id_customer; ?>" />
 <input type="hidden" id="id_zone" value="<?php echo $consign->id_zone; ?>" />
 <input type="hidden" id="id_customer_zone" value="<?php echo $zone->id_customer; ?>" />
-<input type="hidden" id="so" value="1" /><!--- เปิดใบกำกับภาษีด้วย --->
+<input type="hidden" id="so" value="0" /><!--- ไม่เปิดใบกำกับ เปิดใบโอนคลังแทน -->
 <input type="hidden" id="role" value="2" />
 <input type="hidden" id="isOnline" value="0" />
