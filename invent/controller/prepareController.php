@@ -7,6 +7,24 @@ include_once "../function/warehouse_helper.php";
 
 
 
+//--	ตรวจสอบสภานะของออเดอร์
+if( isset($_GET['checkStatusAndState']))
+{
+	$sc = '';
+	$id_order = $_GET['id_order'];
+	$order = new order();
+	$qs = $order->getStatusAndState($id_order);
+	if( dbNumRows($qs) == 1)
+	{
+		$rs = dbFetchObject($qs);
+		$sc = json_encode(array('status' => $rs->status, 'state' => $rs->state));
+	}
+
+	echo $sc;
+}
+
+
+
 //--- จัดสินค้า ตัดยอดออกจากโซน เพิ่มเข้า buffer
 if( isset( $_GET['doPrepare']))
 {

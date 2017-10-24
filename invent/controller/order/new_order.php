@@ -91,6 +91,16 @@
 			$consign = new consign();
 			$consign->add($id, $id_zone);
 		}
+
+		//---	ถ้าเป็นเบิกแปรสภาพ เพิ่มข้อมูลที่เก็บและวัตถุประสงค์ด้วย
+		if( $role == 5)
+		{
+			$transRole = $_POST['transform_role'];
+			$ds = array('id_order' => $id, 'id_zone' => $id_zone, 'role' => $transRole);
+			$transform = new transform();
+			$transform->add($ds);
+		}
+
 	}
 
 	echo $sc;

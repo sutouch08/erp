@@ -58,7 +58,7 @@ $toDate     = getFilter('toDate', 'toDate', '');
 <hr class="margin-top-10"/>
 
 <?php
-$where = "WHERE state = 3 ";
+$where = "WHERE state = 3 AND status = 1 ";
 if( $sCode != "")
 {
     createCookie('sOrderCode', $sCode);

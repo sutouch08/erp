@@ -25,12 +25,8 @@
 		//----- ถ้ายังไม่มีรายการ ไม่ต้องคำนวณใหม่
 		if( $order->hasDetails($order->id) === TRUE )
 		{
-			//---- ยอดรวมสินค้าที่บันทึกไปแล้ว เพื่อเอามาคืนยอดใช้ไป
-			$amount = $order->getTotalAmountSaved($order->id);
-
 			//----- ยกเลิกการบันทึกรายการ เพื่อจะได้คำนวณใหม่อีกที
 			$order->unSaveDetails($order->id);
-
 		}
 
 		//--- update order header

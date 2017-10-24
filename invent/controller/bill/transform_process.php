@@ -1,7 +1,7 @@
 <?php
   $bill = new bill();
-  $consign = new consign($order->id);
-  $zone = new zone($consign->id_zone);
+  $transform = new transform($order->id);
+  $zone = new zone($transform->id_zone);
 
   //--- ใช้งาน ทรานเซ็คชั่น
   startTransection();
@@ -93,8 +93,8 @@
                     'reference' => $order->reference,
                     'id_role'   => $order->role,
                     'role_name' => $role->name,
-                    'payment'   => 'consign',
-                    'channels'  => 'consign',
+                    'payment'   => 'transform',
+                    'channels'  => 'transform',
                     'id_product'  => $product->id,
                     'product_code'  => $product->code,
                     'product_name'  => $product->name,

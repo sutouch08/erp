@@ -966,6 +966,12 @@ class order
 	}
 
 
+
+	public function getStatusAndState($id)
+	{
+		return dbQuery("SELECT state, status FROM tbl_order WHERE id = '".$id."'");
+	}
+
 }//--- End Class
 
 ?>

@@ -19,17 +19,19 @@
 <hr class="margin-top-10 margin-bottom-10" />
 
 <?php
-$order = new order($_GET['id_order']);
-if( $order->state == 3)
-{
-  $order->stateChange($order->id, 4);
-}
-else if($order->state != 4)
-{
-  include 'include/prepare/invalid_state.php';
-}
-?>
+  $order = new order($_GET['id_order']);
+  if( $order->state == 3 && $order->status == 1)
+  {
+    $order->stateChange($order->id, 4);
+  }
 
+  else if($order->state != 4 || $order->status == 0)
+  {
+    include 'include/prepare/invalid_state.php';
+  }
+
+?>
+<?php if( $order->status == 1 && $order->state == 3 || $order->state == 4) : ?>
 
 <div class="row">
   <div class="col-sm-2">
@@ -56,6 +58,8 @@ else if($order->state != 4)
 <?php include 'include/prepare/prepare_incomplete_list.php'; ?>
 
 <?php include 'include/prepare/prepare_completed_list.php'; ?>
+
+<?php endif; //--- endif order->state ?>
 
 <script src="script/prepare/prepare_process.js"></script>
 <script src="script/beep.js"></script>

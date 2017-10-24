@@ -15,7 +15,7 @@
 <?php
 $qr = "SELECT o.* FROM tbl_order AS o JOIN tbl_order_state AS s ON o.id = s.id_order AND o.state = s.id_state ";
 
-$qr .= "WHERE state = 4 ";
+$qr .= "WHERE state = 4 AND status = 1 ";
 
 if( ! $supervisor )
 {

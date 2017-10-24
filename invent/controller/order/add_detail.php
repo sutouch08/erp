@@ -36,6 +36,12 @@
 			include 'order/add_sponsor_detail.php';
 		}
 
+		//---	เบิกแปรสภาพ
+		if( $order->role == 5)
+		{
+			include 'order/add_transform_detail.php';
+		}
+
 		if( $result === TRUE )
 		{
 			$order->changeStatus($order->id, 0); //--- เปลี่ยนกลับมาเป็นยังไม่เซฟอีกครั้ง

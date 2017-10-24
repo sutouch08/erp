@@ -171,6 +171,12 @@ if( isset( $_GET['export']) && isset( $_GET['SO']))
 		//---	โอนคลัง
 		$sc = exportConsignTR($order->id);
 	}
+	else if( $order->role == 5)
+	{
+		//---	เบิกแปรสภาพ
+		include 'interface/export/exportTR.php';
+		$sc = exportTR($order->id);
+	}
 	else
 	{
 		//---	เอกสารใบสั่งขาย

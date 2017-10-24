@@ -231,3 +231,24 @@ function setZoneLabel(showZone){
   //---- 1 = show , 0 == not show;
   $.get('controller/prepareController.php?setZoneLabel&showZone='+showZone);
 }
+
+
+
+var intv = setInterval(function(){
+  var id_order = $('#id_order').val();
+  $.ajax({
+    url: 'controller/prepareController.php?checkStatusAndState',
+    type:'GET',
+    cache:'false',
+    data:{'id_order':id_order},
+    success:function(rs){
+      var rs = $.trim(rs);
+      if( isJson(rs) ){
+        var ds = $.parseJSON(rs);
+        if( ds.status == 0 || ds.state != 4){
+          window.location.reload();
+        }
+      }
+    }
+  })
+}, 10000);

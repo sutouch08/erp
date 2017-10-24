@@ -144,8 +144,7 @@ function get_header($order)
 									"ลูกค้า"	=> $customer->getName($order->id_customer),
 									"วันที่"	=> thaiDate($order->date_add),
 									"ผู้เบิก"	=> employee_name($order->id_employee),
-									"เลขที่เอกสาร"	=> $order->reference,
-									"เลขที่อ้างอิง"		=> getInvoice($order->id)
+									"เลขที่เอกสาร"	=> $order->reference
 									);
 	}
 

@@ -44,6 +44,12 @@ if( isset( $_GET['saveOrder'] ) )
 		include 'order/save_sponsor.php';
 	}
 
+	//---	ถ้าเป็นเบิกแปรสภาพ
+	if( $order->role == 5)
+	{
+		include 'order/save_transform.php';
+	}
+
 }
 
 
@@ -79,6 +85,12 @@ if( isset( $_GET['updateOrder'] ) )
 	if( $order->role == 4)
 	{
 		include 'order/update_sponsor.php';
+	}
+
+	//---	เบิกแปรสภาพ
+	if( $order->role == 5)
+	{
+		include 'order/update_transform.php';
 	}
 
 
@@ -158,25 +170,34 @@ if( isset( $_GET['removeDetail'] ) )
 	$id_order = $_POST['id_order'];
 	$order = new order($id_order);
 
-	//---
+	//---	ขาย
 	if( $order->role == 1)
 	{
 		include 'order/delete_order_detail.php';
 	}
 
+	//---	ฝากขาย
 	if( $order->role == 2)
 	{
 		include 'order/delete_consign_detail.php';
 	}
 
+	//---	เบิกอภินันท์
 	if( $order->role == 3)
 	{
 		include 'order/delete_support_detail.php';
 	}
 
+	//---	เบิกสปอนเซอร์
 	if( $order->role == 4 )
 	{
 		include 'order/delete_sponsor_detail.php';
+	}
+
+	//---	เบิกแปรสภาพ
+	if( $order->role == 5)
+	{
+		include 'order/delete_transform_detail.php';
 	}
 
 }
