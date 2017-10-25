@@ -3,7 +3,7 @@
 	{
 		$sc 	= FALSE;
 		$order 	= new order($id_order);
-		$cs     = new transform($order->id);
+		$cs     = $order->role == 5 ? new transform($order->id) : new lend($order->id);
 		$zone 	= new zone($cs->id_zone);
 		$pd			= new product();
 		$wh			= new warehouse();

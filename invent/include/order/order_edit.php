@@ -1,35 +1,37 @@
-<?php 
+<?php
 $order = isset( $_GET['id_order'] ) ? new order( $_GET['id_order'] ) : new order();
-$hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hide'; 
+$hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hide';
+$payment 	= new payment_method($order->id_payment);
+$channels = new channels($order->id_channels);
 ?>
 <div class="row top-row">
 	<div class="col-sm-4 top-col"><h4 class="title"><i class="fa fa-shopping-bag"></i> <?php echo $pageTitle; ?></h4></div>
     <div class="col-sm-8">
     	<p class="pull-right top-p">
         	<button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i>  กลับ</button>
-			<?php if( $order->isOnline == 1 ) : ?>
+			<?php if( $payment->hasTerm == 0 ) : ?>
             <?php $payed = ( $order->status == 0 || $order->hasPayment == 1) ? 'disabled' : '' ;	?>
             <button type="button" class="btn btn-sm btn-primary" onClick="payOrder()" <?php echo $payed; ?>><i class="fa fa-credit-card"></i> แจ้งชำระเงิน</button>
-            
+
             <?php $shiped = ( $order->status == 0 || $order->hasPayment == 0) ? 'disabled' : '' ;	?>
-    		<button type="button" class="btn btn-sm btn-info" onClick="updateShipping()" <?php echo $shiped; ?>><i class="fa fa-truck"></i> บันทึกการจัดส่ง</button>
-            
+    				<button type="button" class="btn btn-sm btn-info" onClick="updateShipping()" <?php echo $shiped; ?>><i class="fa fa-truck"></i> บันทึกการจัดส่ง</button>
+
             <?php $disabled = $order->status == 0 ? 'disabled' : '' ;	?>
-        	<button type="button" class="btn btn-sm btn-success" onClick="getSummary()" <?php echo $disabled; ?>><i class="fa fa-list"></i> สรุปข้อมูล</button>
+        		<button type="button" class="btn btn-sm btn-success" onClick="getSummary()" <?php echo $disabled; ?>><i class="fa fa-list"></i> สรุปข้อมูล</button>
             <?php endif; ?>
-        	<button type="button" class="btn btn-sm btn-default" onClick="printOrder()"><i class="fa fa-print"></i> พิมพ์</button>
-            
-            
-            
+        		<button type="button" class="btn btn-sm btn-default" onClick="printOrder()"><i class="fa fa-print"></i> พิมพ์</button>
+
+
+
 			<?php if( ($add && $order->status == 0 && $order->id_employee == getCookie('user_id') ) OR ($edit && $order->status == 1 && $order->state < 4 ) ) : ?>
-				<?php if( $order->isOnline == 0 OR $order->hasPayment == FALSE ) : ?>
-                
+				<?php if( $payment->hasTerm == 0 && $order->hasPayment == FALSE ) : ?>
+
             		<button type="button" class="btn btn-sm btn-warning" onclick="goAddDetail(<?php echo $order->id; ?>)"><i class="fa fa-pencil"></i> แก้ไขรายการ</button>
-                    
-				<?php endif; ?>            
+
+				<?php endif; ?>
             <?php endif; ?>
-            
-			<button type="button" class="btn btn-sm btn-success <?php echo $hide; ?>" id="btn-save-order" onclick="saveOrder(<?php echo $order->id; ?>)">  
+
+			<button type="button" class="btn btn-sm btn-success <?php echo $hide; ?>" id="btn-save-order" onclick="saveOrder(<?php echo $order->id; ?>)">
             	<i class="fa fa-save"></i> บันทึก
             </button>
         </p>
@@ -57,7 +59,7 @@ else
 <!--------------------------------- Order Detail ----------------->
 
 <!------------------- ปุ่มแก้ไขราคาและส่วนลด ------------->
-<?php 
+<?php
 if( ( $allowEditDisc == 1 OR $allowEditPrice == 1 ) && $order->state < 4 )
 {
  	include 'include/order/order_discount_bar.php';
@@ -75,4 +77,3 @@ if( ( $allowEditDisc == 1 OR $allowEditPrice == 1 ) && $order->state < 4 )
 <script src="script/order/order_edit.js"></script>
 <script src="script/order/order_add.js"></script>
 <?php endif; //--- isset $_GET['id_order']  ?>
-

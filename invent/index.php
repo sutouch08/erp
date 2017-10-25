@@ -60,10 +60,11 @@ switch($page){
 			$pageTitle = "เบิกสินค้า";
 			break;
 
-		case "lend";
-			$content = "lend.php";
+		case "order_lend";
+			$content = "order_lend.php";
 			$pageTitle = "ยืมสินค้า";
 			break;
+			
 		case "ProductMove":
 			$content = "product_move.php";
 			$pageTitle = "ย้ายพื้นที่จัดเก็บ";

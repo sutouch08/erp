@@ -158,7 +158,7 @@ if( isset( $_GET['export'] ) && isset( $_GET['BI'] ) )
 
 
 //---	Export Sale order
-if( isset( $_GET['export']) && isset( $_GET['SO']))
+if( isset( $_GET['export']) && isset( $_GET['order']))
 {
 	$order = new order($_POST['id_order']);
 
@@ -171,7 +171,7 @@ if( isset( $_GET['export']) && isset( $_GET['SO']))
 		//---	โอนคลัง
 		$sc = exportConsignTR($order->id);
 	}
-	else if( $order->role == 5)
+	else if( $order->role == 5 OR $order->role == 6)
 	{
 		//---	เบิกแปรสภาพ
 		include 'interface/export/exportTR.php';

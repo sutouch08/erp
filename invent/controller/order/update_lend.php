@@ -1,0 +1,49 @@
+<?php
+	$cs = new lend();
+
+	//---	เตรียมข้อมูลสำหรับ update order
+	$arr = array(
+						"date_add"	=> dbDate($_POST['date_add'],TRUE),
+						"id_customer" => $_POST['id_customer'],
+						"id_employee"	=> $_POST['id_employee'],
+						"status"		=> 0, //--- เปลี่ยนกลับ ให้กดบันทึกใหม่
+						"emp_upd"		=> getCookie('user_id'),
+						"remark"		=> $_POST['remark']
+					);
+
+	//---	เตรียมข้อมูลสำหรับ update order_lend
+	$ds = array(
+					"id_zone" => $_POST['id_zone']
+				);
+
+	$sc = TRUE;
+	startTransection();
+
+	//--- update order header
+	if( $order->update($order->id, $arr) === FALSE )
+	{
+		$sc = FALSE;
+	}
+
+	//--- update zone
+	if( $cs->update($order->id, $ds) === FALSE )
+	{
+		$sc = FALSE;
+	}
+
+
+	if( $sc === TRUE )
+	{
+		commitTransection();
+	}
+	else
+	{
+		dbRollback();
+	}
+
+	endTransection();
+
+
+	echo $sc === TRUE ? 'success' : 'fail';
+
+?>

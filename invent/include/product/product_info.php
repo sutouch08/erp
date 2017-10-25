@@ -2,7 +2,8 @@
 
 	$qr = "SELECT s.code AS pdCode, s.name AS pdName, p.* FROM tbl_product AS p ";
 	$qr .= "JOIN tbl_product_style AS s ON p.id_style = s.id ";
-	$qr .= "WHERE p.id_style = '".$id_style."' AND is_deleted = 0 GROUP BY p.id_style LIMIT 1";
+	$qr .= "WHERE p.id_style = '".$id_style."' AND s.is_deleted = 0 GROUP BY p.id_style LIMIT 1";
+
 	$qs = dbQuery($qr);
 	if( dbNumRows($qs) == 1 ) :
 		$rs = dbFetchObject($qs);
@@ -121,7 +122,7 @@
                     </div>
                     <div class="divider-hidden" style="margin-top:5px; margin-bottom:5px;"></div>
 
-                    
+
 
                     <div class="col-sm-3"><span class="form-control label-left">น้ำหนัก</span></div>
                     <div class="col-sm-9">

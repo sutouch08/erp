@@ -7,7 +7,7 @@ function doExport(){
 	var id_order = $("#id_order").val();
 	load_in();
 	$.ajax({
-		url:"controller/interfaceController.php?export&SO",
+		url:"controller/interfaceController.php?export&order",
 		type:"POST",
     cache:"false",
     data:{ "id_order" : id_order },

@@ -5,10 +5,10 @@ foreach( $ds as $items )
   {
     if( $qty > 0 )
     {
-      //--- ถ้ามีสต็อกมากว่าที่สั่ง
-      if( $stock->getSellStock($id) >= $qty )
+      $pd 			= new product($id);
+      //--- ถ้ามีสต็อกมากว่าที่สั่ง หรือ เป็นสินค้าไม่นับสต็อก
+      if( $stock->getSellStock($id) >= $qty OR $pd->count_stock == 0 )
       {
-        $pd 			= new product($id);
 
         //---- ถ้ายังไม่มีรายการในออเดอร์
         if( $order->isExistsDetail($order->id, $id) === FALSE )
@@ -40,9 +40,9 @@ foreach( $ds as $items )
         }
         else  //--- ถ้ามีรายการในออเดอร์อยู่แล้ว
         {
-          $detail 		= $order->getDetail($order->id, $id);
+          $detail 	= $order->getDetail($order->id, $id);
           $qty			= $qty + $detail->qty;
-          $discount 	= $disc->getItemDiscount($pd->id, $order->id_customer, $qty, $order->id_payment, $order->id_channels, $order->date_add);
+          $discount = $disc->getItemDiscount($pd->id, $order->id_customer, $qty, $order->id_payment, $order->id_channels, $order->date_add);
           $arr = array(
                     "id_product"	=> $id,
                     "qty" => $qty,
@@ -52,6 +52,8 @@ foreach( $ds as $items )
                     "id_rule"	=> $discount['id_rule'],
                     "isSaved"	=> 0 //--- ย้อนกลับมาเป็นยังไม่ได้บันทึกอีกครั้ง เพื่อคำนวณเคดิตใหม่
                     );
+
+
           if( $order->updateDetail($detail->id, $arr) === FALSE )
           {
             $result = FALSE;
@@ -72,6 +74,7 @@ foreach( $ds as $items )
       }
       else 	// if getStock
       {
+        $result = FALSE;
         $error = "Error : สินค้าไม่เพียงพอ";
       } 	//--- if getStock
     }	//--- if qty > 0

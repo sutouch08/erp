@@ -43,24 +43,26 @@
                 <td class="middle"><?php echo $rs->product_code; ?></td>
                 <td class="middle"><?php echo $rs->product_name; ?></td>
                 <td class="middle text-center">
-                <?php if( $allowEditPrice && $order->state < 4 ) : ?>
-
+								<?php if( isset( $allowEditPrice)): ?>
+                	<?php if( $allowEditPrice && $order->state < 4 ) : ?>
                 	<input type="text" class="form-control input-sm text-center price-box hide" id="price_<?php echo $rs->id; ?>" name="price[<?php echo $rs->id; ?>]" value="<?php echo $rs->price; ?>" />
-                    </div>
-                <?php endif; ?>
+                	<?php endif; ?>
+								<?php endif; ?>
                 <span class="price-label" id="price-label-<?php echo $rs->id; ?>">	<?php echo number_format($rs->price, 2); ?></span>
                 </td>
                 <td class="middle text-center"><?php echo number_format($rs->qty); ?></td>
                 <td class="middle text-center">
-                <?php if( $allowEditDisc && $order->state < 4 ) : ?>
+								<?php if( isset( $allowEditDisc)) : ?>
+                	<?php if( $allowEditDisc && $order->state < 4 ) : ?>
                     <input type="text" class="form-control input-sm text-center discount-box hide" id="disc_<?php echo $rs->id; ?>" name="disc[<?php echo $rs->id; ?>]" value="<?php echo $discount; ?>" />
-                <?php endif; ?>
+                	<?php endif; ?>
+								<?php endif; ?>
                 <span class="discount-label"><?php echo $discLabel; ?></span>
 
                 </td>
                 <td class="middle text-right"><?php echo number_format($rs->total_amount, 2); ?></td>
                 <td class="middle text-right">
-                <?php if( ( $order->isPaid == 0 && $order->hasPayment == 0 ) && ($edit OR $add) ) : ?>
+                <?php if( ( $order->isPaid == 0 && $order->hasPayment == 0 ) && ($edit OR $add) && $order->state < 4 ) : ?>
                 	<button type="button" class="btn btn-xs btn-danger" onclick="removeDetail(<?php echo $rs->id; ?>, '<?php echo $rs->product_code; ?>')"><i class="fa fa-trash"></i></button>
                 <?php endif; ?>
                 </td>

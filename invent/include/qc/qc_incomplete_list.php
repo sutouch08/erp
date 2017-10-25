@@ -25,7 +25,7 @@
         <td class="middle text-center td"><?php echo $barcode; ?></td>
         <td class="middle td"><?php echo $rs->product_code.' : '.$rs->product_name; ?></td>
         <td class="middle text-center td"><?php echo number($rs->order_qty); ?></td>
-        <td class="middle text-center td" id="prepared-<?php echo $rs->id_product; ?>"><?php echo number($rs->prepared); ?></td>
+        <td class="middle text-center td" id="prepared-<?php echo $rs->id_product; ?>"> <?php echo number($rs->prepared); ?></td>
         <td class="middle text-center td" id="qc-<?php echo $rs->id_product; ?>"><?php echo number($rs->qc); ?></td>
         <td class="middle text-right td">
           <button

@@ -20,7 +20,7 @@
                 <li class="divider"></li>
                 <li><a href="index.php?content=order_transform"><i class="fa fa-upload"></i>&nbsp; เบิกสินค้าเพื่อแปรสภาพ</a></li>
                 <li><a href="index.php?content=order_support"><i class="fa fa-upload"></i>&nbsp; เบิกอภินันทนาการ</a></li>
-                <li><a href="index.php?content=lend"><i class="fa fa-upload"></i>&nbsp; ยืมสินค้า</a></li>
+                <li><a href="index.php?content=order_lend"><i class="fa fa-upload"></i>&nbsp; ยืมสินค้า</a></li>
                 <li class="divider"></li>
                 <li><a href="index.php?content=tranfer"><i class="fa fa-recycle"></i>&nbsp; โอนสินค้าระหว่างคลัง</a></li>
                 <li><a href="index.php?content=ProductMove"><i class="fa fa-recycle"></i>&nbsp; ย้ายพื้นที่จัดเก็บ</a></li>

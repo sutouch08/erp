@@ -101,6 +101,15 @@
 			$transform->add($ds);
 		}
 
+		//---	ถ้าเป็นการยืมสินค้า เพิ่มข้อมูลที่เก็บด้วย
+		if( $role == 6)
+		{
+			$lend = new lend();
+			$lend->add(array('id_order' => $id, 'id_zone' => $id_zone));
+		}
+
+
+
 	}
 
 	echo $sc;

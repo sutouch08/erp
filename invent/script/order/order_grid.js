@@ -20,11 +20,11 @@ function getProductGrid(){
 					grid_init();
 					$("#orderGrid").modal('show');
 				}else{
-					swal("สินค้าไม่ถูกต้อง");	
+					swal("สินค้าไม่ถูกต้อง");
 				}
 			}
 		});
-	}		
+	}
 }
 
 
@@ -49,7 +49,7 @@ function getOrderGrid(id_style){
 				grid_init();
 				$("#orderGrid").modal('show');
 			}else{
-				swal("สินค้าไม่ถูกต้อง");	
+				swal("สินค้าไม่ถูกต้อง");
 			}
 		}
 	});
@@ -77,7 +77,7 @@ function getStockGrid(id_style){
 				grid_init();
 				$("#orderGrid").modal('show');
 			}else{
-				swal("สินค้าไม่ถูกต้อง");	
+				swal("สินค้าไม่ถูกต้อง");
 			}
 		}
 	});
@@ -92,7 +92,7 @@ function valid_qty(el, qty){
 		swal('สั่งได้ '+qty+' เท่านั้น');
 		el.val('');
 		el.focus();
-	}		
+	}
 }
 
 

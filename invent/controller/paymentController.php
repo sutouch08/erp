@@ -13,14 +13,20 @@ include '../function/customer_helper.php';
 if( isset( $_GET['confirmPayment'] ) )
 {
 	$sc			= 'success';
-	$id_order	= $_POST['id_order'];
 	$id_emp		= getCookie('user_id');
-	$order	= new order();
+	$order	= new order($_POST['id_order']);
 	startTransection();
-	$ra = validPayment($id_order); 	//----- update tbl_payment set valid = 1
-	$rb = $order->paid($id_order);	//----- update tbl_order set isPaid = 1
-	$rc = $order->stateChange($id_order, 3);	//----- update tbl_order set state = 3, insert tbl_order_state
-	
+
+	//----- update tbl_payment set valid = 1
+	$ra = validPayment($order->id);
+
+	//----- update tbl_order set isPaid = 1
+	$rb = $order->paid($order->id);
+
+	//----	ถ้า state น้อยกว่า 3 (1 = รอชำระงิน 2 = แจ้งชำระเงิน) update state -> 3 (รอการจัดสินค้า)
+	//----- ถ้า state มากกว่า 2 ไม่ต้องทำอะไร
+	$rc = $order->state < 3 ? $order->stateChange($order->id, 3) : TRUE;
+
 	if( $ra === TRUE && $rb === TRUE && $rc === TRUE )
 	{
 		commitTransection();
@@ -111,7 +117,7 @@ if( isset( $_GET['getPaymentDetail'] ) )
 	$id_order 	= $_POST['id_order'];
 	$payment = new payment();
 	$qs = $payment->getDetail($id_order);
-	
+
 	if( dbNumRows($qs) == 1 )
 	{
 		$rs		= dbFetchArray($qs);

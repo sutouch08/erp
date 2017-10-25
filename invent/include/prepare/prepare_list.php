@@ -29,12 +29,12 @@ $toDate     = getFilter('toDate', 'toDate', '');
     </div>
 
     <div class="col-sm-2 padding-5">
-        <label>ลูกค้า/ผู้รับสปอนเซอร์</label>
+        <label>ลูกค้า/ผู้รับ/ผู้ยืม</label>
         <input type="text" class="form-control input-sm text-center search-box" id="sCus" name="sCus" value="<?php echo $sCus; ?>"/>
     </div>
 
     <div class="col-sm-2 padding-5">
-        <label>พนักงาน/ผู้เบิก/ผู้ยืม</label>
+        <label>พนักงาน/ผู้เบิก/</label>
         <input type="text" class="form-control input-sm text-center search-box" id="sEmp" name="sEmp" value="<?php echo $sEmp; ?>"/>
     </div>
 
@@ -121,19 +121,7 @@ $qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Sta
                 <td class="middle text-center"><?php echo $no; ?></td>
                 <td class="middle"><?php echo $rs->reference; ?></td>
                 <td class="middle">
-                  <?php
-
-                    if( $rs->role == 1 OR $rs->role == 2 OR $rs->role == 4)
-                    {
-                      //--- ขาย / ฝากขาย / สปอนเซอร์
-                      echo customerName($rs->id_customer);
-                    }
-                    else
-                    {
-                      //--- อภินันท์ / แปรสภาพ / เบิก / ยืม
-                      echo employee_name($rs->id_employee);
-                    }
-                  ?>
+                  <?php echo customerName($rs->id_customer);  ?>
                 </td>
                 <td class="middle text-center"><?php echo roleName($rs->role); ?></td>
                 <td class="middle text-center"><?php echo thaiDate($rs->date_add); ?></td>

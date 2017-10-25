@@ -259,7 +259,7 @@
 		}
 
 
-
+		//---	auto complete โซนในคลังฝากขาย
 		public function searchConsignZone($txt, $id_customer)
 		{
 			//---	role = 2 คือ คลังฝากขาย
@@ -268,7 +268,7 @@
 			$qr .= "WHERE w.role = 2 ";
 			$qr .= "AND w.active = 1 ";
 			$qr .= "AND z.id_customer = '".$id_customer."' ";
-			
+
 			if( $txt != '*')
 			{
 				$qr .= "AND z.zone_name LIKE '%".$txt."%' ";
@@ -278,11 +278,29 @@
 		}
 
 
+		//---	auto complete โซนในคลังระหว่าทำ
 		public function searchWIPZone($txt)
 		{
 			$qr  = "SELECT z.* FROM tbl_zone AS z ";
 			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
 			$qr .= "WHERE w.role = 7 ";
+			$qr .= "AND w.active = 1 ";
+			if( $txt != '*')
+			{
+				$qr .= "AND z.zone_name LIKE '%".$txt."%'";
+			}
+
+			return dbQuery($qr);
+		}
+
+
+
+		//---	auto complete โซนในคลังยืมสินค้า
+		public function searchLendZone($txt)
+		{
+			$qr  = "SELECT z.* FROM tbl_zone AS z ";
+			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
+			$qr .= "WHERE w.role = 8 ";
 			$qr .= "AND w.active = 1 ";
 			if( $txt != '*')
 			{

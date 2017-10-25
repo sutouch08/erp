@@ -1,3 +1,8 @@
+<?php
+$ps 				= checkAccess($id_profile, 83); //--- ย้อนสถานะออเดอร์ได้หรือไม่
+$canChange	= ($ps['add'] + $ps['edit'] + $ps['delete']) > 0 ? TRUE : FALSE;
+?>
+
 <div class="row" style="margin-left:0px; margin-right:0px; margin-bottom:5px;">
 	<div class="col-sm-4 padding-left-0">
     	<table class="table border-1" style="margin-bottom:0px;">
@@ -7,14 +12,18 @@
                 <td class="width-40">
                 	<select class="form-control input-xs" style="padding-top:0px; padding-bottom:0px;" id="stateList">
                     	<option value="0">เลือกสถานะ</option>
-                 <?php if( $order->state <3 OR $edit) : ?>
+                 <?php if( $order->state <3 && $edit) : ?>
                         <option value="1">รอการชำระเงิน</option>
                         <option value="2">แจ้งชำระเงิน</option>
                         <option value="3">รอจัดสินค้า</option>
-                 <?php endif; ?>
+								 <?php elseif($order->state > 4 && $canChange ) : ?>
+											 <option value="1">รอการชำระเงิน</option>
+											 <option value="2">แจ้งชำระเงิน</option>
+											 <option value="3">รอจัดสินค้า</option>
+								 <?php endif; ?>
                  <?php if( $delete ) : ?>
                         <option value="11">ยกเลิก</option>
-                  <?php endif; ?>      
+                  <?php endif; ?>
                     </select>
                 </td>
                 <td class="width-30">
@@ -42,5 +51,5 @@
         <center><?php echo thaiDateTime($rs->date_upd); ?></center>
     </div>
 <?php	endwhile; ?>
-<?php endif; ?>   
+<?php endif; ?>
 </div>

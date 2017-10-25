@@ -36,3 +36,4 @@
 <?php endif; ?>
     <input type="hidden" name="id_order" id="id_order" value="<?php echo $order->id; ?>" />
 </div>
+<hr/>

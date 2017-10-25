@@ -4,15 +4,15 @@ class product_grid extends product
 	public $filter;
 	public function __construct()
 	{
-		parent::__construct();	
+		parent::__construct();
 		$this->filter = getConfig('MAX_SHOW_STOCK');
 	}
-	
+
 	public function showStock($qty)
 	{
-		return $this->filter == 0 ? $qty : ($this->filter < $qty ? $this->filter : $qty);	
+		return $this->filter == 0 ? $qty : ($this->filter < $qty ? $this->filter : $qty);
 	}
-	
+
 	public function getAttribute($id_style)
 	{
 		$sc = array();
@@ -28,9 +28,9 @@ class product_grid extends product
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function getOrderTableWidth($id_style)
 	{
 		$sc = 800; //--- ชั้นต่ำ
@@ -40,13 +40,13 @@ class product_grid extends product
 		$rs 	= dbNumRows($qs);
 		if( $rs > 0 )
 		{
-			$sc = $rs * $tdWidth + $padding;	
+			$sc = $rs * $tdWidth + $padding;
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	private function gridHeader(array $colors)
 	{
 		$sc = '<tr class="font-size-12"><td>&nbsp;</td>';
@@ -54,18 +54,18 @@ class product_grid extends product
 		{
 			$sc .= '<td class="text-center middle"><strong>'.$color['code'] . '<br/>'. $color['name'].'</strong></td>';
 		}
-		$sc .= '</tr>';	
+		$sc .= '</tr>';
 		return $sc;
 	}
-	
-	
-	
-	
+
+
+
+
 	public function getOrderGrid($id_style, $view = FALSE)
 	{
 		$sc = '';
 		$isVisual = $this->isCountStock($id_style) === TRUE ? FALSE : TRUE;
-		$attrs = $this->getAttribute($id_style); 
+		$attrs = $this->getAttribute($id_style);
 		if( count($attrs) == 1  )
 		{
 			$sc .= $this->orderGridOneAttribute($id_style, $attrs[0], $isVisual, $view);
@@ -76,7 +76,7 @@ class product_grid extends product
 		}
 		return $sc;
 	}
-	
+
 
 
 
@@ -84,21 +84,21 @@ class product_grid extends product
 
 	private function orderGridOneAttribute($id_style, $attr, $isVisual, $view)
 	{
-		$sc 	= '';
+		$sc 		= '';
 		$data 	= $attr == 'color' ? $this->getAllColors($id_style) : $this->getAllSizes($id_style);
-		$ds = $this->getProductsByStyle($id_style);
-		$sc 	.= "<table class='table table-bordered'>";
-		$i 		= 0;
+		$ds 		= $this->getProductsByStyle($id_style);
+		$sc 	 .= "<table class='table table-bordered'>";
+		$i 		  = 0;
 		while( $rs = dbFetchObject($ds) )
 		{
 			$id 			= $rs->id;
-			$id_attr		= $rs->id_size == 0 || $rs->id_size == "" ? $rs->id_color : $rs->id_size;
-			$sc 			.= $i%2 == 0 ? '<tr>' : ''; 
-			
+			$id_attr	= $rs->id_size == 0 || $rs->id_size == "" ? $rs->id_color : $rs->id_size;
+			$sc 			.= $i%2 == 0 ? '<tr>' : '';
+
 			$active	= $rs->active == 0 ? 'Disactive' : ( $rs->can_sell == 0 ? 'Not for sell' : ( $rs->is_deleted == 1 ? 'Deleted' : TRUE ) );
 			$stock	= $isVisual === FALSE ? ( $active == TRUE ? $this->showStock( $this->getStock($id) )  : 0 ) : 0; //---- สต็อกทั้งหมดทุกคลัง
 			$qty 		= $isVisual === FALSE ? ( $active == TRUE ? $this->showStock( $this->getSellStock($id) ) : 0 ) : FALSE; //--- สต็อกที่สั่งซื้อได้
-			$disabled  = $isVisual === TRUE  && $active == TRUE ? '' : ( ($active !== TRUE OR $qty < 1 ) ? 'disabled' : ''); 
+			$disabled  = $isVisual === TRUE  && $active == TRUE ? '' : ( ($active !== TRUE OR $qty < 1 ) ? 'disabled' : '');
 			if( $qty < 1 && $active === TRUE )
 			{
 				$txt = '<p class="pull-right red">Sold out</p>';
@@ -111,15 +111,15 @@ class product_grid extends product
 			{
 				$txt = $active === TRUE ? '' : '<p class="pull-right blue">'.$active.'</p>';
 			}
-					
-			$available = 
+
+
 			$limit		= $qty === FALSE ? 1000000 : $qty;
-	
+
 			$sc 	.= '<td class="middle" style="border-right:0px;">';
 			$sc 	.= '<strong>' .	$data[$id_attr]['code'] . '</strong>';
 			$sc 	.= 	$qty === FALSE && $active === TRUE ? '' : ( ($qty < 1 || $active !== TRUE ) ? $txt : $qty);
 			$sc 	.= '</td>';
-	
+
 			$sc 	.= '<td class="middle" class="one-attribute">';
 			$sc 	.= $isVisual === FALSE ? '<center><span class="font-size-10 blue">('.($stock < 0 ? 0 : $stock).')</span></center>':'';
 			if( $view === FALSE )
@@ -127,15 +127,15 @@ class product_grid extends product
 			$sc 	.= '<input type="text" class="form-control input-sm order-grid" name="qty[0]['.$id.']" id="qty_'.$id.'" onkeyup="valid_qty($(this), '.($qty === FALSE ? 1000000 : $qty).')" '.$disabled.' />';
 			}
 			$sc 	.= '</td>';
-				
+
 			$i++;
-				
+
 			$sc 	.= $i%2 == 0 ? '</tr>' : '';
-	
+
 		}// end while
-	
+
 		$sc	.= "</table>";
-	
+
 		return $sc;
 	}
 
@@ -145,23 +145,23 @@ class product_grid extends product
 
 	private function orderGridTwoAttribute($id_style, $isVisual, $view)
 	{
-		
+
 		$colors	= $this->getAllColors($id_style);
 		$sizes 	= $this->getAllSizes($id_style);
-		
+
 		$sc 		= '';
 		$sc 		.= '<table class="table table-bordered">';
 		$sc 		.= $this->gridHeader($colors);
-		
+
 		foreach( $sizes as $id_size => $size )
 		{
 			$sc 	.= '<tr style="font-size:12px;">';
 			$sc 	.= '<td class="text-center middle" style="width:70px;"><strong>'.$size['code'].'</strong></td>';
-			
+
 			foreach( $colors as $id_color => $color )
 			{
 				$id = FALSE;
-				$qs = dbQuery("SELECT * FROM tbl_product WHERE id_size = '".$id_size."' AND id_color = '".$id_color."' LIMIT 1");
+				$qs = dbQuery("SELECT * FROM tbl_product WHERE id_style = '".$id_style."' AND id_size = '".$id_size."' AND id_color = '".$id_color."' LIMIT 1");
 				if( dbNumRows($qs) == 1 )
 				{
 					$rs = dbFetchObject($qs);
@@ -169,7 +169,7 @@ class product_grid extends product
 					$active	= $rs->active == 0 ? 'Disactive' : ( $rs->can_sell == 0 ? 'Not for sell' : ( $rs->is_deleted == 1 ? 'Deleted' : TRUE ) );
 					$stock	= $isVisual === FALSE ? ( $active == TRUE ? $this->showStock( $this->getStock($id) )  : 0 ) : 0; //---- สต็อกทั้งหมดทุกคลัง
 					$qty 		= $isVisual === FALSE ? ( $active == TRUE ? $this->showStock( $this->getSellStock($id) ) : 0 ) : FALSE; //--- สต็อกที่สั่งซื้อได้
-					$disabled  = $isVisual === TRUE  && $active == TRUE ? '' : ( ($active !== TRUE OR $qty < 1 ) ? 'disabled' : ''); 
+					$disabled  = $isVisual === TRUE  && $active == TRUE ? '' : ( ($active !== TRUE OR $qty < 1 ) ? 'disabled' : '');
 					if( $qty < 1 && $active === TRUE )
 					{
 						$txt = '<span class="font-size-12 red">Sold out</span>';
@@ -178,11 +178,11 @@ class product_grid extends product
 					{
 						$txt = $active === TRUE ? '' : '<span class="font-size-12 blue">'.$active.'</span>';
 					}
-					
+
 					$available = $qty === FALSE && $active === TRUE ? '' : ( ($qty < 1 || $active !== TRUE ) ? $txt : $qty);
 					$limit		= $qty === FALSE ? 1000000 : $qty;
-					
-					
+
+
 					$sc 	.= '<td class="order-grid">';
 					$sc 	.= $isVisual === FALSE ? '<center><span class="font-size-10 blue">('.$stock.')</span></center>' : '';
 					if( $view === FALSE )
@@ -195,15 +195,15 @@ class product_grid extends product
 				else
 				{
 					$sc .= '<td class="order-grid">Not Available</td>';
-				}			
+				}
 			} //--- End foreach $colors
-			
-			$sc .= '</tr>';			
+
+			$sc .= '</tr>';
 		} //--- end foreach $sizes
 	$sc .= '</table>';
 	return $sc;
 	}
-	
-	
-	
+
+
+
 }//---- End Class

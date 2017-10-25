@@ -1,5 +1,6 @@
-<?php 
-$pay 	= new payment(); 
+<?php if( $payment->hasTerm == 0 ) : ?>
+<?php
+$pay 	= new payment();
 $dship 	= ( $order->shipping_fee > 0 || $order->hasPayment === TRUE ) ? 'disabled' : '' ;
 $ubtn 		= ( $order->shipping_fee > 0 || $order->hasPayment === TRUE ) ? 'hide' : '' ;
 $ebtn 	= ( $order->shipping_fee > 0 || $order->hasPayment === TRUE ) ? '' : 'hide' ;
@@ -10,8 +11,8 @@ $usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE ) ? 'hide' : 
 ?>
 <div class="row">
 	<div class="col-sm-4">
-	<?php echo paymentLabel( $order->id, $pay->isExists($order->id), $order->isPaid ); ?>	  
-    <?php echo shippingLabel($order->shipping_code); ?>    
+	<?php echo paymentLabel( $order->id, $pay->isExists($order->id), $order->isPaid ); ?>
+    <?php echo shippingLabel($order->shipping_code); ?>
     </div>
 	<div class="col-sm-8">
     	<p class="pull-right top-p">
@@ -28,7 +29,7 @@ $usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE ) ? 'hide' : 
 </div>
 <hr />
 
-
+<?php if( $order->isOnline == 1 ) : ?>
 <div class="row">
     <div class="col-sm-12">
     	<ul class="nav nav-tabs border-1" role="tablist" style="border-radius:0px;">
@@ -51,7 +52,7 @@ $usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE ) ? 'hide' : 
                             <thead>
                             <tr>
                             <td colspan="6" align="center">
-                                ที่อยู่สำหรับจัดส่ง  
+                                ที่อยู่สำหรับจัดส่ง
                                 <p class="pull-right top-p"><button type="button" class="btn btn-info btn-xs" onClick="addNewAddress()"> เพิ่มที่อยู่ใหม่</button></p>
                                 </td>
                             </tr>
@@ -94,20 +95,15 @@ $usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE ) ? 'hide' : 
                             </tbody>
                             </table>
                         </div>
-                    </div><!-- /row-->                
+                    </div><!-- /row-->
                 </div>
-<?php endif; ?>          
-            
+<?php endif; ?>
+
             <div role="tabpanel" class="tab-pane" id="state" style="padding-top:10px;">
             <?php include 'include/order/order_state.php'; ?>
             </div>
           </div>
-	</div>         
+	</div>
 </div>
-
-
-
-
-
-
-
+<?php endif; ?>
+<?php endif; ?>

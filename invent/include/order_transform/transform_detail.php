@@ -56,7 +56,7 @@
         </td>
 
         <td class="middle text-right">
-        <?php if(  $edit OR $add ) : ?>
+        <?php if(  ($edit OR $add) && $order->state < 4 ) : ?>
         	<button type="button" class="btn btn-xs btn-danger" onclick="removeDetail(<?php echo $rs->id; ?>, '<?php echo $rs->product_code; ?>')"><i class="fa fa-trash"></i></button>
         <?php endif; ?>
         </td>
@@ -83,16 +83,16 @@
 <!---  End Order Detail --->
 
 <div class="modal fade" id="transform-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog" id="modal" style="width:500px;">
+	<div class="modal-dialog" style="width:500px;">
 		<div class="modal-content">
   		<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="modal_title">เพิ่มการเชื่อมโยง</h4>
+				<h4 class="modal-title" >เพิ่มการเชื่อมโยง</h4>
         <input type="hidden" id="id_order_detail" value="" />
 				<input type="hidden" id="detail-qty" value="" />
 				<input type="hidden" id="id_product" value="" />
 			 </div>
-			 <div class="modal-body" id="modal_body">
+			 <div class="modal-body">
 				 <div class="row">
 				 	<div class="col-sm-3">
 				 		<label>จำนวน</label>

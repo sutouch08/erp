@@ -50,6 +50,12 @@ if( isset( $_GET['saveOrder'] ) )
 		include 'order/save_transform.php';
 	}
 
+	//--- ถ้าเป็นยืมสินค้า
+	if( $order->role == 6)
+	{
+		include 'order/save_lend.php';
+	}
+
 }
 
 
@@ -91,6 +97,12 @@ if( isset( $_GET['updateOrder'] ) )
 	if( $order->role == 5)
 	{
 		include 'order/update_transform.php';
+	}
+
+	//---	ยืมสินค้า
+	if( $order->role == 6)
+	{
+		include 'order/update_lend.php';
 	}
 
 

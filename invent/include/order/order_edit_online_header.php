@@ -1,6 +1,4 @@
 
-<?php $pm = new payment_method(); ?>
-<?php $channels = new channels(); ?>
 <div class="row">
 	<div class="col-sm-1 col-1-harf padding-5 first">
     	<label>เลขที่เอกสาร</label>
@@ -23,18 +21,18 @@
     </div>
     <div class="col-sm-1 col-1-harf padding-5">
     	<label>ช่องทางขาย</label>
-        <label class="form-control input-sm text-center" disabled><?php echo $channels->getName($order->id_channels); ?></label>
+        <label class="form-control input-sm text-center" disabled><?php echo $channels->name; ?></label>
     </div>
     <div class="col-sm-1 col-1-harf padding-5 last">
     	<label>การชำระเงิน</label>
-        <label class="form-control input-sm text-center" disabled><?php echo $pm->getName($order->id_payment); ?></label>
+        <label class="form-control input-sm text-center" disabled><?php echo $payment->name; ?></label>
     </div>
-<?php if( $order->remark != "" ) : ?>    
+<?php if( $order->remark != "" ) : ?>
     <div class="col-sm-12 margin-top-10">
     	<label>หมายเหตุ : </label>
         <label  style="font-weight:normal;"><?php echo $order->remark; ?></label>
     </div>
-<?php endif; ?>    
+<?php endif; ?>
     <input type="hidden" name="id_order" id="id_order" value="<?php echo $order->id; ?>" />
 </div>
 
