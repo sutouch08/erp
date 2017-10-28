@@ -238,9 +238,8 @@ class Cart_model extends CI_Model
 		$html = curl_exec($curl);
 		curl_close ($curl);
 
-		return  json_decode($html);
-		
-		
+		// return  json_decode($html);
+		return $html;
 
 	}
 	

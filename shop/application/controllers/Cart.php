@@ -166,7 +166,7 @@ class Cart extends CI_Controller
 			if($item['qty'] > 0)
 			{
 				$product = $this->product_model->getProdctFormGrid($item['id_style'],$item['id_size'],$item['id_color']);
-				array_push($data_insert,array("id_cart_online"=>$this->id_cart,"id_product"=>$product->id,"qty"=>$item['qty']));
+				array_push($data_insert,array("id_cart_online"=>$this->id_cart,"id_product"=>trim($product->id),"qty"=>$item['qty']));
 
 			}
 		}

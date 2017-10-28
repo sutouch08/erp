@@ -41,81 +41,81 @@ $this->load->view("include/footer");
 
 
 
-<script>
-$(document).ready(function(){
+	<script>
+		$(document).ready(function(){
 
-	$(window).scroll(function() {
-		if ($(this).scrollTop()) {
-			$('#promo').show('4000', function() {
+			$(window).scroll(function() {
+				if ($(this).scrollTop()) {
+					$('#promo').show('4000', function() {
 
+					});
+				} else {
+					$('#promo').hide('4000', function() {
+
+					});
+				}
 			});
-		} else {
-			$('#promo').hide('4000', function() {
 
-			});
-		}
-	});
+			(function tableWidth(){
 
-	(function tableWidth(){
-
-		$('#modal').on('show.bs.modal', function () {
-			$(this).find('.modal-body').css({
+				$('#modal').on('show.bs.modal', function () {
+					$(this).find('.modal-body').css({
 	              width:'auto', //probably not needed
 	              height:'auto', //probably not needed 
 	              'max-height':'100%'
-	        });
-		});
-
-	}());
-
-
-	$("#color_select").change(function(){
-		$.ajax({
-			url:"<?php echo base_url(); ?>shop/product/fetchSize",
-			type:"POST",
-			cache:true, 
-			data: {
-				"color_select" : $(this).val(),
-				"id_style": $("#style_id").val()
-			}, 
-			success: function(rs) { 
-				var opt = "";
-				var res = $.parseJSON(rs);
-				$.each(res, function(key, val){
-					opt +="<option value='"+ val +"'>"+val["size_name"]+"</option>"
+	          });
 				});
-				$("#size_select").html( opt );
-				console.log(res);
-			},error: function(e) {
-				console.log("error");
-			}
-		});	
-	});
+
+			}());
+
+
+			$("#color_select").change(function(){
+				$.ajax({
+					url:"<?php echo base_url(); ?>shop/product/fetchSize",
+					type:"POST",
+					cache:true, 
+					data: {
+						"color_select" : $(this).val(),
+						"id_style": $("#style_id").val()
+					}, 
+					success: function(rs) { 
+						var opt = "";
+						var res = $.parseJSON(rs);
+						$.each(res, function(key, val){
+							opt +="<option value='"+ val +"'>"+val["size_name"]+"</option>"
+						});
+						$("#size_select").html( opt );
+						console.log(res);
+					},error: function(e) {
+						console.log("error");
+					}
+				});	
+			});
 
 });//document ready
 
-	function addToCart()
-	{
-		load_in();
-		var key = [];
-		var value = [];
-		var attributes = [];
+		function addToCart()
+		{
+			load_in();
+			var key = [];
+			var value = [];
+			var attributes = [];
 
-		var i = 0 ;
-		$.each($("#tableOrder_bd").find("tr"), function(){
-			key = $(this).find("span").attr('id');
-			value = $(this).find("input[name='inputQty[]']").val();   
-			if(value==''){ value = 0; }
-			var res = key.split("_");
-			
-		    attributes[i] = {
-		    					'id_style':$("#id_style").val(),
-		    					'id_color':res[0],
-		    					'id_size':res[1],
-		    					'qty':value
-							};
-		    i++;
-		});
+			var i = 0 ;
+			$.each($("#tableOrder_bd").find("tr"), function(){
+				key = $(this).find("span").attr('id');
+				value = $(this).find("input[name='inputQty[]']").val();   
+				if(value==''){ value = 0; }
+				var res = key.split("_");
+
+				attributes[i] = {
+					'id_style':$("#id_style").val(),
+					'id_color':res[0],
+					'id_size':res[1],
+					'qty':value
+				};
+				i++;
+			});
 		// console.log(attributes);
 		$.ajax({
 			url:"<?php echo base_url(); ?>shop/cart/addToCart",
@@ -126,17 +126,17 @@ $(document).ready(function(){
 			},
 			success: function(rs){
 				console.log(rs);
-				// if( rs == 'success' )
-				// {
-				// 	 $('#orderGrid').modal('toggle');
-				// 	swal({ title: 'Success', title : 'Add to cart successfully', timer: 2000, type: 'success' });
+				if( rs == 'success' )
+				{
+					$('#orderGrid').modal('toggle');
+					swal({ title: 'Success', title : 'Add to cart successfully', timer: 2000, type: 'success' });
 					
-				// }
-				// else
-				// {
-				// 	 $('#orderGrid').modal('toggle');
-				// 	swal({ title: 'ไม่สำเร็จ', title : 'เพิ่มสินค้าลงตะกร้าไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', type: 'error' });	
-				// }
+				}
+				else
+				{
+					$('#orderGrid').modal('toggle');
+					swal({ title: 'ไม่สำเร็จ', title : 'เพิ่มสินค้าลงตะกร้าไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', type: 'error' });	
+				}
 			},error: function(XMLHttpRequest, textStatus, errorThrown) {
 				swal({ title: 'ไม่สำเร็จ', title : 'การเชื่อมต่อกับฐานข้อมูลมีปัณหา กรุณาลองใหม่ !!', type: 'error' });	
 				load_out();
@@ -203,56 +203,93 @@ $(document).ready(function(){
 
 				
 				var c = [];
+				var size = [];
+				
 				$.each(arr, function(key, value) {
 					var x = $.inArray(value['color_name'],c);
+					var y = $.inArray(value['size_name'],size);
+
 					if(x<0){
 						c.push(value['color_name']);
 					}
-				});
 
-				// console.log(c);
-
-				var s = [];
-				$.each(arr, function(key, value) {
-					var x = $.inArray(value['size_name'],s);
-					if(x<0){
-						s.push(arr[key]);
+					if(y<0){
+						size.push(value['size_name']);
 					}
 				});
 
+				
+				arr.sort(function(a,b) {return (a.size_id > b.size_id) ? 1 : ((b.size_id > a.size_id) ? -1 : 0);} );
+
+				
+				// size_header = $.unique( size_header );
+
 				// console.log(s);
+				// console.log(c);
+
 				$("#tableOrder_th").html("<th></th>");
 				$("#tableOrder_bd").html("");
-
 				
 				$.each(c, function( key,value ) 
 				{
 					$("#tableOrder_th").append("<th style='text-align: center;'>"+value+"</th>");
 				});
-				// console.log(s);
+
+				// console.log(arr);
+				var count = 0;
 				$dataAppend = "<tr>";
-
-				$.each(s, function( key,value ) 
-				{
-
-					$dataAppend += "<td style='padding-top:6%'>"+value['size_name']+"</td>";
 				
-					$.each(c, function( k, v ) 
-					{
-						// $("#tableOrder_bd").append("<td>"+value['size_name']+"</td>");
-						if(value['color_name'] == v)
-						{
+				
 
-							$dataAppend += "<td ><input type='text' name='inputQty[]'  style='margin-bottom:0px;'><span name='av[]' id='"+value['color_id']+'_'+value['size_id']+"' style='font-size:10px;color:#DA631D'></span></td>";
-							// av(id_style,value['id_color'],value['id_size']);
-							// $('span[name=av[]')append(av);
-						}else{
-							$dataAppend += "<td></td>";
-						}
+				var size = ['S', 'M','L'];
+				var color = ['แดง','ฟ้า','เหลือง'];
 
-					});
-					$dataAppend  += "</tr>";
-				});
+				var grid = {};
+				for(var i = 0; i < people.length; i++){
+					var name = people[i];
+					if(name in grid == false){
+				        grid[name] = {}; 
+				    }
+
+				    for(var j = 0; j < fruit.length; j++){
+				    	var fruitName = fruit[j];
+				    	grid[name][fruitName] = 0;
+				    }
+				}
+
+
+console.log(grid);
+// console.log(size);
+
+// $.each(size, function(index, val) {
+
+// 	$dataAppend += "<td style='padding-top:6%'>"+ val +"</td>";
+
+// 	$.each(s['M'],function(key,value)
+// 	{
+// 		console.log(value);
+// 	});
+
+// 	$dataAppend += "</tr>";
+// });
+
+				// $.each(s, function( size_key,size_value ) 
+				// {
+				// 	$dataAppend += "<td style='padding-top:6%'>"+size_value+"</td>";
+
+				// 	$.each(c,function(color_key,color_value)
+				// 	{
+				// 		$.each(arr, function(index, val) {
+				// 			if(val == size_value && val == color_value){
+				// 				$dataAppend += "<td ><input type='text' name='inputQty[]'  style='margin-bottom:0px;'><span name='av[]' id='"+val['color_id']+'_'+val['size_id']+"' style='font-size:10px;color:#DA631D'></span></td>";
+				// 			}
+
+				// 		});
+
+				// 	});//each
+
+				// 	$dataAppend  += "</tr>";
+				// });//each
 				
 				$("#tableOrder_bd").append($dataAppend);
 				$("#tableOrder_bd").append("<input class='hidden' name='id_style' id='id_style' value='"+id_style+"' >");
@@ -287,7 +324,7 @@ $(document).ready(function(){
 				}
 				// console.log(rs);
 				return rs;
-				},
+			},
 			error: function(XMLHttpRequest, textStatus, errorThrown){
 				console.log(errorThrown);
 			}
@@ -332,6 +369,6 @@ input{
 	background-color:#2E2E2E;
 }
 input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 30px white inset;
+	-webkit-box-shadow: 0 0 0 30px white inset;
 }
 </style>
