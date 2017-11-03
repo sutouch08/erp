@@ -6,7 +6,7 @@
                 <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i>&nbsp; รับสินค้าเข้า</a>
                 	<ul class="dropdown-menu">
                     	<li><a href="index.php?content=receive_product"><i class="fa fa-download"></i>&nbsp; รับสินค้า จากการซื้อ</a></li>
-                        <li><a href="index.php?content=receive_tranform"><i class="fa fa-download"></i>&nbsp; รับสินค้า จากการแปรสภาพ</a></li>
+                        <li><a href="index.php?content=receive_transform"><i class="fa fa-download"></i>&nbsp; รับสินค้า จากการแปรสภาพ</a></li>
                     </ul>
                 </li>
                 <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i>&nbsp; รับคืนสินค้า</a>

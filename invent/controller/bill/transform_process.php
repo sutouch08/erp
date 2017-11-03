@@ -76,11 +76,6 @@
             //--- 2. update movement out
             $rc = $movement->move_out($order->reference, $rm->id_warehouse, $rm->id_zone, $rm->id_product, $buffer_qty, dbDate($order->date_add, TRUE));
 
-            //--- 3. เพิ่มสินค้าเข้าโซนฝากขายปลายทาง
-            $rd = $stock->updateStockZone($zone->id, $rm->id_product, $buffer_qty);
-
-            //--- 4. update movement in
-            $re = $movement->move_in($order->reference, $zone->id_warehouse, $zone->id, $rm->id_product, $buffer_qty, dbDate($order->date_add, TRUE));
 
             $product->getData($rm->id_product);
 
@@ -140,12 +135,43 @@
             //--- 5. บันทึกยอดขาย
             $rf = $order->sold($arr);
 
-            if( $rb === FALSE OR $rc === FALSE OR $rd === FALSE && $re === FALSE && $rf === FALSE )
+            if( $rb === FALSE OR $rc === FALSE OR $rf === FALSE )
             {
               $sc = FALSE;
             }
         } //--  end while
       } //--- end if
+
+      //-------------------- ส่วนนี้สำหรับโอนเข้าคลังระหว่างทำ
+      //--- ตัวเลขที่มีการเปิดบิล
+      $sold_qty = ($rs->order_qty >= $rs->qc) ? $rs->qc : $rs->order_qty;
+
+      //--- ยอดสินค้าที่มีการเชื่อมโยงไว้ในตาราง tbl_order_transform_detail (เอาไว้โอนเข้าคลังระหว่างทำ รอรับเข้า)
+      //--- ถ้ามีการเชื่อมโยงไว้ ยอดต้องมากกว่า 0 ถ้ายอดเป็น 0 แสดงว่าไม่ได้เชื่อมโยงไว้
+      $trans_list = $transform->getTransformProducts($rs->id);
+
+      //--- ถ้าไม่มีการเชื่อมโยงไว้
+      while( $ts = dbFetchObject($trans_list))
+      {
+        //--- ถ้าจำนวนที่เชื่อมโยงไว้ น้อยกว่า หรือ เท่ากับ จำนวนที่ตรวจได้ (ไม่เกินที่สั่งไป)
+        //--- แสดงว่าได้ของครบตามที่ผูกไว้ ให้ใช้ตัวเลขที่ผูกไว้ได้เลย
+        //--- แต่ถ้าได้จำนวนที่ผูกไว้มากกว่าที่ตรวจได้ แสดงว่า ได้สินค้าไม่ครบ ให้ใช้จำนวนที่ตรวจได้แทน
+        $move_qty = $ts->qty <= $sold_qty ? $ts->qty : $sold_qty;
+
+        if( $move_qty > 0)
+        {
+          //--- update ยอดเปิดบิลใน tbl_order_transform_detail field sold_qty
+          if( $transform->updateSoldQty($ts->id, $move_qty) === TRUE )
+          {
+            $sold_qty -= $move_qty;
+          }
+          else
+          {
+            $sc = FALSE;
+          }
+        }
+      }
+
     } //--- End while
 
     //--- เคลียร์ยอดค้างที่จัดเกินมาไปที่ cancle หรือ เคลียร์ยอดที่เป็น 0

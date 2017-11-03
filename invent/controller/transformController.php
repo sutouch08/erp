@@ -11,6 +11,7 @@ if( isset( $_GET['addTransformProduct']))
   $arr = array(
           'id_order' => $_POST['id_order'],
           'id_order_detail' => $_POST['id_order_detail'],
+          'from_product' => $_POST['from_product'],
           'id_product' => $_POST['id_product'],
           'qty' => $_POST['qty']
         );
@@ -33,7 +34,7 @@ if( isset( $_GET['addTransformProduct']))
 
 
 
-
+//--- เอารายการเชื่อมโยงออกเฉพาะที่เลือก
 if( isset($_GET['removeTransformProduct']))
 {
   $cs = new transform();
@@ -53,6 +54,41 @@ if( isset($_GET['removeTransformProduct']))
 }
 
 
+
+
+
+//--- เอารายการเชื่อมโยงออกทั้งแถว
+if( isset($_GET['removeTransformDetail']))
+{
+  $cs = new transform();
+
+  if( $cs->removeTransformDetail($_POST['id_order_detail']) === TRUE )
+  {
+    echo 'success';
+  }
+  else
+  {
+    echo 'ลบการเชื่อมโยงสินค้าไม่สำเร็จ';
+  }
+
+}
+
+
+
+
+//--- ตรวจสอบว่ามีการเชือมโยงสินค้าไว้บ้างแล้วหรือยัง
+//--- กรณีที่ต้องการเอาการเชื่อมโยงออกทั้งรายการ
+if(isset($_GET['isExistsConnected'])){
+  $cs = new transform();
+  if( $cs->hasTransformProduct($_GET['id_order_detail']) === TRUE)
+  {
+    echo 'exists';
+  }
+  else
+  {
+    echo 'not_exists';
+  }
+}
 
 //--- ค้นหาโซนที่อยู่ในคลังระหว่างทำเท่านั้น
 if( isset( $_GET['getZone']))

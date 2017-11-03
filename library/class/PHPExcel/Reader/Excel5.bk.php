@@ -357,7 +357,6 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
 	 */
 	private $_xfIndex;
 
-
 	/**
 	 * Mapping of XF index (that is a cell XF) to final index in cellXf collection
 	 *
@@ -4111,11 +4110,6 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
 		if (($this->getReadFilter() !== NULL) && $this->getReadFilter()->readCell($columnString, $row + 1, $this->_phpSheet->getTitle()) ) {
 			// offset: 4; size: 2; XF index
 			$xfIndex = self::_GetInt2d($recordData, 4);
-
-			if (!isset($this->_mapCellXfIndex[$xfIndex]))
-        {
-            $xfIndex = 15;
-        }
 
 			// add cell value
 			// todo: what if string is very long? continue record

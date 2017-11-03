@@ -1,9 +1,9 @@
 <?php
-	function exportTR($id_order)
+	function exportWR($id_order)
 	{
 		$sc 	= FALSE;
 		$order 	= new order($id_order);
-		$cs     = new lend($order->id);
+		$cs     = new transform($order->id);
 		$zone 	= new zone($cs->id_zone);
 		$pd			= new product();
 		$wh			= new warehouse();
@@ -15,13 +15,13 @@
 		//--------------------  กำหนดค่าตัวแปรที่ต้องมีทุกๆ บรรทัด	-----------------//
 
 		//---	Path ของเอกสาร (tbl_config)
-		$path			= getConfig('EXPORT_TR_PATH');
+		$path			= getConfig('EXPORT_WR_PATH');
 
 		//---	เว้นว่างไว้เพื่อเติมข้อมูลกรณีที่ formula importing error
 		$ERRMSG		= "";
 
 		//---	รหัสประเภทเอกสาร TR = โอนสินค้าข้ามคลัง
-		$REFTYPE	= 'TR';
+		$REFTYPE	= 'WR';
 
 		//---	รหัสบริษัท
 		$QCCORP		= getConfig('COMPANY_CODE');
@@ -59,18 +59,21 @@
 		//---	หมายเหตุที่หัวเอกสาร
 		$REMARKH1	= $order->remark;
 
+		//---	หมายเหตุที่ตัวสินค้า (ไม่มี)
+		$REMARKI1 = '';
+
 		//------------------------ จบกำหนดค่าตัวแปรที่ต้องใส่ในทุกบรรทัด-----------------//
 
 
 		$excel->getProperties()->setCreator("Samart Invent 2.0");
 		$excel->getProperties()->setLastModifiedBy("Samart Invent 2.0");
-		$excel->getProperties()->setTitle("TR");
-		$excel->getProperties()->setSubject("TR");
+		$excel->getProperties()->setTitle("WR");
+		$excel->getProperties()->setSubject("WR");
 		$excel->getProperties()->setDescription("This file was generate by Smart invent web application via PHPExcel v.1.8");
-		$excel->getProperties()->setKeywords("TR");
-		$excel->getProperties()->setCategory("TR");
+		$excel->getProperties()->setKeywords("WR");
+		$excel->getProperties()->setCategory("WR");
 		$excel->setActiveSheetIndex(0);
-		$excel->getActiveSheet()->setTitle('TR');
+		$excel->getActiveSheet()->setTitle('WR');
 
 		//------- SET Header Row
 		$excel->getActiveSheet()->setCellValue('A1','ERRMSG');
@@ -129,8 +132,8 @@
 		//---	อัตราส่วน หน่วยนับ(QCUM) / หน่วยมาตรฐานในฐานข้อมูลสินค้า
 		$excel->getActiveSheet()->setCellValue('S1','UMQTY');
 
-		//---	ต้นทุน/หน่วย
-		$excel->getActiveSheet()->setCellValue('T1', 'COSTAMT');
+		//---	หมายเหตุที่ตัวสินค้า
+		$excel->getActiveSheet()->setCellValue('T1', 'REMARKI1');
 
 
 		//------ End Header Row
@@ -151,8 +154,8 @@
 				$excel->getActiveSheet()->getStyle('I'.$row)->getNumberFormat()->setFormatCode('dd/mm/yy');
 
 				//--- Set Cell Format AS Numeric
-				$excel->getActiveSheet()->getStyle('Q'.$row)->getNumberFormat()->setFormatCode('0.0000'); //-- creadit term
-				$excel->getActiveSheet()->getStyle('S'.$row.':T'.$row)->getNumberFormat()->setFormatCode('0.0000'); //-- bill_discount
+				$excel->getActiveSheet()->getStyle('Q'.$row)->getNumberFormat()->setFormatCode('0.0000');
+				$excel->getActiveSheet()->getStyle('S'.$row)->getNumberFormat()->setFormatCode('0.0000');
 
 
 
@@ -215,8 +218,8 @@
 				//---	อัตราส่วนหน่ายนับ
 				$excel->getActiveSheet()->setCellValue('S'.$row, 1);
 
-				//---	ต้นทุน/หน่วย
-				$excel->getActiveSheet()->setCellValue('T'.$row, $rs->cost_inc );
+				//---	หมายเหตุที่ตัวสินค้า
+				$excel->getActiveSheet()->setCellValue('T'.$row, $REMARKI1);
 
 				$row++;
 

@@ -12,11 +12,11 @@ $canChange	= ($ps['add'] + $ps['edit'] + $ps['delete']) > 0 ? TRUE : FALSE;
                 <td class="width-40">
                 	<select class="form-control input-xs" style="padding-top:0px; padding-bottom:0px;" id="stateList">
                     	<option value="0">เลือกสถานะ</option>
-                 <?php if( $order->state <3 && $edit) : ?>
+                 <?php if( $order->state <=3 && $edit) : ?>
                         <option value="1">รอการชำระเงิน</option>
                         <option value="2">แจ้งชำระเงิน</option>
                         <option value="3">รอจัดสินค้า</option>
-								 <?php elseif($order->state > 4 && $canChange ) : ?>
+								 <?php elseif($order->state > 3 && $canChange ) : ?>
 											 <option value="1">รอการชำระเงิน</option>
 											 <option value="2">แจ้งชำระเงิน</option>
 											 <option value="3">รอจัดสินค้า</option>

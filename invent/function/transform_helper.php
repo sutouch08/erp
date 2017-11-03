@@ -11,7 +11,7 @@ function selectTransformRole($se = '')
 
 
 
-function getTransformProducts($id_order_detail)
+function getTransformProducts($id_order_detail, $state = 1)
 {
 	$sc = '';
 	$pd = new product();
@@ -22,17 +22,17 @@ function getTransformProducts($id_order_detail)
 		while($rs = dbFetchObject($qs))
 		{
 			$code = $pd->getCode($rs->id_product);
-			$sc .= '<span class="display-block">';
+			$sc .= '<div class="display-block">';
 			$sc .= $code.' : '.$rs->qty;
 
 			//---	ถ้ายังไม่ได้รับสินค้า สามารถลบได้
-			if( $rs->received == 0)
+			if( $rs->received == 0 && $state < 3)
 			{
 				$sc .= '<span class="red pointer" onclick="removeTransformProduct('.$id_order_detail.', \''.$rs->id_product.'\', \''.$code.'\')">  <i class="fa fa-times">';
 				$sc .= '</i></span>';
 			}
 
-			$sc .= '</span>';
+			$sc .= '</div>';
 		}
 	}
 

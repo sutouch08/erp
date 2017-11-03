@@ -1,6 +1,7 @@
 
 <div class="row">
 	<div class="col-sm-12">
+		<span class="red" style="padding-top:10px;">** สามารถเชื่อมโยงสินค้าได้เฉพาะสถานะ "รอชำระเงิน" เท่านั้น</span>
     	<table class="table table-striped border-1">
         <thead>
         	<tr class="font-size-12">
@@ -9,6 +10,7 @@
             <th class="width-15">รหัสสินค้า</th>
 						<th class="width-20">ชื่อสินค้า</th>
 						<th class="width-10 text-center">จำนวน</th>
+						<th class="width-10 text-center">ไม่คืน</th>
 						<th class="width-25">สินค้าแปรสภาพ</th>
 						<th class="width-10 text-center"></th>
             <th class="width-10 text-center"></th>
@@ -21,6 +23,8 @@
 <?php 	$total_qty = 0;		?>
 <?php	$image = new image(); ?>
 <?php	while( $rs = dbFetchObject($detail) ) : ?>
+<?php 	$hasTransformProduct = $transform->hasTransformProduct($rs->id); ?>
+<?php 	$checked = $hasTransformProduct === FALSE ? 'checked' : ''; ?>
 			<tr class="font-size-10" id="row_<?php echo $rs->id; ?>">
       	<td class="middle text-center">
 					<?php echo $no; ?>
@@ -42,21 +46,33 @@
 					<?php echo number($rs->qty); ?>
 				</td>
 
+
+				<td class="middle text-center">
+				<?php if( $order->state < 3) : ?>
+					<input type="checkbox" class="not-return" id="chk-<?php echo $rs->id; ?>" onchange="toggleReturn(<?php echo $rs->id; ?>)" <?php echo $checked; ?> />
+				<?php else : ?>
+					<?php echo $hasTransformProduct === TRUE ? '' : isActived(1); ?>
+				<?php endif; ?>
+				</td>
+
+
         <td class="middle" id="transform-box-<?php echo $rs->id; ?>">
 					<?php
 					//---	รายการสินค้าที่เชื่อมโยงแล้ว
-					echo getTransformProducts($rs->id);
+					echo getTransformProducts($rs->id, $order->state);
 					 ?>
 					<!--- ยอดรวมของสินค้าที่เชื่อมโยงแล้ว -->
 					<input type="hidden" id="transform-qty-<?php echo $rs->id; ?>" value="<?php echo $transform->getSumTransformProductQty($rs->id); ?>" />
 				</td>
 
-        <td class="text-center">
-					<button type="button" class="btn btn-xs btn-success btn-block" onclick="addTransformProduct(<?php echo $rs->id; ?>)"><i class="fa fa-plus"></i> เชื่อมโยง</button>
+        <td class="text-center" id="connect-box-<?php echo $rs->id; ?>">
+				<?php if( $order->state < 3 && $hasTransformProduct ) : ?>
+					<button type="button" class="btn btn-xs btn-success btn-block connect" id="btn-connect-<?php echo $rs->id; ?>" onclick="addTransformProduct(<?php echo $rs->id; ?>,'<?php echo $rs->id_product; ?>')"><i class="fa fa-plus"></i> เชื่อมโยง</button>
+				<?php endif; ?>
         </td>
 
         <td class="middle text-right">
-        <?php if(  ($edit OR $add) && $order->state < 4 ) : ?>
+        <?php if(  ($edit OR $add) && $order->state < 3 ) : ?>
         	<button type="button" class="btn btn-xs btn-danger" onclick="removeDetail(<?php echo $rs->id; ?>, '<?php echo $rs->product_code; ?>')"><i class="fa fa-trash"></i></button>
         <?php endif; ?>
         </td>
@@ -66,13 +82,13 @@
 <?php		$no++; ?>
 <?php 	endwhile; ?>
 			<tr class="font-size-12">
-        <td colspan="6" class="text-right"><b>จำนวนรวม</b></td>
+        <td colspan="7" class="text-right"><b>จำนวนรวม</b></td>
         <td class="text-right"><b><?php echo number_format($total_qty); ?></b></td>
         <td class="text-center"><b>Pcs.</b></td>
       </tr>
 <?php else : ?>
 			<tr>
-        <td colspan="8" class="text-center"><h4>ไม่พบรายการ</h4></td>
+        <td colspan="9" class="text-center"><h4>ไม่พบรายการ</h4></td>
       </tr>
 <?php endif; ?>
 
@@ -91,6 +107,7 @@
         <input type="hidden" id="id_order_detail" value="" />
 				<input type="hidden" id="detail-qty" value="" />
 				<input type="hidden" id="id_product" value="" />
+				<input type="hidden" id="from_product" value="" />
 			 </div>
 			 <div class="modal-body">
 				 <div class="row">
@@ -124,7 +141,7 @@
 {{#each this}}
 	{{#if @last}}
         <tr>
-        	<td colspan="6" class="text-right" ><b>จำนวนรวม</b></td>
+        	<td colspan="7" class="text-right" ><b>จำนวนรวม</b></td>
           <td class="text-right"><b>{{ total_qty }}</b></td>
           <td class="text-center"><b>Pcs.</b></td>
         </tr>
@@ -140,13 +157,19 @@
 
             <td class="middle text-center qty" id="qty-{{ id }}">{{ qty }}</td>
 
+						<td class="middle text-center">
+							<input type="checkbox" class="not-return" id="chk-{{ id }}" onchange="toggleReturn({{ id }})" {{checkbox}} />
+						</td>
+
             <td class="middle" id="transform-box-{{ id }}">
-							{{ trasProduct }}
+							{{{ transProduct }}}
 							<input type="hidden" id="transform-qty-{{ id }}" value="{{ trans_qty }}" />
 						</td>
 
-            <td class="middle text-right">
-							<button type="button" class="btn btn-xs btn-success btn-block" onclick="addTransformProduct({{ id }})"><i class="fa fa-plus"></i> เชื่อมโยง</button>
+            <td class="middle text-right" id="connect-box-{{ id }}">
+							{{#if button}}
+							<button type="button" class="btn btn-xs btn-success btn-block connect" id="btn-connect-{{ id }}" onclick="addTransformProduct({{ id }})"><i class="fa fa-plus"></i> เชื่อมโยง</button>
+							{{/if}}
 						</td>
 
             <td class="middle text-right">

@@ -5,6 +5,7 @@ class transform
   public $id_order;
   public $id_zone;
   public $role; //--- 1 = Sell,  2 = Sponsor OR Support, 3 = Keep Stock
+  public $is_closed = 0;
 
   public function __construct($id='')
   {
@@ -109,6 +110,19 @@ class transform
   }
 
 
+  //--- เมื่อมีการเปิดบิล
+  public function updateSoldQty($id, $qty)
+  {
+    return dbQuery("UPDATE tbl_order_transform_detail SET sold_qty = sold_qty + ".$qty.", valid = 1 WHERE id = ".$id);
+  }
+
+
+
+  //---
+  public function setValid($id, $valid)
+  {
+    return dbQuery("UPDATE tbl_order_transform_detail SET valid = ".$valid." WHERE id = ".$id);
+  }
 
 
   //--- เพื่มการเชื่อมโยงสินค้าทีละรายการ
@@ -135,11 +149,54 @@ class transform
 
 
 
+
+  public function getDetails($id_order)
+  {
+    return dbQuery("SELECT * FROM tbl_order_transform_detail WHERE id_order = ".$id_order);
+  }
+
+
+
+  //---
+  public function getDetail($id_order, $id_product)
+  {
+    return dbQuery("SELECT * FROM tbl_order_transform_detail WHERE id_order = ".$id_order." AND id_product = '".$id_product."'");
+  }
+
+
+  //--- สำหรับรับเข้า
+  public function getReceiveTransfromProductDetails($id_order)
+  {
+    $qr  = "SELECT id, id_order, id_order_detail, from_product, id_product, SUM(sold_qty) AS qty, SUM(received) AS received, valid, is_closed ";
+    $qr .= "FROM tbl_order_transform_detail ";
+    $qr .= "WHERE id_order = ".$id_order." AND valid = 1 AND is_closed = 0 ";
+    $qr .= "GROUP BY id_product";
+    return dbQuery($qr);
+  }
+
+
+
+
   //--- ตรวจสอบว่ามีการเชื่อมโยงสินค้าแล้วหรือยัง
   public function isExists($id_order_detail, $id_product)
   {
     $sc = FALSE;
     $qs = dbQuery("SELECT id FROM tbl_order_transform_detail WHERE id_order_detail = ".$id_order_detail." AND id_product = '".$id_product."'");
+    if( dbNumRows($qs) > 0)
+    {
+      $sc = TRUE;
+    }
+
+    return $sc;
+  }
+
+
+
+
+  public function hasTransformProduct($id_order_detail)
+  {
+    $sc = FALSE;
+    $qs = dbQuery("SELECT * FROM tbl_order_transform_detail WHERE id_order_detail = ".$id_order_detail);
     if( dbNumRows($qs) > 0)
     {
       $sc = TRUE;
@@ -177,6 +234,16 @@ class transform
 
 
 
+  //--- เอายอดรวมสินค้าที่เชื่อมโยงแล้วเฉพาะสินค้า เพื่อใช้โอนเข้าคลังฝากขาย
+  public function getTransformProductQty($id_order_detail, $id_product)
+  {
+    $qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_order_transform_detail WHERE id_order_detail = ".$id_order_detail." AND id_product = '".$id_product."'");
+    list( $qty ) = dbFetchArray($qs);
+
+    return is_null($qty) ? 0 : $qty;
+  }
+
+
 
   //--- เชื่อมโยงสินค้าไปแล้วเท่าไร
   public function getSumTransformProductQty($id_order_detail)
@@ -186,6 +253,32 @@ class transform
 
     return is_null($qty) ? 0 : $qty;
   }
+
+
+
+
+  //--- รับสินค้าแล้วนะ
+  public function received($id, $qty)
+  {
+    return dbQuery("UPDATE tbl_order_transform_detail SET received = received + ".$qty." WHERE id = ".$id);
+  }
+
+
+
+
+
+  //---	auto complete
+	public function searchReference($reference, $is_closed = '')
+	{
+		$qr  = "SELECT o.id, o.reference FROM tbl_order AS o ";
+		$qr .= "JOIN tbl_order_transform AS t ON o.id = t.id_order ";
+		$qr .= "WHERE o.role = 5 ";
+		$qr .= "AND o.state IN(8,9,10) ";
+    $qr .= $is_closed == '' ? '' : "AND t.is_closed = ".$is_closed." ";
+		$qr .= "AND o.reference LIKE '%".$reference."%'";
+
+		return dbQuery($qr);
+	}
 
 
 } //--- end class

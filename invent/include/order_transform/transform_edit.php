@@ -45,6 +45,9 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
 <?php include 'include/order_transform/transform_detail.php'; ?>
 <!--- End order detail -------------------------------->
 
+<?php if($order->state <= 3): ?>
+<script src="script/order_transform/check_state.js"></script>
+<?php endif; ?>
 
 <script src="script/order/order_edit.js"></script><!--- ใช้ของ order เพราะเหมือนกัน --->
 <script src="script/order_transform/transform_add.js"></script>

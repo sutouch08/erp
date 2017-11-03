@@ -1,14 +1,14 @@
 
-<?php 
-	include "function/customer_helper.php";
-	$cName	= isset( $_POST['cName'] ) ?  trim( $_POST['cName'] ) : ( getCookie('cName') ? getCookie('cName') : '') ; 		
- 	$cCode	= isset( $_POST['cCode'] ) ? trim( $_POST['cCode'] ) : ( getCookie('cCode') ? getCookie('cCode') : '' ); 		  
- 	$cGroup 	= isset( $_POST['cGroup'] ) ? trim( $_POST['cGroup'] ) : ( getCookie('cGroup') ? getCookie('cGroup') : '' ); 	
+<?php
+	
+	$cName	= isset( $_POST['cName'] ) ?  trim( $_POST['cName'] ) : ( getCookie('cName') ? getCookie('cName') : '') ;
+ 	$cCode	= isset( $_POST['cCode'] ) ? trim( $_POST['cCode'] ) : ( getCookie('cCode') ? getCookie('cCode') : '' );
+ 	$cGroup 	= isset( $_POST['cGroup'] ) ? trim( $_POST['cGroup'] ) : ( getCookie('cGroup') ? getCookie('cGroup') : '' );
 	$cArea	= isset( $_POST['cArea'] ) ? trim( $_POST['cArea'] ) : ( getCookie('cArea') ? getCookie('cArea') : '' );
- 	$cProvince = isset( $_POST['cProvince'] ) ? trim( $_POST['cProvince'] ) : ( getCookie('cProvince') ? getCookie('cProvince') : '' ); 
- 	
+ 	$cProvince = isset( $_POST['cProvince'] ) ? trim( $_POST['cProvince'] ) : ( getCookie('cProvince') ? getCookie('cProvince') : '' );
+
 ?>
-    
+
     <form id="searchForm" method="post">
     <div class="row">
     	<div class="col-sm-2">
@@ -50,39 +50,39 @@
 		createCookie('cName', $cName);
 		$where .= "AND name LIKE '%". $cName ."%' ";
 	}
-	
+
 	if( $cCode != '' )
 	{
 		createCookie('cCode', $cCode);
 		$where .= "AND code LIKE '%" . $cCode . "%' ";
 	}
-	
+
 	if( $cGroup != '' )
 	{
 		createCookie('cGroup', $cGroup);
 		$where .= "AND group_code IN(".customerGroupIn($cGroup).") ";
 	}
-	
+
 	if( $cArea != "" )
 	{
 		createCookie('cArea', $cArea);
 		$where .= "AND area_code IN(".customerAreaIn($cArea).") ";
 	}
-	
-	
+
+
 	if( $cProvince != '' )
 	{
 		createCookie('cProvince', $cProvince);
-		$where .= "AND province LIKE '%" . $cProvince ."%' ";	
+		$where .= "AND province LIKE '%" . $cProvince ."%' ";
 	}
-	
+
 	$where .= "ORDER BY name ASC";
-	
+
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
 	$paginator->Per_Page('tbl_customer', $where, $get_rows);
 	$paginator->display($get_rows, 'index.php?content=customer');
-	
+
 	$qs = dbQuery("SELECT * FROM tbl_customer ". $where ." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 ?>
 
@@ -119,13 +119,13 @@
                     <?php endif; ?>
                     </td>
                 </tr>
-	<?php	$no++; ?>                
+	<?php	$no++; ?>
     <?php	endwhile; ?>
     <?php else : ?>
     		<tr>
             	<td colspan="8" align="center"><h4> ไม่พบข้อมูลตามเงื่อนไขที่กำหนด</h4></td>
             </tr>
-    <?php endif; ?>            	
+    <?php endif; ?>
             </tbody>
         </table>
     </div>

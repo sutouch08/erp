@@ -11,6 +11,8 @@
 		$ds = array();
 		while( $rs = dbFetchObject($qs) )
 		{
+			$hasTransformProduct = $transform->hasTransformProduct($rs->id);
+			$checked = $hasTransformProduct === FALSE ? 'checked' : '';
 			$arr = array(
 							"id"		=> $rs->id,
 							"no"	=> $no,
@@ -19,7 +21,9 @@
 							"productName"	=> $rs->product_name,
 							"qty"	=> number_format($rs->qty),
 							"transProduct"	=> getTransformProducts($rs->id),
-							"trans_qty" => $transform->getSumTransformProductQty($rs->id)
+							"trans_qty" => $transform->getSumTransformProductQty($rs->id),
+							"checkbox"	=> $checked,
+							"button" => $hasTransformProduct === FALSE ? '' : 'show'
 							);
 			array_push($ds, $arr);
 			$total_qty += $rs->qty;

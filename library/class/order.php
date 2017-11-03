@@ -353,6 +353,18 @@ class order
 
 
 
+	public function getId($reference)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_order WHERE reference = '".$reference."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+		return $sc;
+	}
+
+
 
 
 	public function getTotalQty($id_order)

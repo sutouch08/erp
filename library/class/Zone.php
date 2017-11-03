@@ -248,6 +248,32 @@
 
 
 
+		public function search($txt, $role = '')
+		{
+			$qr  = "SELECT z.* FROM tbl_zone AS z ";
+			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
+			$qr .= "WHERE ";
+			$qr .= $role == '' ? '' : "w.role IN(".$role.") AND ";
+			$qr .= "w.active = 1 AND zone_name LIKE '%".$txt."%' ";
+
+			return dbQuery($qr);
+		}
+
+
+		//---	auto complete โซนรับสินค้า
+		public function searchReceiveZone($txt)
+		{
+			$role = getConfig('RECEIVE_WAREHOUSE');
+			$role = $role == '' ? 5 : $role;
+			//---	search role 1 คือคลังซื้อขาย, 5 คือ คลังรับสินค้า
+			$qr  = "SELECT z.* FROM tbl_zone AS z ";
+			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
+			$qr .= "WHERE w.role IN(".$role.") AND w.active = 1 AND zone_name LIKE '%".$txt."%' ";
+
+			return dbQuery($qr);
+		}
+
+
 		public function searchConsignZoneId($txt)
 		{
 			//---	role = 2 คือ คลังฝากขาย

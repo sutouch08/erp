@@ -5,6 +5,7 @@ require "../function/tools.php";
 include '../function/order_helper.php';
 include '../function/customer_helper.php';
 
+
 //---- เพิ่มเลขที่เอกสารใหม่
 if( isset( $_GET['addNew'] ) )
 {

@@ -1090,3 +1090,13 @@ td.one-attribute{
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+@media (max-width: 767px){
+  .first{
+    padding-left : 5px !important;
+  }
+
+  .last{
+    padding-right : 5px !important;
+  }
+}

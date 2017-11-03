@@ -27,6 +27,7 @@ function addToOrder(){
 //---- เปลี่ยนสถานะออเดอร์  เป็นบันทึกแล้ว
 function saveOrder(id){
 	if( validateTransformProducts() ){
+		
 		$.ajax({
 			url:"controller/orderController.php?saveOrder",
 			type:"POST",

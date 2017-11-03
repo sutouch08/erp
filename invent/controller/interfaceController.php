@@ -157,6 +157,16 @@ if( isset( $_GET['export'] ) && isset( $_GET['BI'] ) )
 
 
 
+
+//---	Export ใบรับสินค้าเข้าจากการผลิต (FR)
+if( isset( $_GET['export'] ) && isset( $_GET['FR'] ) )
+{
+	$id = $_POST['id_receive_transform'];
+
+}
+
+
+
 //---	Export Sale order
 if( isset( $_GET['export']) && isset( $_GET['order']))
 {
@@ -171,9 +181,15 @@ if( isset( $_GET['export']) && isset( $_GET['order']))
 		//---	โอนคลัง
 		$sc = exportConsignTR($order->id);
 	}
-	else if( $order->role == 5 OR $order->role == 6)
+	else if( $order->role == 5 )
 	{
 		//---	เบิกแปรสภาพ
+		include 'interface/export/exportWR.php';
+		$sc = exportWR($order->id);
+	}
+	else if( $order->role == 6)
+	{
+		//---	ยืมสินค้า
 		include 'interface/export/exportTR.php';
 		$sc = exportTR($order->id);
 	}

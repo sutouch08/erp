@@ -29,8 +29,8 @@ switch($page){
 			$content = "receive_product.php";
 			$pageTitle = "รับสินค้าเข้า";
 			break;
-		case "receive_tranform" :
-			$content 		= "receive_tranform.php";
+		case "receive_transform" :
+			$content 		= "receive_transform.php";
 			$pageTitle	= "รับเข้าจากการแปรสภาพ";
 			break;
 		case "order_return":
@@ -64,7 +64,7 @@ switch($page){
 			$content = "order_lend.php";
 			$pageTitle = "ยืมสินค้า";
 			break;
-			
+
 		case "ProductMove":
 			$content = "product_move.php";
 			$pageTitle = "ย้ายพื้นที่จัดเก็บ";

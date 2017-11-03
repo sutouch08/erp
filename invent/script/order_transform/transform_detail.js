@@ -106,13 +106,14 @@ function removeTransformProduct(id_order_detail, id_product, code){
 
 //---	ตรวจสอบสินค้าที่เชื่อมโยงว่าครบหรือไม่ก่อนบันทึกออเดอร์
 function validateTransformProducts(){
-	console.log('validate');
 	var sc = true;
-	$('.qty').each(function(index, el) {
+	$('.connect').each(function(index, el) {
 		var arr = $(this).attr('id').split('-');
-		var id = arr[1];
-		var qty = parseInt( removeCommas($(this).text() ) );
+		var id = arr[2];
+		var qty = parseInt( removeCommas($('#qty-'+id).text() ) );
+
 		var trans_qty = parseInt($('#transform-qty-'+id).val());
+
 
 		if( qty != trans_qty){
 			sc = false;
@@ -130,6 +131,7 @@ function addToTransform(){
 	var id_order = $('#id_order').val();
 	var id_order_detail = $('#id_order_detail').val();
 	var id_product = $('#id_product').val();
+	var from_product = $('#from_product').val();
 	var product_code = $('#trans-product').val();
 	var qty = parseInt($('#trans-qty').val());
 	var limit = parseInt($('#detail-qty').val());
@@ -165,6 +167,7 @@ function addToTransform(){
 		data:{
 			'id_order' : id_order,
 			'id_order_detail' : id_order_detail,
+			'from_product' : from_product,
 			'id_product' : id_product,
 			'qty' : qty
 		},
@@ -195,13 +198,13 @@ function clearFields(){
 }
 
 //---- 	เปิดกล่องเชื่อมโยงสินค้า
-function addTransformProduct(id){
+function addTransformProduct(id, from_product){
 	//---	id = id_order_detail
 	//---	จำนวนที่สั่ง
 	var qty = parseInt(removeCommas($('#qty-'+id).text()));
 
 	//---	จำนวนที่เชื่อมโยงแล้ว
-	var trans_qty = parseInt($('#transform-qty-'+id).val());
+	var trans_qty = isNaN(parseInt($('#transform-qty-'+id).val())) ? 0 : parseInt($('#transform-qty-'+id).val());
 
 	//---	จำนวนคงเหลือที่จะเชื่อมโยงได้
 	var available_qty = qty - trans_qty;
@@ -211,6 +214,8 @@ function addTransformProduct(id){
 	$('#detail-qty').val(available_qty);
 
 	$('#id_product').val('');
+
+	$('#from_product').val('');
 
 	$('#trans-qty').val(available_qty);
 
@@ -243,6 +248,95 @@ $('#trans-product').autocomplete({
 });
 
 
+
+//---	หากมีการติ๊กถูกตรงช่องไม่คืน (สินค้าใช้แปรสภาพแล้วหมดไป)
+//---	สินค้านี้จะไม่ต้องเชื่อมโยงว่าจะแปรเป็นอะไร
+//---	แต่หากมีการเชื่อมโยงไว้แล้ว ต้องแจ้งเตือนว่าจะต้องเอาออก
+function isConnected(id){
+	//---	ตรวจสอบว่ามีการเชื่อมโยงบ้างหรือไม่
+	$.ajax({
+		url:'controller/transformController.php?isExistsConnected',
+		type:'GET',
+		cache:'false',
+		data:{'id_order_detail' : id},
+		success:function(rs){
+			var rs = $.trim(rs);
+			//---	ถ้ามีการเชื่อมโยงอยู่ แจ้งเตือนการลบ
+			if(rs == 'exists'){
+				swal({
+					title:'รายการที่เชื่อมโยงไว้จะถูกลบ',
+					text: 'ต้องการดำเนินการต่อหรือไม่ ?',
+					type:'warning',
+					showCancelButton:true,
+					confirmButtonText:'ดำเนินการ',
+					closeOnConfirm:true
+				},
+				//---	หากยืนยันการลบ
+				function(){
+
+					//---	ลบรายการเชื่อมโยง
+					$.ajax({
+						url:'controller/transformController.php?removeTransformDetail',
+						type:'POST',
+						cache:'false',
+						data:{
+							'id_order_detail' : id,
+						},
+						success:function(sc){
+							var sc = $.trim(sc);
+							if( sc == 'success'){
+								//---	ลบสำเร็จ
+								//---	ลบรายการเชื่อมโยงหน้าเว็บออก
+								$('#transform-box-'+id).html('');
+
+								//---	เอาปุ่มเชื่อมโยงออก
+								removeButton(id);
+							}else{
+								//---	แจ้งข้อผิดพลาด
+								swal('Error !', rs, 'error');
+							}
+						}
+					});
+				});
+
+			}else{
+				//---	หากไม่มีการเชื่อมโยงไว้
+				//---	เอาปุ่มเชื่อมโยงออกได้เลย
+				removeButton(id);
+			}
+		}
+	})
+}
+
+
+//---	เมื่อติ๊กถูกหรือติ๊กออก ช่องไม่คืนสินค้า
+function toggleReturn(id){
+
+	var chk = $('#chk-'+id);
+
+	//---	ถ้าติ๊กถูก
+	if( chk.is(':checked')){
+		isConnected(id);
+
+	}else{
+	//---	ถ้าติ๊กออก
+	addButton(id);
+
+	}
+}
+
+
+
+function removeButton(id){
+	$('#btn-connect-'+id).remove();
+}
+
+
+function addButton(id){
+	if($('#btn-connect-'+id).length == 0){
+		$('#connect-box-'+id).html('<button type="button" class="btn btn-xs btn-success btn-block connect" id="btn-connect-'+id+'" onclick="addTransformProduct('+id+')"><i class="fa fa-plus"></i> เชื่อมโยง</button>')
+	}
+}
 
 $(document).ready(function() {
 	$('#trans-qty').numberOnly();

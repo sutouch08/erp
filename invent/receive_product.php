@@ -14,11 +14,12 @@
 <div class="container">
 <!-- page place holder -->
 <?php
+//--- หาเอกสารที่ยังไม่ได้ export แล้วทำการ export ให้ auto
 doExportBI();
 
 if( isset( $_GET['add'] ) )
 {
-	include 'include/receive_product/receive_product_add.php';	
+	include 'include/receive_product/receive_product_add.php';
 }
 else if( isset( $_GET['edit'] ) )
 {
@@ -26,11 +27,11 @@ else if( isset( $_GET['edit'] ) )
 }
 else if( isset( $_GET['view_detail'] ) )
 {
-	include 'include/receive_product/receive_product_detail.php';	
+	include 'include/receive_product/receive_product_detail.php';
 }
 else
 {
-	include 'include/receive_product/receive_product_list.php';	
+	include 'include/receive_product/receive_product_list.php';
 }
 
 ?>

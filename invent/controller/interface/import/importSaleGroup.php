@@ -3,7 +3,7 @@
 	$result 	= 'success';
 	$path		= getConfig('IMPORT_SALE_GROUP_PATH');
 	$move		= getConfig('MOVE_SALE_GROUP_PATH');
-	
+
 	$sc	= opendir($path);
 	if( $sc !== FALSE )
 	{
@@ -18,8 +18,8 @@
 			$reader		= new PHPExcel_Reader_Excel5();
 			$excel		= $reader->load($fileName);
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
-			
-			$st	= new sale_team();
+
+			$st	= new sale_group();
 			$i 	= 1;
 			foreach ( $collection as $rs )
 			{
@@ -33,7 +33,7 @@
 								'code'		=> trim( $rs['B'] ),
 								'name'		=> trim( $rs['C'] )
 								);
-						$st->add($arr);	
+						$st->add($arr);
 					}
 					else
 					{
@@ -45,16 +45,16 @@
 						$st->update( trim( $rs['A'] ), $arr);
 					}	/// end if
 				}//-- end if not first row
-				$i++;	
+				$i++;
 			}//---- end foreach
-			rename($fileName, $moveName); //---- move each file to another folder	
+			rename($fileName, $moveName); //---- move each file to another folder
 		}//--- end while
 	} //--- end if
 	else
 	{
-		$result = 'Can not open folder';	
+		$result = 'Can not open folder';
 	}
-	
+
 	echo $result;
 
 ?>

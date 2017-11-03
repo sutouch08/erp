@@ -10,7 +10,7 @@ class bill
   //--- ผลลัพธ์จะไม่ได้ยอดที่มีการสั่งซื้อแต่ไม่มียอดตรวจ หรือ มียอดตรวจแต่ไม่มียอดสั่งซื้อ (กรณีมีการแก้ไขออเดอร์)
   public function getBillDetail($id_order)
   {
-    $qr = "SELECT o.id_product, o.product_code, o.product_name, o.qty AS order_qty, ";
+    $qr = "SELECT o.id, o.id_product, o.product_code, o.product_name, o.qty AS order_qty, ";
     $qr .= "o.price, o.discount, ";
     $qr .= "(o.discount_amount / o.qty) AS discount_amount, ";
     $qr .= "(o.total_amount/o.qty) AS final_price, ";

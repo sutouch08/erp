@@ -79,7 +79,7 @@ if( isset( $_GET['addNew'] ) )
 		{
 			if( is_numeric($val) )
 			{
-				$data[$id]	= $val;	
+				$data[$id]	= $val;
 			}
 		}
 		if( count( $data ) > 0 )
@@ -88,38 +88,38 @@ if( isset( $_GET['addNew'] ) )
 			$reference	= $cs->getNewReference($date_add);
 			if( $_POST['approvKey'] == "" )
 			{
-				$arr = array( 
+				$arr = array(
 										"bookcode"	=> $bookcode,
 										"reference"	=> $reference,
 										"id_supplier"	=> $id_supplier,
-										"po" 			=> $poCode, 
-										"invoice" 		=> $invoice, 
-										"date_add" 	=> $date_add, 
+										"po" 			=> $poCode,
+										"invoice" 		=> $invoice,
+										"date_add" 	=> $date_add,
 										"id_employee" => getCookie('user_id'),
 										"remark"		=> $remark
 									);
 			}
 			else
 			{
-				$arr = array( 
+				$arr = array(
 										"bookcode"	=> $bookcode,
 										"reference"	=> $reference,
 										"id_supplier"	=> $id_supplier,
-										"po" 			=> $poCode, 
-										"invoice" 		=> $invoice, 
-										"date_add" 	=> $date_add, 
+										"po" 			=> $poCode,
+										"invoice" 		=> $invoice,
+										"date_add" 	=> $date_add,
 										"id_employee" => getCookie('user_id'),
 										"remark"		=> $remark,
 										"approver"	=> $_POST['id_emp'],
 										"approvKey"	=> $_POST['approvKey']
 									);
 			}
-							
+
 				$rs = $cs->add($arr);
-				
+
 				if( $rs == TRUE )
 				{
-					$id_receive_product = $cs->get_id($reference);	
+					$id_receive_product = $cs->get_id($reference);
 					if( $id_receive_product != FALSE )
 					{
 						foreach( $data as $id_pd => $qty )
@@ -132,47 +132,47 @@ if( isset( $_GET['addNew'] ) )
 											"id_warehouse"			=> $id_wh,
 											"id_zone"					=> $id_zone
 											);
-							//------ เพิ่มรายการรับเข้า				
+							//------ เพิ่มรายการรับเข้า
 							$rd = $cs->insertDetail($arr);
-							
+
 							//------ ปรับยอดสต็อก
 							$ra = $st->updateStockZone($id_zone, $id_pd, $qty);
-							
+
 							//---- บันทึก movement
 							$rm = $mv->move_in( $reference, $id_wh, $id_zone, $id_pd, $qty, dbDate($_GET['date'], TRUE) );
-							
+
 							//--- บันทึกยอดรับใน PO
 							$ro = $po->received($poCode, $id_pd, $qty);
-							
+
 							if( $rd !== TRUE OR $ra !== TRUE OR $rm !== TRUE OR $ro !== TRUE )
 							{
 								//--- ถ้ามีขั้นตอนใดไม่สำเร็จ
-								$result = FALSE;	
+								$result = FALSE;
 							}
-							
-						}//--- foreach data				
-							
+
+						}//--- foreach data
+
 					}
 					else
 					{
-						$result = FALSE;	
+						$result = FALSE;
 					}
-					
+
 					if( $result === TRUE )
 					{
 						commitTransection();
 					}
 					else
 					{
-						dbRollback();	
+						dbRollback();
 					}
-					
+
 				}
 				else
 				{
 					$sc = 'fail | เพิ่มเอกสารไม่สำเร็จ';
-				}	
-				
+				}
+
 				endTransection();
 		}
 		else //-- if count
@@ -182,7 +182,7 @@ if( isset( $_GET['addNew'] ) )
 	}
 	else //---- if hasPO
 	{
-		$sc = "ใบสั่งซื้อไม่ถูกต้อง ถูกปิด หรือ ถูกยกเลิก";	
+		$sc = "ใบสั่งซื้อไม่ถูกต้อง ถูกปิด หรือ ถูกยกเลิก";
 	}//--- if hasPO
 	echo $sc = $result === TRUE ? 'success | '.$id_receive_product : 'fail | '.$sc;
 }
@@ -205,7 +205,7 @@ if( isset( $_GET['cancleReceived'] ) )
 		$reference = $cs->reference;
 		$qs = $cs->getDetail($id);
 		startTransection();
-		
+
 		while( $rs = dbFetchObject($qs) )
 		{
 			//--- update stock
@@ -213,13 +213,13 @@ if( isset( $_GET['cancleReceived'] ) )
 			{
 				//--- remove movement
 				$rb = $mv->removeMovement($reference, $rs->id_product);
-				
+
 				//--- update received in po
 				$rc = $po->unReceived($cs->po, $rs->id_product, $rs->qty);
-				
+
 				//--- cancle receive detail
 				$rd = $cs->cancleDetail($rs->id);
-				
+
 				if( $rb === FALSE OR $rc === FALSE OR $rd === FALSE )
 				{
 					$result = FALSE;
@@ -237,7 +237,7 @@ if( isset( $_GET['cancleReceived'] ) )
 				$sc = $stock->error;
 			}
 		}//-- End while
-				
+
 		if( $result === TRUE )
 		{
 			$re = $cs->cancleReceived($id, $emp);
@@ -245,11 +245,11 @@ if( isset( $_GET['cancleReceived'] ) )
 			if( $re === FALSE OR $rf === FALSE )
 			{
 				$sc = "ยกเลิกรายการไม่สำเร็จ2";
-				
+
 				$result = FALSE;
 			}
 		}
-		
+
 		if( $result === TRUE )
 		{
 			commitTransection();
@@ -257,16 +257,16 @@ if( isset( $_GET['cancleReceived'] ) )
 		else
 		{
 			dbRollback();
-		}		
+		}
 		endTransection();
 	}
 	else
 	{
 		$sc = "สินค้าคงเหลือไม่พอให้ยกเลิก";
 	}//--- if isStockEnough
-	
+
 	echo $sc;
-	
+
 }
 
 if( isset( $_GET['getApprove'] ) )
@@ -275,7 +275,7 @@ if( isset( $_GET['getApprove'] ) )
 	$id_tab = 49; //---- อนุมัติรับสินค้าเกินใบสั่งซื้อ
 	$valid = new validate();
 	$rs = $valid->getApproveCode($id_tab, $sKey);
-	
+
 	if( $rs !== FALSE )
 	{
 		echo $rs;
@@ -295,7 +295,7 @@ if( isset($_GET['search_supplier'] ) && isset( $_REQUEST['term'] ) )
 	{
 		while( $rs = dbFetchObject($qs) )
 		{
-			$sc[] = $rs->code.' : ' . $rs->name .' | '. $rs->id;	
+			$sc[] = $rs->code.' : ' . $rs->name .' | '. $rs->id;
 		}
 	}
 	echo json_encode($sc);
@@ -318,11 +318,11 @@ if( isset( $_GET['search_po'] ) && isset( $_REQUEST['term'] ) )
 
 if( isset( $_GET['search_zone'] ) && isset( $_REQUEST['term'] ) )
 {
-	$sc = array();
-	$qr = "SELECT id_zone, zone_name FROM ";
-	$qr .= "tbl_zone JOIN tbl_warehouse ON tbl_zone.id_warehouse = tbl_warehouse.id ";
-	$qr .= "WHERE role = 5 AND zone_name LIKE '%".$_REQUEST['term']."%'";
-	$qs = dbQuery($qr);
+	$sc 	= array();
+	$zone = new zone();
+	$role = '5';
+	$qs 	= $zone->searchReceiveZone($_REQUEST['term']);
+
 	if( dbNumRows($qs) > 0 )
 	{
 		while( $rs = dbFetchObject($qs) )
@@ -341,7 +341,7 @@ if( isset( $_GET['search_zone'] ) && isset( $_REQUEST['term'] ) )
 if( isset( $_GET['isExistsDetails'] ) )
 {
 	$id = $_GET['id_receive_product'];
-	$cs = new receive_product();	
+	$cs = new receive_product();
 	if( $cs->hasDetails($id) === TRUE )
 	{
 		echo "has_details";
@@ -361,7 +361,7 @@ if( isset( $_GET['clearFilter'] ) )
 	deleteCookie('sFrom');
 	deleteCookie('sTo');
 	deleteCookie('sReceiveStatus');
-	echo 'done';	
+	echo 'done';
 }
 
 ?>
