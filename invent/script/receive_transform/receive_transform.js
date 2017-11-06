@@ -54,7 +54,7 @@ function goDelete(id, name){
 						swal({ title: 'Deleted', type: 'success', timer: 1000 });
 						setTimeout(function(){ window.location.reload(); }, 1200);
 					}else{
-						swal("ข้อผิดพลาด !", "ลบรายการไม่สำเร็จ", "error");
+						swal("ข้อผิดพลาด !", rs, "error");
 					}
 				}
 			});

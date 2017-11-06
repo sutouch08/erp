@@ -238,6 +238,42 @@
 
 
 
+		public function getZoneDetailByBarcode($barcode, $id_warehouse = '')
+		{
+			$sc = FALSE;
+
+
+
+			if( $id_warehouse != '')
+			{
+				$qr  = "SELECT * FROM tbl_zone AS z ";
+				$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
+				$qr .= "WHERE barcode_zone = '".$barcode."' AND z.id_warehouse = '".$id_warehouse."' ";
+				$qr .= "AND w.active = 1 ";
+
+				$qs = dbQuery($qr);
+			}
+			else
+			{
+				$qr  = "SELECT * FROM tbl_zone AS z ";
+				$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
+				$qr .= "WHERE barcode_zone = '".$barcode."' ";
+				$qr .= "AND w.active = 1 ";
+
+				$qs = dbQuery($qr);
+			}
+
+			if( dbNumRows($qs) == 1)
+			{
+				$sc = dbFetchObject($qs);
+			}
+
+			return $sc;
+		}
+
+
+
+
 		public function searchId($txt)
 		{
 			//---	role = 2 คือ คลังฝากขาย
@@ -258,6 +294,26 @@
 
 			return dbQuery($qr);
 		}
+
+
+
+		//---	 ค้นหาโซนเฉพาะในคลังนี้เท่านั้น
+		public function searchWarehouseZone($txt, $id_warehouse)
+		{
+			$qr  = "SELECT * FROM tbl_zone AS z ";
+			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
+			$qr .= "WHERE w.id = '".$id_warehouse."' ";
+			$qr .= "AND w.active = 1 ";
+			if( $txt != '*')
+			{
+				$qr .= "AND z.zone_name LIKE '%".$txt."%'";
+			}
+
+			return dbQuery($qr);
+		}
+
+
+
 
 
 		//---	auto complete โซนรับสินค้า

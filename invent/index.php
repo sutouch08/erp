@@ -81,8 +81,8 @@ switch($page){
 			$content = "diff.php";
 			$pageTitle = "โหลดยอดต่าง";
 			break;
-		case 'tranfer':
-			$content = 'tranfer.php';
+		case 'transfer':
+			$content = 'transfer.php';
 			$pageTitle = "โอนคลัง";
 			break;
 		case "drop_zero" :

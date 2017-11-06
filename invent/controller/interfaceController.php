@@ -161,7 +161,19 @@ if( isset( $_GET['export'] ) && isset( $_GET['BI'] ) )
 //---	Export ใบรับสินค้าเข้าจากการผลิต (FR)
 if( isset( $_GET['export'] ) && isset( $_GET['FR'] ) )
 {
+
+	include '../function/vat_helper.php';
+	include "interface/export/exportFR.php";
 	$id = $_POST['id_receive_transform'];
+	$FR = exportFR($id);
+	if( $FR === TRUE )
+	{
+		echo "success";
+	}
+	else
+	{
+		echo $FR;
+	}
 
 }
 

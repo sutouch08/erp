@@ -240,6 +240,20 @@ class stock
 		return dbQuery($qr);
 	}
 
+
+
+	//---	แสดงรายการสินค้าในโซนที่กำหนด
+	//---	สำหรับโอนคลัง หรือ ดูสินค้าคงเหลือในโซน
+	public function getStockInZone($id)
+	{
+		$qr  = "SELECT * ";
+		$qr .= "FROM tbl_stock AS s ";
+		$qr .= "JOIN tbl_product AS p ON s.id_product = p.id ";
+		$qr .= "WHERE s.id_zone = '".$id."' AND s.qty != 0";
+
+		return dbQuery($qr);
+	}
+
 }//--- end class
 
 ?>
