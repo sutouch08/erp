@@ -17,36 +17,42 @@
   <div class="row">
   	<div class="col-sm-12 moveOut-zone hide">
       <div class="row">
-          <div class="col-sm-4 ">
-              <div class="input-group">
-                  <span class="input-group-addon">โซนต้นทาง</span>
-                  <input type="text" class="form-control input-sm" id="fromZone-barcode" placeholder="ยิงบาร์โค้ดโซน" />
-              </div>
-          </div>
-          <div class="col-sm-1">
-              <button type="button" class="btn btn-sm btn-primary" onclick="getZoneFrom()">ตกลง</button>
-          </div>
-          <div class="col-sm-2">
-              <button type="button" class="btn btn-sm btn-info btn-block" onclick="newFromZone()">โซนใหม่</button>
+        <div class="col-sm-4 ">
+          <div class="input-group">
+            <span class="input-group-addon">โซนต้นทาง</span>
+            <input type="text" class="form-control input-sm" id="fromZone-barcode" placeholder="ยิงบาร์โค้ดโซน" />
           </div>
         </div>
-      </div>
-
-      <div class="col-sm-12 moveIn-zone hide">
-          <div class="col-sm-4">
-              <div class="input-group">
-                  <span class="input-group-addon">โซนปลายทาง</span>
-                  <input type="text" class="form-control input-sm" id="toZone-barcode" placeholder="ยิงบาร์โค้ดโซน" />
-              </div>
-          </div>
-          <div class="col-sm-2">
-          	<button type="button" class="btn btn-sm btn-info btn-block" onclick="newToZone()">โซนใหม่</button>
-          </div>
-          <div class="col-sm-6">
-          	<h4 class="title" style="margin-top:5px;" id="zoneName-label"></h4>
-          </div>
+        <div class="col-sm-1">
+          <button type="button" class="btn btn-sm btn-primary" onclick="getZoneFrom()">ตกลง</button>
+        </div>
+        <div class="col-sm-2">
+          <button type="button" class="btn btn-sm btn-info btn-block" onclick="newFromZone()">โซนใหม่</button>
+        </div>
       </div>
     </div>
+
+    <div class="col-sm-12 moveIn-zone hide">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="input-group">
+            <span class="input-group-addon">บาร์โค้ดโซน</span>
+            <input type="text" class="form-control input-sm" id="toZone-barcode" placeholder="ยิงบาร์โค้ดโซนปลายทาง" />
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="input-group">
+            <span class="input-group-addon">โซนปลายทาง</span>
+            <label type="text" class="form-control input-sm" id="zoneName-label"></label>
+          </div>
+        </div>
+        <div class="col-sm-2">
+        	<button type="button" class="btn btn-sm btn-info btn-block" id="btn-new-to-zone" onclick="newToZone()" disabled>โซนใหม่</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <?php else : ?>
 

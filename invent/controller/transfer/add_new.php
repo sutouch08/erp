@@ -5,11 +5,15 @@
   //--- วันที่เอกสาร
   $date_add = dbDate($_POST['date_add'], TRUE);
 
+  //--- รหัสเล่มเอกสาร
+  $bookcode = getConfig('BOOKCODE_TRANSFER');
+
   if( $_POST['from_warehouse'] != $_POST['to_warehouse'] )
   {
 
     //--- เตรียมข้อมูลสำหรับเพิ่มเอกสาร
     $arr = array(
+      'bookcode'       => $bookcode,
       'reference'      => $cs->getNewReference($date_add),
       'from_warehouse' => $_POST['from_warehouse'],
       'to_warehouse'   => $_POST['to_warehouse'],

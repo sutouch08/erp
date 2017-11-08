@@ -4,6 +4,9 @@ class transfer
   //---
   public $id;
 
+  //--- รหัสเล่มเอกสาร
+  public $bookcode;
+
   //--- เลขที่เอกสาร
   public $reference;
 
@@ -127,7 +130,16 @@ class transfer
       else
       {
         //--- update by using id
-        $sc = $this->updateTransferDetail($id, $ds['qty']);
+        if($this->updateTransferDetail($id, $ds['qty']) === TRUE )
+        {
+          //--- ถ้าสำเร็จ ส่งไอดีกลับไป
+          $sc = $id;
+        }
+        else
+        {
+          $sc = FALSE;
+        }
+
       }
     }
 
@@ -165,6 +177,48 @@ class transfer
 	}
 
 
+
+  public function getDetail($id)
+  {
+    $sc = FALSE;
+    $qs = dbQuery("SELECT * FROM tbl_transfer_detail WHERE id = '".$id."'");
+    if( dbNumRows($qs) == 1 )
+    {
+      $sc = dbFetchObject($qs);
+    }
+
+    return $sc;
+  }
+
+
+  public function getDetails($id)
+  {
+    return dbQuery("SELECT * FROM tbl_transfer_detail WHERE id_transfer = '".$id."'");
+  }
+
+
+
+  public function deleteDetail($id)
+  {
+    return dbQuery("DELETE FROM tbl_transfer_detail WHERE id = '".$id."'");
+  }
+
+
+
+
+
+  public function updateToZone($id, $to_zone)
+  {
+    return dbQuery("UPDATE tbl_transfer_detail SET to_zone = '".$to_zone."' WHERE id = '".$id."'");
+  }
+
+
+  public function setValid($id, $valid)
+  {
+    return dbQuery("UPDATE tbl_transfer_detail SET valid = '".$valid."' WHERE id = '".$id."'");
+  }
+
+
   //--- เปลียนโซนปลายทางให้ถูกต้อง
   //--- เปลี่ยนสถานะรายการเป็น ย้ายเข้าปลายทางแล้ว (valid = 1) tbl_transfer_detail
   public function validDetail($id, $id_zone)
@@ -172,6 +226,27 @@ class transfer
     return dbQuery("UPDATE tbl_transfer_detail SET to_zone = ".$id_zone.", valid = 1 WHERE id = '".$id."'");
   }
 
+
+
+
+
+  public function save($id)
+  {
+    return dbQuery("UPDATE tbl_transfer SET isSaved = 1 WHERE id = '".$id."'");
+  }
+
+
+
+  public function exported($id)
+  {
+    return dbQuery("UPDATE tbl_transfer SET isExport = 1 WHERE id = '".$id."'");
+  }
+
+
+  public function cancled($id)
+  {
+    return dbQuery("UPDATE tbl_transfer SET isCancle = 1 WHERE id = '".$id."'");
+  }
 
 
 
@@ -249,12 +324,32 @@ class transfer
 
 
 
+  //--- จำนวนคงเหลือใน temp
+  public function getTempQty($id_transfer_detail)
+  {
+    $sc = 0;
+    $qs = dbQuery("SELECT qty FROM tbl_transfer_temp WHERE id_transfer_detail = '".$id_transfer_detail."'");
+    if( dbNumRows($qs) == 1 )
+    {
+      list( $sc ) = dbFetchArray($qs);
+    }
+
+    return $sc;
+  }
+
+
+
   //--- ลบรายการใน temp ออก หลังจากเพิ่มยอดเข้าโซนต้นทางแล้ว
   public function removeTempDetail($id_transfer_detail)
   {
     return dbQuery("DELETE FROM tbl_transfer_temp WHERE id_transfer_detail = '".$id_transfer_detail."'");
   }
 
+
+  public function dropZeroTemp($id_transfer_detail)
+  {
+    return dbQuery("DELETE FROM tbl_transfer_temp WHERE id_transfer_detail = '".$id_transfer_detail."' AND qty = 0");
+  }
 
 
 
@@ -287,13 +382,7 @@ class transfer
 
 
 
-  //--- รายการโอนสินค้า
-  public function getMoveList($id)
-	{
-		return dbQuery("SELECT * FROM tbl_transfer_detail WHERE id_transfer = ".$id);
-	}
-
-
+  
 
   //--- ตรวจสอบว่ามีรายการอยู่ในตารางแล้วหรือยัง (ยังไม่ย้ายเข้าปลายทาง)
   public function isExistsDetail($id_transfer, $id_product, $id_zone)
@@ -330,6 +419,33 @@ class transfer
     return $sc;
   }
 
+
+  //--- ตรวจสอบว่ามีรายการที่ไม่สมบูรณ์หรือไม่
+  public function isCompleted($id)
+  {
+    $sc = TRUE;
+    $qs = dbQuery("SELECT id FROM tbl_transfer_temp WHERE id_transfer = '".$id."'");
+    if( dbNumRows($qs) > 0)
+    {
+      $sc = FALSE;
+    }
+
+    return $sc;
+  }
+
+
+
+  public function hasDetail($id)
+  {
+    $sc = FALSE;
+    $qs = dbQuery("SELECT id FROM tbl_transfer_detail WHERE id_transfer = '".$id."'");
+    if( dbNumRows($qs) > 0)
+    {
+      $sc = TRUE;
+    }
+
+    return $sc;
+  }
 
 
 

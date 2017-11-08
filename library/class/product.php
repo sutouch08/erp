@@ -472,6 +472,20 @@ class product
 
 
 
+	public function getCost($id)
+	{
+		$sc = 0.00;
+		$qs = dbQuery("SELECT cost FROM tbl_product WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1)
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+
+		return $sc;
+	}
+
+
+
 	public function search($txt, $fields)
 	{
 		return dbQuery("SELECT $fields FROM tbl_product WHERE code LIKE '%".$txt."%'");

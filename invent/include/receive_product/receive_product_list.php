@@ -1,13 +1,15 @@
 <?php
 	include 'function/supplier_helper.php';
-	$sCode	= isset( $_POST['sCode'] ) ? trim( $_POST['sCode'] ) : ( getCookie('sReceiveCode') ? getCookie('sReceiveCode') : '' );
-	$sPo		= isset( $_POST['sPo'] ) ? trim( $_POST['sPo'] ) : ( getCookie('sReceivePo') ? getCookie('sReceivePo') : '' );
-	$sInv		= isset( $_POST['sInv'] ) ? trim( $_POST['sInv'] ) : ( getCookie('sReceiveInv') ? getCookie('sReceiveInv') : '' );
-	$sSup		= isset( $_POST['sSup'] ) ? trim( $_POST['sSup'] ) : ( getCookie('sReceiveSup') ? getCookie('sReceiveSup') : '' );
-	$sFrom	= isset( $_POST['sFrom'] ) ? trim( $_POST['sFrom'] ) : ( getCookie('sFrom') ? getCookie('sFrom') : '' );
-	$sTo		= isset( $_POST['sTo'] ) ? trim( $_POST['sTo'] ) : ( getCookie('sTo') ? getCookie('sTo') : '' );
-	$sStatus	= isset( $_POST['sStatus'] ) ? $_POST['sStatus'] : ( getCookie('sReceiveStatus') ? getCookie('sReceiveStatus') : '' );
 
+	$sCode	= getFilter('sCode', 'sReceiveCode', '');
+	$sPo		= getFilter('sPo', 'sReceivePo', '');
+	$sInv		= getFilter('sInv', 'sReceiveInv', '');
+	$sSup		= getFilter('sSup', 'sReceiveSup', '');
+	$sFrom	= getFilter('sFrom', 'sFrom', '');
+	$sTo		= getFilter('sTo', 'sTo', '');
+	$sStatus	= getFilter('sStatus', 'sReceiveStatus', '');
+
+	
 ?>
 
 <div class="row top-row">
@@ -18,7 +20,7 @@
       	<p class="pull-right top-p">
 <?php	if( $add ) : ?>
 				<button type="button" class="btn btn-sm btn-success" onclick="goAdd()"><i class="fa fa-plus"></i> เพิ่มใหม่</button>
-<?php	endif; ?>        
+<?php	endif; ?>
 
         </p>
     </div>
@@ -39,7 +41,7 @@
     	<label>ใบส่งสินค้า</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sInv" id="sInv" value="<?php echo $sInv; ?>" />
     </div>
-    
+
      <div class="col-sm-1 col-1-harf padding-5">
     	<label>ผู้จำหน่าย</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sSup" id="sSup" value="<?php echo $sSup; ?>" />
@@ -65,38 +67,38 @@
     	<label class="display-block not-show">reset</label>
         <button type="button" class="btn btn-sm btn-block btn-warning" onClick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
     </div>
-    
+
 </div>
 </form>
 
 <hr class="margin-top-15" />
 <?php
 	$where = "WHERE id != 0 ";
-	
+
 	if( $sCode != "" )
 	{
 		createCookie('sReceiveCode', $sCode);
 		$where .= "AND reference LIKE '%".$sCode."%' ";
 	}
-	
+
 	if( $sPo != "" )
 	{
 		createCookie('sReceivePo', $sPo);
 		$where .= "AND po LIKE '%".$sPo."%' ";
 	}
-	
+
 	if( $sInv != "" )
 	{
 		createCookie('sReceiveInv', $sInv);
 		$where .= "AND invoice LIKE '%".$sInv."%' ";
 	}
-	
+
 	if( $sSup != "" )
 	{
 		createCookie('sReceiveSup', $sSup);
 		$where .= "AND id_supplier IN(".	supplier_in($sSup).") ";
 	}
-	
+
 	if( $sStatus != "" )
 	{
 		createCookie('sReceiveStatus', $sStatus);
@@ -106,25 +108,25 @@
 		}
 		elseif ( $sStatus == 'NE' )
 		{
-			$where .= "AND isExported = 0 ";	
+			$where .= "AND isExported = 0 ";
 		}
 	}
-	
+
 	if( $sFrom != "" && $sTo != "" )
 	{
 		createCookie('sFrom', $sFrom);
 		createCookie('sTo', $sTo);
-		$where .= "AND date_add >= '". fromDate($sFrom) ."' AND date_add <= '".toDate($sTo)."' ";	
+		$where .= "AND date_add >= '". fromDate($sFrom) ."' AND date_add <= '".toDate($sTo)."' ";
 	}
-	
+
 	$where .= "ORDER BY reference DESC";
-	
+
 	$paginator = new paginator();
 	$get_rows = get_rows();
 	$paginator->Per_Page("tbl_receive_product", $where, $get_rows);
-	
+
 	$qs = dbQuery("SELECT * FROM tbl_receive_product ".$where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
-	
+
 ?>
 <div class="row">
 	<div class="col-sm-8">
@@ -167,14 +169,14 @@
                     <td class="middle"><?php echo $rs->invoice; ?></td>
                     <td class="middle"><?php echo $rs->po; ?></td>
                     <td class="middle"><?php echo $sp->getName($rs->id_supplier); ?></td>
-                    <td class="middle text-center"><?php echo number_format( $cs->getTotalQty( $rs->id ) ); ?></td> 
+                    <td class="middle text-center"><?php echo number_format( $cs->getTotalQty( $rs->id ) ); ?></td>
                     <td class="middle text-center">
 					<?php if( $rs->isCancle == 1 ) : ?>
                     	<span class="red"><strong>CN</strong></span>
                     <?php elseif( $rs->isExported == 0 ) :  ?>
                     	<span class="red"><strong>NE</strong></span>
                     <?php endif; ?>
-                    
+
                     <td class="middle text-right">
                     	<button type="button" class="btn btn-xs btn-info" onClick="goDetail(<?php echo $rs->id; ?>)"><i class="fa fa-eye"></i></button>
                     <?php if( $delete ) : ?>
@@ -183,13 +185,13 @@
                     </td>
                 </tr>
 <?php		$no++; ?>
-<?php	endwhile; ?>			
+<?php	endwhile; ?>
 <?php else : ?>
 				<tr>
                 	<td colspan="9" class="text-center"><h4>ไม่พบรายการ</h4></td>
                 </tr>
-<?php endif; ?>            
-            </tbody>            
+<?php endif; ?>
+            </tbody>
         </table>
     </div>
 </div>

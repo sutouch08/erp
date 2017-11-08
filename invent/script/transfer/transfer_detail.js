@@ -1,3 +1,46 @@
+//---	ลบรายการที่โอนออกแล้ว
+function deleteMoveItem(id_transfer_detail, product_reference){
+	swal({
+		title: 'คุณแน่ใจ ?',
+		text: 'ต้องการลบ '+ product_reference +' หรือไม่ ?',
+		type: 'warning',
+		showCancelButton: true,
+		comfirmButtonColor: '#DD6855',
+		confirmButtonText: 'ใช่ ฉันต้องการลบ',
+		cancelButtonText: 'ยกเลิก',
+		closeOnConfirm: false
+	}, function(){
+		$.ajax({
+			url:"controller/transferController.php?deletetransferDetail",
+			type:"POST",
+			cache:"false",
+			data:{
+				"id_transfer_detail" : id_transfer_detail,
+				"id_transfer" : $('#id_transfer').val()
+			},
+			success: function(rs){
+				var rs = $.trim(rs);
+				if( rs == 'success' ){
+					swal({
+						title:'Deleted',
+						text: 'ลบรายการเรียบร้อยแล้ว',
+						type: 'success',
+						timer: 1000
+					});
+
+					$("#row-"+id_transfer_detail).remove();
+
+				}else{
+
+					swal("ข้อผิดพลาด", rs, "error");
+				}
+			}
+		});
+	});
+}
+
+
+
 //------------  ตาราง transfer_detail
 function getTransferTable(){
 	var id_transfer	= $("#id_transfer").val();
@@ -284,7 +327,7 @@ function move_in(id_transfer_detail, from_zone_id){
 
 			if( rs == 'success' ){
 
-				$("#row-label-"+id_transfer_detail).text($('#zoneName').text());
+				$("#row-label-"+id_transfer_detail).text($('#to-zone').val());
 
 			}else{
 

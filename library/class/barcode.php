@@ -95,6 +95,22 @@ public function getDetail($barcode)
 	return $sc;
 }
 
+
+
+
+//---	เอาเฉพาะไอดีสินค้า
+public function getProductId($barcode)
+{
+	$sc = FALSE;
+	$qs = dbQuery("SELECT id_product FROM tbl_barcode WHERE barcode = '".$barcode."'");
+	if( dbNumRows($qs) == 1 )
+	{
+		list( $sc ) = dbFetchArray($qs);
+	}
+
+	return $sc;
+}
+
 }//// end class
 
 

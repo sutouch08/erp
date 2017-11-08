@@ -2,7 +2,7 @@
 require '../../library/config.php';
 require '../../library/functions.php';
 require "../function/tools.php";
-require "../../library/class/PHPExcel.php";
+
 
 
 ///============================================= MASTER ==========================================///
@@ -214,5 +214,23 @@ if( isset( $_GET['export']) && isset( $_GET['order']))
 
 	echo $sc === TRUE ? 'success' : $sc;
 }
+
+
+//---	Export Transfer
+if( isset($_GET['export']) && isset($_GET['TR']))
+{
+	$id = $_POST['id_transfer'];
+
+	//---	โอนสินค้าระหว่างคลัง
+	include 'interface/export/exportTransferTR.php';
+
+	//--- เรียกใช้ function ที่ include เข้ามา เพื่อส่งออกข้อมูลเป็น excel
+	$sc = exportTransferTR($id);
+
+	//---	ถ้าสำเร็จ จะได้ค่า TRUE ถ้าไม่สำเร็จจะได้ Error message
+	echo $sc === TRUE ? 'success' : $sc;
+}
+
+
 ///=================================================== END DOCUMENTS =======================================///
 ?>

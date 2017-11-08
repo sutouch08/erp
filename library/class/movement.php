@@ -111,16 +111,16 @@ class movement
 
 
 
-	public function dropMoveIn($reference, $id_pd)
+	public function dropMoveIn($reference, $id_zone, $id_pd)
 	{
-		return dbQuery("DELETE FROM tbl_stock_movement WHERE reference = '".$reference."' AND id_product = '".$id_pd."' AND move_in > 0");
+		return dbQuery("DELETE FROM tbl_stock_movement WHERE reference = '".$reference."' AND id_product = '".$id_pd."' AND move_in > 0 AND id_zone = '".$id_zone."'");
 	}
 
 
 
-	public function dropMoveOut($reference, $id_pd)
+	public function dropMoveOut($reference, $id_zone, $id_pd)
 	{
-		return dbQuery("DELETE FROM tbl_stock_movement WHERE reference = '".$reference."' AND id_product = '".$id_pd."' AND move_out > 0");
+		return dbQuery("DELETE FROM tbl_stock_movement WHERE reference = '".$reference."' AND id_product = '".$id_pd."' AND move_out > 0 AND id_zone = '".$id_zone."'");
 	}
 
 

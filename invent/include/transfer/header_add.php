@@ -1,16 +1,4 @@
-<?php
-include 'function/warehouse_helper.php';
 
-//--- ตรวจสอบว่ามีการกดเพิ่มเอกสารแล้วหรือยัง
-$id = isset($_GET['id_transfer']) ? $_GET['id_transfer'] : FALSE;
-
-//--- สาร้าง instant
-$cs = $id === FALSE ? new transfer() : new transfer($id);
-
-//--- หากกดสร้างเอกสารแล้ว disabled input ต่างๆ
-$disabled = $id === FALSE ? '' : 'disabled';
-
-?>
 <div class="row">
 
   <div class="col-sm-1 col-1-harf padding-5 first">

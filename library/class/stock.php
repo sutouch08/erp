@@ -78,7 +78,7 @@ class stock
 
 
 
-	private function isExists($id_zone, $id_pd)
+	public function isExists($id_zone, $id_pd)
 	{
 		$sc = FALSE;
 		$qs = dbQuery("SELECT qty FROM tbl_stock WHERE id_zone = ".$id_zone." AND id_product = '".$id_pd."'");

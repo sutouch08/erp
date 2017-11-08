@@ -1,181 +1,44 @@
-<div class="row">
-	<div class="col-sm-12 hide" id="zone-table">
-    <form id="productForm">
-    	<table class="table table-striped table-bordered">
-      	<thead>
-					<tr>
-						<th colspan="6" class="text-center">
-							<h4 class="title" id="zoneName"></h4>
-						</th>
-					</tr>
-        	<tr>
-          	<th colspan="6">
-							<div class="col-sm-6">
-              <?php if( $delete ) : ?>
-              	<label class="margin-right-15px padding-10" id="underZeroLabel">
-                <input type="checkbox" name="allowUnderZeroAll" id="allowUnderZeroAll" value="1" style="margin-right:5px;" />ติดลบได้ทั้งหมด</label>
-              <?php endif; ?>
-              	<button type="button" class="btn btn-sm btn-warning" onclick="addAllToTransfer()">ย้ายรายการทั้งหมด</button>
-              </div>
-              <div class="col-sm-6">
-                <p class="pull-right top-p">
-                  <button type="button" class="btn btn-sm btn-primary" onclick="addToTransfer()">ย้ายรายการที่เลือก</button>
-                </p>
-              </div>
-            </th>
-          </tr>
+<?php
+include 'function/warehouse_helper.php';
 
-          <tr>
-          	<th class="width-10 text-center">ลำดับ</th>
-            <th class="width-20 text-center">บาร์โค้ด</th>
-            <th class="width-40 text-center">สินค้า</th>
-            <th class="width-10 text-center">จำนวน</th>
-            <th class="width-10 text-center">ย้ายออก</th>
-            <th class="width-10 text-center">ตัวเลือก</th>
-          </tr>
-          </thead>
+//--- ตรวจสอบว่ามีการกดเพิ่มเอกสารแล้วหรือยัง
+$id = isset($_GET['id_transfer']) ? $_GET['id_transfer'] : FALSE;
 
-          <tbody id="zone-list"> </tbody>
+//--- สาร้าง instant
+$cs = $id === FALSE ? new transfer() : new transfer($id);
 
-        </table>
-      </form>
-    </div>
+//--- warehouse object
+$wh = new warehouse();
 
+//--- หากกดสร้างเอกสารแล้ว disabled input ต่างๆ
+$disabled = $id === FALSE ? '' : 'disabled';
 
-
-	<div class="col-sm-12" id="transfer-table">
-  	<table class="table table-striped table-bordered">
-    	<thead>
-      	<tr>
-        	<th colspan="7" class="text-center">รายการโอนย้าย</th>
-        </tr>
-
-      	<tr>
-        	<th class="width-5 text-center">ลำดับ</th>
-          <th class="width-15 text-center">บาร์โค้ด</th>
-          <th class="width-30 text-center">สินค้า</th>
-          <th class="width-15 text-center">ต้นทาง</th>
-          <th class="width-15 text-center">ปลายทาง</th>
-          <th class="width-10 text-center">จำนวน</th>
-          <th class="width-10 text-center">การกระทำ</th>
-        </tr>
-      </thead>
-
-      <tbody id="transfer-list">
-<?php	$qs = $cs->getMoveList($id); ?>
-<?php if( dbNumRows($qs) > 0 ) : ?>
-<?php		$no = 1;						?>
-<?php 	$product = new product(); ?>
-<?php 	$barcode = new barcode(); ?>
-<?php 	$zone    = new zone();    ?>
-<?php		while( $rs = dbFetchObject($qs) ) : 	?>
-<?php			$pReference = $product->getCode($rs->id_product);	?>
-<?php			$id_td	 = $rs->id;			?>
-				<tr class="font-size-12" id="row-<?php echo $id_td; ?>">
-
-	      	<td class="middle text-center">
-						<?php echo $no; ?>
-					</td>
-
-					<!--- บาร์โค้ดสินค้า --->
-	        <td class="middle">
-						<?php echo $barcode->getBarcode($rs->id_product); ?>
-					</td>
-
-					<!--- รหัสสินค้า -->
-	        <td class="middle">
-						<?php echo $pReference; ?>
-					</td>
-
-					<!--- โซนต้นทาง --->
-	        <td class="middle text-center">
-	      		<input type="hidden" class="row-zone-from" id="row-from-<?php echo $id_td; ?>" value="<?php echo $rs->from_zone; ?>" />
-						<?php echo $zone->getName($rs->from_zone); ?>
-	        </td>
-
-
-	        <td class="middle text-center" id="row-label-<?php echo $id_td; ?>">
-	        	<?php if( $rs->to_zone == 0 ) : ?>
-	        	<button type="button" class="btn btn-xs btn-primary" id="btn_<?php echo $id_td; ?>" onclick="move_in(<?php echo $id_td; ?>, <?php echo $rs->from_zone; ?>)">
-							ย้ายเข้าโซน
-						</button>
-	        	<?php else : ?>
-							<?php 	echo $zone->getName($rs->to_zone); 	?>
-	        	<?php endif; ?>
-	        </td>
-
-	        <td class="middle text-center" >
-						<?php echo number_format($rs->qty); ?>
-					</td>
-
-	        <td class="middle text-center">
-	          <?php if( $edit ) : ?>
-	          	<button type="button" class="btn btn-xs btn-danger" onclick="deleteMoveItem(<?php echo $id_td; ?>, '<?php echo $pReference; ?>')"><i class="fa fa-trash"></i></button>
-	          <?php endif; ?>
-	        </td>
-
-	      </tr>
-<?php			$no++;			?>
-<?php		endwhile;			?>
-<?php	else : ?>
- 				<tr>
-        	<td colspan="7" class="text-center"><h4>ไม่พบรายการ</h4></td>
-        </tr>
-<?php	endif; ?>
-      </tbody>
-    </table>
+?>
+<div class="row top-row">
+  <div class="col-sm-6 top-col">
+    <h4 class="title"><i class="fa fa-random"></i> <?php echo $pageTitle; //--- index.php ?></h4>
+  </div>
+  <div class="col-sm-6">
+    <p class="pull-right top-p">
+    <?php echo goBackButton(); ?>
+    <?php if($id !== FALSE && $cs->isSaved == 1) : ?>
+      <button type="button" class="btn btn-sm btn-info" onclick="doExport()"><i class="fa fa-send"></i> ส่งข้อมูลไป formula</button>
+    <?php endif; ?>
+    <?php if( $id !== FALSE ) : ?>
+      <button type="button" class="btn btn-sm btn-default" onclick="printTransfer(<?php echo $id; ?>)"><i class="fa fa-print"></i> พิมพ์</button>
+    <?php endif; ?>
+    </p>
   </div>
 </div>
+<hr/>
 
-<script id="zoneTemplate" type="text/x-handlebars-template">
-{{#each this}}
-{{#if nodata}}
-<tr>
-	<td colspan="6" class="text-center">
-		<h4>ไม่พบสินค้าในโซน</h4>
-	</td>
-</tr>
-{{else}}
-<tr>
-	<td align="center">{{ no }}</td>
-  <td align="center">{{ barcode }}</td>
-  <td>{{ products }}</td>
-  <td align="center" class="qty-label">{{ qty }}</td>
-  <td align="center">
-  	<input type="text" class="form-control input-sm text-center input-qty" id="moveQty_{{ id_stock }}" name="moveQty[{{id_stock}}]" onkeyup="validQty({{ id_stock}}, {{ qty }})" />
-		 <input type="hidden" name="id_product[{{ id_stock }}]" id="id_product_{{ id_stock }}" value="{{ id_product }}" />
-  </td>
-  <td align="center">
-<?php if( $delete ) : ?>
-    {{#if isAllowUnderZero}}
-    	<input type="checkbox" name="allowUnderZero[{{id_stock}}]" id="allowUnderZero_{{ id_stock }}" onChange="validQty({{ id_stock }}, {{ qty }})" value="1" />
-      <label for="allowUnderZero_{{ id_stock }}">ติดลบได้</label>
-    {{/if}}
-<?php endif; ?>
-    </td>
-</tr>
-{{/if}}
-{{/each}}
-</script>
-<script id="transferTableTemplate" type="text/x-handlebars-template">
-{{#each this}}
-	{{#if nodata}}
-	<tr>
-		<td colspan="7" class="text-center"><h4>ไม่พบรายการ</h4></td>
-	</tr>
-	{{else}}
-		<tr class="font-size-12" id="row-{{ id }}">
-			<td class="middle text-center">{{ no }}</td>
-			<td class="middle">{{ barcode }}</td>
-			<td class="middle">{{ products }}</td>
-			<td class="middle text-center">
-				<input type="hidden" class="row-zone-from" id="row-from-{{ id }}" value="{{ from_zone }}" />
-				{{ fromZone }}
-			</td>
-			<td class="middle text-center" id="row-label-{{id}}">{{{ toZone }}}</td>
-			<td class="middle text-center">{{ qty }}</td>
-			<td class="middle text-center">{{{ btn_delete }}}</td>
-		</tr>
-	{{/if}}
-{{/each}}
-</script>
+<?php
+  //----  import หัวเอกสาร
+  include 'include/transfer/header_detail.php';
+  include 'include/transfer/transfer_detail_table.php';
+
+?>
+
+
+
+<script src="script/transfer/transfer_add.js"></script>
