@@ -48,9 +48,7 @@
 
 	        <td class="middle text-center" id="row-label-<?php echo $id_td; ?>">
 	        	<?php if( $rs->to_zone == 0 ) : ?>
-	        	<button type="button" class="btn btn-xs btn-primary" id="btn_<?php echo $id_td; ?>" onclick="move_in(<?php echo $id_td; ?>, <?php echo $rs->from_zone; ?>)">
-							ย้ายเข้าโซน
-						</button>
+	        		<span class="red">ยังไม่ย้ายเข้าโซน</span>
 	        	<?php else : ?>
 							<?php 	echo $zone->getName($rs->to_zone); 	?>
 	        	<?php endif; ?>

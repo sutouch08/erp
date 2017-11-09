@@ -95,7 +95,7 @@
 
 
 	        <td class="middle text-center" id="row-label-<?php echo $id_td; ?>">
-	        	<?php if( $rs->to_zone == 0 ) : ?>
+	        	<?php if( $rs->to_zone == 0 OR $rs->valid == 0 ) : ?>
 	        	<button type="button" class="btn btn-xs btn-primary" id="btn_<?php echo $id_td; ?>" onclick="move_in(<?php echo $id_td; ?>, <?php echo $rs->from_zone; ?>)">
 							ย้ายเข้าโซน
 						</button>
@@ -104,7 +104,7 @@
 	        	<?php endif; ?>
 	        </td>
 
-	        <td class="middle text-center" >
+	        <td class="middle text-center" id="qty-<?php echo $rs->id; ?>" >
 						<?php echo number_format($rs->qty).' / '. number_format($rs->qty - $cs->getTempQty($rs->id)); ?>
 					</td>
 
@@ -176,7 +176,7 @@
 				{{ fromZone }}
 			</td>
 			<td class="middle text-center" id="row-label-{{id}}">{{{ toZone }}}</td>
-			<td class="middle text-center">{{ qty }} / {{ temp }}</td>
+			<td class="middle text-center" id="qty-{{id}}">{{ qty }} / {{ temp }}</td>
 			<td class="middle text-center">{{{ btn_delete }}}</td>
 		</tr>
 	{{/if}}

@@ -145,6 +145,19 @@ if( isset( $_GET['moveBarcodeToZone'] ) )
 
 
 
+if( isset($_GET['getMovedQty']))
+{
+	$cs = new transfer();
+
+	//---	ดึงข้อมูลรายการโอน
+	$rs = $cs->getDetail($_POST['id_transfer_detail']);
+
+	//---	ดึงยอดใน temp ถ้าไม่มีแสดงว่าโอนเข้าปลายทางหมดแล้ว
+	$tmp_qty = $cs->getTempQty($rs->id);
+
+	echo $rs->qty.' / '. ($rs->qty - $tmp_qty);
+}
+
 //---	ยิงบาร์โค้ดโซน
 //---	ดึงข้อมูลโซนตามบาร์โค้ดโซนที่ยิงมา
 if( isset( $_GET['getZone'] ) )

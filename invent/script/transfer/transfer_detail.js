@@ -329,6 +329,8 @@ function move_in(id_transfer_detail, from_zone_id){
 
 				$("#row-label-"+id_transfer_detail).text($('#to-zone').val());
 
+				updateMoved(id_transfer_detail);
+
 			}else{
 
 				swal("ข้อผิดพลาด !", rs, "error");
@@ -336,6 +338,25 @@ function move_in(id_transfer_detail, from_zone_id){
 		}
 	});
 }
+
+
+
+
+function updateMoved(id){
+	$.ajax({
+		url:'controller/transferController.php?getMovedQty',
+		type:'POST',
+		cache:'false',
+		data:{
+			'id_transfer_detail' : id
+		},
+		success:function(rs){
+			var rs = $.trim(rs);
+			$('#qty-'+id).text(rs);
+		}
+	});
+}
+
 
 
 

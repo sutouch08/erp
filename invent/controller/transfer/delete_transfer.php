@@ -142,7 +142,7 @@ if( dbNumRows($qs) > 0)
           {
             //--- ถ้าสินค้าพอย้ายกลับ หรือ โซนสามารถติดลบได้
             //--- ลดยอดโซนปลายทาง
-            if( $stock->updateStockZone($rs->to_zone, $rs->id_product, ($rs->qty * -1) ) !== TRUE)
+            if( $stock->updateStockZone($rs->to_zone, $rs->id_product, ($diff_qty * -1) ) !== TRUE)
             {
               $sc = FALSE;
               $message = 'ลดยอดสต็อกปลายทางไม่สำเร็จ';
@@ -154,6 +154,7 @@ if( dbNumRows($qs) > 0)
               $sc = FALSE;
               $message = 'ลบ movement ขาเข้าโซนปลายทางไม่สำเร็จ';
             }
+
 
             //--- เพิ่มยอดเข้า temp
             if( $cs->updateTransferTemp($tmp->id, $diff_qty ) !== TRUE)
@@ -167,14 +168,14 @@ if( dbNumRows($qs) > 0)
         } //--- end if $temp->qty < $rs->qty
 
         //--- เพิ่มยอดเข้าโซนต้นทาง
-        if( $stock->updateStockZone($tmp->id_zone, $tmp->id_product, $tmp->qty) !== TRUE)
+        if( $stock->updateStockZone($rs->from_zone, $rs->id_product, $rs->qty) !== TRUE)
         {
           $sc = FALSE;
           $message = 'ย้ายสินค้าจาก temp กลับโซนไม่สำเร็จ';
         }
 
         //--- ลบ movement ขาออกจากโซนต้นทาง
-        if( $movement->dropMoveOut($cs->reference, $tmp->id_zone, $tmp->id_product) !== TRUE)
+        if( $movement->dropMoveOut($cs->reference, $rs->from_zone, $rs->id_product) !== TRUE)
         {
           $sc = FALSE;
           $message = 'ลบ movement ขาออกจากโซนต้นทางไม่สำเร็จ';
@@ -216,7 +217,6 @@ if( dbNumRows($qs) > 0)
   }
 
   //--- ถ้าทุกอย่างไม่มีอะไรผิดพลาด
-
   if( $sc === TRUE )
   {
     commitTransection();
