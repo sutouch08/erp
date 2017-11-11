@@ -291,6 +291,7 @@
 			$qr .= "WHERE ";
 			$qr .= $role == '' ? '' : "w.role IN(".$role.") AND ";
 			$qr .= "w.active = 1 AND zone_name LIKE '%".$txt."%' ";
+			$qr .= "ORDER BY zone_name ASC";
 
 			return dbQuery($qr);
 		}

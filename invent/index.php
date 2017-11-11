@@ -73,9 +73,9 @@ switch($page){
 			$content = "product_check.php";
 			$pageTitle = "ตรวจนับสินค้า";
 			break;
-		case "ProductAdjust":
-			$content = "product_adjust.php";
-			$pageTitle = "ปรับยอดสินค้า";
+		case "adjust":
+			$content = "adjust.php";
+			$pageTitle = "ปรับปรุงสต็อก";
 			break;
 		case 'diff' :
 			$content = "diff.php";

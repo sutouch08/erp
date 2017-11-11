@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$id_tab = 46;
     $pm = checkAccess($id_profile, $id_tab);
 	$view = $pm['view'];
@@ -8,7 +8,7 @@
 	$ps = checkAccess($id_profile, 50);
 	$close = $ps['add']+$ps['edit']+$ps['delete'];
 	accessDeny($view);
-	include "function/po_helper.php"; 
+	include "function/po_helper.php";
 	include "function/supplier_helper.php";
  ?>
 <div class="container">
@@ -20,23 +20,23 @@
     	<p class="pull-right top-p">
 <?php	if( ! isset( $_GET['view_detail'] ) ) : ?>
 			<button type="button" class="btn btn-sm btn-success" onclick="syncDocument()"><i class="fa fa-retweet"></i> อัพเดตข้อมูล</button>
-<?php	endif; ?>   
+<?php	endif; ?>
 <?php 	if( isset( $_GET['view_detail'] ) ) : ?>
 			<button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i> กลับ</button>
-<?php	endif; ?>    	
+<?php	endif; ?>
         </p>
     </div>
 </div>
 <hr class="margin-bottom-15" />
 
-<?php 
-if( isset( $_GET['view_detail'] ) ) 
+<?php
+if( isset( $_GET['view_detail'] ) )
 {
-	include 'include/po_detail.php';
+	include 'include/po/po_detail.php';
 }
 else
 {
-	include 'include/po_list.php';	
+	include 'include/po/po_list.php';	
 }
 ?>
 </div><!--- container -->

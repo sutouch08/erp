@@ -15,7 +15,9 @@
 			}
 			$fileName	= $path . $file;
 			$moveName	= $move . $file;
+			$es 			= new PHPExcel();
 			$reader		= new PHPExcel_Reader_Excel5();
+			
 			$excel		= $reader->load($fileName);
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
 
@@ -81,7 +83,7 @@
 											"qty"						=> $rs['AC'],
 											"unit_code"			=> $rs['AD'],
 											"unit_qty"			=> $rs['AE'],
-											"isCancle"			=> $isCancle						
+											"isCancle"			=> $isCancle
 										);
 						$cs->update($bookcode, $reference, $product, $arr);
 					}//---- end if exists

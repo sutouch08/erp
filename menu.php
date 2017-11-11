@@ -25,7 +25,7 @@
                 <li><a href="index.php?content=transfer"><i class="fa fa-recycle"></i>&nbsp; โอนสินค้าระหว่างคลัง</a></li>
                 <li><a href="index.php?content=ProductMove"><i class="fa fa-recycle"></i>&nbsp; ย้ายพื้นที่จัดเก็บ</a></li>
                 <li><a href="index.php?content=ProductCheck"><i class="fa fa-check-square-o"></i>&nbsp; ตรวจนับสินค้า</a></li>
-                <li><a href="index.php?content=ProductAdjust"><span class="glyphicon glyphicon-tasks"></span>&nbsp; ปรับปรุงยอด</a></li>
+                <li><a href="index.php?content=adjust"><i class="fa fa-magic"></i>&nbsp; ปรับปรุงสต็อก</a></li>
                 <li><a href="index.php?content=drop_zero"><span class="glyphicon glyphicon-tasks"></span>&nbsp; เคลียร์ยอดสต็อกที่เป็นศูนย์</a></li>
                 <li><a href="index.php?content=buffer_zone"><span class="glyphicon glyphicon-tasks"></span>&nbsp; ตรวจสอบ BUFFER ZONE</a></li>
                 <li><a href="index.php?content=cancle_zone"><span class="glyphicon glyphicon-tasks"></span>&nbsp; ตรวจสอบ CANCLE ZONE</a></li>

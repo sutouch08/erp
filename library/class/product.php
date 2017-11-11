@@ -488,7 +488,7 @@ class product
 
 	public function search($txt, $fields)
 	{
-		return dbQuery("SELECT $fields FROM tbl_product WHERE code LIKE '%".$txt."%'");
+		return dbQuery("SELECT $fields FROM tbl_product WHERE code LIKE '%".$txt."%' ORDER BY code ASC");
 	}
 
 

@@ -16,12 +16,12 @@
     	<label>วันที่</label>
         <span class="form-control input-sm text-center" disabled><?php echo thaiDate($po->date_add); ?></span>
     </div>
-    
+
     <div class="col-sm-1 col-1-harf padding-5">
     	<label>รหัสผู้ขาย</label>
         <span class="form-control input-sm text-center" disabled><?php echo $sp->code; ?></span>
     </div>
-    
+
     <div class="col-sm-4 padding-5">
     	<label>ชื่อผู้ขาย</label>
         <span class="form-control input-sm" disabled><?php echo $sp->name; ?></span>
@@ -33,13 +33,13 @@
         	<button type="button" class="btn btn-sm btn-danger btn-block" onclick="closePO('<?php echo $po->bookcode; ?>', '<?php echo $po->reference; ?>')"><i class="fa fa-lock"></i> ปิดใบสั่งซื้อ</button>
        	<?php else : ?>
         	<button type="button" class="btn btn-sm btn-primary btn-block" onclick="unClosePO('<?php echo $po->bookcode; ?>', '<?php echo $po->reference; ?>')"><i class="fa fa-unlock"></i> ยกเลิกการปิดใบสั่งซื้อ</button>
-        <?php endif; ?>     
+        <?php endif; ?>
     </div>
     <?php endif; ?>
 </div>
 <hr class="margin-top-15 margin-bottom-15"  />
 
-<?php $qs = $po->getDetail($po->reference);	?>
+<?php $qs = $po->getPoDetail($po->reference);	?>
 <div class="row">
 	<div class="col-sm-12">
     	<table class="table table-striped table-bordered">
@@ -71,7 +71,7 @@
                     <td class="text-right"><?php echo number_format( ( $rs->qty * $rs->price), 2); ?></td>
                     <td class="text-right"><?php echo number_format( $rs->received ); ?></td>
                 </tr>
-	<?php		$no++; 	?>      
+	<?php		$no++; 	?>
     <?php		$totalQty += $rs->qty;	?>
     <?php		$totalAmount	 += ($rs->qty * $rs->price);	?>
     <?php		$totalReceived += $rs->received; ?>
@@ -86,7 +86,7 @@
     			<tr>
                 	<td colspan="8" class="text-center"><h4>ไม่พบรายการ</h4></td>
                 </tr>
-    <?php endif; ?>        
+    <?php endif; ?>
             </tbody>
         </table>
     </div>
