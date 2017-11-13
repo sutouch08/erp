@@ -16,12 +16,11 @@
           <th class="width-5 text-center">ลำดับ</th>
           <th class="width-10 text-center">บาร์โค้ด</th>
           <th class="width-20">รหัสสินค้า</th>
-          <th class="width-20">สินค้า</th>
+          <th class="width-25">สินค้า</th>
           <th class="width-20 text-center">โซน</th>
           <th class="width-8 text-center">เพิ่ม</th>
           <th class="width-8 text-center">ลด</th>
           <th class="width-5 text-center">สถานะ</th>
-          <th class="width-5 text-right"></th>
         </tr>
       </thead>
       <tbody id="detail-table">
@@ -57,45 +56,16 @@
         <td class="middle text-center">
           <?php echo isActived($rs->valid); ?>
         </td>
-        <td class="middle text-right">
-        <?php if( ($add OR $edit) && $cs->isCancle == 0 && $cs->isExport == 0 && $cs->isSaved == 0 ) : ?>
-          <button type="button" class="btn btn-xs btn-danger" onclick="deleteDetail(<?php echo $rs->id; ?>, '<?php echo $pdCode; ?>')">
-            <i class="fa fa-trash"></i>
-          </button>
-        <?php endif; ?>
-        </td>
+
       </tr>
 <?php     $no++; ?>
 <?php   endwhile; ?>
+<?php else : ?>
+      <tr>
+        <td colspan="8" class="text-center"><h4>ไม่พบรายการ</h4></td>
+      </tr>
 <?php endif; ?>
       </tbody>
     </table>
   </div>
 </div>
-
-
-<script id="detail-template" type="text/x-handlebars-template">
-<tr class="font-size-12 rox" id="row-{{id}}">
-  <td class="middle text-center no">{{no}}</td>
-  <td class="middle text-center">{{ barcode }}</td>
-  <td class="middle">{{ pdCode }}</td>
-  <td class="middle">{{ pdName }}</td>
-  <td class="middle text-center">{{ zoneName }}</td>
-  <td class="middle text-center" id="qty-up-{{id}}">{{ up }}</td>
-  <td class="middle text-center" id="qty-down-{{id}}">{{ down }}</td>
-  <td class="middle text-center">
-    {{#if valid}}
-    <i class="fa fa-times red"></i>
-    {{else}}
-    <i class="fa fa-check green"></i>
-    {{/if}}
-  </td>
-  <td class="middle text-right">
-  <?php if( ($add OR $edit) && $cs->isCancle == 0 && $cs->isExport == 0 && $cs->isSaved == 0 ) : ?>
-    <button type="button" class="btn btn-xs btn-danger" onclick="deleteDetail({{ id }}, '{{ pdCode }}')">
-      <i class="fa fa-trash"></i>
-    </button>
-  <?php endif; ?>
-  </td>
-</tr>
-</script>

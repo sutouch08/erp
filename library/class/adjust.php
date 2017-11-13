@@ -180,6 +180,32 @@ class adjust
 
 
 
+  public function setValidDetail($id)
+  {
+    return dbQuery("UPDATE tbl_adjust_detail SET valid = 1 WHERE id = '".$id."'");
+  }
+
+
+
+  public function setSaved($id)
+  {
+    return dbQuery("UPDATE tbl_adjust SET isSaved = 1 WHERE id = '".$id."'");
+  }
+
+
+
+  public function setCancle($id)
+  {
+    return dbQuery("UPDATE tbl_adjust SET isCancle = 1 WHERE id = '".$id."'");
+  }
+
+
+  public function exported($id)
+  {
+    return dbQuery("UPDATE tbl_adjust SET isExport = 1 WHERE id = '".$id."'");
+  }
+
+
   public function isValidDetail($id)
   {
     $sc = FALSE;

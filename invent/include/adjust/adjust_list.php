@@ -102,12 +102,23 @@ if( $fromDate != '' && $toDate != '')
 $paginator = new paginator();
 $get_rows  = get_rows();
 $paginator->Per_Page('tbl_adjust', $where, $get_rows);
-$paginator->display($get_rows, 'index.php?content=adjust');
+
 
 $qs = dbQuery("SELECT * FROM tbl_adjust ".$where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 
  ?>
-
+ <div class="row">
+   <div class="col-sm-7" style="margin-top:-5px;">
+    	<?php $paginator->display($get_rows, 'index.php?content=adjust'); ?>
+   </div>
+   <div class="col-sm-5 margin-top-15">
+     <p class="pull-right">
+       <span class="red">NC</span><span class="margin-right-15"> = ยังไม่บันทึก, </span>
+       <span class="red">CN</span><span class="margin-right-15"> = ยกเลิก, </span>
+       <span class="red">NE</span><span> = ยังไม่ส่งออกไป FORMULA</span>
+     </p>
+   </div>
+ </div>
  <div class="row">
    <div class="col-sm-12">
      <table class="table table-striped border-1">
@@ -129,13 +140,15 @@ $qs = dbQuery("SELECT * FROM tbl_adjust ".$where." LIMIT ".$paginator->Page_Star
   <?php   while($rs = dbFetchObject($qs)) : ?>
         <tr class="font-size-12">
           <td class="middle text-center"><?php echo number($no); ?></td>
-          <td><?php echo $rs->reference; ?></td>
-          <td><?php echo $rs->refer; ?></td>
-          <td><?php echo $rs->requester; ?></td>
-          <td><?php echo $rs->remark; ?></td>
-          <td><?php echo thaiDate($rs->date_add); ?></td>
-          <td></td>
-          <td>
+          <td class="middle"><?php echo $rs->reference; ?></td>
+          <td class="middle"><?php echo $rs->refer; ?></td>
+          <td class="middle"><?php echo $rs->requester; ?></td>
+          <td class="middle"><?php echo $rs->remark; ?></td>
+          <td class="middle text-center"><?php echo thaiDate($rs->date_add); ?></td>
+          <td class="middle text-center">
+            <?php echo statusLabel($rs->isCancle, $rs->isExport, $rs->isSaved); ?>
+          </td>
+          <td class="middle text-right">
             <button type="button" class="btn btn-xs btn-info" onclick="goDetail(<?php echo $rs->id; ?>)">
               <i class="fa fa-eye"></i>
             </button>
@@ -146,7 +159,7 @@ $qs = dbQuery("SELECT * FROM tbl_adjust ".$where." LIMIT ".$paginator->Page_Star
             </button>
           <?php endif; ?>
 
-          <?php if( $delete ) : ?>
+          <?php if( $delete && $rs->isCancle == 0 ) : ?>
             <button type="button" class="btn btn-xs btn-danger" onclick="goDelete(<?php echo $rs->id; ?>, '<?php echo $rs->reference; ?>')">
               <i class="fa fa-trash"></i>
             </button>

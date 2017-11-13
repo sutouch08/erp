@@ -1,3 +1,46 @@
+function saveAdjust(){
+  var id = $('#id_adjust').val();
+
+  if(id == ''){
+    swal('ไม่พบ ID เอกสาร');
+    return false;
+  }
+
+  load_in();
+  $.ajax({
+    url:'controller/adjustController.php?saveAdjust',
+    type:'POST',
+    cache:'false',
+    data:{
+      'id_adjust' : id
+    },
+    success:function(rs){
+      load_out();
+      var rs = $.trim(rs);
+      if(rs == 'success'){
+        swal({
+          title:'Success',
+          type:'success',
+          timer:1000
+        });
+
+        doExport();
+        
+        setTimeout(function(){
+          window.location.reload();
+        }, 1500);
+
+      }else{
+        swal('Error!', rs, 'error');
+      }
+    }
+  });
+}
+
+
+
+
+//--- ลบรายการ 1 บรรทัด
 function deleteDetail(id, pdCode){
   swal({
 		title: 'คุณแน่ใจ ?',

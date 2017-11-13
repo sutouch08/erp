@@ -16,6 +16,9 @@ $disabled = $id === FALSE ? '' : 'disabled';
   <div class="col-sm-6">
     <p class="pull-right top-p">
     <?php echo goBackButton(); ?>
+    <?php if( $cs->isCancle == 0 && $cs->isSaved == 0 && ($add OR $edit) ) : ?>
+      <button type="button" class="btn btn-sm btn-success" onclick="saveAdjust()"><i class="fa fa-save"></i> ปรับยอด</button>
+    <?php endif; ?>
     </p>
   </div>
 </div>

@@ -82,7 +82,8 @@ if( $qty != 0 )
         'pdName'  => $product->getName($ds->id_product),
         'zoneName'  => $zone->name,
         'up'  => $ds->qty > 0 ? number($ds->qty) : 0,
-        'down'  => $ds->qty < 0 ? number($ds->qty) : 0
+        'down'  => $ds->qty < 0 ? number($ds->qty * -1) : 0,
+        'valid' => $ds->valid
       );
     }
   }

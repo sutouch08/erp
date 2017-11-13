@@ -19,6 +19,8 @@ $delete = $pm['delete'];
 
 //--- หากไม่มีสิทธิ์ในการดู
 accessDeny($view);
+
+include 'function/adjust_helper.php';
 ?>
 
 <div class="container">
@@ -27,6 +29,10 @@ accessDeny($view);
 if( isset( $_GET['add']) )
 {
   include 'include/adjust/adjust_add.php';
+}
+else if( isset( $_GET['view_detail']))
+{
+  include 'include/adjust/adjust_detail.php';
 }
 else
 {

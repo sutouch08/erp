@@ -29,6 +29,26 @@ if( isset( $_GET['deleteDetail']))
 }
 
 
+if( isset($_GET['deleteAdjust']))
+{
+  include 'adjust/adjust_delete.php';
+}
+
+
+
+
+
+//--- ปรับยอดในโซน ตามรายการที่คีย์
+//--- บันทึก dropMovement
+//--- บันทึกการปรับยอดในตารางรายการ tbl_adjust_detail.valid = 1
+//--- บันทึกการปรับยอดที่เอกสาร tbl_adjust.isSaved = 1
+if( isset($_GET['saveAdjust']))
+{
+  include 'adjust/adjust_save.php';
+}
+
+
+
 if( isset( $_GET['getZone']))
 {
   $sc   = array();

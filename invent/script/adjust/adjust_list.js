@@ -1,5 +1,47 @@
 //---store in  WEB_ROOT/invent/script/adjust
 
+function goDelete(id, reference){
+	swal({
+		title: 'คุณแน่ใจ ?',
+		text: 'ต้องการยกเลิก '+ reference +' หรือไม่ ?',
+		type: 'warning',
+		showCancelButton: true,
+		comfirmButtonColor: '#DD6855',
+		confirmButtonText: 'ใช่ ฉันต้องการ',
+		cancelButtonText: 'ไม่ใช่',
+		closeOnConfirm: false
+	}, function(){
+		$.ajax({
+			url:"controller/adjustController.php?deleteAdjust",
+			type:"POST",
+      cache:"false",
+      data:{
+        "id_adjust" : id
+      },
+			success: function(rs){
+				var rs = $.trim(rs);
+				if( rs == 'success' ){
+					swal({
+						title:'Success',
+						text: 'ยกเลิกเอกสารเรียบร้อยแล้ว',
+						type: 'success',
+						timer: 1000
+					});
+
+					setTimeout(function(){
+						goBack();
+					}, 1200);
+
+				}else{
+					swal("ข้อผิดพลาด", rs, "error");
+				}
+			}
+		});
+	});
+}
+
+
+
 $(document).ready(function() {
 
   $('#fromDate').datepicker({

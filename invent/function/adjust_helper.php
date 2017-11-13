@@ -1,24 +1,27 @@
 <?php
-function getAdjustData($id)
+function statusLabel($isCancle = 0, $isExport = 0, $isSaved = 0)
 {
-	$sc = FALSE;
-	$qs = dbQuery("SELECT * FROM tbl_adjust WHERE id_adjust = ".$id);
-	if( dbNumRows($qs) == 1 )
-	{
-		$sc = dbFetchArray($qs);
-	}
-	return $sc;
-}
 
-
-function getDiffData($id)
-{
-	$sc = FALSE;
-	$qs = dbQuery("SELECT * FROM tbl_diff WHERE id_diff = ".$id);
-	if( dbNumRows($qs) == 1 )
+	$rs = '';
+	if( $isExport == 0)
 	{
-		$sc = dbFetchArray($qs);	
+		$rs = 'NE';
 	}
+
+	if( $isSaved == 0)
+	{
+		$rs = 'NC';
+	}
+
+	if( $isCancle == 1)
+	{
+		$rs = 'CN';
+	}
+	
+	$sc  = '<span class="red">';
+	$sc .= $rs;
+	$sc .= '</span>';
+
 	return $sc;
 }
 

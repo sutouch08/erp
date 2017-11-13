@@ -232,5 +232,22 @@ if( isset($_GET['export']) && isset($_GET['TR']))
 }
 
 
+//---	Export Adjust
+//---	ส่งข้อมูลไป formula
+if( isset( $_GET['export']) && isset($_GET['AJ']) )
+{
+	$id = $_POST['id_adjust'];
+
+	//--- ปรับยอดสินค้า
+	include 'interface/export/exportAJ.php';
+
+	//--- เรียกใช้ function ที่ include เข้ามา เพื่อส่งออกข้อมูลเป็น excel
+	$sc = exportAJ($id);
+
+	//---	ถ้าสำเร็จ จะได้ค่า TRUE ถ้าไม่สำเร็จยะได้ Error massage
+	echo $sc === TRUE ? 'success' : $sc;
+}
+
+
 ///=================================================== END DOCUMENTS =======================================///
 ?>
