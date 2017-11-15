@@ -80,12 +80,20 @@ class po
 
 	public function isExists($bookcode, $reference, $id_pd)
 	{
-		$sc = FALSE;
-		$qs = dbQuery("SELECT bookcode FROM tbl_po WHERE bookcode = '".$bookcode."' AND reference = '".$reference."' AND id_product = '".$id_pd."'");
+		$sc  = FALSE;
+
+		$qr  = "SELECT bookcode FROM tbl_po ";
+		$qr .= "WHERE bookcode = '".$bookcode."' ";
+		$qr .= "AND reference = '".$reference."' ";
+		$qr .= "AND id_product = '".$id_pd."'";
+
+		$qs = dbQuery($qr);
+
 		if( dbNumRows($qs) > 0 )
 		{
 			$sc = TRUE;
 		}
+		
 		return $sc;
 	}
 

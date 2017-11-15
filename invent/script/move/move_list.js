@@ -1,6 +1,7 @@
-//---store in  WEB_ROOT/invent/script/adjust
 
-function goDelete(id, reference){
+
+
+function goDelete(id_move, reference){
 	swal({
 		title: 'คุณแน่ใจ ?',
 		text: 'ต้องการยกเลิก '+ reference +' หรือไม่ ?',
@@ -12,11 +13,11 @@ function goDelete(id, reference){
 		closeOnConfirm: false
 	}, function(){
 		$.ajax({
-			url:"controller/adjustController.php?deleteAdjust",
+			url:"controller/moveController.php?deleteMove",
 			type:"POST",
       cache:"false",
       data:{
-        "id_adjust" : id
+        "id_move" : id_move
       },
 			success: function(rs){
 				var rs = $.trim(rs);
@@ -42,42 +43,50 @@ function goDelete(id, reference){
 
 
 
-$(document).ready(function() {
-
-  $('#fromDate').datepicker({
-    dateFormat:'dd-mm-yy',
-    onClose:function(sd){
-      $('#toDate').datepicker('option', 'minDate', sd);
-    }
-  });
-
-  $('#toDate').datepicker({
-    dateFormat:'dd-mm-yy',
-    onClose:function(sd){
-      $('#fromDate').datepicker('option', 'maxDate', sd);
-    }
-  });
-
-});
+function clearFilter(){
+  $.get('controller/moveController.php?clearFilter', function(){ goBack(); });
+}
 
 
-$('.search-box').keyup(function(e){
-	if( e.keyCode == 13){
-		getSearch();
-	}
-});
 
 
 function getSearch(){
   var from = $('#fromDate').val();
   var to = $('#toDate').val();
-
-  if( (from.length > 0 && to.length > 0 ) || (from.length == 0 && to.length == 0) ){
+  if( (from.length > 0 && to.length > 0) || (from.length == 0 && to.length == 0)){
     $('#searchForm').submit();
   }
 }
 
 
-function clearFilter(){
-  $.get('controller/adjustController.php?clearFilter', function(){ goBack(); });
-}
+
+
+$('.search-box').keyup(function(e){
+  if(e.keyCode == 13){
+    getSearch();
+  }
+});
+
+
+
+$('#sStatus').change(function(){
+  getSearch();
+});
+
+
+
+$('#fromDate').datepicker({
+  dateFormat:'dd-mm-yy',
+  onClose:function(sd){
+    $('#toDate').datepicker('option', 'minDate', sd);
+  }
+});
+
+
+
+$('#toDate').datepicker({
+  dateFormat:'dd-mm-yy',
+  onClose:function(sd){
+    $('#fromDate').datepicker('option', 'maxDate', sd);
+  }
+});

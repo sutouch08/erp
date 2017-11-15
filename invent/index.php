@@ -20,10 +20,7 @@ if( !getConfig("CLOSED") )
 	$page = ( isset($_GET['content'] ) && $_GET['content'] != '' ) ? $_GET['content'] : '' ;
 
 switch($page){
-		case "orderToComplete" :
-			$content = "orderToComplete.php";
-			$pageTitle = "จัดออเดอร์ย้อนหลัง";
-			break;
+
 //**********  ระบบคลังสินค้า  **********//
 		case "receive_product":
 			$content = "receive_product.php";
@@ -33,13 +30,9 @@ switch($page){
 			$content 		= "receive_transform.php";
 			$pageTitle	= "รับเข้าจากการแปรสภาพ";
 			break;
-		case "order_return":
-			$content = "order_return.php";
-			$pageTitle = "รับคืนสินค้า(ปัจจุบัน)";
-			break;
-		case "order_return2":
-			$content = "order_return2.php";
-			$pageTitle = "รับคืนสินค้า(อดีต)";
+		case "return_order":
+			$content = "return_order.php";
+			$pageTitle = "รับคืนสินค้าจากการขาย(ลดหนี้)";
 			break;
 		case "sponsor_return":
 			$content = "sponsor_return.php";
@@ -65,8 +58,8 @@ switch($page){
 			$pageTitle = "ยืมสินค้า";
 			break;
 
-		case "ProductMove":
-			$content = "product_move.php";
+		case "move":
+			$content = "move.php";
 			$pageTitle = "ย้ายพื้นที่จัดเก็บ";
 			break;
 		case "ProductCheck":

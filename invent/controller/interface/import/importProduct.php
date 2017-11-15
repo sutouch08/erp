@@ -34,7 +34,7 @@
 				{
 					$id 		= trim( $rs['A'] );
 					$count_stock	= $rs['G'] == 3 ? 0 : 1;
-					$active	= $rs['F'] == 'I' ? 0 : 1;
+					$active	= $rs['E'] == 'I' ? 0 : 1;
 					if( $pd->isExists($id) === FALSE )
 					{
 						$arr = array(
@@ -44,7 +44,7 @@
 											"id_style"	=> $st->getStyleId( $rs['J'] ),
 											"id_color"	=> $co->getColorId( $rs['L'] ),
 											"id_size"		=> $si->getSizeId( $rs['K'] ),
-											"id_group"	=> $pg->getProductGroupId( $rs['E'] ),
+											"id_group"	=> $pg->getProductGroupId( $rs['F'] ),
 											"id_brand"	=> $bd->getBrandId( $rs['I'] ),
 											"cost"			=> $rs['D'],
 											"price"			=> $rs['M'],
@@ -62,7 +62,7 @@
 											"id_style"	=> $st->getStyleId( $rs['J'] ),
 											"id_color"	=> $co->getColorId( $rs['L'] ),
 											"id_size"		=> $si->getSizeId( $rs['K'] ),
-											"id_group"	=> $pg->getProductGroupId( $rs['E'] ),
+											"id_group"	=> $pg->getProductGroupId( $rs['F'] ),
 											"id_brand"	=> $bd->getBrandId( $rs['I'] ),
 											"cost"			=> $rs['D'],
 											"price"			=> $rs['M'],

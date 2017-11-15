@@ -13,7 +13,7 @@ error_reporting(E_ALL);
 $dbHost = 'localhost';
 $dbUser = 'root';
 $dbPass = 'warrix';
-$dbName = 'warrix_erp';
+$dbName = 'warrix_test';
 
 // setting up the web root, server root and company's name
 

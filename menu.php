@@ -11,10 +11,9 @@
                 </li>
                 <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i>&nbsp; รับคืนสินค้า</a>
                 	<ul class="dropdown-menu">
-                    	<li><a href="index.php?content=order_return"><i class="fa fa-download"></i>&nbsp; รับคืนสินค้า จากการขาย(ปัจจุบัน)	</a>
-                        <li><a href="index.php?content=order_return2"><i class="fa fa-download"></i>&nbsp; รับคืนสินค้า จากการขาย(อดีต)</a>
-                        <li><a href="index.php?content=support_return"><i class="fa fa-download"></i>&nbsp; รับคืนสินค้า จากอภินันท์</a>
-                        <li><a href="index.php?content=sponsor_return"><i class="fa fa-download"></i>&nbsp; รับคืนสินค้า จากสปอนเซอร์</a>
+                    	<li><a href="index.php?content=return_order"><i class="fa fa-download"></i>&nbsp; รับคืนสินค้า จากการขาย(ลดหนี้)</a></li>
+                      <li><a href="index.php?content=support_return"><i class="fa fa-download"></i>&nbsp; รับคืนสินค้า จากอภินันท์</a></li>
+                      <li><a href="index.php?content=sponsor_return"><i class="fa fa-download"></i>&nbsp; รับคืนสินค้า จากสปอนเซอร์</a></li>
                     </ul>
                 </li>
                 <li class="divider"></li>
@@ -23,7 +22,7 @@
                 <li><a href="index.php?content=order_lend"><i class="fa fa-upload"></i>&nbsp; ยืมสินค้า</a></li>
                 <li class="divider"></li>
                 <li><a href="index.php?content=transfer"><i class="fa fa-recycle"></i>&nbsp; โอนสินค้าระหว่างคลัง</a></li>
-                <li><a href="index.php?content=ProductMove"><i class="fa fa-recycle"></i>&nbsp; ย้ายพื้นที่จัดเก็บ</a></li>
+                <li><a href="index.php?content=move"><i class="fa fa-recycle"></i>&nbsp; ย้ายพื้นที่จัดเก็บ</a></li>
                 <li><a href="index.php?content=ProductCheck"><i class="fa fa-check-square-o"></i>&nbsp; ตรวจนับสินค้า</a></li>
                 <li><a href="index.php?content=adjust"><i class="fa fa-magic"></i>&nbsp; ปรับปรุงสต็อก</a></li>
                 <li><a href="index.php?content=drop_zero"><span class="glyphicon glyphicon-tasks"></span>&nbsp; เคลียร์ยอดสต็อกที่เป็นศูนย์</a></li>
@@ -246,7 +245,6 @@
                         <li><a href="index.php?content=unit"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข หน่วยนับ</a></li>
                         <li><a href="index.php?content=color"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข สี</a></li>
                         <li><a href="index.php?content=size"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข ไซด์</a></li>
-                        <li><a href="index.php?content=attribute"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข คุณลักษณะ</a></li>
                         <li><a href="index.php?content=barcode"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข บาร์โค้ด</a></li>
                       </ul>
             		</li>

@@ -2,6 +2,7 @@
 require '../../library/config.php';
 require '../../library/functions.php';
 require "../function/tools.php";
+require '../../library/class/PHPExcel.php';
 
 
 
@@ -135,6 +136,12 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['customerCredit'] ) )
 if( isset( $_GET['syncDocument'] ) && isset( $_GET['po'] ) )
 {
 	include "interface/import/importPO.php";
+}
+
+
+if( isset( $_GET['syncDocument'] ) && isset( $_GET['SM'] ) )
+{
+	include 'interface/import/importSM.php';
 }
 
 

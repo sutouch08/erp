@@ -9,13 +9,13 @@ function getCustomerIn($txt)
 		$sc = "";
 		while( $rs = dbFetchObject($qs) )
 		{
-			$sc .= $i == 1 ? $rs->id : ", ".$rs->id;
+			$sc .= $i == 1 ? "'".$rs->id."'" : ", '".$rs->id."'";
 			$i++;
 		}
 	}
 	else
 	{
-		$sc = "0";	
+		$sc = "'0'";
 	}
 	return $sc;
 }
@@ -36,7 +36,7 @@ function customerGroupIn($txt)
 	}
 	else
 	{
-		$sc = "'".$txt."'";	
+		$sc = "'".$txt."'";
 	}
 	return $sc;
 }
@@ -52,12 +52,12 @@ function customerAreaIn($txt)
 		while( $rs = dbFetchArray($qs) )
 		{
 			$sc .= $i == 1 ? "'".$rs['code']."'" : ", '".$rs['code']."'";
-			$i++;	
+			$i++;
 		}
 	}
 	else
 	{
-		$sc = "'".$txt."'";	
+		$sc = "'".$txt."'";
 	}
 	return $sc;
 }
@@ -77,7 +77,7 @@ function customerKindIn($txt)
 	}
 	else
 	{
-		$sc = "'".$txt."'";	
+		$sc = "'".$txt."'";
 	}
 	return $sc;
 }
@@ -98,7 +98,7 @@ function customerTypeIn($txt)
 	}
 	else
 	{
-		$sc = "'".$txt."'";	
+		$sc = "'".$txt."'";
 	}
 	return $sc;
 }
@@ -120,7 +120,7 @@ function customerClassIn($txt)
 	}
 	else
 	{
-		$sc = "'".$txt."'";	
+		$sc = "'".$txt."'";
 	}
 	return $sc;
 }
@@ -130,7 +130,7 @@ function customerClassIn($txt)
 function customerName($id)
 {
 	$cs = new customer();
-	return $cs->getName($id);		
+	return $cs->getName($id);
 }
 
 
@@ -144,10 +144,10 @@ function selectCustomerGroup($id = "")
 	{
 		while( $rs = dbFetchObject($qs) )
 		{
-			$sc .= '<option value="'.$rs->id.'" '.isSelected($rs->id, $id).'>'.$rs->name.'</option>';	
+			$sc .= '<option value="'.$rs->id.'" '.isSelected($rs->id, $id).'>'.$rs->name.'</option>';
 		}
 	}
-	
+
 	return $sc;
 }
 
@@ -162,10 +162,10 @@ function selectCustomerKind($id = "")
 	{
 		while( $rs = dbFetchObject($qs) )
 		{
-			$sc .= '<option value="'.$rs->id.'" '.isSelected($rs->id, $id).'>'.$rs->name.'</option>';	
+			$sc .= '<option value="'.$rs->id.'" '.isSelected($rs->id, $id).'>'.$rs->name.'</option>';
 		}
 	}
-	
+
 	return $sc;
 }
 
@@ -178,10 +178,10 @@ function selectCustomerType($id = "")
 	{
 		while( $rs = dbFetchObject($qs) )
 		{
-			$sc .= '<option value="'.$rs->id.'" '.isSelected($rs->id, $id).'>'.$rs->name.'</option>';	
+			$sc .= '<option value="'.$rs->id.'" '.isSelected($rs->id, $id).'>'.$rs->name.'</option>';
 		}
 	}
-	
+
 	return $sc;
 }
 
@@ -194,10 +194,10 @@ function selectCustomerClass($id = "")
 	{
 		while( $rs = dbFetchObject($qs) )
 		{
-			$sc .= '<option value="'.$rs->id.'" '.isSelected($rs->id, $id).'>'.$rs->name.'</option>';	
+			$sc .= '<option value="'.$rs->id.'" '.isSelected($rs->id, $id).'>'.$rs->name.'</option>';
 		}
 	}
-	
+
 	return $sc;
 }
 
