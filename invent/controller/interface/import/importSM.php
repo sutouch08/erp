@@ -40,12 +40,30 @@
 				if( $i != 1 )
 				{
 					$bookcode 	= trim( $rs['G'] );
+
+					//---	รหัสเอกสาร
 					$reference	= trim( $rs['I'] );
+
+					//---	คืนสินค้าหรือไม่
+					$isReturn   = trim($rs['AO']) == 'Y' ? 1 : 0;
+
+					//---	อ้างอิงใบส่งสินค้า/ใบกำกับภาษี
 					$invoice    = trim($rs['AQ']).'-'.trim($rs['AR']);
+
+					//---	รหัสสินค้า
 					$product		= trim( $rs['AC'] );
+
+					//---	ไอดีสินค้า
 					$id_pd		= $pd->getId($product);
+
+					//---	ไอดีรุ่นสินค้า
 					$id_style		= $pd->getStyleId($id_pd);
+
+					//---	ยกเลิกหรือไม่
 					$isCancle	= $rs['F'] == "C" ? 1 : 0;
+
+					//---	valid ถ้าไม่มีการคืนสินค้าให้ valid = 1
+					$valid = $isReturn == 1 ? 0 : 1;
 
 					$id = $cs->getId($bookcode, $reference, $product);
 					if( $id === FALSE )
@@ -64,39 +82,20 @@
 											'price'			    => trim($rs['AI']),
 											'qty'		        => trim($rs['AF']),
 											'unit_code'	    => trim($rs['AG']),
-											'umqty'	        => trim($rs['AH']),										
+											'umqty'	        => trim($rs['AH']),
+											'discount'			=> trim($rs['AJ']),
 											'bill_discount'	=> trim($rs['U']),
 											'amount_ex'	    => trim($rs['V']),
 											'vat_amount'	  => trim($rs['W']),
 											'date_add'			=> dbDate($rs['J']),
-											'isCancle'			=> $isCancle
+											'isCancle'			=> $isCancle,
+											'valid'					=> $valid,
+											'isReturn'			=> $isReturn
 										);
 
 						$cs->add($arr);
 					}
-					else
-					{
-						$arr = array(
-											'code'			    => trim( $rs['H']),
-											'invoice'		    => $invoice,
-											'id_customer'   => $cus->getId(trim($rs['M'])),
-											'id_sale'		    => $sale->getId(trim($rs['N'])),
-											'id_warehouse'	=> $wh->getId(trim($rs['AD'])),
-											'price'			    => trim($rs['AI']),
-											'qty'		        => trim($rs['AF']),
-											'unit_code'	    => trim($rs['AG']),
-											'umqty'	        => trim($rs['AH']),
-											'discount'	    => trim($rs['AJ']),
-											'bill_discount'	=> trim($rs['U']),
-											'amount_ex'	    => trim($rs['V']),
-											'vat_amount'	  => trim($rs['W']),
-											'date_add'			=> dbDate($rs['J']),
-											'isCancle'			=> $isCancle
-										);
 
-						$cs->update($id, $arr);
-
-					}//---- end if exists
 				}//--- end if first row
 				$i++;
 			}//------ end foreach

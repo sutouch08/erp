@@ -1,52 +1,28 @@
 <?php
-  $qs = $cs->getDetails($cs->reference);
- ?>
- <div class="row">
-   <div class="col-sm-12">
-     <form id="receiveForm">
-     <table class="table table-striped table-bordered">
-       <thead>
-         <tr>
-           <th class="width-5 text-center">ลำดับ</th>
-           <th class="width-15 text-center">บาร์โค้ด</th>
-           <th class="">สินค้า</th>
-           <th class="width-10 text-center">จำนวนที่คืน</th>
-           <th class="width-10 text-center">จำนวนที่รับ</th>
-         </tr>
-       </thead>
-       <tbody>
-<?php if( dbNumRows($qs) > 0) : ?>
-<?php   $no = 1; ?>
-<?php   $bc = new barcode(); ?>
-<?php   while( $rs = dbFetchObject($qs)) : ?>
-<?php   $barcode = $bc->getBarcode($rs->id_product); ?>
-        <tr>
-          <td class="middle text-center"><?php echo $no; ?></td>
-          <td class="middle text-center"><?php echo $barcode; ?></td>
-          <td class="middle"><?php echo $rs->product_code; ?></td>
-          <td class="middle text-center" id="qty-label-<?php echo $rs->id_product; ?>"><?php echo number($rs->qty); ?></td>
-          <td class="middle text-center">
-            <input type="number" class="form-control input-sm text-center qty" name="qty[<?php echo $rs->id_product; ?>]" id="qty-<?php echo $rs->id_product; ?>" value="<?php echo $rs->qty; ?>" />
-<?php
-            $qm = $bc->getBarcodes($rs->id_product);
-            while( $rm = dbFetchObject($qm))
-            {
-              echo '<input type="hidden" class="'.$rm->barcode.'" id="'.$rm->id_product.'" value="'.$rm->unit_qty.'"/>';
-            }
+$code = isset($_GET['reference']) ? $_GET['reference'] : '';
+$cs = new return_order($code);
+$wh = new warehouse();
+$zone = new zone();
+$zoneName = $zone->getName($cs->id_zone);
 ?>
-          </td>
-        </tr>
-<?php     $no++; ?>
-<?php   endwhile; ?>
-<?php else: ?>
-        <tr>
-          <td colspan="4" class="text-center">
-            <h4>ไม่พบรายการ</h4>
-          </td>
-        </tr>
+<div class="row top-row">
+  <div class="col-sm-6 top-col">
+    <h4 class="title"><i class="fa fa-recycle"></i> <?php echo $pageTitle; ?></h4>
+  </div>
+  <div class="col-sm-6">
+    <p class="pull-right top-p">
+      <?php echo goBackButton(); ?>
+    </p>
+  </div>
+</div>
+<hr/>
+<?php if( $code == '') : ?>
+<?php include 'include/page_error.php'; ?>
+<?php else : ?>
+<?php
+  include 'include/return_order/return_order_header.php';
+  include 'include/return_order/return_detail_table.php';
+ ?>
+
+
 <?php endif; ?>
-       </tbody>
-     </table>
-   </form>
-   </div>
- </div>

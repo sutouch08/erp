@@ -21,6 +21,8 @@ class return_order
   public $amount_ex;
   public $vat_amount;
   public $valid = 0;
+  public $isCancle = 0;
+  public $isReturn = 1;
 
   public function __construct($reference = '')
   {
@@ -71,12 +73,9 @@ class return_order
   }
 
 
-
-
-  public function update($id, $qty)
+  public function delete($id)
   {
-    return dbQuery("UPDATE tbl_reurn_order SET qty = qty + ".$qty." WHERE id = '".$id."'");
-
+    return dbQuery("DELETE FROM tbl_return_order WHERE id = '".$id."'");
   }
 
 
@@ -131,9 +130,7 @@ class return_order
   //----  เปลี่ยนโซนรับเข้า
   public function setZone($reference, $id_zone)
   {
-
     return dbQuery("UPDATE tbl_return_order SET id_zone = '".$id_zone."' WHERE reference = '".$reference."' AND valid = 0 AND isCancle = 0");
-
   }
 
 
@@ -142,6 +139,12 @@ class return_order
     return dbQuery("UPDATE tbl_return_order SET received = '".$qty."' WHERE bookcode = '".$bookcode."' AND reference = '".$reference."' AND id_product = '".$id_product."'");
   }
 
+
+
+  public function setValid($reference, $valid)
+  {
+    return dbQuery("UPDATE tbl_return_order SET valid = '".$valid."' WHERE reference = '".$reference."'");
+  }
 
 } //--- endclass
 

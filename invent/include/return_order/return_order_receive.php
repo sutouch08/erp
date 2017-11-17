@@ -11,11 +11,11 @@ $zone = new zone();
   <div class="col-sm-6">
     <p class="pull-right top-p">
       <?php if( $cs->isCancle == 1 OR $cs->valid == 1) : ?>
-        <?php echo $goBackButton(); ?>
+        <?php echo goBackButton(); ?>
       <?php else: ?>
       <button type="button" class="btn btn-sm btn-warning" onclick="confirmExit()"><i class="fa fa-arrow-left"></i> กลับ</button>
       <?php endif; ?>
-      <?php if( ($add OR $edit) && $cs->isCancle == 0 && $cs->valid == 0) : ?>
+      <?php if( ($add OR $edit) && $cs->valid == 0 && $cs->isReturn == 1) : ?>
         <button type="button" class="btn btn-sm btn-success" onclick="save()"><i class="fa fa-save"></i> บันทึก</button>
       <?php endif; ?>
     </p>
@@ -27,8 +27,28 @@ $zone = new zone();
 <?php else : ?>
 <?php
   include 'include/return_order/return_order_header.php';
-  include 'include/return_order/return_order_control.php';
-  include 'include/return_order/return_order_detail.php';
+  if( $cs->valid == 0 && $cs->isReturn == 1)
+  {
+    include 'include/return_order/return_order_control.php';
+  }
+
+  if( $cs->isReturn == 1)
+  {
+    if( $cs->valid == 1)
+    {
+      include 'include/return_order/return_detail_table.php';
+    }
+    else
+    {
+      include 'include/return_order/return_detail.php';
+    }
+
+  }
+  else
+  {
+    include 'include/return_order/return_detail_table.php';
+  }
+
  ?>
 
 <script src="script/return_order/return_order_receive.js"></script>

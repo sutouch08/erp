@@ -20,12 +20,14 @@ function save(){
         {'name':'reference', 'value':reference}
       );
 
+  load_in();
   $.ajax({
     url:'controller/returnOrderController.php?saveReturn',
     type:'POST',
     cache:'false',
     data: ds,
     success:function(rs){
+      load_out();
       var rs = $.trim(rs);
       if(rs == 'success'){
         swal({
@@ -33,12 +35,19 @@ function save(){
           type:'success',
           timer:1000
         });
+
+        setTimeout(function(){
+          window.location.reload();
+        }, 1500);
+
       }else{
         swal('error', rs, 'error');
       }
     }
   });
 }
+
+
 
 function checkReceive(){
   var err = 0;
@@ -57,6 +66,8 @@ function checkReceive(){
 
   return err;
 }
+
+
 
 
 //--- ยิงบาร์โค้ดรับเข้า
@@ -98,8 +109,21 @@ function receiveBarcode(){
     beep();
   }
 
+  sumReceived();
+
 }
 
+
+function sumReceived(){
+  var qty = 0;
+
+  $('.qty').each(function(index, el) {
+    var qt = $(this).val() == '' ? 0 : parseInt($(this).val());
+    qty += qt;
+  });
+
+  $('#totalReceived').text( addCommas(qty));
+}
 
 
 $('#barcode').keyup(function(e){
@@ -111,12 +135,11 @@ $('#barcode').keyup(function(e){
 });
 
 
-$(document).ready(function() {
-  $('.qty').keyup(function(e){
-    if(e.keyCode == 13){
-      $(this).next('.qty').focus();
-    }
-  });
+$('.qty').keyup(function(e){
+  if(e.keyCode == 13){
+    var no = parseInt($(this).attr('index')) +1;
+    $('.qty-'+no).focus();
+  }
 });
 
 
@@ -130,6 +153,8 @@ $('.qty').focusout(function(){
   }else{
     $(this).removeClass('has-error');
   }
+
+  sumReceived();
 });
 
 

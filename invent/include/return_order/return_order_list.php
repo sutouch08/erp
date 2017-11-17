@@ -13,9 +13,17 @@
 $sCode = getFilter('sCode', 'SMsCode', '');
 $sInv  = getFilter('sInv', 'SMsInv', '');
 $sCus  = getFilter('sCus', 'SMsCus', '');
-$sStatus = getFilter('sStatus', 'SMsStatus', '');
+$Return = getFilter('Return', 'Return', '');
+$notReturn = getFilter('notReturn', 'notReturn','');
+$Valid = getFilter('Valid', 'Valid', '');
+$notValid = getFilter('notValid', 'notValid', '');
 $fromDate = getFilter('fromDate', 'fromDate', '');
 $toDate = getFilter('toDate', 'toDate', '');
+
+$return_btn = $Return == '' ? '' : 'btn-info';
+$notreturn_btn = $notReturn == '' ? '' : 'btn-info';
+$valid_btn = $Valid == '' ? '' : 'btn-info';
+$notvalid_btn = $notValid == '' ? '' : 'btn-info';
  ?>
 
 <form id="searchForm" method="post">
@@ -32,28 +40,41 @@ $toDate = getFilter('toDate', 'toDate', '');
     <label>ลูกค้า</label>
     <input type="text" class="form-control input-sm text-center search-box" name="sCus" value="<?php echo $sCus; ?>" />
   </div>
-  <div class="col-sm-2">
-    <label>สถานะ</label>
-    <select class="form-control input-sm" name="sStatus" id="sStatus">
-      <option value="">ทั้งหมด</option>
-      <option value="NC" <?php echo isSelected($sStatus, 'NC'); ?>>NC : ยังไม่รับเข้า</option>
-      <option value="CN" <?php echo isSelected($sStatus, 'CN'); ?>>CN : ยกเลิก</option>
-    </select>
-  </div>
-  <div class="col-sm-2 padding-5">
+  <div class="col-sm-3 padding-5">
     <label class="display-block">วันที่</label>
     <input type="text" class="form-control input-sm input-discount text-center" id="fromDate" name="fromDate" placeholder="เริ่มต้น" value="<?php echo $fromDate; ?>" />
     <input type="text" class="form-control input-sm input-unit text-center" id="toDate" name="toDate" placeholder="สิ้นสุด" value="<?php echo $toDate; ?>" />
   </div>
-  <div class="col-sm-1 padding-5">
+  <div class="col-sm-1 col-1-harf padding-5">
     <label class="display-block not-show">Search</label>
     <button type="button" class="btn btn-sm btn-primary btn-block" onclick="getSearch()"><i class="fa fa-search"></i> ค้นหา</button>
   </div>
-  <div class="col-sm-1 padding-5 last">
+  <div class="col-sm-1 col-1-harf padding-5 last">
     <label class="display-block not-show">Search</label>
     <button type="button" class="btn btn-sm btn-warning btn-block" onclick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
   </div>
+
+  <div class="col-sm-2">
+    <label class="display-block not-show">btn-group</label>
+    <div class="btn-group width-100">
+      <button type="button" class="btn btn-sm width-50 <?php echo $return_btn; ?>" id="btn-return" onclick="toggleReturn()">คืนสินค้า</button>
+      <button type="button" class="btn btn-sm width-50 <?php echo $notreturn_btn; ?>" id="btn-notreturn" onclick="toggleNotReturn()">ไม่คืนสินค้า</button>
+    </div>
+  </div>
+
+  <div class="col-sm-2">
+    <label class="display-block not-show">btn-group</label>
+    <div class="btn-group width-100">
+      <button type="button" class="btn btn-sm width-50 <?php echo $valid_btn; ?>" id="btn-valid" onclick="toggleValid()">รับเข้าแล้ว</button>
+      <button type="button" class="btn btn-sm width-50 <?php echo $notvalid_btn; ?>" id="btn-notvalid" onclick="toggleNotValid()">ยังไม่รับเข้า</button>
+    </div>
+  </div>
 </div>
+
+  <input type="hidden" name="Valid" id="Valid" value="<?php echo $Valid; ?>" />
+  <input type="hidden" name="notValid" id="notValid" value="<?php echo $notValid; ?>" />
+  <input type="hidden" name="Return" id="Return" value="<?php echo $Return; ?>" />
+  <input type="hidden" name="notReturn" id="notReturn" value="<?php echo $notReturn; ?>" />
 </form>
 <hr class="margin-top-15"/>
 <?php
@@ -63,7 +84,10 @@ $where = "WHERE reference != '' ";
 createCookie('SMsCode', $sCode);
 createCookie('SMsInv', $sInv);
 createCookie('SMsCus', $sCus);
-createCookie('SMsStatus', $sStatus);
+createCookie('Return', $Return);
+createCookie('notReturn', $notReturn);
+createCookie('Valid', $Valid);
+createCookie('notValid', $notValid);
 createCookie('fromDate', $fromDate);
 createCookie('toDate', $toDate);
 
@@ -82,18 +106,25 @@ if( $sCus != '')
   $where .= "AND id_customer IN(".getCustomerIn($sCus).") ";
 }
 
-if( $sStatus != '')
+
+if( $Return != '')
 {
-  if( $sStatus == 'NC')
-  {
-    $where .= "AND isCancle = 0 AND valid = 0 ";
-  }
+  $where .= "AND isReturn = 1 ";
+}
 
-  if( $sStatus == 'CN')
-  {
-    $where .= "AND isCancle = 1 ";
-  }
+if( $notReturn != '')
+{
+  $where .= "AND isReturn = 0 ";
+}
 
+if( $Valid != '')
+{
+  $where .= "AND valid = 1 ";
+}
+
+if( $notValid != '')
+{
+  $where .= "AND valid = 0 ";
 }
 
 if( $fromDate != '' && $toDate != '')
@@ -119,7 +150,6 @@ $qs = dbQuery("SELECT * FROM tbl_return_order ". $where." LIMIT ".$paginator->Pa
      <p class="pull-right top-p">
        <span>ว่าง</span><span class="margin-right-15"> = ปกติ</span>
        <span class="blue">NC</span><span class="margin-right-15"> = ยังไม่รับเข้า</span>
-       <span class="red">CN</span><span> = ยกเลิก</span>
      </p>
    </div>
  </div>
@@ -128,14 +158,15 @@ $qs = dbQuery("SELECT * FROM tbl_return_order ". $where." LIMIT ".$paginator->Pa
    <div class="col-sm-12">
      <table class="table table-striped table-bordered">
        <thead>
-         <tr>
+         <tr class="font-size-12">
            <th class="width-5 text-center">ลำดับ</th>
            <th class="width-10 text-center">เลขที่เอกสาร</th>
            <th class="width-10 text-center">ใบส่งสินค้า</th>
            <th class="width-35 text-center">ลูกค้า</th>
-           <th class="width-15 text-center">มูลค่า</th>
+           <th class="width-10 text-center">มูลค่า</th>
            <th class="width-10 text-center">วันที่</th>
            <th class="width-5 text-center">สถานะ</th>
+           <th class="width-5 text-center">คืนสินค้า</th>
            <th></th>
          </tr>
        </thead>
@@ -143,7 +174,7 @@ $qs = dbQuery("SELECT * FROM tbl_return_order ". $where." LIMIT ".$paginator->Pa
 <?php if( dbNumRows($qs) > 0 ) : ?>
 <?php   $no = row_no(); ?>
 <?php   while( $rs = dbFetchObject($qs)) : ?>
-        <tr class="font-size-12">
+        <tr class="font-size-12" id="row-<?php echo $rs->reference; ?>">
           <td class="middle text-center"><?php echo number($no); ?></td>
           <td class="middle text-center"><?php echo $rs->reference; ?></td>
           <td class="middle text-center"><?php echo $rs->invoice; ?></td>
@@ -151,11 +182,12 @@ $qs = dbQuery("SELECT * FROM tbl_return_order ". $where." LIMIT ".$paginator->Pa
           <td class="middle text-right"><?php echo number($rs->amount_ex, 2); ?></td>
           <td class="middle text-center"><?php echo thaiDate($rs->date_add, '/'); ?></td>
           <td class="middle text-center"><?php echo returnStatusLabel($rs->isCancle, $rs->valid); ?></td>
+          <td class="middle text-center"><?php echo ($rs->isReturn == 1 ? 'Y' : 'N'); ?></td>
           <td class="middle text-right">
             <button type="button" class="btn btn-xs btn-info" onclick="viewDetail('<?php echo $rs->reference; ?>')">
               <i class="fa fa-eye"></i>
             </button>
-            <?php if( ($add OR $edit ) && $rs->isCancle == 0 && $rs->valid == 0 ) : ?>
+            <?php if( ($add OR $edit ) && $rs->isReturn == 1 && $rs->valid == 0 ) : ?>
               <button type="button" class="btn btn-xs btn-warning" onclick="goEdit('<?php echo $rs->reference; ?>')">
                 <i class="fa fa-pencil"></i>
               </button>
@@ -172,7 +204,7 @@ $qs = dbQuery("SELECT * FROM tbl_return_order ". $where." LIMIT ".$paginator->Pa
 <?php endwhile; ?>
 <?php else : ?>
         <tr>
-          <td colspan="8" class="text-center">
+          <td colspan="9" class="text-center">
             <h4>ไม่พบรายการ</h4>
           </td>
         </tr>

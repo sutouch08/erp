@@ -3,23 +3,22 @@ require '../../library/config.php';
 require '../../library/functions.php';
 require '../function/tools.php';
 
-
+//--- บันทึกเอกสาร
 if( isset($_GET['saveReturn']))
 {
-
-  $id_zone = $_POST['id_zone'];
-  $reference = $_POST['reference'];
-  $cs = new return_order($reference);
-  $ds = $_POST['qty'];
-  if( ! empty($ds))
-  {
-    foreach($ds as $id => $qty)
-    {
-      $cs->updateReceived($cs->bookcode, $reference, $id, $qty);
-    }
-  }
-  echo 'success';
+  include 'return_order/return_order_save.php';
 }
+
+
+
+//--- ลบเอกสารลดหนี้
+if( isset($_GET['deleteReturn']))
+{
+  include 'return_order/return_order_delete.php';
+}
+
+
+
 
 
 //--- auto complete zone name
@@ -71,7 +70,10 @@ if( isset($_GET['clearFilter']))
   deleteCookie('SMsCode');
   deleteCookie('SMsInv');
   deleteCookie('SMsCus');
-  deleteCookie('SMsStatus');
+  deleteCookie('Return');
+  deleteCookie('notReturn');
+  deleteCookie('Valid');
+  deleteCookie('notValid');
   deleteCookie('fromDate');
   deleteCookie('toDate');
   echo 'done';
