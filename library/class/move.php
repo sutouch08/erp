@@ -7,6 +7,8 @@ class move
   //--- เลขที่เอกสาร
   public $reference;
 
+  public $id_warehouse;
+
   //--- พนักงานที่เพิ่มเอกสาร
   public $id_employee;
 
@@ -345,7 +347,7 @@ class move
 		$Y		    = date('y', strtotime($date));
 		$M		    = date('m', strtotime($date));
 		$runDigit = getConfig('RUN_DIGIT');
-		$prefix   = getConfig('PREFIX_TRANSFER');
+		$prefix   = getConfig('PREFIX_MOVE');
 		$preRef   = $prefix . '-' . $Y . $M;
 
 		$qs = dbQuery("SELECT MAX(reference) AS reference FROM tbl_move WHERE reference LIKE '".$preRef."%' ORDER BY reference DESC");

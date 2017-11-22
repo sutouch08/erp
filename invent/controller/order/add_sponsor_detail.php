@@ -20,13 +20,14 @@ foreach( $ds as $items )
           $discount 	=
 
           $arr = array(
-                  "id_order"	=> $order->id,
-                  "id_style"		=> $pd->id_style,
-                  "id_product"	=> $id,
+                  "id_order"	    => $order->id,
+                  "id_style"		  => $pd->id_style,
+                  "id_product"	  => $id,
                   "product_code"	=> $pd->code,
                   "product_name"	=> $pd->name,
-                  "price"	=> $pd->price,
-                  "qty"		=> $qty,
+                  "cost"          => $pd->cost,
+                  "price"	        => $pd->price,
+                  "qty"		        => $qty,
                   "total_amount"	=> ($pd->price * $qty)
                 );
 
@@ -46,6 +47,7 @@ foreach( $ds as $items )
                     "id_product"	=> $id,
                     "qty" => $qty,
                     "total_amount"	=> ($pd->price * $qty),
+                    "valid"   => 0,
                     "isSaved"	=> 0 //--- ย้อนกลับมาเป็นยังไม่ได้บันทึกอีกครั้ง เพื่อคำนวณเคดิตใหม่
                     );
 

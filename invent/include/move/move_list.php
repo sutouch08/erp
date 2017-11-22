@@ -17,7 +17,7 @@ include 'function/employee_helper.php';
 include 'function/move_helper.php';
 
 //--- ค้นหารหัสเอกสาร
-$sCode = getFilter('sCode', 'sTransferCode', '');
+$sCode = getFilter('sCode', 'sMoveCode', '');
 
 //--- ค้นหาชื่อพนักงาน
 $sEmp  = getFilter('sEmp', 'sEmp', '');
@@ -75,7 +75,7 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
   $where = "WHERE id != 0 ";
 
   //--- กรองตามเลขที่เอกสาร
-  createCookie('sTransferCode', $sCode);
+  createCookie('sMoveCode', $sCode);
   if( $sCode != '')
   {
     $where .= "AND reference LIKE '%".$sCode."%' ";
@@ -137,9 +137,8 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
   </div>
   <div class="col-sm-5 margin-top-15">
     <p class="pull-right">
-      <span class="red">NC</span><span> = ยังไม่สมบูรณ์, </span>
-     	<span class="red">CN</span><span> = ยกเลิก, </span>
-      <span class="red">NE</span><span> = ยังไม่ส่งออกไป FORMULA</span>
+      <span class="">ว่างๆ </span><span class="margin-right-10"> = ปกติ, </span>
+      <span class="red">NC</span><span> = ยังไม่สมบูรณ์ </span>
     </p>
   </div>
 </div>
@@ -152,7 +151,6 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
           <th class="width-5 text-center">ลำดับ</th>
           <th class="width-15">เลขที่เอกสาร</th>
           <th class="width-15">ต้นทาง</th>
-          <th class="width-15">ปลายทาง</th>
           <th class="width-20">พนักงาน</th>
           <th class="width-10 text-center">วันที่</th>
           <th class="width-5 text-center">สถานะ</th>
@@ -163,28 +161,22 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
 <?php if( dbNumRows($qs) > 0 ) :  ?>
 <?php   $no = row_no();           ?>
 <?php   $wh = new warehouse();    ?>
+<?php   $cs = new move();         ?>
 <?php   while($rs = dbFetchObject($qs)) : ?>
-<?php     $status = array(
-                      'isSaved' => $rs->isSaved,
-                      'isExport' => $rs->isExport,
-                      'isCancle' => $rs->isCancle);
-?>
-
         <tr class="font-size-12" id="row_<?php echo $rs->id; ?>">
           <td class="middle text-center"><?php echo $no; ?></td>
           <td class="middle"><?php echo $rs->reference; ?></td>
-          <td class="middle"><?php echo $wh->getName($rs->from_warehouse); ?></td>
-          <td class="middle"><?php echo $wh->getName($rs->to_warehouse); ?></td>
+          <td class="middle"><?php echo $wh->getName($rs->id_warehouse); ?></td>
           <td class="middle"><?php echo employee_name($rs->id_employee); ?></td>
           <td class="middle text-center"><?php echo thaiDate($rs->date_add); ?></td>
-          <td class="middle text-center"><?php echo showTransferStatus($status); ?></td>
+          <td class="middle text-center"><?php echo $cs->isCompleted($rs->id) === FALSE ? 'NC':'' ; ?></td>
           <td class="middle text-right">
           <?php if( $rs->isCancle == 0) : ?>
             <button type="button" class="btn btn-xs btn-info" onclick="goDetail(<?php echo $rs->id; ?>)">
               <i class="fa fa-eye"></i>
             </button>
 
-            <?php if( $edit && $rs->isSaved == 0 && $rs->isExport == 0) : ?>
+            <?php if( $edit && $rs->isSaved == 0 && $rs->isCancle == 0) : ?>
               <button type="button" class="btn btn-xs btn-warning" onclick="goAdd(<?php echo $rs->id; ?>)">
                 <i class="fa fa-pencil"></i>
               </button>

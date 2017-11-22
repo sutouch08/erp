@@ -11,7 +11,7 @@ function deleteMoveItem(id_move_detail, product_reference){
 		closeOnConfirm: false
 	}, function(){
 		$.ajax({
-			url:"controller/moveController.php?deletemoveDetail",
+			url:"controller/moveController.php?deleteMoveDetail",
 			type:"POST",
 			cache:"false",
 			data:{
@@ -29,6 +29,7 @@ function deleteMoveItem(id_move_detail, product_reference){
 					});
 
 					$("#row-"+id_move_detail).remove();
+					reOrder();
 
 				}else{
 
@@ -103,9 +104,6 @@ function addToMove(){
 	//---	โซนต้นทาง
 	var id_zone		  = $("#from-zone-id").val();
 
-	//---	โซนนี้อนุญาติให้ติดลบหรือไม่
-	var underZero   = $('#underZero').val();
-
 	//---	จำนวนช่องที่มีการป้อนตัวเลขเพื่อย้ายสินค้าออก
 	var count       = countInput();
 
@@ -115,7 +113,6 @@ function addToMove(){
 	ds.push(
 		{"name" : 'id_move', "value" : id_move},
 		{"name" : 'id_zone', "value" : id_zone},
-		{"name" : "underZero", "value" : underZero}
 	);
 
 
@@ -124,13 +121,11 @@ function addToMove(){
 			var arr = $(this).attr('id').split('_');
 			var id  = arr[1];
 			var pd  = $("#id_product_"+id);
-			var udz = $("#allowUnderZero_"+id);
 
 			if( qty != '' && qty != 0 ){
 				ds.push(
 					{ "name" : $(this).attr('name'), "value" : qty },
 					{ "name" : pd.attr('name'), "value" : pd.val() },
-					{ "name" : udz.attr('name'), "value" : (udz.is(':checked') == true ? 1 : 0) }
 				);
 			}
 
@@ -174,23 +169,32 @@ function addToMove(){
 
 
 
+function addAllToMove(){
+	$('.qty-label').each(function(index, el) {
+		var qty = parseInt( removeCommas($(this).text()) );
+		var arr = $(this).attr('id');
+		var arr = arr.split('-');
+		var id = arr[2];
+		console.log(id);
+		$('#moveQty_'+id).val(qty);
+	});
+}
 
-
+/*
 //---	เพิ่มรายการลงใน move detail
 //---	เพิ่มลงใน move_temp
 //---	update stock รายการทั้งหมด
 function addAllToMove(){
 	var id_move 	 = $("#id_move").val();
-	var id_zone		     = $("#from-zone-id").val();
-	var allowUnderZero = ( $("#allowUnderZero").is(':checked') == true ? 1 : 0 );
-	var count		       = countUnderZero();
+	var id_zone		 = $("#from-zone-id").val();
+	var count		   = countUnderZero();
 
-	if( count > 0 && allowUnderZero == 0 ){
+	if( count > 0 ){
 		swal("ข้อผิดพลาด !", "พบรายการที่ติดลบ ไม่สามารถดำเนินการต่อได้", "warning");
 		return false;
 	}
 
-	if( count == 0 || allowUnderZero == 1 ){
+	if( count == 0 ){
 		$.ajax({
 			url:"controller/moveController.php?addAllToMove",
 			type:"GET",
@@ -198,7 +202,6 @@ function addAllToMove(){
       data:{
         "id_move" : id_move,
         "id_zone" : id_zone,
-        "allowUnderZero" : allowUnderZero
        },
 			success:function(rs){
 				var rs = $.trim(rs);
@@ -225,7 +228,7 @@ function addAllToMove(){
 	}
 }
 
-
+*/
 
 
 
@@ -372,24 +375,16 @@ function countInput(){
 
 
 
-//------ นับจำนวนรายการที่ยอดติดลบ
-function countUnderZero(){
-	var count = 0;
-	$(".qty-label").each(function(index, element) {
-        count += (parseInt($(this).text()) < 0 ? 1 : 0);
-    });
-	return count;
-}
-
-
 
 //---	นับจำนวนโซนที่เหมือนกัน
 function countSameZone(){
 	var count = 0;
 	var to	  = $("#to-zone-id").val();
 	$(".row-zone-from").each(function(index, element) {
-        count += ($(this).val() == to ? 1 : 0);
+			if( $(this).val() == to ){
+				$(this).parents('tr').addClass('red');
+				count++;
+			}
     });
 	return count;
-
 }

@@ -2,8 +2,6 @@
   $sc           = TRUE;
 
   $id_move 	= $_GET['id_move'];
-  $id_zone		  = $_GET['id_zone'];
-  $udz			    = $_GET['allowUnderZero'];
 
   //--- move object with data
   $cs = new move($id_move);
@@ -13,6 +11,14 @@
 
   //--- movement objcet
   $mv = new movement();
+
+  //--- zone object
+  $zone = new zone();
+
+  $id_zone		  = $_GET['id_zone'];
+
+  $id_warehouse = $zone->getWarehouseId($id_zone);
+
 
   //------  ดึงสินค้าทั้งหมดในโซน
   $qs = $stock->getStockInZone($id_zone);
@@ -24,12 +30,13 @@
 
     while( $rs = dbFetchObject($qs) )
     {
-      if( $rs->qty != 0 && ( $rs->qty > 0 OR $udz == 1 ) )
+      if( $rs->qty != 0 && $rs->qty > 0 )
       {
         //--- เตรียมข้อมูลสำหรับเพิ่มเข้า tbl_move_detail
         $arr = array(
-              "id_move"	 => $id_move,
+              "id_move"	     => $id_move,
               "id_product"	 => $rs->id_product,
+              "id_warehouse" => $id_warehouse,
               "from_zone"    => $rs->id_zone,
               "to_zone"      => 0,
               "qty"          => $rs->qty
@@ -52,10 +59,11 @@
           $temp = array(
                     "id_move_detail" => $ra,
                     "id_move"        => $id_move,
-                    "id_product"	       => $rs->id_product,
-                    "id_zone"		         => $id_zone,
-                    "qty"	               => $rs->qty,
-                    "id_employee"	       => getCookie('user_id')
+                    "id_product"	   => $rs->id_product,
+                    "id_warehouse"   => $id_warehouse,
+                    "id_zone"		     => $id_zone,
+                    "qty"	           => $rs->qty,
+                    "id_employee"	   => getCookie('user_id')
                     );
 
           //---  เพิ่มยอดเข้า temp
@@ -75,7 +83,7 @@
           }
 
           //--- บันทึก movement ออก
-          if( $mv->move_out($cs->reference, $cs->from_warehouse, $id_zone, $rs->id_product, $rs->qty, $cs->date_add) !== TRUE )
+          if( $mv->move_out($cs->reference, $id_warehouse, $id_zone, $rs->id_product, $rs->qty, $cs->date_add) !== TRUE )
           {
             $sc = FALSE;
             $message = 'บันทึก movement ไม่สำเร็จ';

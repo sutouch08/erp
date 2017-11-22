@@ -1,14 +1,17 @@
 <?php
-$sc 		 = array();
+$id_warehouse = $_GET['id_warehouse'];
 
-//----	โซน
-$id_zone = $_GET['id_zone'];
+$sc 		 = array();
 
 $stock   = new stock();
 
 $barcode = new barcode();
 
-$qs 		 = $stock->getStockInZone($id_zone);
+$cancle = new cancle_zone();
+
+$zone = new zone();
+
+$qs 		 = $cancle->getDetailsByWarehouse($id_warehouse);
 
 if( dbNumRows($qs) > 0 )
 {
@@ -17,10 +20,11 @@ if( dbNumRows($qs) > 0 )
   {
     $arr = array(
           "no"				 => $no,
-          "id_stock" 	 => $rs->id_stock,
+          "id_cancle" 	 => $rs->id,
           "id_product" => $rs->id_product,
           "barcode" 	 => $barcode->getBarcode($rs->id_product),
           "products" 	 => $rs->code,
+          "zone"       => $zone->getName($rs->id_zone),
           "qty" 			 => $rs->qty,
           );
 

@@ -1,81 +1,42 @@
 <div class="row">
-	<div class="col-sm-12 hide" id="zone-table">
+	<div class="col-sm-12 hide" id="cancle-table">
     <form id="productForm">
     	<table class="table table-striped table-bordered">
       	<thead>
 					<tr>
-						<th colspan="4" class="text-center">
-							<h4 class="title" id="zoneName"></h4>
+						<th colspan="5" class="text-center">
+							<h4 class="title" id="cancle-warehouse-name">โซนยกเลิก</h4>
 						</th>
 					</tr>
-        	<tr>
-          	<th colspan="4">
-								<div class="col-sm-3">
-								
-								</div>
-								<div class="col-sm-2">
-								 <div class="input-group">
-											 <span class="input-group-addon">จำนวน</span>
-											 <input type="text" class="form-control input-sm" id="qty-from" value="1" />
-									 </div>
-							 </div>
-							 <div class="col-sm-4">
-								 <div class="input-group">
-											 <span class="input-group-addon">บาร์โค้ดสินค้า</span>
-											 <input type="text" class="form-control input-sm" id="barcode-item-from" placeholder="ยิงบาร์โค้ดเพื่อย้ายสินค้าออก" />
-									 </div>
-							 </div>
+        	<tr id="row-cancle-btn">
+          	<th colspan="5">
+							<div class="col-sm-6">
+              	<button type="button" class="btn btn-sm btn-warning" onclick="addAllCancleToMove()">ย้ายรายการทั้งหมด</button>
+              </div>
+              <div class="col-sm-6">
+                <p class="pull-right top-p">
+                  <button type="button" class="btn btn-sm btn-primary" onclick="addCancleToMove()">ย้ายรายการที่เลือก</button>
+                </p>
+              </div>
             </th>
           </tr>
 
           <tr>
           	<th class="width-10 text-center">ลำดับ</th>
             <th class="width-20 text-center">บาร์โค้ด</th>
-            <th class="text-center">สินค้า</th>
+            <th class="width-20 text-center">สินค้า</th>
+						<th class="width-20 text-center">ต้นทาง</th>
             <th class="width-10 text-center">จำนวน</th>
-
+            <th class="width-10 text-center">ย้ายออก</th>
           </tr>
           </thead>
 
-          <tbody id="zone-list"> </tbody>
+          <tbody id="cancle-list"> </tbody>
 
         </table>
       </form>
     </div>
 
-
-		<div class="col-sm-12 hide" id="temp-table">
-    	<table class="table table-striped table-bordered">
-      	<thead>
-          <tr>
-          	<th colspan="5">
-             	<div class="col-sm-2 col-sm-offset-3">
-            		<div class="input-group">
-                	<span class="input-group-addon">จำนวน</span>
-                	<input type="text" class="form-control input-sm" id="qty-to" value="1" />
-              	</div>
-            	</div>
-	            <div class="col-sm-4">
-	             	<div class="input-group">
-	                <span class="input-group-addon">บาร์โค้ดสินค้า</span>
-	                <input type="text" class="form-control input-sm" id="barcode-item-to" placeholder="ยิงบาร์โค้ดเพื่อย้ายสินค้าออก" />
-	              </div>
-              </div>
-            </th>
-            </tr>
-          	<tr>
-            	<th class="width-5 text-center">ลำดับ</th>
-              <th class="width-15 text-center">บาร์โค้ด</th>
-              <th class="width-45 text-center">สินค้า</th>
-              <th class="width-25 text-center">ต้นทาง</th>
-              <th class="width-10 text-center">จำนวน</th>
-            </tr>
-          </thead>
-          <tbody id="temp-list">
-
-          </tbody>
-        </table>
-    </div>
 
 
 	<div class="col-sm-12" id="move-table">
@@ -130,7 +91,7 @@
 
 
 	        <td class="middle text-center" id="row-label-<?php echo $id_td; ?>">
-	        	<?php if( $rs->to_zone == 0 ) : ?>
+	        	<?php if( $rs->to_zone == 0 OR $rs->valid == 0 ) : ?>
 	        	<button type="button" class="btn btn-xs btn-primary" id="btn_<?php echo $id_td; ?>" onclick="move_in(<?php echo $id_td; ?>, <?php echo $rs->from_zone; ?>)">
 							ย้ายเข้าโซน
 						</button>
@@ -139,12 +100,12 @@
 	        	<?php endif; ?>
 	        </td>
 
-	        <td class="middle text-center" >
-						<?php echo number_format($rs->qty) .' / ' .number_format( $rs->qty - $cs->getTempQty($rs->id)); ?>
+	        <td class="middle text-center" id="qty-<?php echo $rs->id; ?>" >
+						<?php echo number_format($rs->qty).' / '. number_format($rs->qty - $cs->getTempQty($rs->id)); ?>
 					</td>
 
 	        <td class="middle text-center">
-	          <?php if( $edit && $cs->isSaved == 0 ) : ?>
+	          <?php if( $edit && $cs->isSaved == 0) : ?>
 	          	<button type="button" class="btn btn-xs btn-danger" onclick="deleteMoveItem(<?php echo $id_td; ?>, '<?php echo $pReference; ?>')"><i class="fa fa-trash"></i></button>
 	          <?php endif; ?>
 	        </td>
@@ -162,53 +123,27 @@
   </div>
 </div>
 
-
-<script id="zoneTemplate" type="text/x-handlebars-template">
+<script id="cancleTemplate" type="text/x-handlebars-template">
 {{#each this}}
 {{#if nodata}}
 <tr>
-	<td colspan="4" class="text-center"><h4>ไม่พบสินค้าในโซน</h4></td>
+	<td colspan="6" class="text-center">
+		<h4>ไม่พบสินค้าในโซนยกเลิก</h4>
+	</td>
 </tr>
 {{else}}
 <tr>
 	<td align="center">{{ no }}</td>
-    <td align="center">{{ barcode }}</td>
-    <td>
-		{{ products }}
-		<input type="hidden" id="qty_{{barcode}}" value="{{qty}}" />
-	</td>
-    <td align="center" id="qty-label_{{barcode}}">	{{ qty }}	</td>
+  <td align="center">{{ barcode }}</td>
+  <td>{{ products }}</td>
+  <td align="center" class="qty-label">{{ qty }}</td>
+  <td align="center">
+  	<input type="text" class="form-control input-sm text-center input-qty" id="moveQty_{{ id_cancle }}" name="moveQty[{{id_cancle}}]" onkeyup="validQty({{ id_cancle}}, {{ qty }})" />
+		<input type="hidden" name="id_product[{{ id_cancle }}]" id="id_product_{{ id_cancle }}" value="{{ id_product }}" />
+  </td>
+
 </tr>
 {{/if}}
-{{/each}}
-</script>
-
-
-
-
-<script id="tempTableTemplate" type="text/x-handlebars-template">
-{{#each this}}
-	{{#if nodata}}
-	<tr>
-		<td colspan="6" class="text-center"><h4>ไม่พบรายการ</h4></td>
-	</tr>
-	{{else}}
-		<tr class="font-size-12" id="row-temp-{{ id }}">
-			<td class="middle text-center">{{ no }}</td>
-			<td class="middle">{{ barcode }}</td>
-			<td class="middle">{{ products }}</td>
-			<td class="middle text-center">
-				<input type="hidden" id="from-{{ barcode }}" value="{{ from_zone }}" />
-				<input type="hidden" id="row_{{barcode}}" value="{{id}}" />
-				<input type="hidden" id="qty-{{barcode}}" value="{{qty}}" />
-				{{ fromZone }}
-			</td>
-
-			<td class="middle text-center" id="qty-label-{{barcode}}">
-				{{ qty }}
-			</td>
-		</tr>
-	{{/if}}
 {{/each}}
 </script>
 
@@ -230,7 +165,7 @@
 				{{ fromZone }}
 			</td>
 			<td class="middle text-center" id="row-label-{{id}}">{{{ toZone }}}</td>
-			<td class="middle text-center">{{ qty }} / {{ temp }}</td>
+			<td class="middle text-center" id="qty-{{id}}">{{ qty }} / {{ temp }}</td>
 			<td class="middle text-center">{{{ btn_delete }}}</td>
 		</tr>
 	{{/if}}

@@ -299,17 +299,26 @@
 
 
 		//---	 ค้นหาโซนเฉพาะในคลังนี้เท่านั้น
-		public function searchWarehouseZone($txt, $id_warehouse)
+		public function searchWarehouseZone($txt, $id_warehouse = '')
 		{
+
 			$qr  = "SELECT * FROM tbl_zone AS z ";
 			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
-			$qr .= "WHERE w.id = '".$id_warehouse."' ";
-			$qr .= "AND w.active = 1 ";
+			if( $id_warehouse != '')
+			{
+				$qr .= "WHERE w.id = '".$id_warehouse."' ";
+				$qr .= "AND w.active = 1 ";
+			}
+			else
+			{
+				$qr .= "WHERE w.active = 1 ";
+			}
+
 			if( $txt != '*')
 			{
 				$qr .= "AND z.zone_name LIKE '%".$txt."%'";
 			}
-			
+
 			return dbQuery($qr);
 		}
 
@@ -393,6 +402,12 @@
 			return dbQuery($qr);
 		}
 
+
+		public function countWarehouseZone($id_warehouse)
+		{
+			$qs = dbQuery("SELECT id_zone FROM tbl_zone WHERE id_warehouse = '".$id_warehouse."'");
+			return dbNumRows($qs);
+		}
 
 	} 	//----- End class
 

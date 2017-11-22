@@ -86,7 +86,11 @@
 <?php else : ?>
 
   <tr>
-    <td colspan="6" class="text-center"><h4>ไม่พบรายการ</h4></td>
+    <td colspan="6" class="text-center">
+      <div id="close-bar">
+        <button type="button" class="btn btn-sm btn-success" onclick="finishPrepare()">จัดเสร็จแล้ว</button>
+      </div>
+    </td>
   </tr>
 
 <?php endif; ?>

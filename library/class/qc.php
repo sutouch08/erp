@@ -142,6 +142,12 @@ class qc
   }
 
 
+  public function dropQcData($id_order)
+  {
+    return dbQuery("DELETE FROM tbl_qc WHERE id_order = '".$id_order."'");
+  }
+
+
 } //--- end class
 
  ?>

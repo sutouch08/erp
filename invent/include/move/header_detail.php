@@ -11,17 +11,12 @@
     <input type="text" class="form-control input-sm text-center" id="date_add" value="<?php echo thaiDate($cs->date_add); ?>" disabled />
   </div>
 
-  <div class="col-sm-2 col-2-harf">
-    <label>คลังต้นทาง</label>
-    <input type="text" class="form-control input-sm text-center" value="<?php echo $wh->getName($cs->from_warehouse); ?>" disabled />
+  <div class="col-sm-4">
+    <label>คลังสินค้า</label>
+    <input type="text" class="form-control input-sm text-center" value="<?php echo $wh->getName($cs->id_warehouse); ?>" disabled />
   </div>
 
-  <div class="col-sm-2 col-2-harf">
-    <label>คลังปลายทาง</label>
-    <input type="text" class="form-control input-sm text-center" value="<?php echo $wh->getName($cs->to_warehouse); ?>" disabled />
-  </div>
-
-  <div class="col-sm-3">
+  <div class="col-sm-4">
     <label>พนักงาน</label>
     <input type="text" class="form-control input-sm text-center" value="<?php echo employee_name($cs->id_employee); ?>" disabled />
   </div>
@@ -33,7 +28,6 @@
   </div>
 
   <input type="hidden" id="id_move" value="<?php echo $cs->id; ?>" />
-  <input type="hidden" id="isExport" value="<?php echo $cs->isExport; ?>" />
 
 </div>
 <hr class="margin-top-15 margin-bottom-15"/>

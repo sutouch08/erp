@@ -38,15 +38,11 @@
 
     $buffer = new buffer();
 
-    $payment  = new payment_method($order->id_payment);
+    $bd = new sponsor_budget();
 
-    //--- มีเครดิตหรือไม่
-    $term = $payment->hasTerm($order->id_payment);
 
-    //--- เครดิตที่ต้องคืนเมื่อยกเลิกออเดอร์ กรณีเป็นการขายเครดิต
+    //--- เครดิตที่ต้องคืนเมื่อยกเลิกออเดอร์
     $useCredit = 0;
-
-    $credit = new customer_credit();
 
     startTransection();
     if( $state < $order->state OR $state == 11)
@@ -80,11 +76,8 @@
               $message = 'ลบรายการบันทึกขายไม่สำเร็จ';
             }
 
-            //--- ถ้ามีการใช้เครดิต รวมยอดเครดิตไว้คืน
-            if( $term === TRUE )
-            {
-              $useCredit += $rs->total_amount_inc;
-            }
+            //--- ไว้คืนยอดกรณียกเลิก
+            $useCredit += $rs->total_amount_inc;
 
           } //--- End while
         } //--- end if dbNumRows
@@ -100,15 +93,12 @@
           $sc = FALSE;
           $message = 'เคลียร์ Buffer ไม่สำเร็จ';
         }
-
+        
         //--- คืนยอดเครดิต
-        if( $term === TRUE )
+        if( $bd->decreaseUsed($order->id_budget, $useCredit) !== TRUE )
         {
-          if( $credit->decreaseUsed($order->id_customer, $useCredit) !== TRUE )
-          {
-            $sc = FALSE;
-            $message = 'คืนยอดเครดิตให้ลูกค้าไม่สำเร็จ';
-          }
+          $sc = FALSE;
+          $message = 'คืนยอดงบประมาณไม่สำเร็จ';
         }
 
         //--- ลบประวัติการจัดสินค้า

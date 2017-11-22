@@ -93,5 +93,13 @@ class cancle_zone
 		return $sc;
 	}
 
+
+	public function getDetailsByWarehouse($id_warehouse)
+	{
+		$qr  = "SELECT c.*, p.code FROM tbl_cancle AS c JOIN tbl_product AS p ON c.id_product = p.id ";
+		$qr .= "WHERE id_warehouse = '".$id_warehouse."'";
+		return dbQuery($qr);
+	}
+
 }
 ?>

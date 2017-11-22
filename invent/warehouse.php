@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$pageName	= 'เพิ่ม/แก้ไข คลังสินค้า';
 	$id_tab 	= 13;
     $pm 		= checkAccess($id_profile, $id_tab);
@@ -40,7 +40,7 @@
             	<label class="form-control input-sm input-small"><?php echo $rs->code; ?></label>
             </div>
             <div class="divider-hidden margin-top-5 margin-bottom-5"></div>
-            
+
             <div class="col-sm-4">
                 <label class="form-control label-left">ชื่อคลัง : </label>
             </div>
@@ -48,7 +48,7 @@
             	<label class="form-control input-sm input-large"><?php echo $rs->name; ?></label>
             </div>
             <div class="divider-hidden margin-top-5 margin-bottom-5"></div>
-            
+
             <div class="col-sm-4">
                 <label class="form-control label-left">ประเภทคลัง : </label>
             </div>
@@ -59,7 +59,7 @@
                 <span class="label-left margin-left-15 red hide" id="edit-whRole-error">จำเป็นต้องเลือก</span>
             </div>
             <div class="divider-hidden margin-top-5 margin-bottom-5"></div>
-            
+
             <div class="col-sm-4">
                 <label class="form-control label-left">อนุญาตให้ขาย : </label>
             </div>
@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div class="divider-hidden margin-top-5 margin-bottom-5"></div>
-            
+
             <div class="col-sm-4">
                 <label class="form-control label-left">อนุญาตให้จัด : </label>
             </div>
@@ -81,7 +81,7 @@
                 </div>
             </div>
             <div class="divider-hidden margin-top-5 margin-bottom-5"></div>
-            
+
             <div class="col-sm-4">
                 <label class="form-control label-left">อนุญาตให้ติดลบ : </label>
             </div>
@@ -92,7 +92,7 @@
                 </div>
             </div>
             <div class="divider-hidden margin-top-5 margin-bottom-5"></div>
-            
+
             <div class="col-sm-4">
                 <label class="form-control label-left">เปิดใช้งาน : </label>
             </div>
@@ -103,14 +103,14 @@
                 </div>
             </div>
             <div class="divider-hidden margin-top-5 margin-bottom-5"></div>
-            
-            
+
+
             <input type="hidden" id="sell" value="<?php echo $rs->sell; ?>" />
             <input type="hidden" id="prepare" value="<?php echo $rs->prepare; ?>" />
             <input type="hidden" id="underZero" value="<?php echo $rs->allow_under_zero; ?>" />
             <input type="hidden" id="active" value="<?php echo $rs->active; ?>" />
             <input type="hidden" id="id_warehouse" value="<?php echo $rs->id; ?>" />
-            
+
             <input type="hidden" id="oldCode" value="<?php echo $rs->code; ?>" />
             <input type="hidden" id="oldName" value="<?php echo $rs->warehouse; ?>" />
             <input type="hidden" id="oldRole" value="<?php echo $rs->role; ?>" />
@@ -127,7 +127,7 @@
             </div>
         </div>
     </div>
-    <?php endif; ?>        
+    <?php endif; ?>
 
 <?php else : ?>
 <!----------------------  Warehouse List ------------------------>
@@ -172,29 +172,29 @@
 </div>
 </form>
 <hr class="margin-top-10"/>
-<?php 
+<?php
 	$where 	= "WHERE id != '' ";
 	if( $whCode != '' )
-	{	
+	{
 		createCookie('whCode', $whCode);
-		$where .= "AND code LIKE '%".$whCode."%' "; 
+		$where .= "AND code LIKE '%".$whCode."%' ";
 	}
 	if( $whName != '' )
-	{ 
+	{
 		createCookie('whName', $whName);
-		$where .= "AND name LIKE '%".$whName."%' "; 
+		$where .= "AND name LIKE '%".$whName."%' ";
 	}
 	if( $whRole != 0 )
-	{ 
+	{
 		createCookie('whRole', $whRole);
-		$where .= "AND role = ".$whRole." "; 
+		$where .= "AND role = ".$whRole." ";
 	}
 	if( $underZero != 2 )
-	{ 
+	{
 		createCookie('underZero', $underZero);
-		$where .= "AND allow_under_zero = ".$underZero." "; 
+		$where .= "AND allow_under_zero = ".$underZero." ";
 	}
-	
+
 	$paginator	= new paginator();
 	$get_rows 	= get_rows();
 	$page		= get_page();
@@ -206,47 +206,50 @@
 	<div class="col-sm-12">
     	<table class="table table-striped">
         	<thead>
-            	<tr>
+            	<tr class="font-size-12">
                 	<th style="width:5%; text-align:center;">ลำดับ</th>
                     <th style="width:10%; text-align:center;">รหัสคลัง</th>
                     <th style="width:25%;">ชื่อคลัง</th>
                     <th style="width:10%; text-align:center;">ประเภทคลัง</th>
-                    <th style="width:10%; text-align:center;">ขายสินค้า</th>
-                    <th style="width:10%; text-align:center;">จัดสินค้า</th>
-                    <th style="width:10%; text-align:center;">ติดลบได้</th>
-                    <th style="width:10%; text-align:center;">เปิดใช้งาน</th>
+										<th style="width:8%; text-align:center;">โซน</th>
+                    <th style="width:8%; text-align:center;">ขายสินค้า</th>
+                    <th style="width:8%; text-align:center;">จัดสินค้า</th>
+                    <th style="width:8%; text-align:center;">ติดลบได้</th>
+                    <th style="width:8%; text-align:center;">เปิดใช้งาน</th>
                     <th style="width:10%; text-align:center;">การกระทำ</th>
                 </tr>
             </thead>
             <tbody>
 	<?php if( dbNumRows($qs) > 0 ) : ?>
     <?php	$no	= ($get_rows * ($page -1)) + 1 ;	?>
+		<?php $zone = new zone(); ?>
     <?php	while( $rs = dbFetchObject($qs) ) : 	?>
     			<tr style="font-size:12px;" id="row_<?php echo $rs->id; ?>">
                 	<td class="text-center middle"><?php echo number_format($no); ?></td>
                     <td class="text-center middle"><?php echo $rs->code; ?></td>
                     <td class="middle"><?php echo $rs->name; ?></td>
                     <td class="text-center middle"><?php echo getWarehouseRoleName($rs->role); ?></td>
+										<td class="text-center middle"><?php echo number($zone->countWarehouseZone($rs->id)); ?></td>
                     <td class="text-center middle"><?php echo isActived($rs->sell); ?></td>
                     <td class="text-center middle"><?php echo isActived($rs->prepare); ?></td>
                     <td class="text-center middle"><?php echo isActived($rs->allow_under_zero); ?></td>
                     <td class="text-center middle"><?php echo isActived($rs->active); ?></td>
                     <td align="right" class="middle">
-                    <?php if( $edit ) : ?>	
-                        <button type="button" class="btn btn-sm btn-warning" onclick="edit('<?php echo $rs->id; ?>')"><i class="fa fa-pencil"></i></button>
+                    <?php if( $edit ) : ?>
+                        <button type="button" class="btn btn-xs btn-warning" onclick="edit('<?php echo $rs->id; ?>')"><i class="fa fa-pencil"></i></button>
 					<?php endif; ?>
-                    <?php if( $delete ) : ?>                       
-                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteWarehouse('<?php echo $rs->id; ?>')"><i class="fa fa-trash"></i></button>
-					<?php endif; ?>                        
+                    <?php if( $delete ) : ?>
+                        <button type="button" class="btn btn-xs btn-danger" onclick="deleteWarehouse('<?php echo $rs->id; ?>')"><i class="fa fa-trash"></i></button>
+					<?php endif; ?>
                     </td>
-                </tr>  
-	<?php 	$no++; ?>           
-	<?php	endwhile; ?>                  
-    <?php endif; ?>           
+                </tr>
+	<?php 	$no++; ?>
+	<?php	endwhile; ?>
+    <?php endif; ?>
             </tbody>
-            
+
         </table>
-    </div>	
+    </div>
 </div>
 
 

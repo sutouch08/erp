@@ -110,10 +110,24 @@ class transform
   }
 
 
+  //--- ลบรายการทั้งหมด(ยกเลิกออเดอร์)
+  public function deleteDetails($id_order)
+  {
+    return dbQuery("DELETE FROM tbl_order_transform_detail WHERE id_order = '".$id_order."'");
+  }
+
+
   //--- เมื่อมีการเปิดบิล
   public function updateSoldQty($id, $qty)
   {
     return dbQuery("UPDATE tbl_order_transform_detail SET sold_qty = sold_qty + ".$qty.", valid = 1 WHERE id = ".$id);
+  }
+
+
+  //--- เปลี่ยนยอดที่เปิดบิลให้เป็น 0 เพราะมีการย้อนสถานะ หรือ ยกเลิก
+  public function resetSoldQty($id)
+  {
+    return dbQuery("UPDATE tbl_order_transform_detail SET sold_qty = 0 WHERE id_order = '".$id."'");
   }
 
 
@@ -124,6 +138,19 @@ class transform
     return dbQuery("UPDATE tbl_order_transform_detail SET valid = ".$valid." WHERE id = ".$id);
   }
 
+
+  //--- set valid for all
+  public function setValidAll($id, $valid)
+  {
+    return dbQuery("UPDATE tbl_order_transform_detail SET valid = ".$valid." WHERE id_order = '".$id."'");
+  }
+
+
+  ///------ รับเข้าครบแล้ว หรือ ยกเลิก
+  public function closed($id_order)
+  {
+    return dbQuery("UPDATE tbl_order_transform SET isClosed = 1 WHERE id_order = '".$id_order."'");
+  }
 
   //--- เพื่มการเชื่อมโยงสินค้าทีละรายการ
   public function insertDetail(array $ds = array())
@@ -261,6 +288,20 @@ class transform
   public function received($id, $qty)
   {
     return dbQuery("UPDATE tbl_order_transform_detail SET received = received + ".$qty." WHERE id = ".$id);
+  }
+
+
+  //--- มีการรับเข้าแล้วหรือยัง
+  public function isReceived($id)
+  {
+    $sc = FALSE;
+    $qs = dbQuery("SELECT id FROM tbl_order_transform_detail WHERE id_order = '".$id."' AND received > 0");
+    if( dbNumRows($qs) > 0)
+    {
+      $sc = TRUE;
+    }
+
+    return $sc;
   }
 
 

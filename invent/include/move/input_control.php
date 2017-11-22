@@ -2,7 +2,7 @@
 
   <div class="row">
   	<div class="col-sm-2">
-      	<button type="button" class="btn btn-sm btn-default btn-block" onclick="showTransferTable()">แสดงรายการ</button>
+      	<button type="button" class="btn btn-sm btn-default btn-block" onclick="showMoveTable()">แสดงรายการ</button>
       </div>
   	<div class="col-sm-2 control-btn">
       	<button type="button" class="btn btn-sm btn-danger btn-block" onclick="getMoveOut()">ย้ายสินค้าออก</button>
@@ -80,16 +80,14 @@
   </div>
 
   <div class="col-sm-2">
-    <button type="button" class="btn btn-sm btn-default btn-block" onclick="showTransferTable()">แสดงรายการ</button>
+    <button type="button" class="btn btn-sm btn-default btn-block" onclick="showMoveTable()">แสดงรายการ</button>
   </div>
 
 
 </div>
 
-
 <?php endif; ?>
 <input type="hidden" id="from-zone-id" />
 <input type="hidden" id="to-zone-id" />
-<input type="hidden" id="underZero" value="0" />
 
 <hr class="margin-top-15 margin-bottom-15" />

@@ -24,12 +24,11 @@ $channels = new channels($order->id_channels);
 
 
 			<?php if( ($add && $order->status == 0 && $order->id_employee == getCookie('user_id') ) OR ($edit && $order->status == 1 && $order->state < 4 ) ) : ?>
-				<?php if( $payment->hasTerm == 0 && $order->hasPayment == FALSE ) : ?>
+				<?php if( ($payment->hasTerm == 0 && $order->hasPayment == FALSE ) OR ($payment->hasTerm == 1)) : ?>
 
             		<button type="button" class="btn btn-sm btn-warning" onclick="goAddDetail(<?php echo $order->id; ?>)"><i class="fa fa-pencil"></i> แก้ไขรายการ</button>
-
 				<?php endif; ?>
-            <?php endif; ?>
+      <?php endif; ?>
 
 			<button type="button" class="btn btn-sm btn-success <?php echo $hide; ?>" id="btn-save-order" onclick="saveOrder(<?php echo $order->id; ?>)">
             	<i class="fa fa-save"></i> บันทึก

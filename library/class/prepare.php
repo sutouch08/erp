@@ -119,6 +119,12 @@ class prepare
 
 
 
+    public function dropPreparedData($id_order)
+    {
+      return dbQuery("DELETE FROM tbl_prepare WHERE id_order = '".$id_order."'");
+    }
+
+
 
 
 }   //---   End class

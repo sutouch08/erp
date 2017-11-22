@@ -257,6 +257,13 @@ class order
 
 
 
+	public function deleteDetails($id)
+	{
+		return dbQuery("DELETE FROM tbl_order_detail WHERE id_order = ".$id);
+	}
+
+
+
 	//---- Get 1 row in order_detail
 	public function getDetail($id_order, $id_pd)
 	{
@@ -806,6 +813,11 @@ class order
 	}
 
 
+	public function cancleOrder($id)
+	{
+		return dbQuery("UPDATE tbl_order SET isCancle = 1 WHERE id = '".$id."'");
+	}
+
 
 
 
@@ -859,7 +871,19 @@ class order
 	}
 
 
+	public function unSold($id)
+	{
+		return dbQuery("DELETE FROM tbl_order_sold WHERE id = '".$id."'");
+	}
 
+
+
+
+	//---
+	public function getSoldOrderDetail($id)
+	{
+		return dbQuery("SELECT * FROM tbl_order_sold WHERE id_order = '".$id."'");
+	}
 
 
 
@@ -983,6 +1007,7 @@ class order
 	{
 		return dbQuery("SELECT state, status FROM tbl_order WHERE id = '".$id."'");
 	}
+
 
 }//--- End Class
 

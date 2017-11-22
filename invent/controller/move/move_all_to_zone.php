@@ -5,9 +5,6 @@ $sc = TRUE;
 //--- เอกสาร
 $id = $_GET['id_move'];
 
-//--- โซนปลายทาง
-$id_zone = $_GET['to_zone'];
-
 //---  move object
 $cs  = new move($id);
 
@@ -16,6 +13,17 @@ $stock = new stock();
 
 //--- movement object
 $movement = new movement();
+
+//--- zone object
+$zone = new zone();
+
+//--- โซนปลายทาง
+$id_zone = $_GET['to_zone'];
+
+//--- คลังปลายทาง
+$id_warehouse = $zone->getWarehouseId($id_zone);
+
+
 
 //--- ดึงรายการใน temp
 $qs = $cs->getTempDetails($id);
@@ -42,7 +50,7 @@ if( dbNumRows($qs) > 0 )
     }
 
     //--- บันทึก movement เข้า (tbl_stock_movement)
-    if( $movement->move_in($cs->reference, $cs->to_warehouse, $id_zone, $rs->id_product, $rs->qty, $cs->date_add) !== TRUE )
+    if( $movement->move_in($cs->reference, $id_warehouse, $id_zone, $rs->id_product, $rs->qty, $cs->date_add) !== TRUE )
     {
       $sc = FALSE;
       $message = 'บันทึก movement เข้า ไม่สำเร็จ';

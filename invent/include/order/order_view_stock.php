@@ -20,13 +20,13 @@
 </div><!---/ row -->
 <hr style='border-color:#CCC; margin-top: 0px; margin-bottom:0px;' />
 <div class='row'>
-	<div class='col-sm-12'>		
+	<div class='col-sm-12'>
 		<div class='tab-content' style="min-height:1px; padding:0px;">
 		<?php echo getProductTabs(); ?>
 		</div>
 	</div>
 </div>
-<!------------------------------------ End Category Menu ------------------------------------>	
+<!------------------------------------ End Category Menu ------------------------------------>
 
 
 <form id="orderForm">

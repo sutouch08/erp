@@ -10,7 +10,7 @@ function productTabMenu($mode = 'order')
 		if( hasChild($rs->id) === TRUE)
 		{
 			$sc .= '<li class="dropdown" onmouseover="expandTab((this))" onmouseout="collapseTab((this))">';
-			$sc .= '<a id="ul-'.$rs->id.'" class="dropdown-toggle" role="tab" data-toggle="tab" href="#cat-'.$rs->id.'" onClick="'.$ajax.'('.$rs->id.')" >';
+			$sc .= '<a id="ul-'.$rs->id.'" class="dropdown-toggle" role="tab" data-toggle="tab" href="#cat-'.$rs->id.'" onClick="'.$ajax.'(\''.$rs->id.'\')" >';
 			$sc .=  $rs->name.'<span class="caret"></span></a>';
 			$sc .= 	'<ul class="dropdown-menu" role="menu" aria-labelledby="ul-'.$rs->id.'">';
 			$sc .= 	getSubTab($rs->id, $ajax);
@@ -19,7 +19,7 @@ function productTabMenu($mode = 'order')
 		}
 		else
 		{
-			$sc .= '<li class="menu"><a href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">'.$rs->name.'</a></li>';
+			$sc .= '<li class="menu"><a href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'(\''.$rs->id.'\')">'.$rs->name.'</a></li>';
 		}
 	}
 	return $sc;
@@ -39,7 +39,7 @@ function getSubTab($parent, $ajax)
 			if( hasChild($rs->id) === TRUE ) //----- ถ้ามี sub category
 			{
 				$sc .= '<li class="dropdown-submenu" >';
-				$sc .= '<a id="ul-'.$rs->id.'" class="dropdown-toggle" href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">';
+				$sc .= '<a id="ul-'.$rs->id.'" class="dropdown-toggle" href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'(\''.$rs->id.'\')">';
 				$sc .=  $rs->name.'</a>';
 				$sc .= 	'<ul class="dropdown-menu" role="menu" aria-labelledby="ul-'.$rs->id.'">';
 				$sc .= 	getSubTab($rs->id, $ajax);
@@ -48,7 +48,7 @@ function getSubTab($parent, $ajax)
 			}
 			else
 			{
-				$sc .= '<li class="menu"><a href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">'.$rs->name.'</a></li>';
+				$sc .= '<li class="menu"><a href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'(\''.$rs->id.'\')">'.$rs->name.'</a></li>';
 			}
 
 		}
@@ -70,7 +70,7 @@ function getSubCategoryTab($parent, $ajax)
 			if( hasChild($rs->id) === TRUE ) //----- ถ้ามี sub category
 			{
 				$sc .= '<li class="dropdown-submenu" >';
-				$sc .= '<a id="ul-'.$rs->id.'" class="dropdown-toggle" href="#cat-'.$rs->id.'" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">';
+				$sc .= '<a id="ul-'.$rs->id.'" class="dropdown-toggle" href="#cat-'.$rs->id.'" data-toggle="tab" onClick="'.$ajax.'(\''.$rs->id.'\')">';
 				$sc .=  $rs->name.'</a>';
 				$sc .= 	'<ul class="dropdown-menu" role="menu" aria-labelledby="ul-'.$rs->id.'">';
 				$sc .= 	subCategoryTab($rs->id, $ajax);
@@ -79,7 +79,7 @@ function getSubCategoryTab($parent, $ajax)
 			}
 			else
 			{
-				$sc .= '<li class="menu"><a href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'('.$rs->id.')">'.$rs->name.'</a></li>';
+				$sc .= '<li class="menu"><a href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'(\''.$rs->id.'\')">'.$rs->name.'</a></li>';
 			}
 
 		}

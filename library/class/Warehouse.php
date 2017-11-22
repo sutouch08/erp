@@ -339,6 +339,20 @@
 		}
 
 
+
+		public function searchWarehouse($txt)
+		{
+			$qr  = "SELECT * FROM tbl_warehouse ";
+			if( $txt != '*')
+			{
+				$qr .= "WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%' ";
+			}
+
+			return dbQuery($qr);
+		}
+
+
+
 	} 	//----- End class
 
 

@@ -64,7 +64,7 @@ class buffer
     $qr = "UPDATE tbl_buffer SET qty = qty + ".$qty." ";
     $qr .= "WHERE id_order = ".$id_order." AND id_product = '".$id_pd."' ";
     $qr .= "AND id_zone = '".$id_zone."'";
-    
+
     return dbQuery($qr);
   }
 
@@ -82,7 +82,7 @@ class buffer
   public function isExists($id_order, $id_product, $id_zone)
   {
       $sc = FALSE;
-      $qs = dbQuery("SELECT id FROM tbl_prepare WHERE id_order = '".$id_order."' AND id_product ='".$id_product."' AND id_zone = '".$id_zone."'");
+      $qs = dbQuery("SELECT id FROM tbl_buffer WHERE id_order = '".$id_order."' AND id_product ='".$id_product."' AND id_zone = '".$id_zone."'");
       if( dbNumRows($qs) == 1 )
       {
           $sc = TRUE;

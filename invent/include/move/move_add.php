@@ -7,6 +7,8 @@ $id = isset($_GET['id_move']) ? $_GET['id_move'] : FALSE;
 //--- สาร้าง instant
 $cs = $id === FALSE ? new move() : new move($id);
 
+$wh = new warehouse();
+
 //--- หากกดสร้างเอกสารแล้ว disabled input ต่างๆ
 $disabled = $id === FALSE ? '' : 'disabled';
 
@@ -18,10 +20,8 @@ $disabled = $id === FALSE ? '' : 'disabled';
   <div class="col-sm-6">
     <p class="pull-right top-p">
     <?php echo goBackButton(); ?>
-    <?php if($id !== FALSE && $cs->isSaved == 1) : ?>
-      <button type="button" class="btn btn-sm btn-info" onclick="doExport()"><i class="fa fa-send"></i> ส่งข้อมูลไป formula</button>
-    <?php endif; ?>
-    <?php if( isset( $_GET['id_move'] ) && ($add OR $edit) && $cs->isSaved == 0 ) : ?>
+
+      <?php if( isset( $_GET['id_move'] ) && ($add OR $edit) && $cs->isSaved == 0 ) : ?>
 
       <?php if( isset($_GET['id_move']) && isset( $_GET['barcode'])) : ?>
         <button type="button" class="btn btn-sm btn-primary" onclick="goUseKeyboard()">คีย์มือ</button>

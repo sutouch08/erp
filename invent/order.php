@@ -10,6 +10,9 @@
 	$delete 		= $pm['delete'];
 	accessDeny($view);
 
+	$pm = checkAccess($id_profile, 85); //---	แก้ไขต้นทุนได้หรือไม่ (มองเห็นต้นทุนได้หรือไม่)
+	$canEditCost = ($pm['add'] + $pm['edit'] + $pm['delete']) > 0 ? TRUE : FALSE;
+
 	include 'function/order_helper.php';
 	include 'function/customer_helper.php';
 	include 'function/employee_helper.php';
@@ -23,6 +26,7 @@
 
 	$allowEditDisc = getConfig('ALLOW_EDIT_DISCOUNT');
 	$allowEditPrice = getConfig('ALLOW_EDIT_PRICE');
+	$allowEditCost  = getConfig('ALLOW_EDIT_COST');
 ?>
 <div class="container">
 <?php

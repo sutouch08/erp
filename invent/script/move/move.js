@@ -48,3 +48,12 @@ function printMove(id){
 		window.open("print/move/printMove.php?id_move="+id, "_blank", "width=800, height=900, left="+center+", scrollbars=yes");
 	}
 }
+
+
+function reOrder(){
+  var i = 1;
+  $('.no').each(function(index, el) {
+    $(this).text(i);
+    i++;
+  });
+}

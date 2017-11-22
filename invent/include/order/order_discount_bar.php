@@ -21,6 +21,10 @@
       <button type="button" class="btn btn-sm btn-default" id="btn-edit-price" onClick="showPriceBox()">แก้ไขราคา</button>
       <button type="button" class="btn btn-sm btn-primary hide" id="btn-update-price" onClick="getApprove('price')">บันทึกราคา</button>
 		<?php endif; ?>
+		<?php if( $allowEditCost) : ?>
+			<button type="button" class="btn btn-sm btn-default" id="btn-edit-cost" onClick="showCostBox()">แก้ไขต้นทุน</button>
+      <button type="button" class="btn btn-sm btn-primary hide" id="btn-update-cost" onClick="getApprove('cost')">บันทึกต้นทุน</button>
+		<?php endif; ?>
         <!-- Bill discount
         <button type="button" class="btn btn-sm btn-default" id="btn-edit-bDisc" onclick="showbDiscBox()">แก้ไขส่วนลดท้ายบิล</button>
         <button type="button" class="btn btn-sm btn-primary hide" id="btn-update-bDisc" onClick="getApprove('discount')">บันทึกส่วนลดท้ายบิล</button>

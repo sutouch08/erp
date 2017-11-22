@@ -24,7 +24,12 @@ $online = (isset( $_GET['online'] ) OR $order->isOnline == 1 ) ? TRUE : FALSE;
     </div>
 </div>
 <hr class="margin-bottom-10" />
+<?php if( $order->state > 3) : ?>
+<?php 	include 'include/page_error.php';	?>
+<?php else : ?>
+
 <?php
+
 if( $online )
 {
 	include 'include/order/order_add_online_header.php';
@@ -99,6 +104,8 @@ else
 	//---- include modal for validate s_key to confirm change order date after add details
 	include 'include/validate_credentials.php';
 ?>
+
+<?php endif; ?>
 
 <?php endif; ?>
 <script src="script/order/order_add.js"></script>

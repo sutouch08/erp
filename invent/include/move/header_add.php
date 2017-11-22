@@ -6,6 +6,11 @@
     <input type="text" class="form-control input-sm text-center" value="<?php echo $cs->reference; ?>" <?php echo $disabled; ?> />
   </div>
 
+  <div class="col-sm-4 paddint-5">
+    <label>คลังสินค้า</label>
+    <input type="text" class="form-control input-sm text-center" id="warehouseName" value="<?php echo $wh->getName($cs->id_warehouse); ?>" <?php echo $disabled; ?> />
+  </div>
+
   <div class="col-sm-4 col-4-harf padding-5">
     <label>หมายเหตุ</label>
     <input type="text" class="form-control input-sm header-box" id="remark" value="<?php echo $cs->remark; ?>" <?php echo $disabled; ?> />
@@ -23,7 +28,7 @@
     <?php endif; ?>
   </div>
   <input type="hidden" id="id_move" value="<?php echo $cs->id; ?>" />
-  <input type="hidden" id="isExport" value="<?php echo $cs->isExport; ?>" />
+  <input type="hidden" id="id_warehouse" value="<?php echo $cs->id_warehouse; ?>" />
 
 
 </div>

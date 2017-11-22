@@ -21,6 +21,7 @@ foreach( $ds as $items )
                     "id_product"	    => $id,
                     "product_code"    => $pd->code,
                     "product_name"    => $pd->name,
+                    "cost"            => $pd->cost,
                     "price"	          => $pd->price,
                     "qty"		          => $qty,
                     "discount"	      => 0.00,
@@ -48,6 +49,7 @@ foreach( $ds as $items )
                   "discount"	      => 0,
                   "discount_amount"	=> 0,
                   "total_amount"	  => ($pd->price * $qty),
+                  "valid"           => 0,
                   "isSaved"	        => 0, //--- ย้อนกลับมาเป็นยังไม่ได้บันทึกอีกครั้ง
                   "gp"              => 0
                   );

@@ -166,6 +166,16 @@ if( isset( $_GET['updateEditPrice'] ) )
 
 
 
+
+//---- แก้ไขราคาทุนสินค้า โดยพนักงาน และมีผู้อนุมัติการแก้ไข
+if( isset( $_GET['updateEditCost'] ) )
+{
+	include 'order/edit_cost.php';
+}
+
+
+
+
 //----		เพิ่มรายการสินค้าเข้าออเดอร์พร้อมคำนวณส่วนลดจากนโยบายส่วนลด
 if( isset( $_GET['addToOrder'] ) )
 {
@@ -627,7 +637,7 @@ if( isset( $_GET['setDefaultAddress'] ) )
 //--- เปลี่ยนสถานะของออเดอร์โดยคน
 if( isset( $_GET['stateChange']))
 {
-	include 'order/order_state.php';
+	include 'order/order_state_change.php';
 }
 
 

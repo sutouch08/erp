@@ -4,21 +4,6 @@
 
   $id_move = $_POST['id_move'];
 
-  //--- โซนที่ย้ายออก
-  $id_zone		 = $_POST['id_zone'];
-
-  //--- จำนวนที่ย้ายออก Array
-  $moveQty 	   = $_POST['moveQty'];
-
-  //--- สินค้าที่ย้ายออก Array
-  $pd			     = $_POST['id_product'];
-
-  //--- อนุญาติให้ติดลบได้หรือไม่ (ที่โซน)
-  $underZero   = isset( $_POST['underZero'] ) ? $_POST['underZero'] : array();
-
-  //--- ติดลบได้หรือไม่(ที่รายการ) Array
-  $udz			   = isset( $_POST['allowUnderZero'] ) ? $_POST['allowUnderZero'] : array();
-
   //--- move objcet
   $cs    = new move($id_move);
 
@@ -27,6 +12,25 @@
 
   //--- movement object
   $mv    = new movement();
+
+  //--- zone object
+  $zone = new zone();
+
+
+
+  //--- โซนที่ย้ายออก
+  $id_zone		 = $_POST['id_zone'];
+
+  //--- คลังที่ย้ายออก
+  $id_warehouse = $zone->getWarehouseId($id_zone);
+
+  //--- จำนวนที่ย้ายออก Array
+  $moveQty 	   = $_POST['moveQty'];
+
+  //--- สินค้าที่ย้ายออก Array
+  $pd			     = $_POST['id_product'];
+
+
 
 
   startTransection();
@@ -39,11 +43,12 @@
       $id_product	= $pd[$name];
       $qty		    = $val;
       $arr        = array(
-                      "id_move" => $id_move,
-                      "id_product"	=> $id_product,
-                      "from_zone"	  => $id_zone,
-                      "to_zone"		  => 0,
-                      "qty"		      => $qty
+                      "id_move"      => $id_move,
+                      "id_product"	 => $id_product,
+                      "id_warehouse" => $id_warehouse,
+                      "from_zone"	   => $id_zone,
+                      "to_zone"		   => 0,
+                      "qty"		       => $qty
                     );
 
       //--- เพิ่มข้อมูล
@@ -63,10 +68,11 @@
         $temp = array(
                   "id_move_detail" => $ra,
                   "id_move"        => $id_move,
-                  "id_product"	       => $id_product,
-                  "id_zone"		         => $id_zone,
-                  "qty"	               => $qty,
-                  "id_employee"	       => getCookie('user_id')
+                  "id_product"	   => $id_product,
+                  "id_warehouse"   => $id_warehouse,
+                  "id_zone"		     => $id_zone,
+                  "qty"	           => $qty,
+                  "id_employee"	   => getCookie('user_id')
                   );
 
 
@@ -87,7 +93,7 @@
         }
 
         //--- บันทึก movement ออก
-        if( $mv->move_out($cs->reference, $cs->from_warehouse, $id_zone, $id_product, $qty, $cs->date_add) !== TRUE)
+        if( $mv->move_out($cs->reference, $id_warehouse, $id_zone, $id_product, $qty, $cs->date_add) !== TRUE)
         {
           //--- ถ้าบันทึก movement ไม่สำเร็จ
           $sc = FALSE;

@@ -38,20 +38,15 @@
 
     $buffer = new buffer();
 
-    $payment  = new payment_method($order->id_payment);
+    $stock = new stock();
 
-    //--- มีเครดิตหรือไม่
-    $term = $payment->hasTerm($order->id_payment);
-
-    //--- เครดิตที่ต้องคืนเมื่อยกเลิกออเดอร์ กรณีเป็นการขายเครดิต
-    $useCredit = 0;
-
-    $credit = new customer_credit();
+    $consign = new consign($order->id);
 
     startTransection();
+
     if( $state < $order->state OR $state == 11)
     {
-      if( $order->state >= 8)
+      if( $order->state >= 8 )
       {
         //--- ลบ movement
         if( $movement->dropMovement($order->reference) !== TRUE)
@@ -66,27 +61,33 @@
         {
           while( $rs = dbFetchObject($qs))
           {
-            //--- เพิ่มข้อมูลกลับ buffer
-            if( $buffer->updateBuffer($rs->id_order, $rs->id_product_style, $rs->id_product, $rs->id_zone, $rs->id_warehouse, $rs->qty) !== TRUE)
+            //--- ลดยอดในโซนปลายทางออก
+            $isEnough = $stock->isEnough($consign->id_zone, $rs->id_product, $rs->qty);
+            if( $isEnough === FALSE)
             {
               $sc = FALSE;
-              $message = 'เพิ่มข้อมูลเข้า buffer ไม่สำเร็จ';
+              $message = 'ยอดคงเหลือในโซนไม่เพียงพอ';
             }
-
-            //--- ลบรายการบันทึกขาย
-            if( $order->unSold($rs->id) !== TRUE )
+            else
             {
-              $sc = FALSE;
-              $message = 'ลบรายการบันทึกขายไม่สำเร็จ';
-            }
+              //--- เพิ่มข้อมูลกลับ buffer
+              if( $buffer->updateBuffer($rs->id_order, $rs->id_product_style, $rs->id_product, $rs->id_zone, $rs->id_warehouse, $rs->qty) !== TRUE)
+              {
+                $sc = FALSE;
+                $message = 'เพิ่มข้อมูลเข้า buffer ไม่สำเร็จ';
+              }
 
-            //--- ถ้ามีการใช้เครดิต รวมยอดเครดิตไว้คืน
-            if( $term === TRUE )
-            {
-              $useCredit += $rs->total_amount_inc;
-            }
+              //--- ลบรายการบันทึกขาย
+              if( $order->unSold($rs->id) !== TRUE )
+              {
+                $sc = FALSE;
+                $message = 'ลบรายการบันทึกขายไม่สำเร็จ';
+              }
+
+            } //--- end if isEnough
 
           } //--- End while
+
         } //--- end if dbNumRows
 
       } //--- end if order->state >= 8  ถ้าสถานะปัจจุบัน มากกกว่า หรือ เท่ากับ 8 (เปิดบิลแล้ว)
@@ -99,16 +100,6 @@
         {
           $sc = FALSE;
           $message = 'เคลียร์ Buffer ไม่สำเร็จ';
-        }
-
-        //--- คืนยอดเครดิต
-        if( $term === TRUE )
-        {
-          if( $credit->decreaseUsed($order->id_customer, $useCredit) !== TRUE )
-          {
-            $sc = FALSE;
-            $message = 'คืนยอดเครดิตให้ลูกค้าไม่สำเร็จ';
-          }
         }
 
         //--- ลบประวัติการจัดสินค้า
@@ -124,7 +115,6 @@
           $sc = FALSE;
           $message = 'ลบรายการตรวจสินค้าไม่สำเร็จ';
         }
-
 
         //--- delete order detail
         if( $order->deleteDetails($order->id) !== TRUE )

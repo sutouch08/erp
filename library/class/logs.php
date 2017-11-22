@@ -36,7 +36,7 @@ class logs
 			{
 				$fields .= $i == 1 ? $field : ", ".$field;
 				$values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_gp_logs (".$fields.") VALUES (".$values.")");
 		}
@@ -61,6 +61,26 @@ class logs
 				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_price_logs (".$fields.") VALUES (".$values.")");
+		}
+		return $sc;
+	}
+
+
+	public function logs_cost(array $ds = array() )
+	{
+		$sc = FALSE;
+		if( ! empty( $ds ) )
+		{
+			$fields = "";
+			$values = "";
+			$i = 1;
+			foreach( $ds as $field => $value )
+			{
+				$fields .= $i == 1 ? $field : ", ".$field;
+				$values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
+				$i++;
+			}
+			$sc = dbQuery("INSERT INTO tbl_cost_logs (".$fields.") VALUES (".$values.")");
 		}
 		return $sc;
 	}

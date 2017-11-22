@@ -4,22 +4,18 @@
     	<table class="table table-striped table-bordered">
       	<thead>
 					<tr>
-						<th colspan="6" class="text-center">
+						<th colspan="5" class="text-center">
 							<h4 class="title" id="zoneName"></h4>
 						</th>
 					</tr>
-        	<tr>
-          	<th colspan="6">
+        	<tr id="row-btn">
+          	<th colspan="5">
 							<div class="col-sm-6">
-              <?php if( $delete ) : ?>
-              	<label class="margin-right-15px padding-10" id="underZeroLabel">
-                <input type="checkbox" name="allowUnderZeroAll" id="allowUnderZeroAll" value="1" style="margin-right:5px;" />ติดลบได้ทั้งหมด</label>
-              <?php endif; ?>
-              	<button type="button" class="btn btn-sm btn-warning" onclick="addAllToTransfer()">ย้ายรายการทั้งหมด</button>
+              	<button type="button" class="btn btn-sm btn-warning" onclick="addAllToMove()">ย้ายรายการทั้งหมด</button>
               </div>
               <div class="col-sm-6">
                 <p class="pull-right top-p">
-                  <button type="button" class="btn btn-sm btn-primary" onclick="addToTransfer()">ย้ายรายการที่เลือก</button>
+                  <button type="button" class="btn btn-sm btn-primary" onclick="addToMove()">ย้ายรายการที่เลือก</button>
                 </p>
               </div>
             </th>
@@ -31,7 +27,6 @@
             <th class="width-40 text-center">สินค้า</th>
             <th class="width-10 text-center">จำนวน</th>
             <th class="width-10 text-center">ย้ายออก</th>
-            <th class="width-10 text-center">ตัวเลือก</th>
           </tr>
           </thead>
 
@@ -40,7 +35,6 @@
         </table>
       </form>
     </div>
-
 
 
 	<div class="col-sm-12" id="move-table">
@@ -137,27 +131,19 @@
 </tr>
 {{else}}
 <tr>
-	<td align="center">{{ no }}</td>
-  <td align="center">{{ barcode }}</td>
+	<td class="text-center">{{ no }}</td>
+  <td class="text-center">{{ barcode }}</td>
   <td>{{ products }}</td>
-  <td align="center" class="qty-label">{{ qty }}</td>
-  <td align="center">
+  <td class="qty-label text-center" id="qty-label-{{ id_stock }}">{{ qty }}</td>
+  <td class="text-center">
   	<input type="text" class="form-control input-sm text-center input-qty" id="moveQty_{{ id_stock }}" name="moveQty[{{id_stock}}]" onkeyup="validQty({{ id_stock}}, {{ qty }})" />
-		 <input type="hidden" name="id_product[{{ id_stock }}]" id="id_product_{{ id_stock }}" value="{{ id_product }}" />
+		<input type="hidden" name="id_product[{{ id_stock }}]" id="id_product_{{ id_stock }}" value="{{ id_product }}" />
   </td>
-  <td align="center">
-<?php if( $delete ) : ?>
-    {{#if isAllowUnderZero}}
-    	<input type="checkbox" name="allowUnderZero[{{id_stock}}]" id="allowUnderZero_{{ id_stock }}" onChange="validQty({{ id_stock }}, {{ qty }})" value="1" />
-      <label for="allowUnderZero_{{ id_stock }}">ติดลบได้</label>
-    {{/if}}
-<?php endif; ?>
-    </td>
+
 </tr>
 {{/if}}
 {{/each}}
 </script>
-
 
 
 <script id="moveTableTemplate" type="text/x-handlebars-template">
@@ -168,7 +154,7 @@
 	</tr>
 	{{else}}
 		<tr class="font-size-12" id="row-{{ id }}">
-			<td class="middle text-center">{{ no }}</td>
+			<td class="middle text-center no">{{ no }}</td>
 			<td class="middle">{{ barcode }}</td>
 			<td class="middle">{{ products }}</td>
 			<td class="middle text-center">

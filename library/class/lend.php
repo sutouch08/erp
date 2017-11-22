@@ -129,6 +129,12 @@ class lend
 
 
 
+	public function deleteDetail($id_order, $id_product)
+	{
+		return dbQuery("DELETE FROM tbl_order_lend_detail WHERE id_order = '".$id_order."' AND id_product = '".$id_product."'");
+	}
+
+
 
 
 	public function isExists($id_order, $id_product)
@@ -160,6 +166,9 @@ class lend
 	}
 
 
+
+
+
 	public function getReturnedQty($id_order, $id_product)
 	{
 		$sc = 0;
@@ -170,6 +179,28 @@ class lend
 		}
 
 		return $sc;
+	}
+
+
+
+	//---	มีการคืนสินค้ามาบ้างแล้วหรือยัง
+	public function isReceived($id_order)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_order_lend_detail WHERE id_order = '".$id_order."' AND received > 0");
+		if( dbNumRows($qs) > 0)
+		{
+			$sc = TRUE;
+		}
+
+		return $sc;
+	}
+
+
+	//---	ปิดเอกสาร (รับคืนครบแล้ว หรือ ยกเลิกเอกสาร)
+	public function closed($id_order)
+	{
+		return dbQuery("UPDATE tbl_order_lend SET isClosed = 1 WHERE id_order = '".$id_order."'");
 	}
 
 

@@ -19,6 +19,7 @@
 							"imageLink"	=> $image->getProductImage($rs->id_product, 1),
 							"productCode"	=> $rs->product_code,
 							"productName"	=> $rs->product_name,
+							"cost"				=> $rs->cost,
 							"price"	=> number_format($rs->price, 2),
 							"qty"	=> number_format($rs->qty),
 							"discount"	=> ($order->role == 2 ? $rs->gp .' %' : $rs->discount),
@@ -31,11 +32,17 @@
 			$total_order += $rs->qty * $rs->price;
 			$no++;
 		}
+
+		$netAmount = ( $total_amount - $order->bDiscAmount ) + $order->shipping_fee + $order->service_fee;
+
 		$arr = array(
-					"total_qty" => number_format($total_qty),
-					"order_amount" => number_format($total_order, 2),
-					"total_discount" => number_format($total_discount, 2),
-					"total_amount" => number_format($total_amount, 2)
+					"total_qty" => number($total_qty),
+					"order_amount" => number($total_order, 2),
+					"total_discount" => number($total_discount, 2),
+					"shipping_fee"	=> number($order->shipping_fee,2),
+					"service_fee"	=> number($order->service_fee, 2),
+					"total_amount" => number($total_amount, 2),
+					"net_amount"	=> number($netAmount,2)
 				);
 		array_push($ds, $arr);
 		$sc = json_encode($ds);

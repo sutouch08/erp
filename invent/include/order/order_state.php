@@ -1,6 +1,8 @@
 <?php
 $ps 				= checkAccess($id_profile, 83); //--- ย้อนสถานะออเดอร์ได้หรือไม่
+$px					= checkAccess($id_profile, 84);	//--- ย้อนสถานะออเดอร์ที่เปิดบิลแล้วได้หรือไม่
 $canChange	= ($ps['add'] + $ps['edit'] + $ps['delete']) > 0 ? TRUE : FALSE;
+$canUnbill	= ($px['add'] + $px['edit'] + $px['delete']) > 0 ? TRUE : FALSE;
 ?>
 
 <div class="row" style="margin-left:0px; margin-right:0px; margin-bottom:5px;">
@@ -12,18 +14,26 @@ $canChange	= ($ps['add'] + $ps['edit'] + $ps['delete']) > 0 ? TRUE : FALSE;
                 <td class="width-40">
                 	<select class="form-control input-xs" style="padding-top:0px; padding-bottom:0px;" id="stateList">
                     	<option value="0">เลือกสถานะ</option>
+							<?php if( $order->state != 11 ) : ?>
                  <?php if( $order->state <=3 && $edit) : ?>
                         <option value="1">รอการชำระเงิน</option>
                         <option value="2">แจ้งชำระเงิน</option>
                         <option value="3">รอจัดสินค้า</option>
-								 <?php elseif($order->state > 3 && $canChange ) : ?>
+								 <?php elseif($order->state > 3 && $order->state < 8 && $canChange ) : ?>
+											 <option value="1">รอการชำระเงิน</option>
+											 <option value="2">แจ้งชำระเงิน</option>
+											 <option value="3">รอจัดสินค้า</option>
+								 <?php elseif($order->state > 3 && $order->state >= 8 && $canUnbill ) : ?>
 											 <option value="1">รอการชำระเงิน</option>
 											 <option value="2">แจ้งชำระเงิน</option>
 											 <option value="3">รอจัดสินค้า</option>
 								 <?php endif; ?>
-                 <?php if( $delete ) : ?>
+                 <?php if( $order->state < 8 && $delete ) : ?>
                         <option value="11">ยกเลิก</option>
-                  <?php endif; ?>
+								 <?php elseif( $order->state >= 8 && $canUnbill) : ?>
+												<option value="11">ยกเลิก</option>
+                 <?php endif; ?>
+							<?php endif; ?>
                     </select>
                 </td>
                 <td class="width-30">

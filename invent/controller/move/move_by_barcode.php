@@ -11,6 +11,9 @@ $id_move = $_POST['id_move'];
 //--- โซนปลายทาง
 $id_zone = $_POST['id_zone'];
 
+//--- ไอดีคลังปลายทาง
+$id_warehouse = $_POST['id_warehouse'];
+
 //--- บาร์โค้ดสินค้า
 $barcode = $_POST['barcode'];
 
@@ -79,14 +82,14 @@ else
         }
 
         //--- บันทึก movement เข้า
-        if( $movement->move_in($cs->reference, $cs->to_warehouse, $id_zone, $id_product, $qty, $cs->date_add) !== TRUE )
+        if( $movement->move_in($cs->reference, $id_warehouse, $id_zone, $id_product, $qty, $cs->date_add) !== TRUE )
         {
           $sc = FALSE;
           $message = 'บันทึก movement ไม่สำเร็จ';
         }
 
         //--- ลดยอดใน temp
-        if( $cs->updateTransferTemp($rs->id, ($qty * -1)) !== TRUE)
+        if( $cs->updateMoveTemp($rs->id, ($qty * -1)) !== TRUE)
         {
           $sc = FALSE;
           $message = 'ปรับปรุง ยอดใน temp ไม่สำเร็จ';

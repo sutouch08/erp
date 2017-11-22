@@ -58,7 +58,6 @@
     $policy   = new discount_policy();
 
 
-
     while( $rs = dbFetchObject($qs))
     {
       //--- ถ้ายอดตรวจ น้อยกว่า หรือ เท่ากับ ยอดสั่ง ใช้ยอดตรวจในการตัด buffer
@@ -109,26 +108,36 @@
                     'reference' => $order->reference,
                     'id_role'   => $order->role,
                     'role_name' => $role->name,
+                    'id_payment'  => $payment->id,
                     'payment'   => $payment->name,
+                    'id_channels' => $channels->id,
                     'channels'  => $channels->name,
                     'id_product'  => $product->id,
                     'product_code'  => $product->code,
                     'product_name'  => $product->name,
+                    'id_color'  => $product->id_color,
                     'color'         => $color->getCode($product->id_color),
                     'color_group'   => $color->getGroupCode($product->id_color),
+                    'id_size'       => $product->id_size,
                     'size'          => $size->getCode($product->id_size),
                     'size_group'    => $size->getGroupCode($product->id_size),
+                    'id_product_style'  => $product->id_style,
                     'product_style' => $style->getCode($product->id_style),
+                    'id_product_group'  => $product->id_group,
                     'product_group' => $pd_group->getName($product->id_group),
+                    'id_product_category' => $product->id_category,
                     'product_category'  => $category->getName($product->id_category),
+                    'id_product_kind' => $product->id_kind,
                     'product_kind'  => $kind->getName($product->id_kind),
+                    'id_product_type' => $product->id_type,
                     'product_type'  => $type->getName($product->id_type),
+                    'id_brand'      => $product->id_brand,
                     'brand'         => $brand->getName($product->id_brand),
                     'year'          => $product->year,
-                    'cost_ex' => removeVAT($product->cost, $vat),
-                    'cost_inc'  => $product->cost,
-                    'price_ex'  => removeVAT($product->price, $vat),
-                    'price_inc' => $product->price,
+                    'cost_ex' => removeVAT($ds->cost, $vat),
+                    'cost_inc'  => $ds->cost,
+                    'price_ex'  => removeVAT($ds->price, $vat),
+                    'price_inc' => $ds->price,
                     'sell_ex'   => removeVAT( ($ds->total_amount/$ds->qty), $vat),
                     'sell_inc'  => $ds->total_amount / $ds->qty,
                     'qty'       => $buffer_qty,
@@ -136,10 +145,10 @@
                     'discount_amount' => ($ds->discount_amount / $ds->qty) * $buffer_qty,
                     'total_amount_ex' => removeVAT( ($ds->total_amount / $ds->qty) * $buffer_qty, $vat),
                     'total_amount_inc'  => ($ds->total_amount / $ds->qty) * $buffer_qty,
-                    'total_cost_ex'   => removeVAT(($product->cost * $buffer_qty), $vat),
-                    'total_cost_inc'  => $product->cost * $buffer_qty,
-                    'margin_ex'   => removeVAT( ( ( ($ds->total_amount / $ds->qty) * $buffer_qty) - ($product->cost * $buffer_qty) ), $vat),
-                    'margin_inc'  => ( ($ds->total_amount / $ds->qty) * $buffer_qty) - ($product->cost * $buffer_qty),
+                    'total_cost_ex'   => removeVAT(($ds->cost * $buffer_qty), $vat),
+                    'total_cost_inc'  => $ds->cost * $buffer_qty,
+                    'margin_ex'   => removeVAT( ( ( ($ds->total_amount / $ds->qty) * $buffer_qty) - ($ds->cost * $buffer_qty) ), $vat),
+                    'margin_inc'  => ( ($ds->total_amount / $ds->qty) * $buffer_qty) - ($ds->cost * $buffer_qty),
                     'id_policy'   => $policy->id,
                     'policy_code' => $policy->reference,
                     'policy_name' => $policy->name,
@@ -195,12 +204,24 @@
     $sc = FALSE;
   }
 
+  //--- log การคืนยอดเครดิตหรืองบประมาณ
+  //--- (ไว้ตรวจสอบเวลามีการย้อนขั้นตอนและบันทึกขายอีกครับ (ทำให้มีการคืนเครดิตในสินค้าที่ไม่ได้บันทึกขายอีกรอบ))
+  $clog      = new return_credit_log();
+
+  //--- ดึงยอดทีเครดิตที่เคยคืนไปแล้วครั้งก่อน (ถ้ามี)
+  $logAmount = $clog->getReturnCreditLogAmount($order->id, $order->id_customer);
+  $useCredit -= $logAmount;
 
   //--- ถ้าเป็นออเดอร์ที่มีการใช้เครดิต และ ออเดอร์ได้ของไม่ครบตามที่สั่ง
   //--- ให้คืนยอดใช้ไปให้ลูกค้า
   if( $term === TRUE && $useCredit > 0)
   {
     $credit->decreaseUsed($order->id_customer, $useCredit);
+
+    //--- เก็บ log การคืนยอดเครดิตหรืองบประมาณ
+    //--- (ไว้ตรวจสอบเวลามีการย้อนขั้นตอนและบันทึกขายอีกครับ (ทำให้มีการคืนเครดิตในสินค้าที่ไม่ได้บันทึกขายอีกรอบ))
+    $clog     = new return_credit_log();
+    $clog->add_log($order->id, $order->id_customer, $useCredit );
   }
 
 

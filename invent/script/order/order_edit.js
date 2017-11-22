@@ -9,7 +9,16 @@ function changeState(){
             success:function(rs){
                 var rs = $.trim(rs);
                 if(rs == 'success'){
-                    window.location.reload();
+                    swal({
+                      title:'success',
+                      type:'success',
+                      timer: 1000
+                    });
+
+                    setTimeout(function(){
+                      window.location.reload();
+                    }, 1500);
+
                 }else{
                     swal("Error !", rs, "error");
                 }

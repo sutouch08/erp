@@ -34,11 +34,8 @@ if( $rs !== FALSE )
     //------ ตรวจสอบยอดคงเหลือในโซนก่อนว่าพอที่จะย้ายกลับมั้ย
     $isEnough = $stock->isEnough($rs->to_zone, $rs->id_product, $rs->qty);
 
-    //--- ตรวจสอบว่าโซนปลายทางอนุญาติให้ติดลบได้หรือไม่
-    $isAllowUnderZero = $zone->isAllowUnderZero($rs->to_zone);
 
-
-    if( $isEnough === FALSE && $isAllowUnderZero === FALSE )
+    if( $isEnough === FALSE )
     {
       $sc = FALSE;
       $message = 'ยอดคงเหลือในโซนไม่พอให้ย้ายกลับ';
@@ -103,11 +100,7 @@ if( $rs !== FALSE )
         //------ ตรวจสอบยอดคงเหลือในโซนก่อนว่าพอที่จะย้ายกลับมั้ย
         $isEnough = $stock->isEnough($rs->to_zone, $rs->id_product, $diff_qty);
 
-        //--- ตรวจสอบว่าโซนปลายทางอนุญาติให้ติดลบได้หรือไม่
-        $isAllowUnderZero = $zone->isAllowUnderZero($rs->to_zone);
-
-
-        if( $isEnough === FALSE && $isAllowUnderZero === FALSE )
+        if( $isEnough === FALSE )
         {
           $sc = FALSE;
           $message = 'ยอดคงเหลือในโซนไม่พอให้ย้ายกลับ';
