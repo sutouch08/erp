@@ -88,7 +88,7 @@
 		//---	ถ้าเป็นฝากขาย เพิ่มข้อมูลพื้นที่เก็บด้วย
 		if( $role == 2)
 		{
-			$consign = new consign();
+			$consign = new order_consign();
 			$consign->add($id, $id_zone);
 		}
 

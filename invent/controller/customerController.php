@@ -15,7 +15,7 @@ if( isset( $_GET['saveGeneral'] ) )
 						);
 	if( $cs->update($id, $arr) === FALSE )
 	{
-		$sc = 'บันทึกรายการไม่สำเร็จ';	
+		$sc = 'บันทึกรายการไม่สำเร็จ';
 	}
 	echo $sc;
 }
@@ -49,7 +49,7 @@ if( isset( $_GET['deleteCustomer'] ) )
 	{
 		$sc = 'fail';
 	}
-	echo $sc;	
+	echo $sc;
 }
 
 
@@ -102,24 +102,24 @@ if( isset( $_GET['updateDiscount'] ) )
 					}
 					else
 					{
-						$dc->delete($id_discount);	
+						$dc->delete($id_discount);
 					}
-											
+
 				}
 				else
 				{
-					$sc = FALSE;	
+					$sc = FALSE;
 				}
 			}
 		}//---- end foreach
-		
+
 		if( $sc !== FALSE )
 		{
-			commitTransection();	
+			commitTransection();
 		}
 		else
 		{
-			dbRollback();	
+			dbRollback();
 		}
 		endTransection();
 	}
@@ -128,7 +128,12 @@ if( isset( $_GET['updateDiscount'] ) )
 
 
 
-
+if(isset($_GET['getCustomerId']))
+{
+	$code = trim($_GET['customerCode']);
+	$customer = new customer();
+	echo $customer->getId($code);
+}
 
 
 if( isset( $_GET['clearFilter'] ) )
@@ -141,7 +146,7 @@ if( isset( $_GET['clearFilter'] ) )
 	deleteCookie('cClass');
 	deleteCookie('cArea');
 	deleteCookie('cProvince');
-	echo "success";	
+	echo "success";
 }
 
 ?>

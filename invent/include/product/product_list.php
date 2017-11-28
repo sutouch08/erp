@@ -4,33 +4,33 @@
 	$sGroup	= isset( $_POST['sGroup'] ) ? $_POST['sGroup'] : ( getCookie('sProductGroup') ? getCookie('sProductGroup') : '' );
 	$sCategory	= isset( $_POST['sCategory'] ) ? $_POST['sCategory'] : ( getCookie('sProductCategory') ? getCookie('sProductCategory') : '' );
 	$sYear	= isset( $_POST['sYear'] ) ? $_POST['sYear'] : ( getCookie('sProductYear') ? getCookie('sProductYear') : '' );
-?>    
+?>
 <form id="searchForm" method="post">
 	<div class="row">
     	<div class="col-sm-2">
         	<label>รหัสสินค้า</label>
             <input type="text" class="form-control input-sm text-center search-box" name="sCode" id="sCode" value="<?php echo $sCode; ?>" />
         </div>
-        
+
         <div class="col-sm-2">
         	<label>ชื่อสินค้า</label>
             <input type="text" class="form-control input-sm text-center search-box" name="sName" id="sName" value="<?php echo $sName; ?>" />
         </div>
-        
+
         <div class="col-sm-2">
         	<label>กลุ่มสินค้า</label>
             <select class="form-control input-sm select-box" name="sGroup" id="sGroup">
             	<?php echo selectProductGroup($sGroup); ?>
             </select>
         </div>
-        
+
         <div class="col-sm-2">
         	<label>หมวดหมู่สินค้า</label>
             <select class="form-control input-sm select-box" name="sCategory" id="sCategory">
             	<?php echo selectCategory($sCategory); ?>
             </select>
         </div>
-        
+
         <div class="col-sm-2">
         	<label>ปีสินค้า</label>
             <select class="form-control input-sm select-box" name="sYear" id="sYear">
@@ -38,8 +38,8 @@
             	<?php echo selectYears($sYear); ?>
             </select>
         </div>
-        
-        
+
+
         <div class="col-sm-1">
         	<label class="display-block not-show">search</label>
             <button type="button" class="btn btn-sm btn-primary btn-block" onClick="getSearch()"><i class="fa fa-search"></i> ค้นหา</button>
@@ -50,7 +50,7 @@
         </div>
 
     </div>
-</form>    
+</form>
 <hr class="margin-top-15" />
 <?php
 	$where = "WHERE p.is_deleted = 0 ";
@@ -59,46 +59,46 @@
 		createCookie('sProductCode', $sCode);
 		$where .= "AND p.code LIKE '%".$sCode."%' ";
 	}
-	
+
 	if( $sName != '' )
 	{
 		createCookie('sProductName', $sName);
-		$where .= "AND p.name LIKE '%".$sName."%' ";	
+		$where .= "AND p.name LIKE '%".$sName."%' ";
 	}
-	
+
 	if( $sGroup != '' )
 	{
 		createCookie('sProductGroup', $sGroup);
-		$where .= "AND p.id_group = ".$sGroup." ";	
+		$where .= "AND p.id_group = '".$sGroup."' ";	
 	}
-	
+
 	if( $sCategory != '' )
 	{
 		createCookie('sProductCategory', $sCategory);
-		$where .= "AND p.id_category = ".$sCategory." ";	
+		$where .= "AND p.id_category = ".$sCategory." ";
 	}
-	
+
 	if( $sYear != "" )
 	{
 		createCookie('sProductYear', $sYear);
-		$where .= "AND p.year = '".$sYear."' ";	
+		$where .= "AND p.year = '".$sYear."' ";
 	}
-	
+
 	$where .= "GROUP BY p.id_style ";
 	$where .= "ORDER BY p.date_upd DESC";
-	
-	
+
+
 	$paginator 	= new paginator();
 	$get_rows	= get_rows();
 	//$paginator->Per_Page("tbl_product AS p JOIN tbl_style AS s ON p.id_style = s.id", $where, $get_rows);
 	$paginator->Per_Page("tbl_product_style AS s JOIN tbl_product AS p ON p.id_style = s.id", $where, $get_rows);
 	$paginator->display($get_rows, 'index.php?content=product');
-	
+
 	$qr = "SELECT p.*, s.code AS pdCode FROM tbl_product_style AS s ";
 	$qr .= "JOIN tbl_product AS p ON p.id_style = s.id ";
-	
+
 	$qs = dbQuery($qr . $where . " LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
-	
+
 ?>
 <div class="row">
 	<div class="col-sm-12">
@@ -133,7 +133,7 @@
                     <?php endif; ?>
                     <?php if( $delete ) : ?>
                     	<button type="button" class="btn btn-xs btn-danger" onClick="goDelete('<?php echo $rs->id; ?>', '<?php echo $rs->pdCode; ?>')"><i class="fa fa-trash"></i></button>
-                    <?php endif; ?>	
+                    <?php endif; ?>
                     </td>
                 </tr>
 <?php		$no++;		?>
@@ -142,7 +142,7 @@
 				<tr>
                 	<td colspan="7" align="center"><h4>ไม่พบรายการ</h4></td>
                 </tr>
-<?php endif; ?>                
+<?php endif; ?>
             </tbody>
         </table>
     </div>

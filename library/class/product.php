@@ -80,6 +80,9 @@ class product
 	}
 
 
+
+
+
 	public function update($id, array $ds)
 	{
 		$sc = FALSE;
@@ -96,6 +99,9 @@ class product
 		}
 		return $sc;
 	}
+
+
+
 
 
 
@@ -133,10 +139,14 @@ class product
 
 
 
+
 	public function delete($id)
 	{
 		return dbQuery("DELETE FROM tbl_product WHERE id = '".$id."'");
 	}
+
+
+
 
 
 
@@ -151,6 +161,8 @@ class product
 			return dbQuery("INSERT INTO tbl_product_detail ( id_style, description ) VALUES ('".$id_style."', '".$desc."')");
 		}
 	}
+
+
 
 
 
@@ -197,6 +209,8 @@ class product
 
 
 
+
+
 	public function isDisactiveAll($id_style)
 	{
 		$qs = dbQuery("SELECT id FROM tbl_product WHERE id_style = '".$id_style."' AND active = 1");
@@ -206,10 +220,14 @@ class product
 
 
 
+
+
 	public function getProductsByStyle($id_style)
 	{
 		return dbQuery("SELECT * FROM tbl_product WHERE id_style = '".$id_style."'");
 	}
+
+
 
 
 
@@ -227,6 +245,8 @@ class product
 
 
 
+
+
 	public function addImage($id, $id_image)
 	{
 		return dbQuery("INSERT INTO tbl_product_image (id_product, id_image) VALUES ('".$id."', '".$id_image."')");
@@ -235,10 +255,14 @@ class product
 
 
 
+
+
 	public function updateImage($id, $id_image)
 	{
 		return dbQuery("UPDATE tbl_product_image SET id_image = '".$id_image."' WHERE id_product = '".$id."'");
 	}
+
+
 
 
 
@@ -257,11 +281,15 @@ class product
 
 
 
+
+
 	///------- get images list of this style
 	public function getProductImages($id_style)
 	{
 		return dbQuery("SELECT * FROM tbl_image WHERE id_style = '".$id_style."'");
 	}
+
+
 
 
 
@@ -280,11 +308,15 @@ class product
 
 
 
+
+
 	//----- set status of specific field
 	public function setStatus($id, $field, $val)
 	{
 		return dbQuery("UPDATE tbl_product SET ".$field." = '".$val."' WHERE id = '".$id."'");
 	}
+
+
 
 
 
@@ -298,6 +330,9 @@ class product
 		}
 		return $sc;
 	}
+
+
+
 
 
 	public function getAllColors($id_style)
@@ -316,6 +351,9 @@ class product
 
 
 
+
+
+
 	public function getAllSizes($id_style)
 	{
 		$sc = array();
@@ -330,12 +368,19 @@ class product
 		return $sc;
 	}
 
+
+
+
+
 	public function countAttribute($id_style)
 	{
 		$color = dbNumRows(dbQuery("SELECT id FROM tbl_product WHERE id_style = '".$id_style."' AND id_color != '0' AND id_color != '' GROUP BY id_style"));
 		$size = dbNumRows(dbQuery("SELECT id FROM tbl_product WHERE id_style = '".$id_style."' AND id_size != '0' AND id_size != '' GROUP BY id_style"));
 		return $color + $size;
 	}
+
+
+
 
 
 
@@ -351,6 +396,10 @@ class product
 	}
 
 
+
+
+
+
 	public function getId($code)
 	{
 		$sc = FALSE;
@@ -362,6 +411,10 @@ class product
 		return $sc;
 	}
 
+
+
+
+
 	public function getName($id)
 	{
 		$sc = "";
@@ -372,6 +425,9 @@ class product
 		}
 		return $sc;
 	}
+
+
+
 
 
 	public function getCode($id)
@@ -386,6 +442,10 @@ class product
 	}
 
 
+
+
+
+
 	public function getUnitCode($id)
 	{
 		$sc = "";
@@ -396,6 +456,11 @@ class product
 		}
 		return $sc;
 	}
+
+
+
+
+
 
 	public function getStylePrice($id_style)
 	{
@@ -409,6 +474,11 @@ class product
 		return $sc;
 	}
 
+
+
+
+
+
 	public function getPrice($id)
 	{
 		$sc = 0;
@@ -419,6 +489,11 @@ class product
 		}
 		return $sc;
 	}
+
+
+
+
+
 
 	public function isCountStock($id_style)
 	{
@@ -432,12 +507,20 @@ class product
 	}
 
 
+
+
+
 	//--- ยอดรวมทุกคลังทุกโซนทั้งขายได้และไม่ได้
 	public function getStock($id)
 	{
 		$stock = new stock();
 		return $stock->getStock($id);
 	}
+
+
+
+
+
 
 	//---- ยอดรวมสินค้าที่สั่งได้
 	public function getSellStock($id)
@@ -451,6 +534,8 @@ class product
 		$availableStock = $sellStock - $reservStock + $cancleQty;
 		return $availableStock < 0 ? 0 : $availableStock;
 	}
+
+
 
 
 
@@ -472,6 +557,8 @@ class product
 
 
 
+
+
 	public function getCost($id)
 	{
 		$sc = 0.00;
@@ -486,10 +573,15 @@ class product
 
 
 
+
+
+
 	public function search($txt, $fields)
 	{
-		return dbQuery("SELECT $fields FROM tbl_product WHERE code LIKE '%".$txt."%' ORDER BY code ASC");
+		return dbQuery("SELECT $fields FROM tbl_product WHERE code LIKE '%".$txt."%' LIMIT 50");
 	}
+
+
 
 
 

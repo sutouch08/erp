@@ -3,7 +3,7 @@
 	$result 	= 'success';
 	$path		= getConfig('IMPORT_BARCODE_PATH');
 	$move		= getConfig('MOVE_BARCODE_PATH');
-	
+
 	$sc	= opendir($path);
 	if( $sc !== FALSE )
 	{
@@ -18,7 +18,7 @@
 			$reader		= new PHPExcel_Reader_Excel5();
 			$excel		= $reader->load($fileName);
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
-			
+
 			$barcode 	= new barcode();
 			$pd			= new product();
 			$i 	= 1;
@@ -40,7 +40,7 @@
 								'unit_code'	=> $rs['D'],
 								'unit_qty'		=> $rs['E']
 								);
-						$barcode->add($arr);	
+						$barcode->add($arr);
 					}
 					else
 					{
@@ -52,19 +52,19 @@
 								'unit_code'	=> $rs['D'],
 								'unit_qty'		=> $rs['E']
 								);
-						$barcode->update( $code, $arr);
+						$barcode->update( $id, $arr);
 					}	/// end if
 				}//-- end if not first row
-				$i++;	
+				$i++;
 			}//---- end foreach
-			rename($fileName, $moveName); //---- move each file to another folder	
+			rename($fileName, $moveName); //---- move each file to another folder
 		}//--- end while
 	} //--- end if
 	else
 	{
-		$result = 'Can not open folder';	
+		$result = 'Can not open folder';
 	}
-	
+
 	echo $result;
 
 ?>

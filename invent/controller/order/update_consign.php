@@ -1,5 +1,5 @@
 <?php
-	$consign = new consign();
+	$consign = new order_consign();
 	$logs = new logs();
 
 	//---	data for logs discount

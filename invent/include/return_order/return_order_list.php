@@ -143,13 +143,15 @@ $qs = dbQuery("SELECT * FROM tbl_return_order ". $where." LIMIT ".$paginator->Pa
 
  ?>
  <div class="row">
-   <div class="col-sm-8">
+   <div class="col-sm-7">
      <?php $paginator->display($get_rows, 'index.php?content=return_order'); ?>
    </div>
-   <div class="col-sm-4" style="padding-top:25px;">
+   <div class="col-sm-5" style="padding-top:25px;">
      <p class="pull-right top-p">
        <span>ว่าง</span><span class="margin-right-15"> = ปกติ</span>
        <span class="blue">NC</span><span class="margin-right-15"> = ยังไม่รับเข้า</span>
+       <span>Y</span><span class="margin-right-15"> = คืนสินค้า</span>
+       <span>N</span><span class="margin-right-15"> = ไม่คืนสินค้า</span>
      </p>
    </div>
  </div>
@@ -158,7 +160,7 @@ $qs = dbQuery("SELECT * FROM tbl_return_order ". $where." LIMIT ".$paginator->Pa
    <div class="col-sm-12">
      <table class="table table-striped table-bordered">
        <thead>
-         <tr class="font-size-12">
+         <tr class="font-size-10">
            <th class="width-5 text-center">ลำดับ</th>
            <th class="width-10 text-center">เลขที่เอกสาร</th>
            <th class="width-10 text-center">ใบส่งสินค้า</th>
@@ -166,7 +168,7 @@ $qs = dbQuery("SELECT * FROM tbl_return_order ". $where." LIMIT ".$paginator->Pa
            <th class="width-10 text-center">มูลค่า</th>
            <th class="width-10 text-center">วันที่</th>
            <th class="width-5 text-center">สถานะ</th>
-           <th class="width-5 text-center">คืนสินค้า</th>
+           <th class="width-5 text-center">คืน</th>
            <th></th>
          </tr>
        </thead>

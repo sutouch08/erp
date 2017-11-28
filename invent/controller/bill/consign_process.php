@@ -1,6 +1,6 @@
 <?php
   $bill = new bill();
-  $consign = new consign($order->id);
+  $consign = new order_consign($order->id);
   $zone = new zone($consign->id_zone);
 
   //--- ใช้งาน ทรานเซ็คชั่น

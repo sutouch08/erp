@@ -43,13 +43,13 @@ function getZoneIn($txt)
 		$sc = "";
 		while( $rs = dbFetchObject($qs) )
 		{
-			$sc .= $i == 1 ? $rs->id : ", ".$rs->id;
+			$sc .= $i == 1 ? "'".$rs->id_zone."'" : ", '".$rs->id_zone."'";
 			$i++;
 		}
 	}
 	else
 	{
-		$sc = "0";
+		$sc = "'0'";
 	}
 	return $sc;
 }
@@ -67,13 +67,13 @@ function getConsignZoneIn($txt)
 		$sc = "";
 		while( $rs = dbFetchObject($qs) )
 		{
-			$sc .= $i == 1 ? $rs->id : ", ".$rs->id;
+			$sc .= $i == 1 ? "'".$rs->id_zone."'" : ", '".$rs->id_zone."'";
 			$i++;
 		}
 	}
 	else
 	{
-		$sc = "0";
+		$sc = "'0'";
 	}
 	return $sc;
 }

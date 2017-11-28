@@ -3,24 +3,31 @@
 	class zone
 	{
 		public $id;
+		public $id_zone;
 		public $barcode;
 		public $name;
+		public $zone_name;
 		public $id_warehouse;
 		public $id_customer;
+		public $allowUnderZero = FALSE;
 
 		public function __construct($id = '')
 		{
-			if( $id != '' )
+			if( $id )
 			{
 				$qs = dbQuery("SELECT * FROM tbl_zone WHERE id_zone = '".$id."'");
 				if( dbNumRows($qs) == 1 )
 				{
 					$rs = dbFetchObject($qs);
 					$this->id		= 	$rs->id_zone;
+					$this->id_zone = $rs->id_zone;
 					$this->barcode	= $rs->barcode_zone;
+					$this->barcode_zone = $rs->barcode_zone;
 					$this->name	= $rs->zone_name;
+					$this->zone_name = $rs->zone_name;
 					$this->id_warehouse = $rs->id_warehouse;
 					$this->id_customer = $rs->id_customer;
+					$this->allowUnderZero = $this->isAllowUnderZero($rs->id_zone);
 				}
 			}
 		}
@@ -153,7 +160,7 @@
 		public function getName($id)
 		{
 			$sc = "";
-			$qs = dbQuery("SELECT zone_name FROM tbl_zone WHERE id_zone = ".$id);
+			$qs = dbQuery("SELECT zone_name FROM tbl_zone WHERE id_zone = '".$id."'");
 			if( dbNumRows($qs) == 1 )
 			{
 				list( $sc ) = dbFetchArray($qs);
@@ -227,7 +234,7 @@
 		public function getZoneDetail($id)
 		{
 			$sc = FALSE;
-			$qs = dbQuery("SELECT * FROM tbl_zone WHERE id_zone = ".$id);
+			$qs = dbQuery("SELECT * FROM tbl_zone WHERE id_zone = '".$id."'");
 			if( dbNumRows($qs) == 1 )
 			{
 				$sc = dbFetchObject($qs);

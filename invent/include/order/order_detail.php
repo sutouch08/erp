@@ -1,6 +1,6 @@
 
 <?php		$rowspan = $order->isOnline == 1 ? 6 : 4;	?>
-<?php 	$colspan = $allowEditCost == 1 ? 7 : 6; ?>
+<?php 	$colspan = isset($allowEditCost) && $allowEditCost == 1 ? 7 : 6; ?>
 <form id="discount-form">
 <div class="row">
 	<div class="col-sm-12">
@@ -11,7 +11,7 @@
                 <th class="width-5 text-center"></th>
                 <th class="width-15">รหัสสินค้า</th>
                 <th class="width-25">ชื่อสินค้า</th>
-								<?php if( $allowEditCost ) : ?>
+								<?php if( isset($allowEditCost) && $allowEditCost ) : ?>
 								<th class="width-10 text-center">ทุน</th>
 								<?php endif; ?>
                 <th class="width-10 text-center">ราคา</th>
@@ -39,7 +39,7 @@
 <?php	while( $rs = dbFetchObject($detail) ) : ?>
 <?php 	$discount = $order->role == 2 ? $rs->gp : $rs->discount; ?>
 <?php 	$discLabel = $order->role == 2 ? $rs->gp .' %' : $rs->discount; ?>
-<?php 	$cost = $canEditCost === TRUE ? $rs->cost : '0' ; ?>
+<?php 	$cost = isset($canEditCost) && $canEditCost === TRUE ? $rs->cost : '0' ; ?>
 			<tr class="font-size-10" id="row_<?php echo $rs->id; ?>">
       	<td class="middle text-center">
 					<?php echo $no; ?>
@@ -57,7 +57,7 @@
 					<?php echo $rs->product_name; ?>
 				</td>
 
-    <?php if( $allowEditCost ) : ?>
+    <?php if( isset($canEditCost) && $allowEditCost ) : ?>
 				<td class="middle text-center">
 					<?php if( $order->state <= 3 ) : ?>
             <input type="number" class="form-control input-sm text-center cost-box hide" id="cost_<?php echo $rs->id; ?>" name="cost[<?php echo $rs->id; ?>]" value="<?php echo $cost; ?>" />

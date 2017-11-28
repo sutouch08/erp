@@ -3,7 +3,7 @@
 	{
 		$sc 	= FALSE;
 		$order 	= new order($id_order);
-		$cs     = new consign($order->id);
+		$cs     = new order_consign($order->id);
 		$zone 	= new zone($cs->id_zone);
 		$pd			= new product();
 		$wh			= new warehouse();

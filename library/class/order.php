@@ -84,6 +84,10 @@ class order
 				$bookcode = getConfig('BOOKCODE_LEND');
 				break;
 
+			//---	ตัดยอดฝากขาย
+			case 8 :
+				$bookcode = getConfig('BOOKCODE_CONSIGN_SOLD');
+				break;
 			default:
 				$bookcode = getConfig('BOOKCODE_ORDER');
 				break;
@@ -886,6 +890,39 @@ class order
 	}
 
 
+	//---	ข้อมูลขายของตัดยอดฝากขาย
+	public function getConsignSoldDetail($reference, $id_pd, $id_zone)
+	{
+		$qs = dbQuery("SELECT * FROM tbl_order_sold WHERE reference = '".$reference."' AND id_product = '".$id_pd."' AND id_zone = '".$id_zone."'");
+		return  dbNumRows($qs) == 1 ? dbFetchObject($qs) : FALSE;
+	}
+
+
+	//---	ข้อมูลขายของตัดยอดฝากขายทั้งหมด
+	public function getConsignSoldDetails($reference)
+	{
+		return dbQuery("SELECT * FROM tbl_order_sold WHERE reference = '".$reference."'");		
+	}
+
+
+	//----	มูลค่ารวมทั้งบิลของเอกสารตัดยอดฝากขาย(ใช้ส่งออก formula)
+	public function getTotalConsignSoldAmount($reference, $inc = TRUE)
+	{
+		if( $inc === TRUE)
+		{
+			$qr = "SELECT SUM(total_amount_inc) AS amount FROM tbl_order_sold WHERE reference = '".$reference."'";
+		}
+		else
+		{
+			$qr = "SELECT SUM(total_amount_ex) AS amount FROM tbl_order_sold WHERE reference = '".$reference."'";
+		}
+
+		$qs = dbQuery($qr);
+
+		list( $amount ) = dbFetchArray($qs);
+
+		return is_null($amount) ? 0 : $amount;
+	}
 
 
 	//---	รายการที่บันทึกขายไว้ เพื่อส่งออกไป Formula
@@ -920,11 +957,11 @@ class order
 
 		if( $inc === TRUE)
 		{
-			$qr = "SELECT SUM(total_amount_inc) AS amount FROM tbl_order_sold WHERE id_order = ".$id;
+			$qr = "SELECT SUM(total_amount_inc) AS amount FROM tbl_order_sold WHERE id_order = '".$id."'";
 		}
 		else
 		{
-			$qr = "SELECT SUM(total_amount_ex) AS amount FROM tbl_order_sold WHERE id_order = ".$id;
+			$qr = "SELECT SUM(total_amount_ex) AS amount FROM tbl_order_sold WHERE id_order = '".$id."'";
 		}
 
 		$qs = dbQuery($qr);
@@ -939,7 +976,7 @@ class order
 
 	public function getTotalSoldQty($id)
 	{
-		$qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_order_sold WHERE id_order = ".$id);
+		$qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_order_sold WHERE id_order = '".$id."'");
 
 		list( $qty ) = dbFetchArray($qs);
 

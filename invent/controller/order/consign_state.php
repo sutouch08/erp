@@ -40,7 +40,7 @@
 
     $stock = new stock();
 
-    $consign = new consign($order->id);
+    $consign = new order_consign($order->id);
 
     startTransection();
 

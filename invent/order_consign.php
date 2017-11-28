@@ -1,5 +1,6 @@
 <script src="<?php echo WEB_ROOT; ?>library/js/jquery.md5.js"></script>
 <?php
+	//--- ฝากขาย [ใบกำกับ]
 	$id_tab 		= 16;
   $pm 				= checkAccess($id_profile, $id_tab);
 	$view 			= $pm['view'];

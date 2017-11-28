@@ -256,5 +256,20 @@ if( isset( $_GET['export']) && isset($_GET['AJ']) )
 }
 
 
+//---	Export So for consign sold
+//--- ส่งข้อมูลตัดยอดฝากขายไป formula (SO)
+if( isset( $_GET['export']) && isset( $_GET['consignSold']))
+{
+	$id = $_POST['id_consign'];
+
+	include '../function/vat_helper.php';
+	include 'interface/export/exportConsignSold.php';
+
+	$sc = exportConsignSold($id);
+
+	echo $sc === TRUE ? 'success' : $sc;
+}
+
+
 ///=================================================== END DOCUMENTS =======================================///
 ?>
