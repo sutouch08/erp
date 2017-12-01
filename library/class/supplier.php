@@ -1,5 +1,5 @@
 <?php
-class supplier 
+class supplier
 {
 	public $id;
 	public $code;
@@ -10,7 +10,7 @@ class supplier
 	public $is_deleted;
 	public $emp;
 	public $date_upd;
-	
+
 	public function __construct($id = "")
 	{
 		if( $id != "" )
@@ -23,7 +23,7 @@ class supplier
 				$this->code	 	= $rs->code;
 				$this->name		= $rs->name;
 				$this->id_group = $rs->id_group;
-				$this->credit_term		= $rs->credit_term;	
+				$this->credit_term		= $rs->credit_term;
 				$this->active	= $rs->active;
 				$this->is_deleted	= $rs->is_deleted;
 				$this->emp		= $rs->emp;
@@ -31,9 +31,9 @@ class supplier
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	public function add(array $ds)
 	{
 		$sc = FALSE;
@@ -46,18 +46,18 @@ class supplier
 			{
 				$fields	.= $i == 1 ? $field : ", ".$field;
 				$values	.= $i == 1 ? "'".$value."'" : ", '".$value."'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_supplier (".$fields.") VALUES (".$values.")");
 		}
-		
+
 		return $sc;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public function update($id, array $ds)
 	{
 		$sc = FALSE;
@@ -68,40 +68,40 @@ class supplier
 			foreach( $ds as $field => $value )
 			{
 				$set	.= $i == 1 ? $field." = '".$value."'" : ", ".$field." = '".$value."'";
-				$i++;	
-			}	
+				$i++;
+			}
 			$sc = dbQuery("UPDATE tbl_supplier SET ".$set." WHERE id = '".$id."'");
 		}
 		return $sc;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public function delete($id, $emp)
 	{
 		if( $this->hasTransection($id) === FALSE )
 		{
-			return dbQuery("DELETE FROM tbl_supplier WHERE id = '".$id."'");	
+			return dbQuery("DELETE FROM tbl_supplier WHERE id = '".$id."'");
 		}
 		else
 		{
-			return dbQuery("UPDATE tbl_supplier SET is_deleted = 1, emp = ".$emp." WHERE id = '".$id."'");	
+			return dbQuery("UPDATE tbl_supplier SET is_deleted = 1, emp = ".$emp." WHERE id = '".$id."'");
 		}
 	}
-	
-	
-	
-	
+
+
+
+
 	public function unDelete($id, $emp)
 	{
-		return dbQuery("UPDATE tbl_supplier SET is_deleted = 0, emp = ".$emp." WHERE id = '".$id."'");	
+		return dbQuery("UPDATE tbl_supplier SET is_deleted = 0, emp = ".$emp." WHERE id = '".$id."'");
 	}
-	
-	
-	
-	
+
+
+
+
 	public function hasTransection($id)
 	{
 		$sc = FALSE;
@@ -112,10 +112,10 @@ class supplier
 		}
 		return $sc;
 	}
-	
-	
-	
-	
+
+
+
+
 	public function isExists($id)
 	{
 		$sc = FALSE;
@@ -126,33 +126,33 @@ class supplier
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function getCode($id)
 	{
 		$sc = FALSE;
 		$qs = dbQuery("SELECT code FROM tbl_supplier WHERE id = '".$id."'");
 		if( dbNumRows($qs) == 1 )
 		{
-			list( $sc ) = dbFetchArray($qs);	
+			list( $sc ) = dbFetchArray($qs);
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function getId($code)
 	{
-		$sc = '0000';
+		$sc = '';
 		$qs = dbQuery("SELECT id FROM tbl_supplier WHERE code = '".$code."'");
 		if( dbNumRows($qs) == 1 )
 		{
-			list( $sc ) = dbFetchArray($qs);	
+			list( $sc ) = dbFetchArray($qs);
 		}
 		return $sc;
 	}
-	
+
 	public function getName($id)
 	{
 		$sc = '';
@@ -163,8 +163,8 @@ class supplier
 		}
 		return $sc;
 	}
-	
-	
+
+
 	public function getNameByCode($code)
 	{
 		$sc = '';
@@ -175,11 +175,11 @@ class supplier
 		}
 		return $sc;
 	}
-	
-	
+
+
 	public function search($txt)
 	{
-		return dbQuery("SELECT id, code, name FROM tbl_supplier WHERE name LIKE '%".$txt."%' OR code LIKE '%".$txt."%'");	
+		return dbQuery("SELECT id, code, name FROM tbl_supplier WHERE name LIKE '%".$txt."%' OR code LIKE '%".$txt."%'");
 	}
 }//----end class
 ?>

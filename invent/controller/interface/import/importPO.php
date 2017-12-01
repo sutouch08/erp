@@ -1,13 +1,16 @@
 <?php
 
-	$result 	= 'success';
+	$sc = TRUE;
+	$import = 0;
+	$update = 0;
+	$error  = 0;
 	$path		= getConfig('IMPORT_PO_PATH');
 	$move	= getConfig('MOVE_PO_PATH');
 
-	$sc	= opendir($path);
-	if( $sc !== FALSE )
+	$dr	= opendir($path);
+	if( $dr !== FALSE )
 	{
-		while( $file = readdir($sc) )
+		while( $file = readdir($dr) )
 		{
 			if( $file == '.' OR $file == '..' )
 			{
@@ -17,7 +20,7 @@
 			$moveName	= $move . $file;
 			$es 			= new PHPExcel();
 			$reader		= new PHPExcel_Reader_Excel5();
-			
+
 			$excel		= $reader->load($fileName);
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
 
@@ -62,7 +65,13 @@
 											"unit_qty"			=> $rs['AE'],
 											"isCancle"			=> $isCancle
 										);
-						$cs->add($arr);
+								$import++;
+								if($cs->add($arr) === FALSE)
+								{
+									$sc = FALSE;
+									$message = 'เพิ่มข้อมูลไม่สำเร็จ';
+									$error++;
+								}
 					}
 					else
 					{
@@ -85,7 +94,15 @@
 											"unit_qty"			=> $rs['AE'],
 											"isCancle"			=> $isCancle
 										);
-						$cs->update($bookcode, $reference, $product, $arr);
+
+						$update++;
+						if($cs->update($bookcode, $reference, $product, $arr) === FALSE)
+						{
+							$sc = FALSE;
+							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
+							$error++;
+						}
+
 					}//---- end if exists
 				}//--- end if first row
 				$i++;
@@ -95,9 +112,14 @@
 	}
 	else
 	{
-		$result = 'Can not open folder';
+		$sc = FALSE;
+		$message = "Can not open folder please check connection";
 	}
 
-	echo $result;
+	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
+
+	writeImportLogs('ใบสั่งซื้อ', $result, $import, $update, $error);
+
+	echo $sc === TRUE ? 'success' : $message;
 
 ?>

@@ -16,7 +16,7 @@ $allowUnderZero = $zone->allowUnderZero === TRUE ? 1 : 0;
   <div class="col-sm-6">
     <p class="pull-right top-p">
 <?php echo goBackButton(); ?>
-<?php if( $cs->is_so == 1) : ?>
+<?php if( $cs->is_so == 1 && $cs->isCancle == 0) : ?>
       <button type="button" class="btn btn-sm btn-info" onclick="exportConsignSold(<?php echo $cs->id; ?>)">
         <i class="fa fa-send"></i> ส่งข้อมูลไป formula
       </button>

@@ -238,6 +238,7 @@
                         <li><a href="index.php?content=style"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข รุ่นสินค้า</a></li>
                         <li><a href="index.php?content=category"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข หมวดหมู่สินค้า</a></li>
                         <li><a href="index.php?content=product_group"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข กลุ่มสินค้า</a></li>
+                        <li><a href="index.php?content=product_sub_group"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข กลุ่มย่อยสินค้า</a></li>
                         <li><a href="index.php?content=kind"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข ประเภทสินค้า</a></li>
                         <li><a href="index.php?content=type"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข ชนิดสินค้า</a></li>
                         <li><a href="index.php?content=brand"><i class="fa fa-tags"></i>&nbsp; เพิ่ม/แก้ไข ยี่ห้อสินค้า</a></li>
@@ -328,6 +329,10 @@
                     <li class="divider"></li>
 
                     <li><a href="index.php?content=bank_account"><i class="fa fa-bank"></i>&nbsp; เพิ่ม/แก้ไข บัญชีธนาคาร</a></li>
+
+                    <li class="divider"></li>
+
+                    <li><a href="index.php?content=syncData"><i class="fa fa-exchange"></i>&nbsp; นำเข้าข้อมูลจาก formula</a></li>
 
                     <li class="divider"></li>
 

@@ -1,13 +1,16 @@
 <?php
 
-	$result 	= 'success';
+	$sc = TRUE;
+	$import = 0;
+	$update = 0;
+	$error  = 0;
 	$path		= getConfig('IMPORT_SALE_MAN_PATH');
 	$move		= getConfig('MOVE_SALE_MAN_PATH');
 
-	$sc	= opendir($path);
-	if( $sc !== FALSE )
+	$dr	= opendir($path);
+	if( $dr !== FALSE )
 	{
-		while( $file = readdir($sc) )
+		while( $file = readdir($dr) )
 		{
 			if( $file == '.' OR $file == '..' )
 			{
@@ -19,7 +22,7 @@
 			$excel		= $reader->load($fileName);
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
 
-			$sa	= new sale();
+			$cs	= new sale();
 			$sg	= new sale_group();
 
 			$i 	= 1;
@@ -28,7 +31,7 @@
 				if( $i != 1 ) //---- Skip first row
 				{
 					$id 	= trim( $rs['A'] );
-					if( $sa->isExists( $id ) === FALSE )
+					if( $cs->isExists( $id ) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
@@ -37,7 +40,14 @@
 								'name'				=> trim( $rs['C'] ),
 								'id_group'		=> $sg->getSaleGroupId( trim( $rs['D'] ) )
 								);
-						$sa->add($arr);
+
+						$import++;
+						if($cs->add($arr) === FALSE)
+						{
+							$sc = FALSE;
+							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
+							$error++;
+						}
 					}
 					else
 					{
@@ -47,7 +57,14 @@
 								'name'				=> trim( $rs['C'] ),
 								'id_group'		=> $sg->getSaleGroupId( trim( $rs['D'] ) )
 								);
-						$sa->update( $id, $arr);
+
+						$update++;
+						if($cs->update($id, $arr) === FALSE)
+						{
+							$sc = FALSE;
+							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
+							$error++;
+						}
 					}	/// end if
 				}//-- end if not first row
 				$i++;
@@ -57,9 +74,14 @@
 	} //--- end if
 	else
 	{
-		$result = 'Can not open folder';
+		$sc = FALSE;
+		$message = "Can not open folder please check connection";
 	}
 
-	echo $result;
+	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
+
+	writeImportLogs('พนักงานขาย', $result, $import, $update, $error);
+
+	echo $sc === TRUE ? 'success' : $message;
 
 ?>

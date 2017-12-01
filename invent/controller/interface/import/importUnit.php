@@ -8,68 +8,92 @@
 //		D					FTLASTUPD
 //		E					FTDATETIME
 */
-	$result = 'success';
+	$sc = TRUE;
+	$import = 0;
+	$update = 0;
+	$error  = 0;
 	$path		= getConfig('IMPORT_UNIT_PATH');
-	$move	= getConfig('MOVE_UNIT_PATH');
-	
-	$sc = opendir($path);
-	
-	if( $sc !== FALSE )
+	$move	  = getConfig('MOVE_UNIT_PATH');
+
+	$dr = opendir($path);
+
+	if( $dr !== FALSE )
 	{
-		while( $file = readdir($sc) )
+		while( $file = readdir($dr) )
 		{
 			if( $file == '.' OR $file == '..' )
 			{
 				continue;
 			}
-			
+
 			$fileName 	= $path . $file;
 			$moveName	= $move . $file;
 			$reader		= new PHPExcel_Reader_Excel5();
 			$excel		= $reader->load($fileName);
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
-			
-			
-			$unit	= new unit();
+
+
+			$cs	= new unit();
 			$i = 1;
 			foreach( $collection as $rs )
 			{
 				if( $i > 1 ) //--- skip first row
 				{
 					$id = trim( $rs['A'] );
-					
-					if( $unit->isExists($id) === FALSE )
+
+					if( $cs->isExists($id) === FALSE )
 					{
 						//---- If not exists do insert
-						$ds = array(
+						$arr = array(
 										"id"			=> $id,
 										"code"	=> $rs['B'],
 										"name"	=> $rs['C']
 										);
-						$unit->add($ds);	
+
+						$import++;
+						if($cs->add($arr) === FALSE)
+						{
+							$sc = FALSE;
+							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
+							$error++;
+						}
+
 					}
 					else
 					{
+
 						//--- If exists do update
-						$ds = array(
+						$arr = array(
 									"code"	=> $rs['B'],
 									"name"	=> $rs['C']
 									);
-						$unit->update($id, $ds);
-					}	
+
+						$update++;
+						if($cs->update($id, $arr) === FALSE)
+						{
+							$sc = FALSE;
+							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
+							$error++;
+						}
+					}
 				}
-				
+
 				$i++;
-			}//-- end foreach	
-			rename($fileName, $moveName); //---- move each file to another folder		
+			}//-- end foreach
+			rename($fileName, $moveName); //---- move each file to another folder
 		}//-- end while readdir
-		
+
 	}//- end if
 	else
 	{
-		$result = "Can not open folder please check connection";	
+		$sc = FALSE;
+		$message = "Can not open folder please check connection";
 	}
-	
-	echo $result;
+
+	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
+
+	writeImportLogs('หน่วยนับ', $result, $import, $update, $error);
+
+	echo $sc === TRUE ? 'success' : $message;
 
 ?>

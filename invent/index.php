@@ -22,6 +22,10 @@ if( !getConfig("CLOSED") )
 switch($page){
 
 //**********  ระบบคลังสินค้า  **********//
+		case 'syncData' :
+			$content = 'syncData.php';
+			$pageTitle = 'นำเข้าข้อมูลจาก formula';
+			break;
 		case "receive_product":
 			$content = "receive_product.php";
 			$pageTitle = "รับสินค้าเข้า";
@@ -564,6 +568,10 @@ switch($page){
 		case 'product_group' :
 			$content = 'product_group.php';
 			$pageTitle = 'เพิ่ม/แก้ไข กลุ่มสินค้า';
+			break;
+		case 'product_sub_group' :
+			$content = 'product_sub_group.php';
+			$pageTitle = 'เพิ่ม/แก้ไข กลุ่มย่อยสินค้า';
 			break;
 		case 'product_tab' :
 			$content = 'product_tab.php';

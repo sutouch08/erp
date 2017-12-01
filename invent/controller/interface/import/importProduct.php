@@ -1,13 +1,16 @@
 <?php
 
-	$result 	= 'success';
+	$sc = TRUE;
+	$import = 0;
+	$update = 0;
+	$error  = 0;
 	$path		= getConfig('IMPORT_PRODUCT_PATH');
 	$move	= getConfig('MOVE_PRODUCT_PATH');
 
-	$sc	= opendir($path);
-	if( $sc !== FALSE )
+	$dr	= opendir($path);
+	if( $dr !== FALSE )
 	{
-		while( $file = readdir($sc) )
+		while( $file = readdir($dr) )
 		{
 			if( $file == '.' OR $file == '..' )
 			{
@@ -19,7 +22,7 @@
 			$excel		= $reader->load($fileName);
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
 
-			$pd 	= new product();
+			$cs 	= new product();
 			$pg 	= new product_group();
 			$co 	= new color();
 			$si 	= new size();
@@ -35,7 +38,7 @@
 					$id 		= trim( $rs['A'] );
 					$count_stock	= $rs['G'] == 3 ? 0 : 1;
 					$active	= $rs['E'] == 'I' ? 0 : 1;
-					if( $pd->isExists($id) === FALSE )
+					if( $cs->isExists($id) === FALSE )
 					{
 						$arr = array(
 											"id"				=> $id,
@@ -52,7 +55,14 @@
 											"count_stock"	=> $count_stock,
 											"active"		=> $active
 										);
-						$pd->add($arr);
+
+						$import++;
+						if($cs->add($arr) === FALSE)
+						{
+							$sc = FALSE;
+							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
+							$error++;
+						}
 					}
 					else
 					{
@@ -70,7 +80,15 @@
 											"count_stock"	=> $count_stock,
 											"active"		=> $active
 										);
-						$pd->update($id, $arr);
+
+						$update++;
+						if($cs->update($id, $arr) === FALSE)
+						{
+							$sc = FALSE;
+							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
+							$error++;
+						}
+						
 					}//---- end if exists
 				}//--- end if first row
 				$i++;
@@ -80,9 +98,14 @@
 	}
 	else
 	{
-		$result = 'Can not open folder';
+		$sc = FALSE;
+		$message = "Can not open folder please check connection";
 	}
 
-	echo $result;
+	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
+
+	writeImportLogs('สินค้า', $result, $import, $update, $error);
+
+	echo $sc === TRUE ? 'success' : $message;
 
 ?>

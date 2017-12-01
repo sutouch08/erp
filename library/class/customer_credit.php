@@ -70,6 +70,7 @@ class customer_credit
 			foreach( $ds as $field => $value )
 			{
 				$set .= $i == 1 ? $field ." = '".$value."'" : ", ".$field." = '".$value."'";
+				$i++;
 			}
 			$sc = dbQuery("UPDATE tbl_customer_credit SET ".$set." WHERE id_customer = '".$id."'");
 		}

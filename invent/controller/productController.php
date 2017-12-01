@@ -13,12 +13,12 @@ require '../function/image_helper.php';
 
 if( isset( $_GET['saveProduct'] ) )
 {
-	$sc = 'success';
+	$sc = TRUE;
 	$id_style = $_POST['id_style'];
-	$tabs		= $_POST['tabs']; //---- will be receive in array
 	$pd = new product();
-	$tab = new product_tab();
+
 	$arr 	= array(
+						"id_sub_group" => $_POST['pdSubGroup'],
 						"id_kind"		=> $_POST['pdKind'],
 						"id_type"		=> $_POST['pdType'],
 						"id_category"	=> $_POST['pdCategory'],
@@ -36,18 +36,31 @@ if( isset( $_GET['saveProduct'] ) )
 						"emp"			=> getCookie('user_id') //---- Who last edit products
 						);
 
-	$rs = $pd->updateProducts($id_style, $arr);
-	if( $rs === TRUE )
+	if( $pd->updateProducts($id_style, $arr) !== TRUE)
 	{
-		$pd->updateDescription($id_style, $_POST['description']);
-		$tab->updateTabsProduct($id_style, $tabs);
-	}
-	else
-	{
-		$sc = 'บันทึกข้อมูลไม่สำเร็จ';
+		$sc = FALSE;
+		$message = 'บันทึกข้อมูลสินค้าไม่สำเร็จ';
 	}
 
-	echo $sc;
+	if( $pd->updateDescription($id_style, $_POST['description']) !== TRUE)
+	{
+		$sc = FALSE;
+		$message = 'บันทึกคำอธิบายสินค้าไม่สำเร็จ';
+	}
+
+	if(isset($_POST['tabs']))
+	{
+		//---	แถบแสดงสินค้า
+		$tab = new product_tab();
+		$tabs		= $_POST['tabs']; //---- will be receive in array
+		if($tab->updateTabsProduct($id_style, $tabs) !== TRUE )
+		{
+			$sc = FALSE;
+			$message = 'บันทึกแถบแสดงสินค้าไม่สำเร็จ';
+		}
+	}
+
+	echo $sc === TRUE ? 'success' : $message;
 
 }
 

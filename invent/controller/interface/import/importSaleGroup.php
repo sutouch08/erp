@@ -1,13 +1,16 @@
 <?php
 
-	$result 	= 'success';
+	$sc = TRUE;
+	$import = 0;
+	$update = 0;
+	$error  = 0;
 	$path		= getConfig('IMPORT_SALE_GROUP_PATH');
 	$move		= getConfig('MOVE_SALE_GROUP_PATH');
 
-	$sc	= opendir($path);
-	if( $sc !== FALSE )
+	$dr	= opendir($path);
+	if( $dr !== FALSE )
 	{
-		while( $file = readdir($sc) )
+		while( $file = readdir($dr) )
 		{
 			if( $file == '.' OR $file == '..' )
 			{
@@ -19,30 +22,45 @@
 			$excel		= $reader->load($fileName);
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
 
-			$st	= new sale_group();
+			$cs	= new sale_group();
 			$i 	= 1;
 			foreach ( $collection as $rs )
 			{
 				if( $i != 1 ) //---- Skip first row
 				{
-					if( $st->isExists( trim( $rs['A'] )) === FALSE )
+					$id = $rs['A'];
+					if( $cs->isExists($id) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
-								'id'			=> trim( $rs['A'] ),
-								'code'		=> trim( $rs['B'] ),
-								'name'		=> trim( $rs['C'] )
+								'id'			=> $id,
+								'code'		=> $rs['B'],
+								'name'		=> addslashes( $rs['C'] )
 								);
-						$st->add($arr);
+
+						$import++;
+						if($cs->add($arr) === FALSE)
+						{
+							$sc = FALSE;
+							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
+							$error++;
+						}
 					}
 					else
 					{
 						//--- If exists do update
 						$arr = array(
-								'code'		=> trim( $rs['B'] ),
-								'name' 	=> trim( $rs['C'] )
+								'code'		=> $rs['B'],
+								'name' 	=> addslashes( $rs['C'] )
 								);
-						$st->update( trim( $rs['A'] ), $arr);
+
+						$update++;
+						if($cs->update($id, $arr) === FALSE)
+						{
+							$sc = FALSE;
+							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
+							$error++;
+						}
 					}	/// end if
 				}//-- end if not first row
 				$i++;
@@ -52,9 +70,14 @@
 	} //--- end if
 	else
 	{
-		$result = 'Can not open folder';
+		$sc = FALSE;
+		$message = "Can not open folder please check connection";
 	}
 
-	echo $result;
+	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
+
+	writeImportLogs('ทีมขาย', $result, $import, $update, $error);
+
+	echo $sc === TRUE ? 'success' : $message;
 
 ?>

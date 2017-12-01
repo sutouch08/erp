@@ -3,8 +3,7 @@ require '../../library/config.php';
 require '../../library/functions.php';
 require "../function/tools.php";
 require '../../library/class/PHPExcel.php';
-
-
+include '../function/import_log_helper.php';
 
 ///============================================= MASTER ==========================================///
 //---------  Sync Product Group -------//
@@ -25,6 +24,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['unit'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['barcode'] ) )
 {
 	include "interface/import/importBarcode.php";
+
 }
 
 
@@ -32,6 +32,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['barcode'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['warehouse'] ) )
 {
 	include "interface/import/importWarehouse.php";
+
 }
 
 
@@ -39,6 +40,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['warehouse'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['customerGroup'] ) )
 {
 	include "interface/import/importCustomerGroup.php";
+
 }
 
 
@@ -46,6 +48,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['customerGroup'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['customerArea'] ) )
 {
 	include "interface/import/importCustomerArea.php";
+
 }
 
 
@@ -53,6 +56,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['customerArea'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['customer'] ) )
 {
 	include "interface/import/importCustomer.php";
+
 }
 
 
@@ -60,6 +64,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['customer'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['saleGroup'] ) )
 {
 	include "interface/import/importSaleGroup.php";
+
 }
 
 
@@ -67,6 +72,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['saleGroup'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['sale'] ) )
 {
 	include "interface/import/importSale.php";
+
 }
 
 
@@ -74,6 +80,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['sale'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['supplierGroup'] ) )
 {
 	include "interface/import/importSupplierGroup.php";
+
 }
 
 
@@ -81,6 +88,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['supplierGroup'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['supplier'] ) )
 {
 	include "interface/import/importSupplier.php";
+
 }
 
 
@@ -88,6 +96,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['supplier'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['style'] ) )
 {
 	include "interface/import/importStyle.php";
+
 }
 
 
@@ -96,6 +105,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['style'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['color'] ) )
 {
 	include "interface/import/importColor.php";
+
 }
 
 
@@ -104,6 +114,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['color'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['size'] ) )
 {
 	include "interface/import/importSize.php";
+
 }
 
 
@@ -111,6 +122,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['size'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['brand'] ) )
 {
 	include "interface/import/importBrand.php";
+
 }
 
 
@@ -118,6 +130,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['brand'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['product'] ) )
 {
 	include "interface/import/importProduct.php";
+
 }
 
 
@@ -125,6 +138,7 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['product'] ) )
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['customerCredit'] ) )
 {
 	include "interface/import/importCustomerCredit.php";
+
 }
 
 
@@ -136,12 +150,22 @@ if( isset( $_GET['syncMaster'] ) && isset( $_GET['customerCredit'] ) )
 if( isset( $_GET['syncDocument'] ) && isset( $_GET['po'] ) )
 {
 	include "interface/import/importPO.php";
+
 }
 
 
 if( isset( $_GET['syncDocument'] ) && isset( $_GET['SM'] ) )
 {
 	include 'interface/import/importSM.php';
+
+}
+
+
+
+if( isset( $_GET['syncDocument'] ) && isset( $_GET['BM'] ) )
+{
+	include 'interface/import/importBM.php';
+
 }
 
 

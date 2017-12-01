@@ -6,10 +6,10 @@
 	$error  = 0;
 
 	//---	Path ของไฟล์ที่จะ import
-	$path		= getConfig('IMPORT_SM_PATH');
+	$path		= getConfig('IMPORT_BM_PATH');
 
 	//---	Path ของไฟล์ที่จะย้ายไปเก็บเมื่อ import เสร็จแล้ว
-	$move	= getConfig('MOVE_SM_PATH');
+	$move	= getConfig('MOVE_BM_PATH');
 
 	//---	เปิด path เพื่อดูไฟล์ทั้งหมดใน directory
 	$dr	= opendir($path);
@@ -32,8 +32,8 @@
 			$excel		= $reader->load($fileName);
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
 
-			$cs   = new return_order();
-			$cus = new customer();
+			$cs  = new return_order();
+			$sup = new supplier();
 			$sale	= new sale();
 			$wh	= new warehouse();
 			$pd	= new product();
@@ -42,19 +42,16 @@
 			{
 				if( $i != 1 )
 				{
-					$bookcode 	= $rs['G'];
+					$bookcode 	= trim( $rs['G'] );
 
 					//---	รหัสเอกสาร
-					$reference	= $rs['I'];
-
-					//---	คืนสินค้าหรือไม่
-					$isReturn   = trim($rs['AO']) == 'Y' ? 1 : 0;
+					$reference	= trim( $rs['I'] );
 
 					//---	อ้างอิงใบส่งสินค้า/ใบกำกับภาษี
-					$invoice    = $rs['AQ'].'-'.$rs['AR'];
+					$invoice    = trim($rs['AQ']).'-'.trim($rs['AR']);
 
 					//---	รหัสสินค้า
-					$product		= $rs['AC'];
+					$product		= trim( $rs['AC'] );
 
 					//---	ไอดีสินค้า
 					$id_pd		= $pd->getId($product);
@@ -66,19 +63,19 @@
 					$isCancle	= $rs['F'] == "C" ? 1 : 0;
 
 					//---	valid ถ้าไม่มีการคืนสินค้าให้ valid = 1
-					$valid = $isReturn == 1 ? 0 : 1;
+					$valid = 0;
 
 					$id = $cs->getId($bookcode, $reference, $product);
 					if( $id === FALSE )
 					{
+						$import++;
 						$arr = array(
 											'bookcode'	    => $bookcode,
-											'code'			    => $rs['H'],
+											'code'			    => trim( $rs['H']),
 											'reference'	    => $reference,
 											'invoice'		    => $invoice,
-											'id_customer'   => $cus->getId($rs['M']),
-											'id_sale'		    => $sale->getId($rs['N']),
-											'id_warehouse'	=> $wh->getId($rs['AD']),
+											'id_supplier'   => $sup->getId(trim($rs['M'])),
+											'id_warehouse'	=> $wh->getId(trim($rs['AD'])),
 											'id_style'	    => $id_style,
 											'id_product'	  => $id_pd,
 											'product_code'	=> $product,
@@ -92,15 +89,13 @@
 											'vat_amount'	  => trim($rs['W']),
 											'date_add'			=> dbDate($rs['J']),
 											'isCancle'			=> $isCancle,
-											'valid'					=> $valid,
-											'isReturn'			=> $isReturn
+											'valid'					=> $valid
 										);
 
-						$import++;
 						if($cs->add($arr) === FALSE)
 						{
 							$sc = FALSE;
-							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
+							$message = 'นำเข้าข้อมูลไม่สำเร็จ';
 							$error++;
 						}
 					}
@@ -114,13 +109,14 @@
 	else
 	{
 		$sc = FALSE;
-		$message = "Can not open folder please check connection";
+		$message = 'Can not open folder';
 	}
 
 	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
 
-	writeImportLogs('ใบลดหนี้ขาย', $result, $import, $update, $error, 'last');
+	writeImportLogs('BM', $result, $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
+	
 
 ?>

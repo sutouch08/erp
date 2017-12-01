@@ -1,13 +1,16 @@
 <?php
 
-	$result 	= 'success';
+	$sc = TRUE;
+	$import = 0;
+	$update = 0;
+	$error  = 0;
 	$path		= getConfig('IMPORT_BRAND_PATH');
 	$move		= getConfig('MOVE_BRAND_PATH');
 
-	$sc	= opendir($path);
-	if( $sc !== FALSE )
+	$dr	= opendir($path);
+	if( $dr !== FALSE )
 	{
-		while( $file = readdir($sc) )
+		while( $file = readdir($dr) )
 		{
 			if( $file == '.' OR $file == '..' )
 			{
@@ -29,22 +32,35 @@
 					$id 		= trim( $rs['A'] );
 					if( $cs->isExists( $id ) === FALSE )
 					{
+						$import++;
 						//-- If not exists do insert
 						$arr = array(
 								'id'					=> $id,
 								'code'				=> trim( $rs['B'] ),
 								'name'				=> trim( $rs['C'] )
 								);
-						$cs->add($arr);
+						if($cs->add($arr) === FALSE)
+						{
+							$sc = FALSE;
+							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
+							$error++;
+						}
 					}
 					else
 					{
+						$update++;
 						//--- If exists do update
 						$arr = array(
 								'code'				=> trim( $rs['B'] ),
 								'name'				=> trim( $rs['C'] )
 								);
-						$cs->update( $id, $arr);
+
+						if($cs->update($id, $arr) === FALSE)
+						{
+							$sc = FALSE;
+							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
+							$error++;
+						}
 					}	/// end if
 				}//-- end if not first row
 				$i++;
@@ -54,9 +70,14 @@
 	} //--- end if
 	else
 	{
-		$result = 'Can not open folder';
+		$sc = FALSE;
+		$message = "Can not open folder please check connection";
 	}
 
-	echo $result;
+	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
+
+	writeImportLogs('ยี่ห้อสินค้า', $result, $import, $update, $error);
+
+	echo $sc === TRUE ? 'success' : $message;
 
 ?>

@@ -3,7 +3,9 @@ function saveProduct(){
 	load_in();
 	$.ajax({
 		url:"controller/productController.php?saveProduct",
-		type:"POST", cache:"false", data: $("#productForm").serializeArray(),
+		type:"POST",
+		cache:"false",
+		data: $("#productForm").serializeArray(),
 		success: function(rs){
 			load_out();
 			var rs = $.trim(rs);
@@ -107,4 +109,3 @@ function toggleActive(is){
 	}
 	$("#active").val(is);
 }
-

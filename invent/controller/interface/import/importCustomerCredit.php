@@ -1,13 +1,17 @@
 <?php
 
-	$result 	= 'success';
+	$sc = TRUE;
+	$import = 0;
+	$update = 0;
+	$error  = 0;
+
 	$path		= getConfig('IMPORT_CUSTOMER_CREDIT_PATH');
 	$move		= getConfig('MOVE_CUSTOMER_CREDIT_PATH');
-	
-	$sc	= opendir($path);
-	if( $sc !== FALSE )
+
+	$dr	= opendir($path);
+	if( $dr !== FALSE )
 	{
-		while( $file = readdir($sc) )
+		while( $file = readdir($dr) )
 		{
 			if( $file == '.' OR $file == '..' )
 			{
@@ -18,7 +22,7 @@
 			$reader		= new PHPExcel_Reader_Excel5();
 			$excel		= $reader->load($fileName);
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
-			
+
 			$cs	= new customer_credit();
 			$customer = new customer();
 			$i 	= 1;
@@ -26,20 +30,27 @@
 			{
 				if( $i != 1 ) //---- Skip first row
 				{
-					
-					$code = trim( $rs['C'] );
+
+					$code = addslashes( $rs['C'] );
 					if( $cs->isExists( $code ) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
 								'id_customer'	=> $customer->getId($code),
 								'code'		=> $code,
-								'name'		=> trim( $rs['D'] ),
-								'credit'	=> trim( $rs['E'] ),
-								'used'		=> trim( $rs['F'] ),
-								'balance'	=> trim( $rs['G'] )
+								'name'		=> addslashes( $rs['D'] ),
+								'credit'	=> addslashes( $rs['E'] ),
+								'used'		=> addslashes( $rs['F'] ),
+								'balance'	=> addslashes( $rs['G'] )
 								);
-						$cs->add($arr);	
+
+						$import++;
+						if($cs->add($arr) === FALSE)
+						{
+							$sc = FALSE;
+							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
+							$error++;
+						}
 					}
 					else
 					{
@@ -47,24 +58,36 @@
 						$id = $cs->getid($code);
 						$arr = array(
 								'code'		=> $code,
-								'name'		=> trim( $rs['D'] ),
-								'credit'	=> trim( $rs['E'] ),
-								'used'		=> trim( $rs['F'] ),
-								'balance'	=> trim( $rs['G'] )
+								'name'		=> addslashes( $rs['D'] ),
+								'credit'	=> addslashes( $rs['E'] ),
+								'used'		=> addslashes( $rs['F'] ),
+								'balance'	=> addslashes( $rs['G'] )
 								);
-						$cs->update( $id, $arr);
+						$update++;
+						if($cs->update($id, $arr) === FALSE)
+						{
+							$sc = FALSE;
+							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
+							$error++;
+						}
+
 					}	/// end if
 				}//-- end if not first row
-				$i++;	
+				$i++;
 			}//---- end foreach
-			rename($fileName, $moveName); //---- move each file to another folder	
+			rename($fileName, $moveName); //---- move each file to another folder
 		}//--- end while
 	} //--- end if
 	else
 	{
-		$result = 'Can not open folder';	
+		$sc = FALSE;
+		$message = "Can not open folder please check connection";
 	}
-	
-	echo $result;
+
+	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
+
+	writeImportLogs('เครดิตคงเหลือ', $result, $import, $update, $error);
+
+	echo $sc === TRUE ? 'success' : $message;
 
 ?>

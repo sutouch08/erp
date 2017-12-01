@@ -48,7 +48,7 @@
 									);
 
 						$pg->update($id, $ds);
-						
+
 
 					}//-- end if;
 				}//--- end if;
@@ -64,6 +64,8 @@
 		$result = "Can not open folder please check connection";
 	}
 
+	writeImportLogs('ProductGroup', $result);
+	
 	echo $result;
 
 ?>

@@ -67,6 +67,15 @@
                     <div class="divider-hidden" style="margin-top:5px; margin-bottom:5px;"></div>
 
 
+										<div class="col-sm-3"><span class="form-control label-left">กลุ่มย่อยสินค้า</span></div>
+                    <div class="col-sm-9">
+											<select class="form-control input-sm input-large" name="pdSubGroup" id="pdSubGroup">
+													<?php echo selectSubGroup($rs->id_sub_group); ?>
+											</select>
+                    </div>
+                    <div class="divider-hidden" style="margin-top:5px; margin-bottom:5px;"></div>
+
+
 
                     <div class="col-sm-3"><span class="form-control label-left">ประเภท</span></div>
                     <div class="col-sm-9">
