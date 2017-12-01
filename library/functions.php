@@ -60,21 +60,31 @@ function isActive($id_employee){
 
 
 
-function checkUser(){
-	// if the session id is not set, redirect to login page
-	if(!isset($_COOKIE['user_id'])){
-		header('Location: ' . WEB_ROOT . 'invent/login.php');
-		exit;
-		}else{
+function checkUser()
+{
+	if(! isset($_GET['syncDataFromFormula']))
+	{
+		// if the session id is not set, redirect to login page
+		if(!isset($_COOKIE['user_id']))
+		{
+			header('Location: ' . WEB_ROOT . 'invent/login.php');
+			exit;
+		}
+		else
+		{
 			$active = isActive($_COOKIE['user_id']);
-			if(!$active){
+			if(!$active)
+			{
 				header('Location: ' . WEB_ROOT . 'invent/login.php');
 				exit;
 			}
+		}
+
 	}
 
 	// the user want to logout
-	if (isset($_GET['logout'])) {
+	if (isset($_GET['logout']))
+	{
 		doLogout();
 	}
 
@@ -186,7 +196,7 @@ function saleLogin(){
 
 
 
-		
+
 function customer_login(){
 	$user_email = $_POST['user_email'];
 	$user_password = md5($_POST['user_password']);

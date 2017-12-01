@@ -29,14 +29,14 @@
 			{
 				if( $i != 1 ) //---- Skip first row
 				{
-					$id 		= trim( $rs['A'] );
+					$id 		= $rs['A'];
 					if( $cs->isExists( $id ) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
 								'id'					=> $id,
-								'code'				=> trim( $rs['B'] ),
-								'name'				=> trim( $rs['C'] )
+								'code'				=> $rs['B'],
+								'name'				=> $rs['C']
 								);
 
 						$import++;
@@ -45,14 +45,15 @@
 							$sc = FALSE;
 							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Color', $cs->error);
 						}
 					}
 					else
 					{
 						//--- If exists do update
 						$arr = array(
-								'code'				=> trim( $rs['B'] ),
-								'name'				=> trim( $rs['C'] )
+								'code'				=> $rs['B'],
+								'name'				=> $rs['C']
 								);
 
 						$update++;
@@ -61,6 +62,7 @@
 							$sc = FALSE;
 							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Color', $cs->error);
 						}
 
 					}	/// end if
@@ -76,9 +78,7 @@
 		$message = "Can not open folder please check connection";
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
-
-	writeImportLogs('สี', $result, $import, $update, $error);
+	writeImportLogs('สี', $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
 

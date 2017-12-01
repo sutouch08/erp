@@ -10,6 +10,7 @@ class supplier
 	public $is_deleted;
 	public $emp;
 	public $date_upd;
+	public $error;
 
 	public function __construct($id = "")
 	{
@@ -48,7 +49,13 @@ class supplier
 				$values	.= $i == 1 ? "'".$value."'" : ", '".$value."'";
 				$i++;
 			}
+
 			$sc = dbQuery("INSERT INTO tbl_supplier (".$fields.") VALUES (".$values.")");
+
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 
 		return $sc;
@@ -70,7 +77,13 @@ class supplier
 				$set	.= $i == 1 ? $field." = '".$value."'" : ", ".$field." = '".$value."'";
 				$i++;
 			}
+
 			$sc = dbQuery("UPDATE tbl_supplier SET ".$set." WHERE id = '".$id."'");
+
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}

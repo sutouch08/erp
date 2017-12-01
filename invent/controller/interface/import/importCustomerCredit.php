@@ -50,6 +50,7 @@
 							$sc = FALSE;
 							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Credit', $cs->error);
 						}
 					}
 					else
@@ -69,6 +70,7 @@
 							$sc = FALSE;
 							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Credit', $cs->error);
 						}
 
 					}	/// end if
@@ -84,9 +86,8 @@
 		$message = "Can not open folder please check connection";
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
 
-	writeImportLogs('เครดิตคงเหลือ', $result, $import, $update, $error);
+	writeImportLogs('เครดิตคงเหลือ', $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
 

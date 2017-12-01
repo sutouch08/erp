@@ -44,6 +44,7 @@
 							$sc = FALSE;
 							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Sale Group', $cs->error);
 						}
 					}
 					else
@@ -60,6 +61,7 @@
 							$sc = FALSE;
 							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Sale Group', $cs->error);
 						}
 					}	/// end if
 				}//-- end if not first row
@@ -74,9 +76,7 @@
 		$message = "Can not open folder please check connection";
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
-
-	writeImportLogs('ทีมขาย', $result, $import, $update, $error);
+	writeImportLogs('ทีมขาย', $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
 

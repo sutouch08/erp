@@ -4,7 +4,8 @@ class sale_group
 	public $id;
 	public $code;
 	public $name;
-	
+	public $error;
+
 	public function __construct($id = "")
 	{
 		if( $id != "" )
@@ -15,13 +16,13 @@ class sale_group
 				$rs = dbFetchObject($qs);
 				$this->id		= $rs->id;
 				$this->code	= $rs->code;
-				$this->name	= $rs->name;	
+				$this->name	= $rs->name;
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	public function add(array $ds)
 	{
 		$sc = FALSE;
@@ -33,16 +34,20 @@ class sale_group
 			foreach( $ds as $field => $value )
 			{
 				$fields 	.= $i == 1 ? $field : ", ".$field;
-				$values 	.= $i == 1 ? "'".$value."'" : ", '".$value."'";	
+				$values 	.= $i == 1 ? "'".$value."'" : ", '".$value."'";
 				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_sale_group (".$fields.") VALUES (".$values.")");
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function update( $id, array $ds)
 	{
 		$sc = FALSE;
@@ -56,12 +61,16 @@ class sale_group
 				$i++;
 			}
 			$sc = dbQuery("UPDATE tbl_sale_group SET ".$set." WHERE id = '".$id."'");
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function isExists($id)
 	{
 		$sc = FALSE;
@@ -72,9 +81,9 @@ class sale_group
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function countMember($id)
 	{
 		$sc = 0;
@@ -82,22 +91,22 @@ class sale_group
 		list( $sc ) = dbFetchArray( $qs );
 		return $sc;
 	}
-	
-	
-	
-	
+
+
+
+
 	public function getSaleGroupName($id)
 	{
 		$sc = "";
 		$qs = dbQuery("SELECT name FROM tbl_sale_group WHERE id = '".$id."'");
 		if( dbNumRows($qs) == 1 )
 		{
-			list( $sc ) = dbFetchArray($qs);	
+			list( $sc ) = dbFetchArray($qs);
 		}
 		return $sc;
 	}
-	
-	
+
+
 	public function getSaleGroupId($code)
 	{
 		$sc = '0000';
@@ -108,7 +117,7 @@ class sale_group
 		}
 		return $sc;
 	}
-	
+
 }
 
 

@@ -10,6 +10,7 @@ class sale
 	public $is_delete;
 	public $emp_delete;
 	public $date_upd;
+	public $error;
 
 
 
@@ -54,8 +55,12 @@ class sale
 				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_sale (".$fields.") VALUES (".$values.")");
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
-		
+
 		return $sc;
 	}
 
@@ -77,6 +82,10 @@ class sale
 				$i++;
 			}
 			$sc = dbQuery("UPDATE tbl_sale SET ".$set." WHERE id = '".$id."'");
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 
 		return $sc;

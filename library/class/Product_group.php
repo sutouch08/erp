@@ -5,7 +5,7 @@ class product_group {
 	public $id;
 	public $code;
 	public $name;
-
+	public $error;
 
 	public function __construct($id = "")
 	{
@@ -40,6 +40,10 @@ class product_group {
 				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_product_group (".$fields.") VALUES (".$values.")");
+			if( $sc === FALSE )
+			{
+				$this->error = dbError();
+			}
 		}
 
 		return $sc;
@@ -62,6 +66,10 @@ class product_group {
 				$i++;
 			}
 			$sc = dbQuery("UPDATE tbl_product_group SET ". $set ." WHERE id = '".$id."'");
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}

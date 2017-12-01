@@ -36,8 +36,8 @@
 						//-- If not exists do insert
 						$arr = array(
 								'id'					=> $id,
-								'code'				=> $rs['B'],
-								'name'				=> $rs['C']
+								'code'				=> addslashes($rs['B']),
+								'name'				=> addslashes($rs['C'])
 								);
 
 						$import++;
@@ -46,14 +46,15 @@
 							$sc = FALSE;
 							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Supplier Group', $cs->error);
 						}
 					}
 					else
 					{
 						//--- If exists do update
 						$arr = array(
-								'code'				=> $rs['B'],
-								'name'				=> $rs['C']
+								'code'				=> addslashes($rs['B']),
+								'name'				=> addslashes($rs['C'])
 								);
 
 						$update++;
@@ -62,6 +63,7 @@
 							$sc = FALSE;
 							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Supplier', $cs->error);
 						}
 
 					}	/// end if
@@ -77,9 +79,7 @@
 		$message = "Can not open folder please check connection";
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
-
-	writeImportLogs('กลุ่มผู้จำหน่าย', $result, $import, $update, $error);
+	writeImportLogs('กลุ่มผู้จำหน่าย', $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
 

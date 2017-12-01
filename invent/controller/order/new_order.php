@@ -1,5 +1,5 @@
 <?php
-	$sc 			= "สร้างออเดอร์ไม่สำเร็จ";
+	$sc 			= 'สร้างออเดอร์ไม่สำเร็จ';
 	$order 		= new order();
 
 	//---	ถ้าเป็นออเดอร์ขายหรือสปอนเซอร์ จะมี id_customer
@@ -60,21 +60,21 @@
 
 	//--- เตรียมข้อมูลสำหรับเพิ่มเอกสารใหม่
 	$arr = array(
-					"bookcode"		=> $bookcode,
-					"reference"		=> $reference,
-					"role"				=> $role,
-					"id_customer"	=> $id_customer,
-					"id_sale"			=> $id_sale,
-					"id_employee"	=> $id_employee,
-					"id_payment"	=> $id_payment,
-					"id_channels"	=> $id_channels,
-					"isOnline"		=> $isOnline,
-					"date_add"		=> $date_add,
-					"remark"			=> $_POST['remark'],
-					"online_code"	=> $customerName,
-					"is_so"				=> $is_so,
-					"id_budget"		=> $id_budget,
-					"gp"					=> $gp
+					'bookcode'		=> $bookcode,
+					'reference'		=> $reference,
+					'role'				=> $role,
+					'id_customer'	=> $id_customer,
+					'id_sale'			=> $id_sale,
+					'id_employee'	=> $id_employee,
+					'id_payment'	=> $id_payment,
+					'id_channels'	=> $id_channels,
+					'isOnline'		=> $isOnline,
+					'date_add'		=> $date_add,
+					'remark'			=> addslashes($_POST['remark']),
+					'online_code'	=> $customerName,
+					'is_so'				=> $is_so,
+					'id_budget'		=> $id_budget,
+					'gp'					=> $gp
 					);
 
 	//---	เพิ่มเอกสารใหม่

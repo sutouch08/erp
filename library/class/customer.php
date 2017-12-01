@@ -35,6 +35,7 @@ class customer {
 	public $is_deleted;
 	public $emp;				//--- employee who delete or restore
 	public $date_upd;
+	public $error;
 
 	public function __construct( $id = '')
 	{
@@ -81,6 +82,10 @@ class customer {
 				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_customer (".$fields.") VALUES (".$values.")");
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}
@@ -103,6 +108,10 @@ class customer {
 				$i++;
 			}
 			$sc = dbQuery("UPDATE tbl_customer SET " . $set . " WHERE id = '".$id."'");
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}
@@ -122,6 +131,12 @@ class customer {
 		{
 			$sc = dbQuery("UPDATE tbl_customer SET is_deleted = 1, emp = ".$emp." WHERE id = '". $id ."'");
 		}
+
+		if( $sc === FALSE)
+		{
+			$this->error = dbError();
+		}
+		
 		return $sc;
 	}
 

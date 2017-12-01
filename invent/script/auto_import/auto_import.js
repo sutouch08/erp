@@ -2,11 +2,15 @@ var startSync;
 var endSync;
 var month = ['01','02','03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
 
+/*
 var autoImport = setInterval(function(){
   syncData();
 }, syncTimes);
 
-
+*/
+$(document).ready(function() {
+  //syncData();
+});
 
 
 function syncData(){
@@ -36,8 +40,7 @@ function syncData(){
   setTimeout(function(){
     startlog();
     importData(step, 0);
-    //importBrand('pdBrand');
-  }, 2000);
+  }, 100);
 }
 
 
@@ -60,6 +63,7 @@ function importData(step, index){
 
       if(index == step.length){
         addlog();
+        //window.close();
       }else{
         importData(step, index);
       }
@@ -95,7 +99,7 @@ function endlog(){
 function addlog(){
   endlog();
   var syncLog = '<tr><td> start sync @ '+ startSync + '  End sync @ ' + endSync +'</td></tr>';
-  $('#result-table').append(syncLog);
+  $('#result-table').prepend(syncLog);
 }
 
 

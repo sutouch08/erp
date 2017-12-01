@@ -39,15 +39,15 @@
 			{
 				if( $i > 1 ) //--- skip first row
 				{
-					$id = trim( $rs['A'] );
+					$id = $rs['A'];
 
 					if( $cs->isExists($id) === FALSE )
 					{
 						//---- If not exists do insert
 						$arr = array(
-										"id"			=> $id,
-										"code"	=> $rs['B'],
-										"name"	=> $rs['C']
+										"id"		=> $id,
+										"code"	=> addslashes($rs['B']),
+										"name"	=> addslashes($rs['C'])
 										);
 
 						$import++;
@@ -56,6 +56,7 @@
 							$sc = FALSE;
 							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Unit', $cs->error);
 						}
 
 					}
@@ -64,8 +65,8 @@
 
 						//--- If exists do update
 						$arr = array(
-									"code"	=> $rs['B'],
-									"name"	=> $rs['C']
+									"code"	=> addslashes($rs['B']),
+									"name"	=> addslashes($rs['C'])
 									);
 
 						$update++;
@@ -74,6 +75,7 @@
 							$sc = FALSE;
 							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Unit', $cs->error);
 						}
 					}
 				}
@@ -90,9 +92,7 @@
 		$message = "Can not open folder please check connection";
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
-
-	writeImportLogs('หน่วยนับ', $result, $import, $update, $error);
+	writeImportLogs('หน่วยนับ', $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
 

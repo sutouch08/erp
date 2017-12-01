@@ -29,9 +29,9 @@
 			{
 				if( $i != 1 ) //---- Skip first row
 				{
-					$id = trim( $rs['A'] );
-					$code = trim( $rs['B'] );
-					$id_pd = $pd->getId( trim( $rs['C'] ) );
+					$id = $rs['A'];
+					$code = $rs['B'];
+					$id_pd = $pd->getId($rs['C']);
 					if( $cs->isExists($id) === FALSE )
 					{
 						//-- If not exists do insert
@@ -39,7 +39,7 @@
 								'id'				=> $id,
 								'barcode'	=> $code,
 								'id_product'	=> $id_pd,
-								'reference'	=> trim( $rs['C'] ),
+								'reference'	=> $rs['C'],
 								'unit_code'	=> $rs['D'],
 								'unit_qty'		=> $rs['E']
 								);
@@ -48,6 +48,7 @@
 							$sc = FALSE;
 							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Barcode', $cs->error);
 						}
 					}
 					else
@@ -56,7 +57,7 @@
 						$arr = array(
 								'barcode'	=> $code,
 								'id_product'	=> $id_pd,
-								'reference'	=> trim( $rs['C'] ),
+								'reference'	=> $rs['C'],
 								'unit_code'	=> $rs['D'],
 								'unit_qty'		=> $rs['E']
 								);
@@ -65,6 +66,7 @@
 							$sc = FALSE;
 							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Barcode', $cs->error);
 						}
 
 					}	/// end if
@@ -80,9 +82,7 @@
 		$message = "Can not open folder please check connection";
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
-
-	writeImportLogs('บาร์โค้ด', $result, $import, $update, $error);
+	writeImportLogs('บาร์โค้ด', $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
 

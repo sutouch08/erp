@@ -9,6 +9,7 @@
 		public $allowUnderZero;
 		public $isDefault;
 		public $active;
+		public $error;
 
 		public function __construct($id='')
 		{
@@ -32,46 +33,61 @@
 
 
 
-		public function add(array $ds)
+		public function add(array $ds = array())
 		{
-			$fields 	= '';
-			$values 	= '';
-			$n 		= count($ds);
-			$i 			= 1;
-			foreach( $ds as $key => $val )
+			$sc = FALSE;
+			if(!empty($ds) )
 			{
-				$fields .=	 $key;
-				if( $i < $n ){ $fields .= ', '; }
-				$values .= "'".$val."'";
-				if( $i < $n ){ $values .= ', '; }
-				$i++;
+				$fields 	= "";
+				$values 	= "";
+				$i 				= 1;
+				foreach( $ds as $field => $value )
+				{
+					$fields .= $i == 1 ? $field : ", ".$field;
+					$values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
+					$i++;
+				}
+
+				$sc = dbQuery("INSERT INTO tbl_warehouse (".$fields.") VALUES (".$values.")");
+
+				if( $sc === FALSE)
+				{
+					$this->error = dbError();
+				}
+				else
+				{
+					$sc = dbInsertId();
+				}
 			}
-			$qs = dbQuery("INSERT INTO tbl_warehouse (".$fields.") VALUES (".$values.")");
-			if( $qs )
-			{
-				return dbInsertId();
-			}
-			else
-			{
-				return FALSE;
-			}
+
+			return $sc;
 		}
 
 
 
 
-		public function update($id, array $ds)
+		public function update($id, array $ds = array())
 		{
-			$set = '';
-			$n = count($ds);
-			$i = 1;
-			foreach( $ds as $key => $val )
+			$sc = FALSE;
+			if( !empty($ds) )
 			{
-				$set .= $key." = '".$val."'";
-				if( $i < $n ){ $set .= ", "; }
-				$i++;
+				$set = "";
+				$i   = 1;
+				foreach( $ds as $key => $val )
+				{
+					$set .= $i == 1 ? $key." = '".$val."'" : ", ".$key." = '".$val."'";
+					$i++;
+				}
+
+				$sc = dbQuery("UPDATE tbl_warehouse SET ".$set." WHERE id = '".$id."'");
+
+				if( $sc === FALSE)
+				{
+					$this->error = dbError();
+				}
 			}
-			return dbQuery("UPDATE tbl_warehouse SET ".$set." WHERE id = '".$id."'");
+
+			return $sc;
 		}
 
 

@@ -1,13 +1,17 @@
 <?php
 
-	$result 	= 'success';
+	$sc = TRUE;
+	$import = 0;
+	$update = 0;
+	$error  = 0;
+
 	$path		= getConfig('IMPORT_PRODUCT_GROUP_PATH');
 	$move		= getConfig('MOVE_PRODUCT_GROUP_PATH');
 
-	$sc 	= opendir($path);
-	if( $sc )
+	$dr 	= opendir($path);
+	if( $dr )
 	{
-		while( $file = readdir($sc) )
+		while( $file = readdir($dr) )
 		{
 			if( $file == '.' OR $file == '..' )
 			{
@@ -21,33 +25,45 @@
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
 			$i = 1;
 
-			$pg = new product_group();
+			$cs = new product_group();
 			foreach( $collection as $rs )
 			{
 				if( $i > 1 )  //--- Skip first row
 				{
-					$id = trim( $rs['A'] );
+					$id = $rs['A'];
 
-					if( $pg->isExists($id) === FALSE )
+					if( $cs->isExists($id) === FALSE )
 					{
 						//---- If not exists do insert
-						$ds = array(
+						$arr = array(
 									"id"			=> $id,
 									"code"	=> $rs['B'],
-									"name"	=> $rs['C']
+									"name"	=> addslashes($rs['C'])
 									);
-						$pg->add($ds);
+						if( $cs->add($arr) === FALSE )
+						{
+							$sc = FALSE;
+							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
+							$error++;
+							writeErrorLogs('Product Group', $cs->error);
+						}
 
 					}
 					else
 					{
 						//--- if exists do update
-						$ds = array(
+						$arr = array(
 									"code"	=> $rs['B'],
-									"name"	=> $rs['C']
+									"name"	=> addslashes($rs['C'])
 									);
 
-						$pg->update($id, $ds);
+						if( $cs->update($id, $arr) === FALSE )
+						{
+							$sc = FALSE;
+							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
+							$error++;
+							writeErrorLogs('Product Group', $cs->error);
+						}
 
 
 					}//-- end if;
@@ -57,15 +73,16 @@
 
 			rename($fileName, $moveName); //-- move each file to another folder
 		} //-- end while
-		closedir($sc);
+
 	}//-- end if
 	else
 	{
-		$result = "Can not open folder please check connection";
+		$sc = FALSE;
+		$message = "Can not open folder please check connection";
 	}
 
-	writeImportLogs('ProductGroup', $result);
-	
-	echo $result;
+	writeImportLogs('พนักงานขาย', $import, $update, $error);
+
+	echo $sc === TRUE ? 'success' : $message;
 
 ?>

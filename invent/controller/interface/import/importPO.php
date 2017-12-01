@@ -33,9 +33,9 @@
 			{
 				if( $i != 1 )
 				{
-					$bookcode 	= trim( $rs['G'] );
-					$reference	= trim( $rs['I'] );
-					$product		= trim( $rs['Z'] );
+					$bookcode 	= $rs['G'];
+					$reference	= $rs['I'];
+					$product		= $rs['AA'];
 					$id_pd		= $pd->getId($product);
 					$id_style		= $pd->getStyleId($id_pd);
 					$isCancle	= $rs['F'] == "C" ? 1 : 0;
@@ -43,26 +43,26 @@
 					{
 						$arr = array(
 											"bookcode"			=> $bookcode,
-											"code"					=> trim( $rs['H'] ),
+											"code"					=> $rs['H'],
 											"reference"			=> $reference,
 											"id_supplier"		=> $sp->getId( $rs['M'] ),
-											"id_warehouse"	=> $wh->getId( $rs['AA'] ),
-											"credit_term"		=> $rs['N'],
-											"vat_type"			=> $rs['P'],
-											"vat_is_out"		=> $rs['O'],
-											"vat_amount"		=> $rs['T'],
-											"amount_ex"			=> $rs['S'],
-											"bill_discount"	=> $rs['R'],
+											"id_warehouse"	=> $wh->getId( $rs['AB'] ),
+											"credit_term"		=> $rs['O'],
+											"vat_type"			=> $rs['Q'],
+											"vat_is_out"		=> $rs['P'],
+											"vat_amount"		=> $rs['U'],
+											"amount_ex"			=> $rs['T'],
+											"bill_discount"	=> $rs['S'],
 											"date_add"			=> dbDate( $rs['J'] ),
 											"date_need"			=> dbDate( $rs['K'] ),
 											"due_date"			=> dbDate( $rs['L'] ),
 											"id_style"			=> $id_style,
 											"id_product"		=> $id_pd,
-											"price"					=> $rs['AF'],
-											"discount"			=> $rs['AG'],
-											"qty"						=> $rs['AC'],
-											"unit_code"			=> $rs['AD'],
-											"unit_qty"			=> $rs['AE'],
+											"price"					=> $rs['AG'],
+											"discount"			=> $rs['AH'],
+											"qty"						=> $rs['AD'],
+											"unit_code"			=> $rs['AE'],
+											"unit_qty"			=> $rs['AF'],
 											"isCancle"			=> $isCancle
 										);
 								$import++;
@@ -71,38 +71,8 @@
 									$sc = FALSE;
 									$message = 'เพิ่มข้อมูลไม่สำเร็จ';
 									$error++;
+									writeErrorLogs('PO', $cs->error);
 								}
-					}
-					else
-					{
-						$arr = array(
-											"id_supplier"		=> $sp->getId( $rs['M'] ),
-											"id_warehouse"	=> $wh->getId( $rs['AA'] ),
-											"credit_term"		=> $rs['N'],
-											"vat_type"			=> $rs['P'],
-											"vat_is_out"		=> $rs['O'],
-											"vat_amount"		=> $rs['T'],
-											"amount_ex"			=> $rs['S'],
-											"bill_discount"	=> $rs['R'],
-											"date_add"			=> dbDate( $rs['J'] ),
-											"date_need"			=> dbDate( $rs['K'] ),
-											"due_date"			=> dbDate( $rs['L'] ),
-											"price"					=> $rs['AF'],
-											"discount"			=> $rs['AG'],
-											"qty"						=> $rs['AC'],
-											"unit_code"			=> $rs['AD'],
-											"unit_qty"			=> $rs['AE'],
-											"isCancle"			=> $isCancle
-										);
-
-						$update++;
-						if($cs->update($bookcode, $reference, $product, $arr) === FALSE)
-						{
-							$sc = FALSE;
-							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
-							$error++;
-						}
-
 					}//---- end if exists
 				}//--- end if first row
 				$i++;
@@ -116,9 +86,7 @@
 		$message = "Can not open folder please check connection";
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
-
-	writeImportLogs('ใบสั่งซื้อ', $result, $import, $update, $error);
+	writeImportLogs('ใบสั่งซื้อ', $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
 

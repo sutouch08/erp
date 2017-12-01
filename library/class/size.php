@@ -6,6 +6,7 @@ class size
 	public $name;
 	public $position;
 	public $error;
+
 	public function __construct($id = "" )
 	{
 		if( $id != "" )
@@ -40,6 +41,11 @@ class size
 				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_size (".$fields.") VALUES (".$values.")");
+
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}
@@ -60,6 +66,11 @@ class size
 				$i++;
 			}
 			$sc = dbQuery("UPDATE tbl_size SET " . $set . " WHERE id = '".$id."'");
+
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}

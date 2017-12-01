@@ -30,6 +30,7 @@ class product
 	public $is_deleted;
 	public $emp;
 	public $date_upd;
+	public $error;
 
 	public function __construct($id = '' )
 	{
@@ -75,6 +76,10 @@ class product
 				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_product (".$fields.") VALUES (".$values.")");
+		}
+		if( $sc === FALSE )
+		{
+			$this->error = dbError();
 		}
 		return $sc;
 	}

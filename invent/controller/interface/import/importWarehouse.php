@@ -30,8 +30,8 @@
 				if( $i != 1 ) //---- Skip first row
 				{
 					$id			= $rs['A'];
-					$code 	= $rs['B'];
-					$name 	= $rs['C'];
+					$code 	= addslashes($rs['B']);
+					$name 	= addslashes($rs['C']);
 					$active 	= trim($rs['F'] );
 					if( $cs->isExists($id) === FALSE )
 					{
@@ -48,6 +48,7 @@
 							$sc = FALSE;
 							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Warehouse', $cs->error);
 						}
 					}
 					else
@@ -55,7 +56,7 @@
 						//--- If exists do update
 						$arr = array(
 								'code'		=> $code,
-								'name' 	=> $rs['C'],
+								'name' 		=> $name,
 								'active'	=> $active == '' ? 1 : 0
 								);
 
@@ -65,6 +66,7 @@
 							$sc = FALSE;
 							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Warehouse', $cs->error);
 						}
 					}	/// end if
 				}//-- end if not first row
@@ -79,9 +81,7 @@
 		$message = "Can not open folder please check connection";
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
-
-	writeImportLogs('คลังสินค้า', $result, $import, $update, $error);
+	writeImportLogs('คลังสินค้า', $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
 

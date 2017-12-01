@@ -18,24 +18,24 @@ foreach( $ds as $items )
           $discount['amount']   = ($pd->price * ($order->gp * 0.01)) * $qty;
 
           $arr = array(
-                    "id_order"	      => $order->id,
-                    "id_style"		    => $pd->id_style,
-                    "id_product"	    => $id,
-                    "product_code"    => $pd->code,
-                    "product_name"    => $pd->name,
-                    "cost"            => $pd->cost,
-                    "price"	          => $pd->price,
-                    "qty"		          => $qty,
-                    "discount"	      => $discount['discount'],
-                    "discount_amount" => $discount['amount'],
-                    "total_amount"	  => ($pd->price * $qty) - $discount['amount'],
-                    "gp"              => $order->gp
+                    'id_order'	      => $order->id,
+                    'id_style'		    => $pd->id_style,
+                    'id_product'	    => $id,
+                    'product_code'    => addslashes($pd->code),
+                    'product_name'    => addslashes($pd->name),
+                    'cost'            => $pd->cost,
+                    'price'	          => $pd->price,
+                    'qty'		          => $qty,
+                    'discount'	      => $discount['discount'],
+                    'discount_amount' => $discount['amount'],
+                    'total_amount'	  => ($pd->price * $qty) - $discount['amount'],
+                    'gp'              => $order->gp
                       );
 
           if( $order->addDetail($arr) === FALSE )
           {
             $result = FALSE;
-            $error = "Error : Insert fail";
+            $error = 'Error : Insert fail';
             $err_qty++;
           }
 
@@ -50,20 +50,20 @@ foreach( $ds as $items )
 
 
           $arr = array(
-                  "id_product"      => $id,
-                  "qty"             => $qty,
-                  "discount"	      => $discount['discount'],
-                  "discount_amount"	=> $discount['amount'],
-                  "total_amount"	  => ($pd->price * $qty) - $discount['amount'],
-                  "valid"           => 0,
-                  "isSaved"	        => 0, //--- ย้อนกลับมาเป็นยังไม่ได้บันทึกอีกครั้ง
-                  "gp"              => $order->gp
+                  'id_product'      => $id,
+                  'qty'             => $qty,
+                  'discount'	      => $discount['discount'],
+                  'discount_amount'	=> $discount['amount'],
+                  'total_amount'	  => ($pd->price * $qty) - $discount['amount'],
+                  'valid'           => 0,
+                  'isSaved'	        => 0, //--- ย้อนกลับมาเป็นยังไม่ได้บันทึกอีกครั้ง
+                  'gp'              => $order->gp
                   );
 
           if( $order->updateDetail($detail->id, $arr) === FALSE )
           {
             $result = FALSE;
-            $error = "Error : Update Fail";
+            $error = 'Error : Update Fail';
             $err_qty++;
           }
 
@@ -71,7 +71,7 @@ foreach( $ds as $items )
       }
       else 	// if getStock
       {
-        $error = "Error : สินค้าไม่เพียงพอ";
+        $error = 'Error : สินค้าไม่เพียงพอ';
       } 	//--- if getStock
     }	//--- if qty > 0
   }	//-- foreach items

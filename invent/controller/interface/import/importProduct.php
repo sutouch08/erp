@@ -35,15 +35,15 @@
 			{
 				if( $i != 1 )
 				{
-					$id 		= trim( $rs['A'] );
+					$id 		= $rs['A'];
 					$count_stock	= $rs['G'] == 3 ? 0 : 1;
 					$active	= $rs['E'] == 'I' ? 0 : 1;
 					if( $cs->isExists($id) === FALSE )
 					{
 						$arr = array(
 											"id"				=> $id,
-											"code"			=> trim( $rs['B'] ),
-											"name"			=> trim( $rs['C'] ),
+											"code"			=> $rs['B'],
+											"name"			=> addslashes($rs['C']),
 											"id_style"	=> $st->getStyleId( $rs['J'] ),
 											"id_color"	=> $co->getColorId( $rs['L'] ),
 											"id_size"		=> $si->getSizeId( $rs['K'] ),
@@ -62,13 +62,14 @@
 							$sc = FALSE;
 							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Product', $cs->error);
 						}
 					}
 					else
 					{
 						$arr = array(
-											"code"			=> trim( $rs['B'] ),
-											"name"			=> trim( $rs['C'] ),
+											"code"			=> $rs['B'],
+											"name"			=> addslashes($rs['C']),
 											"id_style"	=> $st->getStyleId( $rs['J'] ),
 											"id_color"	=> $co->getColorId( $rs['L'] ),
 											"id_size"		=> $si->getSizeId( $rs['K'] ),
@@ -87,8 +88,9 @@
 							$sc = FALSE;
 							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Product', $cs->error);
 						}
-						
+
 					}//---- end if exists
 				}//--- end if first row
 				$i++;
@@ -102,9 +104,7 @@
 		$message = "Can not open folder please check connection";
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
-
-	writeImportLogs('สินค้า', $result, $import, $update, $error);
+	writeImportLogs('สินค้า', $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
 

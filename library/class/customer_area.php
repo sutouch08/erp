@@ -1,9 +1,11 @@
 <?php
-class customer_area 
+class customer_area
 {
 	public $id;
 	public $code;
 	public $name;
+	public $error;
+
 	public function __construct($id = '')
 	{
 		if( $id != '' )
@@ -14,11 +16,13 @@ class customer_area
 				$rs 				= dbFetchObject($qs);
 				$this->id 		= $rs->id;
 				$this->code 	= $rs->code;
-				$this->name	 	= $rs->name;	
+				$this->name	 	= $rs->name;
 			}
 		}
 	}
-	
+
+
+
 	public function add(array $ds)
 	{
 		$sc = FALSE;
@@ -27,19 +31,31 @@ class customer_area
 			if( $this->isExists($ds['id']) === FALSE )
 			{
 				$sc = dbQuery("INSERT INTO tbl_customer_area (id, code, name) VALUES ('".$ds['id']."', '".$ds['code']."', '".$ds['name']."')");
+
+				if( $sc === FALSE)
+				{
+					$this->error = dbError();
+				}
+
 			}
 		}
-		
+
 		return $sc;
 	}
-	
-	
+
+
 	public function update($id, array $ds)
 	{
-		return dbQuery("UPDATE tbl_customer_area SET code = '".$ds['code']."', name = '".$ds['name']."' WHERE id = '".$id."'");	
+		$sc = dbQuery("UPDATE tbl_customer_area SET code = '".$ds['code']."', name = '".$ds['name']."' WHERE id = '".$id."'");
+		if( $sc === FALSE)
+		{
+			$this->error = dbError();
+		}
+
+		return $sc;
 	}
-	
-	
+
+
 	public function isExists($id)
 	{
 		$sc = FALSE;
@@ -50,12 +66,19 @@ class customer_area
 		}
 		return $sc;
 	}
-	
+
+
+
+
 	public function delete($id)
 	{
 		return dbQuery("DELETE FROM tbl_customer_area WHERE id = '".$id."'");
 	}
-	
+
+
+
+
+
 	public function hasMember($id)
 	{
 		$sc = FALSE;
@@ -66,42 +89,48 @@ class customer_area
 		}
 		return $sc;
 	}
-	
+
+
+
+
+
 	public function countMember($id)
 	{
 		$qs = dbQuery("SELECT COUNT(*) FROM tbl_customer WHERE id_area = '".$id."'");
 		list( $sc ) = dbFetchArray($qs);
-		return  $sc;			
+		return  $sc;
 	}
-	
-	
-	
-	
+
+
+
+
 	public function getAreaCode($id)
 	{
 		$sc = FALSE;
 		$qs = dbQuery("SELECT code FROM tbl_customer_area WHERE id = '".$id."'");
 		if( dbNumRows($qs) == 1 )
 		{
-			list( $sc ) = dbFetchArray($qs);	
+			list( $sc ) = dbFetchArray($qs);
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function getAreaId($code)
 	{
 		$sc = 0;
 		$qs = dbQuery("SELECT id FROM tbl_customer_area WHERE code = '".$code."'");
 		if( dbNumRows($qs) == 1 )
 		{
-			list( $sc ) = dbFetchArray($qs);	
+			list( $sc ) = dbFetchArray($qs);
 		}
-		return $sc;	
+		return $sc;
 	}
-	
-	
+
+
+
+
 	public function getAreaNameByCode($code)
 	{
 		$sc = "";
@@ -112,9 +141,9 @@ class customer_area
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function getAreaName($id)
 	{
 		$sc = "";
@@ -125,6 +154,8 @@ class customer_area
 		}
 		return $sc;
 	}
+
+	
 }
 
 ?>

@@ -30,15 +30,15 @@
 			{
 				if( $i != 1 ) //---- Skip first row
 				{
-					$id 	= trim( $rs['A'] );
+					$id 	= $rs['A'];
 					if( $cs->isExists( $id ) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
 								'id'					=> $id,
-								'code'				=> trim( $rs['B'] ),
-								'name'				=> trim( $rs['C'] ),
-								'id_group'		=> $sg->getSaleGroupId( trim( $rs['D'] ) )
+								'code'				=> addslashes( $rs['B'] ),
+								'name'				=> addslashes( $rs['C'] ),
+								'id_group'		=> $sg->getSaleGroupId( addslashes( $rs['D'] ) )
 								);
 
 						$import++;
@@ -47,15 +47,16 @@
 							$sc = FALSE;
 							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Sale', $cs->error);
 						}
 					}
 					else
 					{
 						//--- If exists do update
 						$arr = array(
-								'code'				=> trim( $rs['B'] ),
-								'name'				=> trim( $rs['C'] ),
-								'id_group'		=> $sg->getSaleGroupId( trim( $rs['D'] ) )
+								'code'				=> addslashes( $rs['B'] ),
+								'name'				=> addslashes( $rs['C'] ),
+								'id_group'		=> $sg->getSaleGroupId( addslashes( $rs['D'] ) )
 								);
 
 						$update++;
@@ -64,6 +65,7 @@
 							$sc = FALSE;
 							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Sale', $cs->error);
 						}
 					}	/// end if
 				}//-- end if not first row
@@ -78,9 +80,7 @@
 		$message = "Can not open folder please check connection";
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
-
-	writeImportLogs('พนักงานขาย', $result, $import, $update, $error);
+	writeImportLogs('พนักงานขาย', $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
 

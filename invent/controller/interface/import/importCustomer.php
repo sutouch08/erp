@@ -33,7 +33,7 @@
 			{
 				if( $i != 1 ) //---- Skip first row
 				{
-					$id 		= trim( $rs['A'] );
+					$id 		= $rs['A'];
 					$active 	= $rs['J'] == '' ? 1 : 0;
 
 					$arr = array(
@@ -76,6 +76,7 @@
 							$sc = FALSE;
 							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Customer', $cs->error);
 						}
 					}
 					else
@@ -88,6 +89,7 @@
 							$sc = FALSE;
 							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Customer', $cs->error);
 						}
 					}	/// end if
 
@@ -103,9 +105,7 @@
 		$message = "Can not open folder please check connection";
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
-
-	writeImportLogs('ลูกค้า', $result, $import, $update, $error);
+	writeImportLogs('ลูกค้า', $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
 

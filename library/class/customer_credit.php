@@ -8,6 +8,7 @@ class customer_credit
 	public $used;
 	public $balance;
 	public $date_upd;
+	public $error;
 
 	public function __construct($id = "")
 	{
@@ -51,7 +52,13 @@ class customer_credit
 				$values .= $i == 1 ? "'". $value."'" : ", '".$value."'";
 				$i++;
 			}
+
 			$sc = dbQuery("INSERT INTO tbl_customer_credit (".$fields.") VALUES (".$values.")");
+
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}
@@ -72,7 +79,13 @@ class customer_credit
 				$set .= $i == 1 ? $field ." = '".$value."'" : ", ".$field." = '".$value."'";
 				$i++;
 			}
+
 			$sc = dbQuery("UPDATE tbl_customer_credit SET ".$set." WHERE id_customer = '".$id."'");
+
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}

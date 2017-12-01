@@ -32,7 +32,7 @@
 			$excel		= $reader->load($fileName);
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
 
-			$cs  = new return_order();
+			$cs  = new return_received();
 			$sup = new supplier();
 			$sale	= new sale();
 			$wh	= new warehouse();
@@ -42,16 +42,16 @@
 			{
 				if( $i != 1 )
 				{
-					$bookcode 	= trim( $rs['G'] );
+					$bookcode 	= $rs['G'];
 
 					//---	รหัสเอกสาร
-					$reference	= trim( $rs['I'] );
+					$reference	= $rs['I'];
 
 					//---	อ้างอิงใบส่งสินค้า/ใบกำกับภาษี
-					$invoice    = trim($rs['AQ']).'-'.trim($rs['AR']);
+					$invoice    = $rs['AQ'].'-'.$rs['AR'];
 
 					//---	รหัสสินค้า
-					$product		= trim( $rs['AC'] );
+					$product		= $rs['AC'];
 
 					//---	ไอดีสินค้า
 					$id_pd		= $pd->getId($product);
@@ -65,17 +65,17 @@
 					//---	valid ถ้าไม่มีการคืนสินค้าให้ valid = 1
 					$valid = 0;
 
-					$id = $cs->getId($bookcode, $reference, $product);
+					$id = $cs->getId($bookcode, $reference, $id_pd);
 					if( $id === FALSE )
 					{
 						$import++;
 						$arr = array(
 											'bookcode'	    => $bookcode,
-											'code'			    => trim( $rs['H']),
+											'code'			    => $rs['H'],
 											'reference'	    => $reference,
 											'invoice'		    => $invoice,
-											'id_supplier'   => $sup->getId(trim($rs['M'])),
-											'id_warehouse'	=> $wh->getId(trim($rs['AD'])),
+											'id_supplier'   => $sup->getId($rs['M']),
+											'id_warehouse'	=> $wh->getId($rs['AD']),
 											'id_style'	    => $id_style,
 											'id_product'	  => $id_pd,
 											'product_code'	=> $product,
@@ -97,6 +97,7 @@
 							$sc = FALSE;
 							$message = 'นำเข้าข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('BM', $cs->error);
 						}
 					}
 
@@ -112,11 +113,9 @@
 		$message = 'Can not open folder';
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
-
-	writeImportLogs('BM', $result, $import, $update, $error);
+	writeImportLogs('BM', $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
-	
+
 
 ?>

@@ -12,10 +12,16 @@ function dbQuery($sql)
 	return $result;
 }
 
+function dbError()
+{
+	global $dbConn;
+	return mysqli_error($dbConn);
+}
+
 function dbAffectedRows()
 {
 	global $dbConn;
-	
+
 	return mysqli_affected_rows($dbConn);
 }
 
@@ -28,7 +34,7 @@ function dbFetchAssoc($result)
 	return mysqli_fetch_assoc($result);
 }
 
-function dbFetchRow($result) 
+function dbFetchRow($result)
 {
 	return mysqli_fetch_row($result);
 }
@@ -40,7 +46,7 @@ function dbFreeResult($result)
 
 function dbFetchObject($result)
 {
-	return mysqli_fetch_object($result);	
+	return mysqli_fetch_object($result);
 }
 
 function dbNumRows($result)
@@ -67,7 +73,7 @@ function startTransection()
 function endTransection()
 {
 	global $dbConn;
-	return mysqli_autocommit($dbConn, TRUE);	
+	return mysqli_autocommit($dbConn, TRUE);
 }
 
 function commitTransection()

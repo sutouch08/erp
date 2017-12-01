@@ -29,8 +29,8 @@
 			{
 				if( $i != 1 ) //---- Skip first row
 				{
-					$id = trim( $rs['A'] );
-					$code = trim( $rs['B'] );
+					$id = $rs['A'];
+					$code = $rs['B'];
 					//echo $rs['C'];
 
 					if( $cs->isExists( $id ) === FALSE )
@@ -39,7 +39,7 @@
 						$arr = array(
 								'id'			=> $id,
 								'code'		=> $code,
-								'name'		=> trim( $rs['C'] )
+								'name'		=> addslashes( $rs['C'] )
 								);
 
 						$import++;
@@ -48,6 +48,7 @@
 							$sc = FALSE;
 							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Customer Group', $cs->error);
 						}
 					}
 					else
@@ -55,7 +56,7 @@
 						//--- If exists do update
 						$arr = array(
 								'code'		=> $code,
-								'name' 	=> trim($rs['C'])
+								'name' 	=> addslashes($rs['C'])
 								);
 						$update++;
 						if($cs->update($id, $arr) === FALSE)
@@ -63,8 +64,9 @@
 							$sc = FALSE;
 							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Customer Group', $cs->error);
 						}
-						
+
 					}	/// end if
 
 				}//-- end if not first row
@@ -79,9 +81,7 @@
 		$message = "Can not open folder please check connection";
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
-
-	writeImportLogs('กลุ่มลูกค้า', $result, $import, $update, $error);
+	writeImportLogs('กลุ่มลูกค้า', $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
 

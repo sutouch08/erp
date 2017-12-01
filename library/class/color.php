@@ -41,6 +41,11 @@ class color
 			}
 			$sc = dbQuery("INSERT INTO tbl_color (".$fields.") VALUES (".$values.")");
 		}
+
+		if( $sc === FALSE )
+		{
+			$this->error = dbError();
+		}
 		return $sc;
 	}
 
@@ -60,6 +65,10 @@ class color
 				$i++;
 			}
 			$sc = dbQuery("UPDATE tbl_color SET " . $set . " WHERE id = '".$id."'");
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}

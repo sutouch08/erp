@@ -29,21 +29,22 @@
 			{
 				if( $i != 1 ) //---- Skip first row
 				{
-					$id 		= trim( $rs['A'] );
+					$id 		= $rs['A'];
 					if( $cs->isExists( $id ) === FALSE )
 					{
 						$import++;
 						//-- If not exists do insert
 						$arr = array(
 								'id'					=> $id,
-								'code'				=> trim( $rs['B'] ),
-								'name'				=> trim( $rs['C'] )
+								'code'				=> $rs['B'],
+								'name'				=> $rs['C']
 								);
 						if($cs->add($arr) === FALSE)
 						{
 							$sc = FALSE;
 							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Brand', $cs->error);
 						}
 					}
 					else
@@ -51,8 +52,8 @@
 						$update++;
 						//--- If exists do update
 						$arr = array(
-								'code'				=> trim( $rs['B'] ),
-								'name'				=> trim( $rs['C'] )
+								'code'				=> $rs['B'],
+								'name'				=> $rs['C']
 								);
 
 						if($cs->update($id, $arr) === FALSE)
@@ -60,6 +61,7 @@
 							$sc = FALSE;
 							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('Brand', $cs->error);
 						}
 					}	/// end if
 				}//-- end if not first row
@@ -74,9 +76,8 @@
 		$message = "Can not open folder please check connection";
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
 
-	writeImportLogs('ยี่ห้อสินค้า', $result, $import, $update, $error);
+	writeImportLogs('ยี่ห้อสินค้า', $import, $update, $error);
 
 	echo $sc === TRUE ? 'success' : $message;
 

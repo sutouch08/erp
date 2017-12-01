@@ -48,7 +48,7 @@
 					$reference	= $rs['I'];
 
 					//---	คืนสินค้าหรือไม่
-					$isReturn   = trim($rs['AO']) == 'Y' ? 1 : 0;
+					$isReturn   = addslashes($rs['AO']) == 'Y' ? 1 : 0;
 
 					//---	อ้างอิงใบส่งสินค้า/ใบกำกับภาษี
 					$invoice    = $rs['AQ'].'-'.$rs['AR'];
@@ -82,14 +82,14 @@
 											'id_style'	    => $id_style,
 											'id_product'	  => $id_pd,
 											'product_code'	=> $product,
-											'price'			    => trim($rs['AI']),
-											'qty'		        => trim($rs['AF']),
-											'unit_code'	    => trim($rs['AG']),
-											'umqty'	        => trim($rs['AH']),
-											'discount'			=> trim($rs['AJ']),
-											'bill_discount'	=> trim($rs['U']),
-											'amount_ex'	    => trim($rs['V']),
-											'vat_amount'	  => trim($rs['W']),
+											'price'			    => addslashes($rs['AI']),
+											'qty'		        => addslashes($rs['AF']),
+											'unit_code'	    => addslashes($rs['AG']),
+											'umqty'	        => addslashes($rs['AH']),
+											'discount'			=> addslashes($rs['AJ']),
+											'bill_discount'	=> addslashes($rs['U']),
+											'amount_ex'	    => addslashes($rs['V']),
+											'vat_amount'	  => addslashes($rs['W']),
 											'date_add'			=> dbDate($rs['J']),
 											'isCancle'			=> $isCancle,
 											'valid'					=> $valid,
@@ -102,6 +102,7 @@
 							$sc = FALSE;
 							$message = 'เพิ่มข้อมูลไม่สำเร็จ';
 							$error++;
+							writeErrorLogs('SM', $cs->error);
 						}
 					}
 
@@ -117,9 +118,7 @@
 		$message = "Can not open folder please check connection";
 	}
 
-	$result = $sc === TRUE ? 'SUCCESS' : 'ERROR';
-
-	writeImportLogs('ใบลดหนี้ขาย', $result, $import, $update, $error, 'last');
+	writeImportLogs('ใบลดหนี้ขาย', $import, $update, $error, 'last');
 
 	echo $sc === TRUE ? 'success' : $message;
 

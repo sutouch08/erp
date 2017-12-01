@@ -39,7 +39,7 @@ class brand
 			$sc = dbQuery("INSERT INTO tbl_brand (".$fields.") VALUES (".$values.")");
 			if( $sc === FALSE)
 			{
-				$this->error = "Insert Fail";
+				$this->error = dbError();
 			}
 		}
 		return $sc;
@@ -64,7 +64,7 @@ class brand
 			$sc = dbQuery("UPDATE tbl_brand SET " . $set . " WHERE id = '".$id."'");
 			if( $sc === FALSE)
 			{
-				$this->error = "Update fail";
+				$this->error = dbError();
 			}
 		}
 		return $sc;

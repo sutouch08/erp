@@ -1,6 +1,8 @@
 <?php
 class barcode {
 
+public $error;
+
 public function __construct(){}
 
 public function add(array $ds)
@@ -18,6 +20,7 @@ public function add(array $ds)
 			$i++;
 		}
 		$sc = dbQuery("INSERT INTO tbl_barcode (".$fields.") VALUES (".$values.")");
+		$this->error = $sc === FALSE ? dbError() : '';
 	}
 
 	return $sc;
@@ -37,6 +40,7 @@ public function update($id, array $ds)
 			$i++;
 		}
 		$sc = dbQuery("UPDATE tbl_barcode SET ".$set." WHERE id = '".$id."'");
+		$this->error = $sc === FALSE ? dbError() : '';
 	}
 
 	return $sc;

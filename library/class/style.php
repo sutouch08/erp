@@ -39,6 +39,11 @@ class style
 				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_product_style (".$fields.") VALUES (".$values.")");
+
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}
@@ -59,6 +64,11 @@ class style
 				$i++;
 			}
 			$sc = dbQuery("UPDATE tbl_product_style SET " . $set . " WHERE id = '".$id."'");
+
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}

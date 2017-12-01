@@ -3,7 +3,8 @@ class unit {
 	public $id;
 	public $code;
 	public $name;
-	
+	public $error;
+
 	public function __construct($id = "")
 	{
 		if( $id != "" )
@@ -18,12 +19,12 @@ class unit {
 			}
 		}
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	public function add(array $ds)
 	{
 		$sc = FALSE;
@@ -38,18 +39,24 @@ class unit {
 				$values 	.= $i == 1 ? "'".$value."'" : ", '".$value."'";
 				$i++;
 			}
+			
 			$sc = dbQuery("INSERT INTO tbl_unit (".$fields.") VALUES (".$values.")");
+
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 	public function update($id, array $ds)
 	{
 		$sc = FALSE;
@@ -60,27 +67,32 @@ class unit {
 			foreach( $ds as $field => $value )
 			{
 				$set .= $i == 1 ? $field . " = '".$value."'" : ", ".$field . " = '".$value."'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("UPDATE tbl_unit SET ".$set." WHERE id = '".$id."'");
+
+			if( $sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
-		return $sc;	
+		return $sc;
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	public function delete($id)
 	{
-		return dbQuery("DELETE FROM tbl_unit WHERE id = '".$id."'");	
+		return dbQuery("DELETE FROM tbl_unit WHERE id = '".$id."'");
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public function isExists($id)
 	{
 		$sc = FALSE;
@@ -91,11 +103,11 @@ class unit {
 		}
 		return $sc;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public function getName($code)
 	{
 		$sc = "";
@@ -106,11 +118,11 @@ class unit {
 		}
 		return $sc;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public function getUnitId($code)
 	{
 		$sc = FALSE;
@@ -121,11 +133,11 @@ class unit {
 		}
 		return $sc;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public function getUnitCode($id)
 	{
 		$sc = '';
@@ -136,11 +148,11 @@ class unit {
 		}
 		return $sc;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public function getUnitName($id)
 	{
 		$sc = '';
@@ -151,11 +163,11 @@ class unit {
 		}
 		return $sc;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 }// end class
 
 ?>
