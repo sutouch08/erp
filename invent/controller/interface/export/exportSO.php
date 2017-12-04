@@ -3,14 +3,12 @@
 	{
 		$sc 	= FALSE;
 		$order 	= new order($id_order);
-		$cust 	= new customer();
+		$cust 	= new customer($order->id_customer);
 		$sale 	= new sale();
 		$pd			= new product();
 		$wh			= new warehouse();
 		$emp		= new employee();
-		$excel 	= new PHPExcel();
 
-		$path			= getConfig('EXPORT_SO_PATH');
 		$ERRMSG		= "";
 		$REFTYPE	= 'SO';
 		$QCCORP		= getConfig('COMPANY_CODE'); 	//-- รหัสบริษัท
@@ -22,8 +20,8 @@
 		$CODE			= "";	//--	เลขที่เอกสาร ถ้าว่างไว้ระบบจะ gen ให้เอง
 		$REFNO	 	= $order->reference;		//--	เลขที่อ้างอิง (เลขที่เอกสารใน Smart Invent)
 		$DATE			= thaiDate($order->date_add, '/');	//--	วันที่ของเอกสาร
-		$RECEDATE	= "";	//--	วันที่ยื่นภาษี
-		$DUEDATE	= "";	//--	วันที่ครบกำหนด
+		$RECEDATE	= thaiDate($order->date_add, '/');;	//--	วันที่ยื่นภาษี
+		$DUEDATE	= date('d/m/Y', strtotime('+'.$cust->term.' day '.$order->date_add));	//--	วันที่ครบกำหนด
 		$QCCOOR		= $cust->getCode($order->id_customer);	//--	รหัสลูกค้า
 		$QCEMPL		= $sale->getCode($order->id_sale);
 		$CREDTERM	= $cust->getTerm($order->id_customer);	//--	เครดิตเทอม (จำนวนวัน)
@@ -36,16 +34,16 @@
 		$AMT			= round( $order->getTotalSoldAmount($order->id, FALSE), 2);	//--	มูลค่าสินค้าไม่รวม VAT (เป็นยอดรวมทั้งบิล) FALSE = ไม่รวม VAT decmal 15,2
 		$VATAMT		= round( getVatAmount( $order->getTotalSoldAmount($order->id,TRUE ), getVatRate($VATTYPE), FALSE),2 );	//--	มูลค่าภาษี (เป็นยอดรวมทั้งบิล) TRUE = VAT นอก FALSE = VAT ใน decmal 14,2
 		$QCCURRENCY	= "";		//--	รหัสหน่วยเงิน
-		$XRATE		= "";			//--	อัตราแลกเปลี่ยนหน่วยเงิน
-		$DISCAMTK	= "";			//--	มูลค่าส่วนลดท้ายบิล เป็นจำนวนเงิน ตามหน่วยเงินที่คีย์
-		$AMTKE		= "";			//--	มูลค่าสินค้าไม่รวม VAT (เป็นยอดรวมทั้งบิล) ตามหน่วยเงินที่คีย์
-		$VATAMTKE	= "";			//-- 	มูลค่าภาษี (เป็นยอดรวมทั้งบิล) ตามหน่วยเงินที่คีย์
+		$XRATE		= 1;			//--	อัตราแลกเปลี่ยนหน่วยเงิน
+		$DISCAMTK	= $DISCAMT1;			//--	มูลค่าส่วนลดท้ายบิล เป็นจำนวนเงิน ตามหน่วยเงินที่คีย์
+		$AMTKE		= $AMT;			//--	มูลค่าสินค้าไม่รวม VAT (เป็นยอดรวมทั้งบิล) ตามหน่วยเงินที่คีย์
+		$VATAMTKE	= $VATAMT;			//-- 	มูลค่าภาษี (เป็นยอดรวมทั้งบิล) ตามหน่วยเงินที่คีย์
 		$LOT			= "";
 		$PRICEKE	= "";			//--	ราคาสินค้า ตามหน่วยเงินที่คีย์  กรณีมี Option Currency
 		$DISCAMTIK	= "";		//--	ราคาสินค้า ตามหน่วยเงินที่คีย์
 		$QCSECTI	= "";			//--	รหัสแผนก ที่รายการสินค้า (กรณีมี Feature แผนกที่ Item)
 		$QCJOBI		= "";			//--	รหัส JOB  ที่รายการสินค้า (กรณีมี Feature Job ที่ Item)
-		$REMARKH1	= $order->remark;
+		$REMARKH1	= tis($order->remark);
 		$REMARKH2	= "";
 		$REMARKH3	= "";
 		$REMARKH4	= "";
@@ -66,186 +64,152 @@
 		$REMARKI9	= "";
 		$REMARKI10	= "";
 
-
-
-		$excel->getProperties()->setCreator("Samart Invent 2.0");
-		$excel->getProperties()->setLastModifiedBy("Samart Invent 2.0");
-		$excel->getProperties()->setTitle("SO");
-		$excel->getProperties()->setSubject("SO");
-		$excel->getProperties()->setDescription("This file was generate by Smart invent web application via PHPExcel v.1.8");
-		$excel->getProperties()->setKeywords("SO");
-		$excel->getProperties()->setCategory("SO");
-		$excel->setActiveSheetIndex(0);
-		$excel->getActiveSheet()->setTitle('SO');
+		$path			= getConfig('EXPORT_SO_PATH');
+		$file_name = $path.$order->reference.'-'.date('YmdHis').".xls";
+		$workbook	= new Spreadsheet_Excel_Writer($file_name);
+		$excel =& $workbook->addWorksheet('SO');
 
 		//------- SET Header Row
-		$excel->getActiveSheet()->setCellValue('A1','ERRMSG');
-		$excel->getActiveSheet()->setCellValue('B1','REFTYPE');
-		$excel->getActiveSheet()->setCellValue('C1','QCCORP');
-		$excel->getActiveSheet()->setCellValue('D1','QCBRANCH');
-		$excel->getActiveSheet()->setCellValue('E1','QCSECT');
-		$excel->getActiveSheet()->setCellValue('F1','QCJOB');
-		$excel->getActiveSheet()->setCellValue('G1','STAT');
-		$excel->getActiveSheet()->setCellValue('H1','QCBOOK');
-		$excel->getActiveSheet()->setCellValue('I1','CODE');
-		$excel->getActiveSheet()->setCellValue('J1','REFNO');
-		$excel->getActiveSheet()->setCellValue('K1','DATE');
-		$excel->getActiveSheet()->setCellValue('L1','RECEDATE');
-		$excel->getActiveSheet()->setCellValue('M1','DUEDATE');
-		$excel->getActiveSheet()->setCellValue('N1','QCCOOR');
-		$excel->getActiveSheet()->setCellValue('O1','QCEMPL');
-		$excel->getActiveSheet()->setCellValue('P1','CREDTERM');
-		$excel->getActiveSheet()->setCellValue('Q1','VATISOUT');
-		$excel->getActiveSheet()->setCellValue('R1','VATTYPE');
-		$excel->getActiveSheet()->setCellValue('S1','HDISCSTR');
-		$excel->getActiveSheet()->setCellValue('T1','DISCAMT1');
-		$excel->getActiveSheet()->setCellValue('U1','AMT');
-		$excel->getActiveSheet()->setCellValue('V1','VATAMT');
-		$excel->getActiveSheet()->setCellValue('W1','QCCURRENCY');
-		$excel->getActiveSheet()->setCellValue('X1','XRATE');
-		$excel->getActiveSheet()->setCellValue('Y1','DISCAMTK');
-		$excel->getActiveSheet()->setCellValue('Z1','AMTKE');
-		$excel->getActiveSheet()->setCellValue('AA1','VATAMTKE');
-		$excel->getActiveSheet()->setCellValue('AB1','QCPROD');
-		$excel->getActiveSheet()->setCellValue('AC1','QCWHOUSE');
-		$excel->getActiveSheet()->setCellValue('AD1','LOT');
-		$excel->getActiveSheet()->setCellValue('AE1','QTY');
-		$excel->getActiveSheet()->setCellValue('AF1','QCUM');
-		$excel->getActiveSheet()->setCellValue('AG1','UMQTY');
-		$excel->getActiveSheet()->setCellValue('AH1','PRICE');
-		$excel->getActiveSheet()->setCellValue('AI1','DISCSTR');
-		$excel->getActiveSheet()->setCellValue('AJ1','PRICEKE');
-		$excel->getActiveSheet()->setCellValue('AK1','DISCAMTIK');
-		$excel->getActiveSheet()->setCellValue('AL1','QCSECTI');
-		$excel->getActiveSheet()->setCellValue('AM1','QCJOBI');
-		$excel->getActiveSheet()->setCellValue('AN1','REMARKH1');
-		$excel->getActiveSheet()->setCellValue('AO1','REMARKH2');
-		$excel->getActiveSheet()->setCellValue('AP1','REMARKH3');
-		$excel->getActiveSheet()->setCellValue('AQ1','REMARKH4');
-		$excel->getActiveSheet()->setCellValue('AR1','REMARKH5');
-		$excel->getActiveSheet()->setCellValue('AS1','REMARKH6');
-		$excel->getActiveSheet()->setCellValue('AT1','REMARKH7');
-		$excel->getActiveSheet()->setCellValue('AU1','REMARKH8');
-		$excel->getActiveSheet()->setCellValue('AV1','REMARKH9');
-		$excel->getActiveSheet()->setCellValue('AW1','REMARKH10');
-		$excel->getActiveSheet()->setCellValue('AX1','REMARKI1');
-		$excel->getActiveSheet()->setCellValue('AY1','REMARKI2');
-		$excel->getActiveSheet()->setCellValue('AZ1','REMARKI3');
-		$excel->getActiveSheet()->setCellValue('BA1','REMARKI4');
-		$excel->getActiveSheet()->setCellValue('BB1','REMARKI5');
-		$excel->getActiveSheet()->setCellValue('BC1','REMARKI6');
-		$excel->getActiveSheet()->setCellValue('BD1','REMARKI7');
-		$excel->getActiveSheet()->setCellValue('BE1','REMARKI8');
-		$excel->getActiveSheet()->setCellValue('BF1','REMARKI9');
-		$excel->getActiveSheet()->setCellValue('BG1','REMARKI10');
+		$excel->write(0, 0,'ERRMSG');
+		$excel->write(0, 1,'REFTYPE');
+		$excel->write(0, 2,'QCCORP');
+		$excel->write(0, 3,'QCBRANCH');
+		$excel->write(0, 4,'QCSECT');
+		$excel->write(0, 5,'QCJOB');
+		$excel->write(0, 6,'STAT');
+		$excel->write(0, 7,'QCBOOK');
+		$excel->write(0, 8,'CODE');
+		$excel->write(0, 9,'REFNO');
+		$excel->write(0, 10,'DATE');
+		$excel->write(0, 11,'RECEDATE');
+		$excel->write(0, 12,'DUEDATE');
+		$excel->write(0, 13,'QCCOOR');
+		$excel->write(0, 14,'QCEMPL');
+		$excel->write(0, 15,'CREDTERM');
+		$excel->write(0, 16,'VATISOUT');
+		$excel->write(0, 17,'VATTYPE');
+		$excel->write(0, 18,'HDISCSTR');
+		$excel->write(0, 19,'DISCAMT1');
+		$excel->write(0, 20,'AMT');
+		$excel->write(0, 21,'VATAMT');
+		$excel->write(0, 22,'QCCURRENCY');
+		$excel->write(0, 23,'XRATE');
+		$excel->write(0, 24,'DISCAMTK');
+		$excel->write(0, 25,'AMTKE');
+		$excel->write(0, 26,'VATAMTKE');
+		$excel->write(0, 27,'QCPROD');
+		$excel->write(0, 28,'QCWHOUSE');
+		$excel->write(0, 29,'LOT');
+		$excel->write(0, 30,'QTY');
+		$excel->write(0, 31,'QCUM');
+		$excel->write(0, 32,'UMQTY');
+		$excel->write(0, 33,'PRICE');
+		$excel->write(0, 34,'DISCSTR');
+		$excel->write(0, 35,'PRICEKE');
+		$excel->write(0, 36,'DISCAMTIK');
+		$excel->write(0, 37,'QCSECTI');
+		$excel->write(0, 38,'QCJOBI');
+		$excel->write(0, 39,'REMARKH1');
+		$excel->write(0, 40,'REMARKH2');
+		$excel->write(0, 41,'REMARKH3');
+		$excel->write(0, 42,'REMARKH4');
+		$excel->write(0, 43,'REMARKH5');
+		$excel->write(0, 44,'REMARKH6');
+		$excel->write(0, 45,'REMARKH7');
+		$excel->write(0, 46,'REMARKH8');
+		$excel->write(0, 47,'REMARKH9');
+		$excel->write(0, 48,'REMARKH10');
+		$excel->write(0, 49,'REMARKI1');
+		$excel->write(0, 50,'REMARKI2');
+		$excel->write(0, 51,'REMARKI3');
+		$excel->write(0, 52,'REMARKI4');
+		$excel->write(0, 53,'REMARKI5');
+		$excel->write(0, 54,'REMARKI6');
+		$excel->write(0, 55,'REMARKI7');
+		$excel->write(0, 56,'REMARKI8');
+		$excel->write(0, 57,'REMARKI9');
+		$excel->write(0, 58,'REMARKI10');
 
 		//------ End Header Row
 
+		$date_format =& $workbook->addFormat();
+		$date_format->setNumFormat('DD-MMM-YYYY');
+
 		//---- Start
-		$row = 2;  //--- start on row 2
+		$row = 1;  //--- start on row 2
 		$qs = $order->getSoldDetails($order->id);
+
 		if( dbNumRows($qs) > 0 )
 		{
-			while( $rs = dbFetchObject($qs) )
+			while( $rs = dbFetchObject($qs))
 			{
-				//---- SET Cell Format AS TEXT
-
-				$excel->getActiveSheet()->getStyle('A'.$row.':J'.$row)->getNumberFormat()->setFormatCode('@');
-				$excel->getActiveSheet()->getStyle('N'.$row.':O'.$row)->getNumberFormat()->setFormatCode('@');
-				$excel->getActiveSheet()->getStyle('Q'.$row.':S'.$row)->getNumberFormat()->setFormatCode('@');
-				$excel->getActiveSheet()->getStyle('W'.$row)->getNumberFormat()->setFormatCode('@');
-				$excel->getActiveSheet()->getStyle('AB'.$row.':AD'.$row)->getNumberFormat()->setFormatCode('@');
-				$excel->getActiveSheet()->getStyle('AF'.$row.':AI'.$row)->getNumberFormat()->setFormatCode('@');
-				$excel->getActiveSheet()->getStyle('AL'.$row.':BG'.$row)->getNumberFormat()->setFormatCode('@');
-
-				//--- SET Cell Format AS DATE
-				$excel->getActiveSheet()->getStyle('K'.$row)->getNumberFormat()->setFormatCode('dd/mm/yy');
-				$excel->getActiveSheet()->getStyle('L'.$row)->getNumberFormat()->setFormatCode('dd/mm/yy');
-				$excel->getActiveSheet()->getStyle('M'.$row)->getNumberFormat()->setFormatCode('dd/mm/yy');
-
-				//--- Set Cell Format AS Numeric
-				$excel->getActiveSheet()->getStyle('P'.$row)->getNumberFormat()->setFormatCode('0'); //-- creadit term
-				$excel->getActiveSheet()->getStyle('T'.$row.':V'.$row)->getNumberFormat()->setFormatCode('0.00'); //-- bill_discount
-				$excel->getActiveSheet()->getStyle('Y'.$row.':Z'.$row)->getNumberFormat()->setFormatCode('0.00');
-				$excel->getActiveSheet()->getStyle('X'.$row)->getNumberFormat()->setFormatCode('0.00000000');
-				$excel->getActiveSheet()->getStyle('AA'.$row)->getNumberFormat()->setFormatCode('0.00');
-				$excel->getActiveSheet()->getStyle('AE'.$row)->getNumberFormat()->setFormatCode('0.0000');
-				$excel->getActiveSheet()->getStyle('AG'.$row)->getNumberFormat()->setFormatCode('0.0000');
-				$excel->getActiveSheet()->getStyle('AH'.$row)->getNumberFormat()->setFormatCode('0.00');
-				$excel->getActiveSheet()->getStyle('AJ'.$row.':AK'.$row)->getNumberFormat()->setFormatCode('0.00');
-
-				$excel->getActiveSheet()->setCellValueExplicit('A'.$row, $ERRMSG, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('B'.$row, $REFTYPE, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('C'.$row, $QCCORP, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('D'.$row, $QCBRANCH, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('E'.$row, $QCSECT, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('F'.$row, $QCJOB, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('G'.$row, $STAT, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('H'.$row, $QCBOOK, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('I'.$row, $CODE, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('J'.$row, $REFNO, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValue('K'.$row, $DATE);
-				$excel->getActiveSheet()->setCellValue('L'.$row, $RECEDATE);
-				$excel->getActiveSheet()->setCellValue('M'.$row, $DUEDATE);
-				$excel->getActiveSheet()->setCellValueExplicit('N'.$row, $QCCOOR, PHPExcel_Cell_DataType::TYPE_STRING);
-
-				$excel->getActiveSheet()->setCellValueExplicit('O'.$row, $QCEMPL, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('P'.$row, $CREDTERM, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('Q'.$row, $VATISOUT, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('R'.$row, $VATTYPE, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('S'.$row, $HDISCSTR, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValue('T'.$row, $DISCAMT1);
-				$excel->getActiveSheet()->setCellValue('U'.$row, $AMT);
-				$excel->getActiveSheet()->setCellValue('V'.$row, $VATAMT);
-				$excel->getActiveSheet()->setCellValueExplicit('W'.$row, $QCCURRENCY, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValue('X'.$row, $XRATE);
-				$excel->getActiveSheet()->setCellValue('Y'.$row, $DISCAMTK);
-				$excel->getActiveSheet()->setCellValue('Z'.$row, $AMTKE);
-				$excel->getActiveSheet()->setCellValue('AA'.$row, $VATAMTKE);
-				$excel->getActiveSheet()->setCellValueExplicit('AB'.$row, $rs->product_code, PHPExcel_Cell_DataType::TYPE_STRING );
-				$excel->getActiveSheet()->setCellValueExplicit('AC'.$row, $wh->getCode($rs->id_warehouse), PHPExcel_Cell_DataType::TYPE_STRING );
-				$excel->getActiveSheet()->setCellValueExplicit('AD'.$row, $LOT, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValue('AE'.$row, $rs->qty);
-				$excel->getActiveSheet()->setCellValueExplicit('AF'.$row, $pd->getUnitCode($rs->id_product) , PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValue('AG'.$row, 1);
-				$excel->getActiveSheet()->setCellValue('AH'.$row, $rs->price_inc );
-				$excel->getActiveSheet()->setCellValueExplicit('AI'.$row, $rs->discount_label, PHPExcel_Cell_DataType::TYPE_STRING );
-				$excel->getActiveSheet()->setCellValue('AJ'.$row, $PRICEKE);
-				$excel->getActiveSheet()->setCellValue('AK'.$row, $DISCAMTIK);
-				$excel->getActiveSheet()->setCellValueExplicit('AL'.$row, $QCSECTI, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('AM'.$row, $QCJOBI, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('AN'.$row, $REMARKH1, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('AO'.$row, $REMARKH2, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('AP'.$row, $REMARKH3, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('AQ'.$row, $REMARKH4, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('AR'.$row, $REMARKH5, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('AS'.$row, $REMARKH6, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('AT'.$row, $REMARKH7, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('AU'.$row, $REMARKH8, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('AV'.$row, $REMARKH9, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('AW'.$row, $REMARKH10, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('AX'.$row, $REMARKI1, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('AY'.$row, $REMARKI2, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('BZ'.$row, $REMARKI3, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('BA'.$row, $REMARKI4, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('BB'.$row, $REMARKI5, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('BC'.$row, $REMARKI6, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('BD'.$row, $REMARKI7, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('BE'.$row, $REMARKI8, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('BF'.$row, $REMARKI9, PHPExcel_Cell_DataType::TYPE_STRING);
-				$excel->getActiveSheet()->setCellValueExplicit('BG'.$row, $REMARKI10, PHPExcel_Cell_DataType::TYPE_STRING);
+				$excel->writeString($row, 0, $ERRMSG);
+				$excel->writeString($row, 1, tis($REFTYPE));
+				$excel->writeString($row, 2, tis($QCCORP));
+				$excel->writeString($row, 3, tis($QCBRANCH));
+				$excel->writeString($row, 4, tis($QCSECT));
+				$excel->writeString($row, 5, tis($QCJOB));
+				$excel->writeString($row, 6, $STAT);
+				$excel->writeString($row, 7, tis($QCBOOK));
+				$excel->writeString($row, 8, $CODE);
+				$excel->writeString($row, 9, tis($REFNO));
+				$excel->write($row, 10, $DATE, $date_format);
+				$excel->write($row, 11, $RECEDATE, $date_format);
+				$excel->write($row, 12, $DUEDATE, $date_format);
+				$excel->writeString($row, 13, tis($QCCOOR));
+				$excel->writeString($row, 14, tis($QCEMPL));
+				$excel->write($row, 15, $CREDTERM);
+				$excel->writeString($row, 16, $VATISOUT);
+				$excel->writeString($row, 17, $VATTYPE);
+				$excel->writeString($row, 18, tis($HDISCSTR));
+				$excel->write($row, 19, tis($DISCAMT1));
+				$excel->write($row, 20, $AMT);
+				$excel->write($row, 21, $VATAMT);
+				$excel->write($row, 22, $QCCURRENCY);
+				$excel->write($row, 23, 1);
+				$excel->write($row, 24, tis($DISCAMTK));
+				$excel->write($row, 25, $AMTKE);
+				$excel->write($row, 26, $VATAMTKE);
+				$excel->writeString($row, 27, tis($rs->product_code));
+				$excel->writeString($row, 28, tis($wh->getCode($rs->id_warehouse)));
+				$excel->writeString($row, 29, $LOT);
+				$excel->write($row, 30, $rs->qty);
+				$excel->writeString($row, 31, tis($pd->getUnitCode($rs->id_product)));
+				$excel->write($row, 32, 1);
+				$excel->write($row, 33, $rs->price_inc );
+				$excel->writeString($row, 34, tis($rs->discount_label));
+				$excel->write($row, 35, $rs->price_inc);
+				$excel->writeString($row, 36, tis($rs->discount_label));
+				$excel->writeString($row, 37, tis($QCSECTI));
+				$excel->writeString($row, 38, tis($QCJOBI));
+				$excel->writeString($row, 39, tis($REMARKH1));
+				$excel->writeString($row, 40, $REMARKH2);
+				$excel->writeString($row, 41, $REMARKH3);
+				$excel->writeString($row, 42, $REMARKH4);
+				$excel->writeString($row, 43, $REMARKH5);
+				$excel->writeString($row, 44, $REMARKH6);
+				$excel->writeString($row, 45, $REMARKH7);
+				$excel->writeString($row, 46, $REMARKH8);
+				$excel->writeString($row, 47, $REMARKH9);
+				$excel->writeString($row, 48, $REMARKH10);
+				$excel->writeString($row, 49, $REMARKI1);
+				$excel->writeString($row, 50, $REMARKI2);
+				$excel->writeString($row, 51, $REMARKI3);
+				$excel->writeString($row, 52, $REMARKI4);
+				$excel->writeString($row, 53, $REMARKI5);
+				$excel->writeString($row, 54, $REMARKI6);
+				$excel->writeString($row, 55, $REMARKI7);
+				$excel->writeString($row, 56, $REMARKI8);
+				$excel->writeString($row, 57, $REMARKI9);
+				$excel->writeString($row, 58, $REMARKI10);
 				$row++;
 
 			}
 		}
 
-		$file_name = $path.$order->reference.'-'.date('YmdHis').".xls";
-		//header('Content-Type: application/vnd.ms-excel'); /// form excel5 xls
-		//header('Content-Disposition: attachment;filename="'.$file_name.'"');
-		$writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
 		try
 		{
-			$writer->save($file_name);
+			$workbook->close();
 			$sc = TRUE;
 			$order->exported($order->id);
 		}
@@ -255,6 +219,7 @@
 		}
 
 		return $sc;
+
 	}
 
 

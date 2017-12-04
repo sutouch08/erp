@@ -16,7 +16,7 @@
 			$zone 	= new zone();
 			$wh			= new warehouse();
 			$emp		= new employee();
-			
+			$excel 	= new PHPExcel();
 
 			//--------------------  กำหนดค่าตัวแปรที่ต้องมีทุกๆ บรรทัด	-----------------//
 
@@ -57,7 +57,7 @@
 			$DATE			= thaiDate($cs->date_add, '/');
 
 			//--- ผู้ขอปรับยอด
-			$RECVMAN 	= tis($cs->requester);
+			$RECVMAN 	= $cs->requester;
 
 			//---	LOT สินค้า(ถ้ามี)
 			$LOT = '';
@@ -71,155 +71,180 @@
 			//------------------------ จบกำหนดค่าตัวแปรที่ต้องใส่ในทุกบรรทัด-----------------//
 
 
-			$file_name = $path.$cs->reference.'-'.date('YmdHis').".xls";
-			$workbook	= new Spreadsheet_Excel_Writer($file_name);
-			$excel =& $workbook->addWorksheet('AJ');
-			$row = 0; //--- บรรทัดแรก
+			$excel->getProperties()->setCreator("Samart Invent 2.0");
+			$excel->getProperties()->setLastModifiedBy("Samart Invent 2.0");
+			$excel->getProperties()->setTitle("AJ");
+			$excel->getProperties()->setSubject("AJ");
+			$excel->getProperties()->setDescription("This file was generate by Smart invent web application via PHPExcel v.1.8");
+			$excel->getProperties()->setKeywords("AJ");
+			$excel->getProperties()->setCategory("AJ");
+			$excel->setActiveSheetIndex(0);
+			$excel->getActiveSheet()->setTitle('AJ');
+
 			//------- SET Header Row
-			$excel->writeString($row, 0,'ERRMSG');
+			$excel->getActiveSheet()->setCellValue('A1','ERRMSG');
 
 			//---	รหัสประเภทเอกสาร TR = โอนสินค้าข้ามคลัง
-			$excel->writeString($row, 1,'REFTYPE');
+			$excel->getActiveSheet()->setCellValue('B1','REFTYPE');
 
 			//---	รหัสบริษัท
-			$excel->writeString($row, 2,'QCCORP');
+			$excel->getActiveSheet()->setCellValue('C1','QCCORP');
 
 			//---	รหัสสาขา
-			$excel->writeString($row, 3,'QCBRANCH');
+			$excel->getActiveSheet()->setCellValue('D1','QCBRANCH');
 
 			//---	สถานะของเอกสาร ปกติว่างไว้,  C = CANCEL
-			$excel->writeString($row, 4,'STAT');
+			$excel->getActiveSheet()->setCellValue('E1','STAT');
 
 			//---	รหัสเล่มเอกสาร
-			$excel->writeString($row, 5,'QCBOOK');
+			$excel->getActiveSheet()->setCellValue('F1','QCBOOK');
 
 			//---	เลขที่เอกสาร ว่างไว้ formula จะ Gen ให้เอง
-			$excel->writeString($row, 6,'CODE');
+			$excel->getActiveSheet()->setCellValue('G1','CODE');
 
 			//---	เลขเอกสารใน Smart Invent (เลขที่อ้างอิงฝั่ง formula)
-			$excel->writeString($row, 7,'REFNO');
+			$excel->getActiveSheet()->setCellValue('H1','REFNO');
 
 			//---	วันที่ของเอกสาร ต้องเป็นปี ค.ศ. Format DD/MM/YYYY เช่น 20/6/2016
-			$excel->writeString($row, 8,'DATE');
+			$excel->getActiveSheet()->setCellValue('I1','DATE');
 
 			//---	รหัสแผนก
-			$excel->writeString($row, 9,'QCSECT');
+			$excel->getActiveSheet()->setCellValue('J1','QCSECT');
 
 			//---	รหัสโครงการ(ถ้ามี ไม่มีเว้นว่างไว้)
-			$excel->writeString($row, 10,'QCJOB');
+			$excel->getActiveSheet()->setCellValue('K1','QCJOB');
 
 			//---	ผู้ขอปรับยอด
-			$excel->writeString($row, 11, 'RECVMAN');
+			$excel->getActiveSheet()->setCellValue('L1', 'RECVMAN');
 
 			//---	หมายเหตุที่หัวเอกสาร
-			$excel->writeString($row, 12,'REMARKH1');
+			$excel->getActiveSheet()->setCellValue('M1','REMARKH1');
 
 			//---	รหัสสินค้า
-			$excel->writeString($row, 13,'QCPROD');
+			$excel->getActiveSheet()->setCellValue('N1','QCPROD');
 
 			//---	รหัสคลัง
-			$excel->writeString($row, 14,'QCWHOUSE');
+			$excel->getActiveSheet()->setCellValue('O1','QCWHOUSE');
 
 			//---	LOT ของสินค้า (ไม่มีเว้นว่างไว้)
-			$excel->writeString($row, 15,'LOT');
+			$excel->getActiveSheet()->setCellValue('P1','LOT');
 
 			//---	จำนวนสินค้า
-			$excel->writeString($row, 16,'QTY');
+			$excel->getActiveSheet()->setCellValue('Q1','QTY');
 
 			//---	รหัสหน่วยนับ
-			$excel->writeString($row, 17,'QCUM');
+			$excel->getActiveSheet()->setCellValue('R1','QCUM');
 
 			//---	อัตราส่วน หน่วยนับ(QCUM) / หน่วยมาตรฐานในฐานข้อมูลสินค้า
-			$excel->writeString($row, 18,'UMQTY');
+			$excel->getActiveSheet()->setCellValue('S1','UMQTY');
 
 			//---	ต้นทุน/หน่วย
-			$excel->writeString($row, 19, 'COST');
+			$excel->getActiveSheet()->setCellValue('T1', 'COST');
 
 			//---	หมายเหตุที่รายการสินค้า
-			$excel->writeString($row, 20, 'REMARKI1');
+			$excel->getActiveSheet()->setCellVAlue('U1', 'REMARKI1');
 
 
 			//------ End Header Row
 
 			//---- Start
-			$row++;  //--- start on row 2
+			$row = 2;  //--- start on row 2
 			$qs = $cs->getDetails($cs->id);
 			if( dbNumRows($qs) > 0 )
 			{
 				while( $rs = dbFetchObject($qs) )
 				{
+					//---- SET Cell Format AS TEXT
+					$excel->getActiveSheet()->getStyle('A'.$row.':H'.$row)->getNumberFormat()->setFormatCode('@');
+					$excel->getActiveSheet()->getStyle('J'.$row.':P'.$row)->getNumberFormat()->setFormatCode('@');
+					$excel->getActiveSheet()->getStyle('R'.$row)->getNumberFormat()->setFormatCode('@');
+					$excel->getActiveSheet()->getStyle('U'.$row)->getNumberFormat()->setFormatCode('@');
+
+					//--- SET Cell Format AS DATE
+					$excel->getActiveSheet()->getStyle('I'.$row)->getNumberFormat()->setFormatCode('dd/mm/yy');
+
+					//--- Set Cell Format AS Numeric
+					$excel->getActiveSheet()->getStyle('Q'.$row)->getNumberFormat()->setFormatCode('0.0000'); //-- creadit term
+					$excel->getActiveSheet()->getStyle('S'.$row.':T'.$row)->getNumberFormat()->setFormatCode('0.0000'); //-- bill_discount
+
+
+
+					//--------------	Fill data to cells with format
 
 					//---	เว้นว่างเพื่อให้ formula ใส่ข้อมูลการนำเข้าที่ผิดพลาด
-					$excel->writeString($row, 0, $ERRMSG);
+					$excel->getActiveSheet()->setCellValueExplicit('A'.$row, $ERRMSG, PHPExcel_Cell_DataType::TYPE_STRING);
 
 					//---	รหัสประเภทเอกสาร
-					$excel->writeString($row, 1, $REFTYPE);
+					$excel->getActiveSheet()->setCellValueExplicit('B'.$row, $REFTYPE, PHPExcel_Cell_DataType::TYPE_STRING);
 
 					//---	รหัสบริษัท
-					$excel->writeString($row, 2, $QCCORP);
+					$excel->getActiveSheet()->setCellValueExplicit('C'.$row, $QCCORP, PHPExcel_Cell_DataType::TYPE_STRING);
 
 					//---	รหัสสาขา
-					$excel->writeString($row, 3, $QCBRANCH);
+					$excel->getActiveSheet()->setCellValueExplicit('D'.$row, $QCBRANCH, PHPExcel_Cell_DataType::TYPE_STRING);
 
 					//---	สถานะเอกสาร ปกติ = ว่างไว้ , C = CANCLE
-					$excel->writeString($row, 4, $STAT);
+					$excel->getActiveSheet()->setCellValueExplicit('E'.$row, $STAT, PHPExcel_Cell_DataType::TYPE_STRING);
 
 					//---	รหัสเล่มเอกสาร
-					$excel->writeString($row, 5, $QCBOOK);
+					$excel->getActiveSheet()->setCellValueExplicit('F'.$row, $QCBOOK, PHPExcel_Cell_DataType::TYPE_STRING);
 
 					//---	เลขที่เอกสารใน formula ว่างไว้ formula จะ GEN ให้เอง
-					$excel->writeString($row, 6, $CODE);
+					$excel->getActiveSheet()->setCellValueExplicit('G'.$row, $CODE, PHPExcel_Cell_DataType::TYPE_STRING);
 
 					//---	เลขที่เอกสารใน Smart Invent
-					$excel->writeString($row, 7, $REFNO);
+					$excel->getActiveSheet()->setCellValueExplicit('H'.$row, $REFNO, PHPExcel_Cell_DataType::TYPE_STRING);
 
 					//---	วันที่เอกสาร
-					$excel->write($row, 8, $DATE);
+					$excel->getActiveSheet()->setCellValue('I'.$row, $DATE);
 
 					//---	รหัสแผนก
-					$excel->writeString($row, 9, $QCSECT);
+					$excel->getActiveSheet()->setCellValueExplicit('J'.$row, $QCSECT, PHPExcel_Cell_DataType::TYPE_STRING);
 
 					//---	รหัสโครงการ(ถ้ามี)
-					$excel->writeString($row, 10, $QCJOB);
+					$excel->getActiveSheet()->setCellValueExplicit('K'.$row, $QCJOB, PHPExcel_Cell_DataType::TYPE_STRING);
 
 					//---	ผู้ขอปรับยอด
-					$excel->write($row, 11, $RECVMAN);
+					$excel->getActiveSheet()->setCellValueExplicit('L'.$row, $RECVMAN, PHPExcel_Cell_DataType::TYPE_STRING);
 
 					//---	หมายเหตุที่หัวเอกสาร
-					$excel->writeString($row, 12, $REMARKH1);
+					$excel->getActiveSheet()->setCellValueExplicit('M'.$row, $REMARKH1, PHPExcel_Cell_DataType::TYPE_STRING);
 
 					//---	รหัสสินค้า(SKU)
-					$excel->writeString($row, 13, $pd->getCode($rs->id_product));
+					$excel->getActiveSheet()->setCellValueExplicit('N'.$row, $pd->getCode($rs->id_product), PHPExcel_Cell_DataType::TYPE_STRING );
 
 					//---	รหัสคลัง
-					$excel->writeString($row, 14, $wh->getCode($zone->getWarehouseId($rs->id_zone)));
+					$excel->getActiveSheet()->setCellValueExplicit('O'.$row, $wh->getCode($zone->getWarehouseId($rs->id_zone)), PHPExcel_Cell_DataType::TYPE_STRING );
 
 					//---	LOT สินค้า(ถ้ามี)
-					$excel->writeString($row, 15, $LOT);
+					$excel->getActiveSheet()->setCellValueExplicit('P'.$row, $LOT, PHPExcel_Cell_DataType::TYPE_STRING);
 
 					//---	จำนวนสินค้า
-					$excel->write($row, 16, $rs->qty);
+					$excel->getActiveSheet()->setCellValue('Q'.$row, $rs->qty);
 
 					//---	รหัสหน่วยนับ
-					$excel->writeString($row, 17, $pd->getUnitCode($rs->id_product) );
+					$excel->getActiveSheet()->setCellValueExplicit('R'.$row, $pd->getUnitCode($rs->id_product) , PHPExcel_Cell_DataType::TYPE_STRING);
 
 					//---	อัตราส่วนหน่ายนับ
-					$excel->write($row, 18, 1);
+					$excel->getActiveSheet()->setCellValue('S'.$row, 1);
 
 					//---	ต้นทุน/หน่วย
-					$excel->write($row, 19, $pd->getCost($rs->id_product));
+					$excel->getActiveSheet()->setCellValue('T'.$row, $pd->getCost($rs->id_product));
 
 					//---	หมายเหตุที่ตัวสินค้า
-					$excel->writeString($row, 20, '');
+					$excel->getActiveSheet()->setCellValue('U'.$row, '');
 
 					$row++;
 
 				}
 			}
 
+			$file_name = $path . $cs->reference ."-".date('YmdHis').".xls";
+
+			$writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
 			try
 			{
-				$workbook->close();
+				$writer->save($file_name);
 				$sc = TRUE;
 				$cs->exported($cs->id);
 			}

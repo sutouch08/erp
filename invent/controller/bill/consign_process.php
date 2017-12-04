@@ -124,6 +124,8 @@
                     'sell_ex'   => removeVAT( ($ds->total_amount/$ds->qty), $vat),
                     'sell_inc'  => $ds->total_amount / $ds->qty,
                     'qty'       => $buffer_qty,
+                    'discount_label'  => $ds->discount,
+                    'discount_amount' => ($ds->discount_amount / $ds->qty) * $buffer_qty,
                     'total_amount_ex' => removeVAT( ($ds->total_amount / $ds->qty) * $buffer_qty, $vat),
                     'total_amount_inc'  => ($ds->total_amount / $ds->qty) * $buffer_qty,
                     'total_cost_ex'   => removeVAT(($ds->cost * $buffer_qty), $vat),

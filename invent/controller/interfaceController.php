@@ -169,6 +169,14 @@ if( isset( $_GET['syncDocument'] ) && isset( $_GET['BM'] ) )
 }
 
 
+
+
+
+if( isset( $_GET['export'] ) )
+{
+	require_once 'Spreadsheet/Excel/Writer.php';
+}
+
 //---	Export ใบรับสินค้าเข้า
 if( isset( $_GET['export'] ) && isset( $_GET['BI'] ) )
 {

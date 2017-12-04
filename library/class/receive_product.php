@@ -16,14 +16,15 @@ class receive_product
 	public $isExported;
 	public $approver;
 	public $approvKey;
-	
-	
+	public $credit_term = 0;
+
+
 	public function __construct($id = "")
 	{
 		if( $id != "" )
 		{
 			$qs = dbQuery("SELECT * FROM tbl_receive_product WHERE id = ".$id);
-			
+
 			if( dbNumRows($qs) == 1 )
 			{
 				$rs = dbFetchObject($qs);
@@ -38,15 +39,15 @@ class receive_product
 				$this->date_upd	= $rs->date_upd;
 				$this->emp_upd	= $rs->emp_upd;
 				$this->isCancle		= $rs->isCancle;
-				$this->remark		= $rs->remark;	
+				$this->remark		= $rs->remark;
 				$this->isExported	= $rs->isExported;
 				$this->approver	= $rs->approver;
 				$this->approvKey	= $rs->approvKey;
 			}
 		}
 	}
-	
-	
+
+
 	public function add(array $ds)
 	{
 		$sc = FALSE;
@@ -59,19 +60,19 @@ class receive_product
 			{
 				$fields .= $i == 1 ? $field : ", ".$field;
 				$values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_receive_product (".$fields.") VALUES (".$values.")");
 		}
 		return $sc;
 	}
-	
+
 	public function getDetail($id)
 	{
-		return dbQuery("SELECT * FROM tbl_receive_product_detail WHERE id_receive_product = ".$id);	
+		return dbQuery("SELECT * FROM tbl_receive_product_detail WHERE id_receive_product = ".$id);
 	}
-	
-	
+
+
 	public function get_id($reference)
 	{
 		$sc = FALSE;
@@ -82,7 +83,7 @@ class receive_product
 		}
 		return $sc;
 	}
-	
+
 	public function getTotalQty($id_receive_product)
 	{
 		$sc = 0;
@@ -94,21 +95,21 @@ class receive_product
 		}
 		return $sc;
 	}
-	
-	
+
+
 	public function hasDetails($id)
 	{
 		$sc = FALSE;
 		$qs = dbQuery("SELECT id FROM tbl_receive_product_detail WHERE id_receive_product = ".$id);
 		if( dbNumRows($qs) > 0 )
 		{
-			$sc = TRUE;	
+			$sc = TRUE;
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function insertDetail(array $ds)
 	{
 		$sc = FALSE;
@@ -121,34 +122,34 @@ class receive_product
 			{
 				$fields .= $i == 1 ? $field : ", ".$field;
 				$values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_receive_product_detail (".$fields.") VALUES (".$values.")");
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function cancleDetail($id)
 	{
-		return dbQuery("UPDATE tbl_receive_product_detail SET is_cancle = 1 WHERE id = ".$id);	
+		return dbQuery("UPDATE tbl_receive_product_detail SET is_cancle = 1 WHERE id = ".$id);
 	}
-	
-	
-	
+
+
+
 	public function cancleReceived($id, $emp)
 	{
 		return dbQuery("UPDATE tbl_receive_product SET isCancle = 1, emp_upd = ".$emp." WHERE id = ".$id);
 	}
-	
+
 	public function exported($id)
 	{
-		return dbQuery("UPDATE tbl_receive_product SET isExported = 1 WHERE id = ".$id);	
+		return dbQuery("UPDATE tbl_receive_product SET isExported = 1 WHERE id = ".$id);
 	}
-	
-	
-	
+
+
+
 	//-----------------  New Reference --------------//
 	public function getNewReference($date = '')
 	{
@@ -171,8 +172,8 @@ class receive_product
 		}
 		return $reference;
 	}
-	
-	
+
+
 	//-- มูลค่าสินค้ารามทั้งบิล
 	public function getTotalAmount($id, $poCode)
 	{
@@ -189,12 +190,12 @@ class receive_product
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function getNotExportData()
 	{
-		return dbQuery("SELECT id FROM tbl_receive_product WHERE isExported = 0 AND isCancle = 0");	
+		return dbQuery("SELECT id FROM tbl_receive_product WHERE isExported = 0 AND isCancle = 0");
 	}
 }//--end class
 
