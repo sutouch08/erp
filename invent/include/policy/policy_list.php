@@ -5,7 +5,7 @@
   <div class="col-sm-6">
     <p class="pull-right top-p">
 <?php if( $add ) : ?>
-      <button type="button" class="btn btn-sm btn-success" onclick="addNew()"><i class="fa fa-plus"></i> เพิ่มนโยบาย</button>
+      <button type="button" class="btn btn-sm btn-success" onclick="goAdd()"><i class="fa fa-plus"></i> เพิ่มนโยบาย</button>
 <?php endif; ?>
     </p>
   </div>

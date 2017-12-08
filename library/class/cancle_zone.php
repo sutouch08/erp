@@ -73,9 +73,16 @@ class cancle_zone
 
 
 
-	public function dropZero($id_order)
+	public function dropZero($id_order ='')
 	{
-		return dbQuery("DELETE FROM tbl_cancle WHERE id_order = ".$id_order." AND qty = 0");
+		if( $id_order == '')
+		{
+			return dbQuery("DELETE FROM tbl_cancle WHERE qty <= 0");
+		}
+		else
+		{
+			return dbQuery("DELETE FROM tbl_cancle WHERE id_order = ".$id_order." AND qty = 0");
+		}
 	}
 
 
@@ -100,6 +107,32 @@ class cancle_zone
 		$qr .= "WHERE id_warehouse = '".$id_warehouse."'";
 		return dbQuery($qr);
 	}
+
+
+	public function getDetails(){
+		$qr = "SELECT * FROM tbl_cancle";
+		return dbQuery($qr);
+	}
+
+
+	public function move_out($id_cancle, $qty)
+	{
+		return dbQuery("UPDATE tbl_cancle SET qty = qty - ".$qty." WHERE id = '".$id_cancle."'");
+	}
+
+
+	public function isEnough($id_cancle, $qty)
+	{
+		$sc = 0;
+		$qs = dbQuery("SELECT qty FROM tbl_cancle WHERE id = '".$id_cancle."'");
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+
+		return $sc >= $qty ? TRUE : FALSE;
+	}
+
 
 }
 ?>

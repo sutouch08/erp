@@ -24,8 +24,8 @@ function syncWarehouse()
 
 function deleteWarehouse(id)
 {
-	swal({ 
-			title: 'คุณแน่ใจว่าต้องการลบคลังนี้', 
+	swal({
+			title: 'คุณแน่ใจว่าต้องการลบคลังนี้',
 			text: 'เมื่อลบสำเร็จแล้วไม่สามารถย้อนกลับได้',
 			type: 'warning',
 			showCancelButton: true,
@@ -42,43 +42,47 @@ function deleteWarehouse(id)
 
 function actionDelete(id){
 	$.ajax({
-		url:"controller/warehouseController.php",
-		type:"POST", cache:"false", data:{ "deleteWarehouse" : "", "id_warehouse" : id },
+		url:"controller/warehouseController.php?deleteWarehouse",
+		type:"POST",
+		cache:"false",
+		data:{
+			"id_warehouse" : id
+		},
 		success: function(rs){
 			var rs = $.trim(rs);
 			if( rs == 'success' ){
-				swal({ 
-						title: 'สำเร็จ', 
-						text: 'ลบคลังเรียบร้อยแล้ว', 
-						type: 'success', 
-						timer: 1000 
+				swal({
+						title: 'สำเร็จ',
+						text: 'ลบคลังเรียบร้อยแล้ว',
+						type: 'success',
+						timer: 1000
 						});
 				$("#row_"+id).remove();
 			}else{
 				swal(rs);
 			}
 		}
-	});	
+	});
 }
 
 function saveEdit(){
 	var id			= $("#id_warehouse").val();
 	var role		= $("#edit-whRole").val();
-	var sell		= $("#sell").val();	
+	var sell		= $("#sell").val();
 	var prepare	= $("#prepare").val();
 	var underZero	= $("#underZero").val();
 	var active	= $("#active").val();
-	
+
 	if( role == 0 ){
 		checkRole();
-		return false;	
+		return false;
 	}
-	
+
 	$.ajax({
 		url:"controller/warehouseController.php",
-		type:"POST", cache:"false", 
-			data:{ 
-					"editWarehouse" : "", 
+		type:"POST", cache:"false",
+			data:{
+					"editWarehouse" : "",
 					"id_warehouse" : id,
 					"whRole"	: role,
 					"sell"		: sell,
@@ -104,20 +108,20 @@ function saveAdd(){
 	var prepare	= $("#prepare").val();
 	var underZero	= $("#underZero").val();
 	var active	= $("#active").val();
-	
+
 	if( code == "" || name == "" || role == 0 || codeError != 0 || nameError != 0 ){
 		checkCode();
 		checkName();
 		checkRole();
-		return false;	
+		return false;
 	}
-	
+
 	$.ajax({
 		url:"controller/warehouseController.php",
-		type:"POST", cache:"false", 
-			data:{ 
-					"addNew" : "", 
-					"whCode" : code, 
+		type:"POST", cache:"false",
+			data:{
+					"addNew" : "",
+					"whCode" : code,
 					"whName" : name,
 					"whRole"	: role,
 					"sell"		: sell,
@@ -136,7 +140,7 @@ function saveAdd(){
 }
 
 function edit(id) {
-	window.location.href	= 'index.php?content=warehouse&edit&id_warehouse='+id;	
+	window.location.href	= 'index.php?content=warehouse&edit&id_warehouse='+id;
 }
 
 
@@ -165,8 +169,8 @@ $("#add-whRole").change(function(e) {
 			setDefault(0,0,0);
 			break;
 		default : // ไม่เซ็ตอะไรเลย
-			setDefault(0,0,0);	
-			break;	
+			setDefault(0,0,0);
+			break;
 	}
 });
 
@@ -180,13 +184,13 @@ function setDefault(sell, prepare, underZero){
 function toggleSell(option){
 	if( option == 1 )
 	{
-		$("#btn-sell-no").removeClass('btn-danger');	
+		$("#btn-sell-no").removeClass('btn-danger');
 		$("#btn-sell-yes").addClass('btn-success');
 	}else{
 		$("#btn-sell-yes").removeClass('btn-success');
 		$("#btn-sell-no").addClass('btn-danger');
 	}
-	$("#sell").val(option);			
+	$("#sell").val(option);
 }
 
 function togglePrepare(option){
@@ -226,11 +230,11 @@ function toggleActive(option){
 }
 
 function addNew(){
-	window.location.href = 'index.php?content=warehouse&add';	
+	window.location.href = 'index.php?content=warehouse&add';
 }
 
 function goBack(){
-	window.location.href = 'index.php?content=warehouse';	
+	window.location.href = 'index.php?content=warehouse';
 }
 
 
@@ -242,7 +246,7 @@ function showError(el, error){
 }
 
 function hideError(el){
-	$("#"+el+"-error").addClass('hide');	
+	$("#"+el+"-error").addClass('hide');
 	$("#"+el).removeClass('has-error');
 }
 
@@ -289,7 +293,7 @@ function checkName(){
 	if( name == '' )
 	{
 		showError(eid, 'จำเป็นต้องระบุชื่อคลัง');
-		nameError = 1;	
+		nameError = 1;
 	}else{
 		$.ajax({
 			url:"controller/warehouseController.php",
@@ -339,14 +343,14 @@ $("#edit-whCode").focusout(function(e) {
 $("#add-whCode").keyup(function(e) {
     if( e.keyCode == 13 )
 	{
-		$("#add-whName").focus();	
+		$("#add-whName").focus();
 	}
 });
 
 $("#edit-whCode").keyup(function(e) {
     if( e.keyCode == 13 )
 	{
-		$("#edit-whName").focus();	
+		$("#edit-whName").focus();
 	}
 });
 
@@ -380,13 +384,13 @@ $("#edit-whRole").change(function(e) {
 
 function getSearch()
 {
-	$("#searchForm").submit();	
+	$("#searchForm").submit();
 }
 
 $(".search-box").keyup(function(e) {
     if( e.keyCode == 13 )
 	{
-		getSearch();	
+		getSearch();
 	}
 });
 
@@ -402,7 +406,7 @@ function resetSearch() {
 			type:"POST", cache:"false", data:{"resetSearch" : ""},
 			success: function(rs)
 			{
-				goBack();	
+				goBack();
 			}
 		});
 	}

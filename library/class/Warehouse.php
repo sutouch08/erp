@@ -112,7 +112,7 @@
 		public function isWarehouseEmpty($id)
 		{
 			$sc = TRUE;
-			$qs = dbQuery("SELECT id_zone FROM tbl_zone WHERE id = '".$id."'");
+			$qs = dbQuery("SELECT id_zone FROM tbl_zone WHERE id_warehouse = '".$id."'");
 			if( dbNumRows($qs) > 0 )
 			{
 				$sc = FALSE;

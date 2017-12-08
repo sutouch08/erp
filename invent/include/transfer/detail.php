@@ -140,7 +140,7 @@
 	<td align="center">{{ no }}</td>
   <td align="center">{{ barcode }}</td>
   <td>{{ products }}</td>
-  <td align="center" class="qty-label">{{ qty }}</td>
+  <td align="center" class="qty-label" id="qty-label-{{ id_stock }}">{{ qty }}</td>
   <td align="center">
   	<input type="text" class="form-control input-sm text-center input-qty" id="moveQty_{{ id_stock }}" name="moveQty[{{id_stock}}]" onkeyup="validQty({{ id_stock}}, {{ qty }})" />
 		 <input type="hidden" name="id_product[{{ id_stock }}]" id="id_product_{{ id_stock }}" value="{{ id_product }}" />

@@ -1,42 +1,41 @@
 <?php
+$cs = new cancle_zone();
 $id_warehouse = $_GET['id_warehouse'];
-
-$sc 		 = array();
-
-$stock   = new stock();
-
-$barcode = new barcode();
-
-$cancle = new cancle_zone();
-
+$qs = $cs->getDetailsByWarehouse($id_warehouse);
+$warehouse = new warehouse();
 $zone = new zone();
-
-$qs 		 = $cancle->getDetailsByWarehouse($id_warehouse);
-
+$product = new product();
+$order = new order();
+$ds = array();
 if( dbNumRows($qs) > 0 )
 {
   $no = 1;
-  while( $rs = dbFetchObject($qs) )
+  while($rs = dbFetchObject($qs))
   {
+    $product->getData($rs->id_product);
     $arr = array(
-          "no"				 => $no,
-          "id_cancle" 	 => $rs->id,
-          "id_product" => $rs->id_product,
-          "barcode" 	 => $barcode->getBarcode($rs->id_product),
-          "products" 	 => $rs->code,
-          "zone"       => $zone->getName($rs->id_zone),
-          "qty" 			 => $rs->qty,
-          );
+      'no' => $no,
+      'id_cancle' => $rs->id,
+      'id_product' => $product->id,
+      'product' => $product->code,
+      'order' => $order->getReference($rs->id_order),
+      'id_order' => $rs->id_order,
+      'barcode' => $product->barcode,
+      'id_zone' => $rs->id_zone,
+      'zoneName' => $zone->getName($rs->id_zone),
+      'qty' => $rs->qty
+    );
 
-    array_push($sc, $arr);
-
+    array_push($ds, $arr);
     $no++;
   }
 }
 else
 {
-  array_push($sc, array("nodata" => "nodata"));
+  array_push($ds, array('nodata' => 'nodata'));
 }
-echo json_encode($sc);
+
+echo json_encode($ds);
+
 
  ?>

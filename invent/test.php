@@ -1,25 +1,73 @@
 
+<div class="container">
+  <div class="row top-row">
+  	<div class="col-sm-6 top-col">
+      	<h4 class="title"><i class="fa fa-exclamation-triangle"></i>&nbsp;<?php echo $pageTitle; ?></h4>
+      </div>
+      <div class="col-sm-6">
+        <p class="pull-right top-p">
+          <button type="button" class="btn btn-sm btn-success" onclick="goToStock()">Stock</button>
+          <button type="button" class="btn btn-sm btn-info" onclick="goToMovement()">Movement</button>
+          <button type="button" class="btn btn-sm btn-warning" onclick="goToBuffer()">Buffer</button>
+          <button type="button" class="btn btn-sm btn-danger" onclick="goToCancle()">Cancle</button>
+        </p>
+      </div>
+  </div><!-- / row -->
+
+  <hr style="margin-bottom:15px;" />
+
 <?php
-ini_set('display_errors', 'On');
+if( isset( $_GET['stock']))
+{
+  include 'include/test/stock.php';
+}
+else if( isset( $_GET['movement']))
+{
+  include 'include/test/movement.php';
+}
+else if( isset( $_GET['buffer']))
+{
+  include 'include/test/buffer.php';
+}
+else if( isset($_GET['cancle']))
+{
+  include 'include/test/cancle.php';
+}
 
-date_default_timezone_set('Asia/Bangkok');
-//ob_start("ob_gzhandler");
-ob_start();
-error_reporting(E_ALL);
-
-// start the session
-//session_start();
-
- //database connection config
-$dbHost = '172.20.11.14';
-$dbUser = 'fm1234';
-$dbPass = 'x2y2';
-$dbName = 'formula';
-
-include '../library/database.php';
-
-$qs = dbQuery("SELECT * FROM PROD LIMIT 1");
-
-print_r($qs);
 
 ?>
+
+</div><!-- container -->
+<script type="text/javascript">
+  $('.search-box').keyup(function(e){
+    if(e.keyCode == 13){
+      getSearch();
+    }
+  });
+
+  function getSearch(){
+    $('#stockForm').submit();
+  }
+
+  function clearFilter(){
+    $.get('controller/testController.php?clearFilter', function(){ window.location.reload(); });
+  }
+</script>
+<script>
+
+function goToStock(){
+  window.location.href = "index.php?content=test_run&stock";
+}
+
+function goToMovement(){
+  window.location.href = "index.php?content=test_run&movement";
+}
+
+function goToBuffer(){
+  window.location.href = "index.php?content=test_run&buffer";
+}
+
+function goToCancle(){
+  window.location.href = "index.php?content=test_run&cancle";
+}
+</script>

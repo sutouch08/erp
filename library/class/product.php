@@ -31,6 +31,7 @@ class product
 	public $emp;
 	public $date_upd;
 	public $error;
+	public $barcode;
 
 	public function __construct($id = '' )
 	{
@@ -54,6 +55,8 @@ class product
 			{
 				$this->$key = $value;
 			}
+			$bc = new barcode();
+			$this->barcode = $bc->getBarcode($id);
 		}
 	}
 
@@ -229,7 +232,12 @@ class product
 
 	public function getProductsByStyle($id_style)
 	{
-		return dbQuery("SELECT * FROM tbl_product WHERE id_style = '".$id_style."'");
+		$qr = "SELECT p.* FROM tbl_product AS p ";
+		$qr .= "LEFT JOIN tbl_color AS c ON p.id_color = c.id ";
+		$qr .= "LEFT JOIN tbl_size AS s ON p.id_size = s.id ";
+		$qr .= "WHERE p.id_style = '".$id_style."' ";
+		$qr .= "ORDER BY c.code ASC, s.position ASC";
+		return dbQuery($qr);
 	}
 
 
@@ -333,6 +341,21 @@ class product
 		{
 			list( $sc ) = dbFetchArray( $qs);
 		}
+		return $sc;
+	}
+
+
+	public function getStyleCode($id)
+	{
+		$sc  = '';
+		$qr  = "SELECT s.code FROM tbl_product AS p JOIN tbl_product_style AS s ON p.id_style = s.id ";
+		$qr .= "WHERE s.id = '".$id."'";
+		$qs = dbQuery($qr);
+		if( dbNumRows($qs) == 1 )
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+
 		return $sc;
 	}
 

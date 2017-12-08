@@ -22,6 +22,12 @@ if( !getConfig('CLOSED') )
 switch($page){
 
 //**********  ระบบคลังสินค้า  **********//
+		case 'test_run' :
+			$content = 'test.php';
+			$pageTitle = 'แสดงผลการทดสอบระบบ';
+			break;
+
+
 		case 'syncData' :
 			$content = 'syncData.php';
 			$pageTitle = 'นำเข้าข้อมูลจาก formula';

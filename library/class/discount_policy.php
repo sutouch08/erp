@@ -15,10 +15,10 @@ class discount_policy
   public $emp_upd;
   public $active;
   public $isDeleted;
-  
+
   public function __construct($id = '')
   {
-    if( $id != '')
+    if( $id != '' && $id !== FALSE)
     {
       $this->getData($id);
     }
@@ -28,7 +28,7 @@ class discount_policy
 
   public function getData($id)
   {
-    $qs = dbQuery("SELECT * FROM tbl_discount_policy WHERE id = ".$id);
+    $qs = dbQuery("SELECT * FROM tbl_discount_policy WHERE id = '".$id."'");
     if(dbNumRows($qs) == 1)
     {
       $rs = dbFetchArray($qs);
@@ -38,6 +38,32 @@ class discount_policy
       }
     }
   }
+
+
+
+
+  //-----------------  New Reference --------------//
+	public function getNewReference($date = '')
+	{
+		$date = $date == '' ? date('Y-m-d') : $date;
+		$Y		= date('y', strtotime($date));
+		$M		= date('m', strtotime($date));
+		$prefix = getConfig('PREFIX_POLICY');
+		$runDigit = getConfig('RUN_DIGIT'); //--- รันเลขที่เอกสารกี่หลัก
+		$preRef = $prefix . '-' . $Y . $M;
+		$qs = dbQuery("SELECT MAX(reference) AS reference FROM tbl_discount_policy WHERE reference LIKE '".$preRef."%' ORDER BY reference DESC");
+		list( $ref ) = dbFetchArray($qs);
+		if( ! is_null( $ref ) )
+		{
+			$runNo = mb_substr($ref, ($runDigit*-1), NULL, 'UTF-8') + 1;
+			$reference = $prefix . '-' . $Y . $M . sprintf('%0'.$runDigit.'d', $runNo);
+		}
+		else
+		{
+			$reference = $prefix . '-' . $Y . $M . sprintf('%0'.$runDigit.'d', '001');
+		}
+		return $reference;
+	}
 
 }
 

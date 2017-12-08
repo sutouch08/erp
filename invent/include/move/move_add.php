@@ -72,3 +72,4 @@ $disabled = $id === FALSE ? '' : 'disabled';
 <script src="script/move/move_add.js"></script>
 <script src="script/move/move_control.js"></script>
 <script src="script/move/move_detail.js"></script>
+<script src="script/move/move_cancle.js"></script>

@@ -31,3 +31,5 @@ else
 }
  ?>
 </div>
+
+<script src="script/policy/policy.js"></script>

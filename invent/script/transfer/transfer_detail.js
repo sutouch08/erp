@@ -175,7 +175,17 @@ function addToTransfer(){
 
 
 
+function addAllToTransfer(){
+	$('.qty-label').each(function(index, el) {
+		var qty = parseInt( removeCommas($(this).text()) );
+		var arr = $(this).attr('id');
+		var arr = arr.split('-');
+		var id = arr[2];
+		$('#moveQty_'+id).val(qty);
+	});
+}
 
+/*
 //---	เพิ่มรายการลงใน transfer detail
 //---	เพิ่มลงใน transfer_temp
 //---	update stock รายการทั้งหมด
@@ -224,7 +234,7 @@ function addAllToTransfer(){
 		});
 	}
 }
-
+*/
 
 
 

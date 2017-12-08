@@ -5,6 +5,7 @@
  <div class="row">
    <div class="col-sm-12">
      <form id="receiveForm">
+       <input type="text" class="hide" name="xxx" />
      <table class="table table-striped table-bordered">
        <thead>
          <tr>
@@ -64,4 +65,3 @@
    </form>
    </div>
  </div>
- 

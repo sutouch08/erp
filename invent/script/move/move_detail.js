@@ -175,60 +175,9 @@ function addAllToMove(){
 		var arr = $(this).attr('id');
 		var arr = arr.split('-');
 		var id = arr[2];
-		console.log(id);
 		$('#moveQty_'+id).val(qty);
 	});
 }
-
-/*
-//---	เพิ่มรายการลงใน move detail
-//---	เพิ่มลงใน move_temp
-//---	update stock รายการทั้งหมด
-function addAllToMove(){
-	var id_move 	 = $("#id_move").val();
-	var id_zone		 = $("#from-zone-id").val();
-	var count		   = countUnderZero();
-
-	if( count > 0 ){
-		swal("ข้อผิดพลาด !", "พบรายการที่ติดลบ ไม่สามารถดำเนินการต่อได้", "warning");
-		return false;
-	}
-
-	if( count == 0 ){
-		$.ajax({
-			url:"controller/moveController.php?addAllToMove",
-			type:"GET",
-      cache:"false",
-      data:{
-        "id_move" : id_move,
-        "id_zone" : id_zone,
-       },
-			success:function(rs){
-				var rs = $.trim(rs);
-				if( rs == 'success' ){
-
-					swal({
-            title: 'success',
-            text: 'เพิ่มรายการเรียบร้อยแล้ว',
-            type: 'success',
-            timer: 1000
-          });
-
-					setTimeout( function(){
-            showMoveTable();
-          }, 1200);
-
-				}else{
-
-					swal("ข้อผิดพลาด", rs, "error");
-
-				}
-			}
-		});
-	}
-}
-
-*/
 
 
 

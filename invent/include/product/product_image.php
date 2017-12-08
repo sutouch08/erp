@@ -21,7 +21,7 @@
                             <img class="img-rounded" src="<?php echo $image->getImagePath($id_img, 3); ?>" />
                         </a>
                         <div class="caption">
-                            <button type="button" id="btn-cover-<?php echo $id_img; ?>" class="btn btn-sm <?php echo $cover; ?> btn-cover" style="position:relative;" onClick="setAsCover(<?php echo $id_style; ?>, <?php echo $id_img; ?>)">
+                            <button type="button" id="btn-cover-<?php echo $id_img; ?>" class="btn btn-sm <?php echo $cover; ?> btn-cover" style="position:relative;" onClick="setAsCover('<?php echo $id_style; ?>', <?php echo $id_img; ?>)">
                             <i class="fa fa-check"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-danger" style="position:absolute; right:25px;" onClick="removeImage(<?php echo $id_style; ?>, <?php echo $id_img; ?>)"><i class="fa fa-trash"></i></button>
@@ -31,13 +31,13 @@
 			<?php		endwhile; ?>
             <?php	else : ?>
             	<div class="col-sm-12"><h4 style="text-align:center; padding-top:50px; color:#AAA;"><i class="fa fa-file-image-o fa-2x"></i> No image now</h4></div>
-            <?php	endif;	?>            	
+            <?php	endif;	?>
             <?php endif; ?>
-	
-         			<!-- Load Image Table with ajax -->            
+
+         			<!-- Load Image Table with ajax -->
             </div><!--/ row -->
-        
-            
+
+
             <div class="modal fade" id="uploadBox" tabindex="-1" role="dialog" aria-labelledby="uploader" aria-hidden="true">
             	<div class="modal-dialog" style="width:800px">
                 	<div class="modal-content">
@@ -46,7 +46,7 @@
                         </div>
                         <div class="modal-body">
                         	<form class="dropzone" id="imageForm" action="">
-                            </form> 
+                            </form>
                         </div>
                         <div class="modal-footer">
                         	<button type="button" class="btn btn-sm btn-default" onClick="clearUploadBox()">ปิด</button>
@@ -55,7 +55,7 @@
                     </div>
                 </div>
             </div>
-            
+
          </div><!--/ tab-pane #tab3 -->
 <script id="imageTableTemplate" type="text/x-handlebars-temlate">
 {{#each this}}
@@ -66,7 +66,7 @@
 					<img class="img-rounded" src="{{ thumbImage }}" />
 				</a>
 				<div class="caption">
-					<button type="button" id="btn-cover-{{ id_img }}" class="btn btn-sm {{ isCover }} btn-cover" style="position:relative;" onClick="setAsCover({{ id_pd }}, {{ id_img }})"><i class="fa fa-check"></i></button>
+					<button type="button" id="btn-cover-{{ id_img }}" class="btn btn-sm {{ isCover }} btn-cover" style="position:relative;" onClick="setAsCover('{{ id_pd }}', {{ id_img }})"><i class="fa fa-check"></i></button>
 					<button type="button" class="btn btn-sm btn-danger" style="position:absolute; right:25px;" onClick="removeImage({{ id_pd }}, {{ id_img }})"><i class="fa fa-trash"></i></button>
 				</div>
 			</div>
@@ -75,5 +75,5 @@
 		<div class="col-sm-12"><h4 style="text-align:center; padding-top:50px; color:#AAA;"><i class="fa fa-file-image-o fa-2x"></i> No image now</h4></div>
 	{{/if}}
 {{/each}}
-</script>         
+</script>
 <script src="script/product/product_image.js"></script>

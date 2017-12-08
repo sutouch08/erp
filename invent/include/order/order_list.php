@@ -8,6 +8,7 @@ $sEmp	= getFilter('sEmp', 'sOrderEmp', '' );	//---	Employee
 //$sChannels	= getFilter('sChannels', 'sOrderChannels', '' ); 	//---	Sales Channels
 $fromDate	= getFilter('fromDate', 'fromDate', '' );
 $toDate	= getFilter('toDate', 'toDate', '' );
+$isOnline = $_GET['content'] == 'order_online' ? TRUE : FALSE;
 
 ?>
 <div class="row top-row">
@@ -18,9 +19,12 @@ $toDate	= getFilter('toDate', 'toDate', '' );
     	<p class="pull-right top-p">
         	<button type="button" class="btn btn-sm btn-info" onclick="goViewStock()"><i class="fa fa-search"></i> ดูสต็อกคงเหลือ</button>
         	<?php if( $add ) : ?>
-            <button type="button" class="btn btn-sm btn-success" onclick="goAdd()"><i class="fa fa-plus"></i> เพิ่มใหม่ [ปกติ] </button>
+						<?php if( $isOnline === TRUE ) : ?>
             <button type="button" class="btn btn-sm btn-primary" onclick="goAddOnline()"><i class="fa fa-plus"></i> เพิ่มใหม่ [ออนไลน์] </button>
-            <?php endif; ?>
+						<?php else : ?>
+						<button type="button" class="btn btn-sm btn-success" onclick="goAdd()"><i class="fa fa-plus"></i> เพิ่มใหม่ [ปกติ] </button>
+						<?php endif; ?>
+          <?php endif; ?>
         </p>
     </div>
 </div>
@@ -60,6 +64,12 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 
 <?php
 	$where = "WHERE role = 1 ";
+
+	if( $isOnline === TRUE )
+	{
+		$where .= "AND isOnline = 1 ";
+	}
+
 	//--- Reference
 	if( $sCode != "" )
 	{

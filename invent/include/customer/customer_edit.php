@@ -10,17 +10,16 @@
         <li class="li-block active"><a href="#general" data-toggle="tab">ทั่วไป</a></li>
         <li class="li-block"><a href="#address" data-toggle="tab">ที่อยู่ตามบิล</a></li>
         <li class="li-block"><a href="#trans_address" data-toggle="tab">ที่อยู่จัดส่ง</a></li>
-        <li class="li-block"><a href="#discount" data-toggle="tab">ส่วนลด</a></li>
 </ul>
 </div>
 <div class="col-sm-10" style="padding-top:15px; border-left:solid 1px #ccc; min-height:600px; max-height:1000px;">
 <div class="tab-content">
-        <?php include 'include/customer_general.php'; ?>     
-        <?php include 'include/customer_address.php'; ?>
-        <?php include 'include/customer_trans_address.php'; ?>
-        <?php include 'include/customer_discount.php'; ?>
+        <?php include 'include/customer/customer_general.php'; ?>
+        <?php include 'include/customer/customer_address.php'; ?>
+        <?php include 'include/customer/customer_trans_address.php'; ?>
+
 </div>
-</div><!--/ col-sm-9  -->    
+</div><!--/ col-sm-9  -->
 </div><!--/ row  -->
 
 <?php endif; ?>

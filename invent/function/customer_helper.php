@@ -45,13 +45,13 @@ function customerGroupIn($txt)
 function customerAreaIn($txt)
 {
 	$sc = "";
-	$qs = dbQuery("SELECT code FROM tbl_customer_area WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%'");
+	$qs = dbQuery("SELECT id FROM tbl_customer_area WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%'");
 	if( dbNumRows($qs) > 0 )
 	{
 		$i = 1;
 		while( $rs = dbFetchArray($qs) )
 		{
-			$sc .= $i == 1 ? "'".$rs['code']."'" : ", '".$rs['code']."'";
+			$sc .= $i == 1 ? "'".$rs['id']."'" : ", '".$rs['id']."'";
 			$i++;
 		}
 	}

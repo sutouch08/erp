@@ -32,4 +32,4 @@
 
 
 </div>
-<hr class="margin-top-15 margin-bottom-15"/>
+<hr class="margin-top-15 margin-bottom-5"/>

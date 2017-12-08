@@ -50,6 +50,7 @@
         <div class="col-sm-2">
         	<button type="button" class="btn btn-sm btn-info btn-block" id="btn-new-to-zone" onclick="newToZone()" disabled>โซนใหม่</button>
         </div>
+
       </div>
     </div>
   </div>
@@ -57,30 +58,34 @@
 <?php else : ?>
 
 <div class="row">
-  <div class="col-sm-4 padding-5 first">
-    <div class="input-group width-100">
-      <span class="input-group-addon">ต้นทาง</span>
-      <input type="text" class="form-control input-sm" id="from-zone" placeholder="ค้นหาชื่อโซน" autofocus />
-    </div>
+  <div class="col-sm-3 padding-5 first">
+    <label>ต้นทาง</label>
+    <input type="text" class="form-control input-sm" id="from-zone" placeholder="ค้นหาชื่อโซน" autofocus />
   </div>
 
   <div class="col-sm-1 padding-5">
+    <label class="display-block not-show">show</label>
     <button type="button" class="btn btn-sm btn-primary btn-block" onclick="getProductInZone()">แสดงสินค้า</button>
   </div>
 
-  <div class="col-sm-4">
-    <div class="input-group width-100">
-      <span class="input-group-addon">ปลายทาง</span>
-      <input type="text" class="form-control input-sm" id="to-zone" placeholder="ค้นหาชื่อโซน" />
-    </div>
+  <div class="col-sm-3">
+    <label>ปลายทาง</label>
+    <input type="text" class="form-control input-sm" id="to-zone" placeholder="ค้นหาชื่อโซน" />
   </div>
 
   <div class="col-sm-1 padding-5">
+    <label class="display-block not-show">show</label>
     <button type="button" class="btn btn-sm btn-block btn-primary not-show" id="btn-move-all" onclick="move_in_all()">ย้ายเข้าทั้งหมด</button>
   </div>
 
-  <div class="col-sm-2">
-    <button type="button" class="btn btn-sm btn-default btn-block" onclick="showMoveTable()">แสดงรายการ</button>
+  <div class="col-sm-2 padding-5">
+    <label class="display-block not-show">show</label>
+    <button type="button" class="btn btn-sm btn-default btn-block" onclick="getCancleProduct()">โซนยกเลิก</button>
+  </div>
+
+  <div class="col-sm-2 padding-5 last">
+    <label class="display-block not-show">show</label>
+    <button type="button" class="btn btn-sm btn-default btn-block" onclick="showMoveTable()">แสดงรายการที่ย้าย</button>
   </div>
 
 

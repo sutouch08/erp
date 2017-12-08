@@ -19,6 +19,13 @@ $zone = new zone();
 //--- movement object สำหรับจัดการ movement
 $movement = new movement();
 
+//--- cancle zone object
+$cn = new cancle_zone();
+
+
+//--- product object
+$pd = new product();
+
 //----- ดึงรายการที่จะลบมาตรวจสอบก่อน
 //--- ได้ object กลับมา
 $rs = $cs->getDetail($id);
@@ -58,11 +65,23 @@ if( $rs !== FALSE )
       }
 
       //--- คืนยอดโซนต้นทาง
-      if( $stock->updateStockZone($rs->from_zone, $rs->id_product, $rs->qty) !== TRUE )
+      if( $rs->from_cancle == 1 && $rs->id_order != 0 )
       {
-        $sc = FALSE;
-        $message = 'คืนยอดสต็อกไม่สำเร็จ';
+        if( $cn->updateCancle($rs->id_order, $pd->getStyleId($rs->id_product), $rs->id_product, $rs->from_zone, $rs->id_warehouse, $rs->qty) !== TRUE)
+        {
+          $sc = FALSE;
+          $message = 'คืนยอดสินค้าเข้าโซนยกเลิกไม่สำเร็จ';
+        }
       }
+      else
+      {
+        if( $stock->updateStockZone($rs->from_zone, $rs->id_product, $rs->qty) !== TRUE )
+        {
+          $sc = FALSE;
+          $message = 'คืนยอดสต็อกไม่สำเร็จ';
+        }
+      }
+
 
       //--- ลบ movement ขาออก
       if( $movement->dropMoveOut($cs->reference, $rs->from_zone, $rs->id_product) !== TRUE )
@@ -134,10 +153,21 @@ if( $rs !== FALSE )
       } //--- end if $res->qty < $rs->qty
 
       //------- คืนยอดสต็อกเข้าโซนต้นทาง
-      if( $stock->updateStockZone($rs->from_zone, $rs->id_product, $rs->qty) !== TRUE )
+      if( $rs->from_cancle == 1 && $rs->id_order != 0 )
       {
-        $sc = FALSE;
-        $message = 'คืนยอดสต็อกไม่สำเร็จ';
+        if( $cn->updateCancle($rs->id_order, $pd->getStyleId($rs->id_product), $rs->id_product, $rs->from_zone, $rs->id_warehouse, $rs->qty) !== TRUE)
+        {
+          $sc = FALSE;
+          $message = 'คืนยอดสินค้าเข้าโซนยกเลิกไม่สำเร็จ';
+        }
+      }
+      else
+      {
+        if( $stock->updateStockZone($rs->from_zone, $rs->id_product, $rs->qty) !== TRUE )
+        {
+          $sc = FALSE;
+          $message = 'คืนยอดสต็อกไม่สำเร็จ';
+        }
       }
 
       //--- ลบ movement ขาออก

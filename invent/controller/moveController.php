@@ -83,6 +83,17 @@ if( isset( $_GET['addToMove'] ) )
 
 
 
+//---	ย้ายสินค้าออกจาก tbl_cancle
+//--- เพิ่มรายการลงใน move detail
+//---	เพิ่มลงใน move_temp
+//---	update cancle zone ตามรายการที่ใส่ตัวเลข
+if( isset( $_GET['addCancleToMove'] ) )
+{
+	include 'move/add_cancle_detail.php';
+}
+
+
+
 
 
 

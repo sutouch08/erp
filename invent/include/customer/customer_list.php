@@ -1,16 +1,16 @@
 
-<?php 
-	$cName	= isset( $_POST['cName'] ) ?  trim( $_POST['cName'] ) : ( getCookie('cName') ? getCookie('cName') : '') ; 		
- 	$cCode	= isset( $_POST['cCode'] ) ? trim( $_POST['cCode'] ) : ( getCookie('cCode') ? getCookie('cCode') : '' ); 	
+<?php
+	$cName	= isset( $_POST['cName'] ) ?  trim( $_POST['cName'] ) : ( getCookie('cName') ? getCookie('cName') : '') ;
+ 	$cCode	= isset( $_POST['cCode'] ) ? trim( $_POST['cCode'] ) : ( getCookie('cCode') ? getCookie('cCode') : '' );
 	$cKind	= isset( $_POST['cKind'] ) ? trim( $_POST['cKind'] ) : ( getCookie('cKind') ? getCookie('cKind') : '0' );
 	$cType	= isset( $_POST['cType'] ) ? trim( $_POST['cType'] ) : ( getCookie('cType') ? getCookie('cType') : '0' );
-	$cClass	= isset( $_POST['cClass'] ) ? trim( $_POST['cClass'] ) : ( getCookie('cClass') ? getCookie('cClass') : '0' );	  
- 	$cGroup 	= isset( $_POST['cGroup'] ) ? trim( $_POST['cGroup'] ) : ( getCookie('cGroup') ? getCookie('cGroup') : '0' ); 	
+	$cClass	= isset( $_POST['cClass'] ) ? trim( $_POST['cClass'] ) : ( getCookie('cClass') ? getCookie('cClass') : '0' );
+ 	$cGroup 	= isset( $_POST['cGroup'] ) ? trim( $_POST['cGroup'] ) : ( getCookie('cGroup') ? getCookie('cGroup') : '0' );
 	$cArea	= isset( $_POST['cArea'] ) ? trim( $_POST['cArea'] ) : ( getCookie('cArea') ? getCookie('cArea') : '' );
- 	$cProvince = isset( $_POST['cProvince'] ) ? trim( $_POST['cProvince'] ) : ( getCookie('cProvince') ? getCookie('cProvince') : '' ); 
- 	
+ 	$cProvince = isset( $_POST['cProvince'] ) ? trim( $_POST['cProvince'] ) : ( getCookie('cProvince') ? getCookie('cProvince') : '' );
+
 ?>
-    
+
     <form id="searchForm" method="post">
     <div class="row">
     	<div class="col-sm-1 col-1-harf padding-5 first">
@@ -32,9 +32,9 @@
             <select class="form-control input-sm select-box" name="cKind" id="cKind">
             <?php echo selectCustomerKind($cKind); ?>
             </select>
-           
+
         </div>
-        
+
         <div class="col-sm-1 col-1-harf padding-5">
         	<label>ชนิด</label>
             <select class="form-control input-sm select-box" name="cType" id="cType">
@@ -46,13 +46,13 @@
             <select class="form-control input-sm select-box" name="cClass" id="cClass">
             <?php echo selectCustomerClass($cKind); ?>
             </select>
-            
+
         </div>
         <div class="col-sm-1 col-1-harf padding-5">
         	<label>พื้นที่การขาย</label>
             <input type="text" class="form-control input-sm text-center search-box" name="cArea" id="cArea" placeholder="" value="<?php echo $cArea; ?>"  />
         </div>
-        
+
         <div class="col-sm-1 col-1-harf padding-5">
         	<label>จังหวัด</label>
             <input type="text" class="form-control input-sm text-center search-box" name="cProvince" id="cProvince" placeholder="" value="<?php echo $cProvince; ?>" />
@@ -76,59 +76,59 @@
 		createCookie('cName', $cName);
 		$where .= "AND name LIKE '%". $cName ."%' ";
 	}
-	
+
 	if( $cCode != '' )
 	{
 		createCookie('cCode', $cCode);
 		$where .= "AND code LIKE '%" . $cCode . "%' ";
 	}
-	
+
 	if( $cGroup != '0' )
 	{
 		createCookie('cGroup', $cGroup);
 		$where .= "AND id_group = '".$cGroup."' ";
 	}
-	
+
 	if( $cKind !="0" )
 	{
 		createCookie('cKind', $cKind);
 		$where .= "AND id_kind = '".$cKind."' ";
 	}
-	
-	
+
+
 	if( $cType !="0" )
 	{
 		createCookie('cType', $cType);
 		$where .= "AND id_type = '".$cType."' ";
 	}
-	
+
 	if( $cClass !="0" )
 	{
 		createCookie('cClass', $cClass);
 		$where .= "AND id_class = '".$cClass."' ";
 	}
-	
-	
+
+
 	if( $cArea != "" )
 	{
 		createCookie('cArea', $cArea);
-		$where .= "AND area_code IN(".customerAreaIn($cArea).") ";
+		$where .= "AND id_area IN(".customerAreaIn($cArea).") ";
 	}
-	
-	
+
+
 	if( $cProvince != '' )
 	{
 		createCookie('cProvince', $cProvince);
-		$where .= "AND province LIKE '%" . $cProvince ."%' ";	
+		$where .= "AND province LIKE '%" . $cProvince ."%' ";
 	}
-	
+
 	$where .= "ORDER BY name ASC";
-	
+
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
 	$paginator->Per_Page('tbl_customer', $where, $get_rows);
 	$paginator->display($get_rows, 'index.php?content=customer');
-	
+
 	$qs = dbQuery("SELECT * FROM tbl_customer ". $where ." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 ?>
 
@@ -172,25 +172,25 @@
                                     	<i class="fa fa-pencil"></i> แก้ไขลูกค้า
                                     </a>
                                 </li>
-                        <?php endif; ?>                         
+                        <?php endif; ?>
                         <?php if( $delete ) : ?>
                                 <li>
                                 	<a href="javascript:void(0)" onclick="deleteCustomer('<?php echo $rs->id; ?>', '<?php echo $rs->name; ?>')">
                                     	<i class="fa fa-trash"></i> ลบลูกค้า
                                     </a>
                                 </li>
-                        <?php endif; ?>                            
+                        <?php endif; ?>
                               </ul>
                         </div>
                     </td>
                 </tr>
-	<?php	$no++; ?>                
+	<?php	$no++; ?>
     <?php	endwhile; ?>
     <?php else : ?>
     		<tr>
             	<td colspan="7" align="center"><h4> ไม่พบข้อมูลตามเงื่อนไขที่กำหนด</h4></td>
             </tr>
-    <?php endif; ?>            	
+    <?php endif; ?>
             </tbody>
         </table>
     </div>

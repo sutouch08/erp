@@ -6,8 +6,8 @@ class image
 	public $id_style;
 	public $position;
 	public $cover;
-	
-	
+
+
 	public function __construct($id = "")
 	{
 		if( $id != "" )
@@ -23,8 +23,8 @@ class image
 			}
 		}
 	}
-	
-	
+
+
 	public function add(array $ds)
 	{
 		$sc = FALSE;
@@ -37,14 +37,14 @@ class image
 			{
 				$fields	.= $i == 1 ? $field : ", ".$field;
 				$values	.= $i == 1 ? "'". $value ."'" : ", '". $value ."'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_image (".$fields.") VALUES (".$values.")");
 		}
-		return $sc;			
+		return $sc;
 	}
-	
-	
+
+
 	public function update($id, array $ds)
 	{
 		$sc = FALSE;
@@ -55,14 +55,14 @@ class image
 			foreach( $ds as $field => $value )
 			{
 				$set .= $i == 1 ? $field . " = '" . $value . "'" : ", ".$field . " = '" . $value . "'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("UPDATE tbl_image SET " . $set . " WHERE id = '".$id."'");
 		}
 		return $sc;
 	}
-	
-	
+
+
 	public function delete($id)
 	{
 		$sc = FALSE;
@@ -76,15 +76,15 @@ class image
 				while( $size > 0 )
 				{
 					unlink($this->getImagePath($id, $size) );
-					$size--;	
+					$size--;
 				}
 				$sc = TRUE;
 			}
 		}
 		return  $sc;
 	}
-	
-	
+
+
 	//--- return image path
 	public function getProductImage($id, $size)
 	{
@@ -101,33 +101,33 @@ class image
 		}
 		return $this->getImagePath($id_image, $size);
 	}
-	
-	
-	
+
+
+
 	public function isProductImageExists($id_product, $id_image)
 	{
 		$sc = FALSE;
 		$qs = dbQuery("SELECT id_image FROM tbl_product_image WHERE id_product = '".$id_product."' AND id_image = ".$id_image);
-		if( dbNumRows($qs) > 0 )	
+		if( dbNumRows($qs) > 0 )
 		{
-			$sc = TRUE;	
+			$sc = TRUE;
 		}
 		return $sc;
 	}
-	
-	
+
+
 	public function isExixts($id)
 	{
-		
+
 	}
-	
-	
-	
+
+
+
 	public function newCover($id_style)
 	{
-		return dbQuery("UPDATE tbl_image SET cover = 1 WHERE id_style = '".$id_style."' LIMIT 1 ");	
+		return dbQuery("UPDATE tbl_image SET cover = 1 WHERE id_style = '".$id_style."' LIMIT 1 ");
 	}
-	
+
 	public function getLastId()
 	{
 		$sc = 0;
@@ -139,25 +139,24 @@ class image
 		}
 		return $sc;
 	}
-	
-	
+
+
 	public function newImageId()
 	{
 		return $this->getLastId() + 1;
 	}
-	
+
 	public function getImagePath($id, $useSize = 2)
 	{
-		$count	= strlen($id);
-		$arr		= str_split($id);
-		$path		= WEB_ROOT."img/product";
-		$n			= 0;
-		while( $n < $count )
+		$id_style = $this->getStyle($id);
+		$style = new style();
+		$code  = $style->getCode($id_style);
+		$path		= WEB_ROOT."img/product/";
+		if( $code != '')
 		{
-			$path .= '/' . $arr[$n];
-			$n++;
+			$path .= $code.'/';
 		}
-		$path	.= '/';
+
 		$size		= '_default';
 		switch( $useSize )
 		{
@@ -174,36 +173,27 @@ class image
 				$size = '_lage';
 			break;
 		}
-		
-		if( $count == 0 )
-		{
-			//----- If image no found
-			$path .= 'no_image' . $size . '.jpg';
-		}
-		else
-		{
-			//---- if image found
-			$path .= 'product' . $size . '_'. $id .'.jpg';
-		}
-		
+
+		//---- if image found
+		$path .= 'product' . $size . '_'. $id .'.jpg';
+
 		return $path;
 	}
-	
-	
-	
+
+
 	public function doUpload($file, $id_style)
 	{
+		$style = new style();
+		$code  = $style->getCode($id_style);
 		$sc 			= TRUE;
 		$id_image	= $this->newImageId(); //-- เอา id_image ล่าสุด มา + 1
 		$imgName 	= $id_image; //-- ตั้งชื่อรูปตาม id_image
-		$count		= strlen($id_image);  //--- นับจำนวนหน่วยของไอดี เพื่อเอาไปแยกเป็น Folder
-		$path			= str_split($id_image);
-		$imgPath 	= '../../img/product';
-		foreach( $path as $p )
+		$imgPath 	= '../../img/product/';
+		if( $code != '')
 		{
-			$imgPath .= '/' . $p;
+			$imgPath .= $code.'/';
 		}
-		$imgPath .= '/';
+
 		$image 	= new upload($file);
 		$size 	= 4; //---- ใช้ทั้งหมด 4 ขนาด
 		if( $image->uploaded )
@@ -212,7 +202,7 @@ class image
 			while( $size > 0 )
 			{
 				$img	= $this->getImageSizeProperties($size); //--- ได้ $img['prefix'] , $img['size'] กลับมา
-				$size--;				
+				$size--;
 				$image->file_new_name_body	= $img['prefix'] . $imgName; 		//--- เปลี่ยนชือ่ไฟล์ตาม prefix + id_image
 				$image->image_resize			= TRUE;		//--- อนุญาติให้ปรับขนาด
 				$image->image_retio_fill			= TRUE;		//--- เติกสีให้เต็มขนาดหากรูปภาพไม่ได้สัดส่วน
@@ -222,9 +212,9 @@ class image
 				$image->image_y					= $img['size'];		//--- ปรับขนาดแนวนอน
 				$image->image_background_color	= "#FFFFFF";		//---  เติมสีให้ตามี่กำหนดหากรูปภาพไม่ได้สัดส่วน
 				$image->image_convert			= 'jpg';		//--- แปลงไฟล์
-				
+
 				$image->process($imgPath);						//--- ดำเนินการตามที่ได้ตั้งค่าไว้ข้างบน
-				
+
 				if( ! $image->processed )	//--- ถ้าไม่สำเร็จ
 				{
 					$sc 	= $image->error;
@@ -239,25 +229,25 @@ class image
 							"id_style"	=> $id_style,
 							"position"	=> $top,
 							"cover"	=> $cover
-						);				
-		
-		$rs 		= $this->add($arr);		//--- เพิ่มข้อมูลรูปภาพลงฐานข้อมูล		
+						);
+
+		$rs 		= $this->add($arr);		//--- เพิ่มข้อมูลรูปภาพลงฐานข้อมูล
 		return $sc;
 	}
-	
-	
+
+
 	public function hasCover($id_style)
 	{
 		$sc = FALSE;
 		$qs = dbQuery("SELECT id FROM tbl_image WHERE id_style = '".$id_style."' AND cover = 1");
 		if( dbNumRows($qs) > 0 )
 		{
-			$sc = TRUE;	
+			$sc = TRUE;
 		}
 		return $sc;
 	}
-	
-	
+
+
 	public function newPosition($id_style)
 	{
 		$sc = 0;
@@ -270,8 +260,8 @@ class image
 		return $sc + 1;
 	}
 
-	
-	
+
+
 	public function getImageSizeProperties($size)
 	{
 		$sc = array();
@@ -297,24 +287,24 @@ class image
 			$sc['prefix'] 	= "";
 			$sc['size'] 	= 300;
 			break;
-		}//--- end switch	
+		}//--- end switch
 		return $sc;
 	}
-	
-	
+
+
 	public function setCover($id_style, $id_image)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("UPDATE tbl_image SET cover = 0 WHERE id_style = '".$id_style."'");	
+		$qs = dbQuery("UPDATE tbl_image SET cover = 0 WHERE id_style = '".$id_style."'");
 		if( $qs )
 		{
-			$sc = dbQuery("UPDATE tbl_image SET cover = 1 WHERE id = ".$id_image);	
+			$sc = dbQuery("UPDATE tbl_image SET cover = 1 WHERE id = ".$id_image);
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
 	public function isCover($id)
 	{
 		$sc = FALSE;
@@ -325,8 +315,8 @@ class image
 		}
 		return $sc;
 	}
-	
-	
+
+
 	public function getCover($id_style)
 	{
 		$sc = 0;
@@ -337,7 +327,21 @@ class image
 		}
 		return $sc;
 	}
-	
+
+
+
+	public function getStyle($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT id_style FROM tbl_image WHERE id = '".$id."'");
+		if( dbNumRows($qs) == 1)
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+
+		return $sc;
+	}
+
 }//---- End class
 
 ?>

@@ -75,7 +75,7 @@ if( $zName != '' )
 }
 
 
-if( $zWH != 0 )
+if( $zWH != 0)
 {
   createCookie('zWH', $zWH);
   $where .= "AND id_warehouse = '".$zWH."' ";

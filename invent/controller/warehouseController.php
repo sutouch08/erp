@@ -4,7 +4,7 @@ require "../../library/functions.php";
 require "../function/tools.php";
 require '../function/warehouse_helper.php';
 
-if( isset( $_POST['deleteWarehouse'] ) && isset( $_POST['id_warehouse'] ) )
+if( isset( $_GET['deleteWarehouse'] ) && isset( $_POST['id_warehouse'] ) )
 {
 	$sc = 'success';
 	$id_warehouse	= $_POST['id_warehouse'];
@@ -13,7 +13,7 @@ if( isset( $_POST['deleteWarehouse'] ) && isset( $_POST['id_warehouse'] ) )
 	{
 		$sc = 'ข้อผิดพลาด ! | ลบคลังสินค้าไม่สำเร็จ หรือ คลังสินค้าไม่ว่าง';
 	}
-	echo $sc;		
+	echo $sc;
 }
 
 
@@ -30,7 +30,7 @@ if( isset( $_POST['addNew'] ) && isset( $_POST['whCode'] ) )
 						'allow_under_zero'		=> $_POST['underZero'],
 						'active'	=> $_POST['active']
 						);
-	$warehouse		= new warehouse();		
+	$warehouse		= new warehouse();
 	$rs 	= $warehouse->add($ds);
 	if( $rs === FALSE )
 	{
@@ -51,7 +51,7 @@ if( isset( $_POST['editWarehouse'] ) && isset( $_POST['id_warehouse'] ) )
 						'allow_under_zero'		=> $_POST['underZero'],
 						'active'	=> $_POST['active']
 						);
-	$warehouse		= new warehouse();		
+	$warehouse		= new warehouse();
 	$rs 	= $warehouse->update($id_warehouse, $ds);
 	if( $rs === FALSE )
 	{
@@ -65,7 +65,7 @@ if( isset( $_POST['checkCode'] ) && isset( $_POST['whCode'] ) )
 {
 	$whCode = $_POST['whCode'];
 	$id			= $_POST['id_warehouse']; /// May be blank
-	$sc		= 'success';		   
+	$sc		= 'success';
 	$rs 		= isExistsWarehouseCode($whCode, $id);
 	if( $rs === TRUE )
 	{
@@ -94,7 +94,7 @@ if( isset( $_POST['resetSearch'] ) )
 	deleteCookie('whName');
 	deleteCookie('whRole');
 	deleteCookie('underZero');
-	echo 'success';	
+	echo 'success';
 }
 
 ?>

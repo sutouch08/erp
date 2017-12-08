@@ -30,7 +30,8 @@ function getProductInZone(){
 					}
 
 					hideMoveTable();
-					$("#zone-table").removeClass('hide');
+					hideCancleTable();
+					showZoneTable();
 				}
 			}
 		});
@@ -137,6 +138,7 @@ function showMoveTable(){
 	getMoveTable();
 	hideZoneTable();
 	hideTempTable();
+	hideCancleTable();
 	showControl();
 	hideMoveIn();
 	hideMoveOut();
@@ -207,6 +209,16 @@ function hideZoneTable(){
 	$("#zone-table").addClass('hide');
 }
 
+
+function showCancleTable(){
+	$('#cancle-table').removeClass('hide');
+}
+
+
+
+function hideCancleTable(){
+	$('#cancle-table').addClass('hide');
+}
 
 
 
