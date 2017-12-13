@@ -42,6 +42,8 @@
 
     $consign = new order_consign($order->id);
 
+    $pdCost = new product_cost();
+
     startTransection();
 
     if( $state < $order->state OR $state == 11)

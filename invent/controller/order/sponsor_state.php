@@ -40,6 +40,8 @@
 
     $bd = new sponsor_budget();
 
+    $pdCost = new product_cost();
+
 
     //--- เครดิตที่ต้องคืนเมื่อยกเลิกออเดอร์
     $useCredit = 0;
@@ -76,6 +78,12 @@
               $message = 'ลบรายการบันทึกขายไม่สำเร็จ';
             }
 
+            if( $pdCost->addCostList($rs->id_product, $rs->cost_ex, $rs->qty) !== TRUE)
+            {
+              $sc = FALSE;
+              $message = 'ปรับปรุงต้นทุนสินค้าไม่สำเร็จ';
+            }
+
             //--- ไว้คืนยอดกรณียกเลิก
             $useCredit += $rs->total_amount_inc;
 
@@ -93,7 +101,7 @@
           $sc = FALSE;
           $message = 'เคลียร์ Buffer ไม่สำเร็จ';
         }
-        
+
         //--- คืนยอดเครดิต
         if( $bd->decreaseUsed($order->id_budget, $useCredit) !== TRUE )
         {

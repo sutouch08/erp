@@ -5,12 +5,10 @@ $zone      = new zone();
 $cs 			 = new receive_transform();
 $st			   = new stock();
 $mv			   = new movement();
+$cost      = new product_cost();
 
 //---	ไว้ตรวจสอบผลลัพภ์
-$result		 = TRUE;
-
-//---	ไว้ส่งกลับเมื่อเสร็จแล้ว
-$sc 			 = 'success';
+$sc		 = TRUE;
 
 //---	เลขที่เอกสารเบิกแปรสภาพ
 $orderCode = trim( $_POST['reference'] );
@@ -120,22 +118,28 @@ if( $id_order !== FALSE )
             //------ เพิ่มรายการรับเข้า
             if( $cs->insertDetail($arr) === FALSE)
             {
-              $result = FALSE;
-              $sc = 'เพิ่มรายการรับเข้าไม่สำเร็จ';
+              $sc = FALSE;
+              $message = 'เพิ่มรายการรับเข้าไม่สำเร็จ';
             }
 
             //---	บันทึกยอดสต็อกเข้าโซนที่รับสินค้าเข้า
             if( $st->updateStockZone($id_zone, $id_pd, $qty) === FALSE )
             {
-              $result = FALSE;
-              $sc = 'บันทึกยอดสต็อกเข้าโซนไม่สำเร็จ';
+              $sc = FALSE;
+              $message = 'บันทึกยอดสต็อกเข้าโซนไม่สำเร็จ';
+            }
+
+            if( $cost->addCostList($id_pd, $product->getCost($id_pd), $qty, $date_add) !== TRUE)
+            {
+              $sc = FALSE;
+              $message = 'บันทึกต้นทุนสินค้าไม่สำเร็จ';
             }
 
             //---	บันทึก movement เข้าโซนที่รับสินคาเข้า
             if( $mv->move_in( $reference, $id_wh, $id_zone, $id_pd, $qty, $date_add ) === FALSE)
             {
-              $result = FALSE;
-              $sc = 'บันทึก movement ไม่สำเร็จ';
+              $sc = FALSE;
+              $message = 'บันทึก movement ไม่สำเร็จ';
             }
 
 
@@ -157,8 +161,8 @@ if( $id_order !== FALSE )
               $received = $row == 1 ? $received_qty : ($res->sold_qty <= $received_qty ? $res->sold_qty : $received_qty);
               if( $transform->received($res->id, $received) === FALSE )
               {
-                $result = FALSE;
-                $sc = 'ปรับปรุงรายการค้างรับไม่สำเร็จ';
+                $sc = FALSE;
+                $message = 'ปรับปรุงรายการค้างรับไม่สำเร็จ';
               }
 
               $row--;
@@ -170,11 +174,11 @@ if( $id_order !== FALSE )
         }
         else
         {
-          $result = FALSE;
-          $sc = 'ไม่พบข้อมูลเชื่อมโยงสินค้า';
+          $sc = FALSE;
+          $message = 'ไม่พบข้อมูลเชื่อมโยงสินค้า';
         }
 
-        if( $result === TRUE )
+        if( $sc === TRUE )
         {
           commitTransection();
         }
@@ -186,26 +190,27 @@ if( $id_order !== FALSE )
       }
       else
       {
-        $sc = 'fail | เพิ่มเอกสารไม่สำเร็จ';
+        $sc = FALSE;
+        $message = 'เพิ่มเอกสารไม่สำเร็จ';
       }
 
       endTransection();
   }
   else //-- if count
   {
-
-    $sc = "ไม่พบรายการรับเข้า";
+    $sc = FALSE;
+    $message = "ไม่พบรายการรับเข้า";
 
   }//--- if count
 }
 else //---- if id_order !== FALSE
 {
-
-  $sc = "ใบสั่งซื้อไม่ถูกต้อง ถูกปิด หรือ ถูกยกเลิก";
+  $sc = FALSE;
+  $message = "ใบสั่งซื้อไม่ถูกต้อง ถูกปิด หรือ ถูกยกเลิก";
 
 }//--- if id_order !== FALSE
 
 
-echo $sc = $result === TRUE ? 'success | '.$id_receive_transform : 'fail | '.$sc;
+echo $sc === TRUE ? 'success | '.$id_receive_transform : 'fail | '.$message;
 
  ?>

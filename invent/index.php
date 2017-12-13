@@ -375,10 +375,21 @@ switch($page){
 			$pageTitle = 'บัญชีธนาคาร';
 			break;
 
+
+		//-------	รายงานระบบขาย
+		case 'sale_deep_analyz' :
+			$content = 'report/sales/sale_deep_analyz.php';
+			$pageTitle = 'รายงานวิเคราะห์ขายแบบละเอียด';
+			break;
+
 		default:
 			$content = 'main.php';
 			$pageTitle = 'Smart Inventory';
 			break;
+
+
+
+
 }
 
 if( $viewStockOnly === TRUE )

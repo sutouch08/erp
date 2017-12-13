@@ -93,7 +93,7 @@ class po
 		{
 			$sc = TRUE;
 		}
-		
+
 		return $sc;
 	}
 
@@ -136,6 +136,10 @@ class po
 				if( dbNumRows($qs) > 0 )
 				{
 					$status = 2;
+				}
+				else
+				{
+					$status = 1;
 				}
 			}
 
@@ -234,6 +238,19 @@ class po
 		{
 			list( $sc ) = dbFetchArray($qs);
 		}
+		return $sc;
+	}
+
+
+	public function getProductPrice($reference, $id_product)
+	{
+		$sc = 0;
+		$qs = dbQuery("SELECT price FROM tbl_po WHERE reference = '".$reference."' AND id_product = '".$id_product."'");
+		if( dbNumRows($qs) > 0)
+		{
+			list( $sc ) = dbFetchArray($qs);
+		}
+
 		return $sc;
 	}
 

@@ -24,8 +24,11 @@ if( isset( $_GET['confirmOrder']))
 {
 	$sc = TRUE;	//---
 	$order = new order($_POST['id_order']);
+
 	if( $order->state == 7)
 	{
+		//---	สำหรับจัดการต้นทุนสินค้า (tbl_product_cost)
+		$pdCost = new product_cost();
 
 		//---	ดำเนินการตามเงื่อนไขต่างๆ
 		switch($order->role)

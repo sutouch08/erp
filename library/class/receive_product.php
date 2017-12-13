@@ -143,6 +143,7 @@ class receive_product
 		return dbQuery("UPDATE tbl_receive_product SET isCancle = 1, emp_upd = ".$emp." WHERE id = ".$id);
 	}
 
+
 	public function exported($id)
 	{
 		return dbQuery("UPDATE tbl_receive_product SET isExported = 1 WHERE id = ".$id);

@@ -74,7 +74,7 @@
 
       <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ระบบขาย</a>
       	<ul class="dropdown-menu">
-        	<li><a href="index.php?content=sale_summary"><i class="fa fa-bar-chart"></i>&nbsp; สรุปยอดขาย แยกตามรุ่นสินค้า เปรียบเทียบรายเดือน</a></li>
+        	<li><a href="index.php?content=sale_deep_analyz"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ขายแบบละเอียด</a></li>
         </ul>
       </li>
 

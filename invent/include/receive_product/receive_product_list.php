@@ -9,7 +9,7 @@
 	$sTo		= getFilter('sTo', 'sTo', '');
 	$sStatus	= getFilter('sStatus', 'sReceiveStatus', '');
 
-	
+
 ?>
 
 <div class="row top-row">
@@ -179,7 +179,7 @@
 
                     <td class="middle text-right">
                     	<button type="button" class="btn btn-xs btn-info" onClick="goDetail(<?php echo $rs->id; ?>)"><i class="fa fa-eye"></i></button>
-                    <?php if( $delete ) : ?>
+                    <?php if( $delete && $rs->isCancle == 0 ) : ?>
                     	<button type="button" class="btn btn-xs btn-danger" onClick="goDelete(<?php echo $rs->id; ?>, '<?php echo $rs->reference; ?>')"><i class="fa fa-times"></i></button>
                     <?php endif; ?>
                     </td>

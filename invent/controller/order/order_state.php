@@ -40,6 +40,8 @@
 
     $payment  = new payment_method($order->id_payment);
 
+    $pdCost = new product_cost();
+
     //--- มีเครดิตหรือไม่
     $term = $payment->hasTerm($order->id_payment);
 
@@ -78,6 +80,12 @@
             {
               $sc = FALSE;
               $message = 'ลบรายการบันทึกขายไม่สำเร็จ';
+            }
+
+            if( $pdCost->addCostList($rs->id_product, $rs->cost_ex, $rs->qty) !== TRUE)
+            {
+              $sc = FALSE;
+              $message = 'ปรับปรุงต้นทุนสินค้าไม่สำเร็จ';
             }
 
             //--- ถ้ามีการใช้เครดิต รวมยอดเครดิตไว้คืน

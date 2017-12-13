@@ -88,7 +88,9 @@ function save(){
 		//load_in();
 		$.ajax({
 			url:"controller/receiveProductController.php?addNew&date="+date+"&id_supplier="+id_sup+"&po="+po+"&invoice="+invoice+"&id_zone="+id_zone+"&remark="+remark,
-			type:"POST", cache:"false", data: $("#receiveForm").serializeArray(),
+			type:"POST",
+			cache:"false",
+			data: $("#receiveForm").serializeArray(),
 			success: function(rs){
 				//load_out();
 				var rs = $.trim(rs);
@@ -100,7 +102,11 @@ function save(){
 						load_in();
 						$.ajax({
 							url:"controller/interfaceController.php?export&BI",
-							type:"POST", cache:"false", data:{ "id_receive_product" : id_receive_product },
+							type:"POST",
+							cache:"false",
+							data:{
+								"id_receive_product" : id_receive_product
+							},
 							success: function(rs){
 								load_out();
 								var rs = $.trim(rs);

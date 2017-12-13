@@ -901,7 +901,7 @@ class order
 	//---	ข้อมูลขายของตัดยอดฝากขายทั้งหมด
 	public function getConsignSoldDetails($reference)
 	{
-		return dbQuery("SELECT * FROM tbl_order_sold WHERE reference = '".$reference."'");		
+		return dbQuery("SELECT * FROM tbl_order_sold WHERE reference = '".$reference."'");
 	}
 
 
@@ -948,6 +948,31 @@ class order
 		$qr .= "id_sale, sale_code, sale_name, id_employee, employee_name, date_add, date_upd, id_zone, id_warehouse ";	//---	ขอ้มูลพนักงานขาย และ อื่นๆ
 		$qr .= "FROM tbl_order_sold WHERE id_order = ".$id." GROUP BY id_product, id_warehouse";
 
+		return dbQuery($qr);
+	}
+
+
+	public function getSoldDetailsByWarehouse($id, $id_warehouse)
+	{
+		$qr  = "SELECT id, id_order, reference, id_role, role_name, payment, channels, id_product, ";	//---	ข้อมูลออเดอร์
+		$qr .= "product_code, product_name, color, color_group, size, size_group, product_style, ";	//--- ข้อมูลสินค้า
+		$qr .= "product_group, product_category, product_kind, product_type, brand, year, ";	//---	ข้อมูลสินค้า(ต่อ)
+		$qr .= "cost_ex, cost_inc, price_ex, price_inc, sell_ex, sell_inc, ";	//---	ข้อมูลสินค้า (ต่อ)
+		$qr .= "SUM(qty) AS qty, ";	//---	จำนวนขายรวม
+		$qr .= "discount_label, ";	//---	ส่วนลดเป็นตัวอักษร
+		$qr .= "SUM(discount_amount) AS discount_amount, ";	//---	ส่วนลดรวม
+		$qr .= "SUM(total_amount_ex) AS total_amount_ex, ";	//---	ยอดขายรวม ไม่รวม VAT
+		$qr .= "SUM(total_amount_inc) AS total_amount_inc, ";	//---	ยอดขายรวม รวม VAT
+		$qr .= "SUM(total_cost_ex) AS total_cost_ex, ";	//---	ต้นทุนรวม  ไม่รวม VAT
+		$qr .= "SUM(total_cost_inc) AS total_cost_inc, ";	//---	ต้นทุนรวม รวม VAT
+		$qr .= "SUM(margin_ex) AS margin_ex, ";	//---	กำไรขั้นต้น ไม่รวม VAT
+		$qr .= "SUM(margin_inc) AS margin_inc, ";	//---	กำไรขั้นต้น รวม VAT
+		$qr .= "id_policy, policy_code, policy_name, ";	//---	นโยบายส่วนลด
+		$qr .= "id_rule, rule_code, rule_name, ";	//---	เงื่อนไขนโยบายส่วนลด
+		$qr .= "id_customer, customer_code, customer_name, customer_group, customer_type, ";	//---	ข้อมูลลูกค้า
+		$qr .= "customer_kind, customer_class, customer_area, province, ";	//---	ข้อมูลลูกค้า (ต่อ)
+		$qr .= "id_sale, sale_code, sale_name, id_employee, employee_name, date_add, date_upd, id_zone, id_warehouse ";	//---	ขอ้มูลพนักงานขาย และ อื่นๆ
+		$qr .= "FROM tbl_order_sold WHERE id_order = ".$id." AND id_warehouse = '".$id_warehouse."' GROUP BY id_product, id_warehouse";
 		return dbQuery($qr);
 	}
 
@@ -1045,6 +1070,13 @@ class order
 		return dbQuery("SELECT state, status FROM tbl_order WHERE id = '".$id."'");
 	}
 
+
+
+	public function getSoldWarehouse($id)
+	{
+		return dbQuery("SELECT id_warehouse FROM tbl_order_sold WHERE id_order = '".$id."' GROUP BY id_warehouse");
+
+	}
 
 }//--- End Class
 

@@ -69,7 +69,7 @@
 	if( $sGroup != '' )
 	{
 		createCookie('sProductGroup', $sGroup);
-		$where .= "AND p.id_group = '".$sGroup."' ";	
+		$where .= "AND p.id_group = '".$sGroup."' ";
 	}
 
 	if( $sCategory != '' )
@@ -85,7 +85,7 @@
 	}
 
 	$where .= "GROUP BY p.id_style ";
-	$where .= "ORDER BY p.date_upd DESC";
+	$where .= "ORDER BY p.code ASC";
 
 
 	$paginator 	= new paginator();

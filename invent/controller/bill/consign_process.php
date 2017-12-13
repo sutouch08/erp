@@ -68,23 +68,43 @@
 
             //--- 1. ตัดยอดออกจาก buffer
             //--- นำจำนวนติดลบบวกกลับเข้าไปใน buffer เพื่อตัดยอดให้น้อยลง
-            $rb = $buffer->update($rm->id_order, $rm->id_product, $rm->id_zone, $qty);
+            if($buffer->update($rm->id_order, $rm->id_product, $rm->id_zone, $qty) !== TRUE)
+            {
+              $sc = FALSE;
+              $message = 'ปรับยอดใน buffer ไม่สำเร็จ';
+            }
 
             //--- ลดยอด sell qty ลงตามยอด buffer ทีลดลงไป
             $sell_qty += $qty;
 
             //--- 2. update movement out
-            $rc = $movement->move_out($order->reference, $rm->id_warehouse, $rm->id_zone, $rm->id_product, $buffer_qty, dbDate($order->date_add, TRUE));
+            if($movement->move_out($order->reference, $rm->id_warehouse, $rm->id_zone, $rm->id_product, $buffer_qty, dbDate($order->date_add, TRUE)) !== TRUE)
+            {
+              $sc = FALSE;
+              $message = 'บันทึก movement ขาออกไม่สำเร็จ';
+            }
 
             //--- 3. เพิ่มสินค้าเข้าโซนฝากขายปลายทาง
-            $rd = $stock->updateStockZone($zone->id, $rm->id_product, $buffer_qty);
+            if($stock->updateStockZone($zone->id, $rm->id_product, $buffer_qty) !== TRUE)
+            {
+              $sc = FALSE;
+              $message = 'เพิ่มยอดโซนปลายทางไม่สำเร็จ';
+            }
 
             //--- 4. update movement in
-            $re = $movement->move_in($order->reference, $zone->id_warehouse, $zone->id, $rm->id_product, $buffer_qty, dbDate($order->date_add, TRUE));
+            if($movement->move_in($order->reference, $zone->id_warehouse, $zone->id, $rm->id_product, $buffer_qty, dbDate($order->date_add, TRUE)) !== TRUE)
+            {
+              $sc = FALSE;
+              $message = 'บันทึก movement ขาเข้าไม่สำเร็จ';
+            }
 
             $product->getData($rm->id_product);
 
             $ds = $order->getDetail($order->id, $product->id); //---  return as object of order_detail row
+
+            //----  ต้นทุนสินค้าแบบ average
+            $cost_ex = $pdCost->getCost($rm->id_product);
+            $cost_inc = addVAT($cost_ex, $vat);
 
 
             //--- ข้อมูลสำหรับบันทึกยอดขาย
@@ -117,8 +137,8 @@
                     'id_brand'      => $product->id_brand,
                     'brand'         => $brand->getName($product->id_brand),
                     'year'          => $product->year,
-                    'cost_ex' => removeVAT($ds->cost, $vat),
-                    'cost_inc'  => $ds->cost,
+                    'cost_ex'   => $cost_ex,
+                    'cost_inc'  => $cost_inc,
                     'price_ex'  => removeVAT($ds->price, $vat),
                     'price_inc' => $ds->price,
                     'sell_ex'   => removeVAT( ($ds->total_amount/$ds->qty), $vat),
@@ -128,10 +148,10 @@
                     'discount_amount' => ($ds->discount_amount / $ds->qty) * $buffer_qty,
                     'total_amount_ex' => removeVAT( ($ds->total_amount / $ds->qty) * $buffer_qty, $vat),
                     'total_amount_inc'  => ($ds->total_amount / $ds->qty) * $buffer_qty,
-                    'total_cost_ex'   => removeVAT(($ds->cost * $buffer_qty), $vat),
-                    'total_cost_inc'  => $ds->cost * $buffer_qty,
-                    'margin_ex'   => removeVAT( ( ( ($ds->total_amount / $ds->qty) * $buffer_qty) - ($ds->cost * $buffer_qty) ), $vat),
-                    'margin_inc'  => ( ($ds->total_amount / $ds->qty) * $buffer_qty) - ($ds->cost * $buffer_qty),
+                    'total_cost_ex'   => $cost_ex * $buffer_qty,
+                    'total_cost_inc'  => $cost_inc * $buffer_qty,
+                    'margin_ex'   => removeVAT((($ds->total_amount / $ds->qty) * $buffer_qty), $vat) - ($cost_ex * $buffer_qty),
+                    'margin_inc'  => ( ($ds->total_amount / $ds->qty) * $buffer_qty) - ($cost_inc * $buffer_qty),
                     'id_customer' => $customer->id,
                     'customer_code' => $customer->code,
                     'customer_name' => $customer->name,
@@ -148,12 +168,12 @@
             );
 
             //--- 5. บันทึกยอดขาย
-            $rf = $order->sold($arr);
-
-            if( $rb === FALSE OR $rc === FALSE OR $rd === FALSE && $re === FALSE && $rf === FALSE )
+            if($order->sold($arr) !== TRUE)
             {
               $sc = FALSE;
+              $message = 'บันทึกขายไม่สำเร็จ';
             }
+
         } //--  end while
       } //--- end if
     } //--- End while
@@ -163,24 +183,24 @@
     if( clearBuffer($order->id) === FALSE)
     {
       $sc = FALSE;
+      $message = 'เคลียร์ buffer ไม่สำเร็จ';
     }
 
   }
   else
   {
     $sc = FALSE;
+    $message = 'ไม่พบรายการตรวจสินค้า';
   }
 
 
   if( $sc === TRUE )
   {
     commitTransection();
-    //dbRollback();
   }
   else
   {
     dbRollback();
-    $message = 'ทำรายการไม่สำเร็จ';
   }
 
   endTransection();

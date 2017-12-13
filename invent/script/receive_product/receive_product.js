@@ -18,8 +18,8 @@ function doExport(){
 			}
 		});
 	}else{
-		swal("id_receive_product not found");	
-	}	
+		swal("id_receive_product not found");
+	}
 }
 
 
@@ -37,14 +37,26 @@ function goDelete(id, name){
 		}, function(){
 			$.ajax({
 				url:"controller/receiveProductController.php?cancleReceived",
-				type:"POST", cache:"false", data:{ "id_receive_product" : id },
+				type:"POST",
+				cache:"false",
+				data:{
+					"id_receive_product" : id
+				},
 				success: function(rs){
 					var rs = $.trim(rs);
 					if( rs == 'success' ){
-						swal({ title: 'Deleted', type: 'success', timer: 1000 });
-						setTimeout(function(){ window.location.reload(); }, 1200);
+						swal({
+							title: 'Deleted',
+							type: 'success',
+							timer: 1000
+						});
+
+						setTimeout(function(){
+							window.location.reload();
+						}, 1200);
+
 					}else{
-						swal("ข้อผิดพลาด !", "ลบรายการไม่สำเร็จ", "error");
+						swal("Error !", rs, "error");
 					}
 				}
 			});
@@ -53,16 +65,16 @@ function goDelete(id, name){
 
 
 function goAdd(){
-	window.location.href = "index.php?content=receive_product&add";	
+	window.location.href = "index.php?content=receive_product&add";
 }
 
 function goEdit(id){
-	window.location.href = "index.php?content=receive_product&edit=Y&id_receive_product="+id;	
+	window.location.href = "index.php?content=receive_product&edit=Y&id_receive_product="+id;
 }
 
 
 function goDetail(id){
-	window.location.href = "index.php?content=receive_product&view_detail=Y&id_receive_product="+id;	
+	window.location.href = "index.php?content=receive_product&view_detail=Y&id_receive_product="+id;
 }
 
 function goBack(){
@@ -92,7 +104,7 @@ $("#sFrom").datepicker({
 });
 
 $("#sTo").datepicker({
-	dateFormat: "dd-mm-yy", 
+	dateFormat: "dd-mm-yy",
 	onClose: function(sd){
 		$("#sFrom").datepicker("option", "maxDate", sd);
 	}

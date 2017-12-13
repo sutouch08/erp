@@ -11,6 +11,7 @@ $order      = new order();
 $id_order   = $order->getId($cs->order_code);
 $product    = new product();
 $zone       = new zone();
+$cost       = new product_cost();
 $emp        = getCookie('user_id');
 
 
@@ -45,6 +46,13 @@ if( dbNumRows($qs) > 0)
       if( $stock->updateStockZone($rs->id_zone, $rs->id_product, ($rs->qty * -1)) === FALSE )
       {
         $result = FALSE;
+      }
+
+      //---- ลดจำนวนวรายการต้นทุนสินค้าใน tbl_product_cost
+      if($cost->deleteCostList($rs->id_product, $product->getCost($rs->id_product), $rs->qty) !== TRUE)
+      {
+        $sc = FALSE;
+        $message = 'ปรับปรุงต้นทุนสินค้าไม่สำเร็จ';
       }
 
       if( $cs->cancleDetail($rs->id) === FALSE)
