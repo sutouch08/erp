@@ -17,6 +17,22 @@ if( isset( $_GET['deleteProductGroup'] ) )
 }
 
 
+if(isset($_GET['setActive']))
+{
+	$sc = TRUE;
+	$id = $_POST['id'];
+	$active = $_POST['active'];
+	$active = $active == 0 ? 1 : 0;
+	$cs = new product_group();
+	if( $cs->setActive($id, $active) === FALSE )
+	{
+		$sc = FALSE;
+		$message = $cs->error;
+	}
+
+	echo $sc === TRUE ? $active : $message;
+}
+
 if( isset( $_GET['clearFilter'] ) )
 {
 	deleteCookie('sGroupCode');

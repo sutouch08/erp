@@ -82,3 +82,29 @@ $(".search-box").keyup(function(e) {
 function goBack(){
 	window.location.href = "index.php?content=product_group";
 }
+
+
+function setActive(id){
+	var active = $('#active-'+id).val();
+	$.ajax({
+		url:'controller/productGroupController.php?setActive',
+		type:'POST',
+		cache:'false',
+		data:{
+			'id' : id,
+			'active' : active
+		},
+		success:function(rs){
+			var rs = $.trim(rs);
+			if(rs == '1'){
+					$('#active-'+id).val(rs);
+					$('#label-'+id).html('<i class="fa fa-check green"></i>');
+				}else if(rs == '0'){
+					$('#active-'+id).val(rs);
+					$('#label-'+id).html('<i class="fa fa-times red"></i>');
+				}else{
+					swal('Error', rs, 'error');
+				}
+			}
+	});
+}

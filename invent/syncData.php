@@ -108,8 +108,5 @@
 </div>
 
 </div><!--- container -->
-<script>
-var syncTimes = <?php echo getConfig('SYNC_TIME'); ?> * 1000;
-</script>
 
-<script src="script/auto_import/auto_import.js"></script>
+<script src="script/auto_import/import.js"></script>

@@ -82,6 +82,7 @@
                         <th class="width-15">รหัส</th>
                         <th class="width-30">ชื่อ</th>
                         <th class="width-15 text-center">จำนวนสินค้า</th>
+												<th class="width-10 text-center">ใช้งาน</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -95,6 +96,12 @@
                         <td class="middle"><?php echo $rs->code; ?></td>
                         <td class="middle"><?php echo $rs->name; ?></td>
                         <td class="middle text-center"><?php echo $cs->countMember($rs->id); ?></td>
+												<td class="middle text-center">
+													<input type="hidden" id="active-<?php echo $rs->id; ?>" value="<?php echo $rs->active; ?>" />
+													<a href="javascript:void(0)" id="label-<?php echo $rs->id; ?>"  onclick="setActive('<?php echo $rs->id; ?>')">
+													<?php echo isActived($rs->active); ?>
+													</a>
+												</td>
                         <td class="middle text-right">
                         <?php if( $delete ) : ?>
                         	<button type="button" class="btn btn-xs btn-danger" onClick="remove('<?php echo $rs->id; ?>', '<?php echo $rs->code; ?>')">

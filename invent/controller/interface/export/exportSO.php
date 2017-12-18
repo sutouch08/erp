@@ -31,8 +31,8 @@
 		$VATTYPE	= getConfig('ORDER_VAT_TYPE');		//--	ประเภทภาษี  1 = 7%, 2 = 1.5%, 3 = 0%, 4 = ไม่มี VAT,  5 = 10%
 		$HDISCSTR	= $order->bDiscText;	//--	ข้อความ ส่วนลดท้ายบิลเป็น % หรือยอดเงิน เช่น 10%+5% , 200+3%
 		$DISCAMT1	= $order->bDiscAmount;		//--	มูลค่าส่วนลดท้ายบิล เป็นจำนวนเงินบาท
-		$AMT			= round( $order->getTotalSoldAmount($order->id, FALSE), 2);	//--	มูลค่าสินค้าไม่รวม VAT (เป็นยอดรวมทั้งบิล) FALSE = ไม่รวม VAT decmal 15,2
-		$VATAMT		= round( getVatAmount( $order->getTotalSoldAmount($order->id,TRUE ), getVatRate($VATTYPE), FALSE),2 );	//--	มูลค่าภาษี (เป็นยอดรวมทั้งบิล) TRUE = VAT นอก FALSE = VAT ใน decmal 14,2
+		$AMT			= toFixed( $order->getTotalSoldAmount($order->id, FALSE), 2);	//--	มูลค่าสินค้าไม่รวม VAT (เป็นยอดรวมทั้งบิล) FALSE = ไม่รวม VAT decmal 15,2
+		$VATAMT		= getVatAmount( $order->getTotalSoldAmount($order->id,TRUE ), getVatRate($VATTYPE), FALSE);	//--	มูลค่าภาษี (เป็นยอดรวมทั้งบิล) TRUE = VAT นอก FALSE = VAT ใน decmal 14,2
 		$QCCURRENCY	= "";		//--	รหัสหน่วยเงิน
 		$XRATE		= 1;			//--	อัตราแลกเปลี่ยนหน่วยเงิน
 		$DISCAMTK	= $DISCAMT1;			//--	มูลค่าส่วนลดท้ายบิล เป็นจำนวนเงิน ตามหน่วยเงินที่คีย์

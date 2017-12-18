@@ -3,7 +3,9 @@ require '../../library/config.php';
 require '../../library/functions.php';
 require "../function/tools.php";
 require '../../library/class/PHPExcel.php';
+include '../function/date_helper.php';
 include '../function/import_log_helper.php';
+include '../function/match_helper.php';
 
 ///============================================= MASTER ==========================================///
 //---------  Sync Product Group -------//

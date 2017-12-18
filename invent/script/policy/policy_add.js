@@ -12,4 +12,27 @@ function addNew(){
     swal('วันที่ไม่ถูกต้อง');
     return false;
   }
+
+  $.ajax({
+    url:'controller/policyController.php?addNew',
+    type:'POST',
+    cache:'false',
+    data:{
+      'name' : name,
+      'fromDate' : fromDate,
+      'toDate' : toDate
+    },
+    success:function(rs){
+      var rs = $.trim(rs);
+      if(!isNaN(parseInt(rs))){
+        goAdd(rs);
+      }else{
+        swal({
+          title:'Error',
+          text:rs,
+          type:'error'
+        });
+      }
+    }
+  });
 }

@@ -88,6 +88,70 @@ if( isset( $_POST['checkName'] ) && isset( $_POST['whName'] ) )
 }
 
 
+if(isset($_GET['setSell']))
+{
+	$sc = TRUE;
+	$id = $_GET['id'];
+	$value = $_GET['value'] == 0 ? 1 : 0;
+	$cs = new warehouse();
+	if( $cs->update($id, array('sell' => $value)) === FALSE)
+	{
+		$sc = FALSE;
+		$message = $cs->error;
+	}
+
+	echo $sc === TRUE ? $value : $message;
+}
+
+
+if(isset($_GET['setPrepare']))
+{
+	$sc = TRUE;
+	$id = $_GET['id'];
+	$value = $_GET['value'] == 0 ? 1 : 0;
+	$cs = new warehouse();
+	if( $cs->update($id, array('prepare' => $value)) === FALSE)
+	{
+		$sc = FALSE;
+		$message = $cs->error;
+	}
+
+	echo $sc === TRUE ? $value : $message;
+}
+
+
+if(isset($_GET['setAuz']))
+{
+	$sc = TRUE;
+	$id = $_GET['id'];
+	$value = $_GET['value'] == 0 ? 1 : 0;
+	$cs = new warehouse();
+	if( $cs->update($id, array('allow_under_zero' => $value)) === FALSE)
+	{
+		$sc = FALSE;
+		$message = $cs->error;
+	}
+
+	echo $sc === TRUE ? $value : $message;
+}
+
+
+if(isset($_GET['setActive']))
+{
+	$sc = TRUE;
+	$id = $_GET['id'];
+	$value = $_GET['value'] == 0 ? 1 : 0;
+	$cs = new warehouse();
+	if( $cs->update($id, array('active' => $value)) === FALSE)
+	{
+		$sc = FALSE;
+		$message = $cs->error;
+	}
+
+	echo $sc === TRUE ? $value : $message;
+}
+
+
 if( isset( $_POST['resetSearch'] ) )
 {
 	deleteCookie('whCode');

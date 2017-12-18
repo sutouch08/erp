@@ -415,3 +415,108 @@ function resetSearch() {
 $(".search-select").change(function(e) {
     getSearch();
 });
+
+
+function setSell(id){
+	var value = $('#sell-'+id).val();
+	$.ajax({
+		url:'controller/warehouseController.php?setSell',
+		type:'GET',
+		cache:'false',
+		data:{
+			'id' : id,
+			'value' : value
+		},
+		success:function(rs){
+			var rs = $.trim(rs);
+			if(rs == '1'){
+				$('#sell-label-'+id).html('<i class="fa fa-check green"></i>');
+				$('#sell-'+id).val(rs);
+			}else if(rs == '0'){
+				$('#sell-label-'+id).html('<i class="fa fa-times red"></i>');
+				$('#sell-'+id).val(rs);
+			}else{
+				swal('Error', rs, 'error');
+			}
+		}
+	});
+}
+
+
+function setPrepare(id){
+	var value = $('#prepare-'+id).val();
+	$.ajax({
+		url:'controller/warehouseController.php?setPrepare',
+		type:'GET',
+		cache:'false',
+		data:{
+			'id' : id,
+			'value' : value
+		},
+		success:function(rs){
+			var rs = $.trim(rs);
+			if(rs == '1'){
+				$('#prepare-label-'+id).html('<i class="fa fa-check green"></i>');
+				$('#prepare-'+id).val(rs);
+			}else if(rs == '0'){
+				$('#prepare-label-'+id).html('<i class="fa fa-times red"></i>');
+				$('#prepare-'+id).val(rs);
+			}else{
+				swal('Error', rs, 'error');
+			}
+		}
+	});
+}
+
+
+
+function setAuz(id){
+	var value = $('#auz-'+id).val();
+	$.ajax({
+		url:'controller/warehouseController.php?setAuz',
+		type:'GET',
+		cache:'false',
+		data:{
+			'id' : id,
+			'value' : value
+		},
+		success:function(rs){
+			var rs = $.trim(rs);
+			if(rs == '1'){
+				$('#auz-label-'+id).html('<i class="fa fa-check green"></i>');
+				$('#auz-'+id).val(rs);
+			}else if(rs == '0'){
+				$('#auz-label-'+id).html('<i class="fa fa-times red"></i>');
+				$('#auz-'+id).val(rs);
+			}else{
+				swal('Error', rs, 'error');
+			}
+		}
+	});
+}
+
+
+function setActive(id){
+	var value = $('#active-'+id).val();
+	$.ajax({
+		url:'controller/warehouseController.php?setActive',
+		type:'GET',
+		cache:'false',
+		data:{
+			'id' : id,
+			'value' : value
+		},
+		success:function(rs){
+			var rs = $.trim(rs);
+			if(rs == '1'){
+				$('#active-label-'+id).html('<i class="fa fa-check green"></i>');
+				$('#active-'+id).val(rs);
+			}else if(rs == '0'){
+				$('#active-label-'+id).html('<i class="fa fa-times red"></i>');
+				$('#active-'+id).val(rs);
+			}else{
+				swal('Error', rs, 'error');
+			}
+		}
+	});
+}

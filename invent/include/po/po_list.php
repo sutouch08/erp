@@ -37,33 +37,33 @@
     <div class="col-sm-1">
     	<label class="display-block not-show">reset</label>
         <button type="button" class="btn btn-sm btn-warning btn-block" onclick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
-    </div>	
+    </div>
 </div>
 </form>
 <hr class="margin-top-15 margin-bottom-15" />
 
-<?php 
+<?php
 	$where = "WHERE id != 0 ";
 	if( $sCode != "" )
 	{
 		createCookie('sPoCode', $sCode);
 		$where .= "AND reference LIKE '%".$sCode."%' ";
 	}
-	
+
 	if( $sName != "" )
 	{
 		createCookie('sPoName', $sName);
 		$where .= "AND id_supplier IN(".supplier_in($sName).") ";
 	}
-	
+
 	if( $sFrom != "" && $sTo != "")
 	{
 		createCookie('sFrom', $sFrom);
 		createCookie('sTo', $sTo);
-		$where .= "AND date_add >= '".fromDate($sFrom, FALSE)."' AND date_add <= '".toDate($sTo, FALSE)."' ";	
+		$where .= "AND date_add >= '".fromDate($sFrom, FALSE)."' AND date_add <= '".toDate($sTo, FALSE)."' ";
 	}
-	
-	
+
+
 	if( $sStatus != "" )
 	{
 		createCookie('sPoStatus', $sStatus);
@@ -73,19 +73,19 @@
 		}
 		else
 		{
-			$where .= "AND status = ".$sStatus." ";	
+			$where .= "AND status = ".$sStatus." ";
 		}
 	}
-	$where .= "GROUP BY reference ORDER BY reference DESC";	
-	
+	$where .= "GROUP BY reference ORDER BY reference DESC";
+
 	$paginator	= new paginator();
-	
+
 	$get_rows	= get_rows();
 	$paginator->Per_Page('tbl_po', $where, $get_rows);
 	$paginator->display($get_rows, 'index.php?content=po');
-	
+
 	$qs = dbQuery("SELECT * FROM tbl_po " . $where . " LIMIT ".$paginator->Page_Start." , ".$paginator->Per_Page);
-	
+
 ?>
 
 <div class="row">
@@ -108,7 +108,7 @@
 <?php		$cs = new supplier(); 	?>
 <?php		$po = new po();		?>
 <?php		while( $rs = dbFetchObject($qs) ) : ?>
-				<tr class="font-size-12">
+				<tr class="font-size-12" id="row-<?php echo $rs->reference; ?>">
                 	<td class="middle text-center"><?php echo $no; ?></td>
                     <td class="middle text-center"><?php echo thaiDate($rs->date_add); ?></td>
                     <td class="middle"><?php echo $rs->reference; ?></td>
@@ -124,21 +124,26 @@
                         <?php if( $rs->status == 3 ) : ?>
                         <span class="green">Closed</span>
                         <?php endif; ?>
-					</td>                                               
+					</td>
                     <td class="middle text-right">
-                    	<button type="button" class="btn btn-sm btn-info" onclick="viewDetail('<?php echo $rs->reference; ?>')">
+                    	<button type="button" class="btn btn-xs btn-info" onclick="viewDetail('<?php echo $rs->reference; ?>')">
                         	<i class="fa fa-eye"></i>&nbsp; รายละเอียด
                         </button>
+											<?php if( $delete && $rs->status == 1 ) : ?>
+												<button type="button" class="btn btn-xs btn-danger" onclick="deletePo('<?php echo $rs->reference; ?>')">
+													<i class="fa fa-trash"></i>&nbsp; ลบ
+												</button>
+											<?php endif; ?>
                     </td>
                 </tr>
 <?php			$no++;	?>
-<?php		endwhile; ?>	
+<?php		endwhile; ?>
 <?php 	else : ?>
 				<tr>
                 	<td colspan="7" class="text-center"><h4>ไม่พบรายการ</h4></td>
                 </tr>
-<?php	endif; ?>            
-            </tbody>            
-        </table>       
+<?php	endif; ?>
+            </tbody>
+        </table>
     </div>
 </div>

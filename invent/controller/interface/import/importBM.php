@@ -87,7 +87,7 @@
 											'bill_discount'	=> trim($rs['U']),
 											'amount_ex'	    => trim($rs['V']),
 											'vat_amount'	  => trim($rs['W']),
-											'date_add'			=> dbDate($rs['J']),
+											'date_add'			=> fmDate($rs['J']),
 											'isCancle'			=> $isCancle,
 											'valid'					=> $valid
 										);

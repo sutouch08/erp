@@ -12,8 +12,8 @@ function writeImportLogs($name, $import = 0, $update = 0, $error = 0, $last = ''
   {
     $content .= '###################################################################################################'. PHP_EOL;
   }
-
-  $fileName = '../../logs/import_logs/ImportLogs-'.date('Ymd').'.txt';
+  $path = getConfig('IMPORT_LOG_PATH');
+  $fileName = $path.'ImportLogs-'.date('Ymd').'.LOG';
   file_put_contents($fileName, $content, FILE_APPEND);
 }
 
@@ -26,7 +26,8 @@ function writeErrorLogs($name, $error)
   $content .= '  >> ผิดพลาด  :  '.$error;
   $content .= PHP_EOL;
 
-  $fileName = '../../logs/import_logs/error-'.date('Ymd').'.txt';
+  $path = getConfig('IMPORT_LOG_PATH');
+  $fileName = $path.'ErrorLogs-'.date('Ymd').'.LOG';
   file_put_contents($fileName, $content, FILE_APPEND);
 }
 

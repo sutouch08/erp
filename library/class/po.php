@@ -18,6 +18,7 @@ class po
 	public $due_date;
 	public $isCancle;
 	public $status;
+	public $error;
 
 	public function __construct($reference = '')
 	{
@@ -106,12 +107,20 @@ class po
 	}
 
 
+
+
 	public function unClose($bookcode, $reference)
 	{
 		$status = $this->makeStatus($bookcode, $reference);
 		return dbQuery("UPDATE tbl_po SET status = ".$status." WHERE bookcode = '".$bookcode."' AND reference = '".$reference."'");
 	}
 
+
+
+	public function delete($reference)
+	{
+		return dbQuery("DELETE FROM tbl_po WHERE reference = '".$reference."'");
+	}
 
 
 	public function makeStatus($bookcode, $reference)
@@ -192,10 +201,17 @@ class po
 		return dbQuery("SELECT DISTINCT reference FROM tbl_po WHERE reference LIKE '%".$txt."%' AND status != 3 AND isCancle = 0");
 	}
 
+
+
+
 	public function received($reference, $id_pd, $qty)
 	{
 		return dbQuery("UPDATE tbl_po SET received = received + ".$qty.", status = 2 WHERE reference = '".$reference."' AND id_product = '".$id_pd."'");
 	}
+
+
+
+
 
 	public function unReceived($reference, $id_pd, $qty)
 	{
@@ -203,6 +219,8 @@ class po
 		$received = $cQty - $qty < 0 ? 0 : $cQty - $qty;
 		return dbQuery("UPDATE tbl_po SET received = '".$received."' WHERE reference = '".$reference."' AND id_product = '".$id_pd."'");
 	}
+
+
 
 
 	public function getReceived($reference, $id_pd)
@@ -215,6 +233,8 @@ class po
 		}
 		return $sc;
 	}
+
+
 
 	//--- ราคาสินค้า
 	public function getPrice($reference, $id_pd)

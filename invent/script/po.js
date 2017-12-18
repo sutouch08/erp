@@ -1,7 +1,7 @@
 // JavaScript Document
 
 function closePO(bookcode, reference){
-	
+
 	swal({
 		title : 'ปิดใบสั่งซื้อ',
 		text: 'ต้องการปิดใบสั่งซื้อเลขที่ ' + reference + ' หรือไม่ ?',
@@ -11,7 +11,7 @@ function closePO(bookcode, reference){
 		confirmButtonText: 'ใช่, ฉันต้องการ',
 		cancelButtonText: 'ยกเลิก',
 		closeOnConfirm: false
-	}, 
+	},
 	function(){
 			load_in();
 			$.ajax({
@@ -34,7 +34,7 @@ function closePO(bookcode, reference){
 
 
 function unClosePO(bookcode, reference){
-	
+
 	swal({
 		title : 'ยกเลิกการปิดใบสั่งซื้อ',
 		text: 'ต้องการยกเลิกการปิดใบสั่งซื้อเลขที่ ' + reference + ' หรือไม่ ?',
@@ -44,7 +44,7 @@ function unClosePO(bookcode, reference){
 		confirmButtonText: 'ใช่, ฉันต้องการ',
 		cancelButtonText: 'ยกเลิก',
 		closeOnConfirm: false
-	}, 
+	},
 	function(){
 			load_in();
 			$.ajax({
@@ -86,14 +86,45 @@ function syncDocument(){
 
 
 
-function getSearch(){	
+function deletePo(reference){
+	swal({
+		title: 'คุณแน่ใจ ? ',
+		text: 'ต้องการลบ '+reference+' ใช่หรือไม่?',
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#DD6855',
+		confirmButtonText: 'ใช่ ฉันต้องการลบ',
+		cancelButtonText: 'ยกเลิก',
+		closeOnConfirm: false
+	}, function(){
+		$.ajax({
+			url:"controller/poController.php?deletePo",
+			type:"POST",
+			cache:"false",
+			data:{ "reference" : reference },
+			success: function(rs){
+				var rs = $.trim(rs);
+				if( rs == 'success' ){
+					$("#row-"+reference).remove();
+					swal({ title: 'สำเร็จ', text: 'ลบรายการเรียบร้อยแล้ว', type: 'success', timer: 1000 });
+				}else{
+					swal({title: 'ข้อผิดพลาด', text: rs, type: 'error' });
+				}
+			}
+		});
+	});
+}
+
+
+
+function getSearch(){
 	$("#searchForm").submit();
 }
 
 
 
 function clearFilter(){
-	$.get("controller/poController.php?clearFilter", function(){ goBack(); });	
+	$.get("controller/poController.php?clearFilter", function(){ goBack(); });
 }
 
 
@@ -101,14 +132,14 @@ function clearFilter(){
 
 
 function viewDetail(reference){
-	window.location.href = "index.php?content=po&view_detail&reference="+reference;	
+	window.location.href = "index.php?content=po&view_detail&reference="+reference;
 }
 
 
 
 
 function goBack(){
-	window.location.href = "index.php?content=po";	
+	window.location.href = "index.php?content=po";
 }
 
 

@@ -2,10 +2,11 @@
 require_once '../library/config.php';
 require_once '../library/functions.php';
 require_once 'function/tools.php';
+
 if( !getConfig('CLOSED') )
 {
 	checkUser();
-	$user_id = $_COOKIE['user_id'];
+	$user_id = getCookie('user_id');
 
 	$id_profile = getProfile($user_id);
 
@@ -19,7 +20,7 @@ if( !getConfig('CLOSED') )
 
 	$page = ( isset($_GET['content'] ) && $_GET['content'] != '' ) ? $_GET['content'] : '' ;
 
-switch($page){
+	switch($page){
 
 //**********  ระบบคลังสินค้า  **********//
 		case 'test_run' :
@@ -390,14 +391,15 @@ switch($page){
 
 
 
-}
+	}
 
-if( $viewStockOnly === TRUE )
-{
-	$content = 'view_stock.php';
-	$pageTitle = 'View Stock';
-}
-require_once 'template.php';
+	if( $viewStockOnly === TRUE )
+	{
+		$content = 'view_stock.php';
+		$pageTitle = 'View Stock';
+	}
+
+	require_once 'template.php';
 }
 else
 {

@@ -187,7 +187,7 @@ class product_group {
 
 	public function getProductGroup()
 	{
-		return dbQuery("SELECT * FROM tbl_product_group");
+		return dbQuery("SELECT * FROM tbl_product_group WHERE active = 1");
 	}
 
 
@@ -195,6 +195,19 @@ class product_group {
 	{
 		$qs = dbQuery("SELECT id FROM tbl_product WHERE id_group = '".$id."' GROUP BY id_style");
 		return dbNumRows($qs);
+	}
+
+
+
+	public function setActive($id, $active)
+	{
+		$sc = dbQuery("UPDATE tbl_product_group SET active = ".$active." WHERE id = '".$id."'");
+		if($sc === FALSE)
+		{
+			$this->error = dbError();
+		}
+
+		return $sc;
 	}
 
 }

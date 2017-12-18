@@ -4,6 +4,8 @@ $policy =  new discount_policy($id);
 $reference = $id === FALSE ? $policy->getNewReference() : $policy->reference;
 //--- ถ้ามีไอดีแล้ว
 $disabled = $id === FALSE ? '' : 'disabled';
+$startDate = $id === FALSE ? '' : thaiDate($policy->date_start);
+$endDate = $id === FALSE ? '' : thaiDate($policy->date_end);
 ?>
 
 
@@ -30,11 +32,11 @@ $disabled = $id === FALSE ? '' : 'disabled';
   </div>
   <div class="col-sm-1 col-1-harf padding-5">
     <label>เริ่มต้น</label>
-    <input type="text" class="form-control input-sm text-center header-box" id="fromDate" placeholder="วันที่เริ่มต้น" value="<?php echo thaiDate($policy->date_start); ?>" />
+    <input type="text" class="form-control input-sm text-center header-box" id="fromDate" placeholder="วันที่เริ่มต้น" value="<?php echo $startDate; ?>" <?php echo $disabled; ?> />
   </div>
   <div class="col-sm-1 col-1-harf padding-5">
     <label>เริ่มต้น</label>
-    <input type="text" class="form-control input-sm text-center header-box" id="toDate" placeholder="วันที่สิ้นสุด" value="<?php echo thaiDate($policy->date_end); ?>" />
+    <input type="text" class="form-control input-sm text-center header-box" id="toDate" placeholder="วันที่สิ้นสุด" value="<?php echo $endDate; ?>" <?php echo $disabled; ?> />
   </div>
   <?php if( $add && $id === FALSE ) : ?>
   <div class="col-sm-1 col-1-harf padding-5">

@@ -224,7 +224,7 @@
 
 		public function getDatas()
 		{
-			return dbQuery("SELECT * FROM tbl_warehouse");
+			return dbQuery("SELECT * FROM tbl_warehouse ORDER BY code ASC");
 		}
 
 

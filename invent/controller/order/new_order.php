@@ -30,7 +30,7 @@
 	$id_payment = isset( $_POST['paymentMethod']) ? $_POST['paymentMethod'] : 0;
 
 	//---	วันที่เอกสาร
-	$date_add = dbDate($_POST['dateAdd']);
+	$date_add = dbDate($_POST['dateAdd'], TRUE);
 
 	//---	พนักงาน
 	//---	กรณีออเดอร์ขาย คือคนที่ทำการสั่งด้วยตัวเองหน้าเว็บ

@@ -69,6 +69,7 @@
 					$valid = $isReturn == 1 ? 0 : 1;
 
 					$id = $cs->getId($bookcode, $reference, $product);
+
 					if( $id === FALSE )
 					{
 						$arr = array(
@@ -90,7 +91,7 @@
 											'bill_discount'	=> addslashes($rs['U']),
 											'amount_ex'	    => addslashes($rs['V']),
 											'vat_amount'	  => addslashes($rs['W']),
-											'date_add'			=> dbDate($rs['J']),
+											'date_add'			=> fmDate($rs['J']),
 											'isCancle'			=> $isCancle,
 											'valid'					=> $valid,
 											'isReturn'			=> $isReturn

@@ -15,6 +15,7 @@ class discount_policy
   public $emp_upd;
   public $active;
   public $isDeleted;
+  public $error;
 
   public function __construct($id = '')
   {
@@ -37,6 +38,35 @@ class discount_policy
         $this->$key = $value;
       }
     }
+  }
+
+
+
+
+  public function add(array $ds = array())
+  {
+    $sc = FALSE;
+    if( !empty($ds))
+    {
+      $fields = "";
+      $values = "";
+      $i = 1;
+      foreach($ds as $field => $value)
+      {
+        $fields .= $i == 1 ? $field : ", ".$field;
+        $values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
+        $i++;
+      }
+
+      $sc = dbQuery("INSERT INTO tbl_discount_policy (".$fields.") VALUES (".$values.")");
+
+      if( $sc === FALSE )
+      {
+        $this->error = dbError();
+      }
+    }
+
+    return $sc === TRUE ? dbInsertId() : FALSE;
   }
 
 

@@ -25,6 +25,34 @@ if( isset( $_GET['unClosePO'] ) )
 
 
 
+if(isset($_GET['deletePo']))
+{
+	$sc = TRUE;
+	$reference = $_POST['reference'];
+	$po = new po($reference);
+	if( $po->status == 1 )
+	{
+		if( $po->delete($reference) !== TRUE )
+		{
+			$sc = FALSE;
+			$message = $po->error;
+		}
+	}
+	else if($po->status == 2 )
+	{
+		$sc = FALSE;
+		$message = 'ไม่สามารถลบใบสั่งซื้อได้เนื่องจากมีการรับสินค้าแล้วบางส่วน';
+	}
+	else if( $po->status == 3)
+	{
+		$sc = FALSE;
+		$message = 'ไม่สามารถลบใบสั่งซื้อที่ปิดแล้วได้';
+	}
+
+	echo $sc === TRUE ? 'success' : $message;
+
+}
+
 
 if( isset( $_GET['clearFilter'] ) )
 {
@@ -33,7 +61,7 @@ if( isset( $_GET['clearFilter'] ) )
 	deleteCookie('sFrom');
 	deleteCookie('sTo');
 	deleteCookie('sPoStatus');
-	echo 'done';	
+	echo 'done';
 }
 
 ?>

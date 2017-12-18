@@ -122,5 +122,17 @@ function dbYear($year = '')
 }
 
 
+function fmDate($date)
+{
+	$sp = substr($date,2,1);
+	$ds = explode($sp, $date);
+	if( count($ds) == 3)
+	{
+		$date = $ds[1].'-'.$ds[0].'-20'.$ds[2];
+	}
+	return date('Y-m-d', strtotime($date));
+}
+
+
 
 ?>

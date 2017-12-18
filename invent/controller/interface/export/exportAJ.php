@@ -16,7 +16,7 @@
 			$zone 	= new zone();
 			$wh			= new warehouse();
 			$emp		= new employee();
-			
+
 
 			//--------------------  กำหนดค่าตัวแปรที่ต้องมีทุกๆ บรรทัด	-----------------//
 
@@ -63,7 +63,7 @@
 			$LOT = '';
 
 			//---	หมายเหตุที่หัวเอกสาร
-			$REMARKH1	= $cs->remark;
+			$REMARKH1	= tis($cs->remark);
 
 			//---	หมายเหตุที่รายการสินค้า
 			$REMARKI1 = '';
@@ -201,7 +201,7 @@
 					$excel->write($row, 16, $rs->qty);
 
 					//---	รหัสหน่วยนับ
-					$excel->writeString($row, 17, $pd->getUnitCode($rs->id_product) );
+					$excel->writeString($row, 17, tis($pd->getUnitCode($rs->id_product)));
 
 					//---	อัตราส่วนหน่ายนับ
 					$excel->write($row, 18, 1);

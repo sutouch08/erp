@@ -75,10 +75,10 @@
 		$DISCAMT1	= 0.00;
 
 		//--	มูลค่าสินค้าไม่รวม VAT (เป็นยอดรวมทั้งบิล) FALSE = ไม่รวม VAT decmal 15,2
-		$AMT = round( $order->getTotalConsignSoldAmount($cs->reference, FALSE), 2);
+		$AMT = toFixed( $order->getTotalConsignSoldAmount($cs->reference, FALSE), 2);
 
 		//--	มูลค่าภาษี (เป็นยอดรวมทั้งบิล) TRUE = VAT นอก FALSE = VAT ใน decmal 14,2
-		$VATAMT	= round( getVatAmount( $order->getTotalConsignSoldAmount($cs->reference,TRUE ), getVatRate($VATTYPE), FALSE),2 );
+		$VATAMT	= getVatAmount( $order->getTotalConsignSoldAmount($cs->reference,TRUE ), getVatRate($VATTYPE), FALSE);
 
 		//--	รหัสหน่วยเงิน
 		$QCCURRENCY	= "";
