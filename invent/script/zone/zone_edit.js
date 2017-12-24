@@ -182,10 +182,10 @@ $('#customer').autocomplete({
   close:function(){
     var rs = $(this).val();
     var arr = rs.split(' | ');
-    if( arr.length == 2){
-      $('#customer').val(arr[0]);
-      $('#id_customer').val(arr[1]);
-    }else {
+    if( arr.length == 3){
+      $('#customer').val(arr[1]);
+      $('#id_customer').val(arr[2]);
+    }else{
       $('#customer').val('');
       $('#id_customer').val('');
     }

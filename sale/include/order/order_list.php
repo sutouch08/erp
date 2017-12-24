@@ -60,7 +60,7 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 <hr class="margin-top-10 margin-bottom-10"/>
 
 <?php
-	$where = "WHERE id_sale= '".$id_emp."' ";
+	$where = "WHERE id_sale= '".getCookie('sale_id')."' ";
 	//--- Reference
 	if( $sCode != "" )
 	{

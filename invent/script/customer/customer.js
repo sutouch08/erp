@@ -8,37 +8,30 @@ function saveGeneral(){
 		swal("ไม่พบไอดีลูกค้า");
 		return false;
 	}
-	
-	if( kind == '0' ){
-		swal("กรุณาเลือกประเภทลูกค้า");
-		return false;
-	}
-	
-	if( type == '0' ){
-		swal("กรุณาเลือกชนิดลูกค้า");
-		return false;
-	}
-	
-	if( grade == '0' ){
-		swal("กรุณาเลือกเกรดลูกค้า");
-		return false;	
-	}
-	
+
 	load_in();
 	$.ajax({
 		url:"controller/customerController.php?saveGeneral",
-		type:"POST", cache:"false", data:{ "id_customer" : id, "kind" : kind, "type" : type, "class" : grade },
+		type:"POST",
+		cache:"false",
+		data:{
+			"id_customer" : id,
+			"kind" : kind,
+			"type" : type,
+			"class" : grade
+		},
 		success: function(rs){
 			load_out();
 			var rs = $.trim(rs);
 			if( rs == "success" ){
 				swal({title: "Success", type: "success", timer: 1000 });
 			}else{
-				swal("ข้อผิดพลาด !", rs, "error");	
+				swal("ข้อผิดพลาด !", rs, "error");
 			}
 		}
 	});
 }
+
 
 function deleteCustomer(id, name){
 	swal({
@@ -112,7 +105,7 @@ function updateDiscount(){
 			}
 			else
 			{
-				swal("ข้อผิดพลาด !", "บันทึกส่วนลดไม่สำเร็จ", "error");	
+				swal("ข้อผิดพลาด !", "บันทึกส่วนลดไม่สำเร็จ", "error");
 			}
 		}
 	});
@@ -125,7 +118,7 @@ $(".discount-box").keydown(function(e) {
 	// allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
 	// home, end, period, and numpad decimal
 	return (
-		key == 8 || 
+		key == 8 ||
 		key == 9 ||
 		key == 13 ||
 		key == 46 ||
@@ -158,7 +151,7 @@ $(".discount-box").focusout(function(e) {
 });
 
 function getEdit(id){
-	window.location.href = "index.php?content=customer&edit&id="+id;	
+	window.location.href = "index.php?content=customer&edit&id="+id;
 }
 
 $(".search-box").keyup(function(e){
@@ -175,7 +168,7 @@ function getSearch(){
 	var prov	 	= $.trim($("#cProvince").val() );
 	if( name != "" || code != "" || prov != "" || group != "" || area != "" ){
 		$("#searchForm").submit();
-	}		
+	}
 }
 
 function syncCustomer(){
@@ -201,7 +194,7 @@ function goBack(){
 }
 
 function goDeleted(){
-	window.location.href = "index.php?content=customer&deleted";	
+	window.location.href = "index.php?content=customer&deleted";
 }
 
 function clearFilter(){

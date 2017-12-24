@@ -25,6 +25,10 @@ if( isset( $_GET['add'] ) )
 {
   include 'include/policy/policy_add.php';
 }
+else if( isset($_GET['add_rule']))
+{
+  include 'include/policy/add_policy_rule.php';
+}
 else
 {
   include 'include/policy/policy_list.php';

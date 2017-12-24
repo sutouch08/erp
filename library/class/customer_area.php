@@ -82,7 +82,7 @@ class customer_area
 	public function hasMember($id)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT id_customer FROM tbl_customer WHERE id_area = '".$id."'");
+		$qs = dbQuery("SELECT id FROM tbl_customer WHERE id_area = '".$id."'");
 		if( dbNumRows($qs) > 0 )
 		{
 			$sc = TRUE;
@@ -155,7 +155,7 @@ class customer_area
 		return $sc;
 	}
 
-	
+
 }
 
 ?>

@@ -68,7 +68,7 @@
 					//---	valid ถ้าไม่มีการคืนสินค้าให้ valid = 1
 					$valid = $isReturn == 1 ? 0 : 1;
 
-					$id = $cs->getId($bookcode, $reference, $product);
+					$id = $cs->getId($bookcode, $reference, $product, $invoice);
 
 					if( $id === FALSE )
 					{

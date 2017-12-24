@@ -31,9 +31,11 @@
 				if( $i != 1 ) //---- Skip first row
 				{
 
-					$code = addslashes( $rs['C'] );
-					if( $cs->isExists( $code ) === FALSE )
+					$code = addslashes($rs['C']);
+					$id = $customer->getId($code);
+					if( $cs->isExists( $code ) === FALSE && $id == 0)
 					{
+
 						//-- If not exists do insert
 						$arr = array(
 								'id_customer'	=> $customer->getId($code),
@@ -56,7 +58,6 @@
 					else
 					{
 						//--- If exists do update
-						$id = $cs->getid($code);
 						$arr = array(
 								'code'		=> $code,
 								'name'		=> addslashes( $rs['D'] ),

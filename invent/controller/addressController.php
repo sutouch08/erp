@@ -283,7 +283,7 @@ if( isset( $_GET['deleteTransportCustomer'] ) && isset( $_GET['id_transport'] ) 
 
 if( isset( $_GET['isTransportCustomerExists'] ) && isset( $_GET['id_customer'] ) )
 {
-	$qs = dbQuery("SELECT id_customer FROM tbl_transport WHERE id_customer = ''".$_GET['id_customer']."'");
+	$qs = dbQuery("SELECT id_customer FROM tbl_transport WHERE id_customer = '".$_GET['id_customer']."'");
 	echo dbNumRows($qs);
 }
 
@@ -337,7 +337,7 @@ if( isset( $_GET['getSenderInfo'] ) && isset( $_GET['id_sender'] ) )
 {
 	$id = $_GET['id_sender'];
 	$data = array();
-	$qs = dbQuery("SELECT * FROM tbl_sender WHERE id_sender = ".$id);
+	$qs = dbQuery("SELECT * FROM tbl_sender WHERE id_sender = '".$id."'");
 	if( dbNumRows($qs) == 1 )
 	{
 		$rs = dbFetchArray($qs);

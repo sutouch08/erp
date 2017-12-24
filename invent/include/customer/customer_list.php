@@ -158,30 +158,19 @@
                     <td class="middle text-center"><?php echo $ca->getAreaName($rs->id_area); ?></td>
                     <td class="middle text-center"><?php echo $rs->province; ?></td>
                     <td class="middle" align="right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-xs btn-info dropdown-toggle" data-toggle="dropdown">การกระทำ</button>
-                              <ul class="dropdown-menu text-left" role="menu">
-                                <li>
-                                    <a href="javascript:void(0)" onclick="viewDetail('<?php echo $rs->id; ?>')">
-                                    	<i class="fa fa-search"></i> รายละเอียด
-                                    </a>
-                                </li>
-                        <?php if( $edit ) : ?>
-                                <li>
-                                    <a href="javascript:void(0)" onclick="getEdit('<?php echo $rs->id; ?>')">
-                                    	<i class="fa fa-pencil"></i> แก้ไขลูกค้า
-                                    </a>
-                                </li>
-                        <?php endif; ?>
-                        <?php if( $delete ) : ?>
-                                <li>
-                                	<a href="javascript:void(0)" onclick="deleteCustomer('<?php echo $rs->id; ?>', '<?php echo $rs->name; ?>')">
-                                    	<i class="fa fa-trash"></i> ลบลูกค้า
-                                    </a>
-                                </li>
-                        <?php endif; ?>
-                              </ul>
-                        </div>
+											<button type="button" class="btn btn-xs btn-info" onclick="viewDetail('<?php echo $rs->id; ?>')">
+												<i class="fa fa-eye"></i>
+											</button>
+							<?php if( $edit ) : ?>
+											<button type="button" class="btn btn-xs btn-warning" onclick="getEdit('<?php echo $rs->id; ?>')">
+												<i class="fa fa-pencil"></i>
+											</button>
+							<?php endif; ?>
+							<?php if($delete) : ?>
+											<button type="button" class="btn btn-xs btn-danger" onclick="deleteCustomer('<?php echo $rs->id; ?>', '<?php echo $rs->name; ?>')">
+												<i class="fa fa-trash"></i>
+											</button>
+							<?php endif; ?>
                     </td>
                 </tr>
 	<?php	$no++; ?>

@@ -23,7 +23,7 @@ if(isset($_GET['logout']))
 
 
 
-if( ! getConfig("CLOSED") )
+if( ! getConfig("CLOSED") && getConfig("SALES_OPEN") )
 {
 
 	$content = '';

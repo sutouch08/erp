@@ -1,6 +1,8 @@
 <?php
 class movement
 {
+	public $error;
+
 	public function __construct(){}
 
 
@@ -14,7 +16,7 @@ class movement
 			$qr .= "AND id_warehouse = '".$id_warehouse."' ";
 			$qr .= "AND id_zone = '".$id_zone."' ";
 			$qr .= "AND id_product = '".$id_pd."' ";
-			return dbQuery($qr);
+
 		}
 		else
 		{
@@ -22,8 +24,16 @@ class movement
 			$qr .= "(reference, id_warehouse, id_zone, id_product, move_in, date_upd) ";
 			$qr .= "VALUES ";
 			$qr .= "('".$reference."', '".$id_warehouse."', '".$id_zone."', '".$id_pd."', '".$qty."', '".$date_upd."')";
-			return dbQuery($qr);
+
 		}
+
+		$sc = dbQuery($qr);
+		if($sc === FALSE )
+		{
+			$this->error = dbError();
+		}
+
+		return $sc;
 	}
 
 
@@ -38,7 +48,7 @@ class movement
 			$qr .= "AND id_warehouse = '".$id_warehouse."' ";
 			$qr .= "AND id_zone = '".$id_zone."' ";
 			$qr .= "AND id_product = '".$id_pd."' ";
-			return dbQuery($qr);
+
 		}
 		else
 		{
@@ -46,8 +56,17 @@ class movement
 			$qr .= "(reference, id_warehouse, id_zone, id_product, move_out, date_upd) ";
 			$qr .= "VALUES ";
 			$qr .= "('".$reference."', '".$id_warehouse."', '".$id_zone."', '".$id_pd."', '".$qty."', '".$date_upd."')";
-			return dbQuery($qr);
+
 		}
+
+		$sc = dbQuery($qr);
+
+		if($sc === FALSE )
+		{
+			$this->error = dbError();
+		}
+
+		return $sc;
 	}
 
 

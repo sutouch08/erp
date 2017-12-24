@@ -36,3 +36,9 @@ function addNew(){
     }
   });
 }
+
+
+function newRule(id){
+  var id = $('#id_policy').val();
+  window.location.href = 'index.php?content=discount_policy&add_rule=Y&id_policy='+id;
+}

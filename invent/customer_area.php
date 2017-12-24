@@ -19,9 +19,9 @@
     </div>
     <hr/>
 <?php	$caCode 	= isset( $_POST['caCode'] ) ? trim( $_POST['caCode'] ) : ( getCookie('caCode') ? trim( getCookie('caCode') ) : '' ); 		?>
-<?php	$caName		= isset( $_POST['caName'] ) ? trim( $_POST['caName'] ) : ( getCookie('caName') ? trim( getCookie('caName') ) : '' ); 	?>    
-    
-    
+<?php	$caName		= isset( $_POST['caName'] ) ? trim( $_POST['caName'] ) : ( getCookie('caName') ? trim( getCookie('caName') ) : '' ); 	?>
+
+
     <form id="searchForm" method="post">
     <div class="row">
     	<div class="col-sm-3">
@@ -40,33 +40,33 @@
         	<label class="display-block not-show">Apply</label>
             <button type="button" class="btn btn-sm btn-warning btn-block" onClick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
         </div>
-        
+
     </div>
     </form>
     <hr class="margin-top-15" />
-    
-<?php 
+
+<?php
 	$where	= "WHERE id != '' ";
 	if( $caCode != '' )
 	{
 		createCookie('caCode', $caCode);
 		$where .= "AND code LIKE '%". $caCode ."%' ";
 	}
-	
+
 	if( $caName != '' )
 	{
 		createCookie('caName', $caName);
 		$where .= "AND name LIKE '%". $caName ."%' ";
 	}
 	$where .= "ORDER BY code ASC";
-	
+
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
 	$paginator->Per_Page('tbl_customer_area', $where, $get_rows);
-	$paginator->display($get_rows, 'index.php?content=area');
-	
+	$paginator->display($get_rows, 'index.php?content=customer_area');
+
 	$qs = dbQuery("SELECT * FROM tbl_customer_area ".$where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
-?>    
+?>
 	<div class="row">
     	<div class="col-sm-12">
         	<table class="table table-striped border-1">
@@ -101,11 +101,11 @@
 				<tr>
                 	<td colspan="5" align="center"><h4>ไม่พบรายการ</h4></td>
 				</tr>
-<?php	endif; ?>          
-                </tbody>                
+<?php	endif; ?>
+                </tbody>
             </table>
         </div>
     </div>
-    
+
 </div><!--/ Container -->
 <script src="script/customer_area.js"></script>

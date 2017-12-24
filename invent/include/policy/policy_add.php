@@ -15,7 +15,11 @@ $endDate = $id === FALSE ? '' : thaiDate($policy->date_end);
   </div>
   <div class="col-sm-6">
     <p class="pull-right top-p">
-      <?php echo goBackButton(); ?>
+  <?php echo goBackButton(); ?>
+  <?php if( $add ) : ?>
+    <button type="button" class="btn btn-sm btn-info" onclick="newRule()"><i class="fa fa-plus"></i> เพิ่มกฏ</button>
+    <button type="button" class="btn btn-sm btn-success hide" id="btn-save-rule" onclick="saveRule()"><i class="fa fa-save"></i> บันทึก</button>
+  <?php endif; ?>
     </p>
   </div>
 </div>
@@ -45,16 +49,19 @@ $endDate = $id === FALSE ? '' : thaiDate($policy->date_end);
   </div>
   <?php endif; ?>
   <?php if( $id !== FALSE && $edit ) : ?>
-    <div class="col-sm-1 col-1-harf padding-5">
+    <div class="col-sm-2 padding-5 last">
       <label class="display-block not-show">button</label>
       <button type="button" class="btn btn-sm btn-warning btn-block" id="btn-edit" onclick="getEdit()"><i class="fa fa-pencil"></i> แก้ไข</button>
-      <button type="button" class="btn btn-sm btn-success btn-block" id="btn-update" onclick="update()"><i class="fa fa-save"></i> บันทึก</button>
+      <button type="button" class="btn btn-sm btn-success btn-block hide" id="btn-update" onclick="update()"><i class="fa fa-save"></i> บันทึก</button>
     </div>
   <?php endif; ?>
   <input type="hidden" id="id_policy" value="<?php echo $policy->id; ?>" />
+  <input type="hidden" id="countNewRule" value="0" />
 </div>
 
+<hr class="margin-top-12 margin-bottom-15" />
 
-
+<?php include 'include/policy/rule_list.php'; ?>
 
 <script src="script/policy/policy_add.js"></script>
+<script src="script/rule/rule_add.js"></script>

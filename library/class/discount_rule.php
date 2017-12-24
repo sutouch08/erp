@@ -76,6 +76,12 @@ class discount_rule
     $qs = dbQuery("SELECT code FROM tbl_discount_rule");
   }
 
+
+  public function getRuleList($id_policy)
+  {
+    return dbQuery("SELECT * FROM tbl_discount_rule WHERE id_discount_policy = '".$id_policy."'");
+  }
+
 }
 
  ?>

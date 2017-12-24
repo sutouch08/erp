@@ -9,4 +9,13 @@ if(isset($_GET['addNew']))
 	include 'policy/policy_add.php';
 }
 
+
+if(isset($_GET['clearFilter']))
+{
+	deleteCookie('policyCode');
+	deleteCookie('policyName');
+	deleteCookie('startDate');
+	deleteCookie('endDate');
+	echo 'done';
+}
 ?>

@@ -34,6 +34,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'นำเข้าข้อมูลจาก formula';
 			break;
 
+		case 'import_stock_zone' :
+			$content = 'import_stock_zone.php';
+			$pageTitle = 'บันทึกยอดสินค้าคงเหลือยกมาต้นงวด';
+			break;
+
 		case 'receive_product':
 			$content = 'receive_product.php';
 			$pageTitle = 'รับสินค้าเข้า';

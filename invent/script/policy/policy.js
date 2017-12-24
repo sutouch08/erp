@@ -1,5 +1,5 @@
 function goBack(){
-  window.location.herf = 'index.php?content=discount_policy';
+  window.location.href = 'index.php?content=discount_policy';
 }
 
 
@@ -10,6 +10,13 @@ function goAdd(id){
     window.location.href = 'index.php?content=discount_policy&add=Y';
   }
 }
+
+function goEdit(id){
+  window.location.href = 'index.php?content=discount_policy&edit=Y&id_policy='+id;
+}
+
+
+
 
 
 $('#fromDate').datepicker({

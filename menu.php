@@ -193,6 +193,7 @@
       </li>
       <li><a href="index.php?content=syncData"><i class="fa fa-exchange"></i>&nbsp; นำเข้าข้อมูลจาก formula</a></li>
       <li class="divider"></li>
+      <li><a href="index.php?content=import_stock_zone"><i class='fa fa-database'></i>&nbsp; บันทึกยอดสินค้าคงเหลือยกมาต้นงวด</a></li>
       <li><a href="index.php?content=test_run"><i class='fa fa-database'></i>&nbsp; ทดสอบระบบ</a></li>
 
     </ul>

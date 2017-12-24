@@ -87,14 +87,15 @@ class return_order
 
 
 
-  public function getId($bookcode, $reference, $product_code)
+  public function getId($bookcode, $reference, $product_code, $invoice)
   {
     $sc  = FALSE;
 
     $qr  = "SELECT id FROM tbl_return_order ";
     $qr .= "WHERE bookcode = '".$bookcode."' ";
     $qr .= "AND reference = '".$reference."' ";
-    $qr .= "AND product_code = '".$product_code."'";
+    $qr .= "AND product_code = '".$product_code."' ";
+    $qr .= "AND invoice = '".$invoice."'";
 
     $qs = dbQuery($qr);
 

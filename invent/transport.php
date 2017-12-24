@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$page_name = "การจัดส่งของลูกค้า";
 	$id_tab = 56;
 	$id_profile = $_COOKIE['profile_id'];
@@ -11,16 +11,16 @@
 	include 'function/transport_helper.php';
 	?>
 
-<style> 
-label { margin-top: 10px; } 
-.input-medium { 
+<style>
+label { margin-top: 10px; }
+.input-medium {
 	width: 300px;
 }
 .input-small {
 	width: 150px;
 }
 hr { margin-bottom:5px; margin-top:5px; }
-</style>    
+</style>
 <div class="container">
 	<div class="row" style="height:30px;">
         <div class="col-lg-6" style="margin-top:10px;">
@@ -34,23 +34,23 @@ hr { margin-bottom:5px; margin-top:5px; }
 		<?php if( isset( $_GET['add'] ) ) :	?>
         	<?php if( $add ) : ?>
         		<button type="button" class="btn btn-success btn-sm" onClick="save()"><i class="fa fa-save"></i> บันทึก</button>
-			<?php endif; ?>             
-        <?php endif; ?>   
+			<?php endif; ?>
+        <?php endif; ?>
         <?php if( isset( $_GET['edit'] ) && isset( $_GET['id_transport'] ) ) : ?>
             <?php if( $edit ) : ?>
             	<button type="button" class="btn btn-success btn-sm" onClick="saveEdit(<?php echo $_GET['id_transport']; ?>)"><i class="fa fa-save"></i> บันทึก</button>
             <?php endif; ?>
-        <?php endif; ?> 
+        <?php endif; ?>
         <?php if( !isset( $_GET['add'] ) && !isset( $_GET['edit'] ) ) : ?>
         	<?php if( $add ) : ?>
             	<button type="button" class="btn btn-success btn-sm" onClick="addNew()"><i class="fa fa-plus"></i> เพิ่มใหม่</button>
             <?php endif; ?>
-        <?php endif; ?>            
+        <?php endif; ?>
             </p>
-		</div>       
+		</div>
     </div>
     <hr style="margin-bottom:10px;"/>
-<?php if( isset( $_GET['add'] ) ) : ?>    
+<?php if( isset( $_GET['add'] ) ) : ?>
 	<div class="row">
 	<form id="addFrom">
         <div class="col-lg-4 col-lg-offset-4">
@@ -123,7 +123,7 @@ hr { margin-bottom:5px; margin-top:5px; }
     	<div class="input-group">
     		<span class="input-group-addon">ลูกค้า</span>
         	<input type="text" class="form-control input-sm" name="cus_search" value="<?php echo $cus_search; ?>" />
-		</div>        
+		</div>
     </div>
     <div class="col-lg-3">
     	<div class="input-group">
@@ -140,7 +140,7 @@ hr { margin-bottom:5px; margin-top:5px; }
 </div>
 </form>
 <hr style="margin-top:10px; margin-bottom:10px;"/>
-<?php 
+<?php
 	$qr = "WHERE id_transport != 0 ";
 	if($cus_search != '')
 	{
@@ -151,7 +151,7 @@ hr { margin-bottom:5px; margin-top:5px; }
 			$qr .= "AND id_customer IN(".$in.") ";
 		}
 	}
-	
+
 	if( $sender != '')
 	{
 		setcookie('sender', $sender, time()+3600, '/');
@@ -162,12 +162,13 @@ hr { margin-bottom:5px; margin-top:5px; }
 		}
 	}
 	$qr .= "ORDER BY id_transport DESC";
-	
+
 	$paginator = new paginator();
 	if(isset($_POST['get_rows'])){$get_rows = $_POST['get_rows'];$paginator->setcookie_rows($get_rows);}else if(isset($_COOKIE['get_rows'])){$get_rows = $_COOKIE['get_rows'];}else{$get_rows = 50;}
 	$paginator->Per_Page("tbl_transport",$qr,$get_rows);
 	$Page_Start = $paginator->Page_Start;
 	$Per_Page = $paginator->Per_Page;
+
 ?>
 
 <?php $qs = dbQuery("SELECT * FROM tbl_transport ".$qr." LIMIT ".$Page_Start.", ".$Per_Page); ?>
@@ -185,11 +186,12 @@ hr { margin-bottom:5px; margin-top:5px; }
                 </tr>
             </thead>
         <?php $n = 1; ?>
+				<?php $customer = new customer(); ?>
 		<?php while( $rs = dbFetchArray($qs) ) : ?>
         <?php 	$id = $rs['id_transport']; ?>
         	<tr id="<?php echo $id; ?>" style="font-size:10px;">
             	<td align="center"><?php echo $n; ?></td>
-                <td><?php echo customer_name($rs['id_customer']); ?></td>
+                <td><?php echo $customer->getName($rs['id_customer']); ?></td>
                 <td><a href="javascript:void(0)" onClick="showSender(<?php echo $rs['main_sender']; ?>)"><?php echo sender_name($rs['main_sender']); ?></a></td>
                 <td><a href="javascript:void(0)" onClick="showSender(<?php echo $rs['second_sender']; ?>)"><?php echo sender_name($rs['second_sender']); ?></a></td>
                 <td><a href="javascript:void(0)" onClick="showSender(<?php echo $rs['third_sender']; ?>)"><?php echo sender_name($rs['third_sender']); ?></a></td>
@@ -203,12 +205,12 @@ hr { margin-bottom:5px; margin-top:5px; }
                 </td>
             </tr>
         <?php $n++; ?>
-        <?php endwhile; ?>                 
+        <?php endwhile; ?>
         </table>
         <?php $paginator->display($get_rows,"index.php?content=transport"); ?>
     </div>
 </div><!--/ row -->
-<?php endif; ?>    
+<?php endif; ?>
 </div><!--/ Container -->
 
 <div class='modal fade' id='senderInfo' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
@@ -282,13 +284,13 @@ function deleteRow(id)
 						swal("ไม่สำเร็จ", "ลบรายการไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", "error");
 					}
 				}
-			});						
+			});
 	});
 }
 
 function goEdit(id)
 {
-	window.location.href = 'index.php?content=transport&edit=y&id_transport='+id;	
+	window.location.href = 'index.php?content=transport&edit=y&id_transport='+id;
 }
 
 function saveEdit(id)
@@ -337,7 +339,7 @@ function save(){
 		success: function(rs){
 			var rs = $.trim(rs);
 			if( rs != '0' ){
-				swal("ข้อผิดพลาด !!", "ลูกค้ามีการเชื่อมโยงการจัดส่งไว้แล้ว ไม่สามารถเพิ่มใหม่ได้", "warning");	
+				swal("ข้อผิดพลาด !!", "ลูกค้ามีการเชื่อมโยงการจัดส่งไว้แล้ว ไม่สามารถเพิ่มใหม่ได้", "warning");
 			}else{
 				insertTransportCustomer(id_cus, id_main, id_sec, id_third);
 			}
@@ -352,15 +354,15 @@ function insertTransportCustomer(id_cus, id_main, id_sec, id_third){
 		success: function(rs){
 			var rs = $.trim(rs);
 			if( rs == 'success' ){
-				swal({ 
-					title : 'สำเร็จ', 
-					text : 'เชื่อมโยงการจัดส่งเรียบร้อยแล้ว ต้องการเชื่อมโยงลูกค้าคนอื่นต่อหรือไม่ ?', 
-					type: 'success', 
+				swal({
+					title : 'สำเร็จ',
+					text : 'เชื่อมโยงการจัดส่งเรียบร้อยแล้ว ต้องการเชื่อมโยงลูกค้าคนอื่นต่อหรือไม่ ?',
+					type: 'success',
 					//confirmButtonColor: "#DD6B55",
 					confirmButtonText: "ใช่ เพิ่มอีก",
 					cancelButtonText: "ไม่ใช่",
 					closeOnConfirm: true,
-					showCancelButton: true 
+					showCancelButton: true
 					}, function(isConfirm){
 						if( isConfirm ){
 							window.location.href = 'index.php?content=transport&add';
@@ -372,7 +374,7 @@ function insertTransportCustomer(id_cus, id_main, id_sec, id_third){
 					swal("Error!", "เชื่อมโยงการจัดส่งกับลูกค้าไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", "error");
 				}
 		}
-	});				
+	});
 }
 
 
@@ -389,7 +391,7 @@ $("#customer").autocomplete({
 			$("#customer").val('');
 			$("#id_customer").val(0);
 		}
-	}			
+	}
 });
 
 $("#main_sender").autocomplete({
@@ -405,7 +407,7 @@ $("#main_sender").autocomplete({
 			$("#main_sender").val('');
 			$("#id_main_sender").val(0);
 		}
-	}			
+	}
 });
 
 $("#second_sender").autocomplete({
@@ -421,7 +423,7 @@ $("#second_sender").autocomplete({
 			$("#second_sender").val('');
 			$("#id_second_sender").val(0);
 		}
-	}			
+	}
 });
 
 $("#third_sender").autocomplete({
@@ -437,12 +439,12 @@ $("#third_sender").autocomplete({
 			$("#third_sender").val('');
 			$("#id_third_sender").val(0);
 		}
-	}			
+	}
 });
 
 function getSearch()
 {
-	$("#searchForm").submit();	
+	$("#searchForm").submit();
 }
 
 function clearFilter()
@@ -457,10 +459,10 @@ function clearFilter()
 
 function addNew()
 {
-	window.location.href= 'index.php?content=transport&add=y';	
+	window.location.href= 'index.php?content=transport&add=y';
 }
 function goBack()
 {
-	window.location.href = 'index.php?content=transport';	
+	window.location.href = 'index.php?content=transport';
 }
 </script>

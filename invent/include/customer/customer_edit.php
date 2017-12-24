@@ -4,6 +4,7 @@
 <?php else : ?>
 <?php 	$customer = new customer($_GET['id'] );  ?>
 
+<input type="hidden" id="id_customer" value="<?php echo $customer->id; ?>" />
 <div class="row">
 <div class="col-sm-2 padding-right-0" style="padding-top:15px;">
 <ul id="myTab1" class="setting-tabs">

@@ -18,57 +18,16 @@ class discount
 
 		if( $pd->id != "" && $cs->id != "" )
 		{
-			$qr  = "SELECT DISTINCT r.id, r.item_price, r.item_disc, r.item_disc_unit, r.qty, r.amount, r.canGroup ";
+			$qr = "SELECT r.id, r.item_price, r.item_disc, r.item_disc_unit, r.qty, r.amount, r.canGroup FROM tbl_discount_policy AS p ";
 
-			$qr .= "FROM tbl_discount_policy AS p ";
-
-			//----- รายการกฏต่างๆ
+			//----- get list of rule in policy
 			$qr .= "LEFT JOIN tbl_discount_rule AS r ON p.id = r.id_discount_policy ";
 
 			//---- get list of product if specific SKU
 			$qr .= "LEFT JOIN tbl_discount_rule_items AS i ON r.id = i.id_rule ";
 
-			//--- เลือกรายการตาม รุ่นสินค้า
-			$qr .= "LEFT JOIN tbl_discount_rule_product_style AS ps ON r.id = ps.id_rule ";
-
-			//--- รายการตามกลุ่มสินค้า
-			$qr .= "LEFT JOIN tbl_discount_rule_product_group AS pg ON r.id = pg.id_rule ";
-
-			//--- รายการตามกลุ่มย่อยสินค้า
-			$qr .= "LEFT JOIN tbl_discount_rule_product_sub_group AS psg ON r.id = psg.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_type AS pt ON r.id = pt.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_kind AS pk ON r.id = pk.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_category AS pc ON r.id = pc.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_brand AS pb ON r.id = pb.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_year AS py ON r.id = py.id_rule ";
-
 			//---- get list of customer if specific personaly customer
 			$qr .= "LEFT JOIN tbl_discount_rule_customers AS c ON r.id = c.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_group AS cg ON r.id = cg.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_area AS ca ON r.id = ca.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_kind AS ck ON r.id = ck.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_type AS ct ON r.id = ct.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_class AS cc ON r.id = cc.id_rule ";
 
 			//--- get list of sales channels if specific channels
 			$qr .= "LEFT JOIN tbl_discount_rule_channels AS n ON r.id = n.id_rule ";
@@ -80,33 +39,26 @@ class discount
 			$qr .= "WHERE p.date_start <= '".$date."' AND p.date_end >= '".$date."' AND p.isApproved = 1 AND p.active = 1 AND p.isDeleted = 0 ";
 
 			//----- now check product
-			$qr .= "AND (all_product = 1 OR all_product = 0) ";
-			$qr .= "AND (id_product IS NULL OR id_product = '".$pd->id."') ";
-			$qr .= "AND (id_product_style IS NULL OR id_product_style = '".$pd->id_style."') ";
-			$qr .= "AND (id_product_group IS NULL OR id_product_group = '".$pd->id_group."') ";
-			$qr .= "AND (id_product_sub_group IS NULL OR id_product_sub_group = '".$pd->id_sub_group."') ";
-			$qr .= "AND (id_product_type IS NULL OR id_product_type = '".$pd->id_type."') ";
-			$qr .= "AND (id_product_kind IS NULL OR id_product_kind = '".$pd->id_kind."') ";
-			$qr .= "AND (id_product_category IS NULL OR id_product_category = '".$pd->id_category."') ";
-			$qr .= "AND (id_product_brand IS NULL OR id_product_brand = '".$pd->id_brand."') ";
-			$qr .= "AND (year IS NULL OR year = '".$pd->year."') ";
-
+			$qr .= "AND (all_product = 1 OR id_product = '".$pd->id."' OR id_product_style = '".$pd->id_style."' OR id_product_group = '".$pd->id_group."' ";
+			$qr .= "OR id_product_type = '".$pd->id_type."' OR id_product_kind = '".$pd->id_kind."' OR id_product_category = '".$pd->id_category."' ";
+			$qr .= "OR id_product_brand = '".$pd->id_brand."' OR product_year = '".$pd->year."' ) ";
+			
 			//---- now check customer
-			$qr .= "AND (all_customer = 1 OR all_customer = 0) ";
-			$qr .= "AND (id_customer IS NULL OR id_customer = '".$cs->id."') ";
-			$qr .= "AND (id_customer_group IS NULL OR id_customer_group = '".$cs->id_group."') ";
-			$qr .= "AND (id_customer_area IS NULL OR id_customer_area = '".$cs->id_area."') ";
-			$qr .= "AND (id_customer_kind IS NULL OR id_customer_kind = '".$cs->id_kind."') ";
-			$qr .= "AND (id_customer_type IS NULL OR id_customer_type = '".$cs->id_type."') ";
-			$qr .= "AND (id_customer_class IS NULL OR id_customer_class = '".$cs->id_class."') ";
+			$qr .= "AND (all_customer = 1 OR id_customer_group = '".$cs->id."' OR id_customer_group = '".$cs->id_group."' ";
+			$qr .= "OR id_customer_area = '".$cs->id_area."' OR id_customer_kind = '".$cs->id_kind."' OR id_customer_type = '".$cs->id_type."' ";
+			$qr .= "OR id_customer_class = '".$cs->id_class."' ) ";
 
 			//---- now check  payment method
-			$qr .= "AND ( all_payment = 1 OR all_payment = 0) ";
-			$qr .= "AND ( id_payment IS NULL OR id_payment = '".$id_payment."') ";
+			$qr .= "AND ( all_payment = 1 OR id_payment = '".$id_payment."') ";
 
 			//---- now check sales channels
-			$qr .= "AND ( all_channels = 1 OR all_channels = 0) ";
-			$qr .= "AND (id_channels IS NULL OR id_channels = '".$id_channels."') ";
+			$qr .= "AND ( all_channels = 1 OR id_channels = '".$id_channels."') ";
+
+			//--- now check qty options
+			$qr .= "AND (qty = 0 OR  qty <= ".$qty.") ";
+
+			//--- now check amount options
+			$qr .= "AND ( amount = 0 OR amount <= ".( $qty * $pd->price ).") ";
 
 			$qr .= "AND r.active = 1 AND r.isDeleted = 0";
 
@@ -179,57 +131,16 @@ class discount
 
 		if( $pd->id != "" && $cs->id != "" )
 		{
-			$qr  = "SELECT DISTINCT r.id, r.item_price, r.item_disc, r.item_disc_unit, r.qty, r.amount, r.canGroup ";
+			$qr = "SELECT r.id, r.item_price, r.item_disc, r.item_disc_unit, r.qty, r.amount, r.canGroup FROM tbl_discount_policy AS p ";
 
-			$qr .= "FROM tbl_discount_policy AS p ";
-
-			//----- รายการกฏต่างๆ
+			//----- get list of rule in policy
 			$qr .= "LEFT JOIN tbl_discount_rule AS r ON p.id = r.id_discount_policy ";
 
 			//---- get list of product if specific SKU
 			$qr .= "LEFT JOIN tbl_discount_rule_items AS i ON r.id = i.id_rule ";
 
-			//--- เลือกรายการตาม รุ่นสินค้า
-			$qr .= "LEFT JOIN tbl_discount_rule_product_style AS ps ON r.id = ps.id_rule ";
-
-			//--- รายการตามกลุ่มสินค้า
-			$qr .= "LEFT JOIN tbl_discount_rule_product_group AS pg ON r.id = pg.id_rule ";
-
-			//--- รายการตามกลุ่มย่อยสินค้า
-			$qr .= "LEFT JOIN tbl_discount_rule_product_sub_group AS psg ON r.id = psg.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_type AS pt ON r.id = pt.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_kind AS pk ON r.id = pk.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_category AS pc ON r.id = pc.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_brand AS pb ON r.id = pb.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_year AS py ON r.id = py.id_rule ";
-
 			//---- get list of customer if specific personaly customer
 			$qr .= "LEFT JOIN tbl_discount_rule_customers AS c ON r.id = c.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_group AS cg ON r.id = cg.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_area AS ca ON r.id = ca.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_kind AS ck ON r.id = ck.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_type AS ct ON r.id = ct.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_class AS cc ON r.id = cc.id_rule ";
 
 			//--- get list of sales channels if specific channels
 			$qr .= "LEFT JOIN tbl_discount_rule_channels AS n ON r.id = n.id_rule ";
@@ -241,33 +152,20 @@ class discount
 			$qr .= "WHERE p.date_start <= '".$date."' AND p.date_end >= '".$date."' AND p.isApproved = 1 AND p.active = 1 AND p.isDeleted = 0 ";
 
 			//----- now check product
-			$qr .= "AND (all_product = 1 OR all_product = 0) ";
-			$qr .= "AND (id_product IS NULL OR id_product = '".$pd->id."') ";
-			$qr .= "AND (id_product_style IS NULL OR id_product_style = '".$pd->id_style."') ";
-			$qr .= "AND (id_product_group IS NULL OR id_product_group = '".$pd->id_group."') ";
-			$qr .= "AND (id_product_sub_group IS NULL OR id_product_sub_group = '".$pd->id_sub_group."') ";
-			$qr .= "AND (id_product_type IS NULL OR id_product_type = '".$pd->id_type."') ";
-			$qr .= "AND (id_product_kind IS NULL OR id_product_kind = '".$pd->id_kind."') ";
-			$qr .= "AND (id_product_category IS NULL OR id_product_category = '".$pd->id_category."') ";
-			$qr .= "AND (id_product_brand IS NULL OR id_product_brand = '".$pd->id_brand."') ";
-			$qr .= "AND (year IS NULL OR year = '".$pd->year."') ";
+			$qr .= "AND (all_product = 1 OR id_product = '".$pd->id."' OR id_product_style = '".$pd->id_style."' OR id_product_group = '".$pd->id_group."' ";
+			$qr .= "OR id_product_type = '".$pd->id_type."' OR id_product_kind = '".$pd->id_kind."' OR id_product_category = '".$pd->id_category."' ";
+			$qr .= "OR id_product_brand = '".$pd->id_brand."' OR product_year = '".$pd->year."' ) ";
 
 			//---- now check customer
-			$qr .= "AND (all_customer = 1 OR all_customer = 0) ";
-			$qr .= "AND (id_customer IS NULL OR id_customer = '".$cs->id."') ";
-			$qr .= "AND (id_customer_group IS NULL OR id_customer_group = '".$cs->id_group."') ";
-			$qr .= "AND (id_customer_area IS NULL OR id_customer_area = '".$cs->id_area."') ";
-			$qr .= "AND (id_customer_kind IS NULL OR id_customer_kind = '".$cs->id_kind."') ";
-			$qr .= "AND (id_customer_type IS NULL OR id_customer_type = '".$cs->id_type."') ";
-			$qr .= "AND (id_customer_class IS NULL OR id_customer_class = '".$cs->id_class."') ";
+			$qr .= "AND (all_customer = 1 OR id_customer_group = '".$cs->id."' OR id_customer_group = '".$cs->id_group."' ";
+			$qr .= "OR id_customer_area = '".$cs->id_area."' OR id_customer_kind = '".$cs->id_kind."' OR id_customer_type = '".$cs->id_type."' ";
+			$qr .= "OR id_customer_class = '".$cs->id_class."' ) ";
 
 			//---- now check  payment method
-			$qr .= "AND ( all_payment = 1 OR all_payment = 0) ";
-			$qr .= "AND ( id_payment IS NULL OR id_payment = '".$id_payment."') ";
+			$qr .= "AND ( all_payment = 1 OR id_payment = '".$id_payment."') ";
 
 			//---- now check sales channels
-			$qr .= "AND ( all_channels = 1 OR all_channels = 0) ";
-			$qr .= "AND (id_channels IS NULL OR id_channels = '".$id_channels."') ";
+			$qr .= "AND ( all_channels = 1 OR id_channels = '".$id_channels."') ";
 
 			$qr .= "AND r.active = 1 AND r.isDeleted = 0";
 
@@ -404,57 +302,16 @@ class discount
 
 		if( $pd->id != "" && $cs->id != "" )
 		{
-			$qr  = "SELECT DISTINCT r.id, r.item_price, r.item_disc, r.item_disc_unit, r.qty, r.amount, r.canGroup ";
+			$qr = "SELECT r.id, r.item_price, r.item_disc, r.item_disc_unit, r.qty, r.amount, r.canGroup FROM tbl_discount_policy AS p ";
 
-			$qr .= "FROM tbl_discount_policy AS p ";
-
-			//----- รายการกฏต่างๆ
+			//----- get list of rule in policy
 			$qr .= "LEFT JOIN tbl_discount_rule AS r ON p.id = r.id_discount_policy ";
 
 			//---- get list of product if specific SKU
 			$qr .= "LEFT JOIN tbl_discount_rule_items AS i ON r.id = i.id_rule ";
 
-			//--- เลือกรายการตาม รุ่นสินค้า
-			$qr .= "LEFT JOIN tbl_discount_rule_product_style AS ps ON r.id = ps.id_rule ";
-
-			//--- รายการตามกลุ่มสินค้า
-			$qr .= "LEFT JOIN tbl_discount_rule_product_group AS pg ON r.id = pg.id_rule ";
-
-			//--- รายการตามกลุ่มย่อยสินค้า
-			$qr .= "LEFT JOIN tbl_discount_rule_product_sub_group AS psg ON r.id = psg.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_type AS pt ON r.id = pt.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_kind AS pk ON r.id = pk.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_category AS pc ON r.id = pc.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_brand AS pb ON r.id = pb.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_year AS py ON r.id = py.id_rule ";
-
 			//---- get list of customer if specific personaly customer
 			$qr .= "LEFT JOIN tbl_discount_rule_customers AS c ON r.id = c.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_group AS cg ON r.id = cg.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_area AS ca ON r.id = ca.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_kind AS ck ON r.id = ck.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_type AS ct ON r.id = ct.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_class AS cc ON r.id = cc.id_rule ";
 
 			//--- get list of sales channels if specific channels
 			$qr .= "LEFT JOIN tbl_discount_rule_channels AS n ON r.id = n.id_rule ";
@@ -466,33 +323,20 @@ class discount
 			$qr .= "WHERE p.date_start <= '".$date."' AND p.date_end >= '".$date."' AND p.isApproved = 1 AND p.active = 1 AND p.isDeleted = 0 ";
 
 			//----- now check product
-			$qr .= "AND (all_product = 1 OR all_product = 0) ";
-			$qr .= "AND (id_product IS NULL OR id_product = '".$pd->id."') ";
-			$qr .= "AND (id_product_style IS NULL OR id_product_style = '".$pd->id_style."') ";
-			$qr .= "AND (id_product_group IS NULL OR id_product_group = '".$pd->id_group."') ";
-			$qr .= "AND (id_product_sub_group IS NULL OR id_product_sub_group = '".$pd->id_sub_group."') ";
-			$qr .= "AND (id_product_type IS NULL OR id_product_type = '".$pd->id_type."') ";
-			$qr .= "AND (id_product_kind IS NULL OR id_product_kind = '".$pd->id_kind."') ";
-			$qr .= "AND (id_product_category IS NULL OR id_product_category = '".$pd->id_category."') ";
-			$qr .= "AND (id_product_brand IS NULL OR id_product_brand = '".$pd->id_brand."') ";
-			$qr .= "AND (year IS NULL OR year = '".$pd->year."') ";
+			$qr .= "AND (all_product = 1 OR id_product = '".$pd->id."' OR id_product_style = '".$pd->id_style."' OR id_product_group = '".$pd->id_group."' ";
+			$qr .= "OR id_product_type = '".$pd->id_type."' OR id_product_kind = '".$pd->id_kind."' OR id_product_category = '".$pd->id_category."' ";
+			$qr .= "OR id_product_brand = '".$pd->id_brand."' OR product_year = '".$pd->year."' ) ";
 
 			//---- now check customer
-			$qr .= "AND (all_customer = 1 OR all_customer = 0) ";
-			$qr .= "AND (id_customer IS NULL OR id_customer = '".$cs->id."') ";
-			$qr .= "AND (id_customer_group IS NULL OR id_customer_group = '".$cs->id_group."') ";
-			$qr .= "AND (id_customer_area IS NULL OR id_customer_area = '".$cs->id_area."') ";
-			$qr .= "AND (id_customer_kind IS NULL OR id_customer_kind = '".$cs->id_kind."') ";
-			$qr .= "AND (id_customer_type IS NULL OR id_customer_type = '".$cs->id_type."') ";
-			$qr .= "AND (id_customer_class IS NULL OR id_customer_class = '".$cs->id_class."') ";
+			$qr .= "AND (all_customer = 1 OR id_customer_group = '".$cs->id."' OR id_customer_group = '".$cs->id_group."' ";
+			$qr .= "OR id_customer_area = '".$cs->id_area."' OR id_customer_kind = '".$cs->id_kind."' OR id_customer_type = '".$cs->id_type."' ";
+			$qr .= "OR id_customer_class = '".$cs->id_class."' ) ";
 
 			//---- now check  payment method
-			$qr .= "AND ( all_payment = 1 OR all_payment = 0) ";
-			$qr .= "AND ( id_payment IS NULL OR id_payment = '".$id_payment."') ";
+			$qr .= "AND ( all_payment = 1 OR id_payment = '".$id_payment."') ";
 
 			//---- now check sales channels
-			$qr .= "AND ( all_channels = 1 OR all_channels = 0) ";
-			$qr .= "AND (id_channels IS NULL OR id_channels = '".$id_channels."') ";
+			$qr .= "AND ( all_channels = 1 OR id_channels = '".$id_channels."') ";
 
 			//--- now check qty options
 			$qr .= "AND (qty = 0 OR  qty <= ".$qty.") ";
@@ -561,57 +405,16 @@ class discount
 
 		if( $pd->id != "" && $cs->id != "" )
 		{
-			$qr  = "SELECT DISTINCT r.id, r.item_price, r.item_disc, r.item_disc_unit, r.qty, r.amount, r.canGroup ";
+			$qr = "SELECT r.id, r.item_price, r.item_disc, r.item_disc_unit, r.qty, r.amount, r.canGroup FROM tbl_discount_policy AS p ";
 
-			$qr .= "FROM tbl_discount_policy AS p ";
-
-			//----- รายการกฏต่างๆ
+			//----- get list of rule in policy
 			$qr .= "LEFT JOIN tbl_discount_rule AS r ON p.id = r.id_discount_policy ";
 
 			//---- get list of product if specific SKU
 			$qr .= "LEFT JOIN tbl_discount_rule_items AS i ON r.id = i.id_rule ";
 
-			//--- เลือกรายการตาม รุ่นสินค้า
-			$qr .= "LEFT JOIN tbl_discount_rule_product_style AS ps ON r.id = ps.id_rule ";
-
-			//--- รายการตามกลุ่มสินค้า
-			$qr .= "LEFT JOIN tbl_discount_rule_product_group AS pg ON r.id = pg.id_rule ";
-
-			//--- รายการตามกลุ่มย่อยสินค้า
-			$qr .= "LEFT JOIN tbl_discount_rule_product_sub_group AS psg ON r.id = psg.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_type AS pt ON r.id = pt.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_kind AS pk ON r.id = pk.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_category AS pc ON r.id = pc.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_brand AS pb ON r.id = pb.id_rule ";
-
-			//---
-			$qr .= "LEFT JOIN tbl_discount_rule_product_year AS py ON r.id = py.id_rule ";
-
 			//---- get list of customer if specific personaly customer
 			$qr .= "LEFT JOIN tbl_discount_rule_customers AS c ON r.id = c.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_group AS cg ON r.id = cg.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_area AS ca ON r.id = ca.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_kind AS ck ON r.id = ck.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_type AS ct ON r.id = ct.id_rule ";
-
-			//---- get list of customer if specific personaly customer
-			$qr .= "LEFT JOIN tbl_discount_rule_customer_class AS cc ON r.id = cc.id_rule ";
 
 			//--- get list of sales channels if specific channels
 			$qr .= "LEFT JOIN tbl_discount_rule_channels AS n ON r.id = n.id_rule ";
@@ -623,33 +426,20 @@ class discount
 			$qr .= "WHERE p.date_start <= '".$date."' AND p.date_end >= '".$date."' AND p.isApproved = 1 AND p.active = 1 AND p.isDeleted = 0 ";
 
 			//----- now check product
-			$qr .= "AND (all_product = 1 OR all_product = 0) ";
-			$qr .= "AND (id_product IS NULL OR id_product = '".$pd->id."') ";
-			$qr .= "AND (id_product_style IS NULL OR id_product_style = '".$pd->id_style."') ";
-			$qr .= "AND (id_product_group IS NULL OR id_product_group = '".$pd->id_group."') ";
-			$qr .= "AND (id_product_sub_group IS NULL OR id_product_sub_group = '".$pd->id_sub_group."') ";
-			$qr .= "AND (id_product_type IS NULL OR id_product_type = '".$pd->id_type."') ";
-			$qr .= "AND (id_product_kind IS NULL OR id_product_kind = '".$pd->id_kind."') ";
-			$qr .= "AND (id_product_category IS NULL OR id_product_category = '".$pd->id_category."') ";
-			$qr .= "AND (id_product_brand IS NULL OR id_product_brand = '".$pd->id_brand."') ";
-			$qr .= "AND (year IS NULL OR year = '".$pd->year."') ";
+			$qr .= "AND (all_product = 1 OR id_product = '".$pd->id."' OR id_product_style = '".$pd->id_style."' OR id_product_group = '".$pd->id_group."' ";
+			$qr .= "OR id_product_type = '".$pd->id_type."' OR id_product_kind = '".$pd->id_kind."' OR id_product_category = '".$pd->id_category."' ";
+			$qr .= "OR id_product_brand = '".$pd->id_brand."' OR product_year = '".$pd->year."' ) ";
 
 			//---- now check customer
-			$qr .= "AND (all_customer = 1 OR all_customer = 0) ";
-			$qr .= "AND (id_customer IS NULL OR id_customer = '".$cs->id."') ";
-			$qr .= "AND (id_customer_group IS NULL OR id_customer_group = '".$cs->id_group."') ";
-			$qr .= "AND (id_customer_area IS NULL OR id_customer_area = '".$cs->id_area."') ";
-			$qr .= "AND (id_customer_kind IS NULL OR id_customer_kind = '".$cs->id_kind."') ";
-			$qr .= "AND (id_customer_type IS NULL OR id_customer_type = '".$cs->id_type."') ";
-			$qr .= "AND (id_customer_class IS NULL OR id_customer_class = '".$cs->id_class."') ";
+			$qr .= "AND (all_customer = 1 OR id_customer_group = '".$cs->id."' OR id_customer_group = '".$cs->id_group."' ";
+			$qr .= "OR id_customer_area = '".$cs->id_area."' OR id_customer_kind = '".$cs->id_kind."' OR id_customer_type = '".$cs->id_type."' ";
+			$qr .= "OR id_customer_class = '".$cs->id_class."' ) ";
 
 			//---- now check  payment method
-			$qr .= "AND ( all_payment = 1 OR all_payment = 0) ";
-			$qr .= "AND ( id_payment IS NULL OR id_payment = '".$id_payment."') ";
+			$qr .= "AND ( all_payment = 1 OR id_payment = '".$id_payment."') ";
 
 			//---- now check sales channels
-			$qr .= "AND ( all_channels = 1 OR all_channels = 0) ";
-			$qr .= "AND (id_channels IS NULL OR id_channels = '".$id_channels."') ";
+			$qr .= "AND ( all_channels = 1 OR id_channels = '".$id_channels."') ";
 
 			//--- now check qty options
 			$qr .= "AND (qty = 0 OR  qty <= ".$qty.") ";
