@@ -32,12 +32,13 @@ $qs = dbQuery($qr);
     <div class="col-sm-12">
         <table class="table table-striped border-1">
             <thead>
-                <tr>
+                <tr class="font-size-12">
                     <th class="width-5 text-center">No.</th>
                     <th class="width-15">เลขที่เอกสาร</th>
-                    <th class="width-35">ลูกค้า</th>
+                    <th class="width-25">ลูกค้า</th>
                     <th class="width-15 text-center">รูปแบบ</th>
-                    <th class="width-15 text-center">วันที่</th>
+                    <th class="width-15 text-center">พนักงาน</th>
+                    <th class="width-10 text-center">วันที่</th>
                     <th></th>
                 </tr>
             </thead>
@@ -45,6 +46,7 @@ $qs = dbQuery($qr);
 
 <?php if( dbNumRows($qs) > 0) : ?>
 <?php   $no = row_no(); ?>
+<?php   $state = new state(); ?>
 <?php   while( $rs = dbFetchObject($qs)) : ?>
 
             <tr class="font-size-12" id="order-<?php echo $rs->id; ?>">
@@ -52,6 +54,7 @@ $qs = dbQuery($qr);
                 <td class="middle"><?php echo $rs->reference; ?></td>
                 <td class="middle"><?php echo customerName($rs->id_customer); ?></td>
                 <td class="middle text-center"><?php echo roleName($rs->role); ?></td>
+                <td class="middle text-center"><?php echo employeeName($state->getLastStateEmployee($rs->id, 4)); ?></td>
                 <td class="middle text-center"><?php echo thaiDate($rs->date_add); ?></td>
                 <td class="middle text-right">
                   <?php if( $add OR $edit) : ?>
@@ -68,7 +71,7 @@ $qs = dbQuery($qr);
 <?php else : ?>
 
             <tr>
-                <td colspan="6" class="text-center">
+                <td colspan="7" class="text-center">
                     <h4>ไม่พบรายการ</h4>
                 </td>
             </tr>

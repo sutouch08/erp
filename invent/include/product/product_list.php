@@ -85,7 +85,7 @@
 	}
 
 	$where .= "GROUP BY p.id_style ";
-	$where .= "ORDER BY p.code ASC";
+	$where .= "ORDER BY s.code ASC";
 
 
 	$paginator 	= new paginator();

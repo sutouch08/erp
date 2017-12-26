@@ -60,7 +60,7 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 <hr class="margin-top-10 margin-bottom-10"/>
 
 <?php
-	$where = "WHERE id_sale= '".getCookie('sale_id')."' ";
+	$where = "WHERE id_sale = '".getCookie('sale_id')."' ";
 	//--- Reference
 	if( $sCode != "" )
 	{
@@ -72,7 +72,7 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 	if( $sCus != "" )
 	{
 		createCookie('sOrderCus', $sCus);
-		$where .= "AND id_customer IN(".getCustomerIn($sCode).") "; //--- function/customer_helper.php
+		$where .= "AND id_customer IN(".getCustomerIn($sCus).") "; //--- function/customer_helper.php
 	}
 
 

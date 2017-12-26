@@ -69,6 +69,7 @@
     	<li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ระบบคลังสินค้า</a>
         <ul class="dropdown-menu">
           <li><a href="index.php?content=recieved_report"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน การรับสินค้าจากการซื้อ</a></li>
+          <li><a href="index.php?content=stock_balance_by_zone"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือแยกตามโซน</a></li>
         </ul>
       </li>
 

@@ -386,16 +386,24 @@ if( isset( $_GET['getCustomerOnline'] ) && isset( $_REQUEST['term'] ) )
 
 
 
-
 if( isset( $_GET['getSaleCustomer'] ) && isset( $_REQUEST['term'] ) )
 {
+	$id_sale = $_GET['id_sale'];
 	$sc = array();
 	$cs = new customer();
-	$qs = $cs->search($_REQUEST['term'], "id, name");
-	while( $rs = dbFetchObject($qs) )
+	$qs = $cs->search_sale_customer($_REQUEST['term'], $id_sale, 50 );
+	if(dbNumRows($qs) > 0)
 	{
-		$sc[] = $rs->name .' | '. $rs->id;
+		while( $rs = dbFetchObject($qs) )
+		{
+			$sc[] = $rs->name .' | '. $rs->id;
+		}
 	}
+	else
+	{
+		$sc[] = 'ไม่พบข้อมูล';
+	}
+
 	echo json_encode($sc);
 }
 
@@ -405,8 +413,8 @@ if( isset( $_GET['getSaleCustomer'] ) && isset( $_REQUEST['term'] ) )
 if( isset( $_GET['searchProducts'] ) && isset( $_REQUEST['term'] ) )
 {
 	$sc = array();
-	$qr  = "SELECT code FROM tbl_product_style WHERE code LIKE '%".$_REQUEST['term']."%' OR name LIKE '%".$_REQUEST['term']."%' ";
-	$qr .= "AND active = 1 AND can_sell = 1 AND is_deleted = 0";
+	$qr  = "SELECT code FROM tbl_product_style WHERE code LIKE '%".$_REQUEST['term']."%' ";
+	$qr .= "AND active = 1 AND can_sell = 1 AND is_deleted = 0 ORDER BY code ASC";
 	$qs = dbQuery($qr);
 	while( $rs = dbFetchObject($qs) )
 	{
@@ -422,8 +430,10 @@ if( isset( $_GET['searchProducts'] ) && isset( $_REQUEST['term'] ) )
 if( isset( $_GET['searchSaleProducts'] ) && isset( $_REQUEST['term'] ) )
 {
 	$sc = array();
-	$qr  = "SELECT code FROM tbl_product_style WHERE (code LIKE '%".$_REQUEST['term']."%' OR name LIKE '%".$_REQUEST['term']."%') ";
+	$qr  = "SELECT code FROM tbl_product_style ";
+	$qr .= "WHERE (code LIKE '%".$_REQUEST['term']."%' OR name LIKE '%".$_REQUEST['term']."%') ";
 	$qr .= "AND active = 1 AND can_sell = 1 AND is_deleted = 0 AND show_in_sale = 1 ";
+	$qr .= "ORDER BY code ASC";
 
 	$qs = dbQuery($qr);
 	while( $rs = dbFetchObject($qs) )

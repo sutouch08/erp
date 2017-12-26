@@ -118,4 +118,21 @@ class state
 	}
 
 
+	public function getLastStateEmployee($id_order, $id_state)
+	{
+		$sc  = 0;
+		$qr  = "SELECT id_employee FROM tbl_order_state ";
+		$qr .= "WHERE id_order = '".$id_order."' AND id_state = '".$id_state."' ";
+		$qr .= "ORDER BY date_upd DESC LIMIT 1";
+		$qs = dbQuery($qr);
+
+		if(dbNumRows($qs) == 1)
+		{
+			list($sc) = dbFetchArray($qs);
+		}
+
+		return $sc;
+	}
+
+
 }//--- end class

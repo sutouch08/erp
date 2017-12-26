@@ -212,13 +212,44 @@ class style
 	{
 		if( $fields == "" )
 		{
-			return dbQuery("SELECT * FROM tbl_product_style WHERE active = 1 AND code LIKE '%".$txt."'");
+			return dbQuery("SELECT * FROM tbl_product_style WHERE active = 1 AND code LIKE '%".$txt."%'");
 		}
 		else
 		{
-			return dbQuery("SELECT ".$fields." FROM tbl_product_style WHERE active = 1 code LIKE '%".$txt."%'");
+			return dbQuery("SELECT ".$fields." FROM tbl_product_style WHERE active = 1 AND code LIKE '%".$txt."%'");
 		}
 
+	}
+
+
+
+	public function autocomplete($txt, $fields = "", $limit = 50)
+	{
+		if($fields == '')
+		{
+			if( $txt == '*')
+			{
+				$sc = dbQuery("SELECT * FROM tbl_product_style LIMIT ".$limit);
+			}
+			else
+			{
+				$sc = dbQuery("SELECT * FROM tbl_product_style WHERE code LIKE '%".$txt."%' LIMIT ".$limit);
+			}
+		}
+		else
+		{
+			if( $txt != '*')
+			{
+				$sc = dbQuery("SELECT ".$fields." FROM tbl_product_style WHERE code LIKE '%".$txt."%' LIMIT ".$limit);
+			}
+			else
+			{
+				$sc = dbQuery("SELECT ".$fields." FROM tbl_product_style LIMIT ".$limit);
+			}
+
+		}
+
+		return $sc;
 	}
 
 

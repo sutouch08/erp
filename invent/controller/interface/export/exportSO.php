@@ -179,7 +179,7 @@
 				$excel->write($row, 33, $rs->price_inc );
 				$excel->writeString($row, 34, tis($rs->discount_label));
 				$excel->write($row, 35, $rs->price_inc);
-				$excel->writeString($row, 36, tis($rs->discount_label));
+				$excel->writeString($row, 36, tis($rs->discount_amount));
 				$excel->writeString($row, 37, tis($QCSECTI));
 				$excel->writeString($row, 38, tis($QCJOBI));
 				$excel->writeString($row, 39, tis($REMARKH1));

@@ -228,27 +228,30 @@ $("#dateAdd").datepicker({
 	dateFormat: 'dd-mm-yy'
 });
 
-
-
-$("#customer").autocomplete({
-	source: "../invent/controller/orderController.php?getSaleCustomer&id_sale="+$('#id_sale').val(),
-	autoFocus: true,
-	close: function(){
-		var rs = $.trim($(this).val());
-		var arr = rs.split(' | ');
-		if( arr.length == 2 ){
-			var name = arr[0];
-			var id = arr[1];
-			$("#id_customer").val(id);
-			$("#customer").val(name);
-		}else{
-			$("#id_customer").val('');
-			$(this).val('');
-		}
-	}
+$(document).ready(function() {
+	initCustomer();
 });
 
-
+function initCustomer(){
+	var id_sale = $('#id_sale').val();
+	$("#customer").autocomplete({
+		source: "../invent/controller/orderController.php?getSaleCustomer&id_sale="+id_sale,
+		autoFocus: true,
+		close: function(){
+			var rs = $.trim($(this).val());
+			var arr = rs.split(' | ');
+			if( arr.length == 2 ){
+				var name = arr[0];
+				var id = arr[1];
+				$("#id_customer").val(id);
+				$("#customer").val(name);
+			}else{
+				$("#id_customer").val('');
+				$(this).val('');
+			}
+		}
+	});
+}
 
 
 

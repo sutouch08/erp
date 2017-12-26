@@ -136,7 +136,7 @@ class customer {
 		{
 			$this->error = dbError();
 		}
-		
+
 		return $sc;
 	}
 
@@ -335,6 +335,16 @@ class customer {
 		{
 			return dbQuery("SELECT ".$fields." FROM tbl_customer WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%' AND active = 1");
 		}
+	}
+
+
+
+	public function search_sale_customer($txt, $id_sale, $limit=50)
+	{
+		$qr  = "SELECT * FROM tbl_customer ";
+		$qr .= "WHERE (name LIKE '%".$txt."%' OR code LIKE '%".$txt."%') ";
+		$qr .= "AND active = 1 AND id_sale = '".$id_sale."' LIMIT ".$limit;
+		return dbQuery($qr);
 	}
 
 

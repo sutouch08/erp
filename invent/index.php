@@ -388,6 +388,13 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รายงานวิเคราะห์ขายแบบละเอียด';
 			break;
 
+
+		//---------- รายงานระบบคลังสินค้า
+		case 'stock_balance_by_zone' :
+			$content = 'report/stock/stock_balance_by_zone.php';
+			$pageTitle = 'รายงานสินค้าคงเหลือแยกตามโซน';
+			break;
+
 		default:
 			$content = 'main.php';
 			$pageTitle = 'Smart Inventory';

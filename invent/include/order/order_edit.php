@@ -9,7 +9,7 @@ $channels = new channels($order->id_channels);
     <div class="col-sm-8">
     	<p class="pull-right top-p">
         	<button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i>  กลับ</button>
-			<?php if( $payment->hasTerm == 0 ) : ?>
+			<?php if( $order->isOnline == 1 && $payment->hasTerm == 0 ) : ?>
             <?php $payed = ( $order->status == 0 || $order->hasPayment == 1) ? 'disabled' : '' ;	?>
             <button type="button" class="btn btn-sm btn-primary" onClick="payOrder()" <?php echo $payed; ?>><i class="fa fa-credit-card"></i> แจ้งชำระเงิน</button>
 
@@ -19,11 +19,11 @@ $channels = new channels($order->id_channels);
             <?php $disabled = $order->status == 0 ? 'disabled' : '' ;	?>
         		<button type="button" class="btn btn-sm btn-success" onClick="getSummary()" <?php echo $disabled; ?>><i class="fa fa-list"></i> สรุปข้อมูล</button>
             <?php endif; ?>
-        		<button type="button" class="btn btn-sm btn-default" onClick="printOrder()"><i class="fa fa-print"></i> พิมพ์</button>
+        		<button type="button" class="btn btn-sm btn-default" onClick="printOrderSheet()"><i class="fa fa-print"></i> พิมพ์</button>
 
 
 
-			<?php if( ($add && $order->status == 0 && $order->id_employee == getCookie('user_id') ) OR ($edit && $order->status == 1 && $order->state < 4 ) ) : ?>
+			<?php if( ($add && $order->status == 0 ) OR ($edit && $order->status == 1 && $order->state < 4 ) ) : ?>
 				<?php if( ($payment->hasTerm == 0 && $order->hasPayment == FALSE ) OR ($payment->hasTerm == 1)) : ?>
 
             		<button type="button" class="btn btn-sm btn-warning" onclick="goAddDetail(<?php echo $order->id; ?>)"><i class="fa fa-pencil"></i> แก้ไขรายการ</button>

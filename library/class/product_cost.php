@@ -62,7 +62,18 @@ class product_cost
     {
       $qs = dbQuery("SELECT * FROM tbl_product_cost WHERE id_product = '".$id_pd."' ORDER BY date_add ASC");
       //--- ถ้ามีผลลัพธ์แค่ แถวเดียว
-      if(dbNumRows($qs) > 0 )
+      if(dbNumRows($qs) == 1 )
+      {
+        $rs = dbFetchObject($qs);
+        //--- ถ้ายอดที่จะตัดน้อยกว่าหรือเท่ากับยอดที่มี ให้ใช้ยอดที่จะตัด ถ้ามากกว่าให้ใช้ยอดคงเหลือ
+        $c_qty = ($rs->qty - $qty) >= 0 ? $qty : $rs->qty;
+
+        if(dbQuery("UPDATE tbl_product_cost SET qty = qty - ".$c_qty." WHERE id = '".$rs->id."'") === FALSE)
+        {
+          $sc = FALSE;
+        }
+      }
+      else if(dbNumRows($qs) > 1)
       {
         while($qty > 0)
         {
@@ -77,13 +88,14 @@ class product_cost
 
           $qty -= $c_qty;
         }
+      }
 
         $this->dropZero();
       }
+      return $sc;
     }
 
-    return $sc;
-  }
+
 
 
 

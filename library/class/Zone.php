@@ -416,6 +416,38 @@
 			return dbNumRows($qs);
 		}
 
+
+
+
+		public function autocomplete($txt, $fields = "", $limit = 50)
+		{
+			if($fields == '')
+			{
+				if( $txt == '*')
+				{
+					$sc = dbQuery("SELECT * FROM tbl_zone LIMIT ".$limit);
+				}
+				else
+				{
+					$sc = dbQuery("SELECT * FROM tbl_zone WHERE zone_name LIKE '%".$txt."%' OR barcode_zone LIKE '%".$txt."%' LIMIT ".$limit);
+				}
+			}
+			else
+			{
+				if( $txt != '*')
+				{
+					$sc = dbQuery("SELECT ".$fields." FROM tbl_zone WHERE zone_name LIKE '%".$txt."%' OR barcode_zone LIKE '%".$txt."%' LIMIT ".$limit);
+				}
+				else
+				{
+					$sc = dbQuery("SELECT ".$fields." FROM tbl_zone LIMIT ".$limit);
+				}
+
+			}
+
+			return $sc;
+		}
+
 	} 	//----- End class
 
 

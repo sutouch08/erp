@@ -9,11 +9,15 @@ $dser		= ( $order->service_fee > 0 || $order->hasPayment === TRUE ) ? 'disabled'
 $esbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE ) ? '' : 'hide';
 $usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE ) ? 'hide' : '';
 ?>
+<?php if($order->isOnline == 1) : ?>
 <div class="row">
 	<div class="col-sm-4">
+
 	<?php echo paymentLabel( $order->id, $pay->isExists($order->id), $order->isPaid ); ?>
     <?php echo shippingLabel($order->shipping_code); ?>
+		&nbsp;
     </div>
+
 	<div class="col-sm-8">
     	<p class="pull-right top-p">
         <label class="inline padding-10" style="font-weight:normal;">ค่าจัดส่ง</label>
@@ -28,6 +32,7 @@ $usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE ) ? 'hide' : 
     </div>
 </div>
 <hr />
+<?php endif; ?>
 
 <?php if( $order->isOnline == 1 ) : ?>
 <div class="row">

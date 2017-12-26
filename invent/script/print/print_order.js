@@ -16,6 +16,14 @@ function printOrder(){
 
 
 
+function printOrderSheet(){
+  var id = $('#id_order').val();
+  var target = 'controller/printController.php?printOrderSheet&id_order='+id;
+  window.open(target, '_blank', prop);
+}
+
+
+
 
 
 //--- พิมพ์ packing list แบบมีบาร์โค้ด

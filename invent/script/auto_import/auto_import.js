@@ -42,7 +42,7 @@ function importData(step, index){
     cache:'false',
     success:function(rs){
       var rs = $.trim(rs);
-      if(index == step.length){
+      if(index == (step.length -1)){
         window.close();
       }else{
         importData(step, index);

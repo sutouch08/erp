@@ -369,6 +369,37 @@
 
 
 
+		public function autocomplete($txt, $fields = "", $limit = 50)
+		{
+			if($fields == '')
+			{
+				if( $txt == '*')
+				{
+					$sc = dbQuery("SELECT * FROM tbl_warehouse LIMIT ".$limit);
+				}
+				else
+				{
+					$sc = dbQuery("SELECT * FROM tbl_warehouse WHERE name LIKE '%".$txt."%' OR code LIKE '%".$txt."%' LIMIT ".$limit);
+				}
+			}
+			else
+			{
+				if( $txt != '*')
+				{
+					$sc = dbQuery("SELECT ".$fields." FROM tbl_warehouse WHERE name LIKE '%".$txt."%' OR code LIKE '%".$txt."%' LIMIT ".$limit);
+				}
+				else
+				{
+					$sc = dbQuery("SELECT ".$fields." FROM tbl_warehouse LIMIT ".$limit);
+				}
+
+			}
+
+			return $sc;
+		}
+
+
+
 	} 	//----- End class
 
 

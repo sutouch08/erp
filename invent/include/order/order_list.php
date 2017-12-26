@@ -81,7 +81,7 @@ $isOnline = $_GET['content'] == 'order_online' ? TRUE : FALSE;
 	if( $sCus != "" )
 	{
 		createCookie('sOrderCus', $sCus);
-		$where .= "AND id_customer IN(".getCustomerIn($sCode).") "; //--- function/customer_helper.php
+		$where .= "AND id_customer IN(".getCustomerIn($sCus).") "; //--- function/customer_helper.php
 	}
 
 	//--- Employee
