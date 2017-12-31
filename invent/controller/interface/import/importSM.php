@@ -72,6 +72,11 @@
 
 					if( $id === FALSE )
 					{
+						//------ คำนวณส่วนลดใหม่
+						$disc 	= explode('%', $rs['AJ']);
+						$disc[0]	= trim( $disc[0] ); //--- ตัดช่องว่างออก
+						$discount = count( $disc ) == 1 ? $disc[0] : $rs['AI'] * ($disc[0] * 0.01 ); //--- ส่วนลดต่อตั
+						$discount_amount = $rs['AF'] * $discount; //---- ส่วนลดรวม
 						$arr = array(
 											'bookcode'	    => $bookcode,
 											'code'			    => $rs['H'],
@@ -88,13 +93,16 @@
 											'unit_code'	    => addslashes($rs['AG']),
 											'umqty'	        => addslashes($rs['AH']),
 											'discount'			=> addslashes($rs['AJ']),
+											'discount_amount' => $discount_amount;
 											'bill_discount'	=> addslashes($rs['U']),
 											'amount_ex'	    => addslashes($rs['V']),
 											'vat_amount'	  => addslashes($rs['W']),
 											'date_add'			=> fmDate($rs['J']),
 											'isCancle'			=> $isCancle,
 											'valid'					=> $valid,
-											'isReturn'			=> $isReturn
+											'isReturn'			=> $isReturn,
+											'bDiscLabel'		=> addslashes($rs['T']),
+											'credit_term'		=> $rs['O']
 										);
 
 						$import++;

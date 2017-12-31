@@ -23,6 +23,7 @@ class return_order
   public $valid = 0;
   public $isCancle = 0;
   public $isReturn = 1;
+  public $date_add;
 
   public function __construct($reference = '')
   {

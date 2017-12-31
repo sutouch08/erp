@@ -12,6 +12,9 @@ $zoneName = $zone->getName($cs->id_zone);
   <div class="col-sm-6">
     <p class="pull-right top-p">
       <?php echo goBackButton(); ?>
+      <?php if($edit OR $add) : ?>
+      <button type="button" class="btn btn-sm btn-info" onclick="exportConsignSO()"><i class="fa fa-send"></i> ดึงไปเปิดใบสั่งขาย</button>
+      <?php endif; ?>
     </p>
   </div>
 </div>

@@ -10,11 +10,22 @@ if(isset($_GET['getStyleCode']))
 }
 
 
+if(isset($_GET['getItemCode']))
+{
+	include 'autocomplete/get_item_code.php';
+}
+
 
 //---	รายงานสินค้าคงเหลือแยกตามโซน
 if(isset($_GET['getWarehouse']))
 {
 	include 'autocomplete/get_warehouse.php';
+}
+
+
+if(isset($_GET['getWarehouseCode']))
+{
+	include 'autocomplete/get_warehouse_code.php';
 }
 
 

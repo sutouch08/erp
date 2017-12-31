@@ -305,5 +305,18 @@ if( isset( $_GET['export']) && isset( $_GET['consignSold']))
 }
 
 
+//----Convert CN and Export to SO
+if(isset($_GET['export']) && isset($_GET['ConsignSO']))
+{
+	$reference = $_POST['reference'];
+
+	include 'interface/export/exportConsignSO.php';
+
+	$sc = exportConsignSO($reference);
+
+	echo $sc === TRUE ? 'success' : $sc;
+}
+
+
 ///=================================================== END DOCUMENTS =======================================///
 ?>

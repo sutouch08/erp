@@ -395,6 +395,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รายงานสินค้าคงเหลือแยกตามโซน';
 			break;
 
+		case 'stock_balance_compare_warehouse' :
+			$content = 'report/stock/stock_balance_compare_warehouse.php';
+			$pageTitle = 'รายงานสินค้าคงเหลือเปรียบเทียบคลัง';
+			break;
+
 		default:
 			$content = 'main.php';
 			$pageTitle = 'Smart Inventory';

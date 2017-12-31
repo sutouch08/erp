@@ -57,11 +57,16 @@ function getOrderGrid(id_style){
 
 
 
-function getStockGrid(id_style){
+function getSaleStockGrid(){
+	var pdCode = $('#pd-box').val();
 	load_in();
 	$.ajax({
-		url:"../invent/controller/orderController.php?getStockGrid",
-		type:"GET", cache:"false", data:{"id_style" : id_style},
+		url:"../invent/controller/orderController.php?getSaleStockGrid",
+		type:"GET",
+		cache:"false",
+		data:{
+			"pdCode" : pdCode
+		},
 		success: function(rs){
 			load_out();
 			var rs = rs.split(' | ');
@@ -72,7 +77,6 @@ function getStockGrid(id_style){
 				var id_style = rs[3];
 				$("#modal").css("width", width +"px");
 				$("#modalTitle").html(pdCode);
-				$("#id_style").val(id_style);
 				$("#modalBody").html(grid);
 				grid_init();
 				$("#orderGrid").modal('show');

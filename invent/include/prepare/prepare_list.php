@@ -107,7 +107,8 @@ $qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Sta
                 <tr>
                     <th class="width-5 text-center">No.</th>
                     <th class="width-15">เลขที่เอกสาร</th>
-                    <th class="width-35">ลูกค้า/ผู้รับ/ผู้เบิก</th>
+                    <th class="width-30">ลูกค้า/ผู้รับ/ผู้เบิก</th>
+                    <th class="width-10 text-center">จำนวน</th>
                     <th class="width-15 text-center">รูปแบบ</th>
                     <th class="width-15 text-center">วันที่</th>
                     <th></th>
@@ -116,6 +117,7 @@ $qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Sta
             <tbody id="list-table">
 <?php if( dbNumRows($qs) > 0) : ?>
 <?php   $no = row_no(); ?>
+<?php   $order = new order(); ?>
 <?php   while( $rs = dbFetchObject($qs)) : ?>
             <tr class="font-size-12">
                 <td class="middle text-center"><?php echo $no; ?></td>
@@ -123,6 +125,7 @@ $qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Sta
                 <td class="middle">
                   <?php echo customerName($rs->id_customer);  ?>
                 </td>
+                <td class="middle text-center"><?php echo number($order->getTotalQty($rs->id)); ?></td>
                 <td class="middle text-center"><?php echo roleName($rs->role); ?></td>
                 <td class="middle text-center"><?php echo thaiDate($rs->date_add); ?></td>
                 <td class="middle text-right">
@@ -137,7 +140,7 @@ $qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Sta
 <?php else : ?>
 
             <tr>
-                <td colspan="6" class="text-center">
+                <td colspan="7" class="text-center">
                     <h4>ไม่พบรายการ</h4>
                 </td>
             </tr>

@@ -34,9 +34,10 @@ $qs = dbQuery($qr);
             <thead>
                 <tr class="font-size-12">
                     <th class="width-5 text-center">No.</th>
-                    <th class="width-15">เลขที่เอกสาร</th>
+                    <th class="width-10">เลขที่เอกสาร</th>
                     <th class="width-25">ลูกค้า</th>
-                    <th class="width-15 text-center">รูปแบบ</th>
+                    <th class="width-10 text-center">จำนวน</th>
+                    <th class="width-10 text-center">รูปแบบ</th>
                     <th class="width-15 text-center">พนักงาน</th>
                     <th class="width-10 text-center">วันที่</th>
                     <th></th>
@@ -47,21 +48,23 @@ $qs = dbQuery($qr);
 <?php if( dbNumRows($qs) > 0) : ?>
 <?php   $no = row_no(); ?>
 <?php   $state = new state(); ?>
+<?php   $order = new order(); ?>
 <?php   while( $rs = dbFetchObject($qs)) : ?>
 
             <tr class="font-size-12" id="order-<?php echo $rs->id; ?>">
                 <td class="middle text-center"><?php echo $no; ?></td>
                 <td class="middle"><?php echo $rs->reference; ?></td>
                 <td class="middle"><?php echo customerName($rs->id_customer); ?></td>
+                <td class="middle text-center"><?php echo number($order->getTotalQty($rs->id)); ?></td>
                 <td class="middle text-center"><?php echo roleName($rs->role); ?></td>
                 <td class="middle text-center"><?php echo employeeName($state->getLastStateEmployee($rs->id, 4)); ?></td>
                 <td class="middle text-center"><?php echo thaiDate($rs->date_add); ?></td>
                 <td class="middle text-right">
                   <?php if( $add OR $edit) : ?>
-                    <button type="button" class="btn btn-sm btn-default" onclick="goPrepare(<?php echo $rs->id; ?>)">จัดสินค้า</button>
+                    <button type="button" class="btn btn-xs btn-default" onclick="goPrepare(<?php echo $rs->id; ?>)">จัดสินค้า</button>
                   <?php endif; ?>
                   <?php if( $supervisor) : ?>
-                    <button type="button" class="btn btn-sm btn-warning" onclick="pullBack(<?php echo $rs->id; ?>)">ดึงกลับ</button>
+                    <button type="button" class="btn btn-xs btn-warning" onclick="pullBack(<?php echo $rs->id; ?>)">ดึงกลับ</button>
                   <?php endif; ?>
                 </td>
             </tr>
@@ -71,7 +74,7 @@ $qs = dbQuery($qr);
 <?php else : ?>
 
             <tr>
-                <td colspan="7" class="text-center">
+                <td colspan="8" class="text-center">
                     <h4>ไม่พบรายการ</h4>
                 </td>
             </tr>

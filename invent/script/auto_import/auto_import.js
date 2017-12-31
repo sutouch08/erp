@@ -35,18 +35,20 @@ function syncData(){
 
 function importData(step, index){
   var ds = step[index];
-  index++;
+
   $.ajax({
     url: ds.url,
     type:'GET',
     cache:'false',
     success:function(rs){
       var rs = $.trim(rs);
-      if(index == (step.length -1)){
+      if(index == (step.length)){
         window.close();
       }else{
         importData(step, index);
       }
     }
   });
+
+  index++;
 }

@@ -314,6 +314,25 @@ if( isset( $_GET['getStockGrid'] ) && isset( $_GET['id_style'] ) )
 }
 
 
+
+//----- Attribute Grid By Clicking image
+if( isset( $_GET['getSaleStockGrid'] ) && isset( $_GET['pdCode'] ) )
+{
+	$sc = 'not exists';
+	$pdCode = $_GET['pdCode'];
+	$pd = new product();
+	$grid = new product_grid();
+	$style = new style();
+	$view = TRUE;  //--- view stock
+	$sc = $grid->getOrderGrid($id_style, $view);
+	$tableWidth	= $pd->countAttribute($id_style) == 1 ? 600 : $grid->getOrderTableWidth($id_style);
+	$sc .= ' | '.$tableWidth;
+	$sc .= ' | ' . $style->getCode($id_style);
+	$sc .= ' | ' . $id_style;
+	echo $sc;
+}
+
+
 //----- Echo product style list in tab
 if( isset( $_GET['getProductsInOrderTab'] ) )
 {
@@ -433,7 +452,7 @@ if( isset( $_GET['searchSaleProducts'] ) && isset( $_REQUEST['term'] ) )
 	$qr  = "SELECT code FROM tbl_product_style ";
 	$qr .= "WHERE (code LIKE '%".$_REQUEST['term']."%' OR name LIKE '%".$_REQUEST['term']."%') ";
 	$qr .= "AND active = 1 AND can_sell = 1 AND is_deleted = 0 AND show_in_sale = 1 ";
-	$qr .= "ORDER BY code ASC";
+	$qr .= "ORDER BY code ASC LIMIT 20";
 
 	$qs = dbQuery($qr);
 	while( $rs = dbFetchObject($qs) )

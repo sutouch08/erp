@@ -603,11 +603,10 @@ class product
 
 
 
-	public function search($txt, $fields)
+	public function search($txt, $fields, $limit= 50)
 	{
-		return dbQuery("SELECT $fields FROM tbl_product WHERE code LIKE '%".$txt."%' LIMIT 50");
+		return dbQuery("SELECT $fields FROM tbl_product WHERE code LIKE '%".$txt."%' LIMIT ".$limit);
 	}
-
 
 
 

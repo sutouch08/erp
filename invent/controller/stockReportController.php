@@ -18,4 +18,14 @@ if(isset($_GET['stock_balance_by_zone']) && isset($_GET['export']))
   include 'report/stockReport/export_stock_balance_by_zone.php';
 }
 
+
+if(isset($_GET['stock_balance_compare_warehouse']) && isset($_GET['report']))
+{
+  include 'report/stockReport/report_stock_compare_warehouse.php';
+}
+
+if(isset($_GET['stock_balance_compare_warehouse']) && isset($_GET['export']))
+{
+  include 'report/stockReport/export_stock_compare_warehouse.php';
+}
  ?>

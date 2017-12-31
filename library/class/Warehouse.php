@@ -375,22 +375,22 @@
 			{
 				if( $txt == '*')
 				{
-					$sc = dbQuery("SELECT * FROM tbl_warehouse LIMIT ".$limit);
+					$sc = dbQuery("SELECT * FROM tbl_warehouse ORDER BY code ASC LIMIT ".$limit);
 				}
 				else
 				{
-					$sc = dbQuery("SELECT * FROM tbl_warehouse WHERE name LIKE '%".$txt."%' OR code LIKE '%".$txt."%' LIMIT ".$limit);
+					$sc = dbQuery("SELECT * FROM tbl_warehouse WHERE name LIKE '%".$txt."%' OR code LIKE '%".$txt."%' ORDER BY code ASC LIMIT ".$limit);
 				}
 			}
 			else
 			{
 				if( $txt != '*')
 				{
-					$sc = dbQuery("SELECT ".$fields." FROM tbl_warehouse WHERE name LIKE '%".$txt."%' OR code LIKE '%".$txt."%' LIMIT ".$limit);
+					$sc = dbQuery("SELECT ".$fields." FROM tbl_warehouse WHERE name LIKE '%".$txt."%' OR code LIKE '%".$txt."%' ORDER BY code ASC LIMIT ".$limit);
 				}
 				else
 				{
-					$sc = dbQuery("SELECT ".$fields." FROM tbl_warehouse LIMIT ".$limit);
+					$sc = dbQuery("SELECT ".$fields." FROM tbl_warehouse ORDER BY code ASC LIMIT ".$limit);
 				}
 
 			}
