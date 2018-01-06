@@ -152,6 +152,7 @@ class image
 		$style = new style();
 		$code  = $style->getCode($id_style);
 		$path		= WEB_ROOT."img/product/";
+		$noImgPath	= WEB_ROOT."img/product/";
 
 		if( $code != '')
 		{
@@ -175,7 +176,7 @@ class image
 			break;
 		}
 
-		$noImgPath = $path.'no_image'.$size.'.jpg';
+		$noImgPath = $noImgPath.'no_image'.$size.'.jpg';
 
 		$path .= 'product' . $size . '_'. $id .'.jpg';
 

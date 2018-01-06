@@ -76,11 +76,14 @@ if( isset( $_GET['getOrderTable'] ) )
 {
 	$sc = 'fail';
 	$payment 	= new payment();
+	$channels = new channels();
 	$qs 			= $payment->getData();
 	if( dbNumRows($qs) > 0 )
 	{
 		$ds = array();
 		$no = 1;
+		$co = new customer_online();
+		$emp = new employee();
 		while( $rs = dbFetchObject($qs) )
 		{
 			$order 	= new order($rs->id_order);
@@ -89,15 +92,15 @@ if( isset( $_GET['getOrderTable'] ) )
 			$shipFee	 = $order->shipping_fee;
 			$servFee = $order->service_fee;
 			$arr			= array(
-									"id"						=> $order->id,
+									"id"					=> $order->id,
 									"no"					=> $no,
-									"reference"			=> $order->reference,
-									"customer"			=> $order->isOnline == 1 ? $order->online_code : customerName($order->id_customer),
-									"orderAmount"		=> number_format($amount, 2), //--- ยอดที่ต้องชำระ
-									"payAmount"			=> number_format($rs->pay_amount, 2),   //--- ยอดโอน
-									"bankName"			=> $bank['bank_name'],
-									"accNo"				=> $bank['acc_no'],
-									"payDate"			=> thaiDateFormat($rs->paydate, TRUE, '/')
+									"reference"		=> $order->reference,
+									"channels"		=> $channels->getName($order->id_channels),
+									"customer"		=> $order->isOnline == 1 ? $co->getName($order->online_code) : customerName($order->id_customer),
+									"employee"		=> $emp->getName($order->id_employee),
+									"orderAmount"	=> number_format($amount, 2), //--- ยอดที่ต้องชำระ
+									"payAmount"		=> number_format($rs->pay_amount, 2),   //--- ยอดโอน
+									"accNo"				=> $bank['acc_no']
 									);
 			array_push($ds, $arr);
 			$no++;

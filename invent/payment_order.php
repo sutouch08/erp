@@ -12,7 +12,7 @@
 	include 'function/date_helper.php';
 ?>
 <div class="container">
-<?php 
+<?php
 if( isset( $_GET['validated'] ) )
 {
 	include 'include/payment/payment_validated.php';
@@ -31,7 +31,7 @@ else
                 <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
             </div>
             <div class='modal-body' id="detailBody">
-            	    	
+
             </div>
             <div class='modal-footer'>
             </div>
@@ -46,7 +46,7 @@ else
                 <button type='button' class='close' data-dismiss='modal' aria-hidden='true'><i class="fa fa-times"></i></button>
             </div>
             <div class='modal-body' id="imageBody">
-            	    	
+
             </div>
             <div class='modal-footer'>
             </div>
@@ -71,7 +71,7 @@ else
 		<div class="col-sm-12 top-row top-col text-center">
 			<a href="javascript:void(0)" onClick="viewImage('{{ imageUrl }}')">
 				รูปสลิปแนบ	<i class="fa fa-paperclip fa-rotate-90"></i>
-			</a> 
+			</a>
 		</div>
 	{{else}}
 		<div class="col-sm-12 top-row top-col text-center">---  ไม่พบไฟล์แนบ  ---</div>
@@ -83,7 +83,7 @@ else
 		</button>
 	</div>
 	{{/if}}
-</div>   
+</div>
 </script>
 
 <script id="orderTableTemplate" type="text/x-handlebars-template">
@@ -91,12 +91,12 @@ else
 <tr id="{{ id }}" class="font-size-12">
 <td class="text-center">{{ no }}</td>
 <td> {{ reference }}</td>
+<td align="center"> {{ channels }}</td>
 <td>{{ customer }}</td>
+<td>{{ employee }}</td>
 <td align="center">{{ orderAmount }}</td>
 <td align="center">{{ payAmount }}</td>
-<td align="center">{{ bankName }}</td>
 <td align="center">{{ accNo }}</td>
-<td align="center">{{ payDate }}</td>
 <td align="right">
 	<button type="button" class="btn btn-xs btn-warning" onClick="viewDetail({{ id }})"><i class="fa fa-eye"></i></button>
 	<button type="button" class="btn btn-xs btn-danger" onClick="removePayment({{ id }}, '{{ reference }}')"><i class="fa fa-trash"></i></button>

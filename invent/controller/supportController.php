@@ -203,12 +203,12 @@ if( isset( $_GET['getCustomer']))
 {
 	$sc = array();
 	$cs = new customer();
-	$qs = $cs->search(trim($_REQUEST['term']), 'id, name');
+	$qs = $cs->search(trim($_REQUEST['term']), 'id, code, name');
 	if( dbNumRows($qs) > 0)
 	{
 		while($rs = dbFetchObject($qs))
 		{
-			$sc[] = $rs->name .' | ' .$rs->id;
+			$sc[] = $rs->code.' | '.$rs->name .' | ' .$rs->id;
 		}
 
 	}

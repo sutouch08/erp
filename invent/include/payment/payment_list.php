@@ -16,22 +16,22 @@
 <div class="row">
 	<div class="col-sm-12">
 	<table class="table" style="border:solid 1px #ccc;">
-            <thead>
-            	<tr class="font-size-12">
-                <th class="width-5 text-center">No.</th>
-                <th class="width-10">Order No.</th>
-                <th class="width-15">ลูกค้า</th>
-                <th class="width-10 text-center">ยอดชำระ</th>
-                <th class="width-10 text-center">ยอดโอน</th>
-                <th class="width-10 text-center">ธนาคาร</th>
-                <th class="width-15 text-center">เลขที่บัญชี</th>
-                <th class="width-15 text-center">เวลาโอน</th>
-                <th class="text-right"></th>
-                </tr>
-            </thead>
-        <tbody id="orderTable"></tbody>
-    </table>
-    </div>
+    <thead>
+    	<tr class="font-size-10">
+        <th class="width-5 text-center">No.</th>
+        <th class="width-10">Order No.</th>
+				<th class="width-10 text-center">ช่องทาง</th>
+        <th class="width-20">ลูกค้า</th>
+				<th class="width-20">พนักงาน</th>
+        <th class="width-8 text-center">ยอดชำระ</th>
+        <th class="width-8 text-center">ยอดโอน</th>
+        <th class="width-10 text-center">เลขที่บัญชี</th>
+        <th class="text-right"></th>
+      </tr>
+    </thead>
+    <tbody id="orderTable"></tbody>
+  </table>
+  </div>
 </div>
 
 <script src="script/payment/payment_list.js"></script>

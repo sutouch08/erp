@@ -104,9 +104,10 @@ $('#customer').autocomplete({
   autoFocus:true,
   close:function(){
     var rs = $(this).val().split(' | ');
-    if(rs.length == 2){
-      var id = rs[1];
-      var name = rs[0];
+    if(rs.length == 3){
+      var code = rs[0];
+      var id = rs[2];
+      var name = rs[1];
       $(this).val(name);
       checkDuplicate(id);
     }else{

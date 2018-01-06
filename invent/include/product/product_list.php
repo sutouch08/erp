@@ -106,11 +106,12 @@
         	<thead>
             	<tr>
                 	<th class="width-5 text-center">ลำดับ</th>
+									<th class="width-8 text-center">Image</th>
                     <th class="width-15">รหัสสินค้า</th>
-                    <th class="width-25">ชื่อสินค้า</th>
-                    <th class="width-15">หมวดหมู่</th>
-                    <th class="width-15">กลุ่มสินค้า</th>
-                    <th class="width-15">ราคา</th>
+                    <th class="width-35">ชื่อสินค้า</th>
+                    <th class="width-10">หมวดหมู่</th>
+                    <th class="width-10">กลุ่มสินค้า</th>
+                    <th class="width-10">ราคา</th>
                     <th></th>
                 </tr>
             </thead>
@@ -119,9 +120,11 @@
 <?php	$no = row_no();					?>
 <?php	$pg = new product_group();		?>
 <?php	$cg = new category();			?>
+<?php $image = new image(); ?>
 <?php 	while( $rs = dbFetchObject($qs) ) : 	?>
 				<tr class="font-size-12">
                 	<td class="text-center"><?php echo $no; ?></td>
+									<td class="text-center"><img src="<?php echo $image->getProductImage($rs->id, 1 ); ?>" width="60px" /></td>
                     <td><?php echo $rs->pdCode; ?></td>
                     <td><?php echo $rs->name; ?></td>
                     <td><?php echo $cg->getCategoryName($rs->id_category); ?></td>
@@ -140,7 +143,7 @@
 <?php	endwhile;			?>
 <?php else : ?>
 				<tr>
-                	<td colspan="7" align="center"><h4>ไม่พบรายการ</h4></td>
+                	<td colspan="8" align="center"><h4>ไม่พบรายการ</h4></td>
                 </tr>
 <?php endif; ?>
             </tbody>

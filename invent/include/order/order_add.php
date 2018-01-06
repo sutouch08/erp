@@ -64,6 +64,7 @@ else
 	<div class='col-sm-12'>
 		<ul class='nav navbar-nav' role='tablist' style='background-color:#EEE'>
 		<?php echo productTabMenu('order'); ?>
+		xxxx
 		</ul>
 	</div><!---/ col-sm-12 ---->
 </div><!---/ row -->

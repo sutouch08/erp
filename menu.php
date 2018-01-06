@@ -43,6 +43,7 @@
       <li><a href="index.php?content=bill"><i class="fa fa-file-text-o"></i>&nbsp; ออเดอร์รอเปิดบิล</a></li>
       <li><a href="index.php?content=order_closed"><i class="fa fa-file-text-o"></i>&nbsp; ออเดอร์เปิดบิลแล้ว</a></li>
       <li class="divider"></li>
+      <li><a href="index.php?content=order_monitor"><i class="fa fa-shopping-bag"></i>&nbsp; ติดตามออเดอร์</a></li>
     </ul>
   </li>
 
@@ -69,6 +70,7 @@
     	<li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ระบบคลังสินค้า</a>
         <ul class="dropdown-menu">
           <li><a href="index.php?content=recieved_report"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน การรับสินค้าจากการซื้อ</a></li>
+          <li><a href="index.php?content=stock_balance"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือ</a></li>
           <li><a href="index.php?content=stock_balance_by_zone"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือแยกตามโซน</a></li>
           <li><a href="index.php?content=stock_balance_compare_warehouse"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน รายงานสินค้าคงเหลือเปรียบเทียบคลัง</a></li>
         </ul>

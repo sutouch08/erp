@@ -3,6 +3,10 @@ function goBack(){
 	window.location.href = "index.php?content=order";
 }
 
+function goBackOnline(){
+	window.location.href = "index.php?content=order_online";
+}
+
 
 function goAdd(){
 	window.location.href = "index.php?content=order&add=Y";

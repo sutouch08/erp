@@ -8,7 +8,12 @@ $channels = new channels($order->id_channels);
 	<div class="col-sm-4 top-col"><h4 class="title"><i class="fa fa-shopping-bag"></i> <?php echo $pageTitle; ?></h4></div>
     <div class="col-sm-8">
     	<p class="pull-right top-p">
-        	<button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i>  กลับ</button>
+			<?php if($order->isOnline == 1) : ?>
+					<button type="button" class="btn btn-sm btn-warning" onclick="goBackOnline()"><i class="fa fa-arrow-left"></i>  กลับ</button>
+			<?php else : ?>
+					<button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i>  กลับ</button>
+			<?php endif; ?>
+
 			<?php if( $order->isOnline == 1 && $payment->hasTerm == 0 ) : ?>
             <?php $payed = ( $order->status == 0 || $order->hasPayment == 1) ? 'disabled' : '' ;	?>
             <button type="button" class="btn btn-sm btn-primary" onClick="payOrder()" <?php echo $payed; ?>><i class="fa fa-credit-card"></i> แจ้งชำระเงิน</button>

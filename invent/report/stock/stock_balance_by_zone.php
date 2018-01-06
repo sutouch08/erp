@@ -8,6 +8,7 @@
       <p class="pull-right top-p">
         <button type="button" class="btn btn-sm btn-success" onclick="getReport()"><i class="fa fa-list"></i> รายงาน</button>
         <button type="button" class="btn btn-sm btn-info" onclick="doExport()"><i class="fa fa-file-excel-o"></i> ส่งออก</button>
+        <button type="button" class="btn btn-sm btn-warning" onclick="exportToCheck()"><i class="fa fa-file-excel-o"></i> ส่งออกยอดตั้งต้น</button>
       </p>
     </div>
   </div>

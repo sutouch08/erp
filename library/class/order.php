@@ -306,7 +306,13 @@ class order
 	{
 		if( $id != "" )
 		{
-			return dbQuery("SELECT * FROM tbl_order_detail WHERE id_order = ".$id);
+			$qr  = "SELECT od.* FROM tbl_order_detail AS od ";
+			$qr .= "LEFT JOIN tbl_product AS pd ON od.id_product = pd.id ";
+			$qr .= "LEFT JOIN tbl_color AS c ON pd.id_color = c.id ";
+			$qr .= "LEFT JOIN tbl_size AS s ON pd.id_size = s.id ";
+			$qr .= "WHERE od.id_order = '".$id."' ";
+			$qr .= "ORDER BY od.id_style ASC, c.code ASC, s.position ASC";
+			return dbQuery($qr);
 		}
 		else
 		{

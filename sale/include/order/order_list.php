@@ -89,24 +89,10 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
 	$paginator->Per_Page('tbl_order', $where, $get_rows);
-	//$paginator->display($get_rows, 'index.php?content=order');
+	$paginator->display($get_rows, 'index.php?content=order');
 	$qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 
 ?>
-
-<div class="row margin-bottom-15">
-	<div class="col-sm-8 col-xs-12">
-<?php	$paginator->display($get_rows, 'index.php?content=order');  ?>
-	</div>
-	<div class="col-sm-4 col-xs-12 margin-top-10">
-		<div class="input-group">
-      <input type="text" class="form-control text-center" id="pd-box" placeholder="เช็คสต็อก" />
-      <span class="input-group-btn">
-        <button class="btn btn-primary" type="button" onclick="getSaleStockGrid()">เช็คสต็อก</button>
-      </span>
-    </div>
-	</div>
-</div>
 
 <div class="row">
 	<div class="col-sm-12">
@@ -170,11 +156,5 @@ $toDate	= getFilter('toDate', 'toDate', '' );
     </div>
 </div>
 
-<?php include 'include/order/view_stock.php'; ?>
-
-
-
-
 <script src="script/order/sale_order_list.js"></script>
 <script src="script/order/sale_order_add.js"></script>
-<script src="script/order/sale_order_grid.js"></script>

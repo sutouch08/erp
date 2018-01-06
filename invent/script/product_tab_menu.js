@@ -7,7 +7,7 @@ function expandTab(el){
 		el.className += " " + className;
 	}
 }
-					
+
 function collapseTab(el)
 {
 	var className = "open";
@@ -18,7 +18,10 @@ function collapseTab(el)
 		el.className=el.className.replace(reg, " ");
 	}
 }
-						
+
+
+
+
 //--------------------------------  โหลดรายการสินค้าสำหรับดูยอดคงเหลือ  -----------------------------//
 function getViewTabs(id) {
 	var output = $("#cat-" + id);
@@ -42,7 +45,7 @@ function getViewTabs(id) {
 	}
 	output.addClass("active");
 }
-					
+
 //--------------------------------  โหลดรายการสินค้าสำหรับจิ้มสั่งสินค้า  -----------------------------//
 function getOrderTabs(id) {
 	var output = $("#cat-" + id);

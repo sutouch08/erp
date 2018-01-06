@@ -42,6 +42,7 @@ function importData(step, index){
     cache:'false',
     success:function(rs){
       var rs = $.trim(rs);
+      $('body').append('import : '+ds.name+' => '+rs+'<br/>');
       if(index == (step.length)){
         window.close();
       }else{
@@ -49,6 +50,5 @@ function importData(step, index){
       }
     }
   });
-
-  index++;
+index++;
 }

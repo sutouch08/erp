@@ -33,12 +33,13 @@
 
 					$code = addslashes($rs['C']);
 					$id = $customer->getId($code);
-					if( $cs->isExists( $code ) === FALSE && $id == 0)
+					$exists = $cs->isExists( $code );
+					if( $exists === FALSE && $id != 0)
 					{
 
 						//-- If not exists do insert
 						$arr = array(
-								'id_customer'	=> $customer->getId($code),
+								'id_customer'	=> $id,
 								'code'		=> $code,
 								'name'		=> addslashes( $rs['D'] ),
 								'credit'	=> addslashes( $rs['E'] ),
@@ -55,7 +56,7 @@
 							writeErrorLogs('Credit', $cs->error);
 						}
 					}
-					else
+					else if($exists === TRUE && $id != 0)
 					{
 						//--- If exists do update
 						$arr = array(

@@ -158,14 +158,24 @@ function get_header($order)
 									"เลขที่เอกสาร"	=> $order->reference
 									);
 	}
-
-	else
+	else if( $order->role == 2)
 	{
 		$header	= array(
 							"ลูกค้า"			=> $customer->getName($order->id_customer),
 							"วันที่"			 => thaiDate($order->date_add),
 							"พนักงานขาย" => $sale->getName($order->id_sale),
 							"เลขที่เอกสาร" => $order->reference
+							);
+	}
+	else
+	{
+		$channels = new channels();
+		$header	= array(
+							"ลูกค้า"			=> $customer->getName($order->id_customer),
+							"วันที่"			 => thaiDate($order->date_add),
+							"พนักงานขาย" => $sale->getName($order->id_sale),
+							"เลขที่เอกสาร" => $order->reference,
+							"ช่องทาง"		 => $channels->getName($order->id_channels)
 							);
 	}
 

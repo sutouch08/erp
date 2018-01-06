@@ -61,6 +61,8 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
 </div>
 <hr class="margin-top-15 margin-bottom-0" />
 
+<?php include 'include/order/test_menu.php'; ?>
+
 <!--- Category Menu ---------------------------------->
 <div class="panel panel-default">
 	<div class="panel-heading">

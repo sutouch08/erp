@@ -19,6 +19,21 @@ function collapseTab(el)
 	}
 }
 
+
+function toggleTab(el){
+	console.log(el);
+	/*
+	var className = 'open';
+	var st = el.parent();
+	console.log(st);
+	if(el.parent().hasClass(className)){
+		el.parent().removeClass(className);
+	}else{
+		el.parent().addClass(className);
+	}
+	*/
+}
+
 //--------------------------------  โหลดรายการสินค้าสำหรับดูยอดคงเหลือ  -----------------------------//
 function getSaleViewTabs(id) {
 	var output = $("#cat-" + id);

@@ -140,6 +140,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รายการเปิดบิลแล้ว';
 			break;
 
+		case 'order_monitor' :
+			$content = 'order_monitor.php';
+			$pageTitle = 'ติดตามออเดอร์';
+			break;
+
 //**********  ระบบบัญชี  **********//
 
 		case 'consign':
@@ -390,6 +395,11 @@ if( !getConfig('CLOSED') )
 
 
 		//---------- รายงานระบบคลังสินค้า
+		case 'stock_balance' :
+			$content = 'report/stock/stock_balance.php';
+			$pageTitle = 'รายงานสินค้าคงเหลือ';
+			break;
+			
 		case 'stock_balance_by_zone' :
 			$content = 'report/stock/stock_balance_by_zone.php';
 			$pageTitle = 'รายงานสินค้าคงเหลือแยกตามโซน';

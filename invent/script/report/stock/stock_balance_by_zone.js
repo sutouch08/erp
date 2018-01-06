@@ -189,6 +189,24 @@ function getReport(){
 
 
 
+function exportToCheck(){
+  var id_zone = $('#id_zone').val();
+
+  if(id_zone.length == 0 || id_zone == ''){
+    swal('กรุณาระบุโซน');
+    return false;
+  }
+
+  var token = new Date().getTime();
+  var target = 'controller/stockReportController.php?exportToCheck';
+  target += '&id_zone='+id_zone;
+  target += '&token='+token;
+  get_download(token);
+  window.location.href = target;
+
+}
+
+
 function doExport(){
   var allProduct = $('#allProduct').val();
   var allZone = $('#allZone').val();

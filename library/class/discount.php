@@ -12,6 +12,7 @@ class discount
 		$date = $date == "" ? date('Y-m-d') : $date;
 		$pd = new product($id_pd);
 		$cs = new customer($id_cus);
+		$price = $pd->price;
 
 		//--- default value if dont have any discount
 		$sc = array("discount" => 0, "unit" => "percent", "amount" => 0, "id_rule" => NULL);
@@ -108,7 +109,16 @@ class discount
 			$qr .= "AND ( all_channels = 1 OR all_channels = 0) ";
 			$qr .= "AND (id_channels IS NULL OR id_channels = '".$id_channels."') ";
 
-			$qr .= "AND r.active = 1 AND r.isDeleted = 0";
+			//--- now check qty options
+			$qr .= "AND (qty = 0 OR  qty <= ".$qty.") ";
+
+			//--- now check amount options
+			$qr .= "AND ( amount = 0 OR amount <= ".( $qty * $price ).") ";
+
+			$qr .= "AND r.active = 1 AND r.isDeleted = 0 ";
+
+
+
 
 			$qs = dbQuery($qr);
 
@@ -268,6 +278,12 @@ class discount
 			//---- now check sales channels
 			$qr .= "AND ( all_channels = 1 OR all_channels = 0) ";
 			$qr .= "AND (id_channels IS NULL OR id_channels = '".$id_channels."') ";
+
+			//--- now check qty options
+			$qr .= "AND (qty = 0 OR  qty <= ".$qty.") ";
+
+			//--- now check amount options
+			$qr .= "AND ( amount = 0 OR amount <= ".( $qty * $price ).") ";
 
 			$qr .= "AND r.active = 1 AND r.isDeleted = 0";
 

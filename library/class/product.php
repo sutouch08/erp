@@ -492,7 +492,7 @@ class product
 	public function getStylePrice($id_style)
 	{
 		$sc = 0;
-		$qs = dbQuery("SELECT MAX( price ) AS price FROM tbl_product WHERE id_style = '".$id_style."'");
+		$qs = dbQuery("SELECT MIN( price ) AS price FROM tbl_product WHERE id_style = '".$id_style."'");
 		list( $price ) = dbFetchArray($qs);
 		if( ! is_null( $price ) )
 		{

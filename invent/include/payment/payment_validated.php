@@ -83,15 +83,16 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 
 	$where .= "ORDER BY p.paydate DESC";
 
-	$qx = "SELECT p.*, o.reference, o.id_customer, o.online_code, o.isOnline FROM ";
+	$qx = "SELECT p.*, o.reference, o.id_customer, o.online_code, o.isOnline, o.id_channels, o.id_employee FROM ";
 	$qr = "tbl_payment AS p ";
-	$qr .= "JOIN tbl_order AS o ON p.id_order = o.id ";
-	$qr .= "JOIN tbl_bank_account AS a ON p.id_account = a.id_account ";
+	$qr .= "LEFT JOIN tbl_order AS o ON p.id_order = o.id ";
+	$qr .= "LEFT JOIN tbl_customer_online AS c ON o.online_code = c.code ";
+	$qr .= "LEFT JOIN tbl_bank_account AS a ON p.id_account = a.id_account ";
 
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
 	$paginator->Per_Page($qr, $where, $get_rows);
-	$paginator->display($get_rows, 'index.php?content=order');
+	$paginator->display($get_rows, 'index.php?content=payment_order&validated=Y');
 	$qx = $qx . $qr . $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page;
 	$qs = dbQuery($qx);
 ?>
@@ -99,40 +100,43 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 <div class="row">
 	<div class="col-sm-12">
 	<table class="table" style="border:solid 1px #ccc;">
-            <thead>
-            	<tr class="font-size-12">
-                <th class="width-5 text-center">No.</th>
-                <th class="width-10">Order No.</th>
-                <th class="width-15">ลูกค้า</th>
-                <th class="width-10 text-center">ยอดชำระ</th>
-                <th class="width-10 text-center">ยอดโอน</th>
-                <th class="width-10 text-center">ธนาคาร</th>
-                <th class="width-15 text-center">เลขที่บัญชี</th>
-                <th class="width-15 text-center">เวลาโอน</th>
-                <th class="text-right"></th>
-                </tr>
-            </thead>
+		<thead>
+    	<tr class="font-size-10">
+        <th class="width-5 text-center">No.</th>
+        <th class="width-10">Order No.</th>
+				<th class="width-10 text-center">ช่องทาง</th>
+        <th class="width-20">ลูกค้า</th>
+				<th class="width-20">พนักงาน</th>
+        <th class="width-8 text-center">ยอดชำระ</th>
+        <th class="width-8 text-center">ยอดโอน</th>
+        <th class="width-10 text-center">เลขที่บัญชี</th>
+        <th class="text-right"></th>
+      </tr>
+    </thead>
         <tbody id="orderTable">
 <?php if( dbNumRows($qs) > 0 ) : ?>
 <?php	$no = row_no(); 	?>
+<?php $channels = new channels(); ?>
+<?php $emp = new employee(); ?>
+<?php $customer_online = new customer_online(); ?>
 <?php	while( $rs = dbFetchObject($qs) ) : ?>
 <?php		$bank = new bank_account($rs->id_account); ?>
 			<tr class="font-size-12" id="<?php echo $rs->id_order; ?>">
-            	<td class="text-center"><?php echo $no; ?></td>
-                <td><?php echo $rs->reference; ?></td>
-                <td><?php echo $rs->isOnline == 1 ? $rs->online_code : customerName($rs->id_customer); ?></td>
-                <td class="text-center"><?php echo number_format($rs->order_amount, 2); ?></td>
-                <td class="text-center"><?php echo number_format($rs->pay_amount, 2); ?></td>
-                <td class="text-center"><?php echo $bank->bank_name; ?></td>
-                <td class="text-center"><?php echo $bank->acc_no; ?></td>
-                <td class="text-center"><?php echo thaiDateFormat($rs->paydate, TRUE, '/'); ?></td>
-                <td class="text-right">
-                	<button type="button" class="btn btn-xs btn-warning" onclick="viewValidDetail(<?php echo $rs->id_order; ?>)"><i class="fa fa-eye"></i></button>
-                  <button type="button" class="btn btn-xs btn-danger" onclick="removeValidPayment(<?php echo $rs->id_order; ?>, '<?php echo $rs->reference; ?>')">
-										<i class="fa fa-trash"></i>
-									</button>
-                </td>
-            </tr>
+        <td class="text-center"><?php echo $no; ?></td>
+        <td><?php echo $rs->reference; ?></td>
+				<td class="text-center"><?php echo $channels->getName($rs->id_channels); ?></td>
+        <td><?php echo $rs->isOnline == 1 ? $customer_online->getName($rs->online_code) : customerName($rs->id_customer); ?></td>
+				<td><?php echo $emp->getName($rs->id_employee); ?></td>
+        <td class="text-center"><?php echo number_format($rs->order_amount, 2); ?></td>
+        <td class="text-center"><?php echo number_format($rs->pay_amount, 2); ?></td>
+        <td class="text-center"><?php echo $bank->acc_no; ?></td>
+        <td class="text-right">
+        	<button type="button" class="btn btn-xs btn-warning" onclick="viewValidDetail(<?php echo $rs->id_order; ?>)"><i class="fa fa-eye"></i></button>
+          <button type="button" class="btn btn-xs btn-danger" onclick="removeValidPayment(<?php echo $rs->id_order; ?>, '<?php echo $rs->reference; ?>')">
+						<i class="fa fa-trash"></i>
+					</button>
+        </td>
+      </tr>
 <?php	$no++;	?>
 <?php 	endwhile; ?>
 

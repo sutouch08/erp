@@ -27,7 +27,7 @@ public function add(array $ds)
 }
 
 
-public function update($id, array $ds)
+public function update($code, array $ds)
 {
 	$sc = FALSE;
 	if( count( $ds ) > 0 )
@@ -39,7 +39,7 @@ public function update($id, array $ds)
 			$set .= $i== 1 ? $field ." = '".$value."'" : ", ".$field . " = '".$value."'";
 			$i++;
 		}
-		$sc = dbQuery("UPDATE tbl_barcode SET ".$set." WHERE id = '".$id."'");
+		$sc = dbQuery("UPDATE tbl_barcode SET ".$set." WHERE barcode = '".$code."'");
 		$this->error = $sc === FALSE ? dbError() : '';
 	}
 
@@ -55,10 +55,10 @@ public function delete($id)
 
 
 
-public function isExists($id)
+public function isExists($barcode)
 {
 	$sc = FALSE;
-	$qs = dbQuery("SELECT barcode FROM tbl_barcode WHERE id = '".$id."'");
+	$qs = dbQuery("SELECT barcode FROM tbl_barcode WHERE barcode = '".$barcode."'");
 	if( dbNumRows($qs) > 0 )
 	{
 		$sc = TRUE;

@@ -93,7 +93,7 @@
 											'unit_code'	    => addslashes($rs['AG']),
 											'umqty'	        => addslashes($rs['AH']),
 											'discount'			=> addslashes($rs['AJ']),
-											'discount_amount' => $discount_amount;
+											'discount_amount' => $discount_amount,
 											'bill_discount'	=> addslashes($rs['U']),
 											'amount_ex'	    => addslashes($rs['V']),
 											'vat_amount'	  => addslashes($rs['W']),
