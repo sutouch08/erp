@@ -1,6 +1,7 @@
 <?php
 
 ini_set('memory_limit', '1024M');
+set_time_limit(600);
 
 $role = $_GET['role'];
 $from = fromDate($_GET['fromDate']);
@@ -113,11 +114,11 @@ if(dbNumRows($qs) > 0)
     $excel->getActiveSheet()->setCellValue('O'.$row, $rs->discount_label);
     $excel->getActiveSheet()->setCellValue('P'.$row, $rs->discount_amount);
     $excel->getActiveSheet()->setCellValue('Q'.$row, $rs->total_amount_ex);
-    $excel->getActiveSheet()->setCellValue('R'.$row, $total->total_amount_inc);
+    $excel->getActiveSheet()->setCellValue('R'.$row, $rs->total_amount_inc);
     $excel->getActiveSheet()->setCellValue('S'.$row, $rs->total_cost_ex);
     $excel->getActiveSheet()->setCellValue('T'.$row, $rs->total_cost_inc);
-    $excel->getActiveSheet()->setCellValue('U'.$row, $rs->total_margin_ex);
-    $excel->getActiveSheet()->setCellValue('V'.$row, $rs->total_margin_inc);
+    $excel->getActiveSheet()->setCellValue('U'.$row, $rs->margin_ex);
+    $excel->getActiveSheet()->setCellValue('V'.$row, $rs->margin_inc);
     $excel->getActiveSheet()->setCellValue('W'.$row, $rs->product_group);
     $excel->getActiveSheet()->setCellValue('X'.$row, '');
     $excel->getActiveSheet()->setCellValue('Y'.$row, $rs->product_category);
@@ -149,6 +150,8 @@ if(dbNumRows($qs) > 0)
   $excel->getActiveSheet()->getStyle('P2:V'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 }
+//echo 'done';
+
 
 setToken($_GET['token']);
 $file_name = "รายงานวิเคราะห์ขายแบบละเอียด".$pred.".xlsx";

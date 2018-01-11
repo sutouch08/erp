@@ -678,9 +678,25 @@ if( isset( $_GET['clearFilter'] ) )
 	deleteCookie('sOrderCode');
 	deleteCookie('sOrderCus');
 	deleteCookie('sOrderEmp');
+	deleteCookie('sOrderPaymentMethod');
+	deleteCookie('sOrderChannels');
+	deleteCookie('sOrderZone');
 	deleteCookie('sOrderUser');
 	deleteCookie('fromDate');
 	deleteCookie('toDate');
+	deleteCookie('state_1');
+	deleteCookie('state_2');
+	deleteCookie('state_3');
+	deleteCookie('state_4');
+	deleteCookie('state_5');
+	deleteCookie('state_6');
+	deleteCookie('state_7');
+	deleteCookie('state_8');
+	deleteCookie('state_9');
+	deleteCookie('state_10');
+	deleteCookie('state_11');
+	deleteCookie('notSave');
+	deleteCookie('onlyMe');
 	echo "done";
 }
 

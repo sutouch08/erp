@@ -9,6 +9,11 @@ if(isset($_GET['getStyleCode']))
 	include 'autocomplete/get_style_code.php';
 }
 
+if(isset($_GET['getStyleCodeAndId']))
+{
+	include 'autocomplete/get_style_code_id.php';
+}
+
 
 if(isset($_GET['getItemCode']))
 {
@@ -34,4 +39,14 @@ if(isset($_GET['getZone']))
 {
 	include 'autocomplete/get_zone.php';
 }
+
+
+
+//---	รายงานใบสั่งซื้อค้างรับ
+if(isset($_GET['getSupplier']))
+{
+	include 'autocomplete/get_supplier.php';
+}
+
+
 ?>

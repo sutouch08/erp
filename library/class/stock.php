@@ -205,7 +205,6 @@ class stock
 		$qr .= "WHERE s.id_product = '".$id_pd."' AND p.can_sell = 1 AND p.active = 1 AND p.is_deleted = 0 AND w.sell = 1 AND w.active = 1";
 		$qs = dbQuery($qr);
 		list( $qty ) = dbFetchArray($qs);
-
 		return is_null( $qty ) ? 0 : $qty;
 	}
 

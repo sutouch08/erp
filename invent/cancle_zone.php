@@ -1,12 +1,11 @@
 <?php
-
-	$page_name = "ตรวจสอบ BUFFER ZONE";
-	$id_tab = 90;
+	$id_tab = 89;
   $pm = checkAccess($id_profile, $id_tab);
 	$view = $pm['view'];
 	$add = $pm['add'];
 	$edit = $pm['edit'];
 	$delete = $pm['delete'];
+  accessDeny($view);
 	?>
 
 <div class="container">
@@ -20,6 +19,7 @@
       </p>
     </div>
   </div>
+  <hr/>
 
 <?php
 $reference = getFilter('reference', 'reference', '');
@@ -28,7 +28,7 @@ $zoneCode = getFilter('zoneCode', 'zoneCode', '');
 $fromDate = getFilter('fromDate', 'fromDate', '');
 $toDate = getFilter('toDate', 'toDate', '');
  ?>
-<form id="stockForm" method="post">
+<form id="searchForm" method="post">
 <div class="row">
   <div class="col-sm-2 padding-5 first">
     <label>เลขที่เอกสาร</label>
@@ -44,8 +44,8 @@ $toDate = getFilter('toDate', 'toDate', '');
   </div>
   <div class="col-sm-2 padding-5">
     <label class="display-block">วันที่</label>
-    <input type="text" class="form-control input-sm input-discount" name="fromDate" id="fromDate" value="<?php echo $fromDate; ?>" />
-    <input type="text" class="form-control input-sm input-unit" name="toDate" id="toDate" value="<?php echo $toDate; ?>" />
+    <input type="text" class="form-control input-sm text-center input-discount" name="fromDate" id="fromDate" value="<?php echo $fromDate; ?>" />
+    <input type="text" class="form-control input-sm text-center input-unit" name="toDate" id="toDate" value="<?php echo $toDate; ?>" />
   </div>
   <div class="col-sm-1 padding-5">
     <label class="display-block not-show">search</label>
@@ -60,12 +60,12 @@ $toDate = getFilter('toDate', 'toDate', '');
 <hr class="margin-top-15 margin-bottom-15" />
 <?php
 
-$where = "WHERE s.reference != '' ";
+$where = "WHERE o.reference != '' ";
 
 if( $reference != '')
 {
   createCookie('reference', $reference);
-  $where .= "AND s.reference LIKE '%".$reference."%' ";
+  $where .= "AND o.reference LIKE '%".$reference."%' ";
 }
 
 if($pdCode != '')
@@ -84,25 +84,28 @@ if($fromDate != '' && $toDate != '')
 {
   createCookie('fromDate', $fromDate);
   createCookie('toDate', $toDate);
-  $where .= "AND s.date_upd >= '".fromDate($fromDate)."' ";
-  $where .= "AND s.date_upd <= '".toDate($toDate)."' ";
+  $where .= "AND o.date_add >= '".fromDate($fromDate)."' ";
+  $where .= "AND o.date_add <= '".toDate($toDate)."' ";
 }
 
-$where .= "ORDER BY s.date_upd DESC";
+$where .= "ORDER BY o.date_add DESC";
 
 
 
 
-$table = "tbl_stock_movement AS s JOIN tbl_zone AS z ON s.id_zone = z.id_zone ";
-$table .= "JOIN tbl_product AS p ON s.id_product = p.id ";
-$qr  = "SELECT z.zone_name, p.code,s.reference, s.move_in, s.move_out, s.date_upd FROM ";
+$table = "tbl_cancle AS b LEFT JOIN tbl_order AS o ON b.id_order = o.id ";
+$table .= "LEFT JOIN tbl_zone AS z ON b.id_zone = z.id_zone ";
+$table .= "LEFT JOIN tbl_product AS p ON b.id_product = p.id ";
+
+//$qr  = "SELECT z.zone_name, p.code, o.reference, s.name AS state, b.qty, o.date_add FROM ";
+$qr  = "SELECT b.id, z.zone_name, p.id AS id_product, p.code, o.id AS id_order, o.reference, b.qty, o.date_add FROM ";
 $qr .= $table;
 
-
+//echo $qr . $where;
 $paginator	= new paginator();
 $get_rows	= get_rows();
 $paginator->Per_Page($table, $where, $get_rows);
-$paginator->display($get_rows, 'index.php?content=test_run&movement');
+$paginator->display($get_rows, 'index.php?content=cancle_zone');
 $qs = dbQuery($qr. $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 
 ?>
@@ -111,24 +114,32 @@ $qs = dbQuery($qr. $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_
   <tr>
     <th class="width-5 text-center">ลำดับ</th>
     <th class="width-15 text-center">วันที่</th>
-    <th class="width-15 text-center">เลขที่เอกสาร</th>
-    <th class="width-30 text-center">สินค้า</th>
-    <th class="width-10 text-center">เข้า</th>
-    <th class="width-10 text-center">ออก</th>
-    <th class="width-15 text-center">โซน</th>
+    <th class="width-10 text-center">เลขที่เอกสาร</th>
+    <th class="width-25 text-center">สินค้า</th>
+    <th class="width-8 text-center">จำนวน</th>
+    <th class="text-center">โซน</th>
+		<?php if($delete) : ?>
+		<th class="width-8 text-center">Action</th>
+		<?php endif; ?>
   </tr>
   <tbody>
 <?php if( dbNumRows($qs) > 0) : ?>
 <?php  $no = 1 ; ?>
 <?php  while($rs = dbFetchObject($qs)) : ?>
-  <tr>
+  <tr class="font-size-12" id="row_<?php echo $rs->id; ?>">
     <td class="text-center"><?php echo $no; ?></td>
-    <td class="text-center"><?php echo thaiDateTime($rs->date_upd); ?></td>
+    <td class="text-center"><?php echo thaiDateTime($rs->date_add); ?></td>
     <td class="text-center"><?php echo $rs->reference; ?></td>
     <td><?php echo $rs->code; ?></td>
-    <td class="text-center"><?php echo number($rs->move_in); ?></td>
-    <td class="text-center"><?php echo number($rs->move_out); ?></td>
-    <td class=""><?php echo $rs->zone_name; ?></td>
+    <td class="text-center"><?php echo number($rs->qty); ?></td>
+    <td class="text-center"><?php echo $rs->zone_name; ?></td>
+		<?php if($delete) : ?>
+			<td class="text-center">
+				<button type="button" class="btn btn-xs btn-danger" onclick="removeCancle('<?php echo $rs->id; ?>', '<?php echo $rs->reference; ?>', '<?php echo $rs->code; ?>')">
+					<i class="fa fa-trash"></i>
+				</button>
+			</td>
+		<?php endif; ?>
   </tr>
 <?php  $no++; ?>
 <?php endwhile; ?>
@@ -141,3 +152,5 @@ $qs = dbQuery($qr. $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_
 </table>
 
 </div><!--- container --->
+
+<script src="script/cancle_zone.js"></script>

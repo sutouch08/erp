@@ -266,6 +266,19 @@ $("#pd-box").autocomplete({
 });
 
 
+$('#pd-box').keyup(function(event) {
+	if(event.keyCode == 13){
+		var code = $(this).val();
+		if(code.length > 0){
+			setTimeout(function(){
+				getProductGrid();
+			}, 300);
+
+		}
+	}
+
+});
+
 
 function goAddDetail(id){
 	window.location.href = "index.php?content=order&add=Y&id_order="+id;

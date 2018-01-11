@@ -194,5 +194,18 @@ class supplier
 	{
 		return dbQuery("SELECT id, code, name FROM tbl_supplier WHERE name LIKE '%".$txt."%' OR code LIKE '%".$txt."%'");
 	}
+
+
+	public function autocomplete($txt, $fields, $limit = 50)
+	{
+		if($txt == '*')
+		{
+			return dbQuery("SELECT ".$fields." FROM tbl_supplier ORDER BY code ASC LIMIT ".$limit);
+		}
+		else
+		{
+			return dbQuery("SELECT ".$fields." FROM tbl_supplier WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%' ORDER BY code ASC LIMIT ".$limit);
+		}
+	}
 }//----end class
 ?>

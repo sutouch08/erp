@@ -141,6 +141,39 @@ class buffer
 
 
 
+  //----  จำนวนที่ค้างใน buffer แต่ไม่มีรายการอยู่ในออเดอร์ไหนๆเลย (ถูกลบรายการเมื่อจัดสินค้าแล้ว)
+  public function getBufferQty($id_pd)
+  {
+    $qr  = "SELECT SUM(bf.qty) AS qty FROM tbl_buffer AS bf ";
+    $qr .= "LEFT JOIN tbl_order_detail AS od ON bf.id_order = od.id_order AND bf.id_product = od.id_product ";
+    $qr .= "WHERE bf.id_product = '".$id_pd."' ";
+    $qr .= "AND od.id_product IS NULL ";
+
+    $qs = dbQuery($qr);
+
+    list($sc) = dbFetchArray($qs);
+
+    return is_null($sc) ? 0 : $sc;
+  }
+
+
+  public function isInOrder($id_order, $id_pd)
+  {
+    $qr  = "SELECT od.id_product FROM tbl_buffer AS bf ";
+    $qr .= "LEFT JOIN tbl_order_detail AS od ON bf.id_order = od.id_order AND bf.id_product = od.id_product ";
+    $qr .= "WHERE bf.id_order = '".$id_order."' AND bf.id_product = '".$id_pd."' ";
+
+    //echo $qr;
+    $qs = dbQuery($qr);
+
+    list($sc) = dbFetchArray($qs);
+
+    return is_null($sc) ? FALSE : TRUE;
+  }
+
+
+
+
 
 
 }//---- End class

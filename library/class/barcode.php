@@ -47,9 +47,9 @@ public function update($code, array $ds)
 }
 
 
-public function delete($id)
+public function delete($barcode)
 {
-	return dbQuery("DELETE FROM tbl_barcode WHERE id = '" .$id."'");
+	return dbQuery("DELETE FROM tbl_barcode WHERE barcode = '" .$id."'");
 }
 
 
@@ -59,6 +59,18 @@ public function isExists($barcode)
 {
 	$sc = FALSE;
 	$qs = dbQuery("SELECT barcode FROM tbl_barcode WHERE barcode = '".$barcode."'");
+	if( dbNumRows($qs) > 0 )
+	{
+		$sc = TRUE;
+	}
+	return $sc;
+}
+
+
+public function isAllExists($id, $barcode)
+{
+	$sc = FALSE;
+	$qs = dbQuery("SELECT barcode FROM tbl_barcode WHERE barcode = '".$barcode."' OR id = '".$id."'");
 	if( dbNumRows($qs) > 0 )
 	{
 		$sc = TRUE;

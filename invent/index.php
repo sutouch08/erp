@@ -22,7 +22,7 @@ if( !getConfig('CLOSED') )
 
 	switch($page){
 
-//**********  ระบบคลังสินค้า  **********//
+
 		case 'test_run' :
 			$content = 'test.php';
 			$pageTitle = 'แสดงผลการทดสอบระบบ';
@@ -39,6 +39,13 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'บันทึกยอดสินค้าคงเหลือยกมาต้นงวด';
 			break;
 
+		case 'export_product_db' :
+			$content = 'export_product_db.php';
+			$pageTitle = 'ส่งออกฐานข้อมูลสินค้า';
+			break;
+
+
+//**********  ระบบคลังสินค้า  **********//
 		case 'receive_product':
 			$content = 'receive_product.php';
 			$pageTitle = 'รับสินค้าเข้า';
@@ -87,6 +94,21 @@ if( !getConfig('CLOSED') )
 		case 'transfer':
 			$content = 'transfer.php';
 			$pageTitle = 'โอนคลัง';
+			break;
+
+		case 'stock_movement' :
+			$content = 'stock_movement.php';
+			$pageTitle = 'ตรวจสอบความเคลื่อนไหวสินค้า';
+			break;
+
+		case 'buffer_zone' :
+			$content = 'buffer_zone.php';
+			$pageTitle = 'ตรวจสอบ Buffer Zone';
+			break;
+
+		case 'cancle_zone' :
+			$content = 'cancle_zone.php';
+			$pageTitle = 'ตรวจสอบ Cancle Zone';
 			break;
 
 //**********  ระบบขาย  **********//
@@ -399,7 +421,7 @@ if( !getConfig('CLOSED') )
 			$content = 'report/stock/stock_balance.php';
 			$pageTitle = 'รายงานสินค้าคงเหลือ';
 			break;
-			
+
 		case 'stock_balance_by_zone' :
 			$content = 'report/stock/stock_balance_by_zone.php';
 			$pageTitle = 'รายงานสินค้าคงเหลือแยกตามโซน';
@@ -408,6 +430,13 @@ if( !getConfig('CLOSED') )
 		case 'stock_balance_compare_warehouse' :
 			$content = 'report/stock/stock_balance_compare_warehouse.php';
 			$pageTitle = 'รายงานสินค้าคงเหลือเปรียบเทียบคลัง';
+			break;
+
+
+		//---------- รายงานระบบซื้อ
+		case 'po_backlog' :
+			$content = 'report/purchase/po_backlog.php';
+			$pageTitle = 'รายงานใบสั่งซื้อค้างรับ';
 			break;
 
 		default:

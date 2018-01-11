@@ -148,6 +148,8 @@ $('.qty').focusout(function(){
   var id = arr[1];
   var limit = parseInt( removeCommas($('#qty-label-'+id).text()));
   var qty = parseInt($(this).val());
+  console.log('limit = '+limit);
+  console.log('qty = '+qty);
   if(qty > limit){
     $(this).addClass('has-error');
   }else{

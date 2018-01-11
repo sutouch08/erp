@@ -1,11 +1,15 @@
 <div class="row top-row">
-	<div class="col-sm-6 top-row">
-    	<h4 class="title"><i class="fa fa-shopping-bag"></i> <?php echo $pageTitle; ?></h4>
+	<div class="col-sm-7 top-col">
+    	<h4 class="title"><i class="fa fa-shopping-bag"></i> เช็คสต็อก</h4>
     </div>
-    <div class="col-sm-6">
-    	<p class="pull-right top-p">
-        	<button type="button" class="btn btn-sm btn-warning" onClick="goBack()"><i class="fa fa-arrow-left"></i> กลับ</button>
-        </p>
+		<div class="col-sm-3 padding-5">
+			<input type="text" class="form-control input-sm text-center" id="pd-search-box" placeholder="ค้นหารหัสรุ่นสินค้า" />
+		</div>
+		<div class="col-sm-1 padding-5">
+			<button type="button" class="btn btn-sm btn-block btn-primary" onclick="getStockGrid()">เช็คสต็อก</button>
+		</div>
+    <div class="col-sm-1 padding-5 last">
+      <button type="button" class="btn btn-sm btn-block btn-warning" onClick="goBack()"><i class="fa fa-arrow-left"></i> กลับ</button>
     </div>
 </div>
 <hr class="margin-bottom-10" />
@@ -47,5 +51,39 @@
 </div>
 </form>
 
+<input type="hidden" id="id_style" />
+
+<script>
+$('#pd-search-box').autocomplete({
+	source:'controller/autoCompleteController.php?getStyleCode',
+	autoFocus:true,
+	close:function(){
+		var code = $(this).val();
+		if(code == 'ไม่พบข้อมูล'){
+			$(this).val('');
+			$('#id_style').val('');
+		}else{
+			$.ajax({
+				url:'controller/styleController.php?getStyleId',
+				type:'GET',
+				cache:'false',
+				data:{
+					'style_code' : code
+				},
+				success:function(rs){
+					var rs = $.trim(rs);
+					if(rs.length != 0){
+						$('#id_style').val(rs);
+						getStockGrid(rs);
+					}else{
+						$('#id_style').val('');
+						swal('รหัสสินค้าไม่ถูกต้อง');
+					}
+				}
+			});
+		}
+	}
+});
+</script>
 <script src="script/order/order_grid.js"></script>
 <script src="script/product_tab_menu.js"></script>

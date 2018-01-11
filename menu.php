@@ -26,6 +26,7 @@
       <li><a href="index.php?content=adjust"><i class="fa fa-magic"></i>&nbsp; ปรับปรุงสต็อก</a></li>
       <li><a href="index.php?content=buffer_zone"><span class="glyphicon glyphicon-tasks"></span>&nbsp; ตรวจสอบ BUFFER ZONE</a></li>
       <li><a href="index.php?content=cancle_zone"><span class="glyphicon glyphicon-tasks"></span>&nbsp; ตรวจสอบ CANCLE ZONE</a></li>
+      <li><a href="index.php?content=stock_movement"><span class="glyphicon glyphicon-tasks"></span>&nbsp; ตรวจสอบ MOVEMENT</a></li>
     </ul>
   </li>
 
@@ -84,7 +85,7 @@
 
        <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ระบบซื้อ</a>
       	<ul class="dropdown-menu">
-        	<li><a href="index.php?content=po_backlog"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ใบสั่งซื้อค้างรับ แยกตามผู้ขาย</a></li>
+        	<li><a href="index.php?content=po_backlog"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ใบสั่งซื้อค้างรับ</a></li>
         </ul>
       </li>
 
@@ -197,8 +198,9 @@
       </li>
       <li><a href="index.php?content=syncData"><i class="fa fa-exchange"></i>&nbsp; นำเข้าข้อมูลจาก formula</a></li>
       <li class="divider"></li>
+      <li><a href="index.php?content=export_product_db"><i class="fa fa-database"></i>&nbsp; ส่งออกรายการสินค้า นำเข้า POS</a></li>
       <li><a href="index.php?content=import_stock_zone"><i class='fa fa-database'></i>&nbsp; บันทึกยอดสินค้าคงเหลือยกมาต้นงวด</a></li>
-      <li><a href="index.php?content=test_run"><i class='fa fa-database'></i>&nbsp; ทดสอบระบบ</a></li>
+      <!--<li><a href="index.php?content=test_run"><i class='fa fa-database'></i>&nbsp; ทดสอบระบบ</a></li> -->
 
     </ul>
   </li>

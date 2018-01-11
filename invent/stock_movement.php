@@ -1,12 +1,11 @@
 <?php
-
-	$page_name = "ตรวจสอบ BUFFER ZONE";
 	$id_tab = 90;
   $pm = checkAccess($id_profile, $id_tab);
 	$view = $pm['view'];
 	$add = $pm['add'];
 	$edit = $pm['edit'];
 	$delete = $pm['delete'];
+  accessDeny($view);
 	?>
 
 <div class="container">
@@ -20,6 +19,7 @@
       </p>
     </div>
   </div>
+  <hr/>
 
 <?php
 $reference = getFilter('reference', 'reference', '');
@@ -28,7 +28,7 @@ $zoneCode = getFilter('zoneCode', 'zoneCode', '');
 $fromDate = getFilter('fromDate', 'fromDate', '');
 $toDate = getFilter('toDate', 'toDate', '');
  ?>
-<form id="stockForm" method="post">
+<form id="searchForm" method="post">
 <div class="row">
   <div class="col-sm-2 padding-5 first">
     <label>เลขที่เอกสาร</label>
@@ -44,8 +44,8 @@ $toDate = getFilter('toDate', 'toDate', '');
   </div>
   <div class="col-sm-2 padding-5">
     <label class="display-block">วันที่</label>
-    <input type="text" class="form-control input-sm input-discount" name="fromDate" id="fromDate" value="<?php echo $fromDate; ?>" />
-    <input type="text" class="form-control input-sm input-unit" name="toDate" id="toDate" value="<?php echo $toDate; ?>" />
+    <input type="text" class="form-control input-sm text-center input-discount" name="fromDate" id="fromDate" value="<?php echo $fromDate; ?>" />
+    <input type="text" class="form-control input-sm text-center input-unit" name="toDate" id="toDate" value="<?php echo $toDate; ?>" />
   </div>
   <div class="col-sm-1 padding-5">
     <label class="display-block not-show">search</label>
@@ -98,11 +98,10 @@ $table .= "JOIN tbl_product AS p ON s.id_product = p.id ";
 $qr  = "SELECT z.zone_name, p.code,s.reference, s.move_in, s.move_out, s.date_upd FROM ";
 $qr .= $table;
 
-
 $paginator	= new paginator();
 $get_rows	= get_rows();
 $paginator->Per_Page($table, $where, $get_rows);
-$paginator->display($get_rows, 'index.php?content=test_run&movement');
+$paginator->display($get_rows, 'index.php?content=stock_movement');
 $qs = dbQuery($qr. $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 
 ?>
@@ -111,23 +110,23 @@ $qs = dbQuery($qr. $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_
   <tr>
     <th class="width-5 text-center">ลำดับ</th>
     <th class="width-15 text-center">วันที่</th>
-    <th class="width-15 text-center">เลขที่เอกสาร</th>
+    <th class="width-10 text-center">เลขที่เอกสาร</th>
     <th class="width-30 text-center">สินค้า</th>
-    <th class="width-10 text-center">เข้า</th>
-    <th class="width-10 text-center">ออก</th>
-    <th class="width-15 text-center">โซน</th>
+    <th class="width-8 text-center">เข้า</th>
+    <th class="width-8 text-center">ออก</th>
+    <th class="text-center">โซน</th>
   </tr>
   <tbody>
 <?php if( dbNumRows($qs) > 0) : ?>
-<?php  $no = 1 ; ?>
+<?php  $no = row_no(); ?>
 <?php  while($rs = dbFetchObject($qs)) : ?>
-  <tr>
+  <tr class="font-size-12">
     <td class="text-center"><?php echo $no; ?></td>
     <td class="text-center"><?php echo thaiDateTime($rs->date_upd); ?></td>
     <td class="text-center"><?php echo $rs->reference; ?></td>
     <td><?php echo $rs->code; ?></td>
-    <td class="text-center"><?php echo number($rs->move_in); ?></td>
-    <td class="text-center"><?php echo number($rs->move_out); ?></td>
+    <td class="text-center"><?php echo ac_format($rs->move_in); ?></td>
+    <td class="text-center"><?php echo ac_format($rs->move_out); ?></td>
     <td class=""><?php echo $rs->zone_name; ?></td>
   </tr>
 <?php  $no++; ?>
@@ -141,3 +140,5 @@ $qs = dbQuery($qr. $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_
 </table>
 
 </div><!--- container --->
+
+<script src="script/stock_movement.js"></script>

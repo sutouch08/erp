@@ -3,7 +3,7 @@ function syncBarcode(){
 	load_in();
 	$.ajax({
 		url:"controller/interfaceController.php?syncMaster&barcode"	,
-		type:"GET", cache:"false", 
+		type:"GET", cache:"false",
 		success: function(rs){
 			load_out();
 			var rs = $.trim(rs);
@@ -30,14 +30,18 @@ function deleteBarcode(barcode, product){
 	}, function(){
 		$.ajax({
 			url:"controller/barcodeController.php?deleteBarcode",
-			type:"POST", cache:"false", data:{ "barcode" : barcode },
+			type:"POST",
+			cache:"false",
+			data:{
+				"barcode" : barcode
+			},
 			success: function(rs){
 				var rs = $.trim(rs);
 				if( rs == 'success' ){
 					$("#row_"+barcode).remove();
 					swal({ title: 'สำเร็จ', text: 'ลบรายการเรียบร้อยแล้ว', type: 'success', timer: 1000 });
 				}else{
-					swal({title: 'ข้อผิดพลาด', text: 'ลบรายการไม่สำเร็จ', type: 'error' });	
+					swal({title: 'ข้อผิดพลาด', text: 'ลบรายการไม่สำเร็จ', type: 'error' });
 				}
 			}
 		});
@@ -54,7 +58,7 @@ function getSearch(){
 	var sBarcode 	= $("#sBarcode").val();
 	var sUnit			= 	$("#sUnit").val();
 	if( sProduct != '' || sBarcode != '' || sUnit != '' ) {
-		$("#searchForm").submit();			
+		$("#searchForm").submit();
 	}
 }
 

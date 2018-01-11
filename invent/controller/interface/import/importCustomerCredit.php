@@ -31,9 +31,9 @@
 				if( $i != 1 ) //---- Skip first row
 				{
 
-					$code = addslashes($rs['C']);
+					$code = $rs['C'];
 					$id = $customer->getId($code);
-					$exists = $cs->isExists( $code );
+					$exists = $cs->isExists( $id );
 					if( $exists === FALSE && $id != 0)
 					{
 

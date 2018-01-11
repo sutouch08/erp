@@ -48,7 +48,7 @@
 			include 'order/add_lend_detail.php';
 		}
 
-		
+
 		if( $result === TRUE )
 		{
 			$order->changeStatus($order->id, 0); //--- เปลี่ยนกลับมาเป็นยังไม่เซฟอีกครั้ง

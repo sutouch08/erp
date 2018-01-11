@@ -32,7 +32,7 @@
 					$id = $rs['A'];
 					$code = $rs['B'];
 					$id_pd = $pd->getId($rs['C']);
-					if( $cs->isExists($code) === FALSE )
+					if( $cs->isAllExists($id, $code) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
@@ -61,7 +61,7 @@
 								'unit_qty'		=> $rs['E']
 								);
 
-								
+
 						if($cs->update($id, $arr) === FALSE)
 						{
 							$sc = FALSE;

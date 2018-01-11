@@ -74,6 +74,15 @@ if( isset( $_GET['deleteStyle'] ) )
 }
 
 
+if(isset($_GET['getStyleId']))
+{
+	$code = $_GET['style_code'];
+	$cs = new style();
+	$sc = $cs->getId($code);
+	echo $sc;
+}
+
+
 if( isset( $_GET['clearFilter'] ) )
 {
 	deleteCookie('stCode');

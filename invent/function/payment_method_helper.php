@@ -13,7 +13,23 @@ function selectPaymentMethod($id = "" )
 			$sc .= '<option value="'.$rs->id.'" '.isSelected($id, $rs->id).'>'.$rs->name.'</option>';
 		}
 	}
-	return $sc;			
+	return $sc;
+}
+
+
+function selectPaymentMethodList($id="")
+{
+	$sc = '';
+	$cs = new payment_method();
+	$qs = $cs->getData();
+	if( dbNumRows($qs) > 0 )
+	{
+		while( $rs = dbFetchObject($qs) )
+		{
+			$sc .= '<option value="'.$rs->id.'" '.isSelected($id, $rs->id).'>'.$rs->name.'</option>';
+		}
+	}
+	return $sc;
 }
 
 
@@ -35,7 +51,7 @@ function selectOnlinePaymentMethod($id = "" )
 			}
 		}
 	}
-	return $sc;			
+	return $sc;
 }
 
 
@@ -58,7 +74,7 @@ function getPaymentMethodIn($txt)
 	}
 	else
 	{
-		$sc = "0";	
+		$sc = "0";
 	}
 	return $sc;
 }

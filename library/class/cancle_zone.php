@@ -2,8 +2,31 @@
 
 class cancle_zone
 {
+	public $id;
+	public $id_order;
+	public $id_style;
+	public $id_product;
+	public $qty;
+	public $id_zone;
+	public $id_warehouse;
+	public $id_employee;
+	public $date_upd;
 
-	public function __construct(){}
+	public function __construct($id = '')
+	{
+		if($id != '')
+		{
+			$qs = dbQuery("SELECT * FROM tbl_cancle WHERE id = '".$id."'");
+			if(dbNumRows($qs) == 1)
+			{
+				$rs = dbFetchArray($qs);
+				foreach($rs as $key => $value)
+				{
+					$this->$key = $value;
+				}
+			}
+		}
+	}
 
 
 	public function updateCancle($id_order, $id_style, $id_product, $id_zone, $id_warehouse, $qty)
@@ -132,6 +155,17 @@ class cancle_zone
 
 		return $sc >= $qty ? TRUE : FALSE;
 	}
+
+
+
+	public function delete($id)
+	{
+		return dbQuery("DELETE FROM tbl_cancle WHERE id = '".$id."'");
+	}
+
+
+
+
 
 
 }

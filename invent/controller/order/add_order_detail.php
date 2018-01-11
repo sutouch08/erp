@@ -6,6 +6,7 @@ foreach( $ds as $items )
     if( $qty > 0 )
     {
       $pd 			= new product($id);
+
       //--- ถ้ามีสต็อกมากว่าที่สั่ง หรือ เป็นสินค้าไม่นับสต็อก
       if( $stock->getSellStock($id) >= $qty OR $pd->count_stock == 0 )
       {

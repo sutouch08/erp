@@ -92,10 +92,10 @@ class customer_credit
 
 
 
-	public function isExists($code)
+	public function isExists($id)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT id_customer FROM tbl_customer_credit WHERE code = '".$code."'");
+		$qs = dbQuery("SELECT id_customer FROM tbl_customer_credit WHERE id_customer = '".$id."'");
 		if( dbNumRows($qs) == 1 )
 		{
 			$sc = TRUE;

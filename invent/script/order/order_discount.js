@@ -40,7 +40,7 @@ function showbDiscBox(){
 
 
 $(document).ready(function(e) {
-	$(".discount-box").numberOnly();
+	//$(".discount-box").numberOnly();
     $(".discount-box").keyup(function(e) {
 		var id = $(this).attr('id').split('_');
 		var id = id[1];
@@ -67,7 +67,7 @@ $(document).ready(function(e) {
 
 
 $(document).ready(function(e) {
-	$(".price-box").numberOnly();
+	//$(".price-box").numberOnly();
     $(".price-box").keyup(function(e) {
 		var id = $(this).attr('id').split('_');
 		var id = id[1];

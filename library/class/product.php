@@ -555,6 +555,7 @@ class product
 		$order = new order();
 		$stock = new stock();
 		$cancle = new cancle_zone();
+		$buffer = new buffer();
 		$sellStock = $stock->getSellStock($id);
 		$reservStock = $order->getReservQty($id);
 		$cancleQty = $cancle->getCancleQty($id);
@@ -605,7 +606,15 @@ class product
 
 	public function search($txt, $fields, $limit= 50)
 	{
-		return dbQuery("SELECT $fields FROM tbl_product WHERE code LIKE '%".$txt."%' LIMIT ".$limit);
+		if($txt == '*')
+		{
+			return dbQuery("SELECT $fields FROM tbl_product ORDER BY code ASC LIMIT ".$limit);
+		}
+		else
+		{
+			return dbQuery("SELECT $fields FROM tbl_product WHERE code LIKE '%".$txt."%' ORDER BY code ASC LIMIT ".$limit);
+		}
+
 	}
 
 

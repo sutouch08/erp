@@ -7,6 +7,8 @@ include '../function/date_helper.php';
 include '../function/import_log_helper.php';
 include '../function/match_helper.php';
 
+ini_set('memory_limit', '1024M');
+
 ///============================================= MASTER ==========================================///
 //---------  Sync Product Group -------//
 if( isset( $_GET['syncMaster'] ) && isset( $_GET['product_group'] ) )

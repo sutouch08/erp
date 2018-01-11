@@ -58,6 +58,9 @@ function getOrderGrid(id_style){
 
 
 function getStockGrid(id_style){
+	if(id_style == undefined){
+		var id_style = $('#id_style').val();
+	}
 	load_in();
 	$.ajax({
 		url:"controller/orderController.php?getStockGrid",
@@ -69,10 +72,10 @@ function getStockGrid(id_style){
 				var grid = rs[0];
 				var width = rs[1];
 				var pdCode = rs[2];
-				var id_style = rs[3];
+
 				$("#modal").css("width", width +"px");
 				$("#modalTitle").html(pdCode);
-				$("#id_style").val(id_style);
+
 				$("#modalBody").html(grid);
 				grid_init();
 				$("#orderGrid").modal('show');
