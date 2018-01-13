@@ -1,4 +1,5 @@
 <?php if( isset( $_GET['id_order'])) : ?>
+<?php   $customer = new customer($order->id_customer); ?>
 <div class="panel panel-default">
         <div class="panel-heading">
           <h4 class="panel-title">
@@ -25,7 +26,7 @@
 
 					<div class="col-sm-4 col-xs-12">
 					 	<label>ลูกค้า [ในระบบ]</label>
-					  <input type="text" class="form-control input-sm text-center input-header" id="customer" value="<?php echo customerName($order->id_customer); ?>"  <?php echo $disabled; ?>/>
+					  <input type="text" class="form-control input-sm text-center input-header" id="customer" value="<?php echo (isset($_GET['id_order']) ? $customer->name.' ['.$customer->province.']' : ''); ?>"  <?php echo $disabled; ?>/>
 					</div>
 
           <div class="col-sm-2 col-xs-12">

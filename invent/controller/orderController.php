@@ -228,6 +228,7 @@ if( isset( $_GET['removeDetail'] ) )
 
 
 
+
 //----		Attribute Grid By Search box
 if( isset( $_GET['getProductGrid'] ) && isset( $_GET['pdCode'] ) )
 {
@@ -316,19 +317,23 @@ if( isset( $_GET['getStockGrid'] ) && isset( $_GET['id_style'] ) )
 
 
 //----- Attribute Grid By Clicking image
-if( isset( $_GET['getSaleStockGrid'] ) && isset( $_GET['pdCode'] ) )
+if( isset( $_GET['getSaleStockGrid'] ) && isset( $_GET['id_style'] ) )
 {
 	$sc = 'not exists';
-	$pdCode = $_GET['pdCode'];
-	$pd = new product();
-	$grid = new product_grid();
-	$style = new style();
-	$view = TRUE;  //--- view stock
-	$sc = $grid->getOrderGrid($id_style, $view);
-	$tableWidth	= $pd->countAttribute($id_style) == 1 ? 600 : $grid->getOrderTableWidth($id_style);
-	$sc .= ' | '.$tableWidth;
-	$sc .= ' | ' . $style->getCode($id_style);
-	$sc .= ' | ' . $id_style;
+	$id_style = $_GET['id_style'];
+	$style = new style($id_style);
+	if($style->show_in_sale == 1 && $style->can_sell == 1 && $style->active == 1 && $style->is_deleted == 0)
+	{
+		$pd = new product();
+		$grid = new product_grid();
+		$view = TRUE;  //--- view stock
+		$sc = $grid->getOrderGrid($id_style, $view);
+		$tableWidth	= $pd->countAttribute($id_style) == 1 ? 600 : $grid->getOrderTableWidth($id_style);
+		$sc .= ' | '.$tableWidth;
+		$sc .= ' | ' . $style->getCode($id_style);
+		$sc .= ' | ' . $id_style;
+	}
+
 	echo $sc;
 }
 
@@ -415,7 +420,7 @@ if( isset( $_GET['getSaleCustomer'] ) && isset( $_REQUEST['term'] ) )
 	{
 		while( $rs = dbFetchObject($qs) )
 		{
-			$sc[] = $rs->name .' | '. $rs->id;
+			$sc[] = $rs->name.' ['.$rs->province.']' .' | '. $rs->id;
 		}
 	}
 	else
@@ -480,6 +485,22 @@ if( isset( $_GET['updateShippingFee'] ) )
 	$order	= new order();
 	$arr 		= array("shipping_fee" => $amount);
 	if( $order->update($id, $arr) )
+	{
+		$sc = 'success';
+	}
+	echo $sc;
+}
+
+
+
+if(isset($_GET['updateDeliveryNo']))
+{
+	$sc = 'fail';
+	$id = $_POST['id_order'];
+	$deliveryNo = $_POST['deliveryNo'];
+	$order = new order();
+	$arr = array('shipping_code' => $deliveryNo);
+	if($order->update($id, $arr))
 	{
 		$sc = 'success';
 	}
@@ -697,6 +718,11 @@ if( isset( $_GET['clearFilter'] ) )
 	deleteCookie('state_11');
 	deleteCookie('notSave');
 	deleteCookie('onlyMe');
+	deleteCookie('sRefCode');
+	deleteCookie('sDeliveryCode');
+	deleteCookie('selectState');
+	deleteCookie('startTime');
+	deleteCookie('endTime');
 	echo "done";
 }
 

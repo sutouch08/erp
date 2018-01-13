@@ -72,7 +72,7 @@ $('#pd-search-box').autocomplete({
 				},
 				success:function(rs){
 					var rs = $.trim(rs);
-					if(rs.length != 0){
+					if(rs.length != 0 && rs != 0){
 						$('#id_style').val(rs);
 						getStockGrid(rs);
 					}else{

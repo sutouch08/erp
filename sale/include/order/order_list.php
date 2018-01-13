@@ -89,10 +89,23 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
 	$paginator->Per_Page('tbl_order', $where, $get_rows);
-	$paginator->display($get_rows, 'index.php?content=order');
+	//$paginator->display($get_rows, 'index.php?content=order');
 	$qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 
 ?>
+<div class="row">
+	<div class="col-sm-8 padding-5 first">
+		<?php $paginator->display($get_rows, 'index.php?content=order'); ?>
+	</div>
+	<div class="col-sm-3 padding-5">
+		<input type="text" class="form-control input-sm text-center margin-top-10" id="pd-search-box" placeholder="ค้นหารหัสรุ่นสินค้า" />
+	</div>
+	<div class="col-sm-1 padding-5 last">
+		<button type="button" class="btn btn-sm btn-block btn-primary margin-top-10" onclick="getStockGrid()">เช็คสต็อก</button>
+	</div>
+	<div class="col-xs-12 visible-xs">&nbsp;</div>
+	<input type="hidden" id="id_style" />
+</div>
 
 <div class="row">
 	<div class="col-sm-12">
@@ -154,6 +167,22 @@ $toDate	= getFilter('toDate', 'toDate', '' );
         </table>
 			</div>
     </div>
+</div>
+
+<div class="modal fade" id="orderGrid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" id="modal">
+		<div class="modal-content">
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="modalTitle">title</h4>
+          <center><span style="color: red;">ใน ( ) = ยอดคงเหลือทั้งหมด   ไม่มีวงเล็บ = สั่งได้ทันที</span></center>
+			 </div>
+			 <div class="modal-body" id="modalBody"></div>
+			 <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+			 </div>
+		</div>
+	</div>
 </div>
 
 <script src="script/order/sale_order_list.js"></script>

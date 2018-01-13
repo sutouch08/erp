@@ -9,6 +9,11 @@ $sChannels	= getFilter('sChannels', 'sOrderChannels', '' ); 	//---	Sales Channel
 $fromDate	= getFilter('fromDate', 'fromDate', '' );
 $toDate	= getFilter('toDate', 'toDate', '' );
 $isOnline = $_GET['content'] == 'order_online' ? TRUE : FALSE;
+$sRefCode = getFilter('sRefCode', 'sRefCode', '');
+$sDeliveryCode = getFilter('sDeliveryCode', 'sDeliveryCode', '');
+$selectState = getFilter('selectState', 'selectState', '');
+$startTime = getFilter('startTime', 'startTime', '');
+$endTime = getFilter('endTime', 'endTime','');
 
 $state_1 = getFilter('state_1', 'state_1', 0);
 $state_2 = getFilter('state_2', 'state_2', 0);
@@ -89,13 +94,30 @@ for($i =1; $i <= 11; $i++)
     	<label>พนักงาน</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sEmp" id="sEmp" value="<?php echo $sEmp; ?>" />
     </div>
-    <div class="col-sm-2 padding-5">
-    	<label class="display-block">วันที่</label>
-        <input type="text" class="form-control input-sm text-center input-discount" name="fromDate" id="fromDate" value="<?php echo $fromDate; ?>" placeholder="เริ่มต้น" />
-        <input type="text" class="form-control input-sm text-center input-unit" name="toDate" id="toDate" value="<?php echo $toDate; ?>" placeholder="สิ้นสุด" />
+
+		<div class="col-sm-2 padding-5">
+			<label class="display-block">เลขที่อ้างอิง</label>
+			<input type="text" class="form-control input-sm text-center search-box" name="sRefCode" id="sRefCode" value="<?php echo $sRefCode; ?>" />
+		</div>
+
+		<div class="col-sm-2 padding-5">
+			<label class="display-block">เลขที่จัดส่ง</label>
+			<input type="text" class="form-control input-sm text-center search-box" name="sDeliveryCode" id="sDeliveryCode" value="<?php echo $sDeliveryCode; ?>" />
+		</div>
+
+		<div class="col-sm-1 padding-5">
+      <label class="display-block not-show">Apply</label>
+      <button type="button" class="btn btn-sm btn-primary btn-block" onClick="getSearch()"><i class="fa fa-search"></i> ค้นหา</button>
     </div>
 
-		<div class="col-sm-1 col-1-harf padding-5">
+		<div class="col-sm-1 padding-5 last">
+    	<label class="display-block not-show">Apply</label>
+      <button type="button" class="btn btn-sm btn-warning btn-block" onClick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
+    </div>
+
+		<div class="divider-hidden margin-top-5 margin-bottom-5"></div>
+
+		<div class="col-sm-2 padding-5 first">
 			<label class="display-block">ช่องทางขาย</label>
 			<select class="form-control input-sm" name= "sChannels" id="sChannels" onchange="getSearch()">
 				<option value="">ทั้งหมด</option>
@@ -103,80 +125,103 @@ for($i =1; $i <= 11; $i++)
 			</select>
 		</div>
 
-		<div class="col-sm-1 col-1-harf padding-5">
+		<div class="col-sm-2 padding-5">
 			<label class="display-block">การชำระเงิน</label>
 			<select class="form-control input-sm" name="sPayment" id="sPayment" onchange="getSearch()">
 				<option value="">ทั้งหมด</option>
 				<?php echo selectPaymentMethodList($sPaymet); ?>
 			</select>
 		</div>
-		<div class="col-sm-1 padding-1 last">
-    	<label class="display-block not-show">Apply</label>
-      <button type="button" class="btn btn-sm btn-warning btn-block" onClick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
+
+		<div class="col-sm-2 padding-5">
+    	<label class="display-block">วันที่</label>
+        <input type="text" class="form-control input-sm text-center input-discount" name="fromDate" id="fromDate" value="<?php echo $fromDate; ?>" placeholder="เริ่มต้น" />
+        <input type="text" class="form-control input-sm text-center input-unit" name="toDate" id="toDate" value="<?php echo $toDate; ?>" placeholder="สิ้นสุด" />
     </div>
 
+		<div class="col-sm-2 padding-5">
+			<label class="display-block">สถานะ</label>
+			<select class="form-control input-sm" name="selectState">
+				<option value="">เลือกสถานะ</option>
+				<option value="3" <?php echo isSelected($selectState, 3); ?>>รอจัดสินค้า</option>
+				<option value="4" <?php echo isSelected($selectState, 4); ?>>กำลังจัดสินค้า</option>
+				<option value="5" <?php echo isSelected($selectState, 5); ?>>รอตรวจ</option>
+				<option value="6" <?php echo isSelected($selectState, 6); ?>>กำลังตรวจ</option>
+				<option value="7" <?php echo isSelected($selectState, 7); ?>>รอเปิดบิล</option>
+			</select>
+		</div>
+
+		<div class="col-sm-1 padding-5">
+			<label class="display-block">เริ่มต้น</label>
+			<select class="form-control input-sm" name="startTime">
+				<?php echo selectTime($startTime); ?>
+			</select>
+		</div>
+
+		<div class="col-sm-1 padding-5">
+			<label class="display-block">สิ้นสุด</label>
+			<select class="form-control input-sm" name="endTime">
+				<?php echo selectTime($endTime); ?>
+			</select>
+		</div>
+
+		<div class="divider-hidden margin-top-5 margin-bottom-5"></div>
+
 		<div class="col-sm-1 padding-5 first">
-			<label class="display-block not-show">state</label>
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_1; ?>" id="btn-1" onclick="toggleState('btn-1', <?php echo $state_1; ?> )">รอชำระเงิน</button>
 		</div>
 
 		<div class="col-sm-1 padding-5">
-			<label class="display-block not-show">state</label>
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_2; ?>" id="btn-2" onclick="toggleState('btn-2', <?php echo $state_2; ?> )">แจ้งชำระเงิน</button>
 		</div>
+
 		<div class="col-sm-1 padding-5">
-			<label class="display-block not-show">state</label>
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_3; ?>" id="btn-3" onclick="toggleState('btn-3', <?php echo $state_3; ?> )">รอจัด</button>
 		</div>
+
 		<div class="col-sm-1 padding-5">
-			<label class="display-block not-show">state</label>
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_4; ?>" id="btn-4" onclick="toggleState('btn-4', <?php echo $state_4; ?> )">กำลังจัด</button>
 		</div>
+
 		<div class="col-sm-1 padding-5">
-			<label class="display-block not-show">state</label>
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_5; ?>" id="btn-5" onclick="toggleState('btn-5', <?php echo $state_5; ?> )">รอตรวจ</button>
 		</div>
+
 		<div class="col-sm-1 padding-5">
-			<label class="display-block not-show">state</label>
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_6; ?>" id="btn-6" onclick="toggleState('btn-6', <?php echo $state_6; ?> )">กำลังตรวจ</button>
 		</div>
+
 		<div class="col-sm-1 padding-5">
-			<label class="display-block not-show">state</label>
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_7; ?>" id="btn-7" onclick="toggleState('btn-7', <?php echo $state_7; ?> )">รอเปิดบิล</button>
 		</div>
+
 		<div class="col-sm-1 padding-5">
-			<label class="display-block not-show">state</label>
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_8; ?>" id="btn-8" onclick="toggleState('btn-8', <?php echo $state_8; ?> )">เปิดบิลแล้ว</button>
 		</div>
 		<!--
 		<div class="col-sm-1 padding-5">
-			<label class="display-block not-show">state</label>
+
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_9; ?>" id="btn-9" onclick="toggleState('btn-9', <?php echo $state_9; ?> )">กำลังจัดส่ง</button>
 		</div>
 		<div class="col-sm-1 padding-5">
-			<label class="display-block not-show">state</label>
+
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_10; ?>" id="btn-10" onclick="toggleState('btn-10', <?php echo $state_10; ?> )">จัดส่งแล้ว</button>
 		</div>
 		-->
 		<div class="col-sm-1 padding-5">
-			<label class="display-block not-show">state</label>
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_11; ?>" id="btn-11" onclick="toggleState('btn-11', <?php echo $state_11; ?> )">ยกเลิก</button>
 		</div>
 
 		<div class="col-sm-1 padding-5">
-			<label class="display-block not-show">Status</label>
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_notSave; ?>" id="btn-notSave" onclick="toggleState('btn-notSave', <?php echo $notSave; ?> )">ยังไม่บันทึก</button>
 		</div>
 
 		<div class="col-sm-1 padding-5">
-			<label class="display-block not-show">OnnlyMe</label>
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_onlyMe; ?>" id="btn-onlyMe" onclick="toggleState('btn-onlyMe', <?php echo $onlyMe; ?> )">เฉพาะฉัน</button>
 		</div>
 
-    <div class="col-sm-1 padding-5 last">
-      <label class="display-block not-show">Apply</label>
-      <button type="button" class="btn btn-sm btn-primary btn-block" onClick="getSearch()"><i class="fa fa-search"></i> ค้นหา</button>
-    </div>
+
+
 
 		<input type="hidden" name="state_1" id="state_1" value="<?php echo $state_1; ?>" />
 		<input type="hidden" name="state_2" id="state_2" value="<?php echo $state_2; ?>" />
@@ -226,12 +271,30 @@ for($i =1; $i <= 11; $i++)
 		$where .= "AND id_employee IN(".getEmployeeIn($sEmp).") "; //--- function/employee_helper.php
 	}
 
+
+
+
 	if( $fromDate != "" && $toDate != "" )
 	{
 		createCookie('fromDate', $fromDate);
 		createCookie('toDate', $toDate);
-		$where .= "AND date_add >= '".fromDate($fromDate)."' AND date_add <= '". toDate($toDate)."' ";
+		if($selectState != '')
+		{
+			createCookie('selectState', $selectState);
+			createCookie('startTime', $startTime);
+			createCookie('endTime', $endTime);
+			$where .= "AND id_order IN(".getOrderStateChangeIn($selectState, fromDate($fromDate), toDate($toDate), $startTime, $endTime).") ";
+		}
+		else
+		{
+			$where .= "AND date_add >= '".fromDate($fromDate)."' AND date_add <= '". toDate($toDate)."' ";
+		}
+
 	}
+
+
+
+
 
 	if($sPaymet != '')
 	{
@@ -239,11 +302,39 @@ for($i =1; $i <= 11; $i++)
 		$where .= "AND id_payment = '".$sPaymet."' ";
 	}
 
+
+
+
+
 	if($sChannels != '')
 	{
 		createCookie('sOrderChannels', $sChannels);
 		$where .= "AND id_channels = '".$sChannels."' ";
 	}
+
+
+
+
+
+	if($sRefCode != '')
+	{
+		createCookie('sRefCode', $sRefCode);
+		$where .= "AND ref_code LIKE '%".$sRefCode."%' ";
+	}
+
+
+
+
+
+	if($sDeliveryCode != '')
+	{
+		createCookie('sDeliveryCode', $sDeliveryCode);
+		$where .= "AND shipping_code LIKE '%".$sDeliveryCode."%' ";
+	}
+
+
+
+
 
 	if($notSave == 1)
 	{
@@ -258,6 +349,9 @@ for($i =1; $i <= 11; $i++)
 		}
 
 	}
+
+
+
 
 	if($onlyMe == 1)
 	{
@@ -295,9 +389,9 @@ for($i =1; $i <= 11; $i++)
         	<thead>
             	<tr class="font-size-10">
                 	<th class="width-5 text-center">ลำดับ</th>
-                    <th class="width-8 text-center">เลขที่เอกสาร</th>
+                    <th class="width-15 text-center">เลขที่เอกสาร</th>
                     <th class="text-center">ลูกค้า</th>
-                    <th class="width-10 text-center">จังหวัด</th>
+                    <th class="width-8 text-center">จังหวัด</th>
                     <th class="width-8 text-center">ยอดเงิน</th>
                     <th class="width-8 text-center">ช่องทางขาย</th>
                     <th class="width-8 text-center">การชำระเงิน</th>
@@ -312,12 +406,17 @@ for($i =1; $i <= 11; $i++)
 <?php	$cs 		= new customer(); ?>
 <?php	$order 	= new order(); ?>
 <?php	$ch 		= new channels(); ?>
-<?php	$pm		= new payment_method(); ?>
+<?php	$pm		  = new payment_method(); ?>
 <?php	while( $rs = dbFetchObject($qs) ) : ?>
 
 			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status); //--- order_help.php ?>>
             	<td class="middle text-cennter pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $no; ?></td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $rs->reference; ?></td>
+                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
+									<?php echo $rs->reference; ?>
+									<?php if($rs->ref_code != '') : ?>
+											[ <?php echo $rs->ref_code; ?> ]
+									<?php endif; ?>
+								</td>
                 <td class="middle pointer" onclick="goEdit(<?php echo $rs->id; ?>)">
                  	<?php if( $rs->isOnline == 1 ) : ?>
                    		[  <?php echo $rs->online_code; ?>  ] &nbsp; &nbsp;
@@ -383,7 +482,7 @@ for($i =1; $i <= 11; $i++)
 
 <script>
 $(function () {
-  $('[data-toggle="popover"]').popover()
-})
+  $('[data-toggle="popover"]').popover();
+});
 </script>
 <script src="script/order/order_list.js"></script>

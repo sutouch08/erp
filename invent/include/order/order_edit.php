@@ -19,7 +19,7 @@ $channels = new channels($order->id_channels);
             <button type="button" class="btn btn-sm btn-primary" onClick="payOrder()" <?php echo $payed; ?>><i class="fa fa-credit-card"></i> แจ้งชำระเงิน</button>
 
             <?php $shiped = ( $order->status == 0 || $order->hasPayment == 0) ? 'disabled' : '' ;	?>
-    				<button type="button" class="btn btn-sm btn-info" onClick="updateShipping()" <?php echo $shiped; ?>><i class="fa fa-truck"></i> บันทึกการจัดส่ง</button>
+    				<button type="button" class="btn btn-sm btn-info" onClick="inputDeliveryNo()" <?php echo $shiped; ?>><i class="fa fa-truck"></i> บันทึกการจัดส่ง</button>
 
             <?php $disabled = $order->status == 0 ? 'disabled' : '' ;	?>
         		<button type="button" class="btn btn-sm btn-success" onClick="getSummary()" <?php echo $disabled; ?>><i class="fa fa-list"></i> สรุปข้อมูล</button>

@@ -22,7 +22,7 @@ $id_emp = getCookie('user_id');
               <span class="icon-bar"> </span>
             </button>
             <span style="line-height:2.5">
-            <?php echo getCookie('UserName'); ?>
+            <?php echo getCookie('saleName'); ?>
             </span>
 
           </a>

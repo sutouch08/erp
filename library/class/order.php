@@ -34,6 +34,7 @@ class order
 	public $is_so;
 	public $id_budget = 0; //--- ไอดี ของงบประมาณ (กรณี อภินันท์ หรือ สปอนเซอร์)
 	public $gp = 0.00;
+	public $ref_code;
 	public $hasNotSaveDetail = TRUE;
 
 

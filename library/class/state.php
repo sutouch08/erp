@@ -16,7 +16,7 @@ class state
 	//--- 11 = ยกเลิก
 	public function add($id_order, $id_state, $id_employee)
 	{
-		return dbQuery("INSERT INTO tbl_order_state (id_order, id_state, id_employee) VALUES (".$id_order.", ".$id_state.", ".$id_employee.")");
+		return dbQuery("INSERT INTO tbl_order_state (id_order, id_state, id_employee, time_upd) VALUES (".$id_order.", ".$id_state.", ".$id_employee.", '".date('H:i:s')."')");
 	}
 
 

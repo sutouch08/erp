@@ -13,7 +13,11 @@ $online = (isset( $_GET['online'] ) OR $order->isOnline == 1 ) ? TRUE : FALSE;
         	<?php if( $order->id != "" ) : ?>
         	<button type="button" class="btn btn-sm btn-warning" onClick="goEdit(<?php echo $order->id; ?>)"><i class="fa fa-arrow-left"></i> กลับ</button>
             <?php else : ?>
-            <button type="button" class="btn btn-sm btn-warning" onClick="goBack()"><i class="fa fa-arrow-left"></i> กลับ</button>
+							<?php if($online) : ?>
+								<button type="button" class="btn btn-sm btn-warning" onClick="goBackOnline()"><i class="fa fa-arrow-left"></i> กลับ</button>
+							<?php else : ?>
+            		<button type="button" class="btn btn-sm btn-warning" onClick="goBack()"><i class="fa fa-arrow-left"></i> กลับ</button>
+							<?php endif; ?>
             <?php endif; ?>
             <?php if( isset( $_GET['id_order'] ) ) : ?>
             <button type="button" class="btn btn-sm btn-success <?php echo $hide; ?>" id="btn-save-order" onclick="saveOrder(<?php echo $order->id; ?>)">

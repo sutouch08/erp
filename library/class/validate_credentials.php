@@ -51,7 +51,7 @@ class validate_credentials
 			{
 				$time = 3600*24*30; //---	1 เดือน
 				createCookie('sale_id', $rs->id,$time );
-				createCookie('UserName', $rs->name, $time);
+				createCookie('saleName', $rs->name, $time);
 				createCookie('user_id', $rs->id_employee, $time);
 				$sc = TRUE;
 			}

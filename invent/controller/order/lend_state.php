@@ -73,7 +73,7 @@
             {
               //--- ลดยอดในโซนปลายทางออก
               $isEnough = $stock->isEnough($lend->id_zone, $rs->id_product, $rs->qty);
-              
+
               if( $isEnough === FALSE)
               {
                 $sc = FALSE;
@@ -81,6 +81,13 @@
               }
               else
               {
+                if($stock->updateStockZone($consign->id_zone, $rs->id_product, ($rs->qty * -1)) !== TRUE )
+                {
+                  $sc = FALSE;
+                  $message = 'ปรับยอดในโซนปลายทางออกไม่สำเร็จ';
+                }
+
+
                 //--- เพิ่มข้อมูลกลับ buffer
                 if( $buffer->updateBuffer($rs->id_order, $rs->id_product_style, $rs->id_product, $rs->id_zone, $rs->id_warehouse, $rs->qty) !== TRUE)
                 {

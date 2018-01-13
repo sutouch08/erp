@@ -45,6 +45,12 @@
   <div class="col-sm-3">
     <label>วันที่ : <?php echo thaiDate($order->date_add); ?></label>
   </div>
+<?php if($order->remark != '') : ?>
+  <div class="col-sm-12 margin-top-10">
+    <label>หมายเหตุ : <?php echo $order->remark; ?></label>
+  </div>
+<?php endif; ?>
+
   <input type="hidden" id="id_order" value="<?php echo $order->id; ?>" />
 </div>
 

@@ -175,13 +175,14 @@ function recalDiscount(){
 //----- เพิ่มเลขที่เอกสารใหม่
 function addNew(){
 	var dateAdd 		= $("#dateAdd").val();
-	var id_customer 	= $("#id_customer").val();
+	var id_customer = $("#id_customer").val();
 	var role 				= $('#role').val();
 	var customer 		= $("#customer").val();
 	var channels 		= $("#channels").val();
 	var payment 		= $("#paymentMethod").val();
 	var remark			= $("#remark").val();
-	var isOnline			= $("#isOnline").val();
+	var isOnline		= $("#isOnline").val();
+	var refCode     = $('#ref-code').length == 1 ? $('#ref-code').val() : '';
 	var customerName = $("#onlineCustomer").length == 1 ? $("#onlineCustomer").val() : '';
 
 	if( ! isDate(dateAdd) ){
@@ -206,6 +207,7 @@ function addNew(){
 				"paymentMethod" : payment,
 				"remark" : remark,
 				"isOnline" : isOnline,
+				"refCode" : refCode,
 				"customerName" : customerName
 		},
 		success: function(rs){

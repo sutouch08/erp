@@ -31,11 +31,15 @@
         <?php echo selectOnlinePaymentMethod($order->id_payment); ?>
         </select>
     </div>
-    <div class="col-sm-10">
+		<div class="col-sm-1 col-1-harf padding-5 first">
+			<label>อ้างอิงออเดอร์</label>
+			<input type="text" class="form-control input-sm input-header" id="ref-code" value="<?php echo $order->ref_code; ?>" <?php echo $disabled; ?> />
+		</div>
+    <div class="col-sm-9 padding-5">
     	<label>หมายเหตุ</label>
         <input type="text" class="form-control input-sm input-header" id="remark" value="<?php echo $order->remark; ?>" <?php echo $disabled; ?> />
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-1 col-1-harf padding-5 last">
     <label class="display-block not-show">btn</label>
     <?php if( isset( $_GET['id_order'] ) && $order->state < 8): ?>
     	<button type="button" class="btn btn-sm btn-warning btn-block" id="btn-edit-order" onclick="getEdit()">แก้ไข</button>

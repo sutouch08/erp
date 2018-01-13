@@ -27,8 +27,14 @@
     	<label>การชำระเงิน</label>
         <label class="form-control input-sm text-center" disabled><?php echo $payment->name; ?></label>
     </div>
+<?php if( $order->ref_code != '') : ?>
+		<div class="col-sm-2 margin-top-10">
+			<label>อ้างอิง : </label>
+        <label  style="font-weight:normal;"><?php echo $order->ref_code; ?></label>
+		</div>
+<?php endif; ?>
 <?php if( $order->remark != "" ) : ?>
-    <div class="col-sm-12 margin-top-10">
+    <div class="col-sm-10 margin-top-10">
     	<label>หมายเหตุ : </label>
         <label  style="font-weight:normal;"><?php echo $order->remark; ?></label>
     </div>

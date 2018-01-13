@@ -1,6 +1,7 @@
 
 <?php $pm = new payment_method(); ?>
 <?php $channels = new channels(); ?>
+<?php $customer = new customer($order->id_customer); ?>
 <div class="row">
 	<div class="col-sm-2 col-xs-6">
     	<label>เลขที่เอกสาร</label>
@@ -12,7 +13,7 @@
     </div>
     <div class="col-sm-4 col-xs-12">
     	<label>ลูกค้า</label>
-        <label class="form-control input-sm" disabled><?php echo customerName($order->id_customer); ?></label>
+        <label class="form-control input-sm" disabled><?php echo $customer->name . ' ['.$customer->province.']'; ?></label>
     </div>
 
     <div class="col-sm-2  col-xs-6">

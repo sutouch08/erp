@@ -14,6 +14,9 @@
 	//---	เป็นออเดอร์ออนไลน์หรือไม่
 	$isOnline = isset($_POST['isOnline']) ? ($_POST['isOnline'] == 1 ? 1 : 0) : 0;
 
+	//---- อ้างอิงออเดอร์จากเว็บอื่น
+	$refCode = isset($_POST['refCode']) ? $_POST['refCode'] : '';
+
 	//---	เป็นเอกสารประเภทไหน
 	$role 		= isset( $_POST['role']) ? $_POST['role'] : 1;
 
@@ -74,7 +77,8 @@
 					'online_code'	=> $customerName,
 					'is_so'				=> $is_so,
 					'id_budget'		=> $id_budget,
-					'gp'					=> $gp
+					'gp'					=> $gp,
+					'ref_code' 		=> $refCode
 					);
 
 	//---	เพิ่มเอกสารใหม่

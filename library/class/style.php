@@ -5,6 +5,11 @@ class style
 	public $code;
 	public $name;
 	public $active;
+	public $show_in_sale;
+	public $show_in_customer;
+	public $show_in_online;
+	public $can_sell;
+	public $is_deleted;
 	public $error = '';
 
 	public function __construct($id = "")
@@ -14,11 +19,11 @@ class style
 			$qs = dbQuery("SELECT * FROM tbl_product_style WHERE id = '".$id."'");
 			if( dbNumRows($qs) == 1 )
 			{
-				$rs = dbFetchObject($qs);
-				$this->id		= $rs->id;
-				$this->code	= $rs->code;
-				$this->name	= $rs->name;
-				$this->active	= $rs->active;
+				$rs = dbFetchArray($qs);
+				foreach($rs as $key => $value)
+				{
+					$this->$key = $value;
+				}
 			}
 		}
 	}
@@ -251,6 +256,32 @@ class style
 
 		return $sc;
 	}
+
+
+	public function isShowInSale($id_style)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_product_style WHERE id_style = '".$id_style."' AND show_in_sale = 1");
+		if(dbNumRows($qs) == 1)
+		{
+			$sc = TRUE;
+		}
+
+		return $sc;
+	}
+
+	public function isShowInCustomer($id_style)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_product_style WHERE id_style = '".$id_style."' AND show_in_customer = 1");
+		if(dbNumRows($qs) == 1)
+		{
+			$sc = TRUE;
+		}
+
+		return $sc;
+	}
+
 
 
 
