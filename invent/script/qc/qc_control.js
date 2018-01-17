@@ -73,10 +73,12 @@ function saveQc(option){
   });
 
   if(ds.length > 2){
+    load_in();
     $.ajax({
       url:"controller/qcController.php?saveQc",
       type:"POST", cache:"false", data: ds,
       success:function(rs){
+        load_out();
         var rs = $.trim(rs);
         if( rs == 'success'){
 

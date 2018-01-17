@@ -2,6 +2,7 @@
 	$id_tab = 66;
  	$pm 		= checkAccess($id_profile, $id_tab);
 	$view 	= $pm['view'];
+	$edit   = $pm['edit'];
 	$delete 	= $pm['delete'];
 	accessDeny($view);
 
@@ -18,7 +19,7 @@
         </div>
     </div>
     <hr/>
-    
+
 <?php $sBarcode = isset( $_POST['sBarcode'] ) ? trim( $_POST['sBarcode'] ) : ( getCookie('sBarcode') ? trim( getCookie('sBarcode') ) : '' ); ?>
 <?php $sProduct	= isset( $_POST['sProduct'] ) ? trim( $_POST['sProduct'] ) : ( getCookie('sProduct') ? trim( getCookie('sProduct') ) : '' ); ?>
 <?php $sUnit		= isset( $_POST['sUnit'] ) ? trim( $_POST['sUnit'] ) : ( getCookie('sUnit') ? trim( getCookie('sUnit') ) : '' ); ?>
@@ -53,23 +54,23 @@
 	if( $sBarcode != '' )
 	{
 		createCookie('sBarcode', $sBarcode);
-		$where .= "AND barcode LIKE '%" . $sBarcode . "%' ";	
+		$where .= "AND barcode LIKE '%" . $sBarcode . "%' ";
 	}
-	
+
 	if( $sProduct != '' )
 	{
 		createCookie('sProduct', $sProduct);
 		$where .= "AND reference LIKE '%" . $sProduct ."%' ";
 	}
-	
+
 	if( $sUnit != '' )
 	{
 		createCookie('sUnit', $sUnit);
 		$where .= "AND ( code LIKE '%". $sUnit ."%' OR name LIKE '%" . $sUnit ."%') ";
 	}
-	
+
 	//$where .= "ORDER BY barcode ASC";
-	
+
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
 	$page		= get_page();
@@ -77,7 +78,7 @@
 	$paginator->display($get_rows, 'index.php?content=barcode');
 
 
-	$qs = dbQuery("SELECT * FROM tbl_barcode LEFT JOIN tbl_unit ON tbl_barcode.unit_code = tbl_unit.code ".$where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
+	$qs = dbQuery("SELECT tbl_barcode.* FROM tbl_barcode LEFT JOIN tbl_unit ON tbl_barcode.unit_code = tbl_unit.code ".$where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 ?>
 <div class="row">
 	<div class="col-sm-12">
@@ -99,27 +100,65 @@
     <?php		$unit = new unit(); ?>
     			<tr style="font-size:14px;" id="row_<?php echo $rs->barcode; ?>">
                 	<td align="center"><?php echo $no; ?></td>
-                    <td><?php echo $rs->barcode; ?></td>
+                    <td id="<?php echo $rs->id; ?>"><?php echo $rs->barcode; ?></td>
                     <td><?php echo $rs->reference; ?></td>
                     <td align="center"><?php echo $unit->getName($rs->unit_code); ?></td>
                     <td align="center"><?php echo number_format($rs->unit_qty, 2); ?></td>
                     <td align="right">
+										<?php if($edit) : ?>
+											<button type="button" class="btn btn-sm btn-warning" onclick="getEdit('<?php echo $rs->id; ?>')"><i class="fa fa-pencil"></i></button>
+										<?php endif; ?>
                     <?php if( $delete ) : ?>
                     	<button type="button" class="btn btn-sm btn-danger" onClick="deleteBarcode('<?php echo $rs->barcode; ?>', '<?php echo $rs->reference; ?>')"><i class="fa fa-trash"></i></button>
                     <?php endif; ?>
                     </td>
-                </tr>   
+                </tr>
 	<?php	$no++; 	?>
-    <?php	endwhile; ?>      
+    <?php	endwhile; ?>
     <?php else : ?>
     			<tr>
                 	<td colspan="6" align="center"><h4>ไม่พบรายการตามเงื่อนไขที่กำหนด</h4></td>
                 </tr>
-    <?php endif; ?>            	
+    <?php endif; ?>
             </tbody>
         </table>
     </div>
 </div>
- 
+
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" id="modal" style="width:300px;">
+		<div class="modal-content">
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="modal_title">แก้ไขบาร์โค้ด</h4>
+
+			 </div>
+			 <div class="modal-body" id="modal_body"></div>
+			 <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+				<button type="button" class="btn btn-primary" onClick="saveEdit()" >บันทึก</button>
+			 </div>
+		</div>
+	</div>
+</div>
+
+
+<script id="edit-template" type="text/x-handlebarsTemplate">
+<div class="row">
+	<div class="col-sm-12 margin-top-10">
+		<label>บาร์โค้ด</label>
+		<input type="text" class="form-control input-sm text-center" id="txt-barcode" value="{{barcode}}" />
+		<span class="help-block not-show red" id="barcode-error">บาร์โค้ดไม่ถูกต้อง</span>
+	</div>
+	<div class="col-sm-12 margin-top-10">
+		<label>รหัสสินค้า</label>
+		<input type="text" class="form-control input-sm text-center" value="{{pdCode}}" disabled />
+	</div>
+	<input type="hidden" name="id_barcode" id="id_barcode" value="{{id_barcode}}" />
+</div>
+</script>
+
+</div>
+
 </div><!--/ Container -->
 <script src="script/barcode.js"></script>

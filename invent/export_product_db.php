@@ -74,6 +74,7 @@ $toDate = getFilter('toDate', 'toDate', '');
 	$qs = dbQuery($qr . $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 
 ?>
+<form id="exportForm" method="post" action="controller/exportController.php?exportProductSelected">
 <div class="row">
 	<div class="col-sm-12">
 		<table class="table table-striped border-1">
@@ -100,7 +101,7 @@ $toDate = getFilter('toDate', 'toDate', '');
 					<td class="middle text-center"><?php echo number($rs->cost, 2); ?></td>
 					<td class="middle text-center"><?php echo number($rs->price, 2); ?></td>
 					<td class="middle text-right">
-						<input type="checkbox" class="chk" style="margin-right:5px;" id="chk-<?php echo $no; ?>" value="<?php echo $rs->id; ?>" />
+						<input type="checkbox" class="chk" style="margin-right:5px;" name="style[<?php echo $rs->id; ?>]" id="chk-<?php echo $no; ?>" value="<?php echo $rs->id; ?>" />
 					</td>
 				</tr>
 		<?php $no++; ?>
@@ -114,6 +115,7 @@ $toDate = getFilter('toDate', 'toDate', '');
 		</table>
 	</div>
 </div>
+</form>
 
 </div>   <!-- End container -->
 <script>
@@ -142,6 +144,17 @@ function doExport(){
 		return false;
 	}
 
+	$('#exportForm').submit();
+
+}
+
+/*
+function doExport(){
+	if($('.chk:checked').length == 0){
+		swal('ยังไม่ได้เลือกสินค้า', 'กรุณาเลือกสินค้าที่ต้องการส่งออก', 'warning');
+		return false;
+	}
+
 	var data = [];
 	$('.chk:checked').each(function(index, el) {
 		let id = $(this).val();
@@ -158,6 +171,7 @@ function doExport(){
   get_download(token);
   window.location.href = target;
 }
+*/
 
 function doExportAll(){
 	var token = new Date().getTime();

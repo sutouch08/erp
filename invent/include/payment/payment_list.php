@@ -19,10 +19,10 @@
     <thead>
     	<tr class="font-size-10">
         <th class="width-5 text-center">No.</th>
-        <th class="width-10">Order No.</th>
+        <th class="width-15">Order No.</th>
 				<th class="width-10 text-center">ช่องทาง</th>
         <th class="width-20">ลูกค้า</th>
-				<th class="width-20">พนักงาน</th>
+				<th class="width-15">พนักงาน</th>
         <th class="width-8 text-center">ยอดชำระ</th>
         <th class="width-8 text-center">ยอดโอน</th>
         <th class="width-10 text-center">เลขที่บัญชี</th>

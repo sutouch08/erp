@@ -35,7 +35,6 @@ $qr .= "su.name, ";
 $qr .= "po.date_need, ";
 $qr .= "SUM(po.qty) AS qty, ";
 $qr .= "SUM(po.received) AS received, ";
-$qr .= "(qty - received) AS backlogs, ";
 $qr .= "po.status ";
 $qr .= "FROM tbl_po AS po ";
 $qr .= "LEFT JOIN tbl_supplier AS su ON po.id_supplier = su.id ";
@@ -167,7 +166,7 @@ if(dbNumRows($qs) > 0)
     $excel->getActiveSheet()->setCellValue('H'.$row, thaiDate($rs->date_need));
     $excel->getActiveSheet()->setCellValue('I'.$row, $rs->qty);
     $excel->getActiveSheet()->setCellValue('J'.$row, $rs->received);
-    $excel->getActiveSheet()->setCellValue('K'.$row, $rs->backlogs);
+    $excel->getActiveSheet()->setCellValue('K'.$row, '=I'.$row.' - J'.$row);
     $excel->getActiveSheet()->setCellValue('L'.$row, ($rs->status == 3 ? 'closed' : ($rs->status == 2 ? 'Part' : '')));
     $no++;
     $row++;

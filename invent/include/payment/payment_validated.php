@@ -13,6 +13,7 @@
 <?php
 //--- function getFilter in function/tools.php
 $sCode 	= getFilter('sCode', 'sPaymentCode', '');	//---	reference
+$sRefCode = getFilter('sRefCode', 'sRefCode', ''); //---	อ้างอิงออเดอร์ข้างนอก
 $sCus	 	= getFilter('sCus', 'sPaymentCus', '' );	//---	customer
 $sAcc	= getFilter('sAcc', 'sAcc', '' );	//---	เลขที่บัญชี
 
@@ -23,16 +24,20 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 
 <form id="searchForm" method="post">
 <div class="row">
-	<div class="col-sm-2">
+	<div class="col-sm-2 padding-5 first">
     	<label>เลขที่เอกสาร</label>
         <input type="text" class="form-control input-sm text-center search-box" id="sCode" name="sCode" value="<?php echo $sCode; ?>"  />
     </div>
-    <div class="col-sm-2">
+		<div class="col-sm-2 padding-5">
+			<label>เลขที่อ้างอิง</label>
+			<input type="text" class="form-control input-sm text-center search-box" id="sRefCode" name="sRefCode" value="<?php echo $sRefCode; ?>" />
+		</div>
+    <div class="col-sm-2 padding-5">
     	<label>ลูกค้า</label>
         <input type="text" class="form-control input-sm text-center search-box" id="sCus" name="sCus" value="<?php echo $sCus; ?>"  />
     </div>
-    <div class="col-sm-2">
-    	<label>บัญชี</label>
+    <div class="col-sm-2 padding-5">
+    	<label>เลขที่บัญชี</label>
         <input type="text" class="form-control input-sm text-center search-box" id="sAcc" name="sAcc" value="<?php echo $sAcc; ?>" />
     </div>
     <div class="col-sm-2 padding-5">
@@ -40,11 +45,11 @@ $toDate	= getFilter('toDate', 'toDate', '' );
         <input type="text" class="form-control input-sm text-center input-discount" name="fromDate" id="fromDate" value="<?php echo $fromDate; ?>" placeholder="เริ่มต้น" />
         <input type="text" class="form-control input-sm text-center input-unit" name="toDate" id="toDate" value="<?php echo $toDate; ?>" placeholder="สิ้นสุด" />
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-1 padding-5">
         	<label class="display-block not-show">Apply</label>
             <button type="button" class="btn btn-sm btn-primary btn-block" onClick="getSearch()"><i class="fa fa-search"></i> ค้นหา</button>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-1 padding-5 last">
         	<label class="display-block not-show">Apply</label>
             <button type="button" class="btn btn-sm btn-warning btn-block" onClick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
         </div>
@@ -58,6 +63,12 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 	{
 		createCookie('sOrderCode', $sCode);
 		$where .= "AND o.reference LIKE '%".$sCode."%' ";
+	}
+
+	if( $sRefCode != '')
+	{
+		createCookie('sRefCode', $sRefCode);
+		$where .= "AND o.ref_code LIKE '%".$sRefCode."%' ";
 	}
 
 	//--- Customer
@@ -83,7 +94,7 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 
 	$where .= "ORDER BY p.paydate DESC";
 
-	$qx = "SELECT p.*, o.reference, o.id_customer, o.online_code, o.isOnline, o.id_channels, o.id_employee FROM ";
+	$qx = "SELECT p.*, o.reference, o.id_customer, o.online_code, o.isOnline, o.id_channels, o.id_employee, o.ref_code FROM ";
 	$qr = "tbl_payment AS p ";
 	$qr .= "LEFT JOIN tbl_order AS o ON p.id_order = o.id ";
 	$qr .= "LEFT JOIN tbl_customer_online AS c ON o.online_code = c.code ";
@@ -103,10 +114,10 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 		<thead>
     	<tr class="font-size-10">
         <th class="width-5 text-center">No.</th>
-        <th class="width-10">Order No.</th>
+        <th class="width-15">Order No.</th>
 				<th class="width-10 text-center">ช่องทาง</th>
         <th class="width-20">ลูกค้า</th>
-				<th class="width-20">พนักงาน</th>
+				<th class="width-15">พนักงาน</th>
         <th class="width-8 text-center">ยอดชำระ</th>
         <th class="width-8 text-center">ยอดโอน</th>
         <th class="width-10 text-center">เลขที่บัญชี</th>
@@ -123,7 +134,12 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 <?php		$bank = new bank_account($rs->id_account); ?>
 			<tr class="font-size-12" id="<?php echo $rs->id_order; ?>">
         <td class="text-center"><?php echo $no; ?></td>
-        <td><?php echo $rs->reference; ?></td>
+        <td>
+					<?php echo $rs->reference; ?>
+					<?php if($rs->ref_code !='') : ?>
+						 [<?php echo $rs->ref_code; ?>]
+					<?php endif; ?>
+				</td>
 				<td class="text-center"><?php echo $channels->getName($rs->id_channels); ?></td>
         <td><?php echo $rs->isOnline == 1 ? $customer_online->getName($rs->online_code) : customerName($rs->id_customer); ?></td>
 				<td><?php echo $emp->getName($rs->id_employee); ?></td>

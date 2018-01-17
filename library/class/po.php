@@ -60,10 +60,10 @@ class po
 
 
 
-	public function update($bookcode, $reference, $product_code, array $ds)
+	public function update($bookcode, $reference, $id_pd, array $ds)
 	{
 		$sc = FALSE;
-		if( count( $ds ) > 0 )
+		if( !empty($ds) )
 		{
 			$set 	= "";
 			$i 		= 1;
@@ -72,8 +72,11 @@ class po
 				$set .= $i == 1 ? $field . " = '".$value."'" : ", ". $field ." = '".$value."'";
 				$i++;
 			}
-			$sc = dbQuery("UPDATE tbl_po SET ". $set ." WHERE bookcode = '".$bookcode."' AND reference = '".$reference."' AND product_code = '".$product_code."'");
+
+			$sc = dbQuery("UPDATE tbl_po SET ". $set ." WHERE bookcode = '".$bookcode."' AND reference = '".$reference."' AND id_product = '".$id_pd."'");
+			$this->error = $sc === TRUE ? '' : dbError();
 		}
+
 		return $sc;
 	}
 
@@ -96,6 +99,27 @@ class po
 		}
 
 		return $sc;
+	}
+
+
+
+	public function isChanged($bookcode, $reference, $id_pd, $qty, $vat_amount, $amount)
+	{
+		$sc = FALSE;
+		$qr  = "SELECT bookcode FROM tbl_po ";
+		$qr .= "WHERE bookcode = '".$bookcode."' ";
+		$qr .= "AND reference = '".$reference."' ";
+		$qr .= "AND id_product = '".$id_pd."' ";
+		$qr .= "AND (qty != '".$qty."' OR vat_amount != '".$vat_amount."' OR amount_ex != '".$amount."') ";
+		$qs = dbQuery($qr);
+
+		if(dbNumRows($qs) > 0)
+		{
+			$sc = TRUE;
+		}
+
+		return $sc;
+
 	}
 
 

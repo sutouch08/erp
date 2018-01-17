@@ -1,4 +1,87 @@
 // JavaScript Document
+
+function getEdit(id){
+	$.ajax({
+		url:'controller/barcodeController.php?getData',
+		type:'GET',
+		cache:'false',
+		data:{
+			'id_barcode' : id
+		},
+		success:function(rs){
+			var rs = $.trim(rs);
+			if(isJson(rs)){
+				var source = $('#edit-template').html();
+				var data = $.parseJSON(rs);
+				var output = $('#modal_body');
+				render(source, data, output);
+				$('#edit-modal').modal('show');
+			}else{
+				swal('Error', rs, 'error');
+			}
+		}
+	});
+}
+
+
+
+function saveEdit(){
+	var id = $('#id_barcode').val();
+	var barcode = $('#txt-barcode').val();
+	if(barcode.length == 0){
+		$('#barcode-error').text('กรุณาระบุบาร์โค้ด');
+		$('#txt-barcode').addClass('has-error');
+		$('#barcode-error').removeClass('not-show');
+		$('#txt-barcode').focus();
+	}else{
+		//----	check duplication
+		$.ajax({
+			url:'controller/barcodeController.php?isDuplicate',
+			type:'GET',
+			cache:'false',
+			data:{
+				'id_barcode' : id,
+				'barcode' : barcode
+			},
+			success:function(rs){
+				var rs = $.trim(rs);
+				if(rs == 'duplicate'){
+					$('#barcode-error').text('บาร์โค้ดซ้ำ');
+					$('#txt-barcode').addClass('has-error');
+					$('#barcode-error').removeClass('not-show');
+					$('#txt-barcode').focus();
+				}else{
+					$('#edit-modal').modal('hide');
+					
+					$.ajax({
+						url:'controller/barcodeController.php?updateBarcode',
+						type:'POST',
+						cache:'false',
+						data:{
+							'id_barcode' : id,
+							'barcode' : barcode
+						},
+						success:function(rs){
+							var rs = $.trim(rs);
+							if(rs == 'success'){
+								$('#'+id).text(barcode);
+								swal({
+									title:'Updated',
+									text:'บันทึกบาร์โค้ดเรียบร้อยแล้ว',
+									type:'success',
+									timer:1000
+								});
+							}else{
+								swal('Error', rs, 'error');
+							}
+						}
+					});
+				}
+			}
+		});
+	}
+}
+
 function syncBarcode(){
 	load_in();
 	$.ajax({

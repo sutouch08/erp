@@ -149,7 +149,7 @@ class transform
   ///------ รับเข้าครบแล้ว หรือ ยกเลิก
   public function closed($id_order)
   {
-    return dbQuery("UPDATE tbl_order_transform SET isClosed = 1 WHERE id_order = '".$id_order."'");
+    return dbQuery("UPDATE tbl_order_transform SET is_closed = 1 WHERE id_order = '".$id_order."'");
   }
 
   //--- เพื่มการเชื่อมโยงสินค้าทีละรายการ

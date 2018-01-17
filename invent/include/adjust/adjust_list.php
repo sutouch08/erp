@@ -99,6 +99,8 @@ if( $fromDate != '' && $toDate != '')
   $where .= "AND date_add <= '".toDate($toDate)."' ";
 }
 
+$where .= "ORDER BY reference DESC";
+
 $paginator = new paginator();
 $get_rows  = get_rows();
 $paginator->Per_Page('tbl_adjust', $where, $get_rows);

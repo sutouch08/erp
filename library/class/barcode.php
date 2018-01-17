@@ -1,9 +1,34 @@
 <?php
-class barcode {
+class barcode
+{
 
+public $id;
+public $barcode;
+public $id_product;
+public $reference;
+public $unit_code;
+public $unit_qty;
 public $error;
 
-public function __construct(){}
+public function __construct($id='')
+{
+	if($id !='')
+	{
+		$qs = dbQuery("SELECT * FROM tbl_barcode WHERE id= '".$id."'");
+		if(dbNumRows($qs) == 1)
+		{
+			$rs = dbFetchObject($qs);
+			$this->id = $rs->id;
+			$this->barcode = $rs->barcode;
+			$this->id_product = $rs->id_product;
+			$this->reference = $rs->reference;
+			$this->unit_code = $rs->unit_code;
+			$this->unit_qty = $rs->unit_qty;
+		}
+	}
+}
+
+
 
 public function add(array $ds)
 {
@@ -78,6 +103,18 @@ public function isAllExists($id, $barcode)
 	return $sc;
 }
 
+
+public function isDuplicate($id, $barcode)
+{
+	$sc = FALSE;
+	$qs = dbQuery("SELECT * FROM tbl_barcode WHERE barcode = '".$barcode."' AND id != '".$id."'");
+	if(dbNumRows($qs) > 0)
+	{
+		$sc = TRUE;
+	}
+
+	return $sc;
+}
 
 
 

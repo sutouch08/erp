@@ -31,7 +31,6 @@ $qr .= "su.name, ";
 $qr .= "po.date_need, ";
 $qr .= "SUM(po.qty) AS qty, ";
 $qr .= "SUM(po.received) AS received, ";
-$qr .= "(qty - received) AS backlogs, ";
 $qr .= "po.status ";
 $qr .= "FROM tbl_po AS po ";
 $qr .= "LEFT JOIN tbl_supplier AS su ON po.id_supplier = su.id ";
@@ -126,14 +125,14 @@ if(dbNumRows($qs) > 0)
       'dueDate' => thaiDate($rs->date_need),
       'qty' => number($rs->qty),
       'received' => number($rs->received),
-      'backlogs' => number($rs->backlogs),
+      'backlogs' => number($rs->qty - $rs->received),
       'remark' => $rs->status == 3 ? 'closed' : ($rs->status == 2 ? 'Part' : '')
     );
 
     array_push($sc, $arr);
     $totalQty += $rs->qty;
     $totalReceived += $rs->received;
-    $totalBacklogs += $rs->backlogs;
+    $totalBacklogs += ($rs->qty - $rs->received);
     $no++;
   }
 

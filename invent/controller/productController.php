@@ -356,6 +356,26 @@ if( isset( $_GET['doMappingImageWithProductAttribute'] ) )
 }
 
 
+//----	รายงานสินค้าคงเหลืรายงานสินค้าคงเหลือแยกตามโซน
+if(isset($_GET['getIdProduct']))
+{
+	$pdCode = $_GET['pdCode'];
+	$pd = new product();
+	$id = $pd->getId($pdCode);
+
+	echo $id === FALSE ? 'notfound' : $id;
+}
+
+
+if(isset($_GET['getIdStyle']))
+{
+	$code = $_GET['styleCode'];
+	$style = new style();
+	$id = $style->getId($code);
+
+	echo $id === FALSE ? 'notfound' : $id;
+}
+
 if( isset( $_GET['clearFilter'] ) )
 {
 	deleteCookie('sProductCode');

@@ -287,7 +287,7 @@ class discount
 
 			$qr .= "AND r.active = 1 AND r.isDeleted = 0";
 
-			//echo $qr;
+			echo $qr;
 			$qs = dbQuery($qr);
 
 			if( dbNumRows($qs) > 0 )

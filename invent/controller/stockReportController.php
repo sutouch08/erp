@@ -8,14 +8,29 @@ include '../function/report_helper.php';
 //--- รายงานสินค้าคงเหลือแยกตามโซน
 if(isset($_GET['stock_balance_by_zone']) && isset($_GET['report']))
 {
-  include 'report/stockReport/report_stock_balance_by_zone.php';
+  if($_GET['prevDate'] == 1)
+  {
+    include 'report/stockReport/report_stock_balance_by_zone_prev_date.php';
+  }
+  else
+  {
+    include 'report/stockReport/report_stock_balance_by_zone.php';
+  }
+
 }
 
 
 //----  ส่งออกรายงานสินค้าคงเหลือแยกตามโซน
 if(isset($_GET['stock_balance_by_zone']) && isset($_GET['export']))
 {
-  include 'report/stockReport/export_stock_balance_by_zone.php';
+  if($_GET['prevDate'] == 1)
+  {
+    include 'report/stockReport/export_stock_balance_by_zone_prev_date.php';
+  }
+  else
+  {
+    include 'report/stockReport/export_stock_balance_by_zone.php';
+  }
 }
 
 

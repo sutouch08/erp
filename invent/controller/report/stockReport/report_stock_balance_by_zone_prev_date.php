@@ -31,14 +31,27 @@ if($allWarehouse != 1)
   }
 }
 
-$qr  = "SELECT z.zone_name, p.code, p.name, s.qty ";
-$qr .= "FROM tbl_stock AS s ";
+
+$qr  = "SELECT b.barcode, p.code, p.name, p.cost, (SUM(s.move_in) - SUM(s.move_out)) AS qty ";
+$qr .= "FROM tbl_stock_movement AS s ";
+$qr .= "LEFT JOIN tbl_product AS p ON s.id_product = p.id ";
+$qr .= "LEFT JOIN tbl_product_style AS ps ON p.id_style = ps.id ";
+$qr .= "LEFT JOIN tbl_barcode AS b ON p.code = b.reference ";
+$qr .= "WHERE s.date_upd <= '".toDate($selectDate)."' ";
+
+
+$qr  = "SELECT z.zone_name, p.code, p.name, (SUM(s.move_in) - SUM(s.move_out)) AS qty ";
+$qr .= "FROM tbl_stock_movement AS s ";
 $qr .= "LEFT JOIN tbl_zone AS z ON s.id_zone = z.id_zone ";
 $qr .= "LEFT JOIN tbl_product AS p ON s.id_product = p.id ";
 $qr .= "LEFT JOIN tbl_product_style AS ps ON p.id_style = ps.id ";
 $qr .= "LEFT JOIN tbl_color AS c ON p.id_color = c.id ";
 $qr .= "LEFT JOIN tbl_size AS si ON p.id_size = si.id ";
-$qr .= "WHERE s.id_zone != '' ";
+$qr .= "WHERE s.date_upd <= '".toDate($selectDate)."' ";
+
+
+
+
 
 if($allProduct != 1)
 {
@@ -63,6 +76,7 @@ if($allZone != 1 && $id_zone != '')
   $qr .= "AND s.id_zone = '".$id_zone."' ";
 }
 
+
 if($allZone == 1)
 {
   if($allWarehouse == 0)
@@ -72,6 +86,7 @@ if($allZone == 1)
 
 }
 
+$qr .= "GROUP BY p.id, s.id_zone ";
 
 $qr .= "ORDER BY ps.code ASC, c.code ASC, si.position ASC, z.zone_name ASC";
 

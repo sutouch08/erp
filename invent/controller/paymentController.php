@@ -91,10 +91,11 @@ if( isset( $_GET['getOrderTable'] ) )
 			$amount 	= ( $order->getTotalAmount($rs->id_order) - $order->bDiscAmount) + $order->shipping_fee + $order->service_fee;
 			$shipFee	 = $order->shipping_fee;
 			$servFee = $order->service_fee;
+			$refCode = $order->ref_code == '' ? '' : ' ['.$order->ref_code.']';
 			$arr			= array(
 									"id"					=> $order->id,
 									"no"					=> $no,
-									"reference"		=> $order->reference,
+									"reference"		=> $order->reference.$refCode,
 									"channels"		=> $channels->getName($order->id_channels),
 									"customer"		=> $order->isOnline == 1 ? $co->getName($order->online_code) : customerName($order->id_customer),
 									"employee"		=> $emp->getName($order->id_employee),
@@ -242,6 +243,7 @@ if( isset( $_GET['searchBankAccount'] ) )
 if( isset( $_GET['clearFilter'] ) )
 {
 	deleteCookie('sPaymentCode');
+	deleteCookie('sRefCode');
 	deleteCookie('sPaymentCus');
 	deleteCookie('sAcc');
 	deleteCookie('fromDate');

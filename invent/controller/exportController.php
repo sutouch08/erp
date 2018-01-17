@@ -6,7 +6,7 @@ include "../function/report_helper.php";
 
 if( isset($_GET['exportProductSelected']))
 {
- 	$exp 	= $_GET['style'];
+ 	$exp 	= $_POST['style'];
 	$web_id = getConfig("ITEMS_GROUP");
 	$excel = new PHPExcel();
 	$excel->setActiveSheetIndex(0);
@@ -50,7 +50,6 @@ if( isset($_GET['exportProductSelected']))
 		}
 	}
 
-	setToken($_GET['token']);
 	$file_name = "items-".$web_id.".xlsx";
 	header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); /// form excel 2007 XLSX
 	header('Content-Disposition: attachment;filename="'.$file_name.'"');

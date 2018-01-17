@@ -36,6 +36,11 @@ if( ! getConfig("CLOSED") && getConfig("SALES_OPEN") )
 			$pageTitle = "ออเดอร์";
 			break;
 
+		case 'check_stock' :
+			$content = 'check_stock.php';
+			$pageTitle = 'เช็คสต็อก';
+			break;
+
 		case 'category':
 			$content = 'category.php';
 			$pageTitle = 'สินค้า';
