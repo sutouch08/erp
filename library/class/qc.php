@@ -92,7 +92,11 @@ class qc
   //--- จำนวนรวมของสินค้าที่ตรวจแล้วทั้งออเดอร์(ไม่รวมที่ยังไม่ตรวจ)
   public function totalQc($id_order)
   {
-    $qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_qc WHERE id_order = ".$id_order);
+    $qr  = "SELECT SUM(qc.qty) AS qty FROM tbl_qc AS qc ";
+    $qr .= "JOIN tbl_order_detail AS od ON qc.id_order = od.id_order AND qc.id_product = od.id_product ";
+    $qr .= "WHERE qc.id_order = '".$id_order."'";
+    //$qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_qc WHERE id_order = ".$id_order);
+    $qs = dbQuery($qr);
     list( $qty ) = dbFetchArray($qs);
     return is_null($qty) ? 0 : $qty;
   }

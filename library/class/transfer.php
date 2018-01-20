@@ -382,7 +382,7 @@ class transfer
 
 
 
-  
+
 
   //--- ตรวจสอบว่ามีรายการอยู่ในตารางแล้วหรือยัง (ยังไม่ย้ายเข้าปลายทาง)
   public function isExistsDetail($id_transfer, $id_product, $id_zone)
@@ -447,6 +447,13 @@ class transfer
     return $sc;
   }
 
+
+  public function getStockInTransferTemp($id_pd)
+  {
+    $qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_transfer_temp WHERE id_product = '".$id_pd."'");
+    list($qty) = dbFetchArray($qs);
+    return is_null($qty) ? 0 : $qty;
+  }
 
 
 } //--- end class

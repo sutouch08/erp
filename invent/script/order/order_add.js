@@ -130,6 +130,7 @@ function updateOrder(recal){
 	var id_customer = $("#id_customer").val();
 	var id_channels = $("#channels").val();
 	var id_payment = $("#paymentMethod").val();
+	var ref_code  = $('#ref-code').val();
 	var remark = $("#remark").val();
 	if(recal == 1 ){
 		data = {
@@ -138,10 +139,14 @@ function updateOrder(recal){
 					 "id_customer" : id_customer,
 					 "id_channels" : id_channels,
 					 "id_payment" : id_payment,
+					 "refCode" : ref_code,
 					 "remark" : remark
 		};
 	}else{
-		data = { "id_order" : id_order, "remark" : remark };
+		data = {
+			"id_order" : id_order,
+			"refCode" : ref_code,
+			"remark" : remark };
 	}
 	load_in();
 

@@ -22,7 +22,7 @@ if( ! $supervisor )
   $qr .= "AND s.id_employee = ".getCookie('user_id')." ";
 }
 
-$qr .= "ORDER BY date_add ASC";
+$qr .= "ORDER BY s.id_employee ASC, date_add ASC";
 
 $qs = dbQuery($qr);
 

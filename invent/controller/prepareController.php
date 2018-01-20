@@ -25,6 +25,28 @@ if( isset($_GET['checkStatusAndState']))
 
 
 
+if(isset($_GET['pullOrderBack']))
+{
+	$sc = TRUE;
+	$id = $_POST['id_order'];
+	$order = new order($id);
+
+	//---- 	ถ้าสถานะเป็น กำลังจัดสินค้าอยูท
+	if($order->state == 4)
+	{
+		//---	เปลี่ยนสถานะกลับมารอจัดใหม่
+		if($order->stateChange($id, 3) === FALSE)
+		{
+			$sc = FALSE;
+			$message = 'เปลี่ยนสถานะไม่สำเร็จ';
+		}
+	}
+
+	echo $sc === TRUE ? 'success' : $message;
+
+}
+
+
 //--- จัดสินค้า ตัดยอดออกจากโซน เพิ่มเข้า buffer
 if( isset( $_GET['doPrepare']))
 {

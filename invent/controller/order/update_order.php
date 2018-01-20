@@ -6,9 +6,14 @@
 
 	$credit = new customer_credit();
 
+	$refCode = isset($_POST['refCode']) ? $_POST['refCode'] : '';
+
 	if( $recal == 0 )
 	{
-		$arr = array(	"remark" => $_POST['remark']);
+		$arr = array(
+			"ref_code" => $refCode,
+			"remark" => $_POST['remark']
+		);
 		$rs = $order->update($order->id, $arr);
 	}
 	else
@@ -20,6 +25,7 @@
 						"id_sale"		=> $customer->id_sale,
 						"id_payment"	=> $_POST['id_payment'],
 						"id_channels"	=> $_POST['id_channels'],
+						"ref_code"  => $refCode,
 						"status"		=> 0, //--- เปลี่ยนกลับ ให้กดบันทึกใหม่
 						"emp_upd"		=> getCookie('user_id'),
 						"remark"		=> $_POST['remark']

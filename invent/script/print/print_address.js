@@ -79,11 +79,9 @@ function getAddressForm()
 
 function printPackingSheet()
 {
-  var id      = $("#id_order").val();
-  var id_cus  = $("#id_customer").val();
-  var url     = "controller/addressController.php?printAddressSheet&id_order="+id+"&id_customer="+id_cus;
-
-	window.open(url, "_blank", prop);
+  var id_order    = $("#id_order").val();
+	var target   = "controller/orderClosedController.php?printAddressSheet&id_order="+id_order;
+	window.open(target, "_blank", prop);
 }
 
 

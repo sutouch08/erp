@@ -9,6 +9,7 @@
 	$delete = $pm['delete'];
 	accessDeny($view);
 	include 'function/transport_helper.php';
+	include 'function/customer_helper.php';
 	?>
 
 <style>
@@ -86,11 +87,12 @@ hr { margin-bottom:5px; margin-top:5px; }
     <?php $qs = dbQuery("SELECT * FROM tbl_transport WHERE id_transport = ".$id); ?>
     <?php if( dbNumRows($qs) == 1 ) : ?>
     <?php 	$rs = dbFetchArray($qs); ?>
+		<?php   $customer = new customer($rs['id_customer']); ?>
 	<div class="row">
 	<form id="editFrom">
         <div class="col-lg-4 col-lg-offset-4">
         	<label>ลูกค้า</label>
-            <span class="form-control input-sm disabled"><?php echo customer_name($rs['id_customer']); ?></span>
+            <span class="form-control input-sm disabled"><?php echo $customer->name; ?></span>
         </div>
         <div class="col-lg-1"></div>
         <div class="col-lg-4 col-lg-offset-4">
@@ -114,8 +116,12 @@ hr { margin-bottom:5px; margin-top:5px; }
     	<?php endif; ?>
     <?php endif; ?>
 <?php else : ?>
-<?php if( isset($_POST['cus_search'] ) ){ $cus_search = $_POST['cus_search']; }else if( isset($_COOKIE['cus_search']) ){ $cus_search = $_COOKIE['cus_search']; }else{ $cus_search = ''; } ?>
-<?php if( isset( $_POST['sender'] ) ){ $sender = $_POST['sender']; }else if( isset( $_COOKIE['sender'] ) ){ $sender = $_COOKIE['sender']; }else{ $sender = ''; } ?>
+
+<?php
+$cus_search = getFilter('cus_search', 'cus_search', '');
+$sender = getFilter('sender', 'sender', '');
+?>
+
 
 <form id="searchForm" method="post">
 <div class="row">
@@ -145,7 +151,7 @@ hr { margin-bottom:5px; margin-top:5px; }
 	if($cus_search != '')
 	{
 		setcookie('cus_search', $cus_search, time()+3600, '/');
-		$in = customer_in($cus_search);
+		$in = getCustomerIn($cus_search);
 		if( $in !== false )
 		{
 			$qr .= "AND id_customer IN(".$in.") ";
@@ -301,23 +307,55 @@ function saveEdit(id)
 	var id_sec		= $("#id_second_sender").val();
 	var third			= $("#third_sender").val();
 	var id_third		= $("#id_third_sender").val();
-	if( main == '' || id_main == 0 ){ swal("ข้อผิดพลาด !!", "ผู้จัดส่งหลักไม่ถูกต้องกรุณาเลือกใหม่อีกครั้ง", "warning"); return false; }
-	if( second != '' && id_sec == 0 ){ swal("ข้อผิดพลาด !!", "ผู้จัดส่งสำรอง 1 ไม่ถูกต้องกรุณาเลือกใหม่อีกครั้ง", "warning"); return false; }
-	if( third != '' && id_third == 0 ){ swal("ข้อผิดพลาด !!", "ผู้จัดส่งสำรอง 2 ไม่ถูกต้องกรุณาเลือกใหม่อีกครั้ง", "warning"); return false; }
+
+	if( main == '' || id_main == 0 ){
+		swal("ข้อผิดพลาด !!", "ผู้จัดส่งหลักไม่ถูกต้องกรุณาเลือกใหม่อีกครั้ง", "warning");
+		return false;
+	}
+
+
+	if( second != '' && id_sec == 0 ){
+		swal("ข้อผิดพลาด !!", "ผู้จัดส่งสำรอง 1 ไม่ถูกต้องกรุณาเลือกใหม่อีกครั้ง", "warning");
+		return false;
+	}
+
+
+	if( third != '' && id_third == 0 ){
+		swal("ข้อผิดพลาด !!", "ผู้จัดส่งสำรอง 2 ไม่ถูกต้องกรุณาเลือกใหม่อีกครั้ง", "warning");
+		return false;
+	}
+
+
 	$.ajax({
 		url:"controller/addressController.php?updateTransportCustomer&id_transport="+id,
-		type:"POST", cache:"false", data:{ "main_sender" : id_main, "second_sender" : id_sec, "third_sender" : id_third },
+		type:"POST",
+		cache:"false",
+		data:{
+			"main_sender" : id_main,
+			"second_sender" : id_sec,
+			"third_sender" : id_third
+		},
 		success: function(rs){
 			var rs = $.trim(rs);
 			if( rs == 'success' ){
-				swal({ title:"สำเร็จ", text: "ปรับปรุงข้อมูลเรียบร้อยแล้ว", timer: 1000, type: "success" });
+
+				swal({
+					title:"สำเร็จ",
+					text: "ปรับปรุงข้อมูลเรียบร้อยแล้ว",
+					timer: 1000,
+					type: "success"
+				});
+
 				setTimeout(function(){ goBack(); }, 1500);
+
 			}else{
 				swal("ข้อผิดพลาด !!", "ปรับปรุงข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", "error");
 			}
 		}
 	});
 }
+
+
 
 function save(){
 	var customer 	= $("#customer").val();
@@ -394,6 +432,8 @@ $("#customer").autocomplete({
 	}
 });
 
+
+
 $("#main_sender").autocomplete({
 	source : 'controller/autoComplete.php?get_sender',
 	autoFocus: true,
@@ -410,6 +450,8 @@ $("#main_sender").autocomplete({
 	}
 });
 
+
+
 $("#second_sender").autocomplete({
 	source : 'controller/autoComplete.php?get_sender',
 	autoFocus: true,
@@ -425,6 +467,8 @@ $("#second_sender").autocomplete({
 		}
 	}
 });
+
+
 
 $("#third_sender").autocomplete({
 	source : 'controller/autoComplete.php?get_sender',
@@ -450,8 +494,10 @@ function getSearch()
 function clearFilter()
 {
 	$.ajax({
-		url:"controller/addressController.php?clearFilter",
-		type:"GET", cache:"false", success: function(rs){
+		url:"controller/transportController.php?clearFilter",
+		type:"GET",
+		cache:"false",
+		success: function(rs){
 			goBack();
 		}
 	});
@@ -461,6 +507,7 @@ function addNew()
 {
 	window.location.href= 'index.php?content=transport&add=y';
 }
+
 function goBack()
 {
 	window.location.href = 'index.php?content=transport';

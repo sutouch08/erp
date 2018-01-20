@@ -326,7 +326,16 @@ class order
 	//---	รายการที่จัดสินค้าครบแล้ว
 	public function getValidDetails($id)
 	{
-		return dbQuery("SELECT * FROM tbl_order_detail WHERE id_order = ".$id." AND valid = 1");
+		/*
+		$qr  = "SELECT od.* ";
+		$qr .= "FROM tbl_order_detail AS od ";
+		$qr .= "WHERE od.id_order = '".$id."' ";
+		$qr .= "AND od.qty <= ";
+		$qr .= "(SELECT SUM(qty) AS prepared FROM tbl_prepare AS pr ";
+		$qr .= "WHERE pr.id_order = '".$id."' AND pr.id_product = od.id_product GROUP BY pr.id_product) ";
+		*/
+		$qr = "SELECT * FROM tbl_order_detail WHERE id_order = '".$id."' AND valid = 1";
+		return dbQuery($qr);
 	}
 
 
@@ -334,6 +343,16 @@ class order
 	//---	รายการที่จัดสินค้ายังไม่ครบ หรือยังไม่ได้จัด
 	public function getNotValidDetails($id)
 	{
+		/*
+		$qr  = "SELECT od.* ";
+		$qr .= "FROM tbl_order_detail AS od ";
+		$qr .= "WHERE od.id_order = '".$id."' ";
+		$qr .= "AND od.qty > ";
+		$qr .= "(SELECT SUM(qty) AS prepared FROM tbl_prepare AS pr ";
+		$qr .= "WHERE pr.id_order = '".$id."' AND pr.id_product = od.id_product GROUP BY pr.id_product) ";
+
+		return dbQuery($qr);
+		*/
 		return dbQuery("SELECT * FROM tbl_order_detail WHERE id_order = ".$id." AND valid = 0");
 	}
 

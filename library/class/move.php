@@ -435,6 +435,13 @@ class move
   }
 
 
+  public function getStockInMoveTemp($id_pd)
+  {
+    $qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_move_temp WHERE id_product = '".$id_pd."'");
+    list($qty) = dbFetchArray($qs);
+    return is_null($qty) ? 0 : $qty;
+  }
+
 
 } //--- end class
  ?>

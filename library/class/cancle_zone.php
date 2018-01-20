@@ -165,6 +165,13 @@ class cancle_zone
 
 
 
+	public function getStockInCancle($id_pd)
+  {
+    $qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_cancle WHERE id_product = '".$id_pd."'");
+    list($qty) = dbFetchArray($qs);
+    return is_null($qty) ? 0 : $qty;
+  }
+
 
 
 

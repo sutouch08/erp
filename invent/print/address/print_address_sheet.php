@@ -3,7 +3,7 @@
   $order = new order($_GET['id_order']);
   $reference = $order->reference;
 	$id_address	 = isset( $_GET['id_address'] ) ? $_GET['id_address'] : getIdAddress($order->id_customer);
-	$id_sender   = isset( $_GET['id_sender'] )  ? $_GET['id_sender'] : getMainSender($id_customer);
+	$id_sender   = isset( $_GET['id_sender'] )  ? $_GET['id_sender'] : getMainSender($order->id_customer);
 	$sd				   = getSender($id_sender);
 	$ad				   = getAddress($id_address);
 	$cusName	   = $ad['company'] == '' ? $ad['first_name'].' '.$ad['last_name'] : $ad['company'];

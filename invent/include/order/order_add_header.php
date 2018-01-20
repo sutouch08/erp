@@ -1,34 +1,40 @@
 
 <div class="row">
-	<div class="col-sm-2">
+	<div class="col-sm-1 col-1-harf padding-5 first">
     	<label>เลขที่เอกสาร</label>
         <label class="form-control input-sm text-center" <?php echo $disabled; ?>><?php echo $order->reference; ?></label>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-1 col-1-harf padding-5">
     	<label>วันที่</label>
         <input type="text" class="form-control input-sm text-center input-header" id="dateAdd" value="<?php echo thaiDate($order->date_add); ?>" <?php echo $disabled; ?> />
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-5 padding-5">
     	<label>ลูกค้า [ในระบบ]</label>
         <input type="text" class="form-control input-sm text-center input-header" id="customer" value="<?php echo customerName($order->id_customer); ?>"  <?php echo $disabled; ?>/>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-2 padding-5">
     	<label>ช่องทาง</label>
         <select class="form-control input-sm input-header" id="channels" <?php echo $disabled; ?>>
         <?php echo selectOfflineChannels($order->id_channels); ?>
         </select>
     </div>
-    <div class="col-sm-2 margin-bottom-5">
+    <div class="col-sm-2 padding-5 margin-bottom-5 last">
     	<label>การชำระเงิน</label>
         <select class="form-control input-sm input-header" id="paymentMethod" <?php echo $disabled; ?>>
         <?php echo selectPaymentMethod($order->id_payment); ?>
         </select>
     </div>
-    <div class="col-sm-10">
+
+		<div class="col-sm-1 col-1-harf padding-5 first">
+			<label>อ้างอิงออเดอร์</label>
+			<input type="text" class="form-control input-sm input-header" id="ref-code" value="<?php echo $order->ref_code; ?>" <?php echo $disabled; ?> />
+		</div>
+
+    <div class="col-sm-9 padding-5">
     	<label>หมายเหตุ</label>
         <input type="text" class="form-control input-sm input-header" id="remark" value="<?php echo $order->remark; ?>" <?php echo $disabled; ?> />
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-1 col-1-harf padding-5 last">
     <label class="display-block not-show">btn</label>
     <?php if( isset( $_GET['id_order'] ) && $order->state < 8): ?>
     	<button type="button" class="btn btn-sm btn-warning btn-block" id="btn-edit-order" onclick="getEdit()">แก้ไข</button>

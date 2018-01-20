@@ -174,6 +174,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'ตัดยอดฝากขาย';
 			break;
 
+		case 'consign_check' :
+			$content = 'consign_check.php';
+			$pageTitle = 'กระทบยอดสินค้าฝากขาย';
+			break;
+
 		case 'payment_order' :
 			$content 	= 'payment_order.php';
 			$pageTitle	= 'ตรวจสอบยอดชำระ';

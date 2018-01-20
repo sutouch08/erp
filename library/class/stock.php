@@ -229,12 +229,21 @@ class stock
 
 
 	//---- แสดงที่เก็บสินค้า สำหรับการจัดสินค้า
-	public function stockInZone($id_pd)
+	public function stockInZone($id_pd, $showAll = FALSE)
 	{
-		$qr = "SELECT z.zone_name AS name, s.qty FROM tbl_stock AS s ";
-		$qr .= "JOIN tbl_zone AS z ON s.id_zone = z.id_zone ";
-		$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
-		$qr .= "WHERE id_product = '".$id_pd."' AND w.prepare = 1 AND w.active = 1 ";
+		if($showAll === FALSE)
+		{
+			$qr = "SELECT z.zone_name AS name, s.qty FROM tbl_stock AS s ";
+			$qr .= "JOIN tbl_zone AS z ON s.id_zone = z.id_zone ";
+			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
+			$qr .= "WHERE id_product = '".$id_pd."' AND w.prepare = 1 AND w.active = 1 ";
+		}
+		else
+		{
+			$qr = "SELECT z.zone_name AS name, s.qty FROM tbl_stock AS s ";
+			$qr .= "JOIN tbl_zone AS z ON s.id_zone = z.id_zone ";
+			$qr .= "WHERE id_product = '".$id_pd."'";
+		}
 
 		return dbQuery($qr);
 	}
@@ -252,6 +261,7 @@ class stock
 
 		return dbQuery($qr);
 	}
+
 
 }//--- end class
 
