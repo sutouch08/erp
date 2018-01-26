@@ -117,7 +117,7 @@ class buffer
   //--- ยอดรวมสินค้าที่จัดไปแล้ว
   public function getSumQty($id_order, $id_pd)
   {
-    $qs = dbQuery("SELECT SUM(qty) FROM tbl_buffer WHERE id_order = ".$id_order." AND id_product = '".$id_pd."'");
+    $qs = dbQuery("SELECT SUM(qty) FROM tbl_buffer WHERE id_order = '".$id_order."' AND id_product = '".$id_pd."'");
     list( $qty ) = dbFetchArray($qs);
     return is_null($qty) ? 0 : $qty;
   }
@@ -136,7 +136,7 @@ class buffer
   //--- เอารายการที่ค้างอยู่ใน buffer
   public function getBuffer($id_order)
   {
-    return dbQuery("SELECT * FROM tbl_buffer WHERE id_order = ".$id_order);
+    return dbQuery("SELECT * FROM tbl_buffer WHERE id_order = '".$id_order."'");
   }
 
 

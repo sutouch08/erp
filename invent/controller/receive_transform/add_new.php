@@ -116,14 +116,14 @@ if( $id_order !== FALSE )
                 );
 
             //------ เพิ่มรายการรับเข้า
-            if( $cs->insertDetail($arr) === FALSE)
+            if( $cs->insertDetail($arr) !== TRUE)
             {
               $sc = FALSE;
               $message = 'เพิ่มรายการรับเข้าไม่สำเร็จ';
             }
 
             //---	บันทึกยอดสต็อกเข้าโซนที่รับสินค้าเข้า
-            if( $st->updateStockZone($id_zone, $id_pd, $qty) === FALSE )
+            if( $st->updateStockZone($id_zone, $id_pd, $qty) !== TRUE )
             {
               $sc = FALSE;
               $message = 'บันทึกยอดสต็อกเข้าโซนไม่สำเร็จ';
@@ -136,7 +136,7 @@ if( $id_order !== FALSE )
             }
 
             //---	บันทึก movement เข้าโซนที่รับสินคาเข้า
-            if( $mv->move_in( $reference, $id_wh, $id_zone, $id_pd, $qty, $date_add ) === FALSE)
+            if( $mv->move_in( $reference, $id_wh, $id_zone, $id_pd, $qty, $date_add ) !== TRUE)
             {
               $sc = FALSE;
               $message = 'บันทึก movement ไม่สำเร็จ';

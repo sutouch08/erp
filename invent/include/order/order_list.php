@@ -409,7 +409,7 @@ for($i =1; $i <= 11; $i++)
 <?php	$pm		  = new payment_method(); ?>
 <?php	while( $rs = dbFetchObject($qs) ) : ?>
 
-			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status); //--- order_help.php ?>>
+			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status, $rs->isExpire); //--- order_help.php ?>>
             	<td class="middle text-cennter pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $no; ?></td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
 									<?php echo $rs->reference; ?>
@@ -430,7 +430,7 @@ for($i =1; $i <= 11; $i++)
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo number_format($order->getTotalAmount($rs->id), 2); ?></td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $ch->getName($rs->id_channels); ?></td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $pm->getName($rs->id_payment); ?></td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo stateName($rs->state, $rs->status); ?></td>
+                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo stateName($rs->state, $rs->status, $rs->isExpire); ?></td>
                 <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo thaiDate($rs->date_add); ?></td>
                 <td class="middle text-center">
                 <button type="button"

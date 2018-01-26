@@ -104,6 +104,14 @@ $paginator->Per_Page($table, $where, $get_rows);
 $paginator->display($get_rows, 'index.php?content=stock_movement');
 $qs = dbQuery($qr. $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 
+$move_in = 0;
+$move_out = 0;
+
+$qa = dbQuery("SELECT SUM(move_in), SUM(move_out) FROM ".$table . $where);
+if(dbNumRows($qa) == 1)
+{
+	list($move_in, $move_out) = dbFetchArray($qa);
+}
 ?>
 
 <table class="table table-striped table-bordered">
@@ -131,6 +139,12 @@ $qs = dbQuery($qr. $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_
   </tr>
 <?php  $no++; ?>
 <?php endwhile; ?>
+	<tr class="font-size-12">
+		<td colspan="4" class="text-right">รวม</td>
+		<td class="text-center"><?php echo ac_format($move_in); ?></td>
+    <td class="text-center"><?php echo ac_format($move_out); ?></td>
+    <td class="">ยอดต่าง(เข้า - ออก) :  <?php echo  ac_format($move_in - $move_out); ?></td>
+	</tr>
 <?php else : ?>
   <tr>
     <td colspan="7" class="text-center">--- ไม่พบข้อมูล ---</td>

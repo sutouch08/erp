@@ -9,6 +9,7 @@ $mv			  = new movement();
 $cost     = new product_cost();
 
 $poCode		= trim( $_GET['po'] );
+$po_bookcode = getConfig('BOOKCODE_PO');
 
 if( $po->hasPO($poCode) === TRUE )
 {
@@ -125,7 +126,6 @@ if( $po->hasPO($poCode) === TRUE )
 
         } //--- endif $cs->add
 
-
         if( $sc === TRUE )
         {
           commitTransection();
@@ -138,6 +138,14 @@ if( $po->hasPO($poCode) === TRUE )
 
 
       endTransection();
+
+
+    //--- ถ้ารับเข้าครบ PO แล้ว
+    if($po->isCompleted($poCode) === TRUE && getConfig('PO_AUTO_CLOSE') == 1)
+    {
+      $po->close($po_bookcode, $poCode);
+    }
+
   }
   else //-- if count
   {

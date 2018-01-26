@@ -11,11 +11,17 @@ function orderCustomerName($id_customer, $online_code)
 
 
 
-function stateColor($state, $status)
+function stateColor($state, $status, $isExpired=0)
 {
 	$sc = '';
 	$st  = new state();
-	if( $status == 1 )
+	$state = $isExpired == 1 ? 11 : $state;
+
+	if( $status == 1 && $isExpired == 0)
+	{
+		$sc = $st->stateColor($state);
+	}
+	else if($isExpired == 1)
 	{
 		$sc = $st->stateColor($state);
 	}
@@ -23,13 +29,17 @@ function stateColor($state, $status)
 }
 
 
-function stateName($state, $status)
+function stateName($state, $status, $isExpired = 0)
 {
 	$sc = "ยังไม่บันทึก";
 	$st = new state();
-	if( $status == 1 )
+	if( $status == 1 && $isExpired == 0)
 	{
 		$sc = $st->getName($state);
+	}
+	else if($isExpired == 1)
+	{
+		$sc = 'หมดอายุ';
 	}
 	return $sc;
 }

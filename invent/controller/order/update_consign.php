@@ -9,6 +9,9 @@
 
 	//--- id_zone in tbl_order_consign
 	$id_zone = $_POST['id_zone'];
+
+	$gp = floatval($_POST['gp']);
+
 	//---	เตรียมข้อมูลสำหรับ update
 	$arr = array(
 						"date_add"	=> dbDate($_POST['date_add']),
@@ -16,7 +19,7 @@
 						"status"		=> 0, //--- เปลี่ยนกลับ ให้กดบันทึกใหม่
 						"emp_upd"		=> getCookie('user_id'),
 						"remark"		=> $_POST['remark'],
-						"gp"				=> $_POST['gp'],
+						"gp"				=> $gp,
 						"is_so"			=> $_POST['is_so']
 						);
 
@@ -50,26 +53,26 @@
 		{
 			while( $rc = dbFetchObject($qs))
 			{
-				$discount['discount'] = $_POST['gp'].' %';
-				$discount['amount']   = ($rc->price * $rc->qty) * ($_POST['gp'] * 0.01);
+				$discLabel = $gp.' %';
+				$discAmount= ($rc->price * $rc->qty) * ($gp * 0.01);
 
 				//---	prepare data for update detail
 				$arr = array(
-								"discount"        => $discount['discount'],
-								"discount_amount" => $discount['amount'],
-								"total_amount"    => ($rc->price * $rc->qty) - $discount['amount'],
-								"gp"              => $_POST['gp']
+								"discount"        => $discLabel,
+								"discount_amount" => $discAmount,
+								"total_amount"    => ($rc->price * $rc->qty) - $discAmount,
+								"gp"              => $gp
 				      );
 
 				//---	update detail row
-				$rd = $order->updateDetails($order->id, $arr);
+				$rd = $order->updateDetail($rc->id, $arr);
 
 				//---	prepare data for discount logs
 				$log_data = array(
 												"reference"		=> $order->reference,
 												"product_code"	=> $rc->product_code,
 												"old_discount"	=> $rc->discount,
-												"new_discount"	=> $discount['discount'],
+												"new_discount"	=> $discLabel,
 												"id_employee"	=> $id_emp,
 												"approver"		=> $approver,
 												"token"			=> $token

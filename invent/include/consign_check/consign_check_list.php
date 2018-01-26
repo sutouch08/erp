@@ -53,6 +53,7 @@ $btn_v_valid = $sValid == '' ? 'btn-primary' : '';
 $btn_v_not_valid = $sValid == '' ? 'btn-primary' : '';
 
  ?>
+ <form id="searchForm" method="post">
 <div class="row">
   <div class="col-sm-2 padding-5 first">
     <label class="display-block">เลขที่เอกสาร</label>
@@ -75,3 +76,123 @@ $btn_v_not_valid = $sValid == '' ? 'btn-primary' : '';
     <input type="text" class="form-control input-sm input-unit text-center" name="toDate" id="toDate" value="<?php echo $toDate; ?>" />
   </div>
 </div>
+</form>
+
+<hr class="margin-top-15"/>
+
+<?php
+createCookie('sCheckCode', $sCode);
+createCookie('sCheckCus', $sCus);
+createCookie('sCheckZone', $sZone);
+createCookie('fromDate', $fromDate);
+createCookie('toDate', $toDate);
+
+$where = "WHERE id != 0 ";
+
+if( $sCode != '')
+{
+  $where .= "AND reference LIKE '%".$sCode."%' ";
+}
+
+
+if( $sCus != '')
+{
+  $where .= "AND id_customer IN(".getCustomerIn($sCus).") ";
+}
+
+
+if( $sZone != '')
+{
+  $where .= "AND id_zone IN(".getZoneIn($sZone).") ";
+}
+
+
+if( $fromDate != '' && $toDate != '')
+{
+  $where .= "AND date_add >= '".fromDate($fromDate)."' ";
+  $where .= "AND date_add <= '".toDate($toDate)."' ";
+}
+
+$where .= "ORDER BY date_add DESC";
+
+$paginator = new paginator();
+$get_rows = get_rows();
+$paginator->Per_Page('tbl_consign_check', $where, $get_rows);
+
+
+$qs = dbQuery("SELECT * FROM tbl_consign_check ".$where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
+
+ ?>
+
+ <div class="row">
+   <div class="col-sm-7">
+     <?php $paginator->display($get_rows, 'index.php?content=consign_check'); ?>
+   </div>
+   <div class="col-sm-5" style="padding-top:25px;">
+     <p class="pull-right top-p">
+       <span class="green">OK</span><span class="margin-right-15"> = ดึงไปตัดยอดฝากขายแล้ว</span>
+       <span class="red">NC</span><span class="margin-right-15"> = ยังไม่ดึงไปตัดยอดฝากขาย</span>
+     </p>
+   </div>
+ </div>
+ <div class="row">
+   <div class="col-sm-12">
+     <table class="table table-striped table-bordered">
+       <thead>
+         <tr class="font-size-12">
+           <th class="width-10 text-center">วันที่</th>
+           <th class="width-15 text-center">เลขที่เอกสาร</th>
+           <th class="width-30">ลูกค้า</th>
+           <th class="width-30">โซน</th>
+           <th class="width-5 text-center">สถานะ</th>
+           <th></th>
+         </tr>
+       </thead>
+       <tbody>
+<?php if( dbNumRows($qs) > 0 ) : ?>
+<?php   $zone = new zone(); ?>
+<?php   while($rs = dbFetchObject($qs)) : ?>
+        <tr class="font-size-12" id="row-<?php echo $rs->id; ?>">
+          <td class="middle text-center">
+            <?php echo thaiDate($rs->date_add); ?>
+          </td>
+          <td class="middle text-center">
+            <?php echo $rs->reference; ?>
+          </td>
+          <td class="middle">
+            <?php echo customerName($rs->id_customer); ?>
+          </td>
+          <td class="middle">
+            <?php echo $zone->getName($rs->id_zone); ?>
+          </td>
+          <td class="middle text-center" id="xLabel-<?php echo $rs->id; ?>">
+            <?php if($rs->valid == 0 ) : ?>
+              <span class="green">OK</span>
+            <?php else : ?>
+              <span class="red">NC</span>
+            <?php endif; ?>
+          </td>
+          <td class="middle text-right">
+            <button type="button" class="btn btn-xs btn-info" title="รายละเอียด" onclick="goDetail(<?php echo $rs->id;?>)"><i class="fa fa-eye"></i></button>
+
+          <?php if( $edit && $rs->valid == 0 ): ?>
+            <button type="button" class="btn btn-xs btn-warning" title="แก้ไข" id="btn-edit-<?php echo $rs->id; ?>" onclick="goAdd(<?php echo $rs->id;?>)"><i class="fa fa-pencil"></i></button>
+          <?php endif; ?>
+
+          <?php if( $delete && $rs->valid == 0 ): ?>
+            <button type="button" class="btn btn-xs btn-danger" title="ลบ" id="btn-delete-<?php echo $rs->id; ?>" onclick="goDelete(<?php echo $rs->id;?>, '<?php echo $rs->reference; ?>')">
+              <i class="fa fa-trash"></i>
+            </button>
+          <?php endif; ?>
+          </td>
+        </tr>
+<?php   endwhile; ?>
+
+<?php else : ?>
+
+<?php endif; ?>
+       </tbody>
+
+     </table>
+   </div>
+ </div>

@@ -26,7 +26,7 @@ function closeOrder(){
           $(".zone").attr('disabled', 'disabled');
           $(".item").attr('disabled', 'disabled');
           $(".close").attr('disabled', 'disabled');
-
+          $('#btn-print-address').removeClass('hide');
         }else{
           swal("Error!", rs, "error");
         }

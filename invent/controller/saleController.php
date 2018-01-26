@@ -6,7 +6,7 @@ require "../function/tools.php";
 if( isset( $_GET['addUser'] ) )
 {
 	$sc 	= "success";
-	$id 	= $_POST['id'];	
+	$id 	= $_POST['id'];
 	$userName	= trim( $_POST['userName'] );
 	$password	= md5( trim( $_POST['password'] ) );
 	$active 	= $_POST['active'];
@@ -17,7 +17,7 @@ if( isset( $_GET['addUser'] ) )
 	{
 		$sc = "fail";
 	}
-	echo $sc;	
+	echo $sc;
 }
 
 
@@ -27,7 +27,7 @@ if( isset( $_GET['addUser'] ) )
 if( isset( $_GET['updateUser'] ) )
 {
 	$sc 	= "success";
-	$id 	= $_POST['id'];	
+	$id 	= $_POST['id'];
 	$userName	= trim( $_POST['userName'] );
 	$password	= "";
 	$active 	= $_POST['active'];
@@ -45,7 +45,7 @@ if( isset( $_GET['updateUser'] ) )
 	{
 		$sc = "fail";
 	}
-	echo $sc;	
+	echo $sc;
 }
 
 
@@ -106,9 +106,22 @@ if( isset( $_GET['deleteSaleGroup'] ) )
 	$qs = dbQuery("DELETE FROM tbl_sale_group WHERE code = '".$code."'");
 	if( $qs === TRUE )
 	{
-		$sc = 'success';	
+		$sc = 'success';
 	}
 	echo $sc;
+}
+
+
+if(isset($_GET['resetPwd']) && isset($_POST['id_sale']))
+{
+	$id = $_POST['id_sale'];
+	$pwd = $_POST['pwd'];
+
+	$sale = new sale();
+	$arr = array('password' => $pwd);
+	$sc = $sale->update($id, $arr);
+
+	echo $sc === TRUE ? 'success' : 'เปลี่ยนรหัสผ่านไม่สำเร็จ';
 }
 
 
@@ -118,8 +131,8 @@ if( isset( $_GET['clearFilter'] ) )
 	deleteCookie('sName');
 	deleteCookie('stCode');
 	deleteCookie('stName');
-	echo 'success';	
+	echo 'success';
 }
 
-	
+
 ?>

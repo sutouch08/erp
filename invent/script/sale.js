@@ -338,3 +338,86 @@ function removeError(el, label, message){
 	label.removeClass("red");
 	label.text(message);
 }
+
+
+function getResetPassword(id_sale, name){
+	$('#id_sale').val(id_sale);
+	$('#empName').val(name);
+	$('#reset-password-modal').modal('show');
+}
+
+
+function doResetPwd(){
+	var id_sale = $('#id_sale').val();
+	var pwd1 = $('#pwd-1').val();
+	var pwd2 = $('#pwd-2').val();
+
+	if(id_sale == ''){
+		var el = $('#empName');
+		var label = $('#empName-error');
+		addError(el, label, 'ID not found');
+		return false;
+	}
+	else
+	{
+		var el = $('#empName');
+		var label = $('#empName-error');
+		removeError(el, label, '');
+	}
+
+	if(pwd1.length < 4){
+		var el = $('#pwd-1');
+		var label = $('#pwd-1-error');
+		addError(el, label, 'รหัสผ่านต้องมี 4 ตัวอักษรขึ้นไป');
+		return false;
+	}
+	else
+	{
+		var el = $('#pwd-1');
+		var label = $('#pwd-1-error');
+		removeError(el, label, '');
+	}
+
+	if(pwd1 != pwd2){
+		var el = $('#pwd-2');
+		var label = $('#pwd-2-error');
+		addError(el, label, 'รหัสผ่านไม่ตรงกัน');
+		return false;
+	}
+	else
+	{
+		var el = $('#pwd-2');
+		var label = $('#pwd-2-error');
+		removeError(el, label, '');
+	}
+
+	var password = MD5(pwd1);
+
+
+	$('#reset-password-modal').modal('hide');
+
+	load_in();
+	$.ajax({
+		url:'controller/saleController.php?resetPwd',
+		type:'POST',
+		cache:'false',
+		data:{
+			'id_sale' : id_sale,
+			'pwd' : password
+		},
+		success:function(rs){
+			load_out();
+			var rs = $.trim(rs);
+			if(rs == 'success'){
+				swal({
+					title:'Done',
+					type:'success',
+					timer:1000
+				});
+			}else{
+				swal('Error', rs, 'error');
+			}
+		}
+	});
+
+}

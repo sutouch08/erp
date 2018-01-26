@@ -19,6 +19,28 @@ if( isset($_GET['deleteReturn']))
 
 
 
+//--- ปิดเอกสารโดยไม่รับสินค้า
+if(isset($_GET['setValid']))
+{
+  $reference = $_POST['reference'];
+  $cs = new return_order();
+  $sc = $cs->setValid($reference, 1);
+
+  echo $sc === TRUE ? 'success' : 'เปลี่ยนสถานะไม่สำเร็จ';
+}
+
+
+
+//--- ยกเลิกการปิดเอกสารโดยไม่รับเข้า
+if(isset($_GET['disValid']))
+{
+  $reference = $_POST['reference'];
+  $cs = new return_order();
+  $sc = $cs->setValid($reference, 0);
+
+  echo $sc === TRUE ? 'success' : 'เปลี่ยนสถานะไม่สำเร็จ';
+}
+
 
 
 //--- auto complete zone name

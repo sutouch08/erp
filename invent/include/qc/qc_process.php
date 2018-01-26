@@ -53,6 +53,24 @@ include 'include/qc/qc_complete_list.php';
 
 ?>
 
+
+  <!--************** Address Form Modal ************-->
+  <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="addressModal" aria-hidden="true">
+    <div class="modal-dialog" style="width:500px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="colse" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body" id="info_body">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-primary" onclick="printSelectAddress()"><i class="fa fa-print"></i> พิมพ์</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <?php
 
 $qr = dbQuery("SELECT id_product FROM tbl_prepare WHERE id_order = ".$order->id." GROUP BY id_product");
@@ -70,4 +88,5 @@ while( $res = dbFetchObject($qr))
 
 <script src="script/qc/qc_process.js"></script>
 <script src="script/qc/qc_control.js"></script>
+<script src="script/print/print_address.js"></script>
 <?php endif; ?>

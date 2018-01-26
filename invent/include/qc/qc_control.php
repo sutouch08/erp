@@ -25,7 +25,11 @@
       <i class="fa fa-save"></i> บันทึก
     </button>
   </div>
-  <div class="col-sm-2 col-sm-offset-1">
+  <div class="col-sm-1 padding-5">
+    <label class="display-block not-show">print</label>
+    <button type="button" class="btn btn-sm btn-primary hide" id="btn-print-address" onclick="printAddress()">พิมพ์ใบปะหน้า</button>
+  </div>
+  <div class="col-sm-2">
     <div class="title middle text-center" style="height:55px; background-color:black; color:white; padding-top:20px; margin-top:0px;">
       <h4 id="all_qty" style="display:inline;">
         <?php echo number($qc->totalQc($order->id)); ?>
@@ -35,6 +39,8 @@
   </div>
 
   <input type="hidden" id="id_order" value="<?php echo $order->id; ?>"/>
+  <input type="hidden" id="id_customer" value="<?php echo $order->id_customer; ?>" />
+  <input type="hidden" id="online_code" value="<?php echo $order->online_code; ?>" />
   <input type="hidden" id="id_box" value="" />
 </div>
 

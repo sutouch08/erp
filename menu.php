@@ -45,6 +45,7 @@
       <li><a href="index.php?content=order_closed"><i class="fa fa-file-text-o"></i>&nbsp; ออเดอร์เปิดบิลแล้ว</a></li>
       <li class="divider"></li>
       <li><a href="index.php?content=order_monitor"><i class="fa fa-shopping-bag"></i>&nbsp; ติดตามออเดอร์</a></li>
+      <li><a href="index.php?content=order_expire"><i class="fa fa-history"></i>&nbsp; ตรวจสอบอายุออเดอร์</a></li>
     </ul>
   </li>
 

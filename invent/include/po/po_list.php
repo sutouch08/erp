@@ -126,12 +126,17 @@
                         <?php endif; ?>
 					</td>
                     <td class="middle text-right">
-                    	<button type="button" class="btn btn-xs btn-info" onclick="viewDetail('<?php echo $rs->reference; ?>')">
-                        	<i class="fa fa-eye"></i>&nbsp; รายละเอียด
+                    	<button type="button" class="btn btn-xs btn-info" title="รายละเอียด" onclick="viewDetail('<?php echo $rs->reference; ?>')">
+                        	<i class="fa fa-eye"></i>
                         </button>
+											<?php if( $edit && $rs->status != 3 && $po->isCompleted($rs->reference) === TRUE) : ?>
+												<button type="button" class="btn btn-xs btn-warning" title="ปิดใบสั่งซื้อ" onclick="closePO('<?php echo $rs->bookcode; ?>','<?php echo $rs->reference; ?>')">
+													<i class="fa fa-lock"></i>
+												</button>
+											<?php endif; ?>
 											<?php if( $delete && $rs->status == 1 ) : ?>
-												<button type="button" class="btn btn-xs btn-danger" onclick="deletePo('<?php echo $rs->reference; ?>')">
-													<i class="fa fa-trash"></i>&nbsp; ลบ
+												<button type="button" class="btn btn-xs btn-danger" title="ลบใบสั่งซื้อ" onclick="deletePo('<?php echo $rs->reference; ?>')">
+													<i class="fa fa-trash"></i>
 												</button>
 											<?php endif; ?>
                     </td>

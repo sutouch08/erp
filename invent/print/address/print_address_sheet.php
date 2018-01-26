@@ -10,6 +10,7 @@
 	$cName			 = getConfig('COMPANY_FULL_NAME');
 	$cAddress		= getConfig('COMPANY_ADDRESS');
 	$cPhone			= getConfig('COMPANY_PHONE');
+  
 
 
 	/*********  Sender  ***********/

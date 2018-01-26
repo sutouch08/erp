@@ -45,13 +45,28 @@
             startTransection();
 
             //---	ตัดยอดสอนค้าออกจากโซน
-            $ra = $stock->updateStockZone($id_zone, $pd->id_product, $qty * -1);
+            if($stock->updateStockZone($id_zone, $pd->id_product, ($qty * -1)) !== TRUE)
+            {
+              $sc = FALSE;
+              $message = 'ตัดยอดสต็อกจากโซนไม่สำเร็จ';
+            }
 
+            $id_style = $product->getStyleId($pd->id_product);
+            $id_wh    = $zone->getWarehouseId($id_zone);
             //---	เพิ่มยอดเข้า buffer
-            $rb = $buffer->updateBuffer($id_order, $product->getStyleId($pd->id_product), $pd->id_product, $id_zone, $zone->getWarehouseId($id_zone), $qty);
+            if($buffer->updateBuffer($id_order, $id_style, $pd->id_product, $id_zone, $id_wh , $qty) !== TRUE)
+            {
+              $sc = FALSE;
+              $message = 'เพิ่มยอดเข้า Buffer ไม่สำเร็จ';
+            }
+
 
             //--- เพิ่มรายการจัดสินค้าเข้าตารางจัด
-            $rc = $prepare->updatePrepare($id_order, $pd->id_product, $id_zone, $qty);
+            if($prepare->updatePrepare($id_order, $pd->id_product, $id_zone, $qty) !== TRUE)
+            {
+              $sc = FALSE;
+              $message = 'ปรับปรุงรายการจัดสินค้าไม่สำเร็จ';
+            }
 
 
             //---	ตรวจสอบออเดอร์ว่าครบแล้วหรือยัง
@@ -61,7 +76,7 @@
               $valid = 1;
             }
 
-            if( $ra === TRUE && $rb === TRUE && $rc === TRUE )
+            if( $sc === TRUE )
             {
               commitTransection();
             }

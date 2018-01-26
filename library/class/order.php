@@ -920,7 +920,7 @@ class order
 	public function getConsignSoldDetail($reference, $id_pd, $id_zone)
 	{
 		$qs = dbQuery("SELECT * FROM tbl_order_sold WHERE reference = '".$reference."' AND id_product = '".$id_pd."' AND id_zone = '".$id_zone."'");
-		return  dbNumRows($qs) == 1 ? dbFetchObject($qs) : FALSE;
+		return  dbNumRows($qs) > 0 ? dbFetchObject($qs) : FALSE;
 	}
 
 
@@ -1102,6 +1102,52 @@ class order
 	{
 		return dbQuery("SELECT id_warehouse FROM tbl_order_sold WHERE id_order = '".$id."' GROUP BY id_warehouse");
 
+	}
+
+
+
+	public function getOverDateOrder()
+	{
+		$days = getConfig('ORDER_EXPIRATION')+1;
+		$expireDate = date('Y-m-d', strtotime('-'.$days.' day'));
+		$qr  = "SELECT od.id, od.reference, od.date_add, cus.name, CONCAT(emp.first_name, emp.last_name) AS empName, st.name AS state ";
+		$qr .= "FROM tbl_order AS od ";
+		$qr .= "LEFT JOIN tbl_state AS st ON od.state = st.id ";
+		$qr .= "LEFT JOIN tbl_customer AS cus ON od.id_customer = cus.id ";
+		$qr .= "LEFT JOIN tbl_order_user AS us ON od.id = us.id_order ";
+		$qr .= "LEFT JOIN tbl_employee AS emp ON us.id_user = emp.id_employee ";
+		$qr .= "WHERE state IN(1,2,3) ";
+		$qr .= "AND isExpire = 0 ";
+		$qr .= "AND isPaid = 0 ";
+		$qr .= "AND date_add < '".toDate($expireDate)."' ";
+		$qr .= "ORDER BY reference ASC";
+		//$qr .= " LIMIT 10";
+
+		return dbQuery($qr);
+	}
+
+
+	public function setOrderExpired($id)
+	{
+		$sc = dbQuery("UPDATE tbl_order SET isExpire = 1 WHERE id = '".$id."'");
+		if($sc !== TRUE)
+		{
+			$this->error = dbError();
+		}
+
+		return $sc;
+	}
+
+
+	public function setOrderDetailExpired($id_order)
+	{
+		$sc = dbQuery("UPDATE tbl_order_detail SET is_expired = 1 WHERE id_order = '".$id_order."'");
+		if($sc !== TRUE)
+		{
+			$this->error = dbError();
+		}
+
+		return $sc;
 	}
 
 }//--- End Class

@@ -21,9 +21,6 @@ $disabled = $id === FALSE ? '' : 'disabled';
   <div class="col-sm-6">
     <p class="pull-right top-p">
     <?php echo goBackButton(); ?>
-    <?php if($id !== FALSE && $cs->isSaved == 1) : ?>
-      <button type="button" class="btn btn-sm btn-info" onclick="doExport()"><i class="fa fa-send"></i> ส่งข้อมูลไป formula</button>
-    <?php endif; ?>
     <?php if( $id !== FALSE ) : ?>
       <button type="button" class="btn btn-sm btn-default" onclick="printMove(<?php echo $id; ?>)"><i class="fa fa-print"></i> พิมพ์</button>
     <?php endif; ?>

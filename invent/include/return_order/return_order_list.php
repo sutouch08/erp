@@ -139,7 +139,7 @@ $paginator = new paginator();
 $get_rows = get_rows();
 $paginator->Per_Page('tbl_return_order', $where, $get_rows);
 
-$qs = dbQuery("SELECT * FROM tbl_return_order ". $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
+$qs = dbQuery("SELECT tbl_return_order.*, SUM(received) AS totalReceived FROM tbl_return_order ". $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 
  ?>
  <div class="row">
@@ -190,8 +190,17 @@ $qs = dbQuery("SELECT * FROM tbl_return_order ". $where." LIMIT ".$paginator->Pa
               <i class="fa fa-eye"></i>
             </button>
             <?php if( ($add OR $edit ) && $rs->isReturn == 1 && $rs->valid == 0 ) : ?>
+              <button type="button" class="btn btn-xs btn-primary" title="ปิดเอกสาร" onclick="doValid('<?php echo $rs->reference; ?>')">
+                <i class="fa fa-check"></i>
+              </button>
               <button type="button" class="btn btn-xs btn-warning" onclick="goEdit('<?php echo $rs->reference; ?>')">
                 <i class="fa fa-pencil"></i>
+              </button>
+            <?php endif; ?>
+
+            <?php if( $edit && $rs->isReturn == 1 && $rs->valid == 1 && $rs->totalReceived == 0 ) : ?>
+              <button type="button" class="btn btn-xs btn-warning" title="ย้อนสถานะ" onclick="disValid('<?php echo $rs->reference; ?>')">
+                <i class="fa fa-refresh"></i>
               </button>
             <?php endif; ?>
 

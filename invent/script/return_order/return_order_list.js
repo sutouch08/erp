@@ -36,6 +36,97 @@ function goDelete(code){
 
 
 
+
+
+
+function doValid(reference){
+  swal({
+    title:'คุณแน่ใจ ?',
+    text:'ต้องการบันทึกเอกสาร '+reference+' โดยไม่รับสินค้า หรือไม่ ?',
+    type:'warning',
+    showCancelButton:true,
+    confirmButtonColor:'#FA5858',
+    confirmButtonText:'ใช่ ฉันต้องการ',
+    cancelButtonText:'ยกเลิก',
+    closeOnConfirm:false
+  },
+  function(){
+    $.ajax({
+      url:'controller/returnOrderController.php?setValid',
+      type:'POST',
+      cache:'false',
+      data:{
+        'reference' : reference
+      },
+      success:function(rs){
+        var rs = $.trim(rs);
+        if(rs == 'success'){
+          swal({
+            title:'Success',
+            type:'success',
+            timer:1000
+          });
+
+          setTimeout(function(){
+            window.location.reload();
+          },1500);
+
+        }else{
+          swal('Error!', rs, 'error');
+        }
+      }
+    });
+  });
+}
+
+
+
+
+
+function disValid(reference){
+  swal({
+    title:'คุณแน่ใจ ?',
+    text:'ต้องการยกเลิกการบันทึกเอกสาร '+reference+' โดยไม่รับสินค้า หรือไม่ ?',
+    type:'warning',
+    showCancelButton:true,
+    confirmButtonColor:'#FA5858',
+    confirmButtonText:'ใช่ ฉันต้องการ',
+    cancelButtonText:'ยกเลิก',
+    closeOnConfirm:false
+  },
+  function(){
+    $.ajax({
+      url:'controller/returnOrderController.php?disValid',
+      type:'POST',
+      cache:'false',
+      data:{
+        'reference' : reference
+      },
+      success:function(rs){
+        var rs = $.trim(rs);
+        if(rs == 'success'){
+          swal({
+            title:'Success',
+            type:'success',
+            timer:1000
+          });
+
+          setTimeout(function(){
+            window.location.reload();
+          },1500);
+
+        }else{
+          swal('Error!', rs, 'error');
+        }
+      }
+    });
+  });
+}
+
+
+
+
+
 $(document).ready(function() {
 
   $('#fromDate').datepicker({

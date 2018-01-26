@@ -19,6 +19,7 @@ $view = $pm['view'] == 1 ? TRUE : FALSE;
 accessDeny($view);
 
 include 'function/customer_helper.php';
+include 'function/zone_helper.php';
  ?>
 
  <div class="container">

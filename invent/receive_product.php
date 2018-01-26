@@ -15,7 +15,6 @@
 <!-- page place holder -->
 <?php
 //--- หาเอกสารที่ยังไม่ได้ export แล้วทำการ export ให้ auto
-doExportBI();
 
 if( isset( $_GET['add'] ) )
 {

@@ -299,6 +299,21 @@ class po
 	}
 
 
+
+	//---	รับสินค้าครบแล้วหรือยัง
+	public function isCompleted($reference)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT id FROM tbl_po WHERE reference = '".$reference."' AND qty > received");
+		if(dbNumRows($qs) == 0)
+		{
+			$sc = TRUE;
+		}
+
+		return $sc;
+	}
+
+
 }///---- end class
 
 

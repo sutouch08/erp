@@ -89,7 +89,6 @@ function getSaleStockGrid(){
 
 
 
-
 function valid_qty(el, qty){
 	var order_qty = el.val();
 	if(parseInt(order_qty) > parseInt(qty) )	{

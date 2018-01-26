@@ -1,11 +1,17 @@
 // JavaScript Document
 function getProductGrid(){
 	var pdCode 	= $("#pd-box").val();
+	//var id_order = $('#id_order').val();
 	if( pdCode.length > 0  ){
 		load_in();
 		$.ajax({
 			url:"controller/orderController.php?getProductGrid",
-			type:"GET", cache:"false", data:{"pdCode" : pdCode},
+			type:"GET",
+			cache:"false",
+			data:{
+				//"id_order" : id_order,
+				"pdCode" : pdCode
+			},
 			success: function(rs){
 				load_out();
 				var rs = rs.split(' | ');
@@ -30,10 +36,16 @@ function getProductGrid(){
 
 
 function getOrderGrid(id_style){
+	//var id_order = $('#id_order').val();
 	load_in();
 	$.ajax({
 		url:"controller/orderController.php?getOrderGrid",
-		type:"GET", cache:"false", data:{"id_style" : id_style},
+		type:"GET",
+		cache:"false",
+		data:{
+			//"id_order" : id_order,
+			"id_style" : id_style			
+		},
 		success: function(rs){
 			load_out();
 			var rs = rs.split(' | ');

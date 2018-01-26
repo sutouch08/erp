@@ -44,6 +44,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'ส่งออกฐานข้อมูลสินค้า';
 			break;
 
+		case 'order_expire' :
+			$content = 'order_expired.php';
+			$pageTitle = 'ตรวจสอบอายุออเดอร์';
+			break;
+
 
 //**********  ระบบคลังสินค้า  **********//
 		case 'receive_product':

@@ -64,9 +64,71 @@ class consign_check
 
 
 
+
+
   public function update($id, array $ds = array())
   {
-    
+    $sc = FALSE;
+    if(! empty($ds))
+    {
+      $set = "";
+      $i = 1;
+      foreach($ds as $field => $value)
+      {
+        $set .= $i == 1 ? $field." = '".$value."'" : ", ".$field." = '".$value."'";
+        $i++;
+      }
+
+      $sc = dbQuery("UPDATE tbl_consign_check SET ".$set." WHERE id = '".$id."'");
+      $this->error = $sc === TRUE ? '' : dbError();
+    }
+
+    return $sc;
+  }
+
+
+  //----- ดึงรายละเอียดทั้งเอกสาร
+  public function getDetails($id)
+  {
+    return dbQuery("SELECT * FROM tbl_consign_check_detail WHERE id_consign_check = '".$id."'");
+  }
+
+
+
+
+  //----- เพิ่มรายการกระทบยอด
+  public function addDetail(array $ds = array())
+  {
+    $sc = FALSE;
+    if(!empty($ds))
+    {
+      $fields = "";
+      $values = "";
+      $i = 1;
+      foreach($ds as $field => $value)
+      {
+        $fields .= $i == 1 ? $field : ", ".$field;
+        $values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
+        $i++;
+      }
+
+      $sc = dbQuery("INSERT INTO tbl_consign_check_detail (".$fields.") VALUES (".$values.")");
+      $this->error = $sc === TRUE ? '' : $this->dbError();
+    }
+
+    return $sc;
+  }
+
+
+  public function updateCheckQty($id_consign_check, $id_box, $id_pd, $qty)
+  {
+    $qr  = "UPDATE tbl_consign_check_detail ";
+    $qr .= "SET qty = qty + ".$qty." ";
+    $qr .= "WHERE id_consign_check = '".$id_consign_check."' ";
+    $qr .= "AND id_consign_box = ".$id_box." ";
+    $qr .= "AND id_product = '".$id_pd."' ";
+
+    return dbQuery($qr);
   }
 
 
