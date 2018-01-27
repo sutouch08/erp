@@ -219,10 +219,11 @@ $("#customer").autocomplete({
 	close: function(){
 		var rs = $.trim($(this).val());
 		var arr = rs.split(' | ');
-		if( arr.length == 3 ){
-			var id_budget = arr[2];
-			var id_customer = arr[1];
-			var name = arr[0];
+		if( arr.length == 4 ){
+			var id_budget = arr[3];
+			var id_customer = arr[2];
+			var code = arr[0];
+			var name = arr[1];
 			$("#id_customer").val(id_customer);
 			$("#customer").val(name);
 			$('#id_budget').val(id_budget);

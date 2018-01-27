@@ -115,13 +115,16 @@ $qs = dbQuery("SELECT * FROM tbl_zone ".$where." LIMIT ".$paginator->Page_Start.
 <?php if( dbNumRows($qs) > 0 ) : ?>
   <?php	$no	= row_no();	?>
   <?php	$wh	= new warehouse(); 	?>
+  <?php $cus = new customer(); ?>
   <?php	while( $rs = dbFetchObject($qs) ) : ?>
             <tr id="row_<?php echo $rs->id_zone; ?>" style="font-size:12px;">
               <td class="middle text-center"><?php echo number_format($no); ?></td>
               <td class="middle"><?php echo $rs->barcode_zone; ?></td>
               <td class="middle"><?php echo $rs->zone_name; ?></td>
               <td class="middle"><?php echo $wh->getName($rs->id_warehouse); ?></td>
-              <td class="middle"><?php echo $rs->id_customer > 0 ? customerName($rs->id_customer) : '-'; ?></td>
+              <td class="middle">
+                <?php echo $rs->id_customer > 0 ? $cus->getCode($rs->id_customer).' : '.$cus->getName($rs->id_customer) : '-'; ?>
+              </td>
               <td class="middle text-right">
                   <?php if( $edit ) : ?>
                     <button type="button" class="btn btn-xs btn-warning" onclick="editZone(<?php echo $rs->id_zone; ?>)"><i class="fa fa-pencil"></i></button>

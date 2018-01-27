@@ -125,6 +125,12 @@ class prepare
     }
 
 
+    public function deletePrepared($id_order, $id_pd, $id_zone)
+    {
+      return dbQuery("DELETE FROM tbl_prepare WHERE id_order = '".$id_order."' AND id_product = '".$id_pd."' AND id_zone = '".$id_zone."'");
+    }
+
+
 
 
 }   //---   End class

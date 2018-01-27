@@ -218,13 +218,15 @@ function addBudget(){
 function updateSponsor(){
   var id_sponsor = $('#id_sponsor').val();
   var id_budget = $('#budget-year').val();
+  var id_customer = $('#id_customer').val();
 
   $.ajax({
     url: 'controller/sponsorController.php?setActiveBudget',
     type:'POST',
     data: {
       'id_sponsor' : id_sponsor,
-      'id_budget'  : id_budget
+      'id_budget'  : id_budget,
+      'id_customer' : id_customer
     },
     success: function(rs){
       var rs = $.trim(rs);
@@ -418,10 +420,93 @@ function getNewBudgetForm(){
 //--- เปิดให้เลือกปีงบประมาณ
 function getEdit(){
   $('#budget-year').removeAttr('disabled');
+  $('#customer-name').removeAttr('disabled');
   $('#btn-edit').addClass('hide');
   $('#btn-update').removeClass('hide');
 }
 
+
+function getEditCustomer(){
+  swal({
+    title:'คุณแน่ใจ ?',
+    text: 'ต้องการเปลี่ยนผู้ถืองบประมาณหรือไม่ ?',
+    type:'warning',
+    showCancelButton:true,
+    cancelButtonText:'ไม่ต้องการ',
+    confirmButtonText:'ต้องการเปลี่ยน',
+    confirmButtonColor:'#DA4453',
+    closeOnConfirm:true
+  }, function(){
+      $('#customer-name').removeAttr('disabled');
+      $('#btn-edit-customer').addClass('hide');
+      $('#btn-update-customer').removeClass('hide');
+  });
+}
+
+
+function updateCustomer(){
+  var message = '';
+  message += '<center><span style="color:red;">โปรดระวัง !! เมื่อเปลี่ยนแล้วจะไม่สามารถย้อนคืนได้</span></center>';
+  message += '<center>ต้องการให้การเปลี่ยนมีผลย้อนหลังหรือไม่ ?</center>';
+  swal({
+    title:'มีผลย้อนหลังหรือไม่ ?',
+    text: message,
+    html:true,
+    type:'warning',
+    showCancelButton:true,
+    cancelButtonText:'ไม่ต้องการ',
+    confirmButtonText:'ต้องการ',
+    confirmButtonColor:'#DA4453',
+    closeOnConfirm:false
+  }, function(isConfirm){
+    if(isConfirm){
+      //----  ให้มีผลย้อนหลัง
+      updateSponsorCustomer(1);
+    }else{
+      //--- ไม่มีผลย้อนหลัง
+      updateSponsorCustomer(0);
+    }
+  });
+}
+
+
+function updateSponsorCustomer(option){
+  //--- option 1 = มีผลย้อนหลัง
+  //--- option 0 = ไม่มีผลย้อนหลัง
+  var id_sponsor = $('#id_sponsor').val();
+  var id_customer = $('#id_customer').val();
+  var customerName = $('#customer-name').val();
+  var current_id  = $('#current-customer').val();
+  if(id_customer != '' && current_id != '' && id_customer != current_id){
+    $.ajax({
+      url:'controller/sponsorController.php?changeSponsorCustomer',
+      type:'POST',
+      cache:'false',
+      data:{
+        'id_sponsor' : id_sponsor,
+        'id_customer' : id_customer,
+        'customerName' : customerName,
+        'isUpdate' : option //---- มีผลย้อนหลังหรือไม่
+      },
+      success:function(rs){
+        var rs = $.trim(rs);
+        if(rs == 'success'){
+          $('#current-customer').val(id_customer);
+          $('#customer-name').attr('disabled', 'disabled');
+          $('#btn-update-customer').addClass('hide');
+          $('#btn-edit-customer').removeClass('hide');
+
+          swal({
+            title:'Success',
+            text:'เปลี่ยนผู้ถืองบประมาณเรียบร้อยแล้ว',
+            type:'success',
+            timer:1000
+          });
+        }
+      }
+    })
+  }
+}
 
 $('#budget-year').change(function(event) {
   /* Act on the event */
@@ -442,3 +527,66 @@ $('#budget-year').change(function(event) {
     }
   })
 });
+
+
+
+
+$('#customer-name').autocomplete({
+  source:'controller/sponsorController.php?getCustomer',
+  autoFocus:true,
+  close:function(){
+    var rs = $(this).val().split(' | ');
+    if(rs.length == 3){
+      var id = rs[2];
+      var code = rs[0];
+      var name = rs[1];
+      $(this).val(name);
+      $('#customer-code').val(code);
+      checkEditDuplicate(id);
+    }else{
+      $('#id_customer').val('');
+      $('#customer-code').val('');
+      $(this).val('');
+    }
+  }
+});
+
+
+
+function checkEditDuplicate(id){
+  var id_sponsor = $('#id_sponsor').val();
+  $.ajax({
+    url:'controller/sponsorController.php?isExistsSponsor',
+    type:'POST',
+    cache:'false',
+    data:{
+      'id_customer':id,
+      'id_sponsor' : id_sponsor
+    },
+    success:function(rs){
+      var rs = $.trim(rs);
+      if(rs == 'ok'){
+        $('#id_customer').val(id);
+        $('#reference').focus();
+      }else if( ! isNaN(parseInt(rs))){
+        $('#id_customer').val('');
+        $('#customer').val('');
+        swal({
+          title:'Duplicated !',
+          text:'มีรายชื่อนี้อยู่ในผู้รับสปอนเซอร์แล้ว ต้องการเพิ่มงบประมาณหรือไม่',
+          type:'warning',
+          showCancelButton:true,
+          cancelButtonText:'ไม่ต้องการ',
+          confirmButtonText:'ใช่ ต้องการ',
+          confirmButtonColor:'#3ABFDA',
+          closeOnConfirm:true
+        },function(){
+          window.location.href = 'index.php?content=sponsor&edit=Y&id_sponsor='+rs;
+        });
+      }else{
+        $('#id_customer').val('');
+        $('#customer').val('');
+      }
+    }
+  });
+}

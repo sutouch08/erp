@@ -201,7 +201,7 @@ if( isset($_GET['getSponsorCustomer']))
 	{
 		while( $rs = dbFetchObject($qs))
 		{
-			$sc[] = $rs->name. ' | '. $rs->id_customer . ' | '. $rs->id_budget;
+			$sc[] = $rs->code.' | '. $rs->name. ' | '. $rs->id_customer . ' | '. $rs->id_budget;
 		}
 
 	}
@@ -252,12 +252,129 @@ if( isset( $_GET['getBudgetBalance']))
 if( isset( $_GET['isExistsSponsor']))
 {
 	$id_customer = $_POST['id_customer'];
+	$id_sponsor = isset($_POST['id_sponsor']) ? $_POST['id_sponsor'] : FALSE;
 	$sponsor = new sponsor();
-	$id = $sponsor->getId($id_customer);
 
-	echo $id == 0 ? 'ok' : $id;
+	$id = $sponsor->isSponsorExists($id_customer, $id_sponsor);
+
+	echo $id == FALSE ? 'ok' : $id;
 }
 
+
+
+//----เปลี่ยนชือผู้ถืองบประมาณ
+if(isset($_GET['changeSponsorCustomer']))
+{
+	$sc = TRUE;
+	$id_sponsor = $_POST['id_sponsor'];
+	$id_customer = $_POST['id_customer'];
+	$customerName = $_POST['customerName'];
+	$isUpdate = $_POST['isUpdate'] == 1 ? TRUE : FALSE;
+
+	$sp = new sponsor();
+	$bd = new sponsor_budget();
+
+
+	if($isUpdate === TRUE)
+	{
+		$cs = new customer($id_customer);
+		$cg = new customer_group($cs->id_group);
+		$ck = new customer_kind($cs->id_kind);
+		$ca = new customer_area($cs->id_area);
+		$ct = new customer_type($cs->id_type);
+		$cc = new customer_class($cs->id_class);
+		$sale = new sale($cs->id_sale);
+	}
+
+
+	$arr = array(
+		'id_customer' => $id_customer,
+		'name' => $customerName
+	);
+
+	startTransection();
+
+	//---- update sponsor
+	if($sp->update($id_sponsor, $arr) !== TRUE)
+	{
+		$sc = FALSE;
+		$message = 'เปลี่ยนผู้ถืองบประมาณไม่สำเร็จ';
+	}
+
+	//--- updte id_customer in budget
+	if($sc === TRUE)
+	{
+		$qs = $bd->getBudgetList($id_sponsor);
+		if(dbNumRows($qs) > 0)
+		{
+			while($rs = dbFetchObject($qs))
+			{
+				$id = $rs->id;
+				$arr = array(
+					'id_customer' => $id_customer
+				);
+
+				if($bd->update($id, $arr) !== TRUE)
+				{
+					$sc = FALSE;
+					$message = 'เปลี่ยนแปลงงบประมาณไม่สำเร็จ';
+				}
+				else
+				{
+					if($isUpdate === TRUE)
+					{
+						$qo = dbQuery("UPDATE tbl_order SET id_customer = '".$id_customer."' WHERE role = 4 AND id_budget = '".$id."'");
+						if($qo !== TRUE)
+						{
+							$sc = FALSE;
+							$message = 'ปรับปรุงรายการสั่งซื้อย้อนหลังไม่สำเร็จ';
+						}
+						else
+						{
+							$qr  = "UPDATE tbl_order_sold ";
+							$qr .= "SET id_customer = '".$id_customer."' " ;
+							$qr .= ", customer_code = '".$cs->code."' ";
+							$qr .= ", customer_name = '".$cs->name."' ";
+							$qr .= ", customer_group = '".$cg->name."' ";
+							$qr .= ", customer_type = '".$ct->name."' ";
+							$qr .= ", customer_kind = '".$ck->name."' ";
+							$qr .= ", customer_class = '".$cc->name."' ";
+							$qr .= ", customer_area = '".$ca->name."' ";
+							$qr .= ", province = '".$cs->province."' ";
+							$qr .= ", id_sale = '".$sale->id."' ";
+							$qr .= ", sale_code = '".$sale->code."' ";
+							$qr .= ", sale_name = '".$sale->name."' ";
+
+							$qr .= "WHERE id_role = 4 AND id_budget = '".$id."'";
+
+							$qa = dbQuery($qr);
+
+							if($qa !== TRUE)
+							{
+								$sc = FALSE;
+								$message = 'ปรับปรุงรายการขายย้อนหลังไม่สำเร็จ';
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+	if($sc === TRUE)
+	{
+		commitTransection();
+	}
+	else
+	{
+		dbRollback();
+	}
+
+	endTransection();
+
+	echo $sc === TRUE ? 'success' : $message;
+}
 
 
 

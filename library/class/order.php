@@ -367,6 +367,13 @@ class order
 	}
 
 
+	//--- ย้อนกลับไปเป็นยังจัดไม่ครบ (กรณีลบ buffer)
+	public function unValidDetail($id_order, $id_pd)
+	{
+		return dbQuery("UPDATE tbl_order_detail SET valid = 0 WHERE id_order = '".$id_order."' AND id_product = '".$id_pd."'");
+	}
+
+
 
 
 	//---	จัดเสร็จแล้วทุกรายการ หรือ มีการบังคับจบ

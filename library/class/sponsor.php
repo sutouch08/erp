@@ -128,8 +128,9 @@ class sponsor
 
   public function getSponsorAndBudgetBalance($txt, $date)
   {
-    $qr = "SELECT s.id_customer, s.name, s.id_budget, b.balance FROM tbl_sponsor AS s ";
+    $qr = "SELECT s.id_customer, c.code, c.name, s.id_budget, b.balance FROM tbl_sponsor AS s ";
     $qr .= "LEFT JOIN tbl_sponsor_budget AS b ON s.id_budget = b.id ";
+    $qr .= "LEFT JOIN tbl_customer AS c ON b.id_customer = c.id ";
     $qr .= "WHERE b.active = 1 AND b.is_deleted = 0 AND s.name LIKE '%".$txt."%' ";
     $qr .= "AND b.start <= '".fromDate($date)."' AND b.end >= '".toDate($date)."'";
 
@@ -143,7 +144,7 @@ class sponsor
     $qr  = "SELECT balance FROM tbl_sponsor AS s ";
     $qr .= "JOIN tbl_sponsor_budget AS b ON s.id_budget = b.id ";
     $qr .= "WHERE s.id_customer = '".$id_customer."'";
-  
+
     $qs = dbQuery($qr);
     if( dbNumRows($qs) == 1)
     {
@@ -151,6 +152,28 @@ class sponsor
     }
 
     return $sc;
+  }
+
+
+
+  public function isSponsorExists($id_customer, $id_sponsor)
+  {
+    $id = FALSE;
+    if($id_sponsor === FALSE)
+    {
+      $qs = dbQuery("SELECT id FROM tbl_sponsor WHERE id_customer = '".$id_customer."'");
+    }
+    else
+    {
+      $qs = dbQuery("SELECT id FROM tbl_sponsor WHERE id_customer = '".$id_customer."' AND id != '".$id_sponsor."'");
+    }
+
+    if(dbNumRows($qs) == 1)
+    {
+      list($id) = dbFetchArray($qs);
+    }
+
+    return $id;
   }
 
 

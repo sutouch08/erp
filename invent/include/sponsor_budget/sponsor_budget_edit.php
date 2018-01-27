@@ -45,4 +45,5 @@ else
 }
 ?>
 </div><!-- container-->
+<script src="script/sponsor_budget/sponsor_budget_add.js"></script>
 <script src="script/sponsor_budget/sponsor_budget_edit.js"></script>

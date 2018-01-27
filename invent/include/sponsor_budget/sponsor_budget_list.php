@@ -86,7 +86,8 @@ $sYear = getFilter('sYear', 'sSponsorYear', '');
        <thead>
          <tr class="font-size-12">
            <th class="width-5 text-center">ลำดับ</th>
-           <th class="width-35">ผู้รับ</th>
+           <th class="width-10 text-center">รหัส</th>
+           <th class="width-25">ผู้รับ</th>
            <th class="width-10 text-center">ปีงบประมาณ</th>
            <th class="width-10 text-center">งบประมาณ</th>
            <th class="width-10 text-center">ใช้ไป</th>
@@ -97,10 +98,12 @@ $sYear = getFilter('sYear', 'sSponsorYear', '');
        <tbody>
 <?php if( dbNumRows($qs) > 0) : ?>
   <?php $no = row_no(); ?>
+  <?php $cus = new customer(); ?>
   <?php while( $rs = dbFetchObject($qs)) : ?>
   <?php   $bd = new sponsor_budget($rs->id_budget); ?>
       <tr class="font-size-12">
         <td class="middle text-center"><?php echo $no; ?></td>
+        <td class="middle text-center"><?php echo $cus->getCode($rs->id_customer); ?></td>
         <td class="middle"><?php echo $rs->name; ?></td>
         <td class="middle text-center"><?php echo $bd->year; ?></td>
         <td class="middle text-center"><?php echo number($bd->budget, 2); ?></td>

@@ -10,6 +10,8 @@ if(isset($_GET['deleteBuffer']))
 
 	$id = $_POST['id_buffer'];
 	$buffer = new buffer($id);
+	$prepare = new prepare();
+	$order = new order();
 
 	if($buffer->id_order != '' && $buffer->id_product != '' && $buffer->id_zone != '')
 	{
@@ -22,11 +24,25 @@ if(isset($_GET['deleteBuffer']))
 			$message = 'ย้ายสินค้ากลับโซนไม่สำเร็จ';
 		}
 
+		if($prepare->deletePrepared($buffer->id_order, $buffer->id_product, $buffer->id_zone) !== TRUE)
+		{
+			$sc = FALSE;
+			$message = 'ลบรายการจัดสินค้าไม่สำเร็จ';
+		}
+
+		if($order->unValidDetail($buffer->id_order, $buffer->id_product) !== TRUE)
+		{
+			$sc = FALSE;
+			$message = 'เปลี่ยนสถานะรายการสั่งซื้อไม่สำเร็จ';
+		}
+
 		if($buffer->delete($id) !== TRUE)
 		{
 			$sc = FALSE;
 			$message = 'ลบ Buffer ไม่สำเร็จ';
 		}
+
+
 
 		if($sc === TRUE)
 		{

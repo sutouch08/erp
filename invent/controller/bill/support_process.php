@@ -159,7 +159,8 @@
                     'employee_name' => $employee->full_name,
                     'date_add'  => dbDate($order->date_add, TRUE),
                     'id_zone' => $rm->id_zone,
-                    'id_warehouse'  => $rm->id_warehouse
+                    'id_warehouse'  => $rm->id_warehouse,
+                    'id_budget' => $order->id_budget
             );
 
             //--- 3. บันทึกยอดขาย
