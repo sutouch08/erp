@@ -23,7 +23,7 @@ function stateColor($state, $status, $isExpired=0)
 	}
 	else if($isExpired == 1)
 	{
-		$sc = $st->stateColor($state);
+		$sc = 'style="color:#CCC; background-color:#000;"';
 	}
 	return $sc;
 }

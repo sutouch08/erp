@@ -31,7 +31,7 @@ class stock
 		}
 		else
 		{
-			if( $qty >= 0 OR $auz === TRUE )
+			if( $qty > 0 OR $auz === TRUE )
 			{
 				$sc =  $this->add( $id_zone, $id_pd, $qty );
 			}
@@ -52,7 +52,7 @@ class stock
 
 	private function add($id_zone, $id_pd, $qty)
 	{
-		return dbQuery("INSERT INTO tbl_stock (id_zone, id_product, qty) VALUES ('".$id_zone."', '".$id_pd."', '".$qty."')");
+		return dbQuery("INSERT INTO tbl_stock (id_zone, id_product, qty) VALUES (".$id_zone.", '".$id_pd."', ".$qty.")");
 	}
 
 
@@ -61,7 +61,14 @@ class stock
 
 	private function update($id_zone, $id_pd, $qty)
 	{
-		return dbQuery("UPDATE tbl_stock SET qty = qty + ".$qty." WHERE id_zone = '".$id_zone."' AND id_product = '".$id_pd."'");
+		$sc = FALSE;
+		$qs = dbQuery("UPDATE tbl_stock SET qty = (qty + ".$qty.") WHERE id_zone = ".$id_zone." AND id_product = '".$id_pd."'");
+		if($qs === TRUE && dbAffectedRows() == 1)
+		{
+			$sc = TRUE;
+		}
+
+		return $sc;
 	}
 
 
@@ -71,7 +78,7 @@ class stock
 
 	private function removeZero()
 	{
-		return dbQuery("DELETE FROM tbl_stock WHERE qty = 0");
+		dbQuery("DELETE FROM tbl_stock WHERE qty = 0");
 	}
 
 

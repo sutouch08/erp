@@ -64,7 +64,13 @@ function checkItem(barcode, qty){
 
           $('#detail-table').prepend($('#row-'+barcode));
 
+          updateTotalStockQty();
+          updateTotalCheckedQty();
+          updateTotalDiffQty();
+          run_no();
+
           $('#txt-pd-barcode').focus();
+
         }else{
           swal('Error!', rs, 'error');
           $('#txt-qty').val(1);
@@ -144,3 +150,99 @@ $(document).ready(function() {
   $('#total-checked').text(sumCheck);
   $('#total-diff').text(sumDiff);
 });
+
+
+
+function updateTotalStockQty(){
+  var qty = 0;
+  $('.stock-qty').each(function(index, el) {
+    qty += parseInt($(this).text());
+  });
+
+  $('#total-zone').text(qty);
+  $('#sumStock').val(qty);
+}
+
+
+function updateTotalCheckedQty(){
+  var qty = 0;
+  $('.checked-qty').each(function(index, el) {
+    qty += parseInt($(this).text());
+  });
+
+  $('#total-checked').text(qty);
+  $('#sumCount').val(qty);
+}
+
+
+function updateTotalDiffQty(){
+  var qty = 0;
+  $('.diff-qty').each(function(index, el) {
+    qty += parseInt($(this).text());
+  });
+
+  $('#total-diff').text(qty);
+  $('#sumDiff').val(qty);
+}
+
+
+function run_no(){
+  var no = 1;
+  $('.row-no').each(function(index, el){
+    $(this).text(no);
+    no++;
+  })
+}
+
+
+function buildDetails(){
+  var id_consign_check = $('#id_consign_check').val();
+  load_in();
+  $.ajax({
+    url:'controller/consignCheckController.php?buildDetails',
+    type:'GET',
+    cache:'false',
+    data:{
+      'id_consign_check' : id_consign_check
+    },
+    success:function(rs){
+      load_out();
+      var rs = $.trim(rs);
+      if(rs == 'success'){
+        swal({
+          title:'Completed',
+          type:'success',
+          timer:1000
+        });
+
+        setTimeout(function(){
+          window.location.reload();
+        }, 1500);
+      }else{
+        swal('Error!!', rs, 'error');
+      }
+    }
+  });
+}
+
+
+function getBoxList(){
+  var id_consign_check = $('#id_consign_check').val();
+  $.ajax({
+    url:'controller/consignCheckController.php?getBoxList',
+    type:'GET',
+    cache:'false',
+    data:{
+      'id_consign_check' : id_consign_check
+    },
+    success:function(rs){
+      if(isJson(rs)){
+        var source = $('#box-list-template').html();
+        var data = $.parseJSON(rs);
+        var output = $('#box-list-body');
+        render(source, data, output);
+        $('#box-list-modal').modal('show');
+      }
+    }
+  });
+}

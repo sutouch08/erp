@@ -48,7 +48,7 @@
 
 
 				<td class="middle text-center">
-				<?php if( $order->state < 3) : ?>
+				<?php if( $order->state < 3 && $order->isExpire == 0) : ?>
 					<input type="checkbox" class="not-return" id="chk-<?php echo $rs->id; ?>" onchange="toggleReturn(<?php echo $rs->id; ?>)" <?php echo $checked; ?> />
 				<?php else : ?>
 					<?php echo $hasTransformProduct === TRUE ? '' : isActived(1); ?>
@@ -58,21 +58,21 @@
 
         <td class="middle" id="transform-box-<?php echo $rs->id; ?>">
 					<?php
-					//---	รายการสินค้าที่เชื่อมโยงแล้ว
-					echo getTransformProducts($rs->id, $order->state);
+						//---	รายการสินค้าที่เชื่อมโยงแล้ว
+						echo getTransformProducts($rs->id, $order->state, $order->isExpire);
 					 ?>
 					<!--- ยอดรวมของสินค้าที่เชื่อมโยงแล้ว -->
 					<input type="hidden" id="transform-qty-<?php echo $rs->id; ?>" value="<?php echo $transform->getSumTransformProductQty($rs->id); ?>" />
 				</td>
 
         <td class="text-center" id="connect-box-<?php echo $rs->id; ?>">
-				<?php if( $order->state < 3 && $hasTransformProduct ) : ?>
+				<?php if( $order->isExpire == 0 && $order->state < 3 && $hasTransformProduct ) : ?>
 					<button type="button" class="btn btn-xs btn-success btn-block connect" id="btn-connect-<?php echo $rs->id; ?>" onclick="addTransformProduct(<?php echo $rs->id; ?>,'<?php echo $rs->id_product; ?>')"><i class="fa fa-plus"></i> เชื่อมโยง</button>
 				<?php endif; ?>
         </td>
 
         <td class="middle text-right">
-        <?php if(  ($edit OR $add) && $order->state < 3 ) : ?>
+        <?php if( $order->isExpire == 0 && ($edit OR $add) && $order->state < 3 ) : ?>
         	<button type="button" class="btn btn-xs btn-danger" onclick="removeDetail(<?php echo $rs->id; ?>, '<?php echo $rs->product_code; ?>')"><i class="fa fa-trash"></i></button>
         <?php endif; ?>
         </td>

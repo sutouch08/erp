@@ -24,7 +24,7 @@
                             <button type="button" id="btn-cover-<?php echo $id_img; ?>" class="btn btn-sm <?php echo $cover; ?> btn-cover" style="position:relative;" onClick="setAsCover('<?php echo $id_style; ?>', <?php echo $id_img; ?>)">
                             <i class="fa fa-check"></i>
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger" style="position:absolute; right:25px;" onClick="removeImage(<?php echo $id_style; ?>, <?php echo $id_img; ?>)"><i class="fa fa-trash"></i></button>
+                            <button type="button" class="btn btn-sm btn-danger" style="position:absolute; right:25px;" onClick="removeImage('<?php echo $id_style; ?>', <?php echo $id_img; ?>)"><i class="fa fa-trash"></i></button>
                         </div>
                     </div>
                 </div>

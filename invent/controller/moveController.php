@@ -254,6 +254,22 @@ if( isset( $_GET['saveMove'] ))
 
 
 
+if(isset($_GET['unSaveMove']))
+{
+	$id = $_POST['id_move'];
+	$cs = new move();
+	$sc = TRUE;
+	if($cs->unSave($id) !== TRUE)
+	{
+		$sc = FALSE;
+		$message = 'เปลี่ยนสถานะไม่สำเร็จ';
+	}
+
+	echo $sc === TRUE ? 'success' : $message;
+}
+
+
+
 if( isset( $_GET['deleteMove'] ) )
 {
 	include 'move/delete_move.php';

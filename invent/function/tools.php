@@ -25,7 +25,7 @@ function getFilter($postName, $cookieName, $defaultValue = "")
 //-------------------------  สร้าง cookie
 function createCookie($name, $value, $time = 3600, $path = '/')
 {
-	return setcookie($name, $value, time()+$time, $path);
+	return setcookie($name, $value, intval(time()+$time), $path);
 }
 
 

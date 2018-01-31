@@ -736,7 +736,7 @@ class order
 
 	public function getReservQty($id_pd)
 	{
-		$qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_order_detail WHERE id_product = '".$id_pd."' AND valid = 0");
+		$qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_order_detail WHERE id_product = '".$id_pd."' AND valid = 0 AND is_expired = 0");
 		list( $qty ) = dbFetchArray($qs);
 		return is_null( $qty ) ? 0 : $qty;
 	}
@@ -747,7 +747,7 @@ class order
 
 	public function getStyleReservQty($id_style)
 	{
-		$qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_order_detail WHERE id_style = '".$id_style."' AND valid = 0");
+		$qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_order_detail WHERE id_style = '".$id_style."' AND valid = 0 AND is_expired = 0");
 		list( $qty ) = dbFetchArray($qs);
 		return is_null( $qty ) ? 0 : $qty;
 	}
@@ -1117,7 +1117,7 @@ class order
 	{
 		$days = getConfig('ORDER_EXPIRATION')+1;
 		$expireDate = date('Y-m-d', strtotime('-'.$days.' day'));
-		$qr  = "SELECT od.id, od.reference, od.date_add, cus.name, CONCAT(emp.first_name, emp.last_name) AS empName, st.name AS state ";
+		$qr  = "SELECT od.id, od.reference, od.date_add, od.id_budget, od.role, cus.name, CONCAT(emp.first_name, emp.last_name) AS empName, st.name AS state ";
 		$qr .= "FROM tbl_order AS od ";
 		$qr .= "LEFT JOIN tbl_state AS st ON od.state = st.id ";
 		$qr .= "LEFT JOIN tbl_customer AS cus ON od.id_customer = cus.id ";

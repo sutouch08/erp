@@ -225,7 +225,14 @@ class move
 
   public function save($id)
   {
-    return dbQuery("UPDATE tbl_move SET isSaved = 1 WHERE id = '".$id."'");
+    return dbQuery("UPDATE tbl_move SET isSaved = 1 WHERE id = ".$id);
+  }
+
+
+
+  public function unSave($id)
+  {
+    return dbQuery("UPDATE tbl_move SET isSaved = 0 WHERE id = ".$id);
   }
 
 
@@ -411,7 +418,7 @@ class move
   public function isCompleted($id)
   {
     $sc = TRUE;
-    $qs = dbQuery("SELECT id FROM tbl_move_temp WHERE id_move = '".$id."'");
+    $qs = dbQuery("SELECT id FROM tbl_move_temp WHERE id_move = ".$id);
     if( dbNumRows($qs) > 0)
     {
       $sc = FALSE;

@@ -75,6 +75,15 @@ $btn_v_not_valid = $sValid == '' ? 'btn-primary' : '';
     <input type="text" class="form-control input-sm input-discount text-center" name="fromDate" id="fromDate" value="<?php echo $fromDate; ?>" />
     <input type="text" class="form-control input-sm input-unit text-center" name="toDate" id="toDate" value="<?php echo $toDate; ?>" />
   </div>
+
+  <div class="col-sm-1 padding-5">
+    <label class="display-block not-show">submit</label>
+    <button type="button" class="btn btn-sm btn-primary btn-block" onclick="getSearch()"><i class="fa fa-search"></i> ค้นหา</button>
+  </div>
+  <div class="col-sm-1 padding-5">
+    <label class="display-block not-show">reset</label>
+    <button type="button" class="btn btn-sm btn-warning btn-block" onclick="clearFilter()"<i class="fa fa-retweet"></i> Reset</button>
+  </div>
 </div>
 </form>
 
@@ -125,13 +134,15 @@ $qs = dbQuery("SELECT * FROM tbl_consign_check ".$where." LIMIT ".$paginator->Pa
  ?>
 
  <div class="row">
-   <div class="col-sm-7">
+   <div class="col-sm-6 padding-5 first">
      <?php $paginator->display($get_rows, 'index.php?content=consign_check'); ?>
    </div>
-   <div class="col-sm-5" style="padding-top:25px;">
+   <div class="col-sm-6 padding-5 last" style="padding-top:25px;">
      <p class="pull-right top-p">
-       <span class="green">OK</span><span class="margin-right-15"> = ดึงไปตัดยอดฝากขายแล้ว</span>
-       <span class="red">NC</span><span class="margin-right-15"> = ยังไม่ดึงไปตัดยอดฝากขาย</span>
+       <span class="green font-size-">OK</span><span class="margin-right-15"> = ตัดยอดฝากขายแล้ว</span>
+       <span class="blue">NC</span><span class="margin-right-15"> = ยังไม่ตัดยอดฝากขาย</span>
+       <span class="red">NS</span><span class="margin-right-15"> = ยังไม่บันทึก</span>
+       <span class="red">CN</span><span class="margin-right-15"> = ยกเลิก</span>
      </p>
    </div>
  </div>
@@ -166,16 +177,22 @@ $qs = dbQuery("SELECT * FROM tbl_consign_check ".$where." LIMIT ".$paginator->Pa
             <?php echo $zone->getName($rs->id_zone); ?>
           </td>
           <td class="middle text-center" id="xLabel-<?php echo $rs->id; ?>">
-            <?php if($rs->valid == 0 ) : ?>
+            <?php if($rs->valid == 1 ) : ?>
               <span class="green">OK</span>
             <?php else : ?>
-              <span class="red">NC</span>
+              <?php if($rs->status == 1) : ?>
+                <span class="blue">NC</span>
+              <?php elseif($rs->status == 2) : ?>
+                <span class="red">CN</span>
+              <?php else : ?>
+                <span class="red">NS</span>
+              <?php endif; ?>
             <?php endif; ?>
           </td>
           <td class="middle text-right">
+          <?php if($rs->status != 2) :  //--- ถ้าสถานะไม่ใ่ช่ยกเลิก ?>
             <button type="button" class="btn btn-xs btn-info" title="รายละเอียด" onclick="goDetail(<?php echo $rs->id;?>)"><i class="fa fa-eye"></i></button>
-
-          <?php if( $edit && $rs->valid == 0 ): ?>
+          <?php if( ($edit && $rs->valid == 0 && $rs->status == 0) OR ($delete && $rs->valid == 0) ): ?>
             <button type="button" class="btn btn-xs btn-warning" title="แก้ไข" id="btn-edit-<?php echo $rs->id; ?>" onclick="goAdd(<?php echo $rs->id;?>)"><i class="fa fa-pencil"></i></button>
           <?php endif; ?>
 
@@ -184,6 +201,7 @@ $qs = dbQuery("SELECT * FROM tbl_consign_check ".$where." LIMIT ".$paginator->Pa
               <i class="fa fa-trash"></i>
             </button>
           <?php endif; ?>
+        <?php endif; //--- end if status != 2 ?>
           </td>
         </tr>
 <?php   endwhile; ?>
@@ -196,3 +214,4 @@ $qs = dbQuery("SELECT * FROM tbl_consign_check ".$where." LIMIT ".$paginator->Pa
      </table>
    </div>
  </div>
+ <script src="script/consign_check/consign_check_list.js"></script>

@@ -11,7 +11,7 @@ function selectTransformRole($se = '')
 
 
 
-function getTransformProducts($id_order_detail, $state = 1)
+function getTransformProducts($id_order_detail, $state = 1, $isExpired = 0)
 {
 	$sc = '';
 	$pd = new product();
@@ -26,7 +26,7 @@ function getTransformProducts($id_order_detail, $state = 1)
 			$sc .= $code.' : '.$rs->qty;
 
 			//---	ถ้ายังไม่ได้รับสินค้า สามารถลบได้
-			if( $rs->received == 0 && $state < 3)
+			if( $isExpired == 0 && $rs->received == 0 && $state < 3)
 			{
 				$sc .= '<span class="red pointer" onclick="removeTransformProduct('.$id_order_detail.', \''.$rs->id_product.'\', \''.$code.'\')">  <i class="fa fa-times">';
 				$sc .= '</i></span>';

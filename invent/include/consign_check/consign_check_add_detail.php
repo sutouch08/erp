@@ -31,27 +31,27 @@
 <?php  $diff = $rs->stock_qty - $rs->qty; ?>
 <?php  $hide = $rs->qty == 0 ? 'hide' : ''; ?>
         <tr class="font-size-12" id="row-<?php echo $barcode; ?>">
-          <td class="middle text-center"><?php echo $no; ?></td>
+          <td class="middle text-center row-no"><?php echo $no; ?></td>
           <td class="middle text-center"><?php echo $barcode; ?></td>
           <td class="middle"><?php echo $rs->product_code; ?></td>
           <td class="middle text-center">
-            <span id="stock-qty-<?php echo $barcode; ?>">
+            <span class="stock-qty" id="stock-qty-<?php echo $barcode; ?>">
             <?php echo $rs->stock_qty; ?>
             </span>
           </td>
           <td class="middle text-center">
-            <span id="check-qty-<?php echo $barcode; ?>">
+            <span class="checked-qty checked-<?php echo $rs->id_product; ?>" id="check-qty-<?php echo $barcode; ?>">
             <?php echo $rs->qty; ?>
             </span>
           </td>
           <td class="middle text-center">
-            <span id="diff-qty-<?php echo $barcode; ?>">
+            <span class="diff-qty diff-<?php echo $rs->id_product; ?>" id="diff-qty-<?php echo $barcode; ?>">
             <?php echo $diff; ?>
             </span>
           </td>
           <td class="middle text-right">
-            <button type="button" class="btn btn-xs btn-primary <?php echo $hide; ?>" id="btn-<?php echo $barcode; ?>" onclick="showEditDetail('<?php echo $barcode; ?>')">
-              <i class="fa fa-pencil"></i> แก้ไข
+            <button type="button" class="btn btn-xs btn-info <?php echo $hide; ?>" id="btn-<?php echo $barcode; ?>" onclick="showDetail('<?php echo $rs->id_product; ?>')">
+              <i class="fa fa-eye"></i>
             </button>
           </td>
         </tr>
@@ -68,5 +68,59 @@
 <input type="hidden" id="sumCount" value="<?php echo $sumCount; ?>" />
 <input type="hidden" id="sumDiff" value="<?php echo $sumDiff; ?>" />
 <?php else : ?>
-
+  <center><h4>ไม่พบรายการ</h4></center>
 <?php endif; ?>
+
+<div class="modal fade" id="checked-detail-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:400px;">
+		<div class="modal-content">
+  			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			 </div>
+			 <div class="modal-body" id="modal_body">
+
+       </div>
+			 <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+			 </div>
+		</div>
+	</div>
+</div>
+
+
+<script id="box-detail-template" type="text/handlebarsTemplate">
+<div class="row">
+  <div class="col-sm-12">
+    <table class="table table-bordered">
+      <tr>
+        <td colspan="3" class="text-center">{{pdCode}}</td>
+      </tr>
+      <tr>
+        <td class="width-50 text-center">กล่อง</td>
+        <td class="width-30 text-center">จำนวน</td>
+        <td class="width-20 text-right"></td>
+      </tr>
+      {{#each rows}}
+        {{#if nodata}}
+          <tr><td colspan="2" class="text-center">ไม่มีข้อมูล</td></tr>
+        {{else}}
+         <tr id="row-{{id_box}}-{{id_pd}}">
+           <td class="middle text-center">{{ box }}</td>
+           <td class="middle text-center">{{ qty }}</td>
+           <td class="text-right">
+      <?php if(($add OR $edit) && $cs->valid == 0 && $cs->status == 0) : ?>
+             <button type="button" class="btn btn-xs btn-danger" onclick="removeCheckedItem('{{id_box}}', '{{id_pd}}', {{qty}},'{{ box }}')">
+               <i class="fa fa-trash"></i>
+             </button>
+      <?php endif; ?>
+           </td>
+         </tr>
+         {{/if}}
+      {{/each}}
+    </table>
+  </div>
+</div>
+</script>
+
+
+<script src="script/consign_check/consign_check_detail.js"></script>

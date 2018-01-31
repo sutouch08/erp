@@ -143,3 +143,45 @@ function save(){
     }
   });
 }
+
+
+function unSave(){
+  swal({
+    title:'ยกเลิกการบันทึก ?',
+    text:'<center>คุณต้องการยกเลิกการบันทึกเพื่อแก้ไขเพิ่มเติม</center><center>ต้องการดำเนินการต่อหรือไม่ ?</center>',
+    type:'warning',
+    html:true,
+    showCancelButton:true,
+    confirmButtonText:'ดำเนินการ',
+    cancelButtonText:'ไม่',
+    confirmButtonColor:'#F6BB42',
+    closeOnConfirm:false
+  }, function(){
+    var id = $('#id_move').val();
+    $.ajax({
+      url:'controller/moveController.php?unSaveMove',
+      type:'POST',
+      cache:'false',
+      data:{
+        'id_move' : id
+      },
+      success:function(rs){
+        var rs = $.trim(rs);
+        if(rs == 'success'){
+          swal({
+            title:'Success',
+            type:'success',
+            timer:1000
+          });
+
+          setTimeout(function(){
+            goAdd(id);
+          },1500);
+
+        }else{
+          swal('Error!', rs, 'error');
+        }
+      }
+    });
+  });
+}

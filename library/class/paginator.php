@@ -4,7 +4,7 @@ class paginator{
 	var $items_total;
 	var $current_page;
 	var $num_pages;
-	var $mid_range;
+	var $mid_range = 5;
 	var $low;
 	var $high;
 	var $limit;
@@ -15,13 +15,14 @@ class paginator{
 	var $Num_Rows;
 	var $Page;
 
-	function paginator()
+	function __construct()
 	{
 		$this->current_page = 1;
-		$this->mid_range = 7;
 		$this->items_per_page = $this->default_ipp;
 		$this->url_next = $this->url_next;
 	}
+
+
 	function paginate()
 	{
 
@@ -93,7 +94,7 @@ class paginator{
 		$this->Page = $Page;
 		$this->Prev_Page = $Page-1;
 		$this->Next_Page = $Page+1;
-		
+
 		$this->Page_Start = $All_Pages < $Page ? 1 : (($Per_Page*$Page)-$Per_Page);
 		if($Num_Rows<=$Per_Page)
 		{
@@ -108,13 +109,13 @@ class paginator{
 			$Num_Pages =($Num_Rows/$Per_Page)+1;
 			$this->Num_Pages = (int)$Num_Pages;
 		}
-		
+
 	}
 	function display($get_rows,$url)
 	{
-		
+
 		$this->items_total = $this->Num_Rows;
-		$this->mid_range = 10;
+		//$this->mid_range = 5;
 		$this->current_page = $this->Page;
 		$this->default_ipp = $this->Per_Page;
 		$this->url_next = "$url&Page=";
@@ -137,4 +138,3 @@ class paginator{
 	}
 }
 ?>
-

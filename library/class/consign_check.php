@@ -87,6 +87,53 @@ class consign_check
   }
 
 
+  public function close($id)
+  {
+    $sc = FALSE;
+    $id_emp = getCookie('user_id');
+    //--- จะปิดได้ต้องยังไม่ถูกดึงไปตัดยอด
+    $qs = dbQuery("UPDATE tbl_consign_check SET status = 1, emp_upd = '".$id_emp."' WHERE id = ".$id." AND valid = 0");
+    if(dbAffectedRows() > 0)
+    {
+      $sc = TRUE;
+    }
+
+    return $sc;
+  }
+
+
+  public function unClose($id)
+  {
+    $sc = FALSE;
+    $id_emp = getCookie('user_id');
+    //----   จะเปิดได้ต้องไม่ถูกส่งไปตัดยอด
+    $qs = dbQuery("UPDATE tbl_consign_check SET status = 0, emp_upd = '".$id_emp."' WHERE id = ".$id." AND valid = 0");
+    if(dbAffectedRows() > 0)
+    {
+      $sc = TRUE;
+    }
+
+    return $sc;
+  }
+
+
+
+  public function cancleConsignCheck($id)
+  {
+    $sc = FALSE;
+    $id_emp = getCookie('user_id');
+    //----- จะยกเลิกได้ต้องยังไม่ถูกดึงไปตัดยอด
+    $qs = dbQuery("UPDATE tbl_consign_check SET status = 2, emp_upd = '".$id_emp."' WHERE id = ".$id." AND valid = 0");
+    if(dbAffectedRows() > 0)
+    {
+      $sc = TRUE;
+    }
+
+    return $sc;
+  }
+
+
+
   //----- ดึงรายละเอียดทั้งเอกสาร
   public function getDetails($id)
   {
@@ -195,6 +242,25 @@ class consign_check
 
 
 
+
+  //---- แสดงรายการตรวจเช็คสินค้าลงกล่อง ตามสินค้าที่เลือกมา
+  public function getProductCheckedDetail($id, $id_pd)
+  {
+    $qr  = "SELECT bd.id_consign_box, bx.box_no, bd.id_product, SUM(bd.qty) AS qty ";
+    $qr .= "FROM tbl_consign_box_detail AS bd ";
+    $qr .= "LEFT JOIN tbl_consign_box AS bx ON bd.id_consign_box = bx.id ";
+    $qr .= "WHERE bd.id_consign_check = ".$id." ";
+    $qr .= "AND bd.id_product = '".$id_pd."' ";
+    $qr .= "GROUP BY bd.id_consign_box, bd.id_product ";
+    $qr .= "ORDER BY bx.box_no ASC";
+
+    return dbQuery($qr);
+  }
+
+
+
+
+
   public function getConsignBoxDetailId($id_consign_box, $id_consign_check, $id_pd)
   {
     $sc = FALSE;
@@ -215,6 +281,57 @@ class consign_check
 
 
 
+
+
+  public function getConsignBoxDetail($id_consign_check, $id_box, $id_pd)
+  {
+    $qr  = "SELECT * FROM tbl_consign_box_detail ";
+    $qr .= "WHERE id_consign_check = ".$id_consign_check." ";
+    $qr .= "AND id_consign_box = ".$id_box." ";
+    $qr .= "AND id_product = '".$id_pd."' ";
+
+    return dbQuery($qr);
+  }
+
+
+
+  //----- ลบสินค้าในกล่อง
+  public function deleteCheckedProductByBox($id_consign_check, $id_box, $id_pd)
+  {
+    $qr  = "DELETE FROM tbl_consign_box_detail ";
+    $qr .= "WHERE id_consign_check = ".$id_consign_check." ";
+    $qr .= "AND id_consign_box = ".$id_box." ";
+    $qr .= "AND id_product = '".$id_pd."'";
+
+    return dbQuery($qr);
+  }
+
+
+
+  public function deleteAllBoxDetails($id_box)
+  {
+    return dbQuery("DELETE FROM tbl_consign_box_detail WHERE id_consign_box = ".$id_box);
+  }
+
+
+  public function deleteConsignBox($id_box)
+  {
+    return dbQuery("DELETE FROM tbl_consign_box WHERE id = ".$id_box);
+  }
+
+
+
+  public function deleteAllDetails($id_consign_check)
+  {
+    return dbQuery("DELETE FROM tbl_consign_check_detail WHERE id_consign_check = ".$id_consign_check);
+  }
+
+
+
+  public function getAllConsignBox($id_consign_check)
+  {
+    return dbQuery("SELECT * FROM tbl_consign_box WHERE id_consign_check = ".$id_consign_check);
+  }
 
 
 
@@ -241,6 +358,13 @@ class consign_check
   }
 
 
+
+
+
+  public function getBoxList($id)
+  {
+    return dbQuery("SELECT * FROM tbl_consign_box WHERE id_consign_check = ".$id);
+  }
 
 
 
@@ -291,6 +415,28 @@ class consign_check
 
 
 
+  public function getBox($id_box)
+  {
+    $sc = FALSE;
+    $qs = dbQuery("SELECT * FROM tbl_consign_box WHERE id = ".$id_box);
+    if(dbNumRows($qs) == 1)
+    {
+      $sc = dbFetchObject($qs);
+    }
+
+    return $sc;
+  }
+
+
+  public function getBoxDetail($id_box)
+  {
+    $qr  = "SELECT * FROM tbl_consign_box_detail AS bd ";
+    $qr .= "JOIN tbl_product AS pd ON bd.id_product = pd.id ";
+    $qr .= "WHERE id_consign_box = ".$id_box;
+
+    return dbQuery($qr);
+  }
+
 
   public function getQtyInBox($id_box, $id_check)
   {
@@ -301,6 +447,14 @@ class consign_check
   }
 
 
+
+  public function hasDetails($id)
+  {
+    $qs = dbQuery("SELECT COUNT(*) FROM tbl_consign_check_detail WHERE id_consign_check = '".$id."'");
+    list($sc) = dbFetchArray($qs);
+
+    return $sc == 0 ? FALSE : TRUE;
+  }
 
   //-----------------  New Reference --------------//
   public function getNewReference($date = '')

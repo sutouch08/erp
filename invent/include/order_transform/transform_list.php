@@ -105,7 +105,7 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
 	$paginator->Per_Page('tbl_order' , $where, $get_rows);
-	$paginator->display($get_rows, 'index.php?content=order');
+	$paginator->display($get_rows, 'index.php?content=order_transform');
 	$qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 
 ?>
@@ -132,7 +132,7 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 <?php	$order 	= new order(); ?>
 <?php	while( $rs = dbFetchObject($qs) ) : ?>
 
-			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status); //--- order_help.php ?>>
+			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status, $rs->isExpire); //--- order_help.php ?>>
         <td class="middle text-cennter pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
 					<?php echo $no; ?>
 				</td>
@@ -154,7 +154,7 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 				</td>
 
         <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
-					<?php echo stateName($rs->state, $rs->status); ?>
+					<?php echo stateName($rs->state, $rs->status, $rs->isExpire); ?>
 				</td>
 
         <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
@@ -162,7 +162,7 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 				</td>
 
         <td class="middle text-center">
-					<a href="#"  data-toggle="popover" data-html="true" data-placement="left" data-trigger="focus"
+					<a href="javascipt:void(0)"  data-toggle="popover" data-html="true" data-placement="left" data-trigger="focus"
 						data-content="
 							พนักงาน : <?php echo employee_name($rs->id_employee); ?><br/>
               ปรับปรุงล่าสุด : <?php echo thaiDate($rs->date_upd); ?>

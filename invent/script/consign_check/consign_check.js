@@ -9,5 +9,9 @@ function goAdd(id){
   }else{
     window.location.href = 'index.php?content=consign_check&add=Y&id_consign_check='+id;
   }
+}
 
+
+function goDetail(id){
+  window.location.href = 'index.php?content=consign_check&view_detail&id_consign_check='+id;
 }

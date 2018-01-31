@@ -60,24 +60,28 @@ $toDate = getFilter('toDate', 'toDate', '');
 <hr class="margin-top-15 margin-bottom-15" />
 <?php
 
+$length = 0;
 $where = "WHERE s.reference != '' ";
 
 if( $reference != '')
 {
   createCookie('reference', $reference);
   $where .= "AND s.reference LIKE '%".$reference."%' ";
+	$length++;
 }
 
 if($pdCode != '')
 {
   createCookie('pdCode', $pdCode);
   $where .= "AND p.code LIKE '%".$pdCode."%' ";
+	$length++;
 }
 
 if($zoneCode != '')
 {
   createCookie('zoneCode', $zoneCode);
   $where .= "AND (z.barcode_zone LIKE '%".$zoneCode."%' OR z.zone_name LIKE '%".$zoneCode."%') ";
+	$length++;
 }
 
 if($fromDate != '' && $toDate != '')
@@ -86,10 +90,15 @@ if($fromDate != '' && $toDate != '')
   createCookie('toDate', $toDate);
   $where .= "AND s.date_upd >= '".fromDate($fromDate)."' ";
   $where .= "AND s.date_upd <= '".toDate($toDate)."' ";
+	$length++;
 }
 
 $where .= "ORDER BY s.date_upd DESC";
 
+if($length == 0)
+{
+	$where = "WHERE s.reference = ''";
+}
 
 
 

@@ -28,6 +28,7 @@ $state_10 = getFilter('state_10', 'state_10', 0);
 $state_11 = getFilter('state_11', 'state_11', 0);
 $notSave = getFilter('notSave', 'notSave', 0);
 $onlyMe = getFilter('onlyMe', 'onlyMe', 0);
+$isExpire = getFilter('isExpire', 'isExpire', 0);
 
 $btn_1 = $state_1 == 0 ? '' : 'btn-info';
 $btn_2 = $state_2 == 0 ? '' : 'btn-info';
@@ -42,6 +43,7 @@ $btn_10 = $state_10 == 0 ? '' : 'btn-info';
 $btn_11 = $state_11 == 0 ? '' : 'btn-info';
 $btn_notSave = $notSave == 0 ? '' : 'btn-info';
 $btn_onlyMe = $onlyMe == 0 ? '' : 'btn-info';
+$btn_expire = $isExpire == 0 ? '' : 'btn-info';
 
 $state = '';
 
@@ -220,6 +222,10 @@ for($i =1; $i <= 11; $i++)
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_onlyMe; ?>" id="btn-onlyMe" onclick="toggleState('btn-onlyMe', <?php echo $onlyMe; ?> )">เฉพาะฉัน</button>
 		</div>
 
+		<div class="col-sm-1 padding-5 last">
+			<button type="button" class="btn btn-sm btn-block <?php echo $btn_expire; ?>" id="btn-expire" onclick="toggleState('btn-expire', <?php echo $isExpire; ?> )">หมดอายุ</button>
+		</div>
+
 
 
 
@@ -236,6 +242,7 @@ for($i =1; $i <= 11; $i++)
 		<input type="hidden" name="state_11" id="state_11" value="<?php echo $state_11; ?>" />
 		<input type="hidden" name="notSave" id="state_notSave" value="<?php echo $notSave; ?>" />
 		<input type="hidden" name="onlyMe" id="state_onlyMe" value="<?php echo $onlyMe; ?>" />
+		<input type="hidden" name="isExpire" id="state_expire" value="<?php echo $isExpire; ?>" />
 
 </div>
 </form>
@@ -351,6 +358,11 @@ for($i =1; $i <= 11; $i++)
 	}
 
 
+	if($isExpire == 1)
+	{
+		createCookie('isExpire', 1);
+		$where .= "AND isExpire = 1 ";
+	}
 
 
 	if($onlyMe == 1)

@@ -1,4 +1,5 @@
 // JavaScript Document
+
 function expandTab(el){
 	var className = "open";
 	if (el.classList){

@@ -2,7 +2,7 @@
 $pd = new product();
 $txt = $_REQUEST['term'];
 $field = 'code';
-$limit = 50; //---- limit result
+$limit = 100; //---- limit result
 
 $sc = array();
 

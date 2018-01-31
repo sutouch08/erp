@@ -4,7 +4,7 @@
   $id_order = $_POST['id_order'];
   $barcode 	= $_POST['barcode'];
   $id_zone	= $_POST['id_zone'];
-  $qty 			= $_POST['qty'];
+  $qty 			= intval($_POST['qty']);
   $valid    = 0;
 
 

@@ -730,6 +730,7 @@ if( isset( $_GET['clearFilter'] ) )
 	deleteCookie('state_11');
 	deleteCookie('notSave');
 	deleteCookie('onlyMe');
+	deleteCookie('isExpire');
 	deleteCookie('sRefCode');
 	deleteCookie('sDeliveryCode');
 	deleteCookie('selectState');

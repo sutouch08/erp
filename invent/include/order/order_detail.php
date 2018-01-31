@@ -89,7 +89,7 @@
 				</td>
 
         <td class="middle text-right">
-        <?php if( ( $order->isPaid == 0 && $order->hasPayment == 0 ) && ($edit OR $add) && $order->state < 4 ) : ?>
+        <?php if( ( $order->isPaid == 0 && $order->hasPayment == 0 && $order->isExpire == 0 ) && ($edit OR $add) && $order->state < 4 ) : ?>
         	<button type="button" class="btn btn-xs btn-danger" onclick="removeDetail(<?php echo $rs->id; ?>, '<?php echo $rs->product_code; ?>')"><i class="fa fa-trash"></i></button>
         <?php endif; ?>
         </td>

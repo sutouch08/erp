@@ -1,13 +1,13 @@
 <?php if( $payment->hasTerm == 0 ) : ?>
 <?php
 $pay 	= new payment();
-$dship 	= ( $order->shipping_fee > 0 || $order->hasPayment === TRUE ) ? 'disabled' : '' ;
-$ubtn 		= ( $order->shipping_fee > 0 || $order->hasPayment === TRUE ) ? 'hide' : '' ;
-$ebtn 	= ( $order->shipping_fee > 0 || $order->hasPayment === TRUE ) ? '' : 'hide' ;
+$dship 	= ( $order->shipping_fee > 0 || $order->hasPayment === TRUE || $order->isExpire == 1 ) ? 'disabled' : '' ;
+$ubtn 		= ( $order->shipping_fee > 0 || $order->hasPayment === TRUE || $order->isExpire == 1 ) ? 'hide' : '' ;
+$ebtn 	= ( $order->shipping_fee > 0 || $order->hasPayment === TRUE || $order->isExpire == 1) ? '' : 'hide' ;
 
-$dser		= ( $order->service_fee > 0 || $order->hasPayment === TRUE ) ? 'disabled' : '' ;
-$esbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE ) ? '' : 'hide';
-$usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE ) ? 'hide' : '';
+$dser		= ( $order->service_fee > 0 || $order->hasPayment === TRUE || $order->isExpire == 1) ? 'disabled' : '' ;
+$esbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE || $order->isExpire == 1) ? '' : 'hide';
+$usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE || $order->isExpire == 1) ? 'hide' : '';
 ?>
 <?php if($order->isOnline == 1) : ?>
 <div class="row">

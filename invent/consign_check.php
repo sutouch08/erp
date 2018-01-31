@@ -30,7 +30,7 @@ if( isset( $_GET['add'] ) )
 }
 else if( isset( $_GET['view_detail']))
 {
-  include 'include/consign_check/consign_check_detail.php';
+  include 'include/consign_check/consign_check_view_detail.php';
 }
 else
 {

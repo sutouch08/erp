@@ -48,7 +48,7 @@ function getSubTab($parent, $ajax)
 			}
 			else
 			{
-				$sc .= '<li class="menu"><a href="#cat-'.$rs->id.'" role="tab" data-toggle="tab" onClick="'.$ajax.'(\''.$rs->id.'\')">'.$rs->name.'</a></li>';
+				$sc .= '<li class="menu"><a href="#cat-'.$rs->id.'" role="menu" data-toggle="tab" onClick="'.$ajax.'(\''.$rs->id.'\')">'.$rs->name.'</a></li>';
 			}
 
 		}

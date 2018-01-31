@@ -1,8 +1,9 @@
 <?php
 $order = isset( $_GET['id_order'] ) ? new order( $_GET['id_order'] ) : new order();
-$hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hide';
+$hide = ( $order->isExpire == 0 && ($order->status == 0 OR $order->hasNotSaveDetail === TRUE )) ? '' : 'hide';
 $payment 	= new payment_method($order->id_payment);
 $channels = new channels($order->id_channels);
+$expired = $order->isExpire == 1 ? 'disabled' : '';
 ?>
 <div class="row top-row">
 	<div class="col-sm-4 top-col"><h4 class="title"><i class="fa fa-shopping-bag"></i> <?php echo $pageTitle; ?></h4></div>
@@ -15,20 +16,20 @@ $channels = new channels($order->id_channels);
 			<?php endif; ?>
 
 			<?php if( $order->isOnline == 1 && $payment->hasTerm == 0 ) : ?>
-            <?php $payed = ( $order->status == 0 || $order->hasPayment == 1) ? 'disabled' : '' ;	?>
+            <?php $payed = ( $order->status == 0 || $order->hasPayment == 1 || $order->isExpire == 1) ? 'disabled' : '' ;	?>
             <button type="button" class="btn btn-sm btn-primary" onClick="payOrder()" <?php echo $payed; ?>><i class="fa fa-credit-card"></i> แจ้งชำระเงิน</button>
 
-            <?php $shiped = ( $order->status == 0 || $order->hasPayment == 0) ? 'disabled' : '' ;	?>
+            <?php $shiped = ( $order->status == 0 || $order->hasPayment == 0 || $order->isExpire == 1) ? 'disabled' : '' ;	?>
     				<button type="button" class="btn btn-sm btn-info" onClick="inputDeliveryNo()" <?php echo $shiped; ?>><i class="fa fa-truck"></i> บันทึกการจัดส่ง</button>
 
-            <?php $disabled = $order->status == 0 ? 'disabled' : '' ;	?>
+            <?php $disabled = ($order->status == 0 OR $order->isExpire == 1) ? 'disabled' : '' ;	?>
         		<button type="button" class="btn btn-sm btn-success" onClick="getSummary()" <?php echo $disabled; ?>><i class="fa fa-list"></i> สรุปข้อมูล</button>
             <?php endif; ?>
         		<button type="button" class="btn btn-sm btn-default" onClick="printOrderSheet()"><i class="fa fa-print"></i> พิมพ์</button>
 
 
 
-			<?php if( ($add && $order->status == 0 ) OR ($edit && $order->status == 1 && $order->state < 4 ) ) : ?>
+			<?php if( ($add && $order->status == 0 && $order->isExpire == 0) OR ($edit && $order->status == 1 && $order->state < 4 && $order->isExpire == 0) ) : ?>
 				<?php if( ($payment->hasTerm == 0 && $order->hasPayment == FALSE ) OR ($payment->hasTerm == 1)) : ?>
 
             		<button type="button" class="btn btn-sm btn-warning" onclick="goAddDetail(<?php echo $order->id; ?>)"><i class="fa fa-pencil"></i> แก้ไขรายการ</button>

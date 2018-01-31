@@ -1,4 +1,4 @@
-<?php if( $order->hasPayment == 0 && $order->isPaid == 0 ) : ?>
+<?php if( $order->hasPayment == 0 && $order->isPaid == 0 && $order->isExpire == 0 ) : ?>
 <div class="row">
 	<div class="col-sm-12 margin-top-5 margin-bottom-5">
 		<?php if( isset($allowEditDisc) && $allowEditDisc && ($order->role == 1 OR $order->role == 2)) : ?>

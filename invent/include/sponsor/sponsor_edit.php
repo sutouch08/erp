@@ -7,7 +7,7 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
     <div class="col-sm-8">
     	<p class="pull-right top-p">
         <button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i>  กลับ</button>
-        <button type="button" class="btn btn-sm btn-default" onClick="printOrder()"><i class="fa fa-print"></i> พิมพ์</button>
+        <button type="button" class="btn btn-sm btn-default" onClick="printOrderSheet()"><i class="fa fa-print"></i> พิมพ์</button>
 				<?php if( ($add && $order->status == 0 ) OR ($edit && $order->status == 1 && $order->state < 4 ) ) : ?>
         <button type="button" class="btn btn-sm btn-warning" onclick="goAddDetail(<?php echo $order->id; ?>)"><i class="fa fa-pencil"></i> แก้ไขรายการ</button>
         <?php endif; ?>

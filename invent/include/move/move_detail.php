@@ -21,6 +21,9 @@ $disabled = $id === FALSE ? '' : 'disabled';
   <div class="col-sm-6">
     <p class="pull-right top-p">
     <?php echo goBackButton(); ?>
+    <?php if( $delete && $cs->isSaved == 1) : ?>
+      <button type="button" class="btn btn-sm btn-danger" onclick="unSave()"><i class="fa fa-bolt"></i> ยกเลิกการบันทึก</button>
+    <?php endif;?>
     <?php if( $id !== FALSE ) : ?>
       <button type="button" class="btn btn-sm btn-default" onclick="printMove(<?php echo $id; ?>)"><i class="fa fa-print"></i> พิมพ์</button>
     <?php endif; ?>

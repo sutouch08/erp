@@ -1,6 +1,6 @@
 <?php
 $order = isset( $_GET['id_order'] ) ? new order( $_GET['id_order'] ) : new order();
-$hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hide';
+$hide = $order->isExpire == 0 && ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hide';
 ?>
 <div class="row top-row">
 	<div class="col-sm-4 top-col"><h4 class="title"><i class="fa fa-shopping-bag"></i> <?php echo $pageTitle; ?></h4></div>
@@ -10,7 +10,7 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
 
         	<button type="button" class="btn btn-sm btn-default" onClick="printOrder()"><i class="fa fa-print"></i> พิมพ์</button>
 
-			<?php if( ($add && $order->status == 0 ) OR ($edit && $order->status == 1 && $order->state < 4 ) ) : ?>
+			<?php if( ($order->isExpire == 0 && $add && $order->status == 0 ) OR ($order->isExpire == 0 && $edit && $order->status == 1 && $order->state < 4 ) ) : ?>
 
 				<button type="button" class="btn btn-sm btn-warning" onclick="goAddDetail(<?php echo $order->id; ?>)"><i class="fa fa-pencil"></i> แก้ไขรายการ</button>
 

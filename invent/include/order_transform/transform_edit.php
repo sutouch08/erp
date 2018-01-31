@@ -1,6 +1,6 @@
 <?php
 $order = isset( $_GET['id_order'] ) ? new order( $_GET['id_order'] ) : new order();
-$hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hide';
+$hide = ( $order->isExpire == 0 && ($order->status == 0 OR $order->hasNotSaveDetail === TRUE )) ? '' : 'hide';
 ?>
 <div class="row top-row">
 	<div class="col-sm-4 top-col"><h4 class="title"><i class="fa fa-shopping-bag"></i> <?php echo $pageTitle; ?></h4></div>
@@ -12,7 +12,7 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
 
 
 			<?php if( ($add && $order->status == 0 && $order->id_employee == getCookie('user_id') ) OR ($edit && $order->status == 1 && $order->state < 4 ) ) : ?>
-				<?php if( $order->isOnline == 0 OR $order->hasPayment == FALSE ) : ?>
+				<?php if( $order->isExpire == 0 && ($order->isOnline == 0 OR $order->hasPayment == FALSE )) : ?>
 
             		<button type="button" class="btn btn-sm btn-warning" onclick="goAddDetail(<?php echo $order->id; ?>)"><i class="fa fa-pencil"></i> แก้ไขรายการ</button>
 
