@@ -59,6 +59,8 @@
       {
         while( $rm = dbFetchObject($qa) )
         {
+          if($sell_qty > 0)
+          {
 
           //--- ถ้ายอดใน buffer น้อยกว่าหรือเท่ากับยอดสั่งซื้อ (แยกแต่ละโซน น้อยกว่าหรือเท่ากับยอดสั่ง (ซึ่งควรเป็นแบบนี้))
             $buffer_qty = $rm->qty <= $sell_qty ? $rm->qty : $sell_qty;
@@ -88,7 +90,7 @@
             if($stock->updateStockZone($zone->id, $rm->id_product, $buffer_qty) !== TRUE)
             {
               $sc = FALSE;
-              $message = 'เพิ่มยอดโซนปลายทางไม่สำเร็จ';
+              $message = 'เพิ่มยอด '.$rm->id_product.' จำนวน '.$buffer_qty.' เข้าโซนปลายทางไม่สำเร็จ';
             }
 
             //--- 4. update movement in
@@ -173,7 +175,7 @@
               $sc = FALSE;
               $message = 'บันทึกขายไม่สำเร็จ';
             }
-
+          }//--- end if sell_qty > 0
         } //--  end while
       } //--- end if
     } //--- End while

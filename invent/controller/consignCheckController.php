@@ -179,6 +179,52 @@ if(isset($_GET['cancleConsignCheck']))
 
 
 
+if(isset($_GET['getConsignCheckReference']))
+{
+  $id_customer = $_GET['id_customer'];
+  $id_zone  = $_GET['id_zone'];
+  $txt = $_REQUEST['term'];
+
+  $sc  = array();
+
+  $qr  = "SELECT reference, id FROM tbl_consign_check ";
+  $qr .= "WHERE id_customer = '".$id_customer."' ";
+  $qr .= "AND id_zone = '".$id_zone."' ";
+  $qr .= "AND status = 1 AND valid = 0 ";
+  if($txt != '*')
+  {
+    $qr .= "AND reference LIKE '%".$txt."%' ";
+  }
+  $qr .= "ORDER BY reference ASC";
+
+  $qs = dbQuery($qr);
+  if(dbNumRows($qs) > 0)
+  {
+    while($rs = dbFetchObject($qs))
+    {
+      $sc[] = $rs->reference;
+    }
+  }
+  else
+  {
+    $sc[] = 'ไม่พบข้อมูล';
+  }
+
+  echo json_encode($sc);
+}
+
+
+
+//----- ส่งรายการเอกสารสำหรับนำเข้าตัดยอด
+if(isset($_GET['getActiveCheckList']))
+{
+  include 'consign_check/consign_check_list.php';
+}
+
+
+
+
+
 if(isset($_GET['clearFilter']))
 {
   deleteCookie('sCheckCode');

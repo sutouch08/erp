@@ -115,6 +115,7 @@
           </td>
 
         </tr>
+<?php  $no++; ?>        
 <?php endwhile; ?>
 <?php else : ?>
       <tr>

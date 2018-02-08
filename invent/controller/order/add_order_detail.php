@@ -7,9 +7,11 @@ foreach( $ds as $items )
     {
       $pd = new product($id);
       $bf = new buffer();
+      $cn = new cancle_zone();
 
       //--- ยอดรวมสินค้าในโซน + สินค้าที่อยู่ใน buffer ที่ถูกจัดออกไปด้วยออเดอร์นี้
       $sumStock = $stock->getSellStock($id);// + $bf->getSumQty($order->id, $id);
+      //$cancleQty = $cn->getCancleQty($id);
 
       //--- ถ้ามีสต็อกมากว่าที่สั่ง หรือ เป็นสินค้าไม่นับสต็อก
       if( $sumStock >= $qty OR $pd->count_stock == 0 )

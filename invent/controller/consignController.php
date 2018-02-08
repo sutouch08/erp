@@ -4,7 +4,21 @@ require '../../library/functions.php';
 require '../function/tools.php';
 require '../function/zone_helper.php';
 
+if(isset($_GET['addToDetail']))
+{
+  include 'consign/consign_add_detail.php';
+}
 
+
+
+//--- โหลดรารการยอดต่างจากการระทบยอดเข้าเอกสาร
+if(isset($_GET['loadCheckDiff']))
+{
+  include 'consign/consign_load_check_diff.php';
+}
+
+
+//---- เรียกข้อมูลสินค้าในโซน
 if( isset($_GET['getItemByBarcode']))
 {
   include 'consign/consign_get_product_by_barcode.php';
@@ -18,11 +32,14 @@ if( isset($_GET['getProductData']))
 }
 
 
-
-if( isset( $_GET['getProductByCode']))
+//---- เรียกข้อมูลสินค้าในโซน
+if( isset( $_GET['getItemByCode']))
 {
   include 'consign/consign_get_product_by_code.php';
 }
+
+
+
 
 
 
@@ -57,6 +74,50 @@ if(isset($_GET['saveConsign']))
 if(isset($_GET['deleteConsign']))
 {
   include 'consign/consign_delete.php';
+}
+
+
+if(isset($_GET['deleteDetail']))
+{
+  $id = $_POST['id_consign_detail'];
+  $cs = new consign();
+  $sc = TRUE;
+
+  $qs = $cs->getDetail($id);
+
+  if(dbNumRows($qs) == 1)
+  {
+    $rs = dbFetchObject($qs);
+    //---ถ้าบันทึกไปแล้วไม่อนุญาติให้ลบ
+    if($rs->status == 1)
+    {
+      $sc = FALSE;
+      $message = 'รายการถูกบันทึกแล้วไม่สามารถลบได้';
+    }
+    else
+    {
+      if($cs->deleteDetail($id) !== TRUE)
+      {
+        $sc = FALSE;
+        $message = 'ลบรายการไม่สำเร็จ';
+      }
+    }
+  }
+
+  echo $sc === TRUE ? 'success' : $message;
+}
+
+
+
+if(isset($_GET['updatePrice']))
+{
+  include 'consign/consign_update_price.php';
+}
+
+
+if(isset($_GET['updateDiscount']))
+{
+  include 'consign/consign_update_discount.php';
 }
 
 
@@ -205,6 +266,77 @@ if(isset( $_GET['getConsignZone']))
   echo json_encode($sc);
 }
 
+
+
+if(isset($_GET['getCheckDiffData']))
+{
+  $sc = TRUE;
+  $ds = array();
+  $reference = $_GET['reference'];
+  $id_customer = $_GET['id_customer'];
+  $id_zone = $_GET['id_zone'];
+  $id_consign = $_GET['id_consign'];
+
+  $qr  = "SELECT id FROM tbl_consign_check ";
+  $qr .= "WHERE reference = '".$reference."' ";
+  $qr .= "AND id_customer = '".$id_customer."' ";
+  $qr .= "AND id_zone = ".$id_zone." ";
+  $qr .= "AND valid = 0 AND status = 1";
+  $qs = dbQuery($qr);
+  if(dbNumRows($qs) == 1 )
+  {
+    list($id) = dbFetchArray($qs);
+
+    $qa = dbQuery("SELECT * FROM tbl_consign_check_detail WHERE id_consign_check = ".$id);
+
+    if(dbNumRows($qa) > 0)
+    {
+      $cs = new consign();
+      while($rs = dbFetchObject($qa))
+      {
+        $diff = $rs->stock_qty - $rs->qty;
+        if( $diff > 0)
+        {
+          $pd = new product($rs->id_product);
+          $st = new stock();
+          $bc = new barcode();
+
+          $barcode = $bc->getBarcode($rs->id_product);
+          $gp = $cs->getProductGP($rs->id_product, $id_zone);
+          $stock = $st->getStockZone($id_zone, $rs->id_product);
+          $discAmount = ($pd->price * ($gp * 0.01)) * $diff;
+          $amount  = ($diff * $pd->price) - $discAmount;
+
+          $arr = array(
+            'id_product' => $rs->id_product,
+            'barcode'    => $barcode,
+            'product'    => $pd->code,
+            'price'      => $pd->price,
+            'p_disc'     => $gp,
+            'a_disc'     => 0,
+            'qty'        => $diff,
+            'amount'     => $amount,
+            'stock'      => $stock
+          );
+
+          array_push($ds, $arr);
+        }
+      }
+    }
+    else
+    {
+      $sc = FALSE;
+      $message = 'ไม่พบรายการที่จะตัดยอด';
+    }
+  }
+  else
+  {
+    $sc = FALSE;
+    $message = 'ไม่พบเอกสาร เอกสารอาจถูกยกเลิก, ยังไม่บันทึก, หรือถูกดึงตัดยอดแล้ว';
+  }
+
+  echo $sc === TRUE ? json_encode($ds) : $message;
+}
 
 
 if(isset( $_GET['clearFilter']))

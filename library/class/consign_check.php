@@ -139,8 +139,7 @@ class consign_check
   {
     return dbQuery("SELECT * FROM tbl_consign_check_detail WHERE id_consign_check = '".$id."'");
   }
-
-
+  
 
 
   //----- เพิ่มรายการกระทบยอด
@@ -172,8 +171,9 @@ class consign_check
 
   public function updateCheckedQty($id_consign_check, $id_pd, $qty)
   {
+    $id_emp = getCookie('user_id');
     $qr  = "UPDATE tbl_consign_check_detail ";
-    $qr .= "SET qty = qty + ".$qty." ";
+    $qr .= "SET qty = qty + ".$qty.", id_employee = '".$id_emp."' ";
     $qr .= "WHERE id_consign_check = '".$id_consign_check."' ";
     $qr .= "AND id_product = '".$id_pd."' ";
 
@@ -240,7 +240,18 @@ class consign_check
   }
 
 
+  //---- เรียกรายการเอกสารที่บันทึกแล้วเพื่อจะนำไปตัดยอด
+  public function getActiveCheckList($id_zone, $id_customer)
+  {
+    $qr  = "SELECT * FROM tbl_consign_check ";
+    $qr .= "WHERE id_zone = '".$id_zone."' ";
+    $qr .= "AND id_customer = '".$id_customer."' ";
+    $qr .= "AND status = 1 AND valid = 0 ";
+    $qr .= "AND id_consign = 0 ";
+    $qr .= "ORDER BY reference ASC";
 
+    return dbQuery($qr);
+  }
 
 
   //---- แสดงรายการตรวจเช็คสินค้าลงกล่อง ตามสินค้าที่เลือกมา

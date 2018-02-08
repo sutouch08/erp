@@ -704,6 +704,27 @@ if(isset($_GET['setExpired']))
 }
 
 
+if(isset($_GET['setNotExpire']))
+{
+	$id = $_POST['id_order'];
+	$option = $_POST['option'];
+	$sc = TRUE;
+
+	$order = new order();
+	$arr = array(
+		'never_expire' => $option
+	);
+
+	if($order->update($id, $arr) !== TRUE)
+	{
+		$sc = FALSE;
+		$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
+	}
+
+	echo $sc === TRUE ? 'success' : $message;
+}
+
+
 
 
 if( isset( $_GET['clearFilter'] ) )

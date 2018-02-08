@@ -41,7 +41,7 @@ class consign
   public $isSaved = 0;
 
   //--- ไอดีเอกสารกระทบยอด (กรณีนำเข้ายอดจากการกระทบยอด)
-  public $id_consign_check;
+  public $id_consign_check = 0;
 
   //--- พนักงานที่แก้ไขเอกสาร
   public $emp_upd;
@@ -132,6 +132,25 @@ class consign
       $sc = dbQuery("INSERT INTO tbl_consign_detail (".$fields.") VALUES (".$values.")");
     }
 
+    return $sc === TRUE ? dbInsertId() : FALSE;
+  }
+
+
+  public function updateDetail($id, array $ds = array())
+  {
+    $sc = FALSE;
+    if(!empty($ds))
+    {
+      $set = "";
+      $i = 1;
+      foreach($ds as $field => $value)
+      {
+        $set .= $i == 1 ? $field." = '".$value."'" : ", ".$field." = '".$value."'";
+        $i++;
+      }
+      $sc = dbQuery("UPDATE tbl_consign_detail SET ".$set." WHERE id = ".$id);
+    }
+
     return $sc;
   }
 
@@ -144,9 +163,22 @@ class consign
   }
 
 
+  public function getUnsaveDetails($id_consign)
+  {
+    return dbQuery("SELECT * FROM tbl_consign_detail WHERE id_consign = ".$id_consign." AND status = 0");
+  }
+
+
+
+  public function getDetail($id)
+  {
+    return dbQuery("SELECT * FROM tbl_consign_detail WHERE id = ".$id);
+  }
+
+
   public function deleteDetail($id)
   {
-    return dbQuery("DELETE FROM tbl_consign_detail WHERE id = '".$id."'");
+    return dbQuery("DELETE FROM tbl_consign_detail WHERE id = ".$id);
   }
 
 
@@ -164,11 +196,13 @@ class consign
         $i++;
       }
 
-      $sc = dbQuery("UPDATE tbl_consign SET ".$set." WHERE id = '".$id."'");
+      $sc = dbQuery("UPDATE tbl_consign SET ".$set." WHERE id = ".$id);
     }
 
     return $sc;
   }
+
+
 
 
 
@@ -204,14 +238,23 @@ class consign
 
   public function getProductGP($id_pd, $id_zone)
   {
-    $qr  = "SELECT MAX(gp) FROM tbl_order_consign AS c JOIN tbl_order_detail AS d ON c.id_order = d.id_order ";
-    $qr .= "WHERE id_product = '".$id_pd."' AND id_zone = '".$id_zone."' ";
-    $qr .= "AND valid = 1 AND isSaved = 1 AND is_expired = 0";
+    $sc  = 0;
+
+    $qr  = "SELECT gp FROM tbl_order_detail AS od ";
+    $qr .= "LEFT JOIN tbl_order_consign AS oc ON od.id_order = oc.id_order ";
+    $qr .= "WHERE od.id_product = '".$id_pd."' ";
+    $qr .= "AND oc.id_zone = '".$id_zone."' ";
+    $qr .= "AND od.valid = 1 AND od.isSaved = 1 AND od.is_expired = 0 ";
+    $qr .= "ORDER BY oc.id_order DESC LIMIT 1";
 
     $qs = dbQuery($qr);
-    list( $rs ) = dbFetchArray($qs);
 
-    return is_null($rs) ? 0 : $rs;
+    if(dbNumRows($qs) == 1)
+    {
+      list( $sc ) = dbFetchArray($qs);
+    }
+
+    return $sc;
 
   }
 

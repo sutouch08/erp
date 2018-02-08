@@ -19,8 +19,6 @@ if( $id_pd !== FALSE )
     'price'      => $pd->price,
     'p_disc'     => $gp,
     'a_disc'     => 0,
-    'qty'        => 1,
-    'amount'     => $pd->price,
     'stock'      => $stock
   );
 

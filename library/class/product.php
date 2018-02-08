@@ -558,7 +558,7 @@ class product
 		$buffer = new buffer();
 		$sellStock = $stock->getSellStock($id);
 		$reservStock = $order->getReservQty($id);
-		$cancleQty = $cancle->getCancleQty($id);
+		$cancleQty = 0; //$cancle->getCancleQty($id);
 		$bufferStock = $id_order == '' ? 0 : $buffer->getSumQty($id_order, $id);
 		$availableStock = ($sellStock + $bufferStock) - $reservStock + $cancleQty;
 		return $availableStock < 0 ? 0 : $availableStock;
@@ -576,7 +576,7 @@ class product
 		$cancle = new cancle_zone();
 		$sellStock = $stock->getStyleSellStock($id_style);
 		$reservStock = $order->getStyleReservQty($id_style);
-		$cancleQty = $cancle->getStyleCancleQty($id_style);
+		$cancleQty = 0; //$cancle->getStyleCancleQty($id_style);
 
 		$availableStock = $sellStock - $reservStock + $cancleQty;
 

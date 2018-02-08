@@ -12,6 +12,7 @@
 
 
 <?php
+	$emp = new employee();
 	$whCode		= isset( $_POST['whCode'] ) ? $_POST['whCode'] : (getCookie('whCode') ? getCookie('whCode') : '');
 	$whName		= isset( $_POST['whName'] ) ? $_POST['whName'] : (getCookie('whName') ? getCookie('whName') : '');
 	$whRole		= isset( $_POST['whRole'] ) ? $_POST['whRole'] : (getCookie('whRole') ? getCookie('whRole') : 0);
@@ -95,16 +96,17 @@
     	<table class="table table-striped">
         	<thead>
             	<tr class="font-size-12">
-                	<th style="width:5%; text-align:center;">ลำดับ</th>
-                    <th style="width:10%; text-align:center;">รหัสคลัง</th>
-                    <th style="width:25%;">ชื่อคลัง</th>
-                    <th style="width:10%; text-align:center;">ประเภทคลัง</th>
-										<th style="width:8%; text-align:center;">โซน</th>
-                    <th style="width:8%; text-align:center;">ขายสินค้า</th>
-                    <th style="width:8%; text-align:center;">จัดสินค้า</th>
-                    <th style="width:8%; text-align:center;">ติดลบได้</th>
-                    <th style="width:8%; text-align:center;">เปิดใช้งาน</th>
-                    <th style="width:10%; text-align:center;">การกระทำ</th>
+                	<th class="width-5 text-center">ลำดับ</th>
+                  <th class="width-10 text-center">รหัสคลัง</th>
+                  <th class="width-25 text-center">ชื่อคลัง</th>
+                  <th class="width-10 text-center">ประเภทคลัง</th>
+									<th class="width-5 text-center">โซน</th>
+                  <th class="width-5 text-center">ขาย</th>
+                  <th class="width-5 text-center">จัด</th>
+                  <th class="width-5 text-center">ติดลบ</th>
+                  <th class="width-5 text-center">ใช้งาน</th>
+									<th class="text-center">แก้ไข</th>
+                  <th class="width-8 text-center"></th>
                 </tr>
             </thead>
             <tbody>
@@ -178,6 +180,12 @@
               <?php endif; ?>
 
             </td>
+
+						<td class="middle text-center">
+							<?php if($rs->emp_upd != '') : ?>
+								<?php echo $emp->getName($rs->emp_upd); ?>
+							<?php endif; ?>
+						</td>
 
             <td align="right" class="middle">
             <?php if( $edit ) : ?>

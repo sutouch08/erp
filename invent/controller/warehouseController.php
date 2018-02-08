@@ -49,7 +49,9 @@ if( isset( $_POST['editWarehouse'] ) && isset( $_POST['id_warehouse'] ) )
 						'sell'		=> $_POST['sell'],
 						'prepare'	=> $_POST['prepare'],
 						'allow_under_zero'		=> $_POST['underZero'],
-						'active'	=> $_POST['active']
+						'active'	=> $_POST['active'],
+						'last_upd' => date('Y-m-d H:i:s'),
+						'emp_upd' => getCookie('user_id')
 						);
 	$warehouse		= new warehouse();
 	$rs 	= $warehouse->update($id_warehouse, $ds);
@@ -94,7 +96,13 @@ if(isset($_GET['setSell']))
 	$id = $_GET['id'];
 	$value = $_GET['value'] == 0 ? 1 : 0;
 	$cs = new warehouse();
-	if( $cs->update($id, array('sell' => $value)) === FALSE)
+	$arr = array(
+		'sell' => $value,
+		'last_upd' => date('Y-m-d H:i:s'),
+		'emp_upd' => getCookie('user_id')
+	);
+
+	if( $cs->update($id, $arr) === FALSE)
 	{
 		$sc = FALSE;
 		$message = $cs->error;
@@ -110,7 +118,12 @@ if(isset($_GET['setPrepare']))
 	$id = $_GET['id'];
 	$value = $_GET['value'] == 0 ? 1 : 0;
 	$cs = new warehouse();
-	if( $cs->update($id, array('prepare' => $value)) === FALSE)
+	$arr = array(
+		'prepare' => $value,
+		'last_upd' => date('Y-m-d H:i:s'),
+		'emp_upd' => getCookie('user_id')
+	);
+	if( $cs->update($id, $arr) === FALSE)
 	{
 		$sc = FALSE;
 		$message = $cs->error;
@@ -126,7 +139,13 @@ if(isset($_GET['setAuz']))
 	$id = $_GET['id'];
 	$value = $_GET['value'] == 0 ? 1 : 0;
 	$cs = new warehouse();
-	if( $cs->update($id, array('allow_under_zero' => $value)) === FALSE)
+	$arr = array(
+		'allow_under_zero' => $value,
+		'last_upd' => date('Y-m-d H:i:s'),
+		'emp_upd' => getCookie('user_id')
+	);
+
+	if( $cs->update($id, $arr) === FALSE)
 	{
 		$sc = FALSE;
 		$message = $cs->error;
@@ -142,7 +161,13 @@ if(isset($_GET['setActive']))
 	$id = $_GET['id'];
 	$value = $_GET['value'] == 0 ? 1 : 0;
 	$cs = new warehouse();
-	if( $cs->update($id, array('active' => $value)) === FALSE)
+	$arr = array(
+		'active' => $value,
+		'last_upd' => date('Y-m-d H:i:s'),
+		'emp_upd' => getCookie('user_id')
+	);
+
+	if( $cs->update($id, $arr) === FALSE)
 	{
 		$sc = FALSE;
 		$message = $cs->error;

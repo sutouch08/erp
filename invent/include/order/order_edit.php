@@ -31,7 +31,12 @@ $expired = $order->isExpire == 1 ? 'disabled' : '';
 
 			<?php if( ($add && $order->status == 0 && $order->isExpire == 0) OR ($edit && $order->status == 1 && $order->state < 4 && $order->isExpire == 0) ) : ?>
 				<?php if( ($payment->hasTerm == 0 && $order->hasPayment == FALSE ) OR ($payment->hasTerm == 1)) : ?>
-
+							<?php if($delete && $order->never_expire == 0) : ?>
+								<button type="button" class="btn btn-sm btn-primary" onclick="setNotExpire(1)">ยกเว้นการหมดอายุ</button>
+							<?php endif; ?>
+							<?php if($delete && $order->never_expire == 1) : ?>
+								<button type="button" class="btn btn-sm btn-info" onclick="setNotExpire(0)">ไม่ยกเว้นการหมดอายุ</button>
+							<?php endif; ?>
             		<button type="button" class="btn btn-sm btn-warning" onclick="goAddDetail(<?php echo $order->id; ?>)"><i class="fa fa-pencil"></i> แก้ไขรายการ</button>
 				<?php endif; ?>
       <?php endif; ?>
@@ -78,7 +83,38 @@ if( ( $allowEditDisc == 1 OR $allowEditPrice == 1 ) && $order->state < 4 )
 
 
 <?php include 'include/order/order_online_modal.php'; ?>
+<script>
+	function setNotExpire(option){
+		var id_order = $('#id_order').val();
+		load_in();
+		$.ajax({
+			url:'controller/orderController.php?setNotExpire',
+			type:'POST',
+			cache:'false',
+			data:{
+				'id_order' : id_order,
+				'option' : option
+			},
+			success:function(rs){
+				load_out();
+				var rs = $.trim(rs);
+				if(rs == 'success'){
+					swal({
+						title:'Success',
+						type:'success',
+						timer: 1000
+					});
 
+					setTimeout(function(){
+						window.location.reload();
+					},1500);
+				}else{
+					swal('Error', rs, 'error');
+				}
+			}
+		});
+	}
+</script>
 <script src="script/order/order_edit.js"></script>
 <script src="script/order/order_add.js"></script>
 <?php endif; //--- isset $_GET['id_order']  ?>

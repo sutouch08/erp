@@ -25,6 +25,18 @@ $pm = checkAccess($id_profile, $id_tab);
 //--- สามารถยกเลิกการเปิดบิลได้หรือไม่
 $canUnbill = ($pm['add'] + $pm['edit'] + $pm['delete']) > 0 ? TRUE : FALSE;
 
+$id_tab = 35;
+$pm = checkAccess($id_profile, $id_tab);
+//--- สามารถ แก้ไขส่วนลดได้หรือไม่
+$canEditDiscount = ($pm['add'] + $pm['edit'] + $pm['delete']) > 0 ? TRUE : FALSE;
+
+
+$id_tab = 65;
+$pm = checkAccess($id_profile, $id_tab);
+//--- สามารถ แก้ไขราคาได้หรือไม่
+$canEditPrice = ($pm['add'] + $pm['edit'] + $pm['delete']) > 0 ? TRUE : FALSE;
+
+
 include 'function/customer_helper.php';
  ?>
 

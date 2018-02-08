@@ -9,16 +9,36 @@ function deleteRow(id, code){
 		cancelButtonText: 'ยกเลิก',
 		closeOnConfirm: false
 		}, function(){
-      $('#row-'+id).remove();
-      reOrder();
-      updateTotalQty();
-      updateTotalAmount();
-      swal({
-        title:'Deleted',
-        type:'success',
-        timer:1000
-      });
+      deleteDetail(id);
 	});
+}
+
+
+function deleteDetail(id){
+  $.ajax({
+    url:'controller/consignController.php?deleteDetail',
+    type:'POST',
+    cache:'false',
+    data:{
+      'id_consign_detail' : id
+    },
+    success:function(rs){
+      var rs = $.trim(rs);
+      if(rs == 'success'){
+
+        swal({
+          title:'Deleted',
+          type:'success',
+          timer:1000
+        });
+
+        $('#row-'+id).remove();
+        reOrder();
+        updateTotalQty();
+        updateTotalAmount();
+      }
+    }
+  });
 }
 
 

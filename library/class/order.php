@@ -35,6 +35,7 @@ class order
 	public $id_budget = 0; //--- ไอดี ของงบประมาณ (กรณี อภินันท์ หรือ สปอนเซอร์)
 	public $gp = 0.00;
 	public $ref_code;
+	public $never_expire = 0; //--- ถ้าเป็น 1 จะข้ามการตรวจสอบการหมดอายุ
 	public $hasNotSaveDetail = TRUE;
 
 
@@ -1115,7 +1116,7 @@ class order
 
 	public function getOverDateOrder()
 	{
-		$days = getConfig('ORDER_EXPIRATION')+1;
+		$days = getConfig('ORDER_EXPIRATION');
 		$expireDate = date('Y-m-d', strtotime('-'.$days.' day'));
 		$qr  = "SELECT od.id, od.reference, od.date_add, od.id_budget, od.role, cus.name, CONCAT(emp.first_name, emp.last_name) AS empName, st.name AS state ";
 		$qr .= "FROM tbl_order AS od ";
@@ -1127,6 +1128,7 @@ class order
 		$qr .= "AND isExpire = 0 ";
 		$qr .= "AND isPaid = 0 ";
 		$qr .= "AND date_add < '".toDate($expireDate)."' ";
+		$qr .= "AND never_expire = 0 ";
 		$qr .= "ORDER BY reference ASC";
 		//$qr .= " LIMIT 10";
 

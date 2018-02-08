@@ -67,7 +67,8 @@
       {
         while( $rm = dbFetchObject($qa) )
         {
-
+          if($sell_qty > 0)
+          {
           //--- ถ้ายอดใน buffer น้อยกว่าหรือเท่ากับยอดสั่งซื้อ (แยกแต่ละโซน น้อยกว่าหรือเท่ากับยอดสั่ง (ซึ่งควรเป็นแบบนี้))
             $buffer_qty = $rm->qty <= $sell_qty ? $rm->qty : $sell_qty;
 
@@ -182,7 +183,7 @@
             {
               $useCredit -= $arr['total_amount_inc'];
             }
-
+          } //--- end if sell_qty > 0
         } //--  end while
       } //--- end if
     } //--- End while

@@ -148,11 +148,11 @@ $qs = dbQuery("SELECT * FROM tbl_consign ".$where." LIMIT ".$paginator->Page_Sta
      <table class="table table-striped table-bordered">
        <thead>
          <tr class="font-size-12">
+           <th class="width-5 text-center">ลำดับ</th>
            <th class="width-10 text-center">วันที่</th>
            <th class="width-10 text-center">เลขที่เอกสาร</th>
-           <th class="width-25">ลูกค้า</th>
-           <th class="width-20">โซน</th>
-           <th class="width-20">จุดขาย/งานขาย</th>
+           <th class="width-30">ลูกค้า</th>
+           <th class="width-30">โซน</th>
            <th class="width-5 text-center">สถานะ</th>
            <th></th>
          </tr>
@@ -160,9 +160,13 @@ $qs = dbQuery("SELECT * FROM tbl_consign ".$where." LIMIT ".$paginator->Page_Sta
        <tbody>
 <?php if( dbNumRows($qs) > 0 ) : ?>
 <?php   $zone = new zone(); ?>
+<?php   $no = row_no(); ?>
 <?php   while($rs = dbFetchObject($qs)) : ?>
 <?php    $pos = $rs->id_shop != 0 ? shopName($rs->id_shop) : ($rs->id_event != 0 ? eventName($rs->id_event) : ''); ?>
         <tr class="font-size-12" id="row-<?php echo $rs->id; ?>">
+          <td class="middle text-center">
+            <?php echo $no; ?>
+          </td>
           <td class="middle text-center">
             <?php echo thaiDate($rs->date_add); ?>
           </td>
@@ -175,26 +179,24 @@ $qs = dbQuery("SELECT * FROM tbl_consign ".$where." LIMIT ".$paginator->Page_Sta
           <td class="middle">
             <?php echo $zone->getName($rs->id_zone); ?>
           </td>
-          <td class="middle">
-            <?php echo $pos; ?>
-          </td>
           <td class="middle text-center" id="xLabel-<?php echo $rs->id; ?>">
             <?php echo consignStatusLabel($rs->is_so, $rs->isExport, $rs->isSaved, $rs->isCancle); ?>
           </td>
           <td class="middle text-right">
             <button type="button" class="btn btn-xs btn-info" onclick="goDetail(<?php echo $rs->id;?>)"><i class="fa fa-eye"></i></button>
 
-          <?php if( $edit && $rs->isSaved == 0 && $rs->isExport == 0 && $rs->isCancle == 0 ): ?>
+          <?php if($edit && $rs->isSaved == 0 && $rs->isCancle == 0 ): ?>
             <button type="button" class="btn btn-xs btn-warning" id="btn-edit-<?php echo $rs->id; ?>" onclick="goAdd(<?php echo $rs->id;?>)"><i class="fa fa-pencil"></i></button>
           <?php endif; ?>
 
-          <?php if( $delete && $rs->isCancle == 0 ): ?>
+          <?php if( $delete && $rs->isSaved == 0 && $rs->isCancle == 0 ): ?>
             <button type="button" class="btn btn-xs btn-danger" id="btn-delete-<?php echo $rs->id; ?>" onclick="goDelete(<?php echo $rs->id;?>, '<?php echo $rs->reference; ?>')">
               <i class="fa fa-trash"></i>
             </button>
           <?php endif; ?>
           </td>
         </tr>
+<?php    $no++; ?>        
 <?php   endwhile; ?>
 
 <?php else : ?>

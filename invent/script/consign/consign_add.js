@@ -1,86 +1,26 @@
 function saveConsign(){
-  var err = 0;
-  var valid = 0;
   var id_consign = $('#id_consign').val();
-  var id_zone = $('#id_zone').val();
-  var id_customer = $('#id_customer').val();
-  var id_shop = $('#id_shop').val();
-  var id_event = $('#id_event').val();
-  var is_so = $('#isSo').val();
-
-  //--- โซนติดลบได้หรือไม่
-  var allowUnderZero = $('#allowUnderZero').val();
-
-  var ds = [
-    {'name' : 'id_consign', 'value' : id_consign},
-    {'name' : 'id_zone', 'value' : id_zone},
-    {'name' : 'id_customer', 'value' : id_customer},
-    {'name' : 'id_shop', 'value' : id_shop},
-    {'name' : 'id_event', 'value' : id_event},
-    {'name' : 'allowUnderZero', 'value' : allowUnderZero},
-    {'name' : 'is_so', 'value' : is_so}
-  ];
-
-  $('.product').each(function(index, el) {
-    var id     = $(this).val();
-
-    //--- จำนวนที่จะตัดยอด
-    var qty    = isNaN(parseInt($('#qty-'+id).val())) ? 0 : parseInt($('#qty-'+id).val());
-
-    //--- ราคาสินค้า
-    var price  = isNaN(parseFloat($('#price-'+id).val())) ? 0 : parseFloat($('#price-'+id).val());
-
-    //--- ส่วนลดเป็น %
-    var p_disc = isNaN(parseFloat($('#p_disc-'+id).val())) ? 0 : parseFloat($('#p_disc-'+id).val());
-
-    //--- ส่วนลดเป็นจำนวนเงิน
-    var a_disc = isNaN(parseFloat($('#a_disc-'+id).val())) ? 0 : parseFloat($('#a_disc-'+id).val());
-
-    //--- สต็อกคงเหลือในโซนที่จะตัด
-    var stock  = isNaN(parseInt($('#stock-'+id).val())) ? 0 : parseInt($('#stock-'+id).val());
-
-    //console.log('qty-'+id+' = '+qty);
-
-    //--- จำนวนต้องมากกว่า 0
-    //--- และ จำนวนต้องน้อยกว่าหรือเท่ากับในโซนที่จะตัด
-    //--- หรือ ถ้ามากกว่าโซนที่จะตัดต้องสามารถติดลบได้
-    if( qty > 0 && (qty <= stock || allowUnderZero == 1) ){
-      ds.push({'name' : 'product['+id+']', 'value' : $(this).val()});
-      ds.push({'name' : 'qty['+id+']', 'value' : qty});
-      ds.push({'name' : 'price['+id+']', 'value' : price});
-      ds.push({'name' : 'p_disc['+id+']', 'value' : p_disc});
-      ds.push({'name' : 'a_disc['+id+']', 'value' : a_disc});
-      $('#qty-'+id).removeClass('has-error');
-      valid++;
-    }else{
-      $('#qty-'+id).addClass('has-error');
-      err++;
-    }
-  });
-
-  if( err > 0){
-    swal('Error!', 'จำนวนไม่ถูกต้อง กรุณาตรวจสอบ', 'error');
-    return false;
-  }
-
-  if(valid == 0){
-    swal('Error!', 'ไม่พบรายการที่จะตัดยอด กรุณาตรวจสอบ', 'error');
-    return false;
-  }
-
-  if(valid > 0){
-    $.ajax({
-      url:'controller/consignController.php?saveConsign',
-      type:'POST',
-      cache:'false',
-      data: ds,
-      success:function(rs){
-        var rs = $.trim(rs);
-        if(rs == 'success'){
-          if( is_so == 1){
-            exportConsignSold(id_consign);
-          }else{
-
+  swal({
+		title: "บันทึกขายและตัดสต็อก",
+		text: "เมื่อบันทึกแล้วจะไม่สามารถแก้ไขได้ ต้องการบันทึกหรือไม่ ?",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#8CC152",
+		confirmButtonText: 'บันทึก',
+		cancelButtonText: 'ยกเลิก',
+		closeOnConfirm: false,
+    showLoaderOnConfirm:true
+		}, function(){
+      $.ajax({
+        url:'controller/consignController.php?saveConsign',
+        type:'POST',
+        cache:'false',
+        data:{
+          'id_consign' : id_consign
+        },
+        success:function(rs){
+          var rs = $.trim(rs);
+          if(rs == 'success'){
             swal({
               title:'Saved',
               type:'success',
@@ -89,15 +29,13 @@ function saveConsign(){
 
             setTimeout(function(){
               goDetail(id_consign);
-            }, 1200);
+            }, 1500);
+          }else{
+            swal('Error!', rs, 'error');
           }
-
-        }else{
-          swal('Error!', rs, 'error');
         }
-      }
-    });
-  }
+      });
+	});
 }
 
 
@@ -312,9 +250,104 @@ function zoneInit(){
         $(this).val('');
         $('#allowUnderZero').val(0);
       }
+      consignCheckInit();
     }
   });
 }
+
+
+function consignCheckInit(){
+  var id_customer = $('#id_customer').val();
+  var id_zone = $('#id_zone').val();
+  $('#txt-consign').autocomplete({
+    source:'controller/consignCheckController.php?getConsignCheckReference&id_customer='+id_customer+'&id_zone='+id_zone,
+    autoFocus:true,
+    close:function(){
+      var rs = $(this).val();
+      if(rs == 'ไม่พบข้อมูล'){
+        $(this).val('');
+      }
+    }
+  });
+}
+
+
+
+function getActiveCheckList(){
+  var id_customer = $('#id_customer').val();
+  var id_zone = $('#id_zone').val();
+  load_in();
+  $.ajax({
+    url:'controller/consignCheckController.php?getActiveCheckList',
+    type:'GET',
+    cache:'false',
+    data:{
+      'id_customer' : id_customer,
+      'id_zone' : id_zone
+    },
+    success:function(rs){
+      load_out();
+      if(isJson(rs)){
+        var source = $('#check-list-template').html();
+        var data = $.parseJSON(rs);
+        var output = $('#check-list-body');
+        render(source, data, output);
+        $('#check-list-modal').modal('show');
+      }else{
+        swal('Error', rs, 'error');
+      }
+    }
+  });
+}
+
+
+
+function loadCheckDiff(id_consign_check, reference){
+  swal({
+    title: "นำเข้ายอดต่าง",
+		text: "ต้องการนำเข้ายอดต่างจากเอกสารกระทบยอด "+reference+" หรือไม่ ?",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonText: 'ใช่, ฉันต้องการ',
+		cancelButtonText: 'ยกเลิก',
+		closeOnConfirm: true
+  },function(){
+    var id_consign = $('#id_consign').val();
+    var id_customer = $('#id_customer').val();
+    var id_zone = $('#id_zone').val();
+    load_in();
+    $.ajax({
+      url:'controller/consignController.php?loadCheckDiff',
+      type:'GET',
+      cache:'false',
+      data:{
+        'id_consign' : id_consign,
+        'id_consign_check' : id_consign_check,
+        'id_zone' : id_zone,
+        'id_customer' : id_customer
+      },
+      success:function(rs){
+        load_out();
+        var rs = $.trim(rs);
+        if(rs == 'success'){
+          swal({
+            title: 'Success',
+            type:'success',
+            timer:1000
+          });
+
+          setTimeout(function(){
+            window.location.reload();
+          },1500);
+        }else{
+          swal('Error!', rs, 'error');
+        }
+      }
+    });
+
+  });//--- swal
+}
+
 
 
 function updateAllowUnderZero(id_zone){
@@ -353,4 +386,8 @@ $('#eventName').autocomplete({
       $(this).val('');
     }
   }
+});
+
+$(document).ready(function() {
+  consignCheckInit();
 });

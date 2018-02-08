@@ -16,11 +16,17 @@ $allowUnderZero = $zone->allowUnderZero === TRUE ? 1 : 0;
   <div class="col-sm-6">
     <p class="pull-right top-p">
 <?php echo goBackButton(); ?>
+<?php if($delete && $cs->isCancle == 0) : ?>
+      <button type="button" class="btn btn-sm btn-danger" onclick="unSave(<?php echo $cs->id; ?>)">ยกเลิกการเปิดบิล</button>
+<?php endif; ?>
 <?php if( $cs->is_so == 1 && $cs->isCancle == 0) : ?>
       <button type="button" class="btn btn-sm btn-info" onclick="exportConsignSold(<?php echo $cs->id; ?>)">
         <i class="fa fa-send"></i> ส่งข้อมูลไป formula
       </button>
 <?php endif; ?>
+      <button type="button" class="btn btn-sm btn-primary" onclick="printConsign(<?php echo $cs->id; ?>)">
+        <i class="fa fa-print"></i> พิมพ์
+      </button>
     </p>
   </div>
 </div>
