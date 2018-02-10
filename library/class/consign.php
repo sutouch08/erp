@@ -172,7 +172,27 @@ class consign
   }
 
 
+  public function getExistsDetail($id_consign,$id_pd, $price, $discLabel)
+  {
+    $qr = "SELECT * FROM tbl_consign_detail WHERE id_consign = ".$id_consign." ";
+    $qr .= "AND id_product = '".$id_pd."' ";
+    $qr .= "AND price = '".$price."' ";
+    $qr .= "AND discount = '".$discLabel."' ";
+    $qr .= "AND status = 0";
 
+    return dbQuery($qr);
+  }
+
+
+
+  public function getSumProductQty($id_consign, $id_pd)
+  {
+    $qr = "SELECT SUM(qty) AS qty FROM tbl_consign_detail WHERE id_consign = '".$id_consign."' AND id_product = '".$id_pd."'";
+    $qs = dbQuery($qr);
+    list($qty) = dbFetchArray($qs);
+
+    return is_null($qty) ? 0 : $qty;
+  }
 
 
   public function getSavedDetails($id_consign)

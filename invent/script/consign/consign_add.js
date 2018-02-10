@@ -273,6 +273,9 @@ function loadCheckDiff(id_consign_check, reference){
 }
 
 
+function getSample(){
+window.location.href = '../upload/consign/sample.xlsx';
+}
 
 function getUploadFile(){
   $('#upload-modal').modal('show');
@@ -335,9 +338,9 @@ function uploadfile(){
 			var rs = $.trim(rs);
 			if( rs == 'success')
 			{
-				swal({
-          title : 'Imported',
-          type: 'success',
+        swal({
+          title:'Success',
+          type:'success',
           timer: 1000
         });
 
@@ -345,7 +348,7 @@ function uploadfile(){
           window.location.reload();
         }, 1200);
 			}
-			else( rs == 'fail' )
+			else
 			{
 				swal("Error!", rs, "error");
 			}

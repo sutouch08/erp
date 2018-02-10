@@ -51,7 +51,8 @@ if( isset( $_GET['getItemByCode']))
 
 if(isset($_GET['importUploadFile']))
 {
-  include 'consing/consign_import_excel.php';
+  include '../../library/class/PHPExcel.php';
+  include 'consign/consign_import_excel.php';
 }
 
 

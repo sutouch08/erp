@@ -11,12 +11,15 @@ $allowUnderZero = $zone->allowUnderZero === TRUE ? 1 : 0;
  ?>
 
 <div class="row top-row">
-  <div class="col-sm-6 top-col">
+  <div class="col-sm-4 top-col">
     <h4 class="title"><i class="fa fa-check-square-o"></i> <?php echo $pageTitle; ?></h4>
   </div>
-  <div class="col-sm-6">
+  <div class="col-sm-8">
     <p class="pull-right top-p">
 <?php echo goBackButton(); ?>
+      <button type="button" class="btn btn-sm btn-default" onclick="getSample()">
+        <i class="fa fa-download"></i> ไฟล์ตัวอย่าง
+      </button>
 <?php if( ($add OR $edit) && $id !== FALSE && $cs->isSaved == 0 && $cs->isCancle == 0 ) : ?>
   <?php if($cs->id_consign_check == 0) : ?>
       <button type="button" class="btn btn-sm btn-info" onclick="getActiveCheckList()">
@@ -76,16 +79,12 @@ if( $id !== FALSE && $cs->isSaved == 0 && $cs->isCancle == 0)
  			 <div class="modal-body">
          <form id="upload-form" name="upload-form" method="post" enctype="multipart/form-data">
          <div class="row">
-           <div class="col-sm-2 padding-5 first">
-             <button type="button" class="btn btn-sm btn-default" id="btn-get-file" onclick="getFile()">เลือกไฟล์</button>
+           <div class="col-sm-9">
+             <button type="button" class="btn btn-sm btn-primary btn-block" id="show-file-name" onclick="getFile()">กรุณาเลือกไฟล์ Excel</button>
            </div>
-           <div class="col-sm-8 padding-5">
-             <span class="form-control input-sm text-center" id="show-file-name">
-               กรุณาเลือกไฟล์ Excel
-             </span>
-           </div>
-           <div class="col-sm-2 padding-5 last">
-             <button type="button" class="btn btn-sm btn-info" onclick="uploadfile()"><i class="fa fa-cloud-upload"></i> ตกลง</button>
+
+           <div class="col-sm-3">
+             <button type="button" class="btn btn-sm btn-info" onclick="uploadfile()"><i class="fa fa-cloud-upload"></i> นำเข้า</button>
            </div>
          </div>
          <input type="file" class="hide" name="uploadFile" id="uploadFile" accept=".xlsx" />
@@ -93,7 +92,7 @@ if( $id !== FALSE && $cs->isSaved == 0 && $cs->isCancle == 0)
          </form>
         </div>
  			 <div class="modal-footer">
- 				<button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+ 				
  			 </div>
  		</div>
  	</div>

@@ -13,24 +13,24 @@ $cs    = new consign();
 $pd    = new product();
 $bc    = new barcode();
 $st    = new stock();
-$zone  = new zone();
+$zone  = new zone($id_zone);
 
 $discount = $pDisc > 0 ? $pDisc.' %' : $aDisc;
 
-$qr = "SELECT * FROM tbl_consign_detail WHERE id_consign = ".$id." ";
-$qr .= "AND id_product = '".$id_pd."' ";
-$qr .= "AND price = '".$price."' ";
-$qr .= "AND discount = '".$discount."' ";
-$qr .= "AND status = 0";
-
-$qs = dbQuery($qr);
+//---- ดึงรายการที่มีอยู่แล้ว
+$qs = $cs->getExistsDetail($id, $id_pd, $price, $discount);
 
 if(dbNumRows($qs) == 1)
 {
   //--- update exists detail
   $rs = dbFetchObject($qs);
+
+  //---- เอายอดที่คีย์มา รวมกับยอดในเอกสารที่มีอยู่แล้ว
+  $max_qty = $qty + $cs->getSumProductQty($id, $id_pd);
+
   $qty = $rs->qty + $qty;
-  if($st->isEnough($id_zone, $id_pd, $qty) === FALSE)
+
+  if($st->isEnough($id_zone, $id_pd, $max_qty) === FALSE && $zone->allowUnderZero === FALSE)
   {
     $sc = FALSE;
     $message = 'สต็อกในโซนไม่เพียงพอ';
@@ -77,7 +77,7 @@ else
 {
   //----- ถ้ายังไม่มีข้อมูล
   //---- ถ้าสินค้าในโซนไม่พอตัด
-  if($st->isEnough($id_zone, $id_pd, $qty) === FALSE)
+  if($st->isEnough($id_zone, $id_pd, $qty) === FALSE && $zone->allowUnderZero === FALSE)
   {
     $sc = FALSE;
     $message = 'สต็อกในโซนไม่เพียงพอ';
