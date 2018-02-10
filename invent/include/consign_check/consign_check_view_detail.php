@@ -42,9 +42,8 @@ $cs = $id === FALSE ? new consign_check() : new consign_check($id);
 </div>
 
 <?php
-  if($cs->id != '' && $add)
+  if($cs->id != '')
   {
-    include 'include/consign_check/consign_check_control.php';
     include 'include/consign_check/consign_check_add_detail.php';
   }
 

@@ -139,7 +139,7 @@ class consign_check
   {
     return dbQuery("SELECT * FROM tbl_consign_check_detail WHERE id_consign_check = '".$id."'");
   }
-  
+
 
 
   //----- เพิ่มรายการกระทบยอด
@@ -325,10 +325,16 @@ class consign_check
   }
 
 
+
+
+
   public function deleteConsignBox($id_box)
   {
     return dbQuery("DELETE FROM tbl_consign_box WHERE id = ".$id_box);
   }
+
+
+
 
 
 
@@ -339,10 +345,14 @@ class consign_check
 
 
 
+
+
   public function getAllConsignBox($id_consign_check)
   {
     return dbQuery("SELECT * FROM tbl_consign_box WHERE id_consign_check = ".$id_consign_check);
   }
+
+
 
 
 
@@ -376,6 +386,8 @@ class consign_check
   {
     return dbQuery("SELECT * FROM tbl_consign_box WHERE id_consign_check = ".$id);
   }
+
+
 
 
 

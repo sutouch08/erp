@@ -163,10 +163,39 @@ class consign
   }
 
 
+
+
+
   public function getUnsaveDetails($id_consign)
   {
-    return dbQuery("SELECT * FROM tbl_consign_detail WHERE id_consign = ".$id_consign." AND status = 0");
+    return dbQuery("SELECT * FROM tbl_consign_detail WHERE id_consign = '".$id_consign."' AND status = 0");
   }
+
+
+
+
+
+  public function getSavedDetails($id_consign)
+  {
+    return dbQuery("SELECT * FROM tbl_consign_detail WHERE id_consign = '".$id_consign."' AND status = 1");
+  }
+
+
+
+
+  public function deleteImportDetails($id_consign)
+  {
+    $qr  = "DELETE FROM tbl_consign_detail ";
+    $qr .= "WHERE id_consign = '".$id_consign."' ";
+    $qr .= "AND id_consign_check_detail != 0 ";
+    $qr .= "AND status = 0 ";
+    $qr .= "AND input_type = 1 ";
+
+    return dbQuery($qr);
+  }
+
+
+
 
 
 
@@ -174,6 +203,9 @@ class consign
   {
     return dbQuery("SELECT * FROM tbl_consign_detail WHERE id = ".$id);
   }
+
+
+
 
 
   public function deleteDetail($id)
@@ -262,21 +294,20 @@ class consign
 
   public function setSaved($id, $option)
   {
-    return dbQuery("UPDATE tbl_consign SET isSaved = '".$option."' WHERE id = '".$id."'");
+    return dbQuery("UPDATE tbl_consign SET isSaved = ".$option." WHERE id = ".$id);
   }
 
 
   public function setCancle($id, $option)
   {
-    return dbQuery("UPDATE tbl_consign SET isCancle = '".$option."' WHERE id = '".$id."'");
+    return dbQuery("UPDATE tbl_consign SET isCancle = ".$option." WHERE id = ".$id);
   }
 
 
   public function setExport($id, $option)
   {
-    return dbQuery("UPDATE tbl_consign SET isExport = '".$option."' WHERE id = '".$id."'");
+    return dbQuery("UPDATE tbl_consign SET isExport = ".$option." WHERE id = ".$id);
   }
-
 
 
 }

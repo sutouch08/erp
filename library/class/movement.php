@@ -143,6 +143,42 @@ class movement
 	}
 
 
+	public function updateMoveIn($reference, $id_zone, $id_pd, $qty)
+	{
+		$qr  = "UPDATE tbl_stock_movement SET move_in = move_in + ".$qty." ";
+		$qr .= "WHERE reference = '".$reference."' ";
+		$qr .= "AND id_zone = '".$id_zone."' ";
+		$qr .= "AND id_product = '".$id_pd."' ";
+
+		$sc = dbQuery($qr);
+
+		if($sc !== TRUE)
+		{
+			$this->error = dbError();
+		}
+
+		return $sc;
+	}
+
+
+
+	public function updateMoveOut($reference, $id_zone, $id_pd, $qty)
+	{
+		$qr  = "UPDATE tbl_stock_movement SET move_out = move_out + ".$qty." ";
+		$qr .= "WHERE reference = '".$reference."' ";
+		$qr .= "AND id_zone = '".$id_zone."' ";
+		$qr .= "AND id_product = '".$id_pd."' ";
+
+		$sc = dbQuery($qr);
+
+		if($sc !== TRUE)
+		{
+			$this->error = dbError();
+		}
+
+		return $sc;
+	}
+
 
 }//--- end class
 

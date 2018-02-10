@@ -1,5 +1,6 @@
 function saveConsign(){
   var id_consign = $('#id_consign').val();
+  var is_so = $('#is_so').val();
   swal({
 		title: "บันทึกขายและตัดสต็อก",
 		text: "เมื่อบันทึกแล้วจะไม่สามารถแก้ไขได้ ต้องการบันทึกหรือไม่ ?",
@@ -21,15 +22,19 @@ function saveConsign(){
         success:function(rs){
           var rs = $.trim(rs);
           if(rs == 'success'){
-            swal({
-              title:'Saved',
-              type:'success',
-              timer:1000
-            });
+            if(is_so == 1){
+              exportConsignSold(id_consign);
+            }else{
+              swal({
+                title:'Saved',
+                type:'success',
+                timer:1000
+              });
 
-            setTimeout(function(){
-              goDetail(id_consign);
-            }, 1500);
+              setTimeout(function(){
+                goDetail(id_consign);
+              }, 1500);
+            }
           }else{
             swal('Error!', rs, 'error');
           }
@@ -47,19 +52,8 @@ function addNew(){
   var customerName = $('#customerName').val();
   var id_zone = $('#id_zone').val();
   var zoneName = $('#zoneName').val();
-  var id_shop = $('#id_shop').val();
-  var shopName = $('#shopName').val();
-  var eventName = $('#eventName').val();
-  var id_event = $('#id_event').val();
   var remark = $('#remark').val();
   var is_so = $('#isSo').val();
-
-  //----  ไว้ตรวจสอบ หากเลือก shop ลูกค้า และโซนต้องตรงกับที่กำหนดใน tbl_shop
-  var id_customer_shop = $('#id_customer_shop').val();
-  var id_zone_shop = $('#id_zone_shop').val();
-  if( shopName.length == 0){
-    id_shop = '';
-  }
 
   if( zoneName.length == 0){
     id_zone = '';
@@ -67,10 +61,6 @@ function addNew(){
 
   if( customerName.length == 0){
     id_customer = '';
-  }
-
-  if( eventName.length == 0){
-    id_event = '';
   }
 
   if( !isDate(dateAdd)){
@@ -87,20 +77,6 @@ function addNew(){
     swal('โซนไม่ถูกต้อง');
   }
 
-
-
-  if( id_shop != '' && id_shop != 0 && shopName.length != 0){
-    if( id_customer != id_customer_shop ){
-      swal('ลูกค้าที่เลือกไม่ตรงกับจุดขาย');
-      return false;
-    }
-
-    if( id_zone != id_zone_shop ){
-      swal('โซนที่เลือกไม่ตรงกับจุดขาย');
-      return false;
-    }
-  }
-
   load_in();
   $.ajax({
     url:'controller/consignController.php?addNew',
@@ -110,8 +86,6 @@ function addNew(){
       'date_add' : dateAdd,
       'id_customer' : id_customer,
       'id_zone' : id_zone,
-      'id_shop' : id_shop,
-      'id_event' : id_event,
       'remark'  : remark,
       'is_so' : is_so
     },
@@ -135,57 +109,6 @@ $('#date_add').datepicker({
   dateFormat:'dd-mm-yy'
 });
 
-
-$('#shopName').autocomplete({
-  source:'controller/shopController.php?getShop',
-  autoFocus:true,
-  close:function(){
-    var rs = $(this).val();
-    var rs = rs.split(' | ');
-    if(rs.length == 3){
-      var code = rs[0];
-      var name = rs[1];
-      var id = rs[2];
-      $(this).val(name);
-      $('#id_shop').val(rs[2]);
-      //--- ดึงข้อมูล shop มา update
-      getShopData(id);
-    }else{
-      $('#id_shop').val('');
-      $(this).val('');
-    }
-  }
-});
-
-
-
-
-function getShopData(id){
-  $.ajax({
-    url:'controller/shopController.php?getShopData',
-    type:'GET',
-    cache:'false',
-    data:{
-      'id_shop' : id
-    },
-    success:function(rs){
-      var rs = $.trim(rs);
-      var rs = rs.split(' | ');
-      if( rs.length == 4)
-      //--- ไว้ตรวจสอบ
-      $('#id_customer_shop').val(rs[0]);
-      $('#id_zone_shop').val(rs[2]);
-
-
-      //--- ไว้ใช้งาน
-      $('#id_customer').val(rs[0]);
-      $('#customerName').val(rs[1]);
-      $('#id_zone').val(rs[2]);
-      $('#zoneName').val(rs[3]);
-      updateAllowUnderZero(rs[2]);
-    }
-  });
-}
 
 
 
@@ -303,6 +226,7 @@ function getActiveCheckList(){
 
 
 function loadCheckDiff(id_consign_check, reference){
+  $('#check-list-modal').modal('hide');
   swal({
     title: "นำเข้ายอดต่าง",
 		text: "ต้องการนำเข้ายอดต่างจากเอกสารกระทบยอด "+reference+" หรือไม่ ?",
@@ -310,7 +234,7 @@ function loadCheckDiff(id_consign_check, reference){
 		showCancelButton: true,
 		confirmButtonText: 'ใช่, ฉันต้องการ',
 		cancelButtonText: 'ยกเลิก',
-		closeOnConfirm: true
+		closeOnConfirm: false
   },function(){
     var id_consign = $('#id_consign').val();
     var id_customer = $('#id_customer').val();
@@ -350,6 +274,86 @@ function loadCheckDiff(id_consign_check, reference){
 
 
 
+function getUploadFile(){
+  $('#upload-modal').modal('show');
+}
+
+
+
+function getFile(){
+  $('#uploadFile').click();
+}
+
+
+
+
+
+
+
+
+$("#uploadFile").change(function(){
+	if($(this).val() != '')
+	{
+		var file 		= this.files[0];
+		var name		= file.name;
+		var type 		= file.type;
+		var size		= file.size;
+
+		if( size > 5000000 )
+		{
+			swal("ขนาดไฟล์ใหญ่เกินไป", "ไฟล์แนบต้องมีขนาดไม่เกิน 5 MB", "error");
+			$(this).val('');
+			return false;
+		}
+		//readURL(this);
+    $('#show-file-name').text(name);
+	}
+});
+
+
+
+function uploadfile(){
+  var id_consign = $('#id_consign').val();
+  var excel = $('#uploadFile')[0].files[0];
+
+	$("#upload-modal").modal('hide');
+
+	var fd = new FormData();
+
+	fd.append('excel', $('input[type=file]')[0].files[0]);
+	fd.append('id_consign', id_consign);
+	load_in();
+	$.ajax({
+		url:"controller/consignController.php?importUploadFile",
+		type:"POST",
+    cache: "false",
+    data: fd,
+    processData:false,
+    contentType: false,
+		success: function(rs){
+			load_out();
+			var rs = $.trim(rs);
+			if( rs == 'success')
+			{
+				swal({
+          title : 'Imported',
+          type: 'success',
+          timer: 1000
+        });
+
+				setTimeout(function(){
+          window.location.reload();
+        }, 1200);
+			}
+			else( rs == 'fail' )
+			{
+				swal("Error!", rs, "error");
+			}
+		}
+	});
+}
+
+
 function updateAllowUnderZero(id_zone){
   $.ajax({
     url:'controller/consignController.php?isAllowUnderZeroZone',
@@ -369,24 +373,6 @@ function updateAllowUnderZero(id_zone){
   });
 }
 
-
-$('#eventName').autocomplete({
-  source:'controller/eventController.php?getEvent',
-  autoFocus:true,
-  close:function(){
-    var rs = $(this).val();
-    var rs = rs.split(' | ');
-    if( rs.length == 3){
-      var id = rs[2];
-      var name = rs[1];
-      $('#id_event').val(id);
-      $(this).val(name);
-    }else{
-      $('#id_event').val('');
-      $(this).val('');
-    }
-  }
-});
 
 $(document).ready(function() {
   consignCheckInit();

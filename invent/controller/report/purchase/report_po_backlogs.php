@@ -35,8 +35,11 @@ $qr .= "po.status ";
 $qr .= "FROM tbl_po AS po ";
 $qr .= "LEFT JOIN tbl_supplier AS su ON po.id_supplier = su.id ";
 $qr .= "LEFT JOIN tbl_product AS pd ON po.id_product = pd.id ";
+$qr .= "LEFT JOIN tbl_color AS co ON pd.id_color = co.id ";
+$qr .= "LEFT JOIN tbl_size AS si ON pd.id_size = si.id ";
 $qr .= "LEFT JOIN tbl_product_style AS st ON po.id_style = st.id ";
 $qr .= "WHERE po.isCancle = 0 AND qty > received ";
+
 
 //--- ถ้าระบุใบสั่งซื้อ
 if($allPO == 0)
@@ -87,7 +90,7 @@ if($showItem == 0)
   }
 
   $qr .= "GROUP BY po.reference, po.id_style ";
-  $qr .= "ORDER BY po.reference ASC";
+  $qr .= "ORDER BY po.reference ASC, st.code ASC, co.code ASC , si.position ASC";
 
 }
 else
@@ -99,7 +102,7 @@ else
   }
 
   $qr .= "GROUP BY po.reference, po.id_product ";
-  $qr .= "ORDER BY po.reference ASC";
+  $qr .= "ORDER BY po.reference ASC, st.code ASC, co.code ASC , si.position ASC";
 }
 
 //echo $qr;

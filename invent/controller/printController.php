@@ -18,4 +18,10 @@ if(isset($_GET['printConsignBox']))
   include '../print/packing/print_consign_box.php';
 }
 
+
+
+if(isset($_GET['printConsign']))
+{
+  include '../print/consign/print_consign.php';
+}
  ?>

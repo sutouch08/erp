@@ -4,28 +4,22 @@
     <label>เลขที่เอกสาร</label>
     <input type="text" class="form-control input-sm text-center" value="<?php echo $cs->reference; ?>" disabled />
   </div>
-
-  <div class="col-sm-1 col-1-harf padding-5">
+  <div class="col-sm-1 padding-5">
     <label>วันที่</label>
     <input type="text" class="form-control input-sm text-center header-box" id="date_add" value="<?php echo thaiDate($cs->date_add); ?>" disabled />
   </div>
 
-  <div class="col-sm-3 padding-5">
+  <div class="col-sm-4 padding-5">
     <label>ลูกค้า</label>
-    <input type="text" class="form-control input-sm header-box" id="customerName" value="<?php echo $customer->getName($cs->id_customer); ?>" disabled />
+    <input type="text" class="form-control input-sm import-box" id="customerName" value="<?php echo $customer->getName($cs->id_customer); ?>" disabled />
   </div>
 
-  <div class="col-sm-3 padding-5">
+  <div class="col-sm-4 padding-5">
     <label>โซน</label>
-    <input type="text" class="form-control input-sm header-box" id="zoneName" value="<?php echo $zone->name; ?>" disabled />
+    <input type="text" class="form-control input-sm import-box" id="zoneName" value="<?php echo $zone->name; ?>" disabled />
   </div>
 
-  <div class="col-sm-3 padding-5 last">
-    <label>จุดขาย [shop]</label>
-    <input type="text" class="form-control input-sm header-box" id="shopName" value="<?php echo $shop->name; ?>" disabled />
-  </div>
-
-  <div class="col-sm-2 padding-5 first">
+  <div class="col-sm-1 col-1-harf padding-5 last">
     <label class="display-block">ใบกำกับ</label>
     <select id="isSo" class="form-control input-sm header-box" disabled>
       <option value="1" <?php echo isSelected(1, $cs->is_so); ?>>เปิดใบกำกับ</option>
@@ -33,12 +27,12 @@
     </select>
   </div>
 
-  <div class="col-sm-4 padding-5">
-    <label>งานขาย [Event]</label>
-    <input type="text" class="form-control input-sm header-box" id="eventName" value="<?php echo $event->name; ?>" disabled />
+  <div class="col-sm-1 col-1-harf padding-5 first">
+    <label>อ้างอิง</label>
+    <input type="text" class="form-control input-sm text-center" id="check-reference" value="<?php echo $consign_check->reference; ?>" disabled />
   </div>
 
-  <div class="col-sm-6 padding-5 last">
+  <div class="col-sm-10 col-10-harf padding-5 last">
     <label>หมายเหตุ</label>
     <input type="text" class="form-control input-sm header-box" id="remark" maxlength="100" value="<?php echo $cs->remark; ?>" disabled />
   </div>

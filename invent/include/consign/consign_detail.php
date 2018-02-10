@@ -5,6 +5,7 @@ $disabled = $id === FALSE ? '' : 'disabled';
 $zone = new zone($cs->id_zone);
 $shop = new shop($cs->id_shop);
 $event = new event($cs->id_event);
+$consign_check = new consign_check($cs->id_consign_check);
 $customer = new customer();
 $allowUnderZero = $zone->allowUnderZero === TRUE ? 1 : 0;
  ?>
@@ -16,10 +17,10 @@ $allowUnderZero = $zone->allowUnderZero === TRUE ? 1 : 0;
   <div class="col-sm-6">
     <p class="pull-right top-p">
 <?php echo goBackButton(); ?>
-<?php if($delete && $cs->isCancle == 0) : ?>
+<?php if($canUnbill && $cs->isSaved == 1 && $cs->isCancle == 0) : ?>
       <button type="button" class="btn btn-sm btn-danger" onclick="unSave(<?php echo $cs->id; ?>)">ยกเลิกการเปิดบิล</button>
 <?php endif; ?>
-<?php if( $cs->is_so == 1 && $cs->isCancle == 0) : ?>
+<?php if( $cs->is_so == 1 && $cs->isSaved == 1 && $cs->isCancle == 0) : ?>
       <button type="button" class="btn btn-sm btn-info" onclick="exportConsignSold(<?php echo $cs->id; ?>)">
         <i class="fa fa-send"></i> ส่งข้อมูลไป formula
       </button>
@@ -42,3 +43,4 @@ include 'include/consign/consign_view_detail.php';
 <script src="script/consign/consign_edit.js"></script>
 <script src="script/consign/consign_control.js"></script>
 <script src="script/consign/consign_detail.js"></script>
+<script src="script/print/print_consign.js"></script>

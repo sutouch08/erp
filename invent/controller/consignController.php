@@ -18,6 +18,14 @@ if(isset($_GET['loadCheckDiff']))
 }
 
 
+
+//--- นำรายการนำเข้าออก
+if(isset($_GET['removeImportDetails']))
+{
+  include 'consign/consign_unload_check_diff.php';
+}
+
+
 //---- เรียกข้อมูลสินค้าในโซน
 if( isset($_GET['getItemByBarcode']))
 {
@@ -40,6 +48,11 @@ if( isset( $_GET['getItemByCode']))
 
 
 
+
+if(isset($_GET['importUploadFile']))
+{
+  include 'consing/consign_import_excel.php';
+}
 
 
 
@@ -67,6 +80,12 @@ if(isset($_GET['saveConsign']))
   include '../function/discount_helper.php';
   include '../function/vat_helper.php';
   include 'consign/consign_save.php';
+}
+
+
+if(isset($_GET['unSaveConsign']))
+{
+  include 'consign/consign_unsave.php';
 }
 
 
@@ -132,10 +151,10 @@ if(isset($_GET['canUpdate']))
     $message = 'ไม่สามารถแก้ไขได้เนื่องจากเอกสารถูกยกเลิกแล้ว';
   }
 
-  if( $cs->isExport == 1 OR $cs->isSaved == 1)
+  if($cs->isSaved == 1)
   {
     $sc = FALSE;
-    $message = 'ไม่สามารถแก้ไขได้เนื่องจากเอกสารถูกบันทึกหรือถูกส่งออกแล้ว';
+    $message = 'ไม่สามารถแก้ไขได้เนื่องจากเอกสารถูกบันทึกแล้ว';
   }
 
   echo $sc === TRUE ? 'ok' : $message;

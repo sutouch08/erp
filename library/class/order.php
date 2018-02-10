@@ -911,7 +911,7 @@ class order
 
 	public function unSold($id)
 	{
-		return dbQuery("DELETE FROM tbl_order_sold WHERE id = '".$id."'");
+		return dbQuery("DELETE FROM tbl_order_sold WHERE id = ".$id);
 	}
 
 
@@ -929,6 +929,28 @@ class order
 	{
 		$qs = dbQuery("SELECT * FROM tbl_order_sold WHERE reference = '".$reference."' AND id_product = '".$id_pd."' AND id_zone = '".$id_zone."'");
 		return  dbNumRows($qs) > 0 ? dbFetchObject($qs) : FALSE;
+	}
+
+
+
+	public function getConsignSoldDetailRowId($reference, $id_pd, $id_zone, $price, $qty, $discLabel)
+	{
+		$sc  = FALSE;
+		$qr  = "SELECT id FROM tbl_order_sold ";
+		$qr .= "WHERE reference = '".$reference."' ";
+		$qr .= "AND id_product = '".$id_pd."' ";
+		$qr .= "AND id_zone = '".$id_zone."' ";
+		$qr .= "AND price_inc = '".$price."' ";
+		$qr .= "AND qty = '".$qty."' ";
+		$qr .= "AND discount_label = '".$discLabel."' ";
+
+		$qs = dbQuery($qr);
+		if(dbNumRows($qs) == 1)
+		{
+			list($sc) = dbFetchArray($qs);
+		}
+
+		return $sc;
 	}
 
 

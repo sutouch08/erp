@@ -85,7 +85,7 @@ if($allProduct == 0)
 }
 
 $qr .= "GROUP BY po.reference, po.id_style ";
-$qr .= "ORDER BY po.reference ASC";
+$qr .= "ORDER BY po.reference ASC, st.code ASC";
 
 //echo $qr;
 $qs = dbQuery($qr);

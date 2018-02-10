@@ -1,5 +1,12 @@
 function getEdit(){
-  $('.header-box').removeAttr('disabled');
+  var id_consign_check = $('#id_consign_check').val();
+  if(id_consign_check > 0){
+    $('.header-box').removeAttr('disabled');
+  }else{
+    $('.header-box').removeAttr('disabled');
+    $('.import-box').removeAttr('disabled');
+  }
+
   $('#btn-edit').addClass('hide');
   $('#btn-update').removeClass('hide');
 }
@@ -12,19 +19,8 @@ function checkUpdate(){
   var customerName = $('#customerName').val();
   var id_zone = $('#id_zone').val();
   var zoneName = $('#zoneName').val();
-  var id_shop = $('#id_shop').val();
-  var shopName = $('#shopName').val();
-  var eventName = $('#eventName').val();
-  var id_event = $('#id_event').val();
   var remark = $('#remark').val();
   var is_so = $('#isSo').val();
-
-  //----  ไว้ตรวจสอบ หากเลือก shop ลูกค้า และโซนต้องตรงกับที่กำหนดใน tbl_shop
-  var id_customer_shop = $('#id_customer_shop').val();
-  var id_zone_shop = $('#id_zone_shop').val();
-  if( shopName.length == 0){
-    id_shop = '';
-  }
 
   if( zoneName.length == 0){
     id_zone = '';
@@ -32,10 +28,6 @@ function checkUpdate(){
 
   if( customerName.length == 0){
     id_customer = '';
-  }
-
-  if( eventName.length == 0){
-    id_event = '';
   }
 
   if( !isDate(dateAdd)){
@@ -53,19 +45,6 @@ function checkUpdate(){
   }
 
 
-
-  if( id_shop != '' && id_shop != 0 && shopName.length != 0){
-    if( id_customer != id_customer_shop ){
-      swal('ลูกค้าที่เลือกไม่ตรงกับจุดขาย');
-      return false;
-    }
-
-    if( id_zone != id_zone_shop ){
-      swal('โซนที่เลือกไม่ตรงกับจุดขาย');
-      return false;
-    }
-  }
-
   //--- ตรวจสอบก่อนว่าคนอื่นบันทึกไปแล้วหรือยัง
   $.ajax({
     url:'controller/consignController.php?canUpdate',
@@ -77,7 +56,7 @@ function checkUpdate(){
     success:function(rs){
       var rs = $.trim(rs);
       if(rs == 'ok'){
-        update(id, dateAdd, id_customer, id_zone, id_shop, id_event, remark, is_so);
+        update(id, dateAdd, id_customer, id_zone, remark, is_so);
       }else{
         swal('Error!', rs, 'error');
       }
@@ -86,7 +65,7 @@ function checkUpdate(){
 }
 
 
-function update(id_consign, dateAdd, id_customer, id_zone, id_shop, id_event, remark, is_so){
+function update(id_consign, dateAdd, id_customer, id_zone, remark, is_so){
   load_in();
   $.ajax({
     url:'controller/consignController.php?updateConsign',
@@ -97,8 +76,6 @@ function update(id_consign, dateAdd, id_customer, id_zone, id_shop, id_event, re
       'date_add' : dateAdd,
       'id_customer' : id_customer,
       'id_zone' : id_zone,
-      'id_shop' : id_shop,
-      'id_event' : id_event,
       'remark' : remark,
       'is_so' : is_so
     },
@@ -106,8 +83,8 @@ function update(id_consign, dateAdd, id_customer, id_zone, id_shop, id_event, re
       load_out();
       var rs = $.trim(rs);
       if(rs == 'success'){
-
         $('.header-box').attr('disabled', 'disabled');
+        $('.import-box').attr('disabled', 'disabled');
         $('#btn-update').addClass('hide');
         $('#btn-edit').removeClass('hide');
 
@@ -117,7 +94,7 @@ function update(id_consign, dateAdd, id_customer, id_zone, id_shop, id_event, re
           timer: 1000
         });
 
-        updateStockZone(id_zone);
+        //updateStockZone(id_zone);
 
       }else{
         swal('Error', rs, 'error');

@@ -5,6 +5,7 @@ $disabled = $id === FALSE ? '' : 'disabled';
 $zone = new zone($cs->id_zone);
 $shop = new shop($cs->id_shop);
 $event = new event($cs->id_event);
+$consign_check = new consign_check($cs->id_consign_check);
 $customer = new customer();
 $allowUnderZero = $zone->allowUnderZero === TRUE ? 1 : 0;
  ?>
@@ -18,9 +19,17 @@ $allowUnderZero = $zone->allowUnderZero === TRUE ? 1 : 0;
 <?php echo goBackButton(); ?>
 <?php if( ($add OR $edit) && $id !== FALSE && $cs->isSaved == 0 && $cs->isCancle == 0 ) : ?>
   <?php if($cs->id_consign_check == 0) : ?>
-      <button type="button" class="btn btn-sm btn-info" onclick="getActiveCheckList()">นำเข้ายอดต่าง</button>
+      <button type="button" class="btn btn-sm btn-info" onclick="getActiveCheckList()">
+        <i class="fa fa-exchange"></i> &nbsp; โหลดเอกสารกระทบยอด
+      </button>
   <?php endif; ?>
-      <button type="button" class="btn btn-sm btn-success" onclick="saveConsign()"><i class="fa fa-save"></i> บันทึก</button>
+      <button type="button" class="btn btn-sm btn-primary" onclick="getUploadFile()">
+        <i class="fa fa-upload"></i> &nbsp; นำเข้าจากไฟล์ Excel
+      </button>
+
+      <button type="button" class="btn btn-sm btn-success" onclick="saveConsign()">
+        <i class="fa fa-save"></i> บันทึก
+      </button>
 <?php endif; ?>
 
     </p>
@@ -49,6 +58,39 @@ if( $id !== FALSE && $cs->isSaved == 0 && $cs->isCancle == 0)
  			 </div>
  			 <div class="modal-body" id="check-list-body">
 
+        </div>
+ 			 <div class="modal-footer">
+ 				<button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+ 			 </div>
+ 		</div>
+ 	</div>
+ </div>
+
+ <div class="modal fade" id="upload-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ 	<div class="modal-dialog" style="width:500px;">
+ 		<div class="modal-content">
+   			<div class="modal-header">
+ 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">นำเข้าไฟล์ Excel</h4>
+ 			 </div>
+ 			 <div class="modal-body">
+         <form id="upload-form" name="upload-form" method="post" enctype="multipart/form-data">
+         <div class="row">
+           <div class="col-sm-2 padding-5 first">
+             <button type="button" class="btn btn-sm btn-default" id="btn-get-file" onclick="getFile()">เลือกไฟล์</button>
+           </div>
+           <div class="col-sm-8 padding-5">
+             <span class="form-control input-sm text-center" id="show-file-name">
+               กรุณาเลือกไฟล์ Excel
+             </span>
+           </div>
+           <div class="col-sm-2 padding-5 last">
+             <button type="button" class="btn btn-sm btn-info" onclick="uploadfile()"><i class="fa fa-cloud-upload"></i> ตกลง</button>
+           </div>
+         </div>
+         <input type="file" class="hide" name="uploadFile" id="uploadFile" accept=".xlsx" />
+         <input type="hidden" name="555" />
+         </form>
         </div>
  			 <div class="modal-footer">
  				<button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
