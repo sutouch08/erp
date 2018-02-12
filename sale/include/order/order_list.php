@@ -9,6 +9,51 @@ $sCus	 	= getFilter('sCus', 'sOrderCus', '' );	//---	customer
 $fromDate	= getFilter('fromDate', 'fromDate', '' );
 $toDate	= getFilter('toDate', 'toDate', '' );
 
+$state_1 = getFilter('state_1', 'state_1', 0);
+$state_2 = getFilter('state_2', 'state_2', 0);
+$state_3 = getFilter('state_3', 'state_3', 0);
+$state_4 = getFilter('state_4', 'state_4', 0);
+$state_5 = getFilter('state_5', 'state_5', 0);
+$state_6 = getFilter('state_6', 'state_6', 0);
+$state_7 = getFilter('state_7', 'state_7', 0);
+$state_8 = getFilter('state_8', 'state_8', 0);
+$state_9 = getFilter('state_9', 'state_9', 0);
+$state_10 = getFilter('state_10', 'state_10', 0);
+$state_11 = getFilter('state_11', 'state_11', 0);
+$notSave = getFilter('notSave', 'notSave', 0);
+$isExpire = getFilter('isExpire', 'isExpire', 0);
+
+$btn_1 = $state_1 == 0 ? '' : 'btn-info';
+$btn_2 = $state_2 == 0 ? '' : 'btn-info';
+$btn_3 = $state_3 == 0 ? '' : 'btn-info';
+$btn_4 = $state_4 == 0 ? '' : 'btn-info';
+$btn_5 = $state_5 == 0 ? '' : 'btn-info';
+$btn_6 = $state_6 == 0 ? '' : 'btn-info';
+$btn_7 = $state_7 == 0 ? '' : 'btn-info';
+$btn_8 = $state_8 == 0 ? '' : 'btn-info';
+$btn_9 = $state_9 == 0 ? '' : 'btn-info';
+$btn_10 = $state_10 == 0 ? '' : 'btn-info';
+$btn_11 = $state_11 == 0 ? '' : 'btn-info';
+$btn_notSave = $notSave == 0 ? '' : 'btn-info';
+$btn_expire = $isExpire == 0 ? '' : 'btn-info';
+
+$state = '';
+
+$a = 1;
+for($i =1; $i <= 11; $i++)
+{
+	if(${'state_'.$i} == 1)
+	{
+		$state .= $a == 1 ? $i : ', '.$i;
+		createCookie('state_'.$i, 1);
+		$a++;
+	}
+	else
+	{
+		deleteCookie('state_'.$i);
+	}
+}
+
 ?>
 <div class="row top-row">
 	<div class="col-sm-6 col-xs-6 top-col">
@@ -52,6 +97,75 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 		</div>
   </div>
 
+	<div class="divider-hidden margin-top-5 margin-bottom-5"></div>
+
+	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5 first">
+		<button type="button" class="btn btn-sm btn-block <?php echo $btn_1; ?>" id="btn-1" onclick="toggleState('btn-1', <?php echo $state_1; ?> )">รอชำระเงิน</button>
+	</div>
+
+	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5">
+		<button type="button" class="btn btn-sm btn-block <?php echo $btn_2; ?>" id="btn-2" onclick="toggleState('btn-2', <?php echo $state_2; ?> )">แจ้งชำระเงิน</button>
+	</div>
+
+	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5">
+		<button type="button" class="btn btn-sm btn-block <?php echo $btn_3; ?>" id="btn-3" onclick="toggleState('btn-3', <?php echo $state_3; ?> )">รอจัด</button>
+	</div>
+
+	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5">
+		<button type="button" class="btn btn-sm btn-block <?php echo $btn_4; ?>" id="btn-4" onclick="toggleState('btn-4', <?php echo $state_4; ?> )">กำลังจัด</button>
+	</div>
+
+	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5">
+		<button type="button" class="btn btn-sm btn-block <?php echo $btn_5; ?>" id="btn-5" onclick="toggleState('btn-5', <?php echo $state_5; ?> )">รอตรวจ</button>
+	</div>
+
+	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5 last">
+		<button type="button" class="btn btn-sm btn-block <?php echo $btn_6; ?>" id="btn-6" onclick="toggleState('btn-6', <?php echo $state_6; ?> )">กำลังตรวจ</button>
+	</div>
+
+	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5 first">
+		<button type="button" class="btn btn-sm btn-block <?php echo $btn_7; ?>" id="btn-7" onclick="toggleState('btn-7', <?php echo $state_7; ?> )">รอเปิดบิล</button>
+	</div>
+
+	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5">
+		<button type="button" class="btn btn-sm btn-block <?php echo $btn_8; ?>" id="btn-8" onclick="toggleState('btn-8', <?php echo $state_8; ?> )">เปิดบิลแล้ว</button>
+	</div>
+
+	<!--
+	<div class="col-sm-1 padding-5">
+
+		<button type="button" class="btn btn-sm btn-block <?php echo $btn_9; ?>" id="btn-9" onclick="toggleState('btn-9', <?php echo $state_9; ?> )">กำลังจัดส่ง</button>
+	</div>
+	<div class="col-sm-1 padding-5">
+
+		<button type="button" class="btn btn-sm btn-block <?php echo $btn_10; ?>" id="btn-10" onclick="toggleState('btn-10', <?php echo $state_10; ?> )">จัดส่งแล้ว</button>
+	</div>
+	-->
+	<div class="col-sm-2 col-xs-4 margin-bottom-5  padding-5">
+		<button type="button" class="btn btn-sm btn-block <?php echo $btn_11; ?>" id="btn-11" onclick="toggleState('btn-11', <?php echo $state_11; ?> )">ยกเลิก</button>
+	</div>
+
+	<div class="col-sm-2 col-xs-4 margin-bottom-5  padding-5">
+		<button type="button" class="btn btn-sm btn-block <?php echo $btn_notSave; ?>" id="btn-notSave" onclick="toggleState('btn-notSave', <?php echo $notSave; ?> )">ยังไม่บันทึก</button>
+	</div>
+
+	<div class="col-sm-2 col-xs-4 margin-bottom-5  padding-5">
+		<button type="button" class="btn btn-sm btn-block <?php echo $btn_expire; ?>" id="btn-expire" onclick="toggleState('btn-expire', <?php echo $isExpire; ?> )">หมดอายุ</button>
+	</div>
+
+	<input type="hidden" name="state_1" id="state_1" value="<?php echo $state_1; ?>" />
+	<input type="hidden" name="state_2" id="state_2" value="<?php echo $state_2; ?>" />
+	<input type="hidden" name="state_3" id="state_3" value="<?php echo $state_3; ?>" />
+	<input type="hidden" name="state_4" id="state_4" value="<?php echo $state_4; ?>" />
+	<input type="hidden" name="state_5" id="state_5" value="<?php echo $state_5; ?>" />
+	<input type="hidden" name="state_6" id="state_6" value="<?php echo $state_6; ?>" />
+	<input type="hidden" name="state_7" id="state_7" value="<?php echo $state_7; ?>" />
+	<input type="hidden" name="state_8" id="state_8" value="<?php echo $state_8; ?>" />
+	<input type="hidden" name="state_9" id="state_9" value="<?php echo $state_9; ?>" />
+	<input type="hidden" name="state_10" id="state_10" value="<?php echo $state_10; ?>" />
+	<input type="hidden" name="state_11" id="state_11" value="<?php echo $state_11; ?>" />
+	<input type="hidden" name="notSave" id="state_notSave" value="<?php echo $notSave; ?>" />
+	<input type="hidden" name="isExpire" id="state_expire" value="<?php echo $isExpire; ?>" />
 
 
 </div>
@@ -82,6 +196,27 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 		createCookie('fromDate', $fromDate);
 		createCookie('toDate', $toDate);
 		$where .= "AND date_add >= '".fromDate($fromDate)."' AND date_add <= '". toDate($toDate)."' ";
+	}
+
+	if($notSave == 1)
+	{
+		createCookie('notSave', $notSave);
+		$where .= "AND status = 0 ";
+	}
+	else
+	{
+		if($state != '')
+		{
+			$where .= "AND state IN(".$state.") ";
+		}
+
+	}
+
+
+	if($isExpire == 1)
+	{
+		createCookie('isExpire', 1);
+		$where .= "AND isExpire = 1 ";
 	}
 
 	$where .= "ORDER BY reference DESC";
@@ -132,7 +267,7 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 <?php	$pm		= new payment_method(); ?>
 <?php	while( $rs = dbFetchObject($qs) ) : ?>
 
-			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status); //--- order_help.php ?>>
+			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status, $rs->isExpire);  //--- order_help.php ?>>
         <td class="middle text-cennter pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $no; ?></td>
 
         <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $rs->reference; ?></td>
@@ -151,7 +286,7 @@ $toDate	= getFilter('toDate', 'toDate', '' );
 
 				<td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $pm->getName($rs->id_payment); ?></td>
 
-				<td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo stateName($rs->state, $rs->status); ?></td>
+				<td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo stateName($rs->state, $rs->status, $rs->isExpire); ?></td>
 
 				<td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo thaiDate($rs->date_add); ?></td>
 

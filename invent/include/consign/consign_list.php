@@ -43,19 +43,9 @@ $toDate = getFilter('toDate', 'toDate', '');
     <input type="text" class="form-control input-sm search-box text-center" name="sCus" id="sCus" value="<?php echo $sCus; ?>" />
   </div>
 
-  <div class="col-sm-1 col-1-harf  padding-5">
+  <div class="col-sm-3 padding-5">
     <label>โซน</label>
     <input type="text" class="form-control input-sm search-box text-center" name="sZone" id="sZone" value="<?php echo $sZone; ?>" />
-  </div>
-
-  <div class="col-sm-1 col-1-harf  padding-5">
-    <label>จุดขาย [Shop]</label>
-    <input type="text" class="form-control input-sm search-box text-center" name="sShop" id="sShop" value="<?php echo $sShop; ?>" />
-  </div>
-
-  <div class="col-sm-1 col-1-harf  padding-5">
-    <label>งานขาย [Event]</label>
-    <input type="text" class="form-control input-sm search-box text-center" name="sEvent" id="sEvent" value="<?php echo $sEvent; ?>" />
   </div>
 
   <div class="col-sm-2 padding-5">
@@ -81,8 +71,6 @@ $toDate = getFilter('toDate', 'toDate', '');
 createCookie('sConsignCode', $sCode);
 createCookie('sConsignCus', $sCus);
 createCookie('sConsignZone', $sZone);
-createCookie('sShop', $sShop);
-createCookie('sEvent', $sEvent);
 createCookie('fromDate', $fromDate);
 createCookie('toDate', $toDate);
 
@@ -101,16 +89,6 @@ if( $sCus != '')
 if( $sZone != '')
 {
   $where .= "AND id_zone IN(".getZoneIn($sZone).") ";
-}
-
-if( $sShop != '')
-{
-  $where .= "AND id_shop IN(".getShopIn($sShop).") ";
-}
-
-if( $sEvent != '')
-{
-  $where .= "AND id_event IN(".getEventIn($sEvent).") ";
 }
 
 if( $fromDate != '' && $toDate != '')
@@ -183,20 +161,22 @@ $qs = dbQuery("SELECT * FROM tbl_consign ".$where." LIMIT ".$paginator->Page_Sta
             <?php echo consignStatusLabel($rs->is_so, $rs->isExport, $rs->isSaved, $rs->isCancle); ?>
           </td>
           <td class="middle text-right">
+        <?php if($rs->isCancle == 0) : ?>
             <button type="button" class="btn btn-xs btn-info" onclick="goDetail(<?php echo $rs->id;?>)"><i class="fa fa-eye"></i></button>
 
-          <?php if($edit && $rs->isSaved == 0 && $rs->isCancle == 0 ): ?>
+          <?php if($edit && $rs->isSaved == 0 ): ?>
             <button type="button" class="btn btn-xs btn-warning" id="btn-edit-<?php echo $rs->id; ?>" onclick="goAdd(<?php echo $rs->id;?>)"><i class="fa fa-pencil"></i></button>
           <?php endif; ?>
 
-          <?php if( $delete && $rs->isSaved == 0 && $rs->isCancle == 0 ): ?>
+          <?php if( $delete && $rs->isSaved == 0 ): ?>
             <button type="button" class="btn btn-xs btn-danger" id="btn-delete-<?php echo $rs->id; ?>" onclick="goDelete(<?php echo $rs->id;?>, '<?php echo $rs->reference; ?>')">
               <i class="fa fa-trash"></i>
             </button>
           <?php endif; ?>
+        <?php endif; ?>
           </td>
         </tr>
-<?php    $no++; ?>        
+<?php    $no++; ?>
 <?php   endwhile; ?>
 
 <?php else : ?>

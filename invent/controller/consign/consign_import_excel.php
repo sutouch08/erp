@@ -75,6 +75,18 @@ if($cs->isSaved == 0 && $cs->isCancle == 0)
             }
             else
             {
+              if($pDisc > 100)
+              {
+                $sc = FALSE;
+                $message = $pdCode .' ส่วนลดเกิน 100% ';
+              }
+
+              if($aDisc > $price)
+              {
+                $sc = FALSE;
+                $message = $pdCode.' ส่วนลดเกินราคาขาย ';
+              }
+              
               //--- แปลงเป็นส่วนลด (Label)
               $discLabel = $pDisc > 0 ? $pDisc.' %' : ($aDisc > 0 ? $aDisc : 0);
 

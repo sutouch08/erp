@@ -11,16 +11,17 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
         	<button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i>  กลับ</button>
 
 			<?php if( ($order->status == 0 && $order->id_employee == getCookie('user_id') ) OR ($order->status == 1 && $order->state < 4 ) ) : ?>
-				<?php if( $order->isOnline == 0 OR $order->hasPayment == FALSE ) : ?>
+				<?php if( ($order->isOnline == 0 OR $order->hasPayment == FALSE) && $order->isExpire == 0 ) : ?>
 
             		<button type="button" class="btn btn-sm btn-warning" onclick="goAddDetail(<?php echo $order->id; ?>)"><i class="fa fa-pencil"></i> แก้ไขรายการ</button>
 
 				<?php endif; ?>
-            <?php endif; ?>
-
-			<button type="button" class="btn btn-sm btn-success <?php echo $hide; ?>" id="btn-save-order" onclick="saveOrder(<?php echo $order->id; ?>)">
+      <?php endif; ?>
+			<?php if($order->isExpire == 0) : ?>
+						<button type="button" class="btn btn-sm btn-success <?php echo $hide; ?>" id="btn-save-order" onclick="saveOrder(<?php echo $order->id; ?>)">
             	<i class="fa fa-save"></i> บันทึก
             </button>
+			<?php endif; ?>
         </p>
     </div>
 </div>

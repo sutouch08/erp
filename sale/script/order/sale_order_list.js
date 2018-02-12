@@ -26,6 +26,22 @@ function getSearch(){
 }
 
 
+function toggleState(btn, option){
+	var arr = btn.split('-');
+	var id = arr[1];
+	var option = option == 0 ? 1 : 0;
+	if(option == 1){
+		$('#'+btn).addClass('btn-info');
+	}else{
+		$('#'+btn).removeClass('btn-info');
+	}
+
+	$('#state_'+id).val(option);
+	console.log($('#state_'+id).val());
+
+	getSearch();
+}
+
 function clearFilter(){
 	$.get("../invent/controller/orderController.php?clearFilter", function(){ goBack(); });
 }

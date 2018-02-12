@@ -50,12 +50,14 @@
 
 					<div class="col-sm-2 col-xs-12">
 					  <label class="display-block not-show">btn</label>
-						<?php if( isset( $_GET['id_order'] ) && $order->state < 8): ?>
-						<button type="button" class="btn btn-sm btn-warning btn-block" id="btn-edit-order" onclick="getEdit()">แก้ไข</button>
-						<button type="button" class="btn btn-sm btn-success btn-block hide" id="btn-update-order" onclick="validUpdate()">บันทึก</button>
-						<?php else : ?>
-						<button type="button" class="btn btn-sm btn-success btn-block" onclick="addNew()">สร้างออเดอร์</button>
-						<?php endif; ?>
+            <?php if($order->isExpire == 0) : ?>
+  						<?php if( isset( $_GET['id_order'] ) && $order->state < 8): ?>
+  						<button type="button" class="btn btn-sm btn-warning btn-block" id="btn-edit-order" onclick="getEdit()">แก้ไข</button>
+  						<button type="button" class="btn btn-sm btn-success btn-block hide" id="btn-update-order" onclick="validUpdate()">บันทึก</button>
+  						<?php else : ?>
+  						<button type="button" class="btn btn-sm btn-success btn-block" onclick="addNew()">สร้างออเดอร์</button>
+  						<?php endif; ?>
+            <?php endif;?>
 					</div>
 
 				</div>

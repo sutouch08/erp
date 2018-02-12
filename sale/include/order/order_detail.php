@@ -38,7 +38,7 @@
                 <td class="middle text-center"><?php echo $rs->discount; ?></td>
                 <td class="middle text-right"><?php echo number_format($rs->total_amount, 2); ?></td>
                 <td class="middle text-right">
-                <?php if( ( $order->isPaid == 0 && $order->hasPayment == 0 ) ) : ?>
+                <?php if( ( $order->isPaid == 0 && $order->hasPayment == 0  && $order->isExpire == 0) ) : ?>
                 	<button type="button" class="btn btn-xs btn-danger" onclick="removeDetail(<?php echo $rs->id; ?>, '<?php echo $rs->product_code; ?>')"><i class="fa fa-trash"></i></button>
                 <?php endif; ?>
                 </td>
