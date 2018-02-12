@@ -368,6 +368,10 @@ if(isset( $_GET['clearFilter']))
   deleteCookie('sEvent');
   deleteCookie('fromDate');
   deleteCookie('toDate');
+  deleteCookie('isSaved');
+  deleteCookie('isExported');
+  deleteCookie('isCancle');
+  deleteCookie('is_so');
   echo 'done';
 }
  ?>

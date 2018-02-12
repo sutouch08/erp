@@ -1089,6 +1089,7 @@ td.one-attribute{
 .hide-text{
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space:normal;
 }
 
 @media (max-width: 767px){

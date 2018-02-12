@@ -30,6 +30,24 @@ $sEvent = getFilter('sEvent', 'sEvent');
 $fromDate = getFilter('fromDate', 'fromDate', '');
 $toDate = getFilter('toDate', 'toDate', '');
 
+//-----
+$isSaved = getFilter('isSaved' ,'isSaved', 3); //--- ใช้ 3 แทนช่องว่างเพราะช่องว่างกับ 0 ให้ค่าเดียวกัน
+$isExport = getFilter('isExported', 'isExported', 3);
+$isCancle = getFilter('isCancle', 'isCancle', 3);
+$is_so = getFilter('is_so', 'is_so', 3); //--- เปิด SO หรือไม่
+
+$btn_saved = $isSaved == 1 ? 'btn-info' : '';
+$btn_not_save = $isSaved == 0 ? 'btn-info' : '';
+
+$btn_exported = $isExport == 1 ? 'btn-info' : '';
+$btn_not_export = $isExport == 0 ? 'btn-info' : '';
+
+$btn_cancled = $isCancle == 1 ? 'btn-info' : '';
+$btn_not_cancle = $isCancle == 0 ? 'btn-info' : '';
+
+$btn_so_yes = $is_so == 1 ? 'btn-info' : '';
+$btn_so_no = $is_so == 0 ? 'btn-info' : '';
+
 ?>
 <form id="searchForm" method="post">
 <div class="row">
@@ -64,6 +82,40 @@ $toDate = getFilter('toDate', 'toDate', '');
     <button type="button" class="btn btn-sm btn-warning btn-block" onclick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
   </div>
 </div>
+<div class="divider-hidden" style="margin-bottom:0px;"></div>
+<div class="row">
+  <div class="col-sm-2 padding-5 first">
+    <div class="btn-group width-100">
+      <button type="button" class="btn btn-sm width-50 <?php echo $btn_saved; ?>" id="btn-saved" onclick="toggleSaved(1)">บันทึกแล้ว</button>
+      <button type="button" class="btn btn-sm width-50 <?php echo $btn_not_save; ?>" id="btn-not-save" onclick="toggleSaved(0)">ยังไม่บันทึก</button>
+    </div>
+  </div>
+
+  <div class="col-sm-2 padding-5">
+    <div class="btn-group width-100">
+      <button type="button" class="btn btn-sm width-50 <?php echo $btn_exported; ?>" id="btn-exported" onclick="toggleExported(1)">ส่งออกแล้ว</button>
+      <button type="button" class="btn btn-sm width-50 <?php echo $btn_not_export; ?>" id="btn-not-export" onclick="toggleExported(0)">ยังไม่ส่งออก</button>
+    </div>
+  </div>
+
+  <div class="col-sm-2 padding-5">
+    <div class="btn-group width-100">
+      <button type="button" class="btn btn-sm width-50 <?php echo $btn_cancled; ?>" id="btn-cancled" onclick="toggleCancle(1)">ยกเลิก</button>
+      <button type="button" class="btn btn-sm width-50 <?php echo $btn_not_cancle; ?>" id="btn-not-cancle" onclick="toggleCancle(0)">ไม่ยกเลิก</button>
+    </div>
+  </div>
+
+  <div class="col-sm-2 padding-5">
+    <div class="btn-group width-100">
+      <button type="button" class="btn btn-sm width-50 <?php echo $btn_so_yes; ?>" id="btn-so-yes" onclick="toggleSO(1)">เปิดใบกำกับ</button>
+      <button type="button" class="btn btn-sm width-50 <?php echo $btn_so_no; ?>" id="btn-so-no" onclick="toggleSO(0)">ไม่เปิดใบกำกับ</button>
+    </div>
+  </div>
+</div>
+<input type="hidden" name="isSaved" id="isSaved" value="<?php echo $isSaved; ?>" />
+<input type="hidden" name="isExported" id="isExported" value="<?php echo $isExport; ?>" />
+<input type="hidden" name="isCancle" id="isCancle" value="<?php echo $isCancle; ?>" />
+<input type="hidden" name="is_so" id="is_so" value="<?php echo $is_so; ?>" />
 </form>
 <hr class="margin-top-15"/>
 
@@ -73,6 +125,10 @@ createCookie('sConsignCus', $sCus);
 createCookie('sConsignZone', $sZone);
 createCookie('fromDate', $fromDate);
 createCookie('toDate', $toDate);
+createCookie('isSaved', $isSaved);
+createCookie('isExported', $isExport);
+createCookie('isCancle', $isCancle);
+createCookie('is_so', $is_so);
 
 $where = "WHERE id != 0 ";
 
@@ -89,6 +145,28 @@ if( $sCus != '')
 if( $sZone != '')
 {
   $where .= "AND id_zone IN(".getZoneIn($sZone).") ";
+}
+
+
+if($isSaved != 3)
+{
+  $where .= "AND isSaved = ".$isSaved." ";
+}
+
+
+if($isExport != 3)
+{
+  $where .= "AND isExport = ".$isExport." ";
+}
+
+if($isCancle != 3)
+{
+  $where .= "AND isCancle = ".$isCancle." ";
+}
+
+if($is_so != 3)
+{
+  $where .= "AND is_so = ".$is_so." ";
 }
 
 if( $fromDate != '' && $toDate != '')
@@ -129,8 +207,9 @@ $qs = dbQuery("SELECT * FROM tbl_consign ".$where." LIMIT ".$paginator->Page_Sta
            <th class="width-5 text-center">ลำดับ</th>
            <th class="width-10 text-center">วันที่</th>
            <th class="width-10 text-center">เลขที่เอกสาร</th>
-           <th class="width-30">ลูกค้า</th>
+           <th class="width-25">ลูกค้า</th>
            <th class="width-30">โซน</th>
+           <th class="width-5 text-center">INV</th>
            <th class="width-5 text-center">สถานะ</th>
            <th></th>
          </tr>
@@ -156,6 +235,9 @@ $qs = dbQuery("SELECT * FROM tbl_consign ".$where." LIMIT ".$paginator->Page_Sta
           </td>
           <td class="middle">
             <?php echo $zone->getName($rs->id_zone); ?>
+          </td>
+          <td class="middle text-center">
+            <?php echo ($rs->is_so == 1 ? 'Yes' : 'No'); ?>
           </td>
           <td class="middle text-center" id="xLabel-<?php echo $rs->id; ?>">
             <?php echo consignStatusLabel($rs->is_so, $rs->isExport, $rs->isSaved, $rs->isCancle); ?>
