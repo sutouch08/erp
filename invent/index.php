@@ -76,6 +76,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รับคืนสินค้าอภินันท์';
 			break;
 
+		case 'return_received' :
+			$content = 'return_received.php';
+			$pageTitle = 'ส่งคืนสินค้า(ลดหนี้ซื้อ)';
+			break;
+
 		case 'order_transform' :
 			$content	= 'order_transform.php';
 			$pageTitle	= 'เบิกแปรสภาพ';
@@ -114,6 +119,10 @@ if( !getConfig('CLOSED') )
 		case 'cancle_zone' :
 			$content = 'cancle_zone.php';
 			$pageTitle = 'ตรวจสอบ Cancle Zone';
+			break;
+		case 'stock' :
+			$content = 'stock.php';
+			$pageTitle = 'ตรวจสอบสต็อกสินค้า';
 			break;
 
 //**********  ระบบขาย  **********//
@@ -423,6 +432,11 @@ if( !getConfig('CLOSED') )
 		case 'sale_deep_analyz' :
 			$content = 'report/sales/sale_deep_analyz.php';
 			$pageTitle = 'รายงานวิเคราะห์ขายแบบละเอียด';
+			break;
+
+		case 'sale_by_channels_show_reference' :
+			$content = 'report/sales/sale_by_channels_show_reference.php';
+			$pageTitle = 'รายงานยอดขายแยกตามช่องทางการขายแสดงเลขที่เอกสาร';
 			break;
 
 

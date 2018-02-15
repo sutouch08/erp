@@ -44,6 +44,8 @@
 
     $pdCost = new product_cost();
 
+    $zone  = new zone($consign->id_zone);
+
     startTransection();
 
     if( $state < $order->state OR $state == 11)
@@ -65,7 +67,7 @@
           {
             //--- ลดยอดในโซนปลายทางออก
             $isEnough = $stock->isEnough($consign->id_zone, $rs->id_product, $rs->qty);
-            if( $isEnough === FALSE)
+            if( $isEnough === FALSE && $zone->allowUnderZero === FALSE)
             {
               $sc = FALSE;
               $message = 'ยอดคงเหลือในโซนไม่เพียงพอ';
@@ -78,7 +80,7 @@
                 $message = 'ปรับยอดในโซนปลายทางออกไม่สำเร็จ';
               }
 
-              
+
               //--- เพิ่มข้อมูลกลับ buffer
               if( $buffer->updateBuffer($rs->id_order, $rs->id_product_style, $rs->id_product, $rs->id_zone, $rs->id_warehouse, $rs->qty) !== TRUE)
               {

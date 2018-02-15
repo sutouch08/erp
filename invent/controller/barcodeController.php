@@ -6,16 +6,17 @@ require "../function/tools.php";
 
 if( isset( $_GET['deleteBarcode'] ) )
 {
-	$sc = 'fail';
+	$sc = TRUE;
 	$barcode = $_POST['barcode'];
 	$bc	= new barcode();
 
-	if( $bc->delete($barcode) )
+	if( $bc->delete($barcode) !== TRUE)
 	{
-		$sc = 'success';
+		$sc = FALSE;
+		$message = 'ลบรายการไม่สำเร็จ';
 	}
 
-	echo $sc;
+	echo $sc === TRUE ? 'success' : $message;
 }
 
 

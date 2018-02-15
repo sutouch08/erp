@@ -15,6 +15,11 @@
           <li><a href="index.php?content=sponsor_return"><i class="fa fa-download"></i>&nbsp; รับคืนสินค้า จากสปอนเซอร์</a></li>
         </ul>
       </li>
+      <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-upload"></i>&nbsp; ส่งคืนสินค้า</a>
+      	<ul class="dropdown-menu">
+          <li><a href="index.php?content=return_received"><i class="fa fa-upload"></i>&nbsp; ส่งคืนสินค้า(ลดหนี้ซื้อ)</a></li>
+        </ul>
+      </li>
       <li class="divider"></li>
       <li><a href="index.php?content=order_transform"><i class="fa fa-upload"></i>&nbsp; เบิกสินค้าเพื่อแปรสภาพ</a></li>
       <li><a href="index.php?content=order_support"><i class="fa fa-upload"></i>&nbsp; เบิกอภินันทนาการ</a></li>
@@ -81,6 +86,7 @@
       <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ระบบขาย</a>
       	<ul class="dropdown-menu">
         	<li><a href="index.php?content=sale_deep_analyz"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ขายแบบละเอียด</a></li>
+          <li><a href="index.php?content=sale_by_channels_show_reference"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ยอดขายแยกตางช่องทางการขาย แสดงเลขที่เอกสาร</a></li>
         </ul>
       </li>
 

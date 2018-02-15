@@ -73,7 +73,13 @@ class return_received
 
   public function delete($id)
   {
-    return dbQuery("DELETE FROM tbl_return_received WHERE id = '".$id."'");
+    return dbQuery("DELETE FROM tbl_return_received WHERE id = ".$id);
+  }
+
+
+  public function cancle($reference)
+  {
+    return dbQuery("UPDATE tbl_return_received SET isCancle = 1 WHERE reference = '".$reference."'");
   }
 
 
@@ -83,6 +89,19 @@ class return_received
     return dbQuery("SELECT * FROM tbl_return_received WHERE reference = '".$reference."'");
   }
 
+
+
+  public function getDetail($id)
+  {
+    $qs = FALSE;
+    $qs = dbQuery("SELECT * FROM tbl_return_received WHERE id = '".$id."'");
+    if(dbNumRows($qs) == 1)
+    {
+      $sc = dbFetchObject($qs);
+    }
+
+    return $sc;
+  }
 
 
   public function getId($bookcode, $reference, $product_code)
@@ -106,16 +125,17 @@ class return_received
 
 
 
-  public function isExists($bookcode, $reference, $id_product)
+  public function isExists($bookcode, $reference, $id_product, $id_warehouse)
   {
     $sc  = FALSE;
     $qr  = "SELECT id FROM tbl_return_received ";
     $qr .= "WHERE bookcode = '".$bookcode."' ";
     $qr .= "AND reference = '".$reference."' ";
-    $qr .= "AND id_product = '".$id_product."'";
+    $qr .= "AND id_product = '".$id_product."' ";
+    $qr .= "AND id_warehouse = '".$id_warehouse."' ";
 
     $qs = dbQuery($qr);
-    if( dbNumRows($qs) == 1)
+    if( dbNumRows($qs) > 0)
     {
       $sc = TRUE;
     }
@@ -128,21 +148,18 @@ class return_received
   //----  เปลี่ยนโซนรับเข้า
   public function setZone($reference, $id_zone)
   {
-    return dbQuery("UPDATE tbl_return_received SET id_zone = '".$id_zone."' WHERE reference = '".$reference."' AND valid = 0 AND isCancle = 0");
+    return dbQuery("UPDATE tbl_return_received SET id_zone = ".$id_zone." WHERE reference = '".$reference."'");
   }
 
 
-  public function updateReceived($bookcode, $reference, $id_product, $qty)
+
+  //---- เปลี่ยนสถานะเป็นบันทึกแล้ว
+  public function setValid($reference)
   {
-    return dbQuery("UPDATE tbl_return_received SET received = '".$qty."' WHERE bookcode = '".$bookcode."' AND reference = '".$reference."' AND id_product = '".$id_product."'");
+    $emp_upd = getCookie('user_id');
+    return dbQuery("UPDATE tbl_return_received SET valid = 1, emp_upd = ".$emp_upd." WHERE reference = '".$reference."'");
   }
 
-
-
-  public function setValid($reference, $valid)
-  {
-    return dbQuery("UPDATE tbl_return_received SET valid = '".$valid."' WHERE reference = '".$reference."'");
-  }
 
 } //--- endclass
 

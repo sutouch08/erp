@@ -12,6 +12,19 @@ if(isset($_GET['sale_deep_analyz']) && isset($_GET['export']))
 }
 
 
+//--- รายงานยอดขายแยกตามช่องทางการขายแสดงเลขที่เอกสาร
+if(isset($_GET['saleByChannelsAndReference']) && isset($_GET['report']))
+{
+  include 'report/saleReport/report_sale_by_channels_show_reference.php';
+}
+
+
+if(isset($_GET['saleByChannelsAndReference']) && isset($_GET['export']))
+{
+  include 'report/saleReport/export_sale_by_channels_show_reference.php';
+}
+
+
 
 
  ?>

@@ -112,7 +112,8 @@ while($total_page > 0 )
       $data = array(
                     $n,
                     $barcode->getBarcode($rs->id_product),
-                    limitText($rs->product_code.' : '.$rs->product_name,80),
+                    //limitText($rs->product_code.' : '.$rs->product_name,80),
+                    inputRow($rs->product_code.' : '.$rs->product_name), //--- print_helper
                     number($rs->price, 2),
                     number($rs->qty),
                     $rs->discount,
@@ -140,7 +141,7 @@ while($total_page > 0 )
   if($print->current_page == $print->total_page)
   {
     $qty  = number($total_qty);
-    $total_order = number($total_order, 2);
+    $total_order_amount = number($total_order, 2);
     $total_discount_amount = number($total_discount, 2);
     $net_amount = number($total_amount, 2);
     $remark = $cs->remark;
@@ -151,6 +152,7 @@ while($total_page > 0 )
     $amount = "";
     $shipping_fee = "";
     $service_fee = "";
+    $total_order_amount = "";
     $total_discount_amount = "";
     $net_amount = "";
     $remark = "";
@@ -175,7 +177,7 @@ while($total_page > 0 )
   $sub_price .=  '<strong>ราคารวม</strong>';
   $sub_price .= '</td>';
   $sub_price .= '<td class="subtotal text-right">';
-  $sub_price .=  $total_order;
+  $sub_price .=  $total_order_amount;
   $sub_price .= '</td>';
 
   //--- ส่วนลดรวม

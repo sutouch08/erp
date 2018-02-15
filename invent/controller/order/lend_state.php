@@ -42,6 +42,8 @@
 
     $lend = new lend($order->id);
 
+    $zone = new zone($lend->id_zone);
+
 
     //--- ตรวจสอบว่ามีการรับเข้าแล้วหรือยัง ถ้ามีการรับเข้าแล้วไม่ให้เปลี่ยนสถานะ
     if( $lend->isReceived($order->id) === TRUE)
@@ -74,7 +76,7 @@
               //--- ลดยอดในโซนปลายทางออก
               $isEnough = $stock->isEnough($lend->id_zone, $rs->id_product, $rs->qty);
 
-              if( $isEnough === FALSE)
+              if( $isEnough === FALSE && $zone->allowUnderZero === FALSE )
               {
                 $sc = FALSE;
                 $message = 'ยอดคงเหลือในโซนไม่เพียงพอ';

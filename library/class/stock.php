@@ -22,7 +22,11 @@ class stock
 			//--- หรือถ้าน้อยกว่าแต่โซนนี้ยอมให้ติดลบได้
 			if( ( $cQty + $qty ) >= 0 OR $auz === TRUE )
 			{
-				$sc = $this->update($id_zone, $id_pd, $qty);
+				$qs = $this->update($id_zone, $id_pd, $qty);
+				if($qs === TRUE && dbAffectedRows() == 1)
+				{
+					$sc = TRUE;
+				}
 			}
 			else
 			{
@@ -88,7 +92,7 @@ class stock
 	public function isExists($id_zone, $id_pd)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("SELECT qty FROM tbl_stock WHERE id_zone = ".$id_zone." AND id_product = '".$id_pd."'");
+		$qs = dbQuery("SELECT qty FROM tbl_stock WHERE id_zone = '".$id_zone."' AND id_product = '".$id_pd."'");
 		if( dbNumRows($qs) == 1 )
 		{
 			list( $sc ) = dbFetchArray($qs);

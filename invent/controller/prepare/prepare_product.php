@@ -14,7 +14,7 @@
   $order = new order($id_order);
   $prepare = new prepare();
   $product = new product();
-  $zone = new zone();
+  $zone = new zone($id_zone);
 
   if( $order->state == 4)
   {
@@ -32,7 +32,7 @@
       $orderQty = $order->getOrderQty($id_order, $pd->id_product);
 
       //--- เอาจำนวนที่จัดมาคูณด้วยจำนวนหน่วย (บางทีอาจมีการยิงบาร์โค้ดแพ็ค)
-      $qty = $pd->unit_qty * $qty;
+      $qty = intval($pd->unit_qty) * $qty;
 
       if( $orderQty > 0)
       {
@@ -40,7 +40,12 @@
         if( ($orderQty - $preparedQty) >= $qty)
         {
           //---	ถ้ามีสต็อกคงเหลือเพียงพอให้ตัด
-          if($stock->isEnough($id_zone, $pd->id_product, $qty))
+          if($stock->isEnough($id_zone, $pd->id_product, $qty) !== TRUE && $zone->allowUnderZero !== TRUE)
+          {
+              $sc = FALSE;
+              $message = "สินค้าไม่เพียงพอ กรุณากำหนดจำนวนสินค้าใหม่";
+          }
+          else
           {
             startTransection();
 
@@ -52,7 +57,7 @@
             }
 
             $id_style = $product->getStyleId($pd->id_product);
-            $id_wh    = $zone->getWarehouseId($id_zone);
+            $id_wh    = $zone->id_warehouse;
             //---	เพิ่มยอดเข้า buffer
             if($buffer->updateBuffer($id_order, $id_style, $pd->id_product, $id_zone, $id_wh , $qty) !== TRUE)
             {
@@ -87,11 +92,7 @@
 
             endTransection();
           }
-          else
-          {
-              $sc = FALSE;
-              $message = "สินค้าไม่เพียงพอ กรุณากำหนดจำนวนสินค้าใหม่";
-          }
+
         }
         else
         {

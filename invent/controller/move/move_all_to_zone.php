@@ -36,7 +36,7 @@ if( dbNumRows($qs) > 0 )
   while( $rs = dbFetchObject($qs))
   {
     //---- เพิ่มยอดสินค้าเข้าโซนปลายทาง (tbl_stock)
-    if( $stock->updateStockZone($id_zone, $rs->id_product, $rs->qty) === FALSE )
+    if( $stock->updateStockZone($id_zone, $rs->id_product, $rs->qty) !== TRUE )
     {
       $sc = FALSE;
       $message = 'ย้ายสินค้าเข้าโซนปลายทางไม่สำเร็จ';

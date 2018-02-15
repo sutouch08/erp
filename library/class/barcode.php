@@ -74,7 +74,7 @@ public function update($id, array $ds)
 
 public function delete($barcode)
 {
-	return dbQuery("DELETE FROM tbl_barcode WHERE barcode = '" .$id."'");
+	return dbQuery("DELETE FROM tbl_barcode WHERE barcode = '" .$barcode."'");
 }
 
 

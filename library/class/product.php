@@ -601,7 +601,26 @@ class product
 	}
 
 
+	public function getMinCode($code)
+	{
+		$style = new style();
+		$id_style = $style->getId($code);
+		$qs = dbQuery("SELECT MIN(code) FROM tbl_product WHERE id_style = '".$id_style."'");
+		list($sc) = dbFetchArray($qs);
 
+		return is_null($sc) ? $code : $sc;
+	}
+
+
+	public function getMaxCode($code)
+	{
+		$style = new style();
+		$id_style = $style->getId($code);
+		$qs = dbQuery("SELECT MAX(code) FROM tbl_product WHERE id_style = '".$id_style."'");
+		list($sc) = dbFetchArray($qs);
+
+		return is_null($sc) ? $code : $sc;
+	}
 
 
 

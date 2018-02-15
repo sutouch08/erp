@@ -174,7 +174,7 @@ class consign_check
     $id_emp = getCookie('user_id');
     $qr  = "UPDATE tbl_consign_check_detail ";
     $qr .= "SET qty = qty + ".$qty.", id_employee = '".$id_emp."' ";
-    $qr .= "WHERE id_consign_check = '".$id_consign_check."' ";
+    $qr .= "WHERE id_consign_check = ".$id_consign_check." ";
     $qr .= "AND id_product = '".$id_pd."' ";
 
     return dbQuery($qr);

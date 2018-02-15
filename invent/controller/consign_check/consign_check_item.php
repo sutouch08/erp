@@ -8,33 +8,41 @@ $bc = new barcode();
 $cs = new consign_check();
 
 $id_pd = $bc->getProductId($barcode);
-
-startTransection();
-
-//----- update check qty in tbl_consign_check_detail
-if($cs->updateCheckedQty($id_consign_check, $id_pd, $qty) !== TRUE)
+if($id_pd === FALSE)
 {
   $sc = FALSE;
-  $message = 'บันทึกจำนวนตรวจนับไม่สำเร็จ';
-}
-
-//----  update qty to consign_box
-if($cs->updateConsignBoxDetail($id_box, $id_consign_check, $id_pd, $qty) !== TRUE)
-{
-  $sc = FALSE;
-  $message = 'บันทึกยอดตรวจนับลงกล่องไม่สำเร็จ';
-}
-
-if($sc === TRUE)
-{
-  commitTransection();
+  $message = 'ไม่พบสินค้าในระบบ กรุณาตรวจสอบบาร์โค้ด';
 }
 else
 {
-  dbRollback();
-}
 
-endTransection();
+  startTransection();
+
+  //----- update check qty in tbl_consign_check_detail
+  if($cs->updateCheckedQty($id_consign_check, $id_pd, $qty) !== TRUE)
+  {
+    $sc = FALSE;
+    $message = 'บันทึกจำนวนตรวจนับไม่สำเร็จ';
+  }
+
+  //----  update qty to consign_box
+  if($cs->updateConsignBoxDetail($id_box, $id_consign_check, $id_pd, $qty) !== TRUE)
+  {
+    $sc = FALSE;
+    $message = 'บันทึกยอดตรวจนับลงกล่องไม่สำเร็จ';
+  }
+
+  if($sc === TRUE)
+  {
+    commitTransection();
+  }
+  else
+  {
+    dbRollback();
+  }
+
+  endTransection();
+}
 
 echo $sc === TRUE ? 'success' : $message;
 

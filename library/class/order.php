@@ -642,6 +642,18 @@ class order
 
 
 
+	public function getRefCode($id)
+	{
+		$sc = '';
+		$qs = dbQuery("SELECT ref_code FROM tbl_order WHERE id = '".$id."'");
+		if(dbNumRows($qs) == 1)
+		{
+			list($sc) = dbFetchArray($qs);
+		}
+
+		return $sc;
+	}
+
 
 
 
