@@ -13,6 +13,7 @@
         	<li><a href="index.php?content=return_order"><i class="fa fa-download"></i>&nbsp; รับคืนสินค้า จากการขาย(ลดหนี้)</a></li>
           <li><a href="index.php?content=support_return"><i class="fa fa-download"></i>&nbsp; รับคืนสินค้า จากอภินันท์</a></li>
           <li><a href="index.php?content=sponsor_return"><i class="fa fa-download"></i>&nbsp; รับคืนสินค้า จากสปอนเซอร์</a></li>
+          <li><a href="index.php?content=lend_return"><i class="fa fa-download"></i>&nbsp; รับคืนสินค้า จากการยืม</a></li>
         </ul>
       </li>
       <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-upload"></i>&nbsp; ส่งคืนสินค้า</a>
@@ -32,6 +33,7 @@
       <li><a href="index.php?content=buffer_zone"><span class="glyphicon glyphicon-tasks"></span>&nbsp; ตรวจสอบ BUFFER ZONE</a></li>
       <li><a href="index.php?content=cancle_zone"><span class="glyphicon glyphicon-tasks"></span>&nbsp; ตรวจสอบ CANCLE ZONE</a></li>
       <li><a href="index.php?content=stock_movement"><span class="glyphicon glyphicon-tasks"></span>&nbsp; ตรวจสอบ MOVEMENT</a></li>
+      <li><a href="index.php?content=stock"><span class="glyphicon glyphicon-tasks"></span>&nbsp; ตรวจสอบ STOCK</a></li>
     </ul>
   </li>
 

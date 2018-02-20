@@ -76,6 +76,12 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รับคืนสินค้าอภินันท์';
 			break;
 
+		case 'lend_return' :
+			$id_tab = 92;
+			$content = 'lend_return.php';
+			$pageTitle = 'รับคืนสินค้าจากการยืม';
+			break;
+
 		case 'return_received' :
 			$content = 'return_received.php';
 			$pageTitle = 'ส่งคืนสินค้า(ลดหนี้ซื้อ)';
@@ -478,6 +484,12 @@ if( !getConfig('CLOSED') )
 		$content = 'view_stock.php';
 		$pageTitle = 'View Stock';
 	}
+
+  $pm 				= checkAccess($id_profile, $id_tab);
+	$view 			  = $pm['view'];
+	$add 				  = $pm['add'];
+	$edit 				= $pm['edit'];
+	$delete 			= $pm['delete'];
 
 	require_once 'template.php';
 }

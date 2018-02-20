@@ -31,13 +31,11 @@
       //---	ถ้ามีออเดอร์สั่งมา
       $orderQty = $order->getOrderQty($id_order, $pd->id_product);
 
-      //--- เอาจำนวนที่จัดมาคูณด้วยจำนวนหน่วย (บางทีอาจมีการยิงบาร์โค้ดแพ็ค)
-      $qty = intval($pd->unit_qty) * $qty;
-
       if( $orderQty > 0)
       {
         $preparedQty = $buffer->getSumQty($id_order, $pd->id_product);
-        if( ($orderQty - $preparedQty) >= $qty)
+        $bQty = $orderQty - $preparedQty;
+        if( $bQty >= $qty)
         {
           //---	ถ้ามีสต็อกคงเหลือเพียงพอให้ตัด
           if($stock->isEnough($id_zone, $pd->id_product, $qty) !== TRUE && $zone->allowUnderZero !== TRUE)
@@ -50,7 +48,7 @@
             startTransection();
 
             //---	ตัดยอดสอนค้าออกจากโซน
-            if($stock->updateStockZone($id_zone, $pd->id_product, ($qty * -1)) !== TRUE)
+            if($stock->updateStockZone($id_zone, $pd->id_product, (-1 * $qty)) !== TRUE)
             {
               $sc = FALSE;
               $message = 'ตัดยอดสต็อกจากโซนไม่สำเร็จ';

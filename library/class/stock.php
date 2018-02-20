@@ -16,7 +16,19 @@ class stock
 		$zone = new zone();
 		$cQty = $this->isExists($id_zone, $id_pd); ///-- return FALSE if not exists , return current qty if exists
 		$auz  = $zone->isAllowUnderZero($id_zone); //--- อนุญาติให้ติดลบได้หรือไม่
-		if( $cQty !== FALSE )
+		if( $cQty === FALSE )
+		{
+			if( $qty > 0 OR $auz === TRUE )
+			{
+				$sc =  $this->add( $id_zone, $id_pd, $qty );
+			}
+			else
+			{
+				$this->error = 'This Warehouse cannot store under zero stock';
+			}
+
+		}
+		else
 		{
 			//--- ถ้าจำนวนที่ update รวมกับจำนวนที่มีแล้ว มากกว่า 0
 			//--- หรือถ้าน้อยกว่าแต่โซนนี้ยอมให้ติดลบได้
@@ -27,17 +39,6 @@ class stock
 				{
 					$sc = TRUE;
 				}
-			}
-			else
-			{
-				$this->error = 'This Warehouse cannot store under zero stock';
-			}
-		}
-		else
-		{
-			if( $qty > 0 OR $auz === TRUE )
-			{
-				$sc =  $this->add( $id_zone, $id_pd, $qty );
 			}
 			else
 			{

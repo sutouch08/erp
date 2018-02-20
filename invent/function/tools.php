@@ -58,9 +58,9 @@ function getCookie($name)
 function limitText($str, $length)
 {
 	$txt = '...';
-	if( strlen($str) > $length)
+	if( strlen($str) >= $length)
 	{
-		return substr_replace($str, $txt, $length);
+		return mb_substr($str, 0, $length).$txt;
 	}
 	else
 	{

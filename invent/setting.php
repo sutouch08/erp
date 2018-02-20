@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$pageName	= "การตั้งค่า";
 	$id_tab 		= 25;
 	$id_profile 	= $_COOKIE['profile_id'];
@@ -7,13 +7,13 @@
 	$add 		= $pm['add'];
 	$edit 		= $pm['edit'];
 	$delete 	= $pm['delete'];
-	
+
 	$su		= checkAccess($id_profile, 61); //-------  ตรวจสอบว่ามีสิทธิ์ในการปิดระบบหรือไม่  -----//
 	$cando	= ($su['view'] + $su['add'] + $su['edit'] + $su['delete'] ) > 0 ? TRUE : FALSE;
 	accessDeny($view);
 	?>
 <script src="<?php echo WEB_ROOT; ?>library/ckeditor/ckeditor.js"></script>
-<script src="<?php echo WEB_ROOT; ?>library/ckfinder/ckfinder.js"></script>    
+<script src="<?php echo WEB_ROOT; ?>library/ckfinder/ckfinder.js"></script>
 <div class="container">
 <div class="row top-row">
 	<div class="col-lg-12 top-col">
@@ -28,7 +28,7 @@
         <li class="li-block active"><a href="#general" data-toggle="tab">ตั้งค่าทั่วไป</a></li>
         <li class="li-block"><a href="#product" data-toggle="tab">ตั้งค่าสินค้า</a></li>
          <li class="li-block"><a href="#order" data-toggle="tab">ตั้งค่าออเดอร์</a></li>
-        <li class="li-block"><a href="#document" data-toggle="tab">ตั้งค่าเอกสาร</a></li>        
+        <li class="li-block"><a href="#document" data-toggle="tab">ตั้งค่าเอกสาร</a></li>
         <li class="li-block"><a href="#other" data-toggle="tab">ตั้งค่าอื่นๆ</a></li>
 </ul>
 </div>
@@ -36,16 +36,16 @@
 <div class="tab-content">
         <!-------------------------------------------------------  ตั้งค่าทั่วไป  ----------------------------------------------------->
             <?php include 'include/setting_general.php'; ?>
-		<!-------------------------------------------------------  ตั้งค่าสินค้า  ----------------------------------------------------->          
+		<!-------------------------------------------------------  ตั้งค่าสินค้า  ----------------------------------------------------->
             <?php include 'include/setting_product.php'; ?>
-		<!-------------------------------------------------------  ตั้งค่าออเดอร์  --------------------------------------------------->            
+		<!-------------------------------------------------------  ตั้งค่าออเดอร์  --------------------------------------------------->
             <?php include 'include/setting_order.php'; ?>
-        <!-------------------------------------------------------  ตั้งค่าเอกสาร  --------------------------------------------------->            
-            <?php include 'include/setting_document.php'; ?> 
-		<!-------------------------------------------------------  ตั้งค่าอื่นๆ  ------------------------------------------------------>            
-         	<?php include 'include/setting_other.php'; ?>           
+        <!-------------------------------------------------------  ตั้งค่าเอกสาร  --------------------------------------------------->
+            <?php include 'include/setting_document.php'; ?>
+		<!-------------------------------------------------------  ตั้งค่าอื่นๆ  ------------------------------------------------------>
+         	<?php include 'include/setting_other.php'; ?>
 </div>
-</div><!--/ col-sm-9  -->    
+</div><!--/ col-sm-9  -->
 </div><!--/ row  -->
 
 </div><!---/ container -->
@@ -57,7 +57,7 @@ CKEDITOR.replace( 'content',{
 		{ name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
 		{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
-		{ name: 'links' }, 
+		{ name: 'links' },
 		{ name: 'styles' },
 		{ name: 'colors' },
 		{ name: 'tools' },
@@ -123,24 +123,33 @@ function allow()
 {
 	$("#allowUnderZero").val(1);
 	$("#btn-not-allow").removeClass('btn-danger');
-	$("#btn-allow").addClass('btn-success');	
+	$("#btn-allow").addClass('btn-success');
 }
 
 function notAllow()
 {
-	$("#allowUnderZero").val(0)	
+	$("#allowUnderZero").val(0)
 	$("#btn-allow").removeClass('btn-success');
 	$("#btn-not-allow").addClass('btn-danger');
 }
 
 
+function checkPrefix(){
+	var pre = [];
+	$('.prefix').each(function(index, el) {
+		pre.push({'name':$(this).val(), 'value':$(this).val()});
+	});
+
+	return pre;
+}
+
 $(".prefix").keyup(function(e) {
-    var pf = $(this).val();
+  var pf = $(this).val();
 	var du = 0;
 	if(pf != "")
 	{
 		$(".prefix").each(function(index, element) {
-            var val = $(this).val();
+      var val = $(this).val();
 			if(val == pf){ du += 1; }
         });
 		if(du > 1 )

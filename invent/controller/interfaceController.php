@@ -275,6 +275,22 @@ if( isset($_GET['export']) && isset($_GET['TR']))
 }
 
 
+
+//--- Export Transfer (Return lend)
+if(isset($_GET['export']) && isset($_GET['LEND_TR']))
+{
+	$id = $_POST['id_return_lend'];
+
+	//--- โอนสินค้าจากคลังยืมสินค้าเข้าคลังปกติ
+	include 'interface/export/exportReturnLendTR.php';
+
+	//---
+	$sc = exportReturnLendTR($id);
+
+	//---
+	echo $sc === TRUE ? 'success' : $sc;
+}
+
 //---	Export Adjust
 //---	ส่งข้อมูลไป formula
 if( isset( $_GET['export']) && isset($_GET['AJ']) )

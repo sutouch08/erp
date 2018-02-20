@@ -13,7 +13,7 @@
   </div>
 
   <div class="col-sm-3 padding-5">
-  	<label>ลูกค้า [ ในระบบ ]</label>
+  	<label>ผู้ยืม [พนักงาน]</label>
     <input type="text" class="form-control input-sm text-center input-header" id="customer" value="<?php echo customerName($order->id_customer); ?>"  <?php echo $disabled; ?>/>
   </div>
 

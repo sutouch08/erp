@@ -144,6 +144,7 @@ class order
 
 			$this->hasNotSaveDetail = $this->hasNotSaveDetail($this->id);
 		}
+		
 	}
 
 

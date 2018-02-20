@@ -29,6 +29,11 @@ class lend
 	}
 
 
+	public function getDetails($id_order)
+	{
+		return dbQuery("SELECT * FROM tbl_order_lend_detail WHERE id_order = '".$id_order."'");
+	}
+
 
 	public function add(array $ds = array())
 	{
@@ -93,6 +98,18 @@ class lend
 	}
 
 
+
+	public function getDetail($id)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT * FROM tbl_order_lend_detail WHERE id = '".$id."'");
+		if(dbNumRows($qs) == 1)
+		{
+			$sc = dbFetchObject($qs);
+		}
+
+		return $sc;
+	}
 
 
 
@@ -200,8 +217,71 @@ class lend
 	//---	ปิดเอกสาร (รับคืนครบแล้ว หรือ ยกเลิกเอกสาร)
 	public function closed($id_order)
 	{
-		return dbQuery("UPDATE tbl_order_lend SET isClosed = 1 WHERE id_order = '".$id_order."'");
+		return dbQuery("UPDATE tbl_order_lend SET isClosed = 1 WHERE id_order = ".$id_order);
 	}
+
+
+
+	//---
+	public function unClose($id_order)
+	{
+		return dbQuery("UPDATE tbl_order_lend SET isClosed = 0 WHERE id_order = ".$id_order);
+	}
+
+
+	public function updateReceived($id, $qty)
+	{
+		$emp = getCookie('user_id');
+
+		$qs = dbQuery("UPDATE tbl_order_lend_detail SET received = received + ".$qty.", emp_upd = '".$emp."' WHERE id = ".$id);
+		if($qs)
+		{
+			$this->validDetail($id);
+		}
+
+		return $qs;
+	}
+
+
+
+	public function unReceived($id_order, $id_pd, $qty)
+	{
+		$emp = getCookie('user_id');
+
+		$qr  = "UPDATE tbl_order_lend_detail ";
+		$qr .= "SET received = received - ".$qty.", ";
+		$qr .= "valid = 0, ";
+		$qr .= "emp_upd = '".$emp."' ";
+		$qr .= "WHERE id_order = '".$id_order."' ";
+		$qr .= "AND id_product = '".$id_pd."'";
+
+		return dbQuery($qr);
+	}
+
+
+
+	public function validDetail($id)
+	{
+		return dbQuery("UPDATE tbl_order_lend_detail SET valid = 1 WHERE id = ".$id." AND qty = received");
+	}
+
+
+
+
+
+	//--- ตรวจสอบว่าคืนสินค้าครบทุกรายการแล้วหรือยัง
+	public function isCompleted($id)
+	{
+		$sc = FALSE;
+		$qs = dbQuery("SELECT * FROM tbl_order_lend_detail WHERE id_order = '".$id."' AND valid = 0");
+		if(dbNumRows($qs) == 0)
+		{
+			$sc = TRUE;
+		}
+
+		return $sc;
+	}
+
 
 
 

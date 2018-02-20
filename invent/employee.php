@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$page_menu = "invent_sale";
 	$page_name = "พนักงาน";
 	$id_tab = 26;
@@ -15,7 +15,7 @@
 		{
 			$val = $class;
 		}
-		return $val;			
+		return $val;
 	}
 	$btn = "";
 	if( isset($_GET['reset_password']) )
@@ -34,7 +34,7 @@
 		   $btn .= "<button class='btn btn-warning btn-sm' onclick='go_back()'><i class='fa fa-arrow-left'></i>&nbsp; กลับ</button>";
 			if($edit) :
 				$btn .= "<button type='button' class='btn btn-success btn-sm' onclick='submit_edit()' style='margin-left:10px;'><i class='fa fa-save'></i>&nbsp; บันทึก</button>";
-			endif;	
+			endif;
 	   }
 	   else
 	   {
@@ -50,7 +50,7 @@
 	</div>
     <div class="col-lg-4">
      <p class="pull-right" style="margin-bottom:0px;">
-       <?php 
+       <?php
 	   	echo $btn;
 	   ?>
        </p>
@@ -66,37 +66,37 @@
     <div class="col-lg-4"><input type="text" name="first_name" id="first_name" class="form-control input-sm" placeholder="ชื่อพนักงาน (จำเป็น)" autofocus="autofocus" autocomplete="off" /></div>
     <div class="col-lg-4"><span class="form-control label-right" style="color:red;">*</span></div>
     <div class="col-lg-12"><input type="hidden" name="id_employee" id="id_employee" value="0" />&nbsp;</div>
-    
+
     <div class="col-lg-4"><span class="form-control label-left">นามสกุล : </span></div>
     <div class="col-lg-4"><input type='text' name='last_name' id='last_name' class='form-control input-sm' placeholder="นามสกุลพนักงาน" autocomplete='off' /></div>
     <div class="col-lg-4">&nbsp;</div>
     <div class="col-lg-12">&nbsp;</div>
-    
+
     <div class="col-lg-4"><span class="form-control label-left">Email / User name : </span></div>
     <div class="col-lg-4"><input type='text' name='email' id='email' class='form-control input-sm' autocomplete='off' placeholder="อีเมล์ หรือ ชื่อสำหรับเข้าระบบ (จำเป็น)"/></div>
     <div class="col-lg-4"><span class="form-control label-right" style="color:red;">*</span></div>
     <div class="col-lg-12">&nbsp;</div>
-    
+
     <div class="col-lg-4"><span class="form-control label-left">รหัสผ่าน : </span></div>
     <div class="col-lg-4"><input type='password' name='password' id='password' class='form-control input-sm' autocomplete="off" placeholder="รหัสผ่านสำหรับเข้าระบบ (จำเป็น)"/></div>
     <div class="col-lg-4"><span class="form-control label-right" style="color:red;">*</span></div>
     <div class="col-lg-12">&nbsp;</div>
-    
+
     <div class="col-lg-4"><span class="form-control label-left">ยืนยันรหัสผ่าน : </span></div>
     <div class="col-lg-4"><input type='password' name='cf_password' id='cf_password' class='form-control input-sm' autocomplete="off" placeholder="ป้อนรหัสผ่านให้ตรงกับช่องรหัสผ่านด้านบน (จำเป็น)"/></div>
     <div class="col-lg-4"><span class="form-control label-right" style="color:red;">*</span></div>
     <div class="col-lg-12">&nbsp;</div>
-    
+
     <div class="col-lg-4"><span class="form-control label-left">โปรไฟล์ : </span></div>
     <div class="col-lg-4"><select name='id_profile' id='id_profile' class="form-control input-sm" style="color:#999;"><?php echo selectEmployeeGroup('',"----------  เลือก  ----------"); ?></select></div>
     <div class="col-lg-4"><span class="form-control label-right" style="color:red;">*</span></div>
     <div class="col-lg-12">&nbsp;</div>
-    
+
     <div class="col-lg-4"><span class="form-control label-left">รหัสลับ : </span></div>
     <div class="col-lg-4"><input type='password' name='s_key' id='s_key' class='form-control input-sm' autocomplete="off" placeholder="รหัสลับสำหรับใช้อนุมัติ" /></div>
     <div class="col-lg-4"></div>
     <div class="col-lg-12">&nbsp;</div>
-    
+
      <div class="col-lg-4"><span class="form-control label-left">สถานะ : </span></div>
     <div class="col-lg-3">
         <div class="btn-group">
@@ -115,22 +115,22 @@
     <div class="col-lg-4"><input type="text" name="first_name" id="first_name" class="form-control input-sm" value="<?php echo $employee->first_name; ?>" placeholder="ชื่อพนักงาน (จำเป็น)" autofocus="autofocus" autocomplete="off" /></div>
     <div class="col-lg-4"><span class="form-control label-right" style="color:red;">*</span></div>
     <div class="col-lg-12"><input type="hidden" name="id_employee" id="id_employee" value="<?php echo $_GET['id_employee']; ?>" />&nbsp;</div>
-    
+
     <div class="col-lg-4"><span class="form-control label-left">นามสกุล : </span></div>
     <div class="col-lg-4"><input type='text' name='last_name' id='last_name' class='form-control input-sm' value="<?php echo $employee->last_name; ?>" placeholder="นามสกุลพนักงาน" autocomplete='off' /></div>
     <div class="col-lg-4">&nbsp;</div>
     <div class="col-lg-12">&nbsp;</div>
-    
+
     <div class="col-lg-4"><span class="form-control label-left">Email / User name : </span></div>
     <div class="col-lg-4"><input type='text' name='email' id='email' class='form-control input-sm' value="<?php echo $employee->email; ?>" autocomplete='off' placeholder="อีเมล์ หรือ ชื่อสำหรับเข้าระบบ (จำเป็น)"/></div>
     <div class="col-lg-4"><span class="form-control label-right" style="color:red;">*</span></div>
     <div class="col-lg-12">&nbsp;</div>
-        
+
     <div class="col-lg-4"><span class="form-control label-left">โปรไฟล์ : </span></div>
     <div class="col-lg-4"><select name='id_profile' id='id_profile' class="form-control input-sm" style="color:#999;"><?php echo selectEmployeeGroup($employee->id_profile,"----------  เลือก  ----------"); ?></select></div>
     <div class="col-lg-4"><span class="form-control label-right" style="color:red;">*</span></div>
     <div class="col-lg-12">&nbsp;</div>
-        
+
      <div class="col-lg-4"><span class="form-control label-left">สถานะ : </span></div>
     <div class="col-lg-3">
         <div class="btn-group">
@@ -142,7 +142,7 @@
     <div class="col-lg-12">&nbsp;</div>
 </div>
 
-<?php elseif(isset($_GET['reset_password'])&&isset($_GET['id_employee'])) :   
+<?php elseif(isset($_GET['reset_password'])&&isset($_GET['id_employee'])) :
 	$employee = new employee($_GET['id_employee']);
 	$id_employee = $employee->id_employee;
 	$first_name = $employee->first_name;
@@ -154,24 +154,24 @@
 	<div class='col-lg-4'><span class="form-control input-sm"><?php echo $first_name; ?></span></div>
 	<div class='col-lg-4 label-right'></div>
 	<div class='col-lg-12'>&nbsp;</div>
-	
+
 	<div class='col-lg-4 label-left'>นามสกุล :</div>
 	<div class='col-lg-4'><span class="form-control input-sm"><?php echo $last_name; ?></span></div>
 	<div class='col-lg-4 label-right'></div>
 	<div class='col-lg-12'>&nbsp;</div>
-	
+
 	<div class='col-lg-4 label-left'>รหัสผ่านใหม่ :</div>
 	<div class='col-lg-4'><input type='password' name='password' id='password' class='form-control input-sm' /></div>
 	<div class='col-lg-4 label-right'><span style='color:red'>*</span></div>
 	<div class='col-lg-12'>&nbsp;</div>
-	
+
 	<div class='col-lg-4 label-left'>ยืนยันรหัสผ่าน :</div>
 	<div class='col-lg-4'><input type='password' name='cfm_password' id='cfm_password' class='form-control input-sm' /></div>
 	<div class='col-lg-4 label-right'><span style='color:red'>*</span></div>
 	<div class='col-lg-12'>&nbsp;</div>
 	<div class='col-lg-2 col-lg-offset-6'><button type='button' class='btn btn-warning btn-block' id='reset'>เปลี่ยนรหัสผ่าน</button></div>
     </div>
-   
+
 	<?php if($_GET['id_employee'] == $_COOKIE['user_id']) : ?>
     <hr style='border-color:#CCC; margin-top: 10px; margin-bottom:15px;' />
     <div class="row">
@@ -181,24 +181,24 @@
     <div class='col-lg-12'>&nbsp;</div>
     <div class="col-lg-4 label-left">ยืนยันรหัสลับ</div>
     <div class="col-lg-4"><input type="password" name="cmf_s_key" id="cmf_s_key" class="form-control input-sm"  /></div>
-    <div class="col-lg-4">&nbsp;</div>  
+    <div class="col-lg-4">&nbsp;</div>
     <div class='col-lg-12'>&nbsp;</div>
     <div class="col-lg-2 col-lg-offset-6"><button type="button" class="btn btn-info btn-block" onclick="reset_s_key()"><i class="fa fa-key"></i>&nbsp; เปลี่ยนรหัสลับ</button></div>
     </div>
-    <?php endif; ?>    
-	
-	
+    <?php endif; ?>
+
+
 <?php else :  ?>
-<?php 	
-		if( isset($_POST['search_text']) ) : 
-			$search_text = $_POST['search_text']; 
+<?php
+		if( isset($_POST['search_text']) ) :
+			$search_text = $_POST['search_text'];
 			setcookie("employee_search_text", $search_text, time() + 3600, "/");
 		elseif( isset($_COOKIE['employee_search_text'])) :
 			$search_text = $_COOKIE['employee_search_text'];
 		else :
 			$search_text = '';
 		endif;
-?>		
+?>
 <form id="search_form" method="post" action="index.php?content=Employee">
 <div class="row">
 	<div class="col-lg-4 col-lg-offset-3">
@@ -213,9 +213,10 @@
 <hr style='border-color:#CCC; margin-top: 10px; margin-bottom:15px;' />
 
 <?php
+	$table = "tbl_employee LEFT JOIN tbl_profile ON tbl_employee.id_profile = tbl_profile.id_profile ";
 	$where = "WHERE id_employee != 0 ";
-	if($search_text !="") : 
-		$where .= "AND (first_name LIKE '%".$search_text."%' OR last_name LIKE '%".$search_text."%' OR email LIKE '%".$search_text."%')";
+	if($search_text !="") :
+		$where .= "AND (first_name LIKE '%".$search_text."%' OR last_name LIKE '%".$search_text."%' OR email LIKE '%".$search_text."%' OR profile_name LIKE '%".$search_text."%')";
 	endif;
 	$where .= " ORDER BY id_employee DESC";
 ?>
@@ -223,20 +224,20 @@
 <?php
 	$paginator = new paginator();
 	if(isset($_POST['get_rows'])){$get_rows = $_POST['get_rows'];$paginator->setcookie_rows($get_rows);}else if(isset($_COOKIE['get_rows'])){$get_rows = $_COOKIE['get_rows'];}else{$get_rows = 50;}
-	$paginator->Per_Page("tbl_employee",$where,$get_rows);
+	$paginator->Per_Page($table,$where,$get_rows);
 	$paginator->display($get_rows,"index.php?content=Employee");
 	$Page_Start = $paginator->Page_Start;
 	$Per_Page = $paginator->Per_Page;
-?>	
+?>
 <style>
-	.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td 
+	.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td
 	{
 		vertical-align:middle;
 	}
-</style>	
+</style>
 <div class='row'>
 	<div class='col-sm-12'>
-<?php 	$qs = dbQuery("SELECT * FROM tbl_employee ".$where." LIMIT ".$Page_Start.", ".$Per_Page); ?>		
+<?php 	$qs = dbQuery("SELECT tbl_employee.* FROM ".$table.$where." LIMIT ".$Page_Start.", ".$Per_Page); ?>
 <?php    $row = dbNumRows($qs); ?>
 <?php	if($row >0) : ?>
 		<table class='table table-striped table-hover'>
@@ -260,7 +261,7 @@
                 <?php echo can_do($edit, "<a href='index.php?content=Employee&reset_password&id_employee=".$rs['id_employee']."'><button type='button' class='btn btn-default btn-xs'><i class='fa fa-key'></i></button></a>"); ?>
                 <?php echo can_do($edit, "<a href='index.php?content=Employee&edit=y&id_employee=".$rs['id_employee']."'><button class='btn btn-warning btn-xs'><i class='fa fa-pencil'></i></button></a>"); ?>
                 <?php $link = "controller/employeeController.php?drop=y&id_employee=".$rs['id_employee']; ?>
-                <?php echo can_do($delete, "<button class='btn btn-danger btn-xs' onclick=\"confirm_delete('คุณแน่ใจว่าต้องการลบ ".employee_name($rs['id_employee'])." ?', 'โปรดจำไว้ เมื่อลบแล้วไม่สามารถกู้คืนได้','".$link."')\"><i class='fa fa-trash'></i></button>"); ?>	
+                <?php echo can_do($delete, "<button class='btn btn-danger btn-xs' onclick=\"confirm_delete('คุณแน่ใจว่าต้องการลบ ".employee_name($rs['id_employee'])." ?', 'โปรดจำไว้ เมื่อลบแล้วไม่สามารถกู้คืนได้','".$link."')\"><i class='fa fa-trash'></i></button>"); ?>
                 <?php elseif($rs['id_profile'] == 1 && $id_profile == 1) : ?>
                 <?php echo can_do($edit, "<a href='index.php?content=Employee&reset_password&id_employee=".$rs['id_employee']."'><button type='button' class='btn btn-default btn-xs'><i class='fa fa-key'></i></button></a>"); ?>
                 <?php echo can_do($edit, "<a href='index.php?content=Employee&edit=y&id_employee=".$rs['id_employee']."'><button class='btn btn-warning btn-xs'><i class='fa fa-pencil'></i></button></a>"); ?>
@@ -271,15 +272,15 @@
                 <?php echo can_do($edit, "<a href='index.php?content=Employee&edit=y&id_employee=".$rs['id_employee']."'><button class='btn btn-warning btn-xs'><i class='fa fa-pencil'></i></button></a>"); ?>
                 <?php $link = "controller/employeeController.php?drop=y&id_employee=".$rs['id_employee']; ?>
                 <?php echo can_do($delete, "<button class='btn btn-danger btn-xs' onclick=\"confirm_delete('คุณแน่ใจว่าต้องการลบ ".employee_name($rs['id_employee'])." ?', 'โปรดจำไว้ เมื่อลบแล้วไม่สามารถกู้คืนได้','".$link."')\"><i class='fa fa-trash'></i></button>"); ?>
-                <?php endif; ?>				
+                <?php endif; ?>
 				</td>
 			</tr>
 <?php		endwhile;  ?>
 		</table>
 <?php else : ?>
 	<center><h4>----------  ไม่มีพนักงานตามชื่อที่ค้นหา  ----------</h4></center>
-<?php endif; ?>   
-	</div> 
+<?php endif; ?>
+	</div>
 </div>
 <?php endif; ?>
 </div>
@@ -288,7 +289,7 @@ function check_name(role)
 {
 	var id 			= $("#id_employee").val();
 	var name 		= $("#first_name").val();
-	var last_name 	= $("#last_name").val();	
+	var last_name 	= $("#last_name").val();
 	$.ajax({
 		url:"controller/employeeController.php?check_name",
 		type: "POST", data:{ "id_employee" : id, "first_name" : name, "last_name" : last_name },
@@ -315,7 +316,7 @@ function check_email(role)
 		var s_key	= $("#s_key").val();
 	}else if(role == "edit"){
 		var s_key	= "";
-	}		
+	}
 	$.ajax({
 		url:"controller/employeeController.php?check_email",
 		type: "POST", cache: "false", data: { "id_employee" : id, "email" : email },
@@ -327,7 +328,7 @@ function check_email(role)
 				if( s_key != "" )
 				{
 					check_s_key(role);
-					
+
 				}else{
 					if(role == "add")
 					{
@@ -364,10 +365,10 @@ function check_s_key(role)
 				}
 			}else{
 				load_out();
-				swal("ผิดพลาด !!", "ไม่สามารถใช้รหัสลับนี้ได้ กรุณากำหนดรหัสลับอื่น", "error");	
+				swal("ผิดพลาด !!", "ไม่สามารถใช้รหัสลับนี้ได้ กรุณากำหนดรหัสลับอื่น", "error");
 			}
 		}
-	});	
+	});
 }
 
 function enable()
@@ -386,12 +387,12 @@ function disable()
 
 function add_new()
 {
-	window.location.href = "index.php?content=Employee&add=y";	
+	window.location.href = "index.php?content=Employee&add=y";
 }
 
 function go_back()
 {
-	window.location.href = "index.php?content=Employee";	
+	window.location.href = "index.php?content=Employee";
 }
 
 $("#search_text").keyup(function(e) {
@@ -424,14 +425,14 @@ function submit_add(){
 	var cf_pass 	= $("#cf_password").val();
 	var id_profile 	= $("#id_profile").val();
 	var s_key		= $("#s_key").val();
-	
+
 	if( first_name == ""){ swal("ข้อมูลไม่ครบ","กรุณาระบุชื่อพนักงาน", "error"); return false; }
 	if( email == ""){ swal("ข้อมูลไม่ครบ", "กรุณากำหนดอีเมล์ หรือ User name สำหรับใช้เข้าระบบ", "error"); return false; }
 	if( password == ""){ swal("ข้อมูลไม่ครบ","กรุณากำหนดรหัสผ่านสำหรับเข้าระบบ", "error"); return false; }
 	if( password != "" && cf_pass != password ){ swal("รหัสผ่านไม่ตรงกัน", "รหัสผ่านไม่ตรงกัน โปรดป้อนรหัสผ่านทั้ง 2 ช่อง", "error"); return false; }
 	if( id_profile == ""){ swal("ข้อมูลไม่ครบ", "กรุณาเลือกโปรไฟล์", "error"); return false; }
 	if( s_key != "" && s_key.length < 4 ){ swal("รหัสลับไม่ถูกต้อง", "รหัสลับต้องมีความยาวอย่างน้อย 4 ตัวอักษร", "error"); return false; }
-	
+
 	load_in();
 	check_name("add");
 }
@@ -441,11 +442,11 @@ function submit_edit()
 	var first_name 	= $("#first_name").val();
 	var email 		= $("#email").val();
 	var id_profile 	= $("#id_profile").val();
-	
+
 	if( first_name == ""){ swal("ข้อมูลไม่ครบ","กรุณาระบุชื่อพนักงาน", "error"); return false; }
 	if( email == ""){ swal("ข้อมูลไม่ครบ", "กรุณากำหนดอีเมล์ หรือ User name สำหรับใช้เข้าระบบ", "error"); return false; }
 	if( id_profile == ""){ swal("ข้อมูลไม่ครบ", "กรุณาเลือกโปรไฟล์", "error"); return false; }
-	
+
 	load_in();
 	check_name("edit");
 }
@@ -468,7 +469,7 @@ function add()
 				swal("ผิดพลาด !!", "เพิ่มพนักงานไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", "error");
 			}
 		}
-	});	
+	});
 }
 
 function edit()
@@ -494,7 +495,7 @@ function edit()
 				swal("ผิดพลาด !!", "แก้ไขข้อมูลพนักงานไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", "error");
 			}
 		}
-	});		
+	});
 }
 
 $("#reset").click(function(){
@@ -527,7 +528,7 @@ $("#reset").click(function(){
 			}
 		});
 	}
-	
+
 });
 
 function reset_s_key()
@@ -537,7 +538,7 @@ function reset_s_key()
 	var cmf		= $("#cmf_s_key").val();
 	if(s_key == "" || cmf == "")
 	{
-		swal("Error!!", "รหัสลับไม่สามารถเป็นค่าว่างได้","error");	
+		swal("Error!!", "รหัสลับไม่สามารถเป็นค่าว่างได้","error");
 		return false;
 	}else if(s_key != cmf){
 		swal("Error!!", "รหัสลับ 2 ช่องไม่ตรงกัน", "error");

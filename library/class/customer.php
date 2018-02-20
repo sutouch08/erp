@@ -325,15 +325,15 @@ class customer {
 
 
 
-	public function search($txt, $fields = "")
+	public function search($txt, $fields = "", $limit = 50)
 	{
 		if( $fields == "" )
 		{
-			return dbQuery("SELECT * FROM tbl_customer WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%' AND active = 1");
+			return dbQuery("SELECT * FROM tbl_customer WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%' AND active = 1 LIMIT ".$limit);
 		}
 		else
 		{
-			return dbQuery("SELECT ".$fields." FROM tbl_customer WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%' AND active = 1");
+			return dbQuery("SELECT ".$fields." FROM tbl_customer WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%' AND active = 1 LIMIT ".$limit);
 		}
 	}
 

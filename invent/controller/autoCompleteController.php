@@ -3,11 +3,20 @@ require "../../library/config.php";
 require "../../library/functions.php";
 require "../function/tools.php";
 
+//--- ดึงข้อมูลรหัสและชื่อลูกค้า
+if(isset($_GET['getCustomerCodeAndName']))
+{
+	include 'autocomplete/get_customer_code_and_name.php';
+}
+
 //---	รายงานสินค้าคงเหลือแยกตามโซน
 if(isset($_GET['getStyleCode']))
 {
 	include 'autocomplete/get_style_code.php';
 }
+
+
+
 
 if(isset($_GET['getStyleCodeAndId']))
 {
@@ -15,10 +24,14 @@ if(isset($_GET['getStyleCodeAndId']))
 }
 
 
+
+
 if(isset($_GET['getItemCode']))
 {
 	include 'autocomplete/get_item_code.php';
 }
+
+
 
 
 //---	รายงานสินค้าคงเหลือแยกตามโซน
@@ -28,10 +41,14 @@ if(isset($_GET['getWarehouse']))
 }
 
 
+
+
 if(isset($_GET['getWarehouseCode']))
 {
 	include 'autocomplete/get_warehouse_code.php';
 }
+
+
 
 
 //---	รายงานสินค้าคงเหลือแยกตามโซน

@@ -14,7 +14,7 @@
   </div>
 
 	<div class="col-sm-3 padding-5">
-  	<label>ลูกค้า[ผู้ยืม]</label>
+  	<label>ผู้ยืม [พนักงาน]</label>
     <input type="text" class="form-control input-sm" value="<?php echo customerName($order->id_customer); ?>" disabled />
   </div>
 

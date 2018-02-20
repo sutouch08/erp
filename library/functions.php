@@ -342,34 +342,42 @@ function isViewStockOnly($id_profile)
 }
 
 
-
-
-function checkAccess($id_profile, $id_tab){
-	$pm = array();
-	if($id_profile == 1){
-		$pm['view'] = 1;
-		$pm['add']  = 1;
-		$pm['edit'] = 1;
-		$pm['delete'] = 1;
-	}else{
-		$sql=dbQuery("SELECT tbl_access.view, tbl_access.add, tbl_access.edit, tbl_access.delete FROM tbl_access WHERE tbl_access.id_profile = $id_profile AND tbl_access.id_tab = $id_tab");
-		if(dbNumRows($sql) == 1){
-			$rs = dbFetchArray($sql);
-			$pm['view'] = $rs['view'];
-			$pm['add']  = $rs['add'];
-			$pm['edit'] = $rs['edit'];
-			$pm['delete'] = $rs['delete'];
-		}else{
-		$pm['view'] = 0;
-		$pm['add']  = 0;
-		$pm['edit'] = 0;
-		$pm['delete'] = 0;
+function checkAccess($id_profile, $id_tab)
+{
+	if($id_profile == 1000000)
+	{
+		$pm = array(
+			'view' => 1,
+			'add' => 1,
+			'edit' => 1,
+			'delete' => 1
+		);
+	}
+	else
+	{
+		$qs = dbQuery("SELECT a.view, a.add, a.edit, a.delete FROM tbl_access AS a WHERE id_profile = '".$id_profile."' AND id_tab = '".$id_tab."'");
+		if(dbNumRows($qs) == 1)
+		{
+			$rs = dbFetchObject($qs);
+			$pm = array(
+				'view' => $rs->view,
+				'add' => $rs->add,
+				'edit' => $rs->edit,
+				'delete' => $rs->delete
+			);
+		}
+		else
+		{
+			$pm = array(
+				'view' => 0,
+				'add' => 0,
+				'edit' => 0,
+				'delete' => 0
+			);
 		}
 	}
 	return $pm;
 }
-
-
 
 
 
