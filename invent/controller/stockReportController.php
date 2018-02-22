@@ -88,4 +88,28 @@ if(isset($_GET['stock_balance']) && isset($_GET['export']))
 }
 
 
+//--- รายงานสินค้าคงเหลือปัจจุบัน
+if(isset($_GET['current_stock']) && isset($_GET['report']))
+{
+  include 'report/stockReport/report_current_stock.php';
+}
+
+
+if(isset($_GET['getStockGrid']))
+{
+  $sc = 'not exists';
+	$id_style = $_GET['id_style'];
+	$pd = new product();
+	$grid = new stock_grid();
+	$style = new style();
+	$view = TRUE;  //--- view stock
+	$sc = $grid->getStockGrid($id_style, $view);
+	$tableWidth	= $pd->countAttribute($id_style) == 1 ? 600 : $grid->getOrderTableWidth($id_style);
+	$sc .= ' | '.$tableWidth;
+	$sc .= ' | ' . $style->getCode($id_style);
+	$sc .= ' | ' . $id_style;
+	echo $sc;
+}
+
+
  ?>

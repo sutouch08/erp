@@ -23,6 +23,7 @@ $zone = new zone();
     <?php if($cs->isCancle == 0) : ?>
     <button type="button" class="btn btn-sm btn-info" onclick="exportReturnLend()"><i class="fa fa-send"></i> ส่งข้อมูลไป Formula</button>
     <?php endif; ?>
+    <button type="button" class="btn btn-sm btn-default" onclick="printReturnLend()"><i class="fa fa-print"></i> พิมพ์</button>
     </p>
   </div>
 </div>
@@ -96,3 +97,4 @@ $zone = new zone();
     </table>
   </div>
 </div>
+<script src="script/print/print_return_lend.js"></script>

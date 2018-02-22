@@ -452,6 +452,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รายงานสินค้าคงเหลือ';
 			break;
 
+		case 'current_stock' :
+			$content = 'report/stock/current_stock.php';
+			$pageTitle = 'รายงานสินค้าคงเหลือปัจจุบัน';
+			break;
+
 		case 'stock_balance_by_zone' :
 			$content = 'report/stock/stock_balance_by_zone.php';
 			$pageTitle = 'รายงานสินค้าคงเหลือแยกตามโซน';

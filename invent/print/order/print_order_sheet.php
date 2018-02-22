@@ -108,6 +108,7 @@ while($total_page > 0 )
   $page .= $print->top_page();
   $page .= $print->content_start();
   $page .= $print->table_start();
+  
   $i = 0;
 
   while($i<$row)
@@ -139,7 +140,7 @@ while($total_page > 0 )
       $data = array(
                     $n,
                     $barcode->getBarcode($rs->id_product),
-                    limitText($rs->product_code.' : '.$rs->product_name,80),
+                    inputRow($rs->product_code.' : '.$rs->product_name),
                     number($price, 2),
                     number($qty),
                     $discount,

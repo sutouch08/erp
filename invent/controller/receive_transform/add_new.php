@@ -96,102 +96,90 @@ if( $id_order !== FALSE )
                 );
     }
 
-    $rs = $cs->add($arr);
+    $id = $cs->add($arr);
 
-    if( $rs == TRUE )
+    if( $id === FALSE )
     {
-      $id_receive_transform = $cs->get_id($reference);
-
-      if( $id_receive_transform != FALSE )
+        $sc = FALSE;
+        $message = 'เพิ่มเอกสารไม่สำเร็จ';
+    }
+    else
+    {
+      foreach( $data as $id_pd => $qty )
       {
-        foreach( $data as $id_pd => $qty )
-        {
-          $arr = array(
-                  "id_receive_transform"	=> $id_receive_transform,
-                  "id_style"							=> $product->getStyleId($id_pd),
-                  "id_product"						=> $id_pd,
-                  "qty"										=> $qty,
-                  "id_warehouse"					=> $id_wh,
-                  "id_zone"								=> $id_zone
-                );
+        $arr = array(
+                "id_receive_transform"	=> $id,
+                "id_style"							=> $product->getStyleId($id_pd),
+                "id_product"						=> $id_pd,
+                "qty"										=> $qty,
+                "id_warehouse"					=> $id_wh,
+                "id_zone"								=> $id_zone
+              );
 
-            //------ เพิ่มรายการรับเข้า
-            if( $cs->insertDetail($arr) !== TRUE)
+          //------ เพิ่มรายการรับเข้า
+          if( $cs->insertDetail($arr) !== TRUE)
+          {
+            $sc = FALSE;
+            $message = 'เพิ่มรายการรับเข้าไม่สำเร็จ';
+          }
+
+          //---	บันทึกยอดสต็อกเข้าโซนที่รับสินค้าเข้า
+          if( $st->updateStockZone($id_zone, $id_pd, $qty) !== TRUE )
+          {
+            $sc = FALSE;
+            $message = 'บันทึกยอดสต็อกเข้าโซนไม่สำเร็จ';
+          }
+
+          if( $cost->addCostList($id_pd, $product->getCost($id_pd), $qty, $date_add) !== TRUE)
+          {
+            $sc = FALSE;
+            $message = 'บันทึกต้นทุนสินค้าไม่สำเร็จ';
+          }
+
+          //---	บันทึก movement เข้าโซนที่รับสินคาเข้า
+          if( $mv->move_in( $reference, $id_wh, $id_zone, $id_pd, $qty, $date_add ) !== TRUE)
+          {
+            $sc = FALSE;
+            $message = 'บันทึก movement ไม่สำเร็จ';
+          }
+
+
+          //--- บันทึกยอดรับใน tbl_order_transform_detail
+          $qs = $transform->getDetail($id_order, $id_pd);
+
+          //---	ยอดสินค้าที่รับแล้ว
+          $received_qty = $qty;
+
+          //---	มีรายการที่ต้อง update กี่รายการ
+          $row = dbNumRows($qs);
+
+          //---	วนลูป update ทีละรายการ
+          while( $res = dbFetchObject($qs))
+          {
+            //---	ถ้าเป็นรายการเดียว หรือ เป็นรอบสุดท้าย ใช้ยอดที่เหลือ รับเข้ารายการสุดท้ายเลย
+            //---	ถ้าไมใช่รอบสุดท้าย ให้ใช้ยอดไม่เกินที่เปิดบิลมา
+            $received = $row == 1 ? $received_qty : ($res->sold_qty <= $received_qty ? $res->sold_qty : $received_qty);
+            if( $transform->received($res->id, $received) === FALSE )
             {
               $sc = FALSE;
-              $message = 'เพิ่มรายการรับเข้าไม่สำเร็จ';
+              $message = 'ปรับปรุงรายการค้างรับไม่สำเร็จ';
             }
 
-            //---	บันทึกยอดสต็อกเข้าโซนที่รับสินค้าเข้า
-            if( $st->updateStockZone($id_zone, $id_pd, $qty) !== TRUE )
-            {
-              $sc = FALSE;
-              $message = 'บันทึกยอดสต็อกเข้าโซนไม่สำเร็จ';
-            }
+            $row--;
+            $received_qty -= $received;
+          }	//--- endwhile $res
 
-            if( $cost->addCostList($id_pd, $product->getCost($id_pd), $qty, $date_add) !== TRUE)
-            {
-              $sc = FALSE;
-              $message = 'บันทึกต้นทุนสินค้าไม่สำเร็จ';
-            }
+        }	//--- foreach data
 
-            //---	บันทึก movement เข้าโซนที่รับสินคาเข้า
-            if( $mv->move_in( $reference, $id_wh, $id_zone, $id_pd, $qty, $date_add ) !== TRUE)
-            {
-              $sc = FALSE;
-              $message = 'บันทึก movement ไม่สำเร็จ';
-            }
+      }
 
-
-
-            //--- บันทึกยอดรับใน tbl_order_transform_detail
-            $qs = $transform->getDetail($id_order, $id_pd);
-
-            //---	ยอดสินค้าที่รับแล้ว
-            $received_qty = $qty;
-
-            //---	มีรายการที่ต้อง update กี่รายการ
-            $row = dbNumRows($qs);
-
-            //---	วนลูป update ทีละรายการ
-            while( $res = dbFetchObject($qs))
-            {
-              //---	ถ้าเป็นรายการเดียว หรือ เป็นรอบสุดท้าย ใช้ยอดที่เหลือ รับเข้ารายการสุดท้ายเลย
-              //---	ถ้าไมใช่รอบสุดท้าย ให้ใช้ยอดไม่เกินที่เปิดบิลมา
-              $received = $row == 1 ? $received_qty : ($res->sold_qty <= $received_qty ? $res->sold_qty : $received_qty);
-              if( $transform->received($res->id, $received) === FALSE )
-              {
-                $sc = FALSE;
-                $message = 'ปรับปรุงรายการค้างรับไม่สำเร็จ';
-              }
-
-              $row--;
-              $received_qty -= $received;
-            }	//--- endwhile $res
-
-          }	//--- foreach data
-
-        }
-        else
-        {
-          $sc = FALSE;
-          $message = 'ไม่พบข้อมูลเชื่อมโยงสินค้า';
-        }
-
-        if( $sc === TRUE )
-        {
-          commitTransection();
-        }
-        else
-        {
-          dbRollback();
-        }
-
+      if( $sc === TRUE )
+      {
+        commitTransection();
       }
       else
       {
-        $sc = FALSE;
-        $message = 'เพิ่มเอกสารไม่สำเร็จ';
+        dbRollback();
       }
 
       endTransection();
@@ -211,6 +199,6 @@ else //---- if id_order !== FALSE
 }//--- if id_order !== FALSE
 
 
-echo $sc === TRUE ? 'success | '.$id_receive_transform : 'fail | '.$message;
+echo $sc === TRUE ? 'success | '.$id : 'fail | '.$message;
 
  ?>

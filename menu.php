@@ -80,6 +80,7 @@
         <ul class="dropdown-menu">
           <li><a href="index.php?content=recieved_report"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน การรับสินค้าจากการซื้อ</a></li>
           <li><a href="index.php?content=stock_balance"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือ</a></li>
+          <li><a href="index.php?content=current_stock"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือปัจจุบัน</a></li>
           <li><a href="index.php?content=stock_balance_by_zone"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือแยกตามโซน</a></li>
           <li><a href="index.php?content=stock_balance_compare_warehouse"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน รายงานสินค้าคงเหลือเปรียบเทียบคลัง</a></li>
         </ul>

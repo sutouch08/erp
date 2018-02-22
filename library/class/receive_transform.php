@@ -74,10 +74,10 @@ class receive_transform
 
 
 
-	public function add(array $ds)
+	public function add(array $ds = array())
 	{
 		$sc = FALSE;
-		if( count( $ds ) > 0 )
+		if(!empty($ds))
 		{
 			$fields = "";
 			$values = "";
@@ -88,8 +88,14 @@ class receive_transform
 				$values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
 				$i++;
 			}
-			$sc = dbQuery("INSERT INTO tbl_receive_transform (".$fields.") VALUES (".$values.")");
+
+			$qs = dbQuery("INSERT INTO tbl_receive_transform (".$fields.") VALUES (".$values.")");
+			if($qs === TRUE)
+			{
+				$sc = dbInsertId();
+			}
 		}
+
 		return $sc;
 	}
 

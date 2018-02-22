@@ -38,4 +38,12 @@ if(isset($_GET['printReturnReceived']))
 }
 
 
+
+//--- คืนสินค้าจากการยืม
+if(isset($_GET['printReturnLend']))
+{
+  include '../print/return_lend/print_return_lend.php';
+}
+
+
  ?>
