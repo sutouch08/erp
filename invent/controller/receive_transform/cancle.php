@@ -77,7 +77,7 @@ if( dbNumRows($qs) > 0)
         //---	ถ้าเป็นรายการเดียว หรือ เป็นรอบสุดท้าย ใช้ยอดที่เหลือ รับเข้ารายการสุดท้ายเลย
         //---	ถ้าไมใช่รอบสุดท้าย ให้ใช้ยอดไม่เกินที่เปิดบิลมา
         $received = $row == 1 ? $received_qty  : ($res->received <= $received_qty ? $res->received : $received_qty);
-        if( $transform->received( $res->id, ($received * -1) ) === FALSE )
+        if( $transform->received( $res->id, ($received * -1) ) == FALSE )
         {
           $result = FALSE;
           $sc = 'ปรับปรุงยอดรับไม่สำเร็จ';

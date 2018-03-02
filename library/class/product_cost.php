@@ -75,9 +75,13 @@ class product_cost
       }
       else if(dbNumRows($qs) > 1)
       {
-        while($qty > 0)
+        while($rs = dbFetchObject($qs))
         {
-          $rs = dbFetchObject($qs);
+          if($qty <= 0)
+          {
+            break;
+          }
+          
           //--- ถ้ายอดที่จะตัดน้อยกว่าหรือเท่ากับยอดที่มี ให้ใช้ยอดที่จะตัด ถ้ามากกว่าให้ใช้ยอดคงเหลือ
           $c_qty = ($rs->qty - $qty) >= 0 ? $qty : $rs->qty;
 
@@ -106,12 +110,16 @@ class product_cost
     if( $qty != 0 )
     {
       $qs = dbQuery("SELECT * FROM tbl_product_cost WHERE id_product = '".$id_pd."' AND cost = '".$cost."' ORDER BY date_add ASC");
-      //--- ถ้ามีผลลัพธ์แค่ แถวเดียว
+      //--- ถ้ามีผลลัพธ์มากกว่า 0
       if(dbNumRows($qs) > 0 )
       {
-        while($qty > 0)
+        while($rs = dbFetchObject($qs))
         {
-          $rs = dbFetchObject($qs);
+          if($qty <= 0)
+          {
+            break;
+          }
+
           //--- ถ้ายอดที่จะตัดน้อยกว่าหรือเท่ากับยอดที่มี ให้ใช้ยอดที่จะตัด ถ้ามากกว่าให้ใช้ยอดคงเหลือ
           $c_qty = ($rs->qty - $qty) >= 0 ? $qty : $rs->qty;
 

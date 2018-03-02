@@ -1,4 +1,4 @@
-<?php $consign = new consign($order->id); ?>
+<?php $consign = new order_consign($order->id); ?>
 <?php $zone = new zone($consign->id_zone); ?>
 
 <div class="row">
@@ -19,7 +19,7 @@
 
   <div class="col-sm-3 padding-5">
   	<label>พื้นที่จัดเก็บ [ โซน ]</label>
-    <input type="text" class="form-control input-sm text-center input-header" id="zone" value="<?php echo zoneName($consign->id_zone); ?>"  <?php echo $disabled; ?>/>
+    <input type="text" class="form-control input-sm text-center input-header" id="zone" value="<?php echo $zone->name; ?>"  <?php echo $disabled; ?>/>
   </div>
 
 	<div class="col-sm-1 padding-5">

@@ -1,4 +1,9 @@
 <?php
+	$pm = checkAccess($id_profile, $id_tab);
+	$add = $pm['add'];
+	$edit = $pm['edit'];
+	$delete = $pm['delete'];
+	$view = $pm['view'];
 	accessDeny($view);
 ?>
 

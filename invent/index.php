@@ -467,6 +467,16 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รายงานสินค้าคงเหลือเปรียบเทียบคลัง';
 			break;
 
+		case 'received_by_document' :
+			$content = 'report/stock/received_by_document.php';
+			$pageTitle = 'รายงานการรับสินค้าแยกตามเลขที่เอกสาร';
+			break;
+
+		case 'received_transform_by_document' :
+			$content = 'report/stock/received_transform_by_document.php';
+			$pageTitle = 'รายงานการรับสินค้าแปรสภาพแยกตามเลขที่เอกสาร';
+			break;
+
 
 		//---------- รายงานระบบซื้อ
 		case 'po_backlog' :
@@ -490,11 +500,6 @@ if( !getConfig('CLOSED') )
 		$pageTitle = 'View Stock';
 	}
 
-  $pm 				= checkAccess($id_profile, $id_tab);
-	$view 			  = $pm['view'];
-	$add 				  = $pm['add'];
-	$edit 				= $pm['edit'];
-	$delete 			= $pm['delete'];
 
 	require_once 'template.php';
 }

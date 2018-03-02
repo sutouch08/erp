@@ -9,7 +9,25 @@ class stock
 	}
 
 
+	public function updateStockZone($id_zone, $id_pd, $qty)
+	{
+		$sc = FALSE;
+		$cQty = $this->isExists($id_zone, $id_pd);
+		if($cQty === FALSE)
+		{
+			$sc = $this->add($id_zone, $id_pd, $qty);
+		}
+		else
+		{
+			$sc = $this->update($id_zone, $id_pd, $qty);
+		}
 
+		$this->removeZero();
+
+		return $sc;
+	}
+
+/*
 	public function updateStockZone($id_zone, $id_pd, $qty)
 	{
 		$sc = FALSE;
@@ -34,11 +52,7 @@ class stock
 			//--- หรือถ้าน้อยกว่าแต่โซนนี้ยอมให้ติดลบได้
 			if( ( $cQty + $qty ) >= 0 OR $auz === TRUE )
 			{
-				$qs = $this->update($id_zone, $id_pd, $qty);
-				if($qs === TRUE && dbAffectedRows() == 1)
-				{
-					$sc = TRUE;
-				}
+				$sc = $this->update($id_zone, $id_pd, $qty);
 			}
 			else
 			{
@@ -50,7 +64,7 @@ class stock
 
 		return $sc;
 	}
-
+*/
 
 
 
@@ -67,10 +81,14 @@ class stock
 	private function update($id_zone, $id_pd, $qty)
 	{
 		$sc = FALSE;
-		$qs = dbQuery("UPDATE tbl_stock SET qty = (qty + ".$qty.") WHERE id_zone = ".$id_zone." AND id_product = '".$id_pd."'");
-		if($qs === TRUE && dbAffectedRows() == 1)
+		if($qty < 0)
 		{
-			$sc = TRUE;
+			$qty = $qty * (-1);
+			$sc = dbQuery("UPDATE tbl_stock SET qty = qty - ".$qty." WHERE id_zone = ".$id_zone." AND id_product = '".$id_pd."'");
+		}
+		else
+		{
+			$sc = dbQuery("UPDATE tbl_stock SET qty = (qty + ".$qty.") WHERE id_zone = ".$id_zone." AND id_product = '".$id_pd."'");
 		}
 
 		return $sc;

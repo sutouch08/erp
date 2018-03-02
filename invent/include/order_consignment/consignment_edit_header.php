@@ -1,5 +1,5 @@
 
-<?php $consign = new consign($order->id); ?>
+<?php $consign = new order_consign($order->id); ?>
 <?php $zone = new zone($consign->id_zone); ?>
 
 <div class="row">

@@ -5,6 +5,40 @@ require '../function/tools.php';
 include '../function/report_helper.php';
 
 
+
+//---- รายงานการรับสินค้าแยกตามเอกสาร
+if(isset($_GET['received_by_document']))
+{
+  if(isset($_GET['report']))
+  {
+    include 'report/stockReport/report_received_by_document.php';
+  }
+
+  if(isset($_GET['export']))
+  {
+    include 'report/stockReport/export_received_by_document.php';
+  }
+}
+
+
+
+//---- รายงานการรับสินค้าแปรสภาพแยกตามเอกสาร
+if(isset($_GET['received_transform_by_document']))
+{
+  if(isset($_GET['report']))
+  {
+    include 'report/stockReport/report_received_transform_by_document.php';
+  }
+
+  if(isset($_GET['export']))
+  {
+    include 'report/stockReport/export_received_transform_by_document.php';
+  }
+}
+
+
+
+
 //--- รายงานสินค้าคงเหลือแยกตามโซน
 if(isset($_GET['stock_balance_by_zone']) && isset($_GET['report']))
 {

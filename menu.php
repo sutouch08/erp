@@ -78,7 +78,8 @@
   	<ul class="dropdown-menu">
     	<li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ระบบคลังสินค้า</a>
         <ul class="dropdown-menu">
-          <li><a href="index.php?content=recieved_report"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน การรับสินค้าจากการซื้อ</a></li>
+          <li><a href="index.php?content=received_by_document"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน การรับสินค้าจากการซื้อแยกตามเอกสาร</a></li>
+          <li><a href="index.php?content=received_transform_by_document"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน การรับสินค้าแปรสภาพแยกตามเอกสาร</a></li>
           <li><a href="index.php?content=stock_balance"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือ</a></li>
           <li><a href="index.php?content=current_stock"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือปัจจุบัน</a></li>
           <li><a href="index.php?content=stock_balance_by_zone"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือแยกตามโซน</a></li>

@@ -121,6 +121,7 @@ if( $id_order !== FALSE )
           {
             $sc = FALSE;
             $message = 'เพิ่มรายการรับเข้าไม่สำเร็จ';
+            break;
           }
 
           //---	บันทึกยอดสต็อกเข้าโซนที่รับสินค้าเข้า
@@ -128,12 +129,14 @@ if( $id_order !== FALSE )
           {
             $sc = FALSE;
             $message = 'บันทึกยอดสต็อกเข้าโซนไม่สำเร็จ';
+            break;
           }
 
           if( $cost->addCostList($id_pd, $product->getCost($id_pd), $qty, $date_add) !== TRUE)
           {
             $sc = FALSE;
             $message = 'บันทึกต้นทุนสินค้าไม่สำเร็จ';
+            break;
           }
 
           //---	บันทึก movement เข้าโซนที่รับสินคาเข้า
@@ -141,6 +144,7 @@ if( $id_order !== FALSE )
           {
             $sc = FALSE;
             $message = 'บันทึก movement ไม่สำเร็จ';
+            break;
           }
 
 

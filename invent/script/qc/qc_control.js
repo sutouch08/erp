@@ -154,60 +154,56 @@ function qcProduct(){
       var id = $("."+barcode).attr('id');
       var qty = parseInt($("."+barcode).val());
 
+      //--- จำนวนที่จัดมา
+      var prepared = parseInt( removeCommas( $("#prepared-"+id).text() ) );
+
+      //--- จำนวนที่ตรวจไปแล้วยังไม่บันทึก
+      var notsave = parseInt( removeCommas( $("#"+id).val() ) ) + qty;
+
+      //--- จำนวนที่ตรวจแล้วทั้งหมด (รวมที่ยังไม่บันทึก) ของสินค้านี้
+      var qc_qty = parseInt( removeCommas( $("#qc-"+id).text() ) ) + qty;
+
+      //--- จำนวนสินค้าที่ตรวจแล้วทั้งออเดอร์ (รวมที่ยังไม่บันทึกด้วย)
+      var all_qty = parseInt( removeCommas( $("#all_qty").text() ) ) + qty;
+
+      //--- ถ้าจำนวนที่ตรวจแล้ว
+      if(qc_qty <= prepared){
+
+        $("#"+id).val(notsave);
+
+        $("#qc-"+id).text(addCommas(qc_qty));
+
+        //--- อัพเดตจำนวนในกล่อง
+        updateBox(qc_qty);
+
+        //--- อัพเดตยอดตรวจรวมทั้งออเดอร์
+        $("#all_qty").text( addCommas(all_qty));
+
+        //--- เปลียนสีแถวที่ถูกตรวจแล้ว
+        $("#row-"+id).addClass('blue');
 
 
+        //--- ย้ายรายการที่กำลังตรวจขึ้นมาบรรทัดบนสุด
+        $("#incomplete-table").prepend($("#row-"+id));
 
 
-    //--- จำนวนที่จัดมา
-    var prepared = parseInt( removeCommas( $("#prepared-"+id).text() ) );
+        //--- ถ้ายอดตรวจครบตามยอดจัดมา
+        if( qc_qty == prepared ){
 
-    //--- จำนวนที่ตรวจไปแล้วยังไม่บันทึก
-    var notsave = parseInt( removeCommas( $("#"+id).val() ) ) + qty;
-
-    //--- จำนวนที่ตรวจแล้วทั้งหมด (รวมที่ยังไม่บันทึก) ของสินค้านี้
-    var qc_qty = parseInt( removeCommas( $("#qc-"+id).text() ) ) + qty;
-
-    //--- จำนวนสินค้าที่ตรวจแล้วทั้งออเดอร์ (รวมที่ยังไม่บันทึกด้วย)
-    var all_qty = parseInt( removeCommas( $("#all_qty").text() ) ) + qty;
-
-    //--- ถ้าจำนวนที่ตรวจแล้ว
-    if(qc_qty <= prepared){
-
-      $("#"+id).val(notsave);
-
-      $("#qc-"+id).text(addCommas(qc_qty));
-
-      //--- อัพเดตจำนวนในกล่อง
-      updateBox(qc_qty);
-
-      //--- อัพเดตยอดตรวจรวมทั้งออเดอร์
-      $("#all_qty").text( addCommas(all_qty));
-
-      //--- เปลียนสีแถวที่ถูกตรวจแล้ว
-      $("#row-"+id).addClass('blue');
+          //--- ย้ายบรรทัดนี้ลงข้างล่าง(รายการที่ครบแล้ว)
+          $("#complete-table").append($("#row-"+id));
+          $("#row-"+id).removeClass('incomplete');
+        }
 
 
-      //--- ย้ายรายการที่กำลังตรวจขึ้นมาบรรทัดบนสุด
-      $("#incomplete-table").prepend($("#row-"+id));
+        if($(".incomplete").length == 0 ){
+          showCloseButton();
+        }
 
-
-      //--- ถ้ายอดตรวจครบตามยอดจัดมา
-      if( qc_qty == prepared ){
-
-        //--- ย้ายบรรทัดนี้ลงข้างล่าง(รายการที่ครบแล้ว)
-        $("#complete-table").append($("#row-"+id));
-        $("#row-"+id).removeClass('incomplete');
+      }else{
+        beep();
+        swal("สินค้าเกิน!");
       }
-
-
-      if($(".incomplete").length == 0 ){
-        showCloseButton();
-      }
-
-    }else{
-      beep();
-      swal("สินค้าเกิน!");
-    }
 
   }else{
     beep();

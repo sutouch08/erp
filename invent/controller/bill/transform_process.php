@@ -46,6 +46,10 @@
 
     while( $rs = dbFetchObject($qs))
     {
+      if($sc == FALSE)
+      {
+        break;
+      }
       //--- ถ้ายอดตรวจ น้อยกว่า หรือ เท่ากับ ยอดสั่ง ใช้ยอดตรวจในการตัด buffer
       //--- ถ้ายอดตวจ มากกว่า ยอดสั่ง ให้ใช้ยอดสั่งในการตัด buffer (บางทีอาจมีการแก้ไขออเดอร์หลังจากมีการตรวจสินค้าแล้ว)
       $sell_qty = ($rs->order_qty >= $rs->qc) ? $rs->qc : $rs->order_qty;
@@ -61,7 +65,7 @@
         {
           if($sell_qty > 0)
           {
-          
+
           //--- ถ้ายอดใน buffer น้อยกว่าหรือเท่ากับยอดสั่งซื้อ (แยกแต่ละโซน น้อยกว่าหรือเท่ากับยอดสั่ง (ซึ่งควรเป็นแบบนี้))
             $buffer_qty = $rm->qty <= $sell_qty ? $rm->qty : $sell_qty;
 
@@ -74,6 +78,7 @@
             {
               $sc = FALSE;
               $message = 'ปรับยอดใน buffer ไม่สำเร็จ';
+              break;
             }
 
             //--- ลดยอด sell qty ลงตามยอด buffer ทีลดลงไป
@@ -84,6 +89,7 @@
             {
               $sc = FALSE;
               $message = 'บันทึก movement ขาออกไม่สำเร็จ';
+              break;
             }
 
 
@@ -158,6 +164,7 @@
             {
               $sc = FALSE;
               $sc = 'บันทึกขายไม่สำเร็จ';
+              break;
             }
 
             //--- 4. ปรับปรุงจำนวนคงเหลือในตารางต้นทุน
@@ -165,6 +172,7 @@
             {
               $sc = FALSE;
               $message = 'ปรับปรุงต้นทุนสินค้าไม่สำเร็จ';
+              break;
             }
           } //--- end if sell_qty > 0
         } //--  end while
@@ -205,7 +213,7 @@
 
     //--- เคลียร์ยอดค้างที่จัดเกินมาไปที่ cancle หรือ เคลียร์ยอดที่เป็น 0
     //--  function/bill_helper.php
-    if( clearBuffer($order->id) === FALSE)
+    if( clearBuffer($order->id) == FALSE)
     {
       $sc = FALSE;
       $message = 'เคลียร์ buffer ไม่สำเร็จ';
