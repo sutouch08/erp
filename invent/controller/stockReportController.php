@@ -129,6 +129,15 @@ if(isset($_GET['current_stock']) && isset($_GET['report']))
 }
 
 
+
+//---- รายงานความเคลื่อนไหวสินค้า
+if(isset($_GET['movementByProduct']) && isset($_GET['export']))
+{
+  include 'report/stockReport/export_movement_by_product.php';
+}
+
+
+
 if(isset($_GET['getStockGrid']))
 {
   $sc = 'not exists';

@@ -4,10 +4,10 @@ $cs = new consign($id);
 $disabled = $id === FALSE ? '' : 'disabled';
 $zone = new zone($cs->id_zone);
 $shop = new shop($cs->id_shop);
-$event = new event($cs->id_event);
 $consign_check = new consign_check($cs->id_consign_check);
 $customer = new customer();
 $allowUnderZero = $zone->allowUnderZero === TRUE ? 1 : 0;
+include 'function/channels_helper.php';
  ?>
 
 <div class="row top-row">
@@ -92,7 +92,7 @@ if( $id !== FALSE && $cs->isSaved == 0 && $cs->isCancle == 0)
          </form>
         </div>
  			 <div class="modal-footer">
- 				
+
  			 </div>
  		</div>
  	</div>

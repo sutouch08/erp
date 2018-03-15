@@ -15,7 +15,7 @@
 		{
 			if( $id != '' )
 			{
-				$qs = dbQuery("SELECT * FROM tbl_warehouse WHERE id = '".$id)."'";
+				$qs = dbQuery("SELECT * FROM tbl_warehouse WHERE id = '".$id."'");
 				if( dbNumRows($qs) == 1 )
 				{
 					$rs = dbFetchObject($qs);
@@ -23,7 +23,7 @@
 					$this->code	= $rs->code;
 					$this->name	= $rs->name;
 					$this->role	= $rs->role;
-					$this->allowUnderZero	= $this->allow_under_zero == 1 ? TRUE : FALSE;
+					$this->allowUnderZero	= $rs->allow_under_zero == 1 ? TRUE : FALSE;
 					$this->isDefault	= $rs->is_default == 1 ? TRUE : FALSE;
 					$this->active	= $rs->active == 1 ? TRUE : FALSE;
 				}

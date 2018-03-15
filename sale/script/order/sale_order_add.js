@@ -245,14 +245,31 @@ function initCustomer(){
 				var id = arr[1];
 				$("#id_customer").val(id);
 				$("#customer").val(name);
+				getCredit(id);
 			}else{
 				$("#id_customer").val('');
 				$(this).val('');
+				$('#credit').val('');
 			}
 		}
 	});
 }
 
+
+
+function getCredit(id_customer){
+	$.ajax({
+		url:'../invent/controller/orderController.php?getBalanceCredit',
+		type:'GET',
+		cache:'false',
+		data:{
+			'id_customer' : id_customer
+		},
+		success:function(rs){
+			$('#credit').val(addCommas(rs));
+		}
+	});
+}
 
 
 $("#pd-box").autocomplete({

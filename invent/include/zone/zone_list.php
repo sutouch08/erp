@@ -17,7 +17,6 @@
 $zCode = getFilter('zCode', 'zCode','');
 $zName = getFilter('zName', 'zName', '');
 $zWH   = getFilter('zWH', 'zWH', 0);
-$zCus  = getFilter('zCus', 'zCus', '');
 ?>
 
 <form id="searchForm" method="post">
@@ -37,11 +36,6 @@ $zCus  = getFilter('zCus', 'zCus', '');
       <select class="form-control input-sm" name="zWH" id="zWH">
         <?php echo selectWarehouse($zWH); ?>
       </select>
-  </div>
-
-  <div class="col-sm-3">
-    <label>ชื่อลูกค้า</label>
-    <input type="text" class="form-control input-sm search-box" name="zCus" id="zCus" value="<?php echo $zCus; ?>" />
   </div>
 
   <div class="col-sm-1">
@@ -81,13 +75,9 @@ if( $zWH != 0)
   $where .= "AND id_warehouse = '".$zWH."' ";
 }
 
-if( $zCus != '')
-{
-  createCookie('zCus', $zCus);
-  $where .= "AND id_customer IN(".getCustomerIn($zCus).") ";
-}
 
 $where .= "ORDER BY id_zone DESC";
+
 
 $paginator	= new paginator();
 $get_rows	= get_rows();
@@ -95,8 +85,8 @@ $page		= get_page();
 $paginator->Per_Page('tbl_zone', $where, $get_rows);
 $paginator->display($get_rows, 'index.php?content=zone');
 
+  $qs = dbQuery("SELECT * FROM tbl_zone ".$where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 
-$qs = dbQuery("SELECT * FROM tbl_zone ".$where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 ?>
 <div class="row">
 <div class="col-sm-12">
@@ -105,9 +95,9 @@ $qs = dbQuery("SELECT * FROM tbl_zone ".$where." LIMIT ".$paginator->Page_Start.
       <tr>
         <th class="width-5 text-center">ลำดับ</th>
         <th class="width-15">รหัสโซน</th>
-        <th class="width-30">ชื่อโซน</th>
+        <th class="width-40">ชื่อโซน</th>
         <th class="width-20">คลังสินค้า</th>
-        <th class="width-20">ลูกค้า</th>
+        <th class="width-10">ลูกค้า</th>
         <th></th>
       </tr>
     </thead>
@@ -116,14 +106,15 @@ $qs = dbQuery("SELECT * FROM tbl_zone ".$where." LIMIT ".$paginator->Page_Start.
   <?php	$no	= row_no();	?>
   <?php	$wh	= new warehouse(); 	?>
   <?php $cus = new customer(); ?>
+  <?php $zone = new zone(); ?>
   <?php	while( $rs = dbFetchObject($qs) ) : ?>
             <tr id="row_<?php echo $rs->id_zone; ?>" style="font-size:12px;">
               <td class="middle text-center"><?php echo number_format($no); ?></td>
               <td class="middle"><?php echo $rs->barcode_zone; ?></td>
               <td class="middle"><?php echo $rs->zone_name; ?></td>
               <td class="middle"><?php echo $wh->getName($rs->id_warehouse); ?></td>
-              <td class="middle">
-                <?php echo $rs->id_customer > 0 ? $cus->getCode($rs->id_customer).' : '.$cus->getName($rs->id_customer) : '-'; ?>
+              <td class="middle text-center">
+                <?php echo ac_format($zone->countCustomer($rs->id_zone));  ?>
               </td>
               <td class="middle text-right">
                   <?php if( $edit ) : ?>

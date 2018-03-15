@@ -6,6 +6,7 @@ $arr = array(
     'id_customer' => $_POST['id_customer'],
     'id_employee' => getCookie('user_id'),
     'id_zone' => $_POST['id_zone'],
+    'id_channels' => $_POST['channels'],
     'remark'  => $_POST['remark'],
     'date_add'  => $date_add,
     'is_so' => $_POST['is_so']

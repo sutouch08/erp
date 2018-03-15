@@ -6,6 +6,7 @@ $cs = new consign();
 $arr = array(
   'id_customer' => $_POST['id_customer'],
   'id_zone' => $_POST['id_zone'],
+  'id_channels' => $_POST['id_channels'],
   'remark' => $_POST['remark'],
   'date_add'  => $date_add,
   'is_so'   => $_POST['is_so'],

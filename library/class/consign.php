@@ -22,8 +22,8 @@ class consign
   //--- Shop warrix (กรณีตัดยอดขายจาก shop)
   public $id_shop;
 
-  //--- กรณีตัดยอดขายจากงานขาย retail
-  public $id_event;
+  //--- ช่องทางการขาย
+  public $id_channels;
 
   //--- หมายเหตุเอกสาร
   public $remark;

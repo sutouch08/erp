@@ -235,6 +235,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'เพิ่ม/แก้ไข นโยบายส่วนลด';
 			break;
 
+		case 'discount_rule' :
+			$content = 'discount_rule.php';
+			$pageTitle = 'เพิ่ม/แก้ไข เงื่อนไขส่วนลด';
+			break;
+
 //**********  ฐานข้อมูล  **********//
 	//*****  สินค้า  *****//
 		case 'product':
@@ -477,6 +482,15 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รายงานการรับสินค้าแปรสภาพแยกตามเลขที่เอกสาร';
 			break;
 
+		case 'stock_movement_by_warehouse' :
+			$content = 'report/stock/stock_movement_by_warehouse.php';
+			$pageTitle = 'รายงานความเคลื่อนไหวสินค้าแยกตามคลังสินค้า';
+			break;
+
+		case 'stock_movement_by_product' :
+			$content = 'report/stock/stock_movement_by_product.php';
+			$pageTitle = 'รายงานความเคลื่อนไหวสินค้าแยกตามรายการสินค้า';
+			break;
 
 		//---------- รายงานระบบซื้อ
 		case 'po_backlog' :

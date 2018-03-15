@@ -20,6 +20,7 @@ if($cs->isCancle == 0 && $cs->isSaved == 0)
 
     $employee = new employee($cs->id_employee);
     $role     = new order_role(8);
+    $channels = new channels($cs->id_channels);
     $vat      = getConfig('VAT');
 
     //--- ข้อมูลลูกค้า
@@ -86,8 +87,8 @@ if($cs->isCancle == 0 && $cs->isSaved == 0)
         'role_name'       => $role->name,
         'id_payment'      => 0,
         'payment'         => $role->name,
-        'id_channels'     => 0,
-        'channels'        => $role->name,
+        'id_channels'     => $cs->id_channels,
+        'channels'        => $channels->name,
         'id_product'      => $pd->id,
         'product_code'    => $pd->code,
         'product_name'    => $pd->name,

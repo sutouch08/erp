@@ -11,9 +11,12 @@ function goAdd(id){
   }
 }
 
+
+
 function goEdit(id){
-  window.location.href = 'index.php?content=discount_policy&edit=Y&id_policy='+id;
+  window.location.href = 'index.php?content=discount_policy&add=Y&id_policy='+id;
 }
+
 
 
 

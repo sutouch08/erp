@@ -11,7 +11,7 @@ function showItemDiscountLabel($item_price, $item_disc, $unit)
 	else
 	{
 		$symbal = $unit == 'percent' ? '%' : getConfig('CURRENCY');
-		$disc = '- '.$item_disc.' '.$symbal;
+		$disc = $item_disc.' '.$symbal;
 	}
 
 	return $disc;

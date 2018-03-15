@@ -14,19 +14,23 @@
 
         <div class="row">
 
-          <div class="col-sm-2 hidden-xs">
+          <div class="col-sm-1 col-1-harf hidden-xs">
             	<label>เลขที่เอกสาร</label>
                 <label class="form-control input-sm text-center" <?php echo $disabled; ?>><?php echo $order->reference; ?></label>
           </div>
 
-          <div class="col-sm-2 hidden-xs">
+          <div class="col-sm-1 col-1-harf hidden-xs">
           	<label>วันที่</label>
             <input type="text" class="form-control input-sm text-center input-header" id="dateAdd" value="<?php echo thaiDate($order->date_add); ?>" <?php echo $disabled; ?> />
           </div>
 
-					<div class="col-sm-4 col-xs-12">
+					<div class="col-sm-3 col-xs-12">
 					 	<label>ลูกค้า [ในระบบ]</label>
 					  <input type="text" class="form-control input-sm text-center input-header" id="customer" value="<?php echo (isset($_GET['id_order']) ? $customer->name.' ['.$customer->province.']' : ''); ?>"  <?php echo $disabled; ?>/>
+					</div>
+          <div class="col-sm-2 col-xs-12">
+					 	<label>เครดิตคงเหลือ</label>
+					  <input type="text" class="form-control input-sm text-center" id="credit" value="" disabled/>
 					</div>
 
           <div class="col-sm-2 col-xs-12">

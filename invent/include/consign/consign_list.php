@@ -2,7 +2,7 @@
 include 'function/consign_helper.php';
 include 'function/zone_helper.php';
 include 'function/shop_helper.php';
-include 'function/event_helper.php';
+include 'function/channels_helper.php';
  ?>
 <div class="row top-row">
   <div class="col-sm-6 top-col">
@@ -26,7 +26,7 @@ $sCode = getFilter('sCode', 'sConsignCode', '');
 $sCus  = getFilter('sCus', 'sConsignCus', '');
 $sZone = getFilter('sZone', 'sConsignZone', '');
 $sShop = getFilter('sShop', 'sShop', '');
-$sEvent = getFilter('sEvent', 'sEvent');
+$sChannels = getFilter('sChannels', 'sChannels', 'x');
 $fromDate = getFilter('fromDate', 'fromDate', '');
 $toDate = getFilter('toDate', 'toDate', '');
 
@@ -61,9 +61,16 @@ $btn_so_no = $is_so == 0 ? 'btn-info' : '';
     <input type="text" class="form-control input-sm search-box text-center" name="sCus" id="sCus" value="<?php echo $sCus; ?>" />
   </div>
 
-  <div class="col-sm-3 padding-5">
+  <div class="col-sm-2 col-2-harf padding-5">
     <label>โซน</label>
     <input type="text" class="form-control input-sm search-box text-center" name="sZone" id="sZone" value="<?php echo $sZone; ?>" />
+  </div>
+  <div class="col-sm-2 padding-5">
+    <label>ช่องทางขาย</label>
+    <select class="form-control input-sm" name="sChannels" id="sChannels">
+      <option value="x">กรุณาเลือก</option>
+      <?php echo selectChannels($sChannels); ?>
+    </select>
   </div>
 
   <div class="col-sm-2 padding-5">
@@ -123,6 +130,7 @@ $btn_so_no = $is_so == 0 ? 'btn-info' : '';
 createCookie('sConsignCode', $sCode);
 createCookie('sConsignCus', $sCus);
 createCookie('sConsignZone', $sZone);
+createCookie('sChannels', $sChannels);
 createCookie('fromDate', $fromDate);
 createCookie('toDate', $toDate);
 createCookie('isSaved', $isSaved);
@@ -145,6 +153,10 @@ if( $sCus != '')
 if( $sZone != '')
 {
   $where .= "AND id_zone IN(".getZoneIn($sZone).") ";
+}
+
+if( $sChannels != 'x'){
+  $where .= "AND id_channels = ".$sChannels." ";
 }
 
 
@@ -219,7 +231,6 @@ $qs = dbQuery("SELECT * FROM tbl_consign ".$where." LIMIT ".$paginator->Page_Sta
 <?php   $zone = new zone(); ?>
 <?php   $no = row_no(); ?>
 <?php   while($rs = dbFetchObject($qs)) : ?>
-<?php    $pos = $rs->id_shop != 0 ? shopName($rs->id_shop) : ($rs->id_event != 0 ? eventName($rs->id_event) : ''); ?>
         <tr class="font-size-12" id="row-<?php echo $rs->id; ?>">
           <td class="middle text-center">
             <?php echo $no; ?>

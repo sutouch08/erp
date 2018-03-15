@@ -128,18 +128,6 @@ function saveEdit(){
     hideError('edit-zName');
   }
 
-  if( customer != '' && id_customer == ''){
-    showError('customer', 'ชื่อลูกค้าไม่ถูกต้อง');
-    return false;
-  }else {
-    if( customer == ''){
-      id_customer = '';
-    }
-
-    hideError('customer');
-  }
-
-
 	load_in();
 	$.ajax({
 		url:"controller/zoneController.php?updateZone",
@@ -150,8 +138,6 @@ function saveEdit(){
       "code" : zCode,
       "name" : zName,
       "id_zone" : id,
-      "id_customer" : id_customer,
-      "customerName" : customer
     },
 		success: function(rs){
 			load_out();
@@ -191,3 +177,88 @@ $('#customer').autocomplete({
     }
   }
 });
+
+
+function addCustomer(){
+  cusName = $('#customer').val();
+  id_customer = $('#id_customer').val();
+  id_zone = $('#id_zone').val();
+  if(id_zone == ''){
+    swal('ไม่พบ ID ZONE');
+    return false;
+  }
+
+  if(cusName.length == 0 || id_customer == ''){
+    swal('ชื่อลูกค้าไม่ถูกต้อง');
+    return false;
+  }
+
+  $.ajax({
+    url:'controller/zoneController.php?addCustomerZone',
+    type:'POST',
+    cache:'false',
+    data:{
+      'id_zone' : id_zone,
+      'id_customer' : id_customer
+    },
+    success:function(rs){
+      if(isJson(rs)){
+        source = $('#template').html();
+        data = $.parseJSON(rs);
+        output = $('#result');
+        render_append(source, data, output);
+        reorder();
+      }else{
+        swal('Error!', rs, 'error');
+      }
+    }
+  });
+}
+
+
+
+function removeCustomer(id, code){
+  swal({
+		title: "คุณแน่ใจ ?",
+		text: "ต้องการลบ '"+code+"' หรือไม่ ?",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#FA5858",
+		confirmButtonText: 'ใช่, ฉันต้องการลบ',
+		cancelButtonText: 'ยกเลิก',
+		closeOnConfirm: false
+		}, function(){
+			$.ajax({
+				url:"controller/zoneController.php?removeCustomerZone",
+				type:"POST",
+        cache:"false",
+        data:{
+          "id" : id
+        },
+				success: function(rs){
+					var rs = $.trim(rs);
+					if( rs == 'success' ){
+						swal({
+              title: 'Deleted',
+              type: 'success',
+              timer: 1000
+            });
+
+						$("#row-"+id).remove();
+            reorder();
+            
+					}else{
+						swal("ข้อผิดพลาด !", "ลบลูกค้าไม่สำเร็จ", "error");
+					}
+				}
+			});
+	});
+}
+
+function reorder(){
+  no = 1;
+  $('.no').each(function(index, el) {
+    $(this).text(no);
+    no++;
+  });
+}

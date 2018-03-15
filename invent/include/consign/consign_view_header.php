@@ -32,7 +32,14 @@
     <input type="text" class="form-control input-sm text-center" id="check-reference" value="<?php echo $consign_check->reference; ?>" disabled />
   </div>
 
-  <div class="col-sm-10 col-10-harf padding-5 last">
+  <div class="col-sm-2 padding-5">
+    <label>ช่องทาง</label>
+    <select class="form-control input-sm" id="channels" disabled>
+      <option value="">กรุณาเลือก</option>
+      <?php echo selectChannels($cs->id_channels); ?>
+    </select>
+  </div>
+  <div class="col-sm-8 col-8-harf padding-5 last">
     <label>หมายเหตุ</label>
     <input type="text" class="form-control input-sm header-box" id="remark" maxlength="100" value="<?php echo $cs->remark; ?>" disabled />
   </div>

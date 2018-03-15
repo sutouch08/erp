@@ -34,6 +34,7 @@ if(isset($_GET['getItemCode']))
 
 
 
+
 //---	รายงานสินค้าคงเหลือแยกตามโซน
 if(isset($_GET['getWarehouse']))
 {

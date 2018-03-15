@@ -365,7 +365,7 @@ if(isset( $_GET['clearFilter']))
   deleteCookie('sConsignCus');
   deleteCookie('sConsignZone');
   deleteCookie('sShop');
-  deleteCookie('sEvent');
+  deleteCookie('sChannels');
   deleteCookie('fromDate');
   deleteCookie('toDate');
   deleteCookie('isSaved');

@@ -26,7 +26,7 @@
 					$this->name	= $rs->zone_name;
 					$this->zone_name = $rs->zone_name;
 					$this->id_warehouse = $rs->id_warehouse;
-					$this->id_customer = $rs->id_customer;
+					//$this->id_customer = $rs->id_customer;
 					$this->allowUnderZero = $this->isAllowUnderZero($rs->id_zone);
 				}
 			}
@@ -102,22 +102,9 @@
 
 		public function isExistsTransection($id)
 		{
-			$sc = FALSE;
 			list( $movement ) 		= dbFetchArray( dbQuery("SELECT COUNT(*) FROM tbl_stock_movement WHERE id_zone = ".$id) );
-			list( $consignment ) 	= dbFetchArray( dbQuery("SELECT COUNT(*) FROM tbl_order_consignment WHERE id_zone = ".$id) );
-			list( $consign )			= dbFetchArray( dbQuery("SELECT COUNT(*) FROM tbl_order_consign WHERE id_zone = ".$id) );
-			list( $received )			= dbFetchArray( dbQuery("SELECT COUNT(*) FROM tbl_receive_product_detail WHERE id_zone = ".$id) );
-			list( $transform )		= dbFetchArray( dbQuery("SELECT COUNT(*) FROM tbl_receive_tranform_detail WHERE id_zone = ".$id) );
-			list( $return )			= dbFetchArray( dbQuery("SELECT COUNT(*) FROM tbl_return_order_detail WHERE id_zone = ".$id) );
-			list( $return_spon )		= dbFetchArray( dbQuery("SELECT COUNT(*) FROM tbl_return_sponsor_detail WHERE id_zone = ".$id) );
-			list( $return_supp )		= dbFetchArray( dbQuery("SELECT COUNT(*) FROM tbl_return_support_detail WHERE id_zone = ".$id) );
-			list( $transfer )			= dbFetchArray( dbQuery("SELECT COUNT(*) FROM tbl_tranfer_detail WHERE id_zone_from = ".$id." OR id_zone_to = ".$id) );
-			$all = $movement + $consignment + $consign + $received + $transform + $return + $return_spon + $return_supp + $transfer;
-			if( $all > 0 )
-			{
-				$sc = TRUE;
-			}
-			return $sc;
+
+			return $movement == 0 ? FALSE : TRUE;
 		}
 
 
@@ -362,11 +349,12 @@
 		public function searchConsignZone($txt, $id_customer)
 		{
 			//---	role = 2 คือ คลังฝากขาย
-			$qr  = "SELECT z.* FROM tbl_zone AS z ";
+			$qr  = "SELECT z.*, zc.id_customer FROM tbl_zone_customer AS zc ";
+			$qr .= "JOIN tbl_zone AS z ON zc.id_zone = z.id_zone ";
 			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
 			$qr .= "WHERE w.role = 2 ";
 			$qr .= "AND w.active = 1 ";
-			$qr .= "AND z.id_customer = '".$id_customer."' ";
+			$qr .= "AND zc.id_customer = '".$id_customer."' ";
 
 			if( $txt != '*')
 			{
@@ -444,6 +432,16 @@
 				}
 
 			}
+
+			return $sc;
+		}
+
+
+
+		public function countCustomer($id)
+		{
+			$qs = dbQuery("SELECT count(id) FROM tbl_zone_customer WHERE id_zone = '".$id."'");
+			list($sc) = dbFetchArray($qs);
 
 			return $sc;
 		}

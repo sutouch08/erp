@@ -30,7 +30,7 @@
 				if( $i != 1 ) //---- Skip first row
 				{
 					$id = $rs['A'];
-					$code = $rs['B'];
+					$code = trim($rs['B']);
 					$id_pd = $pd->getId($rs['C']);
 					if( $cs->isAllExists($id, $code) === FALSE )
 					{

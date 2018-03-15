@@ -33,8 +33,7 @@ if( isset( $_GET['updateZone'] ) )
 		$ds = array(
 						'id_warehouse'	=> $_POST['id_warehouse'],
 						'barcode_zone'		=> $_POST['code'],
-						'zone_name'		=> $_POST['name'],
-						'id_customer'	=> $_POST['id_customer'] == '' ? NULL : $_POST['id_customer']
+						'zone_name'		=> $_POST['name']
 						);
 		$zone = new zone();
 		$rs = $zone->update($id_zone, $ds);
@@ -47,6 +46,48 @@ if( isset( $_GET['updateZone'] ) )
 	echo $sc;
 }
 
+
+if(isset($_GET['addCustomerZone']))
+{
+	$id_zone = $_POST['id_zone'];
+	$id_customer = $_POST['id_customer'];
+	$zone = new zone();
+
+	$qs = dbQuery("INSERT INTO tbl_zone_customer (id_zone, id_customer) VALUES (".$id_zone.", '".$id_customer."')");
+	if($qs === TRUE)
+	{
+		$id = dbInsertId();
+		$customer = new customer($id_customer);
+		$sc = array(
+			'id' => $id,
+			'code' => $customer->code,
+			'name' => $customer->name
+		);
+
+		echo json_encode($sc);
+	}
+	else
+	{
+		echo dbError();
+	}
+}
+
+
+
+if(isset($_GET['removeCustomerZone']))
+{
+	$id = $_POST['id'];
+
+	$qs = dbQuery("DELETE FROM tbl_zone_customer WHERE id = ".$id);
+	if($qs)
+	{
+		echo 'success';
+	}
+	else
+	{
+		echo 'fail';
+	}
+}
 
 
 
@@ -61,10 +102,6 @@ if( isset( $_GET['addNewZone'] ) )
 						'barcode_zone'		=> $_POST['code'],
 						'zone_name'		=> $_POST['name']
 						);
-		if($_POST['id_customer'] != '')
-		{
-			$ds['id_customer'] = $_POST['id_customer'];
-		}
 
 		$zone		= new zone();
 
@@ -78,8 +115,7 @@ if( isset( $_GET['addNewZone'] ) )
 				$arr = array(
 									'barcode'	=> $rd->barcode_zone,
 									'zone_name'	=> $rd->zone_name,
-									'warehouse_name'	=> getWarehouseCode($rd->id_warehouse) . ' | ' . warehouseName($rd->id_warehouse),
-									'customer_name' => $_POST['customerName']
+									'warehouse_name'	=> getWarehouseCode($rd->id_warehouse) . ' | ' . warehouseName($rd->id_warehouse)
 									);
 				$sc = json_encode($arr);
 			}

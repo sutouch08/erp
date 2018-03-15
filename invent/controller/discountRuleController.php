@@ -3,17 +3,25 @@ require "../../library/config.php";
 require "../../library/functions.php";
 require "../function/tools.php";
 
-//---	เพิ่มนโยบายใหม่
+//---	เพิ่มนเงื่อนไขใหม่
 if(isset($_GET['addNew']))
 {
-	include 'policy/policy_add.php';
+	include 'rule/new_rule.php';
 }
 
 
-if(isset($_GET['updatePolicy']))
+if(isset($_GET['updateRule']))
 {
-	include 'policy/policy_update.php';
+	include 'rule/rule_update.php';
 }
+
+
+//------ กำหนดเงื่อนไขส่วนลดในกฏ
+if(isset($_GET['setDiscount']))
+{
+	include 'rule/rule_set_discount.php';
+}
+
 
 
 

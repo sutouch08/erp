@@ -72,6 +72,30 @@ class discount_policy
 
 
 
+  public function update($id, array $ds = array())
+  {
+    $sc = FALSE;
+    if(!empty($ds))
+    {
+      $set = "";
+      $i = 1;
+      foreach($ds as $field => $value)
+      {
+        $set .= $i == 1 ? $field." = '".$value."'" : ", ".$field." = '".$value."'";
+        $i++;
+      }
+
+      $sc = dbQuery("UPDATE tbl_discount_policy SET ".$set." WHERE id = ".$id);
+      if( $sc !== TRUE)
+      {
+        $this->error = dbError();
+      }
+    }
+
+    return $sc;
+  }
+
+
   //-----------------  New Reference --------------//
 	public function getNewReference($date = '')
 	{
@@ -95,6 +119,21 @@ class discount_policy
 		return $reference;
 	}
 
-}
+
+
+  public function search($fields, $txt, $limit = 50)
+  {
+    if($txt == '*')
+    {
+      return dbQuery("SELECT ".$fields." FROM tbl_discount_policy ORDER BY reference DESC LIMIT ".$limit);
+    }
+    else
+    {
+      return dbQuery("SELECT ".$fields." FROM tbl_discount_policy WHERE code LIKE '%".$txt."' OR name LIKE '%".$txt."%' LIMIT ".$limit);
+    }
+
+  }
+
+} //--- end class
 
  ?>

@@ -29,12 +29,6 @@
     <input type="text" class="form-control input-sm" id="add-zName" placeholder="* จำเป็น | ห้ามซ้ำ" />
     <span class="display-block margin-top-5 red not-show" id="add-zName-error">ชื่อซ้ำ</span>
   </div>
-
-		<div class="col-sm-3">
-			<label>ลูกค้า[กรณีโซนฝากขาย]</label>
-			<input type="text" class="form-control input-sm" id="customer" placeholder="ลูกค้า" />
-      <span class="display-block margin-top-5 red not-show" id="customer-error">ชื่อซ้ำ</span>
-		</div>
     <div class="col-sm-1">
     	<?php if( $add ) : ?>
         <label class="display-block not-show">Submit</label>
@@ -61,7 +55,6 @@
 	<td>{{ barcode }}</td>
   <td>{{ zone_name }}</td>
   <td>{{ warehouse_name }}</td>
-  <td>{{ customer_name }}</td>
 </tr>
 </script>
 

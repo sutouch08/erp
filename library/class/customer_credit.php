@@ -25,7 +25,7 @@ class customer_credit
 		if( dbNumRows($qs) == 1 )
 		{
 			$rs = dbFetchObject($qs);
-			$this->id_customer	= $rs->id;
+			$this->id_customer	= $rs->id_customer;
 			$this->code		= $rs->code;
 			$this->name  	= $rs->name;
 			$this->credit	= $rs->credit;

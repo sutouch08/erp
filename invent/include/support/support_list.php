@@ -3,7 +3,7 @@
 //--- function getFilter in function/tools.php
 $sCode 	= getFilter('sCode', 'sOrderCode', '');	//---	reference
 $sEmp		= getFilter('sEmp', 'sOrderEmp', '' );	//---	ผู้ทำรายการ
-$sCus		= getFilter('sUser', 'sOrderCus', ''); //---	ผู้เบิก
+$sCus		= getFilter('sCus', 'sOrderCus', ''); //---	ผู้เบิก
 $fromDate	= getFilter('fromDate', 'fromDate', '' );
 $toDate		= getFilter('toDate', 'toDate', '' );
 

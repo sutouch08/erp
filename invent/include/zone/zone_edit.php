@@ -38,11 +38,7 @@
     <span class="display-block margin-top-5 red not-show" id="edit-zName-error">ชื่อซ้ำ</span>
   </div>
 
-  <div class="col-sm-3">
-    <label>ลูกค้า[กรณีฝากขาย]</label>
-    <input type="text" class="form-control input-sm" id="customer" placeholder="ลูกค้า" value="<?php echo customerName($rs->id_customer); ?>" />
-    <span class="display-block margin-top-5 red not-show" id="customer-error">ชื่อซ้ำ</span>
-  </div>
+
 
   <div class="col-sm-1">
   <?php if( $edit ) : ?>
@@ -61,5 +57,79 @@
     </div>
   <?php endif; ?>
 </div>
+<hr/>
+<div class="row">
+  <div class="col-sm-5">
+    <label>ลูกค้า[กรณีฝากขาย]</label>
+    <input type="text" class="form-control input-sm" id="customer" placeholder="ค้นหาลูกค้า" value="" />
+    <span class="display-block margin-top-5 red not-show" id="customer-error">ชื่อซ้ำ</span>
+  </div>
+  <div class="col-sm-1">
+    <label class="display-block not-show">เชื่อมโยง</label>
+    <button type="button" class="btn btn-sm btn-success btn-block" onclick="addCustomer()">เพิ่มลูกค้า</button>
+  </div>
+</div>
+<hr/>
+<div class="row">
+  <div class="col-sm-12">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th class="width-5 text-center">ลำดับ</th>
+          <th class="width-25">รหัส</th>
+          <th class="width-50">ชื่อลูกค้า</th>
+          <th class="width-20 text-center"></th>
+        </tr>
+      </thead>
+      <tbody id="result">
+<?php
+      $qr  = "SELECT cz.id, cs.code, cs.name ";
+      $qr .= "FROM tbl_zone_customer AS cz ";
+      $qr .= "JOIN tbl_customer AS cs ON cz.id_customer = cs.id ";
+      $qr .= "WHERE cz.id_zone = '".$id_zone."' ";
+?>
+<?php $qs = dbQuery($qr); ?>
+<?php if(dbNumRows($qs) > 0) : ?>
+  <?php $no = 1; ?>
+  <?php while($rd = dbFetchObject($qs)) : ?>
+    <tr id="row-<?php echo $rd->id; ?>">
+      <td class="middle text-center no"><?php echo $no; ?></td>
+      <td class="middle"><?php echo $rd->code; ?></td>
+      <td class="middle"><?php echo $rd->name; ?></td>
+      <td class="middle text-right">
+        <?php if($edit OR $add) : ?>
+          <button type="button" class="btn btn-sm btn-danger" onclick="removeCustomer(<?php echo $rd->id; ?>, '<?php echo $rd->code; ?>')">
+            <i class="fa fa-trash"></i>
+          </button>
+        <?php endif; ?>
+      </td>
+    </tr>
+    <?php $no++; ?>
+  <?php endwhile; ?>
+<?php endif; ?>
+
+
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<script id="template" type="text/x-handlebarsTemplate">
+<tr id="row-{{id}}">
+  <td class="middle text-center no"></td>
+  <td class="middle">{{code}}</td>
+  <td class="middle">{{name}}</td>
+  <td class="middle text-right">
+    <?php if($edit OR $add) : ?>
+      <button type="button" class="btn btn-sm btn-danger" onclick="removeCustomer({{id}}, '{{code}}')">
+        <i class="fa fa-trash"></i>
+      </button>
+    <?php endif; ?>
+  </td>
+</tr>
+</script>
+
 
 <script src="script/zone/zone_edit.js"></script>

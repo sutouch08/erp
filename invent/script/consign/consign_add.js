@@ -52,6 +52,7 @@ function addNew(){
   var customerName = $('#customerName').val();
   var id_zone = $('#id_zone').val();
   var zoneName = $('#zoneName').val();
+  var channels = $('#channels').val();
   var remark = $('#remark').val();
   var is_so = $('#isSo').val();
 
@@ -77,6 +78,12 @@ function addNew(){
     swal('โซนไม่ถูกต้อง');
   }
 
+  if(channels == ''){
+    swal('กรุณาเลือกช่องทาง');
+    return false;
+  }
+
+
   load_in();
   $.ajax({
     url:'controller/consignController.php?addNew',
@@ -87,7 +94,8 @@ function addNew(){
       'id_customer' : id_customer,
       'id_zone' : id_zone,
       'remark'  : remark,
-      'is_so' : is_so
+      'is_so' : is_so,
+      'channels' : channels
     },
     success:function(rs){
       load_out();

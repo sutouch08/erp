@@ -62,6 +62,14 @@ if( isset( $_GET['saveOrder'] ) )
 
 
 
+if(isset($_GET['getBalanceCredit']))
+{
+	$id_customer = $_GET['id_customer'];
+	$cs = new customer_credit($id_customer);
+	echo $cs->balance;
+}
+
+
 
 //----- 	แก้ไขหัวเอกสาร
 //------ 	ถ้ามีการเปลี่ยนวันที่ /ชื่อลูกค้า /ช่องทางการชำระเงิน /ช่องทางการขาย จะทำการคำนวณส่วนลดใหม่

@@ -28,7 +28,14 @@
       <option value="0" <?php echo isSelected(0, $cs->is_so); ?>>ไม่เปิด</option>
     </select>
   </div>
-  <div class="col-sm-10 padding-5 first">
+  <div class="col-sm-2 padding-5 first">
+    <label>ช่องทาง</label>
+    <select class="form-control input-sm" id="channels">
+      <option value="" selectd>กรุณาเลือก</option>
+      <?php echo selectChannels('no'); ?>
+    </select>
+  </div>
+  <div class="col-sm-8 padding-5">
     <label>หมายเหตุ</label>
     <input type="text" class="form-control input-sm header-box" id="remark" maxlength="100" placeholder="หมายเหตุ (ไม่เกิน 100 ตัวอักษร)" />
   </div>
@@ -69,7 +76,15 @@
       </select>
     </div>
 
-    <div class="col-sm-1 col-1-harf padding-5 first">
+    <div class="col-sm-2 padding-5 first">
+      <label>ช่องทาง</label>
+      <select class="form-control input-sm header-box" id="channels" disabled>
+        <option value="" selectd>กรุณาเลือก</option>
+        <?php echo selectChannels($cs->id_channels); ?>
+      </select>
+    </div>
+
+    <div class="col-sm-1 col-1-harf padding-5">
       <label>อ้างอิง</label>
       <input type="text" class="form-control input-sm text-center" id="check-reference" value="<?php echo $consign_check->reference; ?>" disabled />
     </div>
@@ -83,12 +98,12 @@
       <?php endif; ?>
     </div>
 
-    <div class="col-sm-7 col-7-harf padding-5">
+    <div class="col-sm-6 col-6-harf padding-5">
       <label>หมายเหตุ</label>
       <input type="text" class="form-control input-sm header-box" id="remark" maxlength="100" value="<?php echo $cs->remark; ?>" disabled />
     </div>
 
-    <div class="col-sm-2 padding-5 last">
+    <div class="col-sm-1 padding-5 last">
       <label class="display-block not-show">add</label>
       <?php if( $edit ) : ?>
         <button type="button" class="btn btn-sm btn-warning btn-block" id="btn-edit" onclick="getEdit()"><i class="fa fa-pencil"></i> แก้ไข</button>

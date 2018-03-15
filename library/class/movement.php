@@ -157,6 +157,8 @@ class movement
 			$this->error = dbError();
 		}
 
+		$this->dropZeroMovement();
+		
 		return $sc;
 	}
 
@@ -176,7 +178,39 @@ class movement
 			$this->error = dbError();
 		}
 
+		$this->dropZeroMovement();
+
 		return $sc;
+	}
+
+
+
+
+	private function dropZeroMovement()
+	{
+		return dbQuery("DELETE FROM tbl_stock_movement WHERE move_out = 0 AND move_in = 0");
+	}
+
+
+	public function getStockBalance($id_pd, $wh_in = 0, $date)
+	{
+		$qr  = "SELECT SUM(move_in) AS move_in, SUM(move_out) AS move_out ";
+		$qr .= "FROM tbl_stock_movement WHERE id_product = '".$id_pd."' ";
+		$qr .= "AND date_upd <= '".fromDate($date)."' ";
+		if($wh_in != 0)
+		{
+			$qr .= "AND id_warehouse IN(".$id_wh.") ";
+		}
+
+
+		$qs = dbQuery($qr);
+
+		list($move_in, $move_out) = dbFetchArray($qs);
+
+		$move_in = is_null($move_in) ? 0 : $move_in;
+		$move_out = is_null($move_out) ? 0 : $move_out;
+
+		return $move_in - $move_out;
 	}
 
 

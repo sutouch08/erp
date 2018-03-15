@@ -83,7 +83,10 @@
           <li><a href="index.php?content=stock_balance"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือ</a></li>
           <li><a href="index.php?content=current_stock"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือปัจจุบัน</a></li>
           <li><a href="index.php?content=stock_balance_by_zone"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือแยกตามโซน</a></li>
-          <li><a href="index.php?content=stock_balance_compare_warehouse"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน รายงานสินค้าคงเหลือเปรียบเทียบคลัง</a></li>
+          <li><a href="index.php?content=stock_balance_compare_warehouse"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือเปรียบเทียบคลัง</a></li>
+          <li class="divider"></li>
+          <li><a href="index.php?content=stock_movement_by_warehouse"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน ความเคลื่อนไหวสินค้าแยกตามคลังสินค้า</a></li>
+          <li><a href="index.php?content=stock_movement_by_product"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน ความเคลื่อนไหวสินค้าแยกตามสินค้า</a></li>
         </ul>
       </li>
 
@@ -123,7 +126,13 @@
   <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cogs"></i>&nbsp; การตั้งค่า</a>
     <ul class="dropdown-menu">
     	<li><a href="index.php?content=config"><i class="fa fa-cogs"></i>&nbsp; การตั้งค่า</a></li>
-      <li><a href="index.php?content=discount_policy"><i class="fa fa-cog"></i>&nbsp; นโยบายส่วนลด</a></li>
+      <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i>&nbsp; นโยบายส่วนลด</a>
+        <ul class="dropdown-menu">
+          <li><a href="index.php?content=discount_policy"><i class="fa fa-cog"></i>&nbsp; เพิ่ม/แก้ไข นโยบายส่วนลด</a></li>
+          <li><a href="index.php?content=discount_rule"><i class="fa fa-cog"></i>&nbsp; เพิ่ม/แก้ไข เงื่อนไขส่วนลด</a></li>
+        </ul>
+      </li>
+
       <li class="divider"></li>
       <li><a href="index.php?content=popup"><i class="fa fa-bullhorn"></i>&nbsp; การแจ้งข่าว</a></li>
       <li class="divider"></li>

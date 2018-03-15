@@ -113,18 +113,6 @@ function saveAdd(){
   }
 
 
-
-  if( customer != '' && id_customer == ''){
-    showError('customer', 'ชื่อลูกค้าไม่ถูกต้อง');
-    return false;
-  }else {
-    if( customer == ''){
-      id_customer = '';
-    }
-
-    hideError('customer');
-  }
-
 	load_in();
 	$.ajax({
 		url:"controller/zoneController.php?addNewZone",
@@ -133,9 +121,7 @@ function saveAdd(){
     data: {
         "id_warehouse" : zWH,
         "code" : zCode,
-        "name" : zName,
-        "id_customer" : id_customer,
-        "customerName" : customer
+        "name" : zName
       },
 		success: function(rs){
 			load_out();
@@ -147,8 +133,6 @@ function saveAdd(){
 				render_append(source, data, output);
 				$("#add-zName").val('');
 				$("#add-zCode").val('');
-        $('#customer').val('');
-        $('#id_customer').val('');
 				$("#add-zCode").focus();
 			}else{
 				swal(rs);
