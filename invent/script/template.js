@@ -34,9 +34,6 @@ function removeCommas(str) {
 
 
 
-
-
-
 function addCommas(number){
 	 return (
 	 	input.toString()).replace(/^([-+]?)(0?)(\d+)(.?)(\d+)$/g, function(match, sign, zeros, before, decimal, after) {
@@ -157,6 +154,13 @@ $.fn.addCommas = function() {
   });
 }
 
+
+function reIndex(){
+  $('.no').each(function(index, el) {
+    no = index +1;
+    $(this).text(addCommas(no));
+  });
+}
 
 
 

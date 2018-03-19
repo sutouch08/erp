@@ -448,7 +448,37 @@ if( !getConfig('CLOSED') )
 		case 'sale_by_channels_show_reference' :
 			$content = 'report/sales/sale_by_channels_show_reference.php';
 			$pageTitle = 'รายงานยอดขายแยกตามช่องทางการขายแสดงเลขที่เอกสาร';
-			break;
+		break;
+
+		case 'sale_by_customer_order' :
+			$content = 'report/sales/sale_by_customer_order.php';
+			$pageTitle = 'รายงาน สรุปยอดขายแยกลูกค้า แสดงเลขที่เอกสาร';
+		break;
+
+		case 'sale_by_customer_items' :
+			$content = 'report/sales/sale_by_customer_items.php';
+			$pageTitle = 'รายงาน สรุปยอดขายแยกลูกค้า แสดงรายการสินค้า';
+		break;
+
+		case 'sponsor_by_customer_order' :
+			$content = 'report/sales/sponsor_by_customer_order.php';
+			$pageTitle = 'รายงาน สรุปยอดสปอนเซอร์แยกตามผู้รับ แสดงเลขที่เอกสาร';
+		break;
+
+		case 'sponsor_by_customer_items' :
+			$content = 'report/sales/sponsor_by_customer_items.php';
+			$pageTitle = 'รายงาน สรุปยอดสปอนเซอร์แยกตามผู้รับ แสดงรายการสินค้า';
+		break;
+
+		case 'support_by_customer_order' :
+			$content = 'report/sales/support_by_customer_order.php';
+			$pageTitle = 'รายงาน สรุปยอดอภินันท์แยกตามผู้รับ แสดงเลขที่เอกสาร';
+		break;
+
+		case 'support_by_customer_items' :
+			$content = 'report/sales/support_by_customer_items.php';
+			$pageTitle = 'รายงาน สรุปยอดอภินันท์แยกตามผู้รับ แสดงรายการสินค้า';
+		break;
 
 
 		//---------- รายงานระบบคลังสินค้า

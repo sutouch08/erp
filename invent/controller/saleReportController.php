@@ -25,6 +25,82 @@ if(isset($_GET['saleByChannelsAndReference']) && isset($_GET['export']))
 }
 
 
+if(isset($_GET['saleByCustomerOrder']) && isset($_GET['report']))
+{
+  include 'report/saleReport/report_sale_by_customer_order.php';
+}
+
+
+if(isset($_GET['saleByCustomerOrder']) && isset($_GET['export']))
+{
+  include 'report/saleReport/export_sale_by_customer_order.php';
+}
+
+
+
+if(isset($_GET['saleByCustomerItems']) && isset($_GET['report']))
+{
+  include 'report/saleReport/report_sale_by_customer_items.php';
+}
+
+
+if(isset($_GET['saleByCustomerItems']) && isset($_GET['export']))
+{
+  include 'report/saleReport/export_sale_by_customer_items.php';
+}
+
+
+//--- รายงานสรุปยอดสปอนเซอร์
+if(isset($_GET['sponsorByCustomerOrder']) && isset($_GET['report']))
+{
+  include 'report/saleReport/report_sponsor_by_customer_order.php';
+}
+
+
+if(isset($_GET['sponsorByCustomerOrder']) && isset($_GET['export']))
+{
+  include 'report/saleReport/export_sponsor_by_customer_order.php';
+}
+
+
+if(isset($_GET['sponsorByCustomerItems']) && isset($_GET['report']))
+{
+  include 'report/saleReport/report_sponsor_by_customer_items.php';
+}
+
+
+if(isset($_GET['sponsorByCustomerItems']) && isset($_GET['export']))
+{
+  include 'report/saleReport/export_sponsor_by_customer_items.php';
+}
+
+
+
+//---- รายงานสรุปยอดอภินันท์
+if(isset($_GET['supportByCustomerOrder']) && isset($_GET['report']))
+{
+  include 'report/saleReport/report_support_by_customer_order.php';
+}
+
+
+if(isset($_GET['supportByCustomerOrder']) && isset($_GET['export']))
+{
+  include 'report/saleReport/export_support_by_customer_order.php';
+}
+
+
+if(isset($_GET['supportByCustomerItems']) && isset($_GET['report']))
+{
+  include 'report/saleReport/report_support_by_customer_items.php';
+}
+
+
+if(isset($_GET['supportByCustomerItems']) && isset($_GET['export']))
+{
+  include 'report/saleReport/export_support_by_customer_items.php';
+}
+
+
 
 
  ?>

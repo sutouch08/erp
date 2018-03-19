@@ -32,15 +32,13 @@
 					$id			= $rs['A'];
 					$code 	= addslashes($rs['B']);
 					$name 	= addslashes($rs['C']);
-					$active 	= trim($rs['F'] );
 					if( $cs->isExists($id) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
 								'id'			=> $id,
 								'code'		=> $code,
-								'name'		=> $name,
-								'active'	=> $active == '' ? 1 : 0
+								'name'		=> $name
 								);
 						$import++;
 						if($cs->add($arr) === FALSE)
@@ -56,8 +54,7 @@
 						//--- If exists do update
 						$arr = array(
 								'code'		=> $code,
-								'name' 		=> $name,
-								'active'	=> $active == '' ? 1 : 0
+								'name' 		=> $name
 								);
 
 						$update++;

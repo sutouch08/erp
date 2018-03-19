@@ -48,7 +48,7 @@
 		$DUEDATE	= date('d/m/Y', strtotime('+'.$cust->term.' day '.$cs->date_add));
 
 		//--	รหัสลูกค้า
-		$QCCOOR		= tis($cust->getCode($cs->id_customer));
+		$QCCOOR		= addslashes($cust->getCode($cs->id_customer));
 
 		//---	รหัสพนักงานขาย
 		$QCEMPL	= "";

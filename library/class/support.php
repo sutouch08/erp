@@ -156,5 +156,19 @@ class support
   }
 
 
+
+  public function search($txt, $fields, $limit = 50)
+  {
+    $qr = "SELECT ".$fields." FROM tbl_support ";
+    if($txt != '*')
+    {
+      $qr .= "WHERE code LIKE '%".$txt."%' OR name LIKE '%".$txt."%' ";
+    }
+
+    $qr .= "ORDER BY code ASC LIMIT ".$limit;
+
+    return dbQuery($qs);
+  }
+
 } //--- End class
  ?>

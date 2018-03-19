@@ -9,6 +9,19 @@ if(isset($_GET['getCustomerCodeAndName']))
 	include 'autocomplete/get_customer_code_and_name.php';
 }
 
+//-- ดึงรายชื่อสปอนเซอร์
+if(isset($_GET['getSponsorCodeAndName']))
+{
+	include 'autocomplete/get_sponsor_code_and_name.php';
+}
+
+
+//--- ดึงรายชื่ออภินันท์
+if(isset($_GET['getSupportCodeAndName']))
+{
+	include 'autocomplete/get_support_code_and_name.php';
+}
+
 //---	รายงานสินค้าคงเหลือแยกตามโซน
 if(isset($_GET['getStyleCode']))
 {
