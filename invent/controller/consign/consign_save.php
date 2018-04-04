@@ -137,7 +137,7 @@ if($cs->isCancle == 0 && $cs->isSaved == 0)
         'province'        => $customer->province,
         'id_employee'     => $employee->id_employee,
         'employee_name'   => $employee->full_name,
-        'date_add'        => dbDate($order->date_add, TRUE),
+        'date_add'        => dbDate($cs->date_add, TRUE),
         'id_zone'         => $zone->id,
         'id_warehouse'    => $zone->id_warehouse
       );

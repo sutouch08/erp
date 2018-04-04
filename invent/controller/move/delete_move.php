@@ -56,6 +56,11 @@ if( dbNumRows($qs) > 0)
 
   while( $rs = dbFetchObject($qs))
   {
+    if($sc === FALSE)
+    {
+      break;
+    }
+    
     //--- 1. ตราจสอบว่าย้ายเข้าปลายทางแล้วหรือไม่
     if( $rs->valid == 1)
     {

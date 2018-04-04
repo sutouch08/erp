@@ -241,11 +241,11 @@ class consign_check
 
 
   //---- เรียกรายการเอกสารที่บันทึกแล้วเพื่อจะนำไปตัดยอด
-  public function getActiveCheckList($id_zone, $id_customer)
+  public function getActiveCheckList($id_zone)
   {
     $qr  = "SELECT * FROM tbl_consign_check ";
     $qr .= "WHERE id_zone = '".$id_zone."' ";
-    $qr .= "AND id_customer = '".$id_customer."' ";
+    //$qr .= "AND id_customer = '".$id_customer."' ";
     $qr .= "AND status = 1 AND valid = 0 ";
     $qr .= "AND id_consign = 0 ";
     $qr .= "ORDER BY reference ASC";

@@ -33,9 +33,6 @@
   $barcode = trim($_POST['barcode']);
 
 
-  //--- เริ่มใช้งาน transection
-  startTransection();
-
   //--- หาไอดีสินค้าจากบาร์โค้ด หากไม่มีบาร์โค้ดนี้จะ return false กลับมา
   $id_product	= $bc->getProductId($barcode);
 
@@ -46,6 +43,10 @@
   }
   else
   {
+
+    //--- เริ่มใช้งาน transection
+    startTransection();
+
     //--- ตรวจสอบว่าสินค้าอยู่ในโซนหรือไม่
     //--- return false if not exists return current qty if exists
     $stock_qty = $stock->isExists($id_zone, $id_product);
@@ -123,22 +124,24 @@
       $message = 'สินค้าคงเหลือในโซนไม่เพียงพอ';
     } //--- end if stock_qty
 
+    //--  ตรวจสอบความถูกต้อง
+    if( $sc === TRUE )
+    {
+      //--- ทุกอย่างถูกต้อง ยืนยันทรานเซ็คชั่น
+      commitTransection();
+    }
+    else
+    {
+      //--- ถ้ามีบางอย่างไม่ถูกต้อง ย้อนกลับ
+      dbRollback();
+    }
+
+    //--- สิ้นสุดการใช้งาน transection
+    endTransection();
+
+
   } //--- end if $id_product
 
-  //--  ตรวจสอบความถูกต้อง
-  if( $sc === TRUE )
-  {
-    //--- ทุกอย่างถูกต้อง ยืนยันทรานเซ็คชั่น
-    commitTransection();
-  }
-  else
-  {
-    //--- ถ้ามีบางอย่างไม่ถูกต้อง ย้อนกลับ
-    dbRollback();
-  }
-
-  //--- สิ้นสุดการใช้งาน transection
-  endTransection();
 
   echo $sc === TRUE ? 'success' : $message;
 

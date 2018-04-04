@@ -144,7 +144,7 @@ class order
 
 			$this->hasNotSaveDetail = $this->hasNotSaveDetail($this->id);
 		}
-		
+
 	}
 
 
@@ -958,7 +958,7 @@ class order
 		$qr .= "AND discount_label = '".$discLabel."' ";
 
 		$qs = dbQuery($qr);
-		if(dbNumRows($qs) == 1)
+		if(dbNumRows($qs) > 0)
 		{
 			list($sc) = dbFetchArray($qs);
 		}

@@ -19,7 +19,9 @@ $view = $pm['view'] == 1 ? TRUE : FALSE;
 accessDeny($view);
 
 ?>
+
 <div class="container">
+
 <?php
 if( isset( $_GET['add'] ) && isset($_GET['id_rule']) )
 {
@@ -28,6 +30,10 @@ if( isset( $_GET['add'] ) && isset($_GET['id_rule']) )
 else if(isset($_GET['add']) && !isset($_GET['id_rule']))
 {
   include 'include/rule/new_rule.php';
+}
+else if(isset($_GET['viewDetail']) && isset($_GET['id_rule']))
+{
+  include 'include/rule/rule_detail.php';
 }
 else
 {

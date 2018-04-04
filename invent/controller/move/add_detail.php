@@ -30,26 +30,52 @@
   //--- สินค้าที่ย้ายออก Array
   $pd			     = $_POST['id_product'];
 
+  $auz = $zone->isAllowUnderZero($id_zone);
+
+  $product = new product();
 
 
+  //-----
 
   startTransection();
 
   foreach( $moveQty as $name => $val)
   {
+    if($sc === FALSE)
+    {
+      break;
+    }
 
     if( $val != '' && $val != 0 )
     {
       $id_product	= $pd[$name];
       $qty		    = $val;
-      $arr        = array(
-                      "id_move"      => $id_move,
-                      "id_product"	 => $id_product,
-                      "id_warehouse" => $id_warehouse,
-                      "from_zone"	   => $id_zone,
-                      "to_zone"		   => 0,
-                      "qty"		       => $qty
-                    );
+
+      if($stock->isEnough($id_zone, $id_product, $qty) !== TRUE && $auz == FALSE)
+      {
+        $sc = FALSE;
+        $message = $product->getCode($id_product).'  มียอดในโซนไม่เพียงพอ';
+        break;
+      }
+
+      //--- ตัดยอดออกจากโซนต้นทาง
+      if( $stock->updateStockZone($id_zone, $id_product, ($qty * -1)) !== TRUE )
+      {
+        //--- if update stock fail
+        $sc = FALSE;
+        $message = $product->getCode($id_product).' ตัดยอดสต็อกจากโซนต้นทางไม่สำเร็จ';
+        break;
+      }
+
+
+      $arr = array(
+                  "id_move"      => $id_move,
+                  "id_product"	 => $id_product,
+                  "id_warehouse" => $id_warehouse,
+                  "from_zone"	   => $id_zone,
+                  "to_zone"		   => 0,
+                  "qty"		       => $qty
+                );
 
       //--- เพิ่มข้อมูล
       //--- หากมีข้อมูลอยู่แล้ว update
@@ -60,11 +86,12 @@
       if( $ra === FALSE )
       {
         $sc = FALSE;
-        $message = 'เพิ่ม/ปรับปรุง รายการไม่สำเร็จ';
+        $message = $product->getCode($id_product).' เพิ่ม/ปรับปรุง รายการไม่สำเร็จ';
+        break;
       }
       else
       {
-        //----- If insert or update move detail successful  do insert or update move temp
+        //--- If insert or update move detail successful  do insert or update move temp
         $temp = array(
                   "id_move_detail" => $ra,
                   "id_move"        => $id_move,
@@ -75,32 +102,26 @@
                   "id_employee"	   => getCookie('user_id')
                   );
 
-
         //--- เพิ่มยอดเข้า temp
         if( $cs->updateTemp($temp) !== TRUE )
         {
           //---- if insert or update move temp fail
           $sc = FALSE;
-          $message = 'เพิ่ม/ปรับปรุง temp ไม่สำเร็จ';
-        }
+          $message = $product->getCode($id_product).' เพิ่ม/ปรับปรุง temp ไม่สำเร็จ';
+          break;
+        } //--- end if updateTemp
 
-        //--- ตัดยอดออกจากโซนต้นทาง
-        if( $stock->updateStockZone($id_zone, $id_product, ($qty * -1)) !== TRUE )
-        {
-          //--- if update stock fail
-          $sc = FALSE;
-          $message = 'ตัดยอดสต็อกจากโซนต้นทางไม่สำเร็จ';
-        }
+      } //--- end if $ra
 
-        //--- บันทึก movement ออก
-        if( $mv->move_out($cs->reference, $id_warehouse, $id_zone, $id_product, $qty, $cs->date_add) !== TRUE)
-        {
-          //--- ถ้าบันทึก movement ไม่สำเร็จ
-          $sc = FALSE;
-          $message = 'บันทึก movement ไม่สำเร็จ';
-        }
 
-      } //--- end if $ra === FALSE
+      //--- บันทึก movement ออก
+      if( $mv->move_out($cs->reference, $id_warehouse, $id_zone, $id_product, $qty, $cs->date_add) !== TRUE)
+      {
+        //--- ถ้าบันทึก movement ไม่สำเร็จ
+        $sc = FALSE;
+        $message = $product->getCode($id_product).' บันทึก movement ไม่สำเร็จ';
+        break;
+      } //--- end move_out
 
     } //--- end if $val != 0
 

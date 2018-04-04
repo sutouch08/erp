@@ -141,67 +141,67 @@
 			while( $rs = dbFetchObject($qs) )
 			{
 				//---	เว้นว่างเพื่อให้ formula ใส่ข้อมูลการนำเข้าที่ผิดพลาด
-				$exce->writeString($row, 0, $ERRMSG);
+				$excel->writeString($row, 0, $ERRMSG);
 
 				//---	รหัสประเภทเอกสาร
-				$exce->writeString($row, 1, $REFTYPE);
+				$excel->writeString($row, 1, $REFTYPE);
 
 				//---	รหัสบริษัท
-				$exce->writeString($row, 2, $QCCORP);
+				$excel->writeString($row, 2, $QCCORP);
 
 				//---	รหัสสาขา
-				$exce->writeString($row, 3, $QCBRANCH);
+				$excel->writeString($row, 3, $QCBRANCH);
 
 				//---	สถานะเอกสาร ปกติ = ว่างไว้ , C = CANCLE
-				$exce->writeString($row, 4, $STAT);
+				$excel->writeString($row, 4, $STAT);
 
 				//---	รหัสเล่มเอกสาร
-				$exce->writeString($row, 5, $QCBOOK);
+				$excel->writeString($row, 5, $QCBOOK);
 
 				//---	เลขที่เอกสารใน formula ว่างไว้ formula จะ GEN ให้เอง
-				$exce->writeString($row, 6, $CODE);
+				$excel->writeString($row, 6, $CODE);
 
 				//---	เลขที่เอกสารใน Smart Invent
-				$exce->writeString($row, 7, $REFNO);
+				$excel->writeString($row, 7, $REFNO);
 
 				//---	วันที่เอกสาร
-				$exce->write($row, 8, $DATE);
+				$excel->write($row, 8, $DATE);
 
 				//---	รหัสคลังต้นทาง
-				$exce->writeString($row, 9, tis($wh->getCode($rs->id_warehouse)));
+				$excel->writeString($row, 9, tis($wh->getCode($rs->id_warehouse)));
 
 				//---	รหัสคลังปลายทาง
-				$exce->writeString($row, 10, $QCTOWHOUSE);
+				$excel->writeString($row, 10, $QCTOWHOUSE);
 
 				//---	รหัสแผนก
-				$exce->writeString($row, 11, $QCSECT);
+				$excel->writeString($row, 11, $QCSECT);
 
 				//---	รหัสโครงการ(ถ้ามี)
-				$exce->writeString($row, 12, $QCJOB);
+				$excel->writeString($row, 12, $QCJOB);
 
 				//---	หมายเหตุที่หัวเอกสาร
-				$exce->writeString($row, 13, $REMARKH1);
+				$excel->writeString($row, 13, $REMARKH1);
 
 				//---	รหัสสินค้า(SKU)
-				$exce->writeString($row, 14, tis($rs->product_code));
+				$excel->writeString($row, 14, tis($rs->product_code));
 
 				//---	LOT สินค้า(ถ้ามี)
-				$exce->writeString($row, 15, $LOT);
+				$excel->writeString($row, 15, $LOT);
 
 				//---	จำนวนสินค้า
-				$exce->write($row, 16, $rs->qty);
+				$excel->write($row, 16, $rs->qty);
 
 				//---	รหัสหน่วยนับ
-				$exce->writeString($row, 17, tis($pd->getUnitCode($rs->id_product)));
+				$excel->writeString($row, 17, tis($pd->getUnitCode($rs->id_product)));
 
 				//---	อัตราส่วนหน่ายนับ
-				$exce->write($row, 18, 1);
+				$excel->write($row, 18, 1);
 
 				//---	ต้นทุน/หน่วย
-				$exce->write($row, 19, $rs->cost_inc );
+				$excel->write($row, 19, $rs->cost_inc );
 
 				//---	หมายเหตุที่ตัวสินค้า
-				$exce->writeString($row, 20, '');
+				$excel->writeString($row, 20, '');
 
 				$row++;
 

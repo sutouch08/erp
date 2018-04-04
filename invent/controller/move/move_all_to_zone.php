@@ -35,11 +35,17 @@ if( dbNumRows($qs) > 0 )
 
   while( $rs = dbFetchObject($qs))
   {
+    if($sc === FALSE)
+    {
+      break;
+    }
+
     //---- เพิ่มยอดสินค้าเข้าโซนปลายทาง (tbl_stock)
     if( $stock->updateStockZone($id_zone, $rs->id_product, $rs->qty) !== TRUE )
     {
       $sc = FALSE;
       $message = 'ย้ายสินค้าเข้าโซนปลายทางไม่สำเร็จ';
+      break;
     }
 
     //--- ตัดยอดออกจาก temp (tbl_move_temp)
@@ -47,6 +53,7 @@ if( dbNumRows($qs) > 0 )
     {
       $sc = FALSE;
       $message = 'ตัดยอดออกจาก temp ไม่สำเร็จ';
+      break;
     }
 
     //--- บันทึก movement เข้า (tbl_stock_movement)
@@ -54,6 +61,7 @@ if( dbNumRows($qs) > 0 )
     {
       $sc = FALSE;
       $message = 'บันทึก movement เข้า ไม่สำเร็จ';
+      break;
     }
 
     //--- เปลี่ยนสถานะรายการเป็นย้ายเข้าปลายทางแล้ว (valid = 1) ใน tbl_move_detail
@@ -61,6 +69,7 @@ if( dbNumRows($qs) > 0 )
     {
       $sc = FALSE;
       $message = 'เปลี่ยนสถานะรายการไม่สำเร็จ';
+      break;
     }
 
   } //--- end while

@@ -5,7 +5,7 @@ $id_zone = $_GET['id_zone'];
 $cs = new consign_check();
 $ds = array();
 
-$qs = $cs->getActiveCheckList($id_zone, $id_customer);
+$qs = $cs->getActiveCheckList($id_zone);
 
 if(dbNumRows($qs) > 0)
 {

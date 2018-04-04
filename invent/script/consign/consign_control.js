@@ -124,6 +124,8 @@ $('#txt-price').keyup(function(e){
     $('#txt-pDisc').focus();
     $('#txt-pDisc').select();
   }
+
+  calAmount();
 });
 
 $('#txt-price').focusout(function(event) {
@@ -150,6 +152,7 @@ $('#txt-pDisc').keyup(function(e){
     $('#txt-aDisc').select();
   }
 
+  calAmount();
 });
 
 $('#txt-pDisc').focusout(function(e){
@@ -178,6 +181,8 @@ $('#txt-aDisc').keyup(function(e){
     $('#txt-qty').focus();
     $('#txt-qty').select();
   }
+
+  calAmount();
 });
 
 
@@ -206,9 +211,38 @@ $('#txt-qty').keyup(function(e){
     var qty = parseInt($(this).val());
     if(qty > 0){
       addToDetail();
+      return;
     }
   }
+
+  calAmount();
+
 });
+
+
+function calAmount(){
+  qty = parseInt($('#txt-qty').val());
+  qty = isNaN(qty) ? 0 : qty;
+  price = parseFloat($('#txt-price').val());
+  price = isNaN(price) ? 0 : price;
+  p_disc = parseFloat($('#txt-pDisc').val());
+  p_disc = isNaN(p_disc) ? 0 : p_disc;
+  a_disc = parseFloat($('#txt-aDisc').val());
+  a_disc = isNaN(a_disc) ? 0 : a_disc;
+  disc = 0;
+  if(a_disc > 0){
+    disc = a_disc;
+  }
+
+  if(p_disc > 0 ){
+    disc = (p_disc * 0.01) * price;
+  }
+
+  discount = disc * qty;
+  amount = (price * qty) - discount;
+  $('#txt-amount').text(addCommas(amount.toFixed(2)));
+
+}
 
 
 

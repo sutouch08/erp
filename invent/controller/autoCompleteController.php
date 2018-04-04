@@ -9,6 +9,11 @@ if(isset($_GET['getCustomerCodeAndName']))
 	include 'autocomplete/get_customer_code_and_name.php';
 }
 
+if(isset($_GET['getCustomerIdCodeAndName']))
+{
+	include 'autocomplete/get_customer_id_code_and_name.php';
+}
+
 //-- ดึงรายชื่อสปอนเซอร์
 if(isset($_GET['getSponsorCodeAndName']))
 {
@@ -44,6 +49,12 @@ if(isset($_GET['getItemCode']))
 	include 'autocomplete/get_item_code.php';
 }
 
+
+
+if(isset($_GET['getItemCodeAndId']))
+{
+	include 'autocomplete/get_item_code_id.php';
+}
 
 
 

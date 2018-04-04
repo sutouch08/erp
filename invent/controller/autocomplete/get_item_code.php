@@ -2,12 +2,15 @@
 //$pd = new product();
 $txt = trim($_REQUEST['term']);
 $field = 'code';
-$limit = 100; //---- limit result
+$limit = 300; //---- limit result
 
 $sc = array();
 
 $qr  = "SELECT pd.code FROM tbl_product AS pd ";
 $qr .= "LEFT JOIN tbl_product_style AS ps ON pd.id_style = ps.id ";
+$qr .= "LEFT JOIN tbl_color AS co ON pd.id_color = co.id ";
+$qr .= "LEFT JOIN tbl_size AS si ON pd.id_size = si.id ";
+
 if($txt != '*')
 {
   $qr .= "WHERE pd.code LIKE '%".$txt."%' ";

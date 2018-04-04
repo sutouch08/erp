@@ -96,6 +96,35 @@ class discount_policy
   }
 
 
+
+  public function deletePolicy($id, $option = 'HIDE')
+  {
+    if($option == 'HIDE')
+    {
+      return dbQuery("UPDATE tbl_discount_policy SET isDeleted = 1, emp_upd = '".getCookie('user_id')."' WHERE id = ".$id);
+    }
+
+    if($option == 'DELETE')
+    {
+      return dbQuery("DELETE FROM tbl_discount_policy WHERE id = ".$id);
+    }
+
+    return FALSE;
+  }
+
+
+
+
+  public function countOrderSold($id)
+  {
+    $qs = dbQuery("SELECT COUNT(id_policy) FROM tbl_order_sold WHERE id_policy = '".$id."'");
+    list($count) = dbFetchArray($qs);
+
+    return $count;
+  }
+
+
+
   //-----------------  New Reference --------------//
 	public function getNewReference($date = '')
 	{

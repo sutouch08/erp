@@ -30,6 +30,11 @@
 
     while( $rs = dbFetchObject($qs) )
     {
+      if($sc === FALSE)
+      {
+        break;
+      }
+
       if( $rs->qty != 0 && $rs->qty > 0 )
       {
         //--- เตรียมข้อมูลสำหรับเพิ่มเข้า tbl_move_detail
@@ -52,6 +57,7 @@
         {
           $sc = FALSE;
           $message = 'เพิ่ม/ปรับปรุง รายการไม่สำเร็จ';
+          break;
         }
         else
         {
@@ -72,6 +78,7 @@
             //---- if insert or update move temp fail
             $sc = FALSE;
             $message = 'เพิ่ม/ปรับปรุง temp ไม่สำเร็จ';
+            break;
           }
 
           //--- ตัดยอดออกจากโซนต้นทาง
@@ -80,6 +87,7 @@
             //--- if update stock fail
             $sc = FALSE;
             $message = 'ปรับยอดสต็อกไม่สำเร็จ';
+            break;
           }
 
           //--- บันทึก movement ออก
@@ -87,6 +95,7 @@
           {
             $sc = FALSE;
             $message = 'บันทึก movement ไม่สำเร็จ';
+            break;
           }
 
         } //--- end if $ra === FALSE
@@ -95,6 +104,19 @@
 
     } //--- endwhile
 
+    if( $sc === TRUE )
+    {
+      //--- ถ้าไม่มีอะไรผิดพลาด commit transection
+      commitTransection();
+    }
+    else
+    {
+      //--- ถ้ามีบางรายการไม่สำเร็จ rollback
+      dbRollback();
+    }
+
+    //--- จบ transection
+    endTransection();
   }
   else
   {
@@ -104,20 +126,6 @@
 
   } //--- end if dbNumRows
 
-
-  if( $sc === TRUE )
-  {
-    //--- ถ้าไม่มีอะไรผิดพลาด commit transection
-    commitTransection();
-  }
-  else
-  {
-    //--- ถ้ามีบางรายการไม่สำเร็จ rollback
-    dbRollback();
-  }
-
-  //--- จบ transection
-  endTransection();
 
   echo $sc === TRUE ? 'success' : $message;
 

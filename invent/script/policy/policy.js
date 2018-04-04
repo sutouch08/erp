@@ -19,6 +19,11 @@ function goEdit(id){
 
 
 
+function viewDetail(id){
+  window.location.href = 'index.php?content=discount_policy&viewDetail&id_policy='+id;
+}
+
+
 
 
 

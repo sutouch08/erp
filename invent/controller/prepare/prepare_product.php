@@ -53,31 +53,39 @@
               $sc = FALSE;
               $message = 'ตัดยอดสต็อกจากโซนไม่สำเร็จ';
             }
-
-            $id_style = $product->getStyleId($pd->id_product);
-            $id_wh    = $zone->id_warehouse;
-            //---	เพิ่มยอดเข้า buffer
-            if($buffer->updateBuffer($id_order, $id_style, $pd->id_product, $id_zone, $id_wh , $qty) !== TRUE)
+            else
             {
-              $sc = FALSE;
-              $message = 'เพิ่มยอดเข้า Buffer ไม่สำเร็จ';
-            }
+              $id_style = $product->getStyleId($pd->id_product);
+              $id_wh    = $zone->id_warehouse;
+              //---	เพิ่มยอดเข้า buffer
+              if($buffer->updateBuffer($id_order, $id_style, $pd->id_product, $id_zone, $id_wh , $qty) !== TRUE)
+              {
+                $sc = FALSE;
+                $message = 'เพิ่มยอดเข้า Buffer ไม่สำเร็จ';
+              }
+              else
+              {
+                //--- เพิ่มรายการจัดสินค้าเข้าตารางจัด
+                if($prepare->updatePrepare($id_order, $pd->id_product, $id_zone, $qty) !== TRUE)
+                {
+                  $sc = FALSE;
+                  $message = 'ปรับปรุงรายการจัดสินค้าไม่สำเร็จ';
+                }
+                else
+                {
+                  //---	ตรวจสอบออเดอร์ว่าครบแล้วหรือยัง
+                  if($orderQty == $buffer->getSumQty($id_order, $pd->id_product))
+                  {
+                    $order->validDetail($id_order, $pd->id_product);
+                    $valid = 1;
+                  }
 
+                } //--- end if updatePrepare
+                                  
+              } //--- end if updateBuffer
 
-            //--- เพิ่มรายการจัดสินค้าเข้าตารางจัด
-            if($prepare->updatePrepare($id_order, $pd->id_product, $id_zone, $qty) !== TRUE)
-            {
-              $sc = FALSE;
-              $message = 'ปรับปรุงรายการจัดสินค้าไม่สำเร็จ';
-            }
+            } //--- end if is isEnough
 
-
-            //---	ตรวจสอบออเดอร์ว่าครบแล้วหรือยัง
-            if($orderQty == $buffer->getSumQty($id_order, $pd->id_product))
-            {
-              $order->validDetail($id_order, $pd->id_product);
-              $valid = 1;
-            }
 
             if( $sc === TRUE )
             {

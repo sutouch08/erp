@@ -25,7 +25,7 @@ $btn_can_group_no = $can_group == 'N' ? 'btn-primary' : '';
         </div>
 				<div class="col-sm-4">
 					<p class="pull-right top-p">
-						<button type="button" class="btn btn-sm btn-success" onclick="saveDiscount()"><i class="fa fa-save"></i> บันทึก</button>
+
 					</p>
 				</div>
         <div class="divider margin-top-5"></div>
@@ -91,9 +91,11 @@ $btn_can_group_no = $can_group == 'N' ? 'btn-primary' : '';
 						<button type="button" class="btn btn-sm width-50 <?php echo $btn_can_group_no; ?>" id="btn-cangroup-no" onclick="toggleCanGroup('N')">NO</button>
           </div>
         </div>
-
-
-
+				<div class="divider-hidden"></div>
+				<div class="col-sm-2">&nbsp;</div>
+				<div class="col-sm-3">
+					<button type="button" class="btn btn-sm btn-success btn-block" onclick="saveDiscount()"><i class="fa fa-save"></i> บันทึก</button>
+				</div>
 
 
     </div>

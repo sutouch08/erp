@@ -111,7 +111,7 @@
 		$QCJOBI		= "";
 
 		//---	หมายเหตุที่เอกสาร
-		$REMARKH1	= tis($cs->remark);
+		$REMARKH1	= $cs->remark;
 		$REMARKH2	= "";
 		$REMARKH3	= "";
 		$REMARKH4	= "";

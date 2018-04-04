@@ -38,6 +38,11 @@
   foreach( $moveQty as $id_cancle => $val)
   {
 
+    if($sc === FALSE)
+    {
+      break;
+    }
+
     if( $val != '' && $val != 0 )
     {
       $id_product	= $pd[$id_cancle];

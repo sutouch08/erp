@@ -9,9 +9,9 @@ function saveConsign(){
 		confirmButtonColor: "#8CC152",
 		confirmButtonText: 'บันทึก',
 		cancelButtonText: 'ยกเลิก',
-		closeOnConfirm: false,
-    showLoaderOnConfirm:true
+		closeOnConfirm: true
 		}, function(){
+      load_in();
       $.ajax({
         url:'controller/consignController.php?saveConsign',
         type:'POST',
@@ -23,8 +23,11 @@ function saveConsign(){
           var rs = $.trim(rs);
           if(rs == 'success'){
             if(is_so == 1){
-              exportConsignSold(id_consign);
+              setTimeout(function(){
+                exportConsignSold(id_consign);
+              }, 1500);
             }else{
+              load_out();
               swal({
                 title:'Saved',
                 type:'success',
@@ -35,7 +38,9 @@ function saveConsign(){
                 goDetail(id_consign);
               }, 1500);
             }
+
           }else{
+            load_out();
             swal('Error!', rs, 'error');
           }
         }

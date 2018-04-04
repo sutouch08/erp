@@ -28,20 +28,21 @@ include 'function/discount_rule_helper.php';
 <?php if(dbNumRows($qs) > 0) : ?>
   <?php $no = 1; ?>
   <?php while ($rs = dbFetchObject($qs)) : ?>
-        <tr class="font-size-12">
+        <tr class="font-size-12" id="row_<?php echo $rs->id; ?>">
           <td class="middle text-center"><?php echo $no; ?></td>
           <td class="middle text-center"><?php echo $rs->code; ?></td>
           <td class="middle"><?php echo $rs->name; ?></td>
           <td class="middle text-center"><?php echo showItemDiscountLabel($rs->item_price, $rs->item_disc, $rs->item_disc_unit); ?></td>
-          <td class="middle text-center"><?php echo customerRule($rs); ?></td>
+          <td class="middle text-center"><?php echo ($rs->all_customer == 1 ? 'ทั้งหมด' : 'กำหนดค่า'); ?></td>
           <td class="middle text-center"><?php echo ($rs->all_product == 1 ? 'ทั้งหมด' : 'กำหนดค่า'); ?></td>
           <td class="middle text-center"><?php echo ($rs->all_channels == 1 ? 'ทั้งหมด' : 'กำหนดค่า'); ?></td>
           <td class="middle text-center"><?php echo ($rs->all_payment == 1 ? 'ทั้งหมด' : 'กำหนดค่า'); ?></td>
           <td class="middle text-center"><?php echo ($rs->qty > 0 ? $rs->qty.' pcs' : ($rs->amount > 0 ? $rs->amount.' '.getConfig('CURRENTCY') : 'No')); ?></td>
           <td class="middle text-right">
-            <button type="button" class="btn btn-xs btn-info" onclick="getViewRule('<?php echo $rs->id; ?>')"><i class="fa fa-eye"></i></button>
-            <button type="button" class="btn btn-xs btn-warning" onclick="getEditRule('<?php echo $rs->id; ?>')"><i class="fa fa-pencil"></i></button>
-            <button type="button" class="btn btn-xs btn-danger" onclick="getDeleteRule('<?php echo $rs->id; ?>')"><i class="fa fa-trash"></i></button>
+            <button type="button" class="btn btn-xs btn-info" onclick="viewRuleDetail('<?php echo $rs->id; ?>')"><i class="fa fa-eye"></i></button>
+            <?php if(!isset($_GET['viewDetail']) && $edit) : ?>
+            <button type="button" class="btn btn-xs btn-danger" onclick="unlinkRule(<?php echo $rs->id; ?>, '<?php echo $rs->code; ?>')"><i class="fa fa-trash"></i></button>
+            <?php endif; ?>
           </td>
         </tr>
   <?php   $no++; ?>

@@ -30,6 +30,11 @@
     <input type="number" class="form-control input-sm text-center" id="txt-qty" />
   </div>
 
+  <div class="col-sm-1 col-1-harf padding-5">
+    <label>มูลค่า</label>
+    <span class="form-control input-sm text-center" id="txt-amount">0</span>
+  </div>
+
 <!--
   <div class="col-sm-1 padding-5">
     <label class="display-block not-show">submit</label>

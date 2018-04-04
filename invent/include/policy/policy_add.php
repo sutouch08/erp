@@ -6,6 +6,8 @@ $reference = $id === FALSE ? $policy->getNewReference() : $policy->reference;
 $disabled = $id === FALSE ? '' : 'disabled';
 $startDate = $id === FALSE ? '' : thaiDate($policy->date_start);
 $endDate = $id === FALSE ? '' : thaiDate($policy->date_end);
+$active = $policy->active == 1 ? 'btn-success' : '';
+$disActive = $policy->active == 0 ? 'btn-danger' : '';
 ?>
 <div class="row top-row">
   <div class="col-sm-6 top-col">
@@ -15,7 +17,7 @@ $endDate = $id === FALSE ? '' : thaiDate($policy->date_end);
     <p class="pull-right top-p">
   <?php echo goBackButton(); ?>
   <?php if( $add && $id != FALSE ) : ?>
-    <button type="button" class="btn btn-sm btn-info" onclick="newRule()"><i class="fa fa-plus"></i> เพิ่มกฏ</button>
+    <button type="button" class="btn btn-sm btn-info" onclick="getActiveRuleList()"><i class="fa fa-plus"></i> เพิ่มกฏ</button>
   <?php endif; ?>
     </p>
   </div>
@@ -26,4 +28,3 @@ $endDate = $id === FALSE ? '' : thaiDate($policy->date_end);
 <?php include 'include/policy/rule_list.php'; ?>
 
 <script src="script/policy/policy_add.js"></script>
-<script src="script/rule/rule_add.js"></script>

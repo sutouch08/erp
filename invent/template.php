@@ -49,6 +49,7 @@ function row_no()
 		<script src="<?php echo WEB_ROOT; ?>library/js/sweet-alert.js"></script>
 		<script src="<?php echo WEB_ROOT; ?>library/js/jquery.cookie.js"></script>
 		<script src="<?php echo WEB_ROOT; ?>library/js/jquery.tablesorter.js"></script>
+		<script src="<?php echo WEB_ROOT; ?>library/js/jquery.scrollbar.min.js"></script>
 
     <!-- Core CSS - Include with every page -->
 
@@ -62,6 +63,7 @@ function row_no()
 		<link href="<?php echo WEB_ROOT; ?>library/css/sweet-alert.css" rel="stylesheet">
 		<link href="<?php echo WEB_ROOT; ?>library/css/color.css" rel="stylesheet">
 		<link href="<?php echo WEB_ROOT; ?>library/css/template.css" rel="stylesheet">
+		<link href="<?php echo WEB_ROOT; ?>library/css/jquery.scrollbar.css" rel="stylesheet">
     <style>
 			.ui-autocomplete { 	height: 400px; overflow-y: scroll; overflow-x: hidden; }
 		</style>
