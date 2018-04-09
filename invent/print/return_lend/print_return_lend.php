@@ -75,7 +75,7 @@
 			      <span style="font-size:150px;">ยกเลิก</span>
 			  </div>';
 			}
-			
+
 				echo $print->table_start();
 				$i = 0;
 				while($i<$row) :
@@ -83,7 +83,7 @@
 					if(count($rs) != 0) :
 
 						$pdCode 	= $pd->getCode($rs['id_product']);
-						$pdName 	= "<input type='text' style='border:0px; width:100%;' value='".$pd->getName($rs['id_product'])."' />";
+						$pdName 	= inputRow($pd->getName($rs['id_product']));
 						$data 		= array(
 													$n,
 													$pdCode,

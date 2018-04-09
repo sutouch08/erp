@@ -2,6 +2,7 @@
 	require "../../../library/config.php";
 	require "../../../library/functions.php";
 	require "../../function/tools.php";
+	include '../../function/print_helper.php';
 
 
 	$id 		= $_GET['id_receive_product'];
@@ -90,13 +91,13 @@
 					if(count($rs) != 0) :
 
 						$pdCode 	= $pd->getCode($rs['id_product']);
-						$pdName 	= "<input type='text' style='border:0px; width:100%;' value='".$pd->getName($rs['id_product'])."' />";
+						$pdName 	= inputRow($pd->getName($rs['id_product']));
 						$data 		= array(
 													$n,
 													$pdCode,
 													$pdName,
 													number_format($rs['qty']),
-													$zone->getName($rs['id_zone'])
+													inputRow($zone->getName($rs['id_zone']))
 													);
 
 						$total_qty 			+= $rs['qty'];

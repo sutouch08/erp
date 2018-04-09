@@ -62,13 +62,8 @@ function goDelete(id, name){
 }
 
 
-function goAdd(id){
-	if(id == undefined){
-		window.location.href = 'index.php?content=receive_transform&add';
-	}else{
-		window.location.href = 'index.php?content=receive_transform&add=Y&id_receive_transform='+id;
-	}
-
+function goAdd(){
+	window.location.href = "index.php?content=receive_transform&add";
 }
 
 

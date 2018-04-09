@@ -5,32 +5,97 @@ var poError = 0;
 var invError = 0;
 var zoneError = 0;
 
+function addNew(){
+	date_add = $('#dateAdd').val();
+	remark = $('#remark').val();
+	if(!isDate(date_add)){
+		swal('วันที่ไม่ถูกต้อง');
+		return false;
+	}
 
-function receiveProduct(){
+	load_in();
+
+	$.ajax({
+		url:'controller/receiveTransformController.php?addNew',
+		type:'POST',
+		cache:'false',
+		data:{
+			'date_add' : date_add,
+			'remark' : remark
+		},
+		success:function(rs){
+			load_out();
+			rs = $.trim(rs);
+			if(! isNaN( parseInt(rs) ) ){
+				setTimeout(function(){
+					goAdd(rs);
+				}, 1000);
+			}else{
+				swal('Error!', rs, 'error');
+			}
+		}
+	});
+}
+
+
+
+function changeOrder(){
+	id_order = $('#id_order').val();
+	poCode  = $('#poCode').val();
+
+	if(id_order != '' && poCode.length > 0)
+	{
+		swal({
+			title: 'ยกเลิกข้อมูลนี้ ?',
+			type: 'warning',
+			showCancelButton: true,
+			cancelButtonText: 'No',
+			confirmButtonText: 'Yes',
+			closeOnConfirm: true
+		}, function(){
+			clearTable();
+		});
+	}
+}
+
+
+
+function clearTable(){
+	$('#id_order').val('');
+	$('#receiveTable').html('');
+	$('#poCode').removeAttr('disabled');
+	$('#poCode').val('');
+	$('#btn-change').addClass('hide');
+	$('#btn-load').removeClass('hide');
+	setTimeout(function(){
+		$('#poCode').focus();
+	}, 500);
+}
+
+
+
+function receiveProduct(id_pd){
 	var qty = isNaN( parseInt( $("#qty").val() ) ) ? 1 : parseInt( $("#qty").val() );
 	var bc = $("#barcode");
-	var barcode = bc.val();
-	if( barcode.length > 0 ){
+	var input = $("#receive-"+ id_pd);
+	if(input.length == 1 ){
 		bc.val('');
 		bc.attr('disabled', 'disabled');
-		var input = $("#receive-"+barcode);
-		var count = input.length;
-		if( count == 1 ){
-			var cqty = input.val() == "" ? 0 : parseInt(input.val());
-			qty += cqty;
-			input.val(qty);
-			$("#qty").val(1);
-		}else{
-			swal({
-				title: "ข้อผิดพลาด !",
-				text: "บาร์โค้ดไม่ถูกต้องหรือสินค้าไม่ตรงกับใบสั่งซื้อ",
-				type: "error"},
-				function(){
-					setTimeout( function(){ $("#barcode")	.focus(); }, 1000 );
-				});
-		}
+		var cqty = input.val() == "" ? 0 : parseInt(input.val());
+		qty += cqty;
+		input.val(qty);
+		$("#qty").val(1);
+		sumReceive();
 		bc.removeAttr('disabled');
 		bc.focus();
+	}else{
+		swal({
+			title: "ข้อผิดพลาด !",
+			text: "บาร์โค้ดไม่ถูกต้องหรือสินค้าไม่ตรงกับใบสั่งซื้อ",
+			type: "error"},
+			function(){
+				setTimeout( function(){ $("#barcode")	.focus(); }, 1000 );
+		});
 	}
 }
 
@@ -39,31 +104,28 @@ function receiveProduct(){
 
 
 function save(){
-	//---	วันที่รับเข้า
-	var date			= $("#dateAdd").val();
 
 	//---	อ้างอิงเลขที่เบิกแปรสภาพ
-	var po			 = $("#poCode").val();
+	var orderCode = $("#poCode").val();
+
+	//--- ID order
+	var id_order = $('#id_order').val();
 
 	//---	เลขที่ใบรับสินค้า
-	var invoice 		= $("#invoice").val();
+	var invoice = $("#invoice").val();
 
 	//---	ชื่อโซนที่รับสินค้าเข้า
-	var zoneName 	= $("#zoneName").val();
+	var zoneName = $("#zoneName").val();
 
 	//---	id โซนที่รับสินค้าเข้า
-	var id_zone		= $("#id_zone").val();
-
-	//--- หมายเหตุ
-	var remark		= $("#remark").val();
+	var id_zone	= $("#id_zone").val();
 
 	//---	จำนวนช่องที่ใส่จำนวนที่รับสินค้า
 	var count = $(".receive-box").length;
 
-	//--- ไว้ตรวจสอบว่ายังไม่ได้มีการบันทึก
 	var id_rec		= $("#id_receive_transform").val();
 
-	if( id_rec == "" )
+	if( id_rec != "" )
 	{
 
 		if( count == 0 ){
@@ -71,108 +133,94 @@ function save(){
 			return false;
 		}
 
-		//---- validate Date
-		if( ! isDate(date) ){
-			var message = "วันที่ไม่ถูกต้อง";
-
-			addError($("#dateAdd"), $("#date-error"), message);
-
-			return false;
-
-		}else{
-
-			removeError($("#dateAdd"), $("#date-error"), "");
-
-		}
-
-
 		//--- validate PO Reference
-		if( po.length == 0  ){
-
+		if( orderCode.length == 0 || id_order == '' ){
 			var message = "กรุณาระบุใบเบิกแปรสภาพ";
-
-			addError($("#poCode"), $("#po-error"), message);
-
+			addError($("#poCode"), $("#poCode-error"), message);
 			return false;
-
 		}else{
-
-			removeError($("#poCode"), $("#po-error"),"");
+			removeError($("#poCode"), $("#poCode-error"),"");
 		}
 
 
 		//--- validate zone
 		if( zoneName.length == 0 || id_zone == "" ){
-
 			var message = "กรุณาระบุโซนรับเข้า";
-
 			addError($("#zoneName"), $("#zone-error"), message);
-
 			return false;
 
 		}else{
-
 			removeError($("#zoneName"), $("#zone-error"), "");
+		}
 
+		var ds = [
+			{'name' : 'id_receive_transform', 'value' : id_rec},
+			{'name' : 'id_order', 'value' : id_order},
+			{'name' : 'order_code', 'value' : orderCode},
+			{'name' : 'invoice', 'value' : invoice},
+			{'name' : 'id_zone', 'value' : id_zone}
+		];
+
+		$('.receive-box').each(function(index, el) {
+			qty = parseInt($(this).val());
+			arr = $(this).attr('id').split('-');
+			id_pd = arr[1];
+			name = "receive["+id_pd+"]";
+			if($(this).val() > 0 && !isNaN(qty)){
+				ds.push({
+					'name' : name, 'value' : qty
+				});
+			}
+		});
+
+		if(ds.length < 6){
+			swal('ไม่พบรายการรับเข้า');
+			return false;
 		}
 
 
-		var receive = $("#receiveForm").serializeArray();
+		load_in();
 
-		receive.push(
-			{name:'date', value:date},
-			{name:'reference', value:po},
-			{name:'invoice', value:invoice},
-			{name:'id_zone', value:id_zone},
-			{name:'remark', value:remark}
-		);
-
-		//---	เพิ่มเอกสารใหม่
 		$.ajax({
-			url:"controller/receiveTransformController.php?addNew",
-			type:"POST", cache:"false", data: receive,
+			url:"controller/receiveTransformController.php?addDetail",
+			type:"POST",
+			cache:"false",
+			data: ds,
 			success: function(rs){
-				//load_out();
-				var rs = $.trim(rs);
-				var arr = rs.split(' | ');
-				if( arr[0] == 'success' ){
-					var id_receive_transform = arr[1];
+				rs = $.trim(rs);
+				if(rs == 'success'){
+					//--- export ไฟล์ไป Formula
+					$.ajax({
+						url:"controller/interfaceController.php?export&FR",
+						type:"POST",
+						cache:"false",
+						data:{
+							"id_receive_transform" : id_rec
+						},
+						success: function(rs){
+							load_out();
+							var rs = $.trim(rs);
+							if( rs == 'success' ){
+								swal({
+									title: "Success",
+									type:"success",
+									timer: 1000
+								});
 
-					if( id_receive_transform.length > 0 )
-					{
-						load_in();
-						$.ajax({
-							url:"controller/interfaceController.php?export&FR",
-							type:"POST",
-							cache:"false",
-							data:{ "id_receive_transform" : id_receive_transform },
-							success: function(rs){
-								load_out();
-								var rs = $.trim(rs);
-								if( rs == 'success' ){
+								setTimeout(function(){
+									goBack();
+								}, 1200);
 
-									swal({
-										title: "Success",
-										type:"success",
-										timer: 1000
-									});
-
-									setTimeout(function(){
-										goBack();
-									}, 1200);
-
-								}else{
-									swal("ข้อผิดพลาด !", rs, "error");
-								}
+							}else{
+								swal("ข้อผิดพลาด !", rs, "error");
 							}
-						});
-					}else{
+						}
+					});
 
-						swal("id_receive_transform not found");
-					}
-					//swal({title: "บันทึกสำเร็จ", type: "success", timer: 1000 });
-					//
-				}else{
+				}
+				else
+				{
+					load_out();
 					swal("ข้อผิดพลาด !", rs, "error");
 				}
 			}
@@ -189,29 +237,29 @@ function save(){
 function checkLimit(){
 	var limit = $("#overLimit").val();
 	var over = 0;
-
-	$(".barcode").each(function(index, element) {
-    var arr = $(this).attr("id").split('_');
-		var barcode = arr[1];
-		var limit = parseInt($("#limit_"+barcode).val() );
-		var qty = parseInt($("#receive-"+barcode).val() );
+	$(".receive-box").each(function(index, element) {
+    var arr = $(this).attr("id").split('-');
+		var id_pd = arr[1];
+		var limit = parseInt(removeCommas($("#backlog_"+id_pd).text()));
+		var qty = parseInt($("#receive-"+id_pd).val());
 		if( ! isNaN(limit) && ! isNaN( qty ) ){
 			if( qty > limit ){
 				over++;
 			}
 		}
-    });
+  });
 
 	if( over > 0 ){
-		getApprove();
+		swal({
+			title:'สินค้าเกิน',
+			text:'กรุณาแก้ไขจำนวนที่รับเกิน',
+			type:'error'
+		});
+		//getApprove();
 	}else{
 		save();
 	}
 }
-
-
-
-
 
 
 $("#sKey").keyup(function(e) {
@@ -292,10 +340,13 @@ function getData(){
 	var po = $("#poCode").val();
 	var id_order = $('#id_order').val();
 
-
 	if( po.length == 0 || id_order == ''){
-		swal('Error !', 'Variable id_order Not found', 'error');
+		addError($('#poCode'), $('#poCode-error'), 'ใบเบิกไม่ถูกต้อง');
 		return false;
+	}else{
+		removeError($('#poCode'), $('#poCode-error'), ' ');
+		$('#btn-load').addClass('hide');
+		$('#btn-change').removeClass('hide');
 	}
 
 
@@ -327,11 +378,6 @@ function getData(){
 }
 
 
-
-
-
-
-
 $("#poCode").autocomplete({
 	source: "controller/receiveTransformController.php?search_transform",
 	autoFocus: true,
@@ -354,9 +400,7 @@ $("#poCode").autocomplete({
 
 
 $("#poCode").focusout(function(e) {
-    if( $(this).val().length > 0 ){
 		getData();
-	}
 });
 
 
@@ -387,14 +431,42 @@ $("#zoneName").autocomplete({
 $("#dateAdd").datepicker({ dateFormat: 'dd-mm-yy'});
 
 
+function checkBarcode(){
+	barcode = $('#barcode').val();
+	$.ajax({
+		url:'controller/receiveTransformController.php?checkBarcode',
+		type:'GET',
+		cache:'false',
+		data:{
+			'barcode' : barcode
+		},
+		success:function(rs){
+			rs = $.trim(rs);
+			if(isJson(rs)){
+				pd = $.parseJSON(rs);
+				if($('#receive-'+pd.id_pd).length == 1){
+					receiveProduct(pd.id_pd);
+				}else{
+					swal({
+						title: "ข้อผิดพลาด !",
+						text: "บาร์โค้ดไม่ถูกต้องหรือสินค้าไม่ตรงกับใบสั่งซื้อ",
+						type: "error"},
+						function(){
+							setTimeout( function(){ $("#barcode")	.focus(); }, 1000 );
+						});
+				}
+			}else{
+				swal('Error', rs, 'error');
+			}
+		}
+	});
+}
 
 
 
 $("#barcode").keyup(function(e) {
-    if( e.keyCode == 13 ){
-		if( $(this).val() != "" ){
-			receiveProduct();
-		}
+  if( e.keyCode == 13 ){
+		checkBarcode();
 	}
 });
 
@@ -404,11 +476,23 @@ $("#barcode").keyup(function(e) {
 
 
 function sumReceive(){
-
 	var qty = 0;
 	$(".receive-box").each(function(index, element) {
-        var cqty = isNaN( parseInt( $(this).val() ) ) ? 0 : parseInt( $(this).val() );
+		pd = $(this).attr('id').split('-');
+		id_pd = pd[1];
+		limit = parseInt(removeCommas($('#backlog_'+id_pd).text()));
+		limit = isNaN(limit) ? 0 : limit;
+		input_qty = parseInt($('#receive-'+id_pd).val());
+		input_qty = isNaN(input_qty) ? 0 : input_qty;
+		if(input_qty > limit){
+			$(this).addClass('has-error');
+		}else{
+			$(this).removeClass('has-error');
+		}
+
+    var cqty = isNaN( parseInt( $(this).val() ) ) ? 0 : parseInt( $(this).val() );
 		qty += cqty;
     });
+
 	$("#total-receive").text( addCommas(qty) );
 }

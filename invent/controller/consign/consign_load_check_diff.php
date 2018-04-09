@@ -34,6 +34,11 @@ if($cs->isSaved == 0 && $cs->isCancle == 0 && $cs->id_consign_check == 0)
         //--- เอาเฉพาะที่มียอดต่าง และ ยอดต่างต้องไม่ติดลบ
         if($diff > 0)
         {
+          if($sc == FALSE)
+          {
+            break;
+          }
+          
           //--- สินค้าคงเหลือในโซนพอตัดหรือไม่
           $isEnough = $st->isEnough($id_zone, $rs->id_product, $diff);
 

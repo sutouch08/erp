@@ -77,6 +77,11 @@ if( $po->hasPO($poCode) === TRUE )
         {
           foreach( $data as $id_pd => $qty )
           {
+            if($sc === FALSE)
+            {
+              break;
+            }
+
             $arr = array(
                     "id_receive_product"	=> $id_receive_product,
                     "id_style"					=> $pd->getStyleId($id_pd),
@@ -92,6 +97,7 @@ if( $po->hasPO($poCode) === TRUE )
             {
               $sc = FALSE;
               $message = 'เพิ่มรายการรับเข้าไม่สำเร็จ';
+              break;
             }
 
             //------ ปรับยอดสต็อก
@@ -99,6 +105,7 @@ if( $po->hasPO($poCode) === TRUE )
             {
               $sc = FALSE;
               $message = 'ปรับยอดสต็อกเข้าโซนไม่สำเร็จ';
+              break;
             }
 
             //---- เพิ่มรายการต้นทุนสินค้าใน tbl_product_cost
@@ -106,6 +113,7 @@ if( $po->hasPO($poCode) === TRUE )
             {
               $sc = FALSE;
               $message = 'บันทึกต้นทุนสินค้ารับเข้าไม่สำเร็จ';
+              break;
             }
 
             //---- บันทึก movement
@@ -113,6 +121,7 @@ if( $po->hasPO($poCode) === TRUE )
             {
               $sc = FALSE;
               $message = 'บันทึก movement ไม่สำเร็จ';
+              break;
             }
 
             //--- บันทึกยอดรับใน PO
@@ -120,6 +129,7 @@ if( $po->hasPO($poCode) === TRUE )
             {
               $sc = FALSE;
               $message = 'ปรับปรุงยอดรับแล้วในใบสั่งซื้อไม่สำเร็จ';
+              break;
             }
 
           }//--- foreach data

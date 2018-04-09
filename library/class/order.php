@@ -1149,6 +1149,14 @@ class order
 
 
 
+	public function getSoldQty($id_order, $id_pd)
+	{
+		$qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_order_sold WHERE id_order = '".$id_order."' AND id_product = '".$id_pd."'");
+		list($qty) = dbFetchArray($qs);
+		return is_null($qty) ? 0 : $qty;
+	}
+
+
 	public function getOverDateOrder()
 	{
 		$days = getConfig('ORDER_EXPIRATION');

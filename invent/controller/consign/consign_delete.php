@@ -25,6 +25,11 @@ if( dbNumRows($qs) > 0)
 
   while($rs = dbFetchObject($qs))
   {
+    if($sc == FALSE)
+    {
+      break;
+    }
+    
     //--- 1. เพิ่มสต็อกในโซนที่ถูกตัด
     if( $stock->updateStockZone($cs->id_zone, $rs->id_product, $rs->qty) !== TRUE)
     {

@@ -11,6 +11,11 @@ if(!empty($p_disc))
   startTransection();
   foreach($p_disc as $id => $pDisc)
   {
+    if($sc == FALSE)
+    {
+      break;
+    }
+    
     $qs = $cs->getDetail($id);
     if(dbNumRows($qs) == 1)
     {

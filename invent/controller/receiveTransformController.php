@@ -7,17 +7,20 @@ include "../function/receive_transform_helper.php";
 
 if( isset( $_GET['getPoData'] ) )
 {
-	include 'receive_transform/data.php';	
+	include 'receive_transform/data.php';
 }
-
-
-
 
 
 
 if( isset( $_GET['addNew'] ) )
 {
 	include 'receive_transform/add_new.php';
+}
+
+
+if(isset($_GET['addDetail']))
+{
+	include 'receive_transform/add_detail.php';
 }
 
 
@@ -92,6 +95,20 @@ if( isset( $_GET['search_zone'] ) && isset( $_REQUEST['term'] ) )
 }
 
 
+if(isset($_GET['checkBarcode']))
+{
+	$sc = TRUE;
+	$bd = new barcode();
+	$bc = trim($_GET['barcode']);
+	$id_pd = $bd->getProductId($bc);
+	if($id_pd == FALSE)
+	{
+		$sc = FALSE;
+		$message = 'บาร์โค้ดไม่ถูกต้อง';
+	}
+
+	echo $sc === TRUE ? json_encode(array('id_pd' => $id_pd)) : $message;
+}
 
 
 

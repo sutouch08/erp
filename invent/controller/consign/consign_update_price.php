@@ -10,6 +10,11 @@ if(!empty($priceList))
   startTransection();
   foreach($priceList as $id => $price)
   {
+    if($sc == FALSE)
+    {
+      break;
+    }
+    
     $qs = $cs->getDetail($id);
     if(dbNumRows($qs) == 1)
     {

@@ -23,6 +23,11 @@ if(is_numeric($id) === TRUE && $id > 0)
     startTransection();
     while($rs = dbFetchObject($qs))
     {
+      if($sc == FALSE)
+      {
+        break;
+      }
+      
       $arr = array(
         'id_consign_check' => $id,
         'id_product' => $rs->id_product,

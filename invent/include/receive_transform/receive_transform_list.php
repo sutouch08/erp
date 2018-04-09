@@ -174,6 +174,9 @@
 					</td>
           <td class="middle text-right">
           	<button type="button" class="btn btn-xs btn-info" onClick="goDetail(<?php echo $rs->id; ?>)"><i class="fa fa-eye"></i></button>
+				  <?php if(($edit OR $add) && $rs->isSaved == 0 && $rs->isCancle == 0) : ?>
+						<button type="button" class="btn btn-xs btn-warning" onclick="goAdd(<?php echo $rs->id; ?>)"><i class="fa fa-pencil"></i></button>
+					<?php endif; ?>
           <?php if( $delete && !$rs->isCancle ) : ?>
           	<button type="button" class="btn btn-xs btn-danger" onClick="goDelete(<?php echo $rs->id; ?>, '<?php echo $rs->reference; ?>')"><i class="fa fa-times"></i></button>
           <?php endif; ?>

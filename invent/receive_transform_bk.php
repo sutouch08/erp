@@ -15,13 +15,9 @@
 <?php
 
 
-if( isset( $_GET['add'] ) && isset($_GET['id_receive_transform']) )
+if( isset( $_GET['add'] ) )
 {
 	include 'include/receive_transform/receive_transform_add.php';
-}
-else if(isset($_GET['add']) && ! isset($_GET['id_receive_transform']))
-{
-	include 'include/receive_transform/receive_transform_add_new.php';
 }
 else if( isset( $_GET['edit'] ) )
 {

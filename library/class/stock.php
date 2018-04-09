@@ -22,6 +22,11 @@ class stock
 			$sc = $this->update($id_zone, $id_pd, $qty);
 		}
 
+		if($sc == FALSE)
+		{
+			$this->error = dbError();
+		}
+		
 		$this->removeZero();
 
 		return $sc;

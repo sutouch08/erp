@@ -14,6 +14,11 @@ if($cs->valid == 0)
   {
     while($rs = dbFetchObject($qs))
     {
+      if($sc == FALSE)
+      {
+        break;
+      }
+      
       //---- Let's delete box detail box by box
       if($cs->deleteAllBoxDetails($rs->id) !== TRUE)
       {

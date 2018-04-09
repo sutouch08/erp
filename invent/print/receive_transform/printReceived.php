@@ -2,6 +2,7 @@
 	require "../../../library/config.php";
 	require "../../../library/functions.php";
 	require "../../function/tools.php";
+	include '../../function/print_helper.php';
 
 
 	$id 		= $_GET['id_receive_transform'];
@@ -74,19 +75,26 @@
 			echo $print->top_page();
 			echo $print->content_start();
 				echo $print->table_start();
+				if($cs->isCancle == 1)
+				{
+					echo '
+				  <div style="width:0px; height:0px; position:relative; left:30%; line-height:0px; top:450px;color:red; text-align:center; z-index:0; opacity:0.1; transform:rotate(-45deg)">
+				      <span style="font-size:150px;">ยกเลิก</span>
+				  </div>';
+				}
 				$i = 0;
 				while($i<$row) :
 					$rs = dbFetchArray($detail);
 					if(count($rs) != 0) :
 
 						$pdCode 	= $pd->getCode($rs['id_product']);
-						$pdName 	= "<input type='text' style='border:0px; width:100%;' value='".$pd->getName($rs['id_product'])."' />";
+						$pdName 	= inputRow($pd->getName($rs['id_product']));
 						$data 		= array(
 													$n,
 													$pdCode,
 													$pdName,
 													number_format($rs['qty']),
-													$zone->getName($rs['id_zone'])
+													inputRow($zone->getName($rs['id_zone']))
 													);
 
 						$total_qty 			+= $rs['qty'];

@@ -45,10 +45,15 @@ class receive_transform
 	//---	รหัสการอนุมัติ(เข้ารหัสไว้)
 	public $approvKey;
 
+	//--- บันทึกเอกสารไปแล้วหรือยัง
+	public $isSaved = 0;
+
+	public $error;
+
 
 	public function __construct($id = "")
 	{
-		if( $id != "" )
+		if( $id != "" && $id != FALSE )
 		{
 			$this->getData($id);
 		}
@@ -94,13 +99,33 @@ class receive_transform
 			{
 				$sc = dbInsertId();
 			}
+			else
+			{
+				$this->error = dbError();
+			}
 		}
 
 		return $sc;
 	}
 
 
+public function update($id, array $ds = array())
+{
+	if(!empty($ds))
+	{
+		$set = "";
+		$i = 1;
+		foreach($ds as $field => $value)
+		{
+			$set .= $i == 1 ? $field." = '".$value."'" : ", ".$field." = '".$value."'";
+			$i++;
+		}
 
+		return dbQuery("UPDATE tbl_receive_transform SET ".$set." WHERE id = ".$id);
+	}
+
+	return FALSE;
+}
 
 
 	public function getDetail($id)

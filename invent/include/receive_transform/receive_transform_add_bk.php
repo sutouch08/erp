@@ -1,89 +1,61 @@
-<?php $id_receive_transform = intval($_GET['id_receive_transform']) ;
-	$cs = new receive_transform($id_receive_transform);
-?>
+
 <div class="row top-row">
 	<div class="col-sm-6 top-col">
     	<h4 class="title" ><i class="fa fa-download"></i>&nbsp;<?php echo $pageTitle; ?></h4>
 	</div>
     <div class="col-sm-6">
       	<p class="pull-right top-p">
-<?php if($cs->isSaved == 1) : ?>
-<?php 	echo goBackButton(); ?>
-<?php else : ?>
 			<button type="button" class="btn btn-sm btn-warning" onclick="leave()"><i class="fa fa-arrow-left"></i> กลับ</button>
-<?php endif; ?>
-<?php 	if( $add && $cs->isSaved == 0 ) : ?>
+<?php 	if( $add ) : ?>
 				<button type="button" class="btn btn-sm btn-success" onclick="checkLimit()"><i class="fa fa-save"></i> บันทึก</button>
 <?php	endif; ?>
         </p>
     </div>
 </div>
 <hr />
-<?php if($id_receive_transform) : ?>
+
 <div class="row">
-  <div class="col-sm-1 col-1-harf padding-5 first">
-  	<label class="display-block">เลขที่เอกสาร</label>
-		<input type="text" class="form-control input-sm text-center" value="<?php echo $cs->reference; ?>" disabled />
+  <div class="col-sm-2">
+  	<label>เลขที่เอกสาร</label>
+      <input type="text" class="form-control input-sm text-center" id="reference" />
   </div>
 
-	<div class="col-sm-1 col-1-harf padding-5">
+	<div class="col-sm-1 col-1-harf">
   	<label>วันที่เอกสาร</label>
-      <input type="text" class="form-control input-sm text-center header-box"  id="dateAdd" value="<?php echo thaiDate($cs->date_add); ?>" disabled />
+      <input type="text" class="form-control input-sm text-center"  id="dateAdd" placeholder="ระบุวันที่เอกสาร" value="<?php echo date('d-m-Y'); ?>" />
+      <span class="help-block red" id="date-error"></span>
   </div>
 
-	<div class="col-sm-8 padding-5">
-  	<label>หมายเหตุ</label>
-    <input type="text" class="form-control input-sm header-box" name="remark" id="remark" value="<?php echo $cs->remark; ?>"  disabled/>
-  </div>
-
-	<?php if($edit && $cs->isSaved == 0) : ?>
-	<div class="col-sm-1 padding-5 last">
-		<label class="display-block not-show">Edit</label>
-		<button type="button" class="btn btn-sm btn-warning btn-block" id="btn-edit" onclick="activeHeader()">
-			<i class="fa fa-pencil"></i> แก้ไข</button>
-		</button>
-		<button type="button" class="btn btn-sm btn-success btn-block hide" id="btn-update" onclick="updateHeader()">
-			<i class="fa fa-save"></i> บันทึก
-		</button>
-	</div>
-	<?php endif; ?>
-
-</div><!--/ row -->
-<hr class="margin-top-10" />
-<?php
-$dis = $cs->isSaved == 1 ? 'disabled' : '';
-?>
-<div class="row">
-	<div class="col-sm-2 padding-5 first">
+	<div class="col-sm-2">
   	<label>ใบเบิกสินค้า</label>
-      <input type="text" class="form-control input-sm text-center header-box" id="poCode" placeholder="ระบุใบเบิกสินค้า" value="<?php echo $cs->order_code; ?>" <?php echo $dis; ?> />
-			<span class="help-block red" style="margin:0px;" id="poCode-error">&nbsp;</span>
+      <input type="text" class="form-control input-sm text-center" id="poCode" placeholder="ระบุใบเบิกสินค้า" />
+      <span class="help-block red" id="po-error"></span>
   </div>
-<?php if($cs->isSaved == 0) : ?>
-	<div class="col-sm-1 padding-5">
-		<label class="display-block not-show">ใบเบิก</label>
-		<button type="button" class="btn btn-sm btn-info btn-block hide" id="btn-change" onclick="changeOrder()" >
-			<i class="fa fa-retweet"></i> เปลี่ยน
-		</button>
-		<button type="button" class="btn btn-sm btn-primary btn-block" id="btn-load" onclick="getData()" >
-			แสดงรายการ
-		</button>
-	</div>
-<?php endif; ?>
 
-  <div class="col-sm-2 padding-5">
+  <div class="col-sm-2">
   	<label>ใบส่งสินค้า</label>
-      <input type="text" class="form-control input-sm text-center" id="invoice" placeholder="อ้างอิงใบส่งสินค้า" <?php echo $dis; ?> />
-      <span class="help-block red" style="margin:0px;" id="invoice-error"></span>
+      <input type="text" class="form-control input-sm text-center" id="invoice" placeholder="อ้างอิงใบส่งสินค้า" />
+      <span class="help-block red" id="invoice-error"></span>
   </div>
 
 	<div class="col-sm-3">
   	<label>ชื่อโซน</label>
-      <input type="text" class="form-control input-sm text-center zone" name="zoneName" id="zoneName" placeholder="ค้นหาชื่อโซน" <?php echo $dis; ?> />
-      <span class="help-block red" style="margin:0px;" id="zone-error"></span>
+      <input type="text" class="form-control input-sm text-center zone" name="zoneName" id="zoneName" placeholder="ค้นหาชื่อโซน"  />
+      <span class="help-block red" id="zone-error"></span>
+  </div>
+
+  <div class="divider-hidden margin-top-5 margin-bottom-5"></div>
+
+
+  <div class="col-sm-12">
+  	<label>หมายเหตุ</label>
+      <input type="text" class="form-control input-sm" name="remark" id="remark" placeholder="ระบุหมายเหตุเอกสาร (ถ้ามี)" />
   </div>
 </div>
+
+
 <hr class="margin-top-15"/>
+
 
 <div class="row">
 	<div class="col-sm-1">
@@ -96,16 +68,16 @@ $dis = $cs->isSaved == 1 ? 'disabled' : '';
     </div>
     <div class="col-sm-1">
     	<label class="display-block not-show">ok</label>
-        <button type="button" class="btn btn-sm btn-primary" onclick="checkBarcode()"><i class="fa fa-check"></i> ตกลง</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="receiveProduct()"><i class="fa fa-check"></i> ตกลง</button>
     </div>
 
     <input type="hidden" name="id_zone" id="id_zone" />
 		<input type="hidden" name="id_order" id="id_order" />
-    <input type="hidden" name="id_receive_transform" id="id_receive_transform" value="<?php echo $cs->id; ?>" />
+    <input type="hidden" name="id_receive_transform" id="id_receive_transform" />
 
 
 </div>
-<hr class="margin-top-5 margin-bottom-15"/>
+<hr class="margin-top-15 margin-bottom-15"/>
 
 <form id="receiveForm">
 <div class="row">
@@ -165,23 +137,21 @@ $dis = $cs->isSaved == 1 ? 'disabled' : '';
             <td class="middle text-center">
 			{{ no }}
 			</td>
-            <td class="middle id_pd" id="barcode_{{id_pd}}">{{barcode}}</td>
+            <td class="middle barcode" id="barcode_{{barcode}}">{{barcode}}</td>
             <td class="middle">{{pdCode}}</td>
             <td class="middle">{{pdName}}</td>
-            <td class="middle text-center" id="qty_{{id_pd}}">
+            <td class="middle text-center" id="qty_{{barcode}}">
 				{{qty}}
-				<input type="hidden" id="limit_{{id_pd}}" value="{{limit}}"/>
+				<input type="hidden" id="limit_{{barcode}}" value="{{limit}}"/>
 			</td>
-            <td class="middle text-center" id="backlog_{{id_pd}}">{{backlog}}</td>
+            <td class="middle text-center">{{backlog}}</td>
             <td class="middle text-center">
-                <input type="text" class="form-control input-sm text-center receive-box pdCode" name="receive[{{id_pd}}]" id="receive-{{id_pd}}" />
+                <input type="text" class="form-control input-sm text-center receive-box pdCode" name="receive[{{id_pd}}]" id="receive-{{barcode}}" />
             </td>
         </tr>
     {{/if}}
 {{/each}}
 </script>
-<?php else : ?>
-<?php include 'include/page_error.php'; ?>
-<?php endif; ?>
+
 <script src="script/receive_transform/receive_transform_add.js"></script>
 <script src="script/validate.js"></script>

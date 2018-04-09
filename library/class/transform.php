@@ -152,6 +152,18 @@ class transform
     return dbQuery("UPDATE tbl_order_transform SET is_closed = 1 WHERE id_order = '".$id_order."'");
   }
 
+
+
+
+  //--- Unclosed
+  public function unClosed($id_order)
+  {
+    return dbQuery("UPDATE tbl_order_transform SET is_closed = 0 WHERE id_order = '".$id_order."'");
+  }
+
+
+
+  
   //--- เพื่มการเชื่อมโยงสินค้าทีละรายการ
   public function insertDetail(array $ds = array())
   {
@@ -291,6 +303,8 @@ class transform
   }
 
 
+
+
   //--- มีการรับเข้าแล้วหรือยัง
   public function isReceived($id)
   {
@@ -305,18 +319,45 @@ class transform
   }
 
 
+  //--- รับเข้าครบแล้วหรือยัง
+  public function isCompleted($id)
+  {
+    $sc = FALSE;
+    $qs = dbQuery("SELECT id FROM tbl_order_transform_detail WHERE id_order = '".$id."' AND received < sold_qty");
+    if(dbNumRows($qs) == 0)
+    {
+      $sc = TRUE;
+    }
+
+    return  $sc;
+  }
+
+
+  public function getOriginalProductId($id_order_detail)
+  {
+    $qs = dbQuery("SELECT id_product FROM tbl_order_detail WHERE id = ".$id_order_detail);
+    if(dbNumRows($qs) == 1)
+    {
+      list($id) = dbFetchArray($qs);
+      return $id;
+    }
+
+    return FALSE;
+  }
+
 
 
 
   //---	auto complete
-	public function searchReference($reference, $is_closed = '')
+	public function searchReference($reference, $is_closed = '', $limit = 50)
 	{
 		$qr  = "SELECT o.id, o.reference FROM tbl_order AS o ";
 		$qr .= "JOIN tbl_order_transform AS t ON o.id = t.id_order ";
 		$qr .= "WHERE o.role = 5 ";
 		$qr .= "AND o.state IN(8,9,10) ";
     $qr .= $is_closed == '' ? '' : "AND t.is_closed = ".$is_closed." ";
-		$qr .= "AND o.reference LIKE '%".$reference."%'";
+		$qr .= "AND o.reference LIKE '%".$reference."%' ";
+    $qr .= "LIMIT ".$limit;
 
 		return dbQuery($qr);
 	}

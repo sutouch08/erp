@@ -46,6 +46,11 @@ if($cs->isSaved == 0 && $cs->isCancle == 0)
       $i = 1;
       foreach($collection as $rs)
       {
+        if($sc == FALSE)
+        {
+          break;
+        }
+        
         if($i > 1)
         {
           //--- A => product code
@@ -86,7 +91,7 @@ if($cs->isSaved == 0 && $cs->isCancle == 0)
                 $sc = FALSE;
                 $message = $pdCode.' ส่วนลดเกินราคาขาย ';
               }
-              
+
               //--- แปลงเป็นส่วนลด (Label)
               $discLabel = $pDisc > 0 ? $pDisc.' %' : ($aDisc > 0 ? $aDisc : 0);
 

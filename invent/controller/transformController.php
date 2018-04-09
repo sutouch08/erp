@@ -8,19 +8,33 @@ require "../function/transform_helper.php";
 if( isset( $_GET['addTransformProduct']))
 {
   $cs = new transform();
+
+  $id_order = $_POST['id_order'];
+  $id_order_detail = $_POST['id_order_detail'];
+  $id_pd = $_POST['id_product'];
+  $id_pdFrom = $cs->getOriginalProductId($id_order_detail);
+  $qty = intval($_POST['qty']);
+
+  $order = new order($id_order);
+  $valid = $order->state == 8 ? 1 : 0;
+  $sold = $order->getSoldQty($id_order, $id_pdFrom);
+  $soldQty = $sold > $qty ? $qty : $sold;
+
   $arr = array(
-          'id_order' => $_POST['id_order'],
-          'id_order_detail' => $_POST['id_order_detail'],
-          'from_product' => $_POST['from_product'],
-          'id_product' => $_POST['id_product'],
-          'qty' => $_POST['qty']
+          'id_order' => $id_order,
+          'id_order_detail' => $id_order_detail,
+          'from_product' => $id_pdFrom,
+          'id_product' => $id_pd,
+          'qty' => $qty,
+          'sold_qty' => $soldQty,
+          'valid' => $valid
         );
 
-  $rs = $cs->addDetail($_POST['id_order_detail'], $_POST['id_product'], $arr);
+  $rs = $cs->addDetail($id_order_detail, $id_pd, $arr);
   if( $rs === TRUE)
   {
-    $ra  = getTransformProducts($_POST['id_order_detail']);
-    $ra .= '<input type="hidden" id="transform-qty-'.$_POST['id_order_detail'].'" value="'.$cs->getSumTransformProductQty($_POST['id_order_detail']).'" />';
+    $ra  = getTransformProducts($id_order_detail);
+    $ra .= '<input type="hidden" id="transform-qty-'.$id_order_detail.'" value="'.$cs->getSumTransformProductQty($id_order_detail).'" />';
 
     $sc = json_encode(array('data' => $ra));
   }

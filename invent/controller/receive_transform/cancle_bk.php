@@ -1,6 +1,7 @@
 <?php
 //--- Cancle Received transform product
-$sc         = TRUE;
+$sc         = 'success';
+$result     = TRUE;
 $id         = $_POST['id_receive_transform'];
 $cs         = new receive_transform($id);
 $mv         = new movement();
@@ -13,9 +14,10 @@ $zone       = new zone();
 $cost       = new product_cost();
 $emp        = getCookie('user_id');
 
-//---- ดึงรายการรับเข้าตามเอกสาร
-$qs = $cs->getDetail($id);
 
+$pdCode = '';
+
+$qs = $cs->getDetail($id);
 if( dbNumRows($qs) > 0)
 {
   startTransection();
@@ -23,50 +25,40 @@ if( dbNumRows($qs) > 0)
   while( $rs = dbFetchObject($qs))
   {
 
-    if($sc === FALSE)
-    {
-      break;
-    }
-
     //--- ตรวจสอบว่าโซนที่ต้องเอายอดสินค้าออกติดลบได้หรือไม่
     $auz = $zone->isAllowUnderZero($rs->id_zone);
 
-    $isEnough = $stock->isEnough($rs->id_zone, $rs->id_product, $rs->qty);
+    //--- ตรวจสอบยอดคงเหลือในโซน
+    $qty = $stock->getStockZone($rs->id_zone, $rs->id_product);
 
-    $pdCode = $product->getCode($rs->id_product);
 
-    if( $isEnough === FALSE && $auz === FALSE )
+    if( $qty < $rs->qty && $auz === FALSE )
     {
       //--- ถ้ายอดคงเหลือน้อยกว่ายอดที่จะยกเลิก และ โซนไม่สามารถติดลบได้
-      $sc = FALSE;
-      $message = $pdCode.' : สินค้าคงเหลือไม่พอให้ยกเลิก';
-      break;
+      $result = FALSE;
+      $pdCode .= $product->getCode($rs->id_product). ' = ' . $qty.'; ';
     }
     else
     {
       //--- ถ้ายอดคงเหลือพอให้ยกเลิกได้
 
       //--- Update stock
-      if( $stock->updateStockZone($rs->id_zone, $rs->id_product, ($rs->qty * -1)) !== TRUE )
+      if( $stock->updateStockZone($rs->id_zone, $rs->id_product, ($rs->qty * -1)) === FALSE )
       {
-        $sc = FALSE;
-        $message = 'ตัดยอด '. $pdCode.' จากโซนต้นทางไม่สำเร็จ';
-        break;
+        $result = FALSE;
       }
 
       //---- ลดจำนวนวรายการต้นทุนสินค้าใน tbl_product_cost
       if($cost->deleteCostList($rs->id_product, $product->getCost($rs->id_product), $rs->qty) !== TRUE)
       {
         $sc = FALSE;
-        $message = 'ปรับปรุงต้นทุน '.$pdCode.' ไม่สำเร็จ';
-        break;
+        $message = 'ปรับปรุงต้นทุนสินค้าไม่สำเร็จ';
       }
 
       if( $cs->cancleDetail($rs->id) === FALSE)
       {
-        $sc = FALSE;
-        $message = 'ยกเลิกรายการรับเข้า '.$pdCode.' ไม่สำเร็จ';
-        break;
+        $result = FALSE;
+        $sc = 'ยกเลิกรายการรับเข้าไม่สำเร็จ';
       }
 
 
@@ -74,7 +66,7 @@ if( dbNumRows($qs) > 0)
       $qa = $transform->getDetail($id_order, $rs->id_product);
 
       //---	ยอดสินค้าที่จะเอาออก
-      $received_qty = $rs->qty;
+      $received_qty = $qty;
 
       //---	มีรายการที่ต้อง update กี่รายการ
       $row = dbNumRows($qa);
@@ -87,8 +79,8 @@ if( dbNumRows($qs) > 0)
         $received = $row == 1 ? $received_qty  : ($res->received <= $received_qty ? $res->received : $received_qty);
         if( $transform->received( $res->id, ($received * -1) ) == FALSE )
         {
-          $sc = FALSE;
-          $message = 'ปรับปรุงยอดรับไม่สำเร็จ';
+          $result = FALSE;
+          $sc = 'ปรับปรุงยอดรับไม่สำเร็จ';
         }
 
         $row--;
@@ -99,31 +91,26 @@ if( dbNumRows($qs) > 0)
   }
 
   //--- ถ้าสต็อกคงเหลือพอและไม่มีรายการไหนผิดพลาด
-  if( $sc === TRUE)
+  if( $result === TRUE)
   {
     //--- ลบ movement ทั้งหมด
     if( $mv->dropMovement($cs->reference) === FALSE )
     {
-      $sc = FALSE;
-      $message = 'ลบการเคลื่อนไหวไม่สำเร็จ';
+      $result = FALSE;
+      $sc = 'ลบการเคลื่อนไหวไม่สำเร็จ';
     }
 
     //--- cancle เอกสาร
     if( $cs->cancleReceived($cs->id, $emp) === FALSE)
     {
-      $sc = FALSE;
-      $message = 'ยกเลิกเอกสารไม่สำเร็จ';
+      $result = FALSE;
+      $sc = 'ยกเลิกเอกสารไม่สำเร็จ';
     }
-  }
-
-  if($sc === TRUE)
-  {
-    $transform->unClosed($id_order);
   }
 
 
   //--- ตรวจสอบความถูกต้องทั้งหมดก่อน commitTransection
-  if( $sc === TRUE )
+  if( $result === TRUE )
   {
     commitTransection();
   }
@@ -134,15 +121,8 @@ if( dbNumRows($qs) > 0)
 
   endTransection();
 
-  //echo $sc === TRUE ? $sc : ($pdCode == '' ? $sc : 'สินค้าคงเหลือไม่พอให้ยกเลิก : '.$pdCode);
+  echo $result === TRUE ? $sc : ($pdCode == '' ? $sc : 'สินค้าคงเหลือไม่พอให้ยกเลิก : '.$pdCode);
 }
-else
-{
-  $sc = FALSE;
-  $message = 'ไม่พบรายการรับเข้า';
-}
-
-echo $sc === TRUE ? 'success' : $message;
 
 
  ?>

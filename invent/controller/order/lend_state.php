@@ -73,6 +73,11 @@
           {
             while( $rs = dbFetchObject($qs))
             {
+              if($sc == FALSE)
+              {
+                break;
+              }
+
               //--- ลดยอดในโซนปลายทางออก
               $isEnough = $stock->isEnough($lend->id_zone, $rs->id_product, $rs->qty);
 
@@ -83,7 +88,7 @@
               }
               else
               {
-                if($stock->updateStockZone($consign->id_zone, $rs->id_product, ($rs->qty * -1)) !== TRUE )
+                if($stock->updateStockZone($lend->id_zone, $rs->id_product, ($rs->qty * -1)) !== TRUE )
                 {
                   $sc = FALSE;
                   $message = 'ปรับยอดในโซนปลายทางออกไม่สำเร็จ';

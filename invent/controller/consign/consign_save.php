@@ -56,6 +56,11 @@ if($cs->isCancle == 0 && $cs->isSaved == 0)
 
     while($rs = dbFetchObject($qs))
     {
+      if($sc == FALSE)
+      {
+        break;
+      }
+      
       //--- ดึงข้อมูลสินค้า
       $pd->getData($rs->id_product);
 

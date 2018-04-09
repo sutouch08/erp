@@ -1,6 +1,7 @@
 <?php
 include '../function/bill_helper.php';
 
+
 $id_order	= $_GET['id_order'];
 
 $order 		= new order($id_order);
@@ -108,7 +109,7 @@ while($total_page > 0 )
   $page .= $print->top_page();
   $page .= $print->content_start();
   $page .= $print->table_start();
-  
+
   $i = 0;
 
   while($i<$row)

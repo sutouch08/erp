@@ -460,9 +460,15 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รายงาน สรุปยอดขายแยกลูกค้า แสดงรายการสินค้า';
 		break;
 
+
 		case 'sponsor_by_customer_order' :
 			$content = 'report/sales/sponsor_by_customer_order.php';
 			$pageTitle = 'รายงาน สรุปยอดสปอนเซอร์แยกตามผู้รับ แสดงเลขที่เอกสาร';
+		break;
+
+		case 'sponsor_summary_by_budget' :
+			$content = 'report/sales/sponsor_summary_by_budget.php';
+			$pageTitle = 'รายงาน สรุปยอดสปอนเซอร์แยกตามผู้รับ';
 		break;
 
 		case 'sponsor_by_customer_items' :
@@ -473,6 +479,11 @@ if( !getConfig('CLOSED') )
 		case 'support_by_customer_order' :
 			$content = 'report/sales/support_by_customer_order.php';
 			$pageTitle = 'รายงาน สรุปยอดอภินันท์แยกตามผู้รับ แสดงเลขที่เอกสาร';
+		break;
+
+		case 'support_summary_by_budget' :
+			$content = 'report/sales/support_summary_by_budget.php';
+			$pageTitle = 'รายงาน สรุปยอดอภินันท์แยกตามผู้รับ';
 		break;
 
 		case 'support_by_customer_items' :

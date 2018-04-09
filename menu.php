@@ -113,9 +113,11 @@
 
       <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ตรวจสอบ</a>
       	<ul class="dropdown-menu">
+          <li><a href="index.php?content=sponsor_summary_by_budget"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดสปอนเซอร์แยกตามผู้รับ</a></li>
           <li><a href="index.php?content=sponsor_by_customer_order"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดสปอนเซอร์แยกตามผู้รับ แสดงเลขที่เอกสาร</a></li>
           <li><a href="index.php?content=sponsor_by_customer_items"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดสปอนเซอร์แยกตามผู้รับ แสดงรายการสินค้า</a></li>
           <li class="divider"></li>
+          <li><a href="index.php?content=support_summary_by_budget"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดอภินันท์แยกตามผู้รับ</a></li>
           <li><a href="index.php?content=support_by_customer_order"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดอถินันท์แยกตามผู้รับ แสดงเลขที่เอกสาร</a></li>
           <li><a href="index.php?content=support_by_customer_items"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดอภินันท์แยกตามผู้รับ แสดงรายการสินค้า</a></li>
           <li class="divider"></li>

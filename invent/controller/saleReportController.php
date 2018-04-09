@@ -51,6 +51,18 @@ if(isset($_GET['saleByCustomerItems']) && isset($_GET['export']))
 
 
 //--- รายงานสรุปยอดสปอนเซอร์
+if(isset($_GET['sponsorByBudget']) && isset($_GET['report']))
+{
+  include 'report/saleReport/report_sponsor_by_budget.php';
+}
+
+
+if(isset($_GET['sponsorByBudget']) && isset($_GET['export']))
+{
+  include 'report/saleReport/export_sponsor_by_budget.php';
+}
+
+
 if(isset($_GET['sponsorByCustomerOrder']) && isset($_GET['report']))
 {
   include 'report/saleReport/report_sponsor_by_customer_order.php';
@@ -77,6 +89,18 @@ if(isset($_GET['sponsorByCustomerItems']) && isset($_GET['export']))
 
 
 //---- รายงานสรุปยอดอภินันท์
+if(isset($_GET['supportByBudget']) && isset($_GET['report']))
+{
+  include 'report/saleReport/report_support_by_budget.php';
+}
+
+
+if(isset($_GET['supportByBudget']) && isset($_GET['export']))
+{
+  include 'report/saleReport/export_support_by_budget.php';
+}
+
+
 if(isset($_GET['supportByCustomerOrder']) && isset($_GET['report']))
 {
   include 'report/saleReport/report_support_by_customer_order.php';

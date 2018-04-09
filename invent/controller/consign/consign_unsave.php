@@ -20,7 +20,11 @@ if($cs->isSaved == 1 && $cs->isCancle == 0)
     startTransection();
     while($rs = dbFetchObject($qs))
     {
-
+      if($sc == FALSE)
+      {
+        break;
+      }
+      
       //--- 1.  ลบ movement
       $move_out = $rs->qty * (-1);
       if($mv->updateMoveOut($cs->reference, $cs->id_zone, $rs->id_product, $move_out) !== TRUE)

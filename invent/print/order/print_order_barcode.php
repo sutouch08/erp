@@ -1,5 +1,6 @@
 <?php
 include '../function/bill_helper.php';
+include '../function/print_helper.php';
 
 $id_order	= $_GET['id_order'];
 
@@ -137,7 +138,7 @@ while($total_page > 0 )
       $data = array(
                     $n,
                     barcodeImage( $barcode->getBarcode($rs->id_product) ),
-                    limitText($rs->product_code.' : '.$rs->product_name,80),
+                    inputRow($rs->product_code.' : '.$rs->product_name),
                     number($price, 2),
                     number($qty),
                     $discount,
