@@ -103,6 +103,7 @@ class po
 
 
 
+
 	public function isChanged($bookcode, $reference, $id_pd, $qty, $vat_amount, $amount)
 	{
 		$sc = FALSE;
@@ -124,6 +125,8 @@ class po
 
 
 
+
+
 	public function close($bookcode, $reference)
 	{
 		//--- status 1 = not receive yet,  2 = received some,  3 = closed;
@@ -141,10 +144,14 @@ class po
 
 
 
+
 	public function delete($reference)
 	{
 		return dbQuery("DELETE FROM tbl_po WHERE reference = '".$reference."'");
 	}
+
+
+
 
 
 	public function makeStatus($bookcode, $reference)
@@ -157,6 +164,11 @@ class po
 		}
 		return $sc;
 	}
+
+
+
+
+
 
 	public function setStatus($reference, $status = "")
 	{
@@ -184,16 +196,22 @@ class po
 	}
 
 
+
+
 	public function getDetail($reference)
 	{
 		return dbQuery("SELECT * FROM tbl_po WHERE reference = '".$reference."' AND isCancle = 0 AND status != 3");
 	}
 
 
+
+
 	public function getPoDetail($reference)
 	{
 		return dbQuery("SELECT * FROM tbl_po WHERE reference = '".$reference."'");
 	}
+
+
 
 
 	public function getSupplierId($reference)
@@ -208,6 +226,8 @@ class po
 	}
 
 
+
+
 	public function hasPO($reference)
 	{
 		$sc = FALSE;
@@ -220,10 +240,29 @@ class po
 	}
 
 
-	public function search($txt)
+
+
+
+	public function search($txt, $id_sup = '')
 	{
-		return dbQuery("SELECT DISTINCT reference FROM tbl_po WHERE reference LIKE '%".$txt."%' AND status != 3 AND isCancle = 0");
+		if($id_sup != '' && $id_sup != FALSE)
+		{
+			$qr  = "SELECT DISTINCT reference ";
+			$qr .= "FROM tbl_po WHERE id_supplier = '".$id_sup."' ";
+			$qr .= $txt == '*' ? '' : "AND reference LIKE '%".$txt."%' ";
+			$qr .= "AND status != 3 AND isCancle = 0";
+		}
+		else
+		{
+			$qr  = "SELECT DISTINCT reference ";
+			$qr .= "FROM tbl_po WHERE ";
+			$qr .= "status != 3 AND isCancle = 0 ";
+			$qr .= $txt == '*' ? '' : "AND reference LIKE '%".$txt."%' ";
+		}
+
+		return dbQuery($qr);
 	}
+
 
 
 

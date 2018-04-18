@@ -19,6 +19,22 @@ function selectWarehouse($se = 0 )
 
 
 
+function selectBranch($se = 0)
+{
+	$sc = '';
+	$branch = new branch();
+	$qs = $branch->getData();
+	if(dbNumRows($qs) > 0)
+	{
+		while($rs = dbFetchObject($qs))
+		{
+			$sc .= '<option value="'.$rs->id.'" '.isSelected($rs->id, $se).'>'.$rs->code.' : '.$rs->name.'</option>';
+		}
+	}
+
+	return $sc;
+}
+
 
 
 function selectWarehouseRole($se = 0)

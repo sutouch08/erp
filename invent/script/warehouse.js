@@ -68,6 +68,7 @@ function actionDelete(id){
 function saveEdit(){
 	var id			= $("#id_warehouse").val();
 	var role		= $("#edit-whRole").val();
+	var branch  = $('#edit-branch').val();
 	var sell		= $("#sell").val();
 	var prepare	= $("#prepare").val();
 	var underZero	= $("#underZero").val();
@@ -80,7 +81,8 @@ function saveEdit(){
 
 	$.ajax({
 		url:"controller/warehouseController.php",
-		type:"POST", cache:"false",
+		type:"POST",
+		cache:"false",
 			data:{
 					"editWarehouse" : "",
 					"id_warehouse" : id,
@@ -88,8 +90,10 @@ function saveEdit(){
 					"sell"		: sell,
 					"prepare" : prepare,
 					"underZero" : underZero,
-					"active" : active
-			},success: function(rs){
+					"active" : active,
+					"id_branch" : branch
+			},
+			success: function(rs){
 				var rs = $.trim(rs);
 				if( rs == 'success'){
 					goBack();
@@ -99,6 +103,9 @@ function saveEdit(){
 			}
 	});
 }
+
+
+
 
 function saveAdd(){
 	var code		= $("#add-whCode").val();
@@ -118,7 +125,8 @@ function saveAdd(){
 
 	$.ajax({
 		url:"controller/warehouseController.php",
-		type:"POST", cache:"false",
+		type:"POST",
+		cache:"false",
 			data:{
 					"addNew" : "",
 					"whCode" : code,
@@ -394,23 +402,13 @@ $(".search-box").keyup(function(e) {
 	}
 });
 
-function resetSearch() {
-	var whCode 	= $("#whCode").val();
-	var whName 	= $("#whName").val();
-	var whRole		= $("#whRole").val();
-	var underZero 	= $("#underZero").val();
-	if( whCode != "" || whName != "" || whRole != 0 || underZero != 2 )
-	{
-		$.ajax({
-			url:"controller/warehouseController.php",
-			type:"POST", cache:"false", data:{"resetSearch" : ""},
-			success: function(rs)
-			{
-				goBack();
-			}
-		});
-	}
+
+function resetSearch(){
+	$.get('controller/warehouseController.php?clearFilter',function(){
+		goBack();
+	});
 }
+
 
 $(".search-select").change(function(e) {
     getSearch();

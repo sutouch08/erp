@@ -33,6 +33,16 @@
             </div>
             <div class="divider-hidden margin-top-5 margin-bottom-5"></div>
 
+						<div class="col-sm-4">
+                <label class="form-control label-left">สาขา : </label>
+            </div>
+            <div class="col-sm-8">
+            	<select class="form-control input-sm input-large inline" id="edit-branch">
+								<?php echo selectBranch($rs->id_branch); ?>
+							</select>
+            </div>
+            <div class="divider-hidden margin-top-5 margin-bottom-5"></div>
+
             <div class="col-sm-4">
                 <label class="form-control label-left">ประเภทคลัง : </label>
             </div>

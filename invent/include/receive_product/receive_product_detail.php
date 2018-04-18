@@ -3,7 +3,7 @@
 <?php else :	?>
 <?php
 	$id_receive_product = $_GET['id_receive_product'];
-	$cs = new receive_product($id_receive_product);	
+	$cs = new receive_product($id_receive_product);
 	if( $cs->id == "" ) :
 		include 'include/page_error.php';
 	else :
@@ -27,7 +27,7 @@
     <div class="col-sm-6">
       	<p class="pull-right top-p">
 			<button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i> กลับ</button>
-		<?php if( $cs->isCancle == 0 ) : ?>            
+		<?php if( $cs->isCancle == 0 ) : ?>
 			<button type="button" class="btn btn-sm btn-info" onclick="doExport()"><i class="fa fa-send"></i> ส่งข้อมูลไป Formula </button>
        <?php endif; ?>
             <button type="button" class="btn btn-sm btn-success" onclick="printReceived()"><i class="fa fa-print"></i> พิมพ์ </button>
@@ -54,7 +54,10 @@
     </div>
     <div class="col-sm-4">
     	<label>ผู้จำหน่าย</label>
-        <label class="form-control input-sm"><?php echo $sp->getName($cs->id_supplier); ?></label>
+        <label class="form-control input-sm">
+					<?php echo $sp->getCode($cs->id_supplier); ?> : 
+					<?php echo $sp->getName($cs->id_supplier); ?>
+				</label>
     </div>
     <div class="col-sm-12 margin-top-10">
     	<label>หมายเหตุ : </label>
@@ -104,15 +107,15 @@
                    	<td class="middle text-center"><?php echo $wh->getName($rs->id_warehouse); ?></td>
                     <td class="middle text-center"><?php echo number_format($rs->qty); ?></td>
                 </tr>
-<?php	$totalQty += $rs->qty; ?>             
+<?php	$totalQty += $rs->qty; ?>
 <?php		$no++;	?>
 <?php	endwhile; ?>
 				<tr>
                 	<td colspan="6" class="middle text-right"><strong>รวม</strong></td>
                     <td class="middle text-center"><?php echo number_format($totalQty); ?></td>
                 </tr>
-<?php endif; ?> 
-			</tbody>       
+<?php endif; ?>
+			</tbody>
         </table>
     </div>
 </div>

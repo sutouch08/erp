@@ -1,175 +1,25 @@
 <?php
 $sc = TRUE;
-$po 			= new po();
-$pd 			= new product();
-$zn			  = new zone();
-$cs 			= new receive_product();
-$st			  = new stock();
-$mv			  = new movement();
-$cost     = new product_cost();
+$cs = new receive_product();
+$date_add = dbDate($_POST['date_add'], TRUE);
+$remark = $_POST['remark'] == '' ? '' : addslashes(trim($_POST['remark']));
 
-$poCode		= trim( $_GET['po'] );
-$po_bookcode = getConfig('BOOKCODE_PO');
+$arr = array(
+  'bookcode' => getConfig('BOOKCODE_BI'),
+  'reference' => $cs->getNewReference($date_add),
+  'id_employee' => getCookie('user_id'),
+  'date_add' => $date_add,
+  'remark' => $remark
+);
 
-if( $po->hasPO($poCode) === TRUE )
-{
-  $date_add	= dbDate( $_GET['date'], TRUE );
-  $id_supplier	= $po->getSupplierId($poCode);
-  $invoice		= trim( $_GET['invoice'] );
-  $remark		= trim( $_GET['remark'] );
-  $id_zone		= $_GET['id_zone'];
-  $id_wh		= $zn->getWarehouseId($id_zone);
-  $bookcode 	= getConfig('BOOKCODE_BI');
-  $ds			= $_POST['receive'];
-  $data			= array();
-  foreach( $ds as $id => $val )
-  {
-    if( is_numeric($val) )
-    {
-      $data[$id]	= $val;
-    }
-  }
-  if( count( $data ) > 0 )
-  {
-    startTransection();
-    $reference	= $cs->getNewReference($date_add);
-    if( $_POST['approvKey'] == "" )
-    {
-      $arr = array(
-                  "bookcode"	=> $bookcode,
-                  "reference"	=> $reference,
-                  "id_supplier"	=> $id_supplier,
-                  "po" 			=> $poCode,
-                  "invoice" 		=> $invoice,
-                  "date_add" 	=> $date_add,
-                  "id_employee" => getCookie('user_id'),
-                  "remark"		=> $remark
-                );
-    }
-    else
-    {
-      $arr = array(
-                  "bookcode"	=> $bookcode,
-                  "reference"	=> $reference,
-                  "id_supplier"	=> $id_supplier,
-                  "po" 			=> $poCode,
-                  "invoice" 		=> $invoice,
-                  "date_add" 	=> $date_add,
-                  "id_employee" => getCookie('user_id'),
-                  "remark"		=> $remark,
-                  "approver"	=> $_POST['id_emp'],
-                  "approvKey"	=> $_POST['approvKey']
-                );
-    }
+$id = $cs->add($arr);
 
-
-
-      if( $cs->add($arr) !== TRUE )
-      {
-        $sc = FALSE;
-        $message = 'เพิ่มเอกสารไม่สำเร็จ';
-      }
-      else
-      {
-        $id_receive_product = $cs->get_id($reference);
-
-        if( $id_receive_product != FALSE )
-        {
-          foreach( $data as $id_pd => $qty )
-          {
-            if($sc === FALSE)
-            {
-              break;
-            }
-
-            $arr = array(
-                    "id_receive_product"	=> $id_receive_product,
-                    "id_style"					=> $pd->getStyleId($id_pd),
-                    "id_product"				=> $id_pd,
-                    "qty"						=> $qty,
-                    "cost"              => $po->getPrice($poCode, $id_pd),
-                    "id_warehouse"			=> $id_wh,
-                    "id_zone"					=> $id_zone
-                    );
-
-            //------ เพิ่มรายการรับเข้า
-            if($cs->insertDetail($arr) !== TRUE)
-            {
-              $sc = FALSE;
-              $message = 'เพิ่มรายการรับเข้าไม่สำเร็จ';
-              break;
-            }
-
-            //------ ปรับยอดสต็อก
-            if($st->updateStockZone($id_zone, $id_pd, $qty) !== TRUE )
-            {
-              $sc = FALSE;
-              $message = 'ปรับยอดสต็อกเข้าโซนไม่สำเร็จ';
-              break;
-            }
-
-            //---- เพิ่มรายการต้นทุนสินค้าใน tbl_product_cost
-            if($cost->addCostList($id_pd, $po->getProductPrice($poCode, $id_pd), $qty, $date_add)  !== TRUE)
-            {
-              $sc = FALSE;
-              $message = 'บันทึกต้นทุนสินค้ารับเข้าไม่สำเร็จ';
-              break;
-            }
-
-            //---- บันทึก movement
-            if($mv->move_in( $reference, $id_wh, $id_zone, $id_pd, $qty, dbDate($_GET['date'], TRUE) ) !== TRUE)
-            {
-              $sc = FALSE;
-              $message = 'บันทึก movement ไม่สำเร็จ';
-              break;
-            }
-
-            //--- บันทึกยอดรับใน PO
-            if($po->received($poCode, $id_pd, $qty) !== TRUE)
-            {
-              $sc = FALSE;
-              $message = 'ปรับปรุงยอดรับแล้วในใบสั่งซื้อไม่สำเร็จ';
-              break;
-            }
-
-          }//--- foreach data
-
-        } //--- endif $cs->add
-
-        if( $sc === TRUE )
-        {
-          commitTransection();
-        }
-        else
-        {
-          dbRollback();
-        }
-      }
-
-
-      endTransection();
-
-
-    //--- ถ้ารับเข้าครบ PO แล้ว
-    if($po->isCompleted($poCode) === TRUE && getConfig('PO_AUTO_CLOSE') == 1)
-    {
-      $po->close($po_bookcode, $poCode);
-    }
-
-  }
-  else //-- if count
-  {
-    $sc = FALSE;
-    $message = "ไม่พบรายการรับเข้า";
-
-  }//--- if count
-}
-else //---- if hasPO
+if($id === FALSE OR !is_numeric($id))
 {
   $sc = FALSE;
-  $message = "ใบสั่งซื้อไม่ถูกต้อง ถูกปิด หรือ ถูกยกเลิก";
-}//--- if hasPO
+  $message = 'เพิ่มเอกสารไม่สำเร็จ';
+}
 
-echo $sc === TRUE ? 'success | '.$id_receive_product : 'fail | '.$message;
+echo $sc === TRUE ? $id : $message;
 
  ?>

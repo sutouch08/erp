@@ -25,6 +25,27 @@ if(isset($_GET['addDetail']))
 
 
 
+if(isset($_GET['update']))
+{
+	$sc = TRUE;
+	$id = $_POST['id_receive_transform'];
+	$date_add = dbDate($_POST['date_add'], TRUE);
+	$remark = addslashes(trim($_POST['remark']));
+	$arr = array(
+		'date_add' => $date_add,
+		'remark' => $remark
+	);
+
+	$cs = new receive_transform($id);
+	if($cs->update($id, $arr) !== TRUE)
+	{
+		$sc = FALSE;
+		$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
+	}
+
+	echo $sc === TRUE ? 'success' : $message;
+}
+
 if( isset( $_GET['cancleReceived'] ) )
 {
 	include 'receive_transform/cancle.php';

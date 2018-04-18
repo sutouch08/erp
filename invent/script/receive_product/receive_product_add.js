@@ -6,134 +6,248 @@ var invError = 0;
 var zoneError = 0;
 
 
-function receiveProduct(){
-	var qty = isNaN( parseInt( $("#qty").val() ) ) ? 1 : parseInt( $("#qty").val() );
-	var bc = $("#barcode");
-	var barcode = bc.val();
-	if( barcode.length > 0 ){
-		bc.val('');
-		bc.attr('disabled', 'disabled');
-		var input = $("#receive-"+barcode);
-		var count = input.length;
-		if( count == 1 ){
-			var cqty = input.val() == "" ? 0 : parseInt(input.val());
-			qty += cqty;
-			input.val(qty);
-			$("#qty").val(1);
-		}else{
-			swal({
-				title: "ข้อผิดพลาด !",
-				text: "บาร์โค้ดไม่ถูกต้องหรือสินค้าไม่ตรงกับใบสั่งซื้อ",
-				type: "error"},
-				function(){
-					setTimeout( function(){ $("#barcode")	.focus(); }, 1000 );
-				});
-		}
-		bc.removeAttr('disabled');
-		bc.focus();
+function addNew(){
+	date_add = $('#dateAdd').val();
+	remark = $('#remark').val();
+
+	if(!isDate(date_add)){
+		swal('วันที่ไม่ถูกต้อง');
+		return false;
 	}
+
+	load_in();
+
+	$.ajax({
+		url:'controller/receiveProductController.php?addNew',
+		type:'POST',
+		cache:'false',
+		data:{
+			'date_add' : date_add,
+			'remark' : remark
+		},
+		success:function(rs){
+			load_out();
+			rs = $.trim(rs);
+			if(! isNaN( parseInt(rs) ) ){
+				setTimeout(function(){
+					goAdd(rs);
+				}, 1000);
+			}else{
+				swal('Error!', rs, 'error');
+			}
+		}
+	});
 }
 
+
+
+function editHeader(){
+	$('.header-box').removeAttr('disabled');
+	$('#btn-edit').addClass('hide');
+	$('#btn-update').removeClass('hide');
+}
+
+
+function updateHeader(){
+	id = $('#id_receive_product').val();
+	date_add = $('#dateAdd').val();
+	remark = $('#remark').val();
+
+	if(id == '' || id == undefined){
+		swal('ไม่พบเลขที่เอกสาร');
+		return false;
+	}
+
+	if(!isDate(date_add)){
+		swal('วันที่ไม่ถูกต้อง');
+		return false;
+	}
+
+	load_in();
+	$.ajax({
+		url:'controller/receiveProductController.php?update',
+		type:'POST',
+		cache:'false',
+		data:{
+			'id_receive_product' : id,
+			'date_add' : date_add,
+			'remark' : remark
+		},
+		success:function(rs){
+			load_out();
+			rs = $.trim(rs);
+			if(rs == 'success'){
+				swal({
+					title:'Success',
+					type:'success',
+					timer: 1000
+				});
+
+				$('.header-box').attr('disabled', 'disabled');
+				$('#btn-update').addClass('hide');
+				$('#btn-edit').removeClass('hide');
+			}else{
+				swal('Error!', rs, 'error');
+			}
+		}
+	});
+}
+
+
+function receiveProduct(id_pd){
+	var qty = isNaN( parseInt( $("#qty").val() ) ) ? 1 : parseInt( $("#qty").val() );
+	var bc = $("#barcode");
+	var input = $("#receive-"+ id_pd);
+	if(input.length == 1 ){
+		bc.val('');
+		bc.attr('disabled', 'disabled');
+		var cqty = input.val() == "" ? 0 : parseInt(input.val());
+		qty += cqty;
+		input.val(qty);
+		$("#qty").val(1);
+		sumReceive();
+		bc.removeAttr('disabled');
+		bc.focus();
+	}else{
+		swal({
+			title: "ข้อผิดพลาด !",
+			text: "บาร์โค้ดไม่ถูกต้องหรือสินค้าไม่ตรงกับใบสั่งซื้อ",
+			type: "error"},
+			function(){
+				setTimeout( function(){ $("#barcode")	.focus(); }, 1000 );
+		});
+	}
+}
 
 
 
 
 function save(){
-	var date			= $("#dateAdd").val();
-	var id_sup		= $("#id_supplier").val();
-	var po			= $("#poCode").val();
-	var invoice 		= $("#invoice").val();
-	var zoneName 	= $("#zoneName").val();
-	var id_zone		= $("#id_zone").val();
-	var remark		= $("#remark").val();
-	var count = $(".receive-box").length;
-	var id_rec		= $("#id_receive_product").val();
+	id = $('#id_receive_product').val();
 
-	if( id_rec == "" )
-	{
+	//--- อ้างอิง PO Code
+	po = $.trim($('#poCode').val());
 
-		if( count == 0 ){
-			swal("ข้อผิดพลาด !", "ไม่พบรายการ", "error");
-			return false;
-		}
+	//--- เลขที่ใบส่งสินค้า
+	invoice = $.trim($('#invoice').val());
 
-		//---- validate Date
-		if( ! isDate(date) ){
-			var message = "วันที่ไม่ถูกต้อง";
-			addError($("#dateAdd"), $("#date-error"), message);
-			return false;
-		}else{
-			removeError($("#dateAdd"), $("#date-error"), "");
-		}
+	//--- zone id
+	id_zone = $('#id_zone').val();
+	zoneName = $('#zoneName').val();
 
-		//--- validate PO Reference
-		if( po.length == 0  ){
-			var message = "กรุณาระบุใบสั่งซื้อ";
-			addError($("#poCode"), $("#po-error"), message);
-			return false;
-		}else{
-			removeError($("#poCode"), $("#po-error"),"");
-		}
+	//--- approve key
+	approvKey = $('#approvKey').val();
+	id_emp = $('#id_emp').val();
 
-		//--- validate zone
-		if( zoneName.length == 0 || id_zone == "" ){
-			var message = "กรุณาระบุโซนรับเข้า";
-			addError($("#zoneName"), $("#zone-error"), message);
-			return false;
-		}else{
-			removeError($("#zoneName"), $("#zone-error"), "");
-		}
+	//--- นับจำนวนรายการในใบสั่งซื้อ
+	count = $(".receive-box").length;
 
-		var receive = $("#receiveForm").serializeArray();
-		//load_in();
-		$.ajax({
-			url:"controller/receiveProductController.php?addNew&date="+date+"&id_supplier="+id_sup+"&po="+po+"&invoice="+invoice+"&id_zone="+id_zone+"&remark="+remark,
-			type:"POST",
-			cache:"false",
-			data: $("#receiveForm").serializeArray(),
-			success: function(rs){
-				//load_out();
-				var rs = $.trim(rs);
-				arr = rs.split(' | ');
-				if( arr[0] == 'success' ){
-					var id_receive_product = arr[1];
-					if( id_receive_product.length > 0 )
-					{
-						load_in();
-						$.ajax({
-							url:"controller/interfaceController.php?export&BI",
-							type:"POST",
-							cache:"false",
-							data:{
-								"id_receive_product" : id_receive_product
-							},
-							success: function(rs){
-								load_out();
-								var rs = $.trim(rs);
-								if( rs == 'success' ){
-									swal({ title: "Success", type:"success", timer: 1000 });
-									setTimeout(function(){ goBack(); }, 1200);
-								}else{
-									swal("ข้อผิดพลาด !", rs, "error");
-								}
-							}
-						});
-					}else{
-						swal("id_receive_product not found");
-					}
-					//swal({title: "บันทึกสำเร็จ", type: "success", timer: 1000 });
-					//
-				}else{
-					swal("ข้อผิดพลาด !", rs, "error");
-				}
-			}
-		});
-	}else{
-		doExport();
+	//--- ตรวจสอบความถูกต้องของข้อมูล
+	if(id == '' || id == undefined){
+		swal('ไม่พบไอดีเอกสาร', 'หากคุณเห็นข้อผิดพลาดนี้มากกว่า 1 ครับ ให้ลองออกจากหน้านี้แล้วกลับเข้ามาทำรายการใหม่', 'error');
+		return false;
 	}
-}
+
+	//--- ใบสั่งซื้อถูกต้องหรือไม่
+	if(po == ''){
+		swal('ไม่พบเลขที่ใบสั่งซื้อ');
+		return false;
+	}
+
+	//--- มีรายการในใบสั่งซื้อหรือไม่
+	if(count = 0){
+		swal('Error!', 'ไม่พบรายการรับเข้า','error');
+		return false;
+	}
+
+	//--- ตรวจสอบใบส่งของ (ต้องระบุ)
+	if(invoice.length == 0){
+		swal('กรุณาระบุใบส่งสินค้า');
+		return false;
+	}
+
+	//--- ตรวจสอบโซนรับเข้า
+	if(id_zone == '' || zoneName == ''){
+		swal('กรุณาระบุโซนเพื่อรับเข้า');
+		return false;
+	}
+
+	ds = [
+		{'name' : 'id_receive_product', 'value' : id},
+		{'name' : 'poCode', 'value' : po},
+		{'name' : 'invoice', 'value' : invoice},
+		{'name' : 'id_zone', 'value' : id_zone},
+		{'name' : 'approvKey', 'value' : approvKey},
+		{'name' : 'id_emp', 'value' : id_emp}
+	];
 
 
+	$('.receive-box').each(function(index, el) {
+		qty = parseInt($(this).val());
+		arr = $(this).attr('id').split('-');
+		id_pd = arr[1];
+		name = "receive["+id_pd+"]";
+		if($(this).val() > 0 && !isNaN(qty)){
+			ds.push({
+				'name' : name, 'value' : qty
+			});
+		}
+	});
+
+	if(ds.length < 7){
+		swal('ไม่พบรายการรับเข้า');
+		return false;
+	}
+
+	load_in();
+
+	$.ajax({
+		url:"controller/receiveProductController.php?addDetail",
+		type:"POST",
+		cache:"false",
+		data: ds,
+		success: function(rs){
+			rs = $.trim(rs);
+			if(rs == 'success'){
+				//--- export ไฟล์ไป Formula
+				$.ajax({
+					url:"controller/interfaceController.php?export&BI",
+					type:"POST",
+					cache:"false",
+					data:{
+						"id_receive_product" : id
+					},
+					success: function(rs){
+						load_out();
+						var rs = $.trim(rs);
+						if( rs == 'success' ){
+							swal({
+								title: "Success",
+								type:"success",
+								timer: 1000
+							});
+
+							setTimeout(function(){
+								goBack();
+							}, 1200);
+
+						}else{
+							swal("ข้อผิดพลาด !", rs, "error");
+						}
+					}
+				});
+
+			}
+			else
+			{
+				load_out();
+				swal("ข้อผิดพลาด !", rs, "error");
+			}
+		}
+	});
+
+
+}	//--- end save
 
 
 
@@ -233,7 +347,31 @@ function leave(){
 }
 
 
-
+function changePo(){
+	swal({
+		title: 'ยกเลิกข้อมูลนี้ ?',
+		type: 'warning',
+		showCancelButton: true,
+		cancelButtonText: 'No',
+		confirmButtonText: 'Yes',
+		closeOnConfirm: false
+	}, function(){
+		$("#receiveTable").html('');
+		$('#btn-change-po').addClass('hide');
+		$('#btn-get-po').removeClass('hide');
+		$('#poCode').val('');
+		$('#poCode').removeAttr('disabled');
+		swal({
+			title:'Success',
+			text:'ยกเลิกข้อมูลเรียบร้อยแล้ว',
+			type:'success',
+			timer:1000
+		});
+		setTimeout(function(){
+			$('#poCode').focus();
+		}, 1200);
+	});
+}
 
 
 function getData(){
@@ -255,36 +393,19 @@ function getData(){
 				$(".receive-box").keyup(function(e){
     				sumReceive();
 				});
+
+				$('#btn-get-po').addClass('hide');
+				$('#btn-change-po').removeClass('hide');
+				setTimeout(function(){
+					$('#invoice').focus();
+				},1000);
+
 			}else{
 				swal("ข้อผิดพลาด !", rs, "error");
 				$("#receiveTable").html('');
 			}
 		}
 	});
-}
-
-
-
-
-
-function getEdit(){
-	var id = $("#id_receive_product").val();
-	$.ajax({
-		url:"controller/receiveProductController.php?isExistsDetails",
-		type:"GET", cache:"false", data:{ "id_receive_product" : id },
-		success: function(rs){
-			var rs = $.trim(rs);
-			if( rs == 'no_details' ){
-				$(".input-header").removeAttr('disabled');
-			}else{
-				$("#dateAdd").removeAttr('disabled');
-				$("#invoice").removeAttr('disabled');
-				$("#remark").removeAttr('disabled');
-			}
-		}
-	});
-	$("#btn-edit").addClass('hide');
-	$("#btn-update").removeClass('hide');
 }
 
 
@@ -310,22 +431,45 @@ $("#supplier").autocomplete({
 
 
 
+$('#supplier').focusout(function(event) {
+	if($(this).val() == ''){
+		$('#id_supplier').val('');
+	}
 
-
-
-$("#poCode").autocomplete({
-	source: "controller/receiveProductController.php?search_po",
-	autoFocus: true
+	poInit();
 });
 
 
 
 
+$(document).ready(function() {
+	poInit();
+});
 
 
-$("#poCode").focusout(function(e) {
-    if( $(this).val().length > 0 ){
-		getData();
+function poInit(){
+	var id_supplier = $('#id_supplier').val();
+	if(id_supplier == ''){
+		$("#poCode").autocomplete({
+			source: "controller/receiveProductController.php?search_po",
+			autoFocus: true
+		});
+	}else{
+		$("#poCode").autocomplete({
+			source: "controller/receiveProductController.php?search_po&id_supplier="+id_supplier,
+			autoFocus: true
+		});
+	}
+}
+
+
+
+
+$('#poCode').keyup(function(e) {
+	if(e.keyCode == 13){
+		if($(this).val().length > 0){
+			getData();
+		}
 	}
 });
 
@@ -360,15 +504,33 @@ $("#dateAdd").datepicker({ dateFormat: 'dd-mm-yy'});
 
 
 
+
+function checkBarcode(){
+	barcode = $('#barcode').val();
+
+	if($('#'+barcode).length == 1){
+		id_pd = $('#'+barcode).val();
+		receiveProduct(id_pd);
+	}else{
+		$('#barcode').val('');
+		swal({
+			title: "ข้อผิดพลาด !",
+			text: "บาร์โค้ดไม่ถูกต้องหรือสินค้าไม่ตรงกับใบสั่งซื้อ",
+			type: "error"
+		},
+			function(){
+				setTimeout( function(){ $("#barcode")	.focus(); }, 1000 );
+			});
+	}
+}
+
+
+
 $("#barcode").keyup(function(e) {
-    if( e.keyCode == 13 ){
-		if( $(this).val() != "" ){
-			receiveProduct();
-		}
+  if( e.keyCode == 13 ){
+		checkBarcode();
 	}
 });
-
-
 
 
 
@@ -377,8 +539,8 @@ function sumReceive(){
 
 	var qty = 0;
 	$(".receive-box").each(function(index, element) {
-        var cqty = isNaN( parseInt( $(this).val() ) ) ? 0 : parseInt( $(this).val() );
-		qty += cqty;
+    	var cqty = isNaN( parseInt( $(this).val() ) ) ? 0 : parseInt( $(this).val() );
+			qty += cqty;
     });
 	$("#total-receive").text( addCommas(qty) );
 }

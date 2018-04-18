@@ -6,7 +6,7 @@ class branch
 	public $name;
 	public function __construct($id = '')
 	{
-		if( $id != '' )
+		if( $id != '' && $id != FALSE )
 		{
 			$qs = dbQuery("SELECT * FROM tbl_branch WHERE id = '".$id."'");
 			if( dbNumRows($qs) == 1 )
@@ -14,11 +14,12 @@ class branch
 				$rs 				= dbFetchObject($qs);
 				$this->id 		= $rs->id;
 				$this->code 	= $rs->code;
-				$this->name	 	= $rs->name;	
+				$this->name	 	= $rs->name;
 			}
 		}
 	}
-	
+
+
 	public function add(array $ds )
 	{
 		$sc = FALSE;
@@ -31,16 +32,16 @@ class branch
 			{
 				$fields	.= $i == 1 ? $field : ", ".$field;
 				$values	.= $i == 1 ? "'". $value ."'" : ", '". $value ."'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_branch (".$fields.") VALUES (".$values.")");
 		}
-		return $sc;	
+		return $sc;
 	}
-	
-	
-	
-	
+
+
+
+
 	public function update($id, array $ds)
 	{
 		$sc = FALSE;
@@ -51,14 +52,14 @@ class branch
 			foreach( $ds as $field => $value )
 			{
 				$set .= $i == 1 ? $field . " = '" . $value . "'" : ", ".$field . " = '" . $value . "'";
-				$i++;	
+				$i++;
 			}
 			$sc = dbQuery("UPDATE tbl_branch SET " . $set . " WHERE id = '".$id."'");
 		}
 		return $sc;
 	}
-	
-	
+
+
 	public function isExists($field, $value, $id='')
 	{
 		$sc = FALSE;
@@ -70,45 +71,53 @@ class branch
 		{
 			$qs = dbQuery("SELECT id FROM tbl_branch WHERE ".$field." = '".$value."'");
 		}
-		
+
 		if( dbNumRows($qs) > 0 )
 		{
-			$sc = TRUE;	
+			$sc = TRUE;
 		}
 		return $sc;
 	}
-	
+
+
+
+
 	public function delete($id)
 	{
 		return dbQuery("DELETE FROM tbl_branch WHERE id = '".$id."'");
 	}
-		
-	
+
+
+
+
 	public function getCode($id)
 	{
 		$sc = FALSE;
 		$qs = dbQuery("SELECT code FROM tbl_branch WHERE id = '".$id."'");
 		if( dbNumRows($qs) == 1 )
 		{
-			list( $sc ) = dbFetchArray($qs);	
+			list( $sc ) = dbFetchArray($qs);
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
+
 	public function getId($code)
 	{
 		$sc = 0;
 		$qs = dbQuery("SELECT id FROM tbl_branch WHERE code = '".$code."'");
 		if( dbNumRows($qs) == 1 )
 		{
-			list( $sc ) = dbFetchArray($qs);	
+			list( $sc ) = dbFetchArray($qs);
 		}
-		return $sc;	
+		return $sc;
 	}
-	
-	
+
+
+
+
 	public function getNameByCode($code)
 	{
 		$sc = "";
@@ -119,9 +128,10 @@ class branch
 		}
 		return $sc;
 	}
-	
-	
-	
+
+
+
+
 	public function getName($id)
 	{
 		$sc = "";
@@ -132,13 +142,16 @@ class branch
 		}
 		return $sc;
 	}
-	
-	
+
+
+
+
 	public function getData()
 	{
-		return dbQuery("SELECT * FROM tbl_branch");	
+		return dbQuery("SELECT * FROM tbl_branch");
 	}
-	
+
+
 }
 
 ?>

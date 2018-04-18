@@ -321,7 +321,7 @@
 
 
 		//---	auto complete โซนรับสินค้า
-		public function searchReceiveZone($txt)
+		public function searchReceiveZone($txt, $limit = 50)
 		{
 			$role = getConfig('RECEIVE_WAREHOUSE');
 			$role = $role == '' ? 5 : $role;
@@ -329,7 +329,8 @@
 			$qr  = "SELECT z.* FROM tbl_zone AS z ";
 			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
 			$qr .= "WHERE w.role IN(".$role.") AND w.active = 1 AND zone_name LIKE '%".$txt."%' ";
-
+			$qr .= "LIMIT ".$limit;
+			
 			return dbQuery($qr);
 		}
 

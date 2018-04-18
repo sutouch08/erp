@@ -64,8 +64,13 @@ function goDelete(id, name){
 }
 
 
-function goAdd(){
-	window.location.href = "index.php?content=receive_product&add";
+function goAdd(id){
+	if(id == undefined){
+		window.location.href = "index.php?content=receive_product&add";
+	}else{
+		window.location.href = 'index.php?content=receive_product&add=Y&id_receive_product='+id;
+	}
+
 }
 
 function goEdit(id){

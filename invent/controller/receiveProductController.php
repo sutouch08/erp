@@ -5,6 +5,14 @@ require "../function/tools.php";
 include "../function/receive_product_helper.php";
 
 
+if(isset($_GET['addDetail']))
+{
+	include 'receive_product/add_detail.php';
+}
+
+
+
+
 if( isset( $_GET['getPoData'] ) )
 {
 	$reference = $_GET['reference']; // po
@@ -24,7 +32,7 @@ if( isset( $_GET['getPoData'] ) )
 			$backlog = $rs->qty - $rs->received < 0 ? 0 : $rs->qty - $rs->received;
 			$arr = array(
 								"no"	=> $no,
-								"barcode"	=> $bc->getBarcode($rs->id_product),
+								"barcode"	=> trim($bc->getBarcode($rs->id_product)),
 								"id_pd"		=> $rs->id_product,
 								"pdCode"		=> $pd->getCode($rs->id_product),
 								"pdName"		=> $pd->getName($rs->id_product),
@@ -53,6 +61,8 @@ if( isset( $_GET['getPoData'] ) )
 
 
 
+
+
 if( isset( $_GET['addNew'] ) )
 {
 	include 'receive_product/receive_add.php';
@@ -60,10 +70,13 @@ if( isset( $_GET['addNew'] ) )
 
 
 
+
 if( isset( $_GET['cancleReceived'] ) )
 {
 	include 'receive_product/receive_cancle.php';
 }
+
+
 
 if( isset( $_GET['getApprove'] ) )
 {
@@ -81,6 +94,10 @@ if( isset( $_GET['getApprove'] ) )
 		echo 'fail';
 	}
 }
+
+
+
+
 
 if( isset($_GET['search_supplier'] ) && isset( $_REQUEST['term'] ) )
 {
@@ -100,15 +117,18 @@ if( isset($_GET['search_supplier'] ) && isset( $_REQUEST['term'] ) )
 
 if( isset( $_GET['search_po'] ) && isset( $_REQUEST['term'] ) )
 {
+	$id_sup = isset($_GET['id_supplier']) ? $_GET['id_supplier'] : FALSE;
 	$sc = array();
 	$po = new po();
-	$qs = $po->search($_REQUEST['term']);
+	$qs = $po->search($_REQUEST['term'], $id_sup);
 	while( $rs = dbFetchObject($qs) )
 	{
 		$sc[] = $rs->reference;
 	}
 	echo json_encode($sc);
 }
+
+
 
 
 
@@ -134,19 +154,33 @@ if( isset( $_GET['search_zone'] ) && isset( $_REQUEST['term'] ) )
 }
 
 
-if( isset( $_GET['isExistsDetails'] ) )
+
+
+
+if(isset($_GET['update']))
 {
-	$id = $_GET['id_receive_product'];
+	$sc = TRUE;
+	$id = $_POST['id_receive_product'];
+	$remark = $_POST['remark'];
+	$date_add = dbDate($_POST['date_add'], TRUE);
+
+	$arr = array(
+		'date_add' => $date_add,
+		'remark' => addslashes($remark)
+	);
+
 	$cs = new receive_product();
-	if( $cs->hasDetails($id) === TRUE )
+	if($cs->update($id, $arr) !== TRUE)
 	{
-		echo "has_details";
+		$sc = FALSE;
+		$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
 	}
-	else
-	{
-		echo "no_details";
-	}
+
+	echo $sc === TRUE ? 'success' : $message;
 }
+
+
+
 
 if( isset( $_GET['clearFilter'] ) )
 {

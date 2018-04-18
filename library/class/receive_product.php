@@ -17,35 +17,33 @@ class receive_product
 	public $approver;
 	public $approvKey;
 	public $credit_term = 0;
+	public $isSaved = 0;
 
 
 	public function __construct($id = "")
 	{
-		if( $id != "" )
+		if( $id != "" && $id != FALSE)
 		{
-			$qs = dbQuery("SELECT * FROM tbl_receive_product WHERE id = ".$id);
+			$this->getData($id);
+		}
+	}
 
-			if( dbNumRows($qs) == 1 )
+
+
+	public function getData($id)
+	{
+		$qs = dbQuery("SELECT * FROM tbl_receive_product WHERE id = ".$id);
+		if(dbNumRows($qs) == 1)
+		{
+			$rs = dbFetchArray($qs);
+			foreach($rs as $key => $val)
 			{
-				$rs = dbFetchObject($qs);
-				$this->id 	= $rs->id;
-				$this->bookcode	= $rs->bookcode;
-				$this->reference 	= $rs->reference;
-				$this->id_supplier	= $rs->id_supplier;
-				$this->po			= $rs->po;
-				$this->invoice		= $rs->invoice;
-				$this->id_employee = $rs->id_employee;
-				$this->date_add	= $rs->date_add;
-				$this->date_upd	= $rs->date_upd;
-				$this->emp_upd	= $rs->emp_upd;
-				$this->isCancle		= $rs->isCancle;
-				$this->remark		= $rs->remark;
-				$this->isExported	= $rs->isExported;
-				$this->approver	= $rs->approver;
-				$this->approvKey	= $rs->approvKey;
+				$this->$key = $val;
 			}
 		}
 	}
+
+
 
 
 	public function add(array $ds)
@@ -62,10 +60,37 @@ class receive_product
 				$values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
 				$i++;
 			}
-			$sc = dbQuery("INSERT INTO tbl_receive_product (".$fields.") VALUES (".$values.")");
+			$qs = dbQuery("INSERT INTO tbl_receive_product (".$fields.") VALUES (".$values.")");
+			if($qs)
+			{
+				$sc = dbInsertId();
+			}
 		}
+
 		return $sc;
 	}
+
+
+
+	public function update($id, array $ds = array())
+	{
+		if(!empty($ds) && $id != '' && $id !== FALSE)
+		{
+			$set = "";
+			$i = 1;
+			foreach($ds as $field => $value)
+			{
+				$set .= $i == 1 ? $field." = '".$value."'" : ", ".$field." = '".$value."'";
+				$i++;
+			}
+
+			return dbQuery("UPDATE tbl_receive_product SET ".$set." WHERE id = ".$id);
+		}
+
+		return FALSE;
+	}
+
+
 
 	public function getDetail($id)
 	{

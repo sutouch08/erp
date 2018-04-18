@@ -231,6 +231,57 @@ function save(){
 
 
 
+function activeHeader(){
+	$('.header-box').removeAttr('disabled');
+	$('#btn-edit').addClass('hide');
+	$('#btn-update').removeClass('hide');
+}
+
+
+function updateHeader(){
+	id = $('#id_receive_transform').val();
+	date_add = $('#dateAdd').val();
+	remark = $('#remark').val();
+
+	if(id == '' || id == undefined){
+		swal('ไม่พบเลขที่เอกสาร');
+		return false;
+	}
+
+	if(!isDate(date_add)){
+		swal('วันที่ไม่ถูกต้อง');
+		return false;
+	}
+
+	load_in();
+	$.ajax({
+		url:'controller/receiveTransformController.php?update',
+		type:'POST',
+		cache:'false',
+		data:{
+			'id_receive_transform' : id,
+			'date_add' : date_add,
+			'remark' : remark
+		},
+		success:function(rs){
+			load_out();
+			rs = $.trim(rs);
+			if(rs == 'success'){
+				swal({
+					title:'Success',
+					type:'success',
+					timer: 1000
+				});
+
+				$('.header-box').attr('disabled', 'disabled');
+				$('#btn-update').addClass('hide');
+				$('#btn-edit').removeClass('hide');
+			}else{
+				swal('Error!', rs, 'error');
+			}
+		}
+	});
+}
 
 
 

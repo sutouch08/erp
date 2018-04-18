@@ -13,40 +13,49 @@
 
 <?php
 	$emp = new employee();
-	$whCode		= isset( $_POST['whCode'] ) ? $_POST['whCode'] : (getCookie('whCode') ? getCookie('whCode') : '');
-	$whName		= isset( $_POST['whName'] ) ? $_POST['whName'] : (getCookie('whName') ? getCookie('whName') : '');
-	$whRole		= isset( $_POST['whRole'] ) ? $_POST['whRole'] : (getCookie('whRole') ? getCookie('whRole') : 0);
-	$underZero	= isset( $_POST['underZero'] ) ? $_POST['underZero'] : (getCookie('underZero') ? getCookie('underZero') : 2 );
+	$whCode		= getFilter('whCode', 'whCode', '');
+	$whName		= getFilter('whName', 'whName', '');
+	$whRole		= getFilter('whRole', 'whRole', 0);
+	$sBranch  = getFilter('sBranch', 'sBranch', '');
+	$underZero	= getFilter('underZero', 'underZero', 2);
+
 ?>
 <form id="searchForm" method="post">
 <div class="row">
-	<div class="col-sm-2">
+	<div class="col-sm-2 padding-5 first">
     	<label>รหัส</label>
         <input type="text" class="form-control input-sm search-box" name="whCode" id="whCode" placeholder="ค้นหารหัสคลัง" value="<?php echo $whCode; ?>" />
     </div>
-    <div class="col-sm-3">
+    <div class="col-sm-3 padding-5">
     	<label>ชื่อคลัง</label>
         <input type="text" class="form-control input-sm search-box" name="whName" id="whName" placeholder="ค้าหาชื่อคลัง" value="<?php echo $whName; ?>" />
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-1 col-1-harf padding-5">
     	<label>ประเภทคลัง</label>
         <select class="form-control input-sm search-select" name="whRole" id="whRole">
         <?php echo selectWarehouseRole($whRole); ?>
         </select>
     </div>
-    <div class="col-sm-2">
+		<div class="col-sm-2 padding-5">
+			<label>สาขา</label>
+			<select class="form-control input-sm search-select" name="sBranch" id="sBranch">
+				<option value="">โปรดเลือก</option>
+				<?php echo selectBranch($sBranch); ?>
+			</select>
+		</div>
+    <div class="col-sm-1 col-1-harf padding-5">
     	<label >สต็อกติดลบ</label>
         <select class="form-control input-sm search-select" name="underZero" id="underZero">
         	<option value="2" <?php echo isSelected($underZero, 2); ?>>ทั้งหมด</option>
-            <option value="1" <?php echo isSelected($underZero, 1); ?>>อนุญาติให้ติดลบ</option>
-            <option value="0" <?php echo isSelected($underZero, 0); ?>>ไม่อนุญาติให้ติดลบ</option>
+            <option value="1" <?php echo isSelected($underZero, 1); ?>>ติดลบได้</option>
+            <option value="0" <?php echo isSelected($underZero, 0); ?>>ติดลบไม่ได้</option>
         </select>
     </div>
-    <div class="col-sm-1 col-1-harf">
+    <div class="col-sm-1 padding-5">
     	<label class="display-block not-show">ใช้ตัวกรอง</label>
         <button type="button" class="btn btn-sm btn-block btn-success" onclick="getSearch()"><i class="fa fa-search"></i> ใช้ตัวกรอง</button>
     </div>
-     <div class="col-sm-1 col-1-harf">
+     <div class="col-sm-1 padding-5 last">
     	<label class="display-block not-show">reset</label>
         <button type="button" class="btn btn-sm btn-block btn-warning" onclick="resetSearch()"><i class="fa fa-retweet"></i> รีเซ็ต</button>
     </div>
@@ -76,6 +85,12 @@
 	}
 
 
+	if($sBranch !='')
+	{
+		createCookie('sBranch', $sBranch);
+		$where .= "AND id_branch = ".$sBranch." ";
+	}
+
 	if( $underZero != 2 )
 	{
 		createCookie('underZero', $underZero);
@@ -98,7 +113,8 @@
             	<tr class="font-size-12">
                 	<th class="width-5 text-center">ลำดับ</th>
                   <th class="width-10 text-center">รหัสคลัง</th>
-                  <th class="width-25 text-center">ชื่อคลัง</th>
+                  <th class="width-25">ชื่อคลัง</th>
+									<th class="width-10 text-center">สาขา</th>
                   <th class="width-10 text-center">ประเภทคลัง</th>
 									<th class="width-5 text-center">โซน</th>
                   <th class="width-5 text-center">ขาย</th>
@@ -114,6 +130,7 @@
     <?php	$no	= ($get_rows * ($page -1)) + 1 ;	?>
 		<?php $zone = new zone(); ?>
     <?php	while( $rs = dbFetchObject($qs) ) : 	?>
+		<?php $branch = new branch($rs->id_branch); ?>
     			<tr style="font-size:12px;" id="row_<?php echo $rs->id; ?>">
             <td class="text-center middle">
               <?php echo number_format($no); ?>
@@ -126,6 +143,10 @@
             <td class="middle">
               <?php echo $rs->name; ?>
             </td>
+
+						<td class="middle text-center">
+							<?php echo $branch->name; ?>
+						</td>
 
             <td class="text-center middle">
               <?php echo getWarehouseRoleName($rs->role); ?>

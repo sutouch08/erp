@@ -51,7 +51,8 @@ if( isset( $_POST['editWarehouse'] ) && isset( $_POST['id_warehouse'] ) )
 						'allow_under_zero'		=> $_POST['underZero'],
 						'active'	=> $_POST['active'],
 						'last_upd' => date('Y-m-d H:i:s'),
-						'emp_upd' => getCookie('user_id')
+						'emp_upd' => getCookie('user_id'),
+						'id_branch' => $_POST['id_branch']
 						);
 	$warehouse		= new warehouse();
 	$rs 	= $warehouse->update($id_warehouse, $ds);
@@ -177,11 +178,12 @@ if(isset($_GET['setActive']))
 }
 
 
-if( isset( $_POST['resetSearch'] ) )
+if( isset( $_GET['clearFilter'] ) )
 {
 	deleteCookie('whCode');
 	deleteCookie('whName');
 	deleteCookie('whRole');
+	deleteCookie('sBranch');
 	deleteCookie('underZero');
 	echo 'success';
 }
