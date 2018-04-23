@@ -18,6 +18,7 @@
 	//include 'function/payment_helper.php';
 	//include 'function/shipping_helper.php';
 	//include 'function/location_helper.php';
+	include 'function/branch_helper.php';
 
 	$allowEditPrice = getConfig('ALLOW_EDIT_PRICE');
 	$allowEditDisc = getConfig('ALLOW_EDIT_DISCOUNT');

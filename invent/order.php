@@ -23,6 +23,7 @@
 	include 'function/payment_helper.php';
 	include 'function/shipping_helper.php';
 	include 'function/location_helper.php';
+	include 'function/branch_helper.php';
 
 	$allowEditDisc = getConfig('ALLOW_EDIT_DISCOUNT');
 	$allowEditPrice = getConfig('ALLOW_EDIT_PRICE');

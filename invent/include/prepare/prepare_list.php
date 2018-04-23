@@ -18,6 +18,7 @@ $sCus       = getFilter('sCus', 'sOrderCus', '');
 $sEmp       = getFilter('sEmp', 'sOrderEmp', '');
 $fromDate   = getFilter('fromDate', 'fromDate', '');
 $toDate     = getFilter('toDate', 'toDate', '');
+$sBranch    = getFilter('sBranch', 'sBranch', '');
 
 ?>
 
@@ -34,8 +35,16 @@ $toDate     = getFilter('toDate', 'toDate', '');
     </div>
 
     <div class="col-sm-2 padding-5">
-        <label>พนักงาน/ผู้เบิก/</label>
+        <label>พนักงาน/ผู้เบิก</label>
         <input type="text" class="form-control input-sm text-center search-box" id="sEmp" name="sEmp" value="<?php echo $sEmp; ?>"/>
+    </div>
+
+    <div class="col-sm-1 col-1-harf padding-5">
+      <label>สาขา</label>
+      <select class="form-control input-sm search-select" id="sBranch" name="sBranch">
+        <option value="">ทั้งหมด</option>
+        <?php echo selectBranch($sBranch); ?>
+      </select>
     </div>
 
     <div class="col-sm-2 padding-5">
@@ -81,6 +90,12 @@ if( $sEmp != '')
 }
 
 
+if( $sBranch != '')
+{
+  createCookie('sBranch', $sBranch);
+  $where .= "AND id_branch = '".$sBranch."' ";
+}
+
 
 if( $fromDate != "" && $toDate != "" )
 {
@@ -109,8 +124,9 @@ $qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Sta
                     <th class="width-15">เลขที่เอกสาร</th>
                     <th class="width-30">ลูกค้า/ผู้รับ/ผู้เบิก</th>
                     <th class="width-10 text-center">จำนวน</th>
-                    <th class="width-15 text-center">รูปแบบ</th>
-                    <th class="width-15 text-center">วันที่</th>
+                    <th class="width-10 text-center">รูปแบบ</th>
+                    <th class="width-10 text-center">วันที่</th>
+                    <th class="width-10 text-center">สาขา</th>
                     <th></th>
                 </tr>
             </thead>
@@ -128,6 +144,7 @@ $qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Sta
                 <td class="middle text-center"><?php echo number($order->getTotalQty($rs->id)); ?></td>
                 <td class="middle text-center"><?php echo roleName($rs->role); ?></td>
                 <td class="middle text-center"><?php echo thaiDate($rs->date_add); ?></td>
+                <td class="middle text-center"><?php echo getBranchName($rs->id_branch); ?></td>
                 <td class="middle text-right">
                   <?php if( $add OR $edit) : ?>
                     <button type="button" class="btn btn-sm btn-default" onclick="goPrepare(<?php echo $rs->id; ?>)">จัดสินค้า</button>
@@ -140,7 +157,7 @@ $qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Sta
 <?php else : ?>
 
             <tr>
-                <td colspan="7" class="text-center">
+                <td colspan="8" class="text-center">
                     <h4>ไม่พบรายการ</h4>
                 </td>
             </tr>

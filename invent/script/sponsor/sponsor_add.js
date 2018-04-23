@@ -78,6 +78,7 @@ function validUpdate(id){
 	var id_customer = $("#id_customer").val();
 	var employee = $("#employee").val();
 	var id_employee = $("#id_employee").val();
+	var id_branch = $('#branch').val();
 
 	//---- ตรวจสอบวันที่
 	if( ! isDate(date_add) ){
@@ -97,6 +98,11 @@ function validUpdate(id){
 		return false;
 	}
 
+	if(id_branch == ''){
+		swal('กรุณาเลือกสาขา');
+		return false;
+	}
+
 	updateOrder();
 }
 
@@ -109,6 +115,7 @@ function updateOrder(){
 	var id_budget = $('#id_budget').val();
 	var remark = $("#remark").val();
 	var id_employee = $("#id_employee").val();
+	var id_branch = $('#branch').val();
 
 	load_in();
 
@@ -122,14 +129,23 @@ function updateOrder(){
 					 "id_customer" : id_customer,
 					 "id_budget" : id_budget,
 					 "id_employee" : id_employee,
-					 "remark" : remark
+					 "remark" : remark,
+					 "id_branch" : id_branch
 		} ,
 		success: function(rs){
 			load_out();
 			var rs = $.trim(rs);
 			if( rs == 'success' ){
-				swal({title: 'Done !', type: 'success', timer: 1000 });
-				setTimeout(function(){ window.location.reload(); }, 1200);
+				swal({
+					title: 'Done !',
+					type: 'success',
+					timer: 1000
+				});
+
+				setTimeout(function(){
+					window.location.reload();
+				}, 1200);
+				
 			}else{
 				swal({ title: "Error!", text: rs, type: 'error'});
 			}
@@ -156,6 +172,7 @@ function addNew(){
 	var id_budget	  = $('#id_budget').val();
 	var employee 		= $('#employee').val();
 	var id_employee = $('#id_employee').val();
+	var branch      = $('#branch').val();
 
 	if( ! isDate(dateAdd) ){
 		swal("วันที่ไม่ถูกต้อง");
@@ -173,6 +190,11 @@ function addNew(){
 		return false;
 	}
 
+	if(branch == ''){
+		swal('กรุณาเลือกสาขา');
+		return false;
+	}
+
 	$.ajax({
 		url:"controller/orderController.php?addNew",
 		type:"POST",
@@ -183,6 +205,7 @@ function addNew(){
 				"id_customer" : id_customer,
 				"channels" : 0,
 				"paymentMethod" : 0,
+				"id_branch" : branch,
 				"remark" : remark,
 				"isOnline" : 0,
 				"id_budget" : id_budget,

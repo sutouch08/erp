@@ -115,7 +115,7 @@ function clearFilter(){
 function syncDocument(){
   load_in();
   $.ajax({
-    url:'controller/interfaceController.php?syncDocument&SM',
+    url:'controller/interfaceController.php?syncDocument&BM',
     success:function(rs){
       load_out();
       var rs = $.trim(rs);

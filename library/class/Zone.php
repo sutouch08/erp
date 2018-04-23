@@ -129,6 +129,22 @@
 		}
 
 
+		public function getZoneIdWithBranch($barcode, $id_branch)
+		{
+			$sc = FALSE;
+			$qr  = "SELECT id_zone FROM tbl_zone AS z ";
+			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
+			$qr .= "WHERE z.barcode_zone = '".$barcode."' ";
+			$qr .= "AND w.id_branch = '".$id_branch."' ";
+
+			$qs = dbQuery($qr);
+			if(dbNumRows($qs) == 1)
+			{
+				list($sc) = dbFetchArray($qs);
+			}
+
+			return $sc;
+		}
 
 
 		public function getId($barcode)
@@ -161,12 +177,19 @@
 
 		public function isAllowUnderZero($id_zone)
 		{
-			$sc = FALSE;
-			$qs = dbQuery("SELECT id_zone FROM tbl_zone AS z JOIN tbl_warehouse AS w ON z.id_warehouse = w.id WHERE z.id_zone = ".$id_zone." AND w.allow_under_zero = 1");
+			$sc  = FALSE;
+			$qr  = "SELECT id_zone FROM tbl_zone AS z ";
+			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
+			$qr .= "WHERE z.id_zone = ".$id_zone." ";
+			$qr .= "AND w.allow_under_zero = 1";
+
+			$qs = dbQuery($qr);
+
 			if( dbNumRows($qs) > 0 )
 			{
 				$sc = TRUE;
 			}
+			
 			return $sc;
 		}
 
@@ -330,7 +353,7 @@
 			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
 			$qr .= "WHERE w.role IN(".$role.") AND w.active = 1 AND zone_name LIKE '%".$txt."%' ";
 			$qr .= "LIMIT ".$limit;
-			
+
 			return dbQuery($qr);
 		}
 

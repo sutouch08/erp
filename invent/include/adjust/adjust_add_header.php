@@ -1,29 +1,36 @@
 
 <div class="row">
-  <div class="col-sm-1">
+  <div class="col-sm-1 padding-5 first">
     <label>รหัสเล่ม</label>
     <input type="text" class="form-control input-sm text-center" value="<?php echo $bookcode; ?>" disabled />
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-1 col-1-harf padding-5">
     <label>เลขที่เอกสาร</label>
     <input type="text" class="form-control input-sm text-center" value="<?php echo $cs->reference; ?>" disabled />
   </div>
 
-  <div class="col-sm-1 col-1-harf">
+  <div class="col-sm-1 padding-5">
     <label>วันที่</label>
     <input type="text" class="form-control input-sm text-center header-box" id="date_add" value="<?php echo thaiDate($cs->date_add); ?>" <?php echo $disabled; ?> />
   </div>
 
-  <div class="col-sm-3 col-3-harf">
+  <div class="col-sm-3 padding-5">
     <label>อ้างถึง</label>
     <input type="text" class="form-control input-sm text-center header-box" id="refer" value="<?php echo $cs->refer; ?>" <?php echo $disabled; ?> />
   </div>
 
-  <div class="col-sm-4">
+  <div class="col-sm-4 padding-5">
     <label>ผู้ขอปรับยอด</label>
     <input type="text" class="form-control input-sm text-center header-box" id="requester" maxlength="30" placeholder="ชื่อผู้ขอปรับยอด(ไม่เกิน 30 ตัวอักษร)" value="<?php echo $cs->requester; ?>" <?php echo $disabled; ?> />
   </div>
 
+  <div class="col-sm-1 col-1-harf padding-5 last">
+    <label>ส่งออกหรือไม่</label>
+    <select class="form-control input-sm" id="is_so" <?php echo $disabled; ?>>
+      <option value="1" <?php echo isSelected(1, $cs->is_so); ?>>ใช่</option>
+      <option value="0" <?php echo isSelected(0, $cs->is_so); ?>>ไม่</option>
+    </select>
+  </div>
   <div class="col-sm-10">
     <label>หมายเหตุ</label>
     <input type="text" class="form-control input-sm header-box" id="remark" maxlength="100" placeholder="หมายเหตุ (ไม่เกิน 100 ตัวอักษร)" value="<?php echo $cs->remark; ?>" <?php echo $disabled; ?> />

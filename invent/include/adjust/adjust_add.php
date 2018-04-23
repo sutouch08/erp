@@ -7,6 +7,7 @@ $bookcode = $id === FALSE ? getConfig('BOOKCODE_ADJUST') : $cs->bookcode;
 
 //--- disabled input if already have id
 $disabled = $id === FALSE ? '' : 'disabled';
+//include 'function/adjust_helper.php';
 ?>
 
 <div class="row top-row">
@@ -16,7 +17,7 @@ $disabled = $id === FALSE ? '' : 'disabled';
   <div class="col-sm-6">
     <p class="pull-right top-p">
     <?php echo goBackButton(); ?>
-    <?php if( $cs->isCancle == 0 && $cs->isSaved == 0 && ($add OR $edit) ) : ?>
+    <?php if( $id!== FALSE && $cs->isCancle == 0 && $cs->isSaved == 0 && ($add OR $edit) ) : ?>
       <button type="button" class="btn btn-sm btn-success" onclick="saveAdjust()"><i class="fa fa-save"></i> ปรับยอด</button>
     <?php endif; ?>
     </p>

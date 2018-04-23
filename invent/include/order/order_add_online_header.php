@@ -4,7 +4,7 @@
     	<label>เลขที่เอกสาร</label>
         <label class="form-control input-sm text-center" <?php echo $disabled; ?>><?php echo $order->reference; ?></label>
     </div>
-    <div class="col-sm-1 col-1-harf padding-5">
+    <div class="col-sm-1 padding-5">
     	<label>วันที่</label>
         <input type="text" class="form-control input-sm text-center input-header" id="dateAdd" value="<?php echo thaiDate($order->date_add); ?>" <?php echo $disabled; ?> />
     </div>
@@ -13,7 +13,7 @@
         <input type="text" class="form-control input-sm text-center input-header" id="customer" value="<?php echo customerName($order->id_customer); ?>"  <?php echo $disabled; ?>/>
     </div>
 
-    <div class="col-sm-3 padding-5">
+    <div class="col-sm-2 padding-5">
     	<label>ลูกค้า [ ออนไลน์ ]</label>
         <input type="text" class="form-control input-sm text-center input-header" id="onlineCustomer" value="<?php echo $order->online_code; ?>"  <?php echo $disabled; ?>/>
     </div>
@@ -31,6 +31,16 @@
         <?php echo selectOnlinePaymentMethod($order->id_payment); ?>
         </select>
     </div>
+
+		<div class="col-sm-1 col-1-harf padding-5 last">
+			<label>สาขา</label>
+			<select class="form-control input-sm input-header" id="branch" <?php echo $disabled; ?>>
+				<option value="">โปรดเลือก</option>
+				<?php echo selectBranch($order->id_branch); ?>
+			</select>
+		</div>
+		<div class="divider-hidden" style="margin:0px;"></div>
+
 		<div class="col-sm-1 col-1-harf padding-5 first">
 			<label>อ้างอิงออเดอร์</label>
 			<input type="text" class="form-control input-sm input-header" id="ref-code" value="<?php echo $order->ref_code; ?>" <?php echo $disabled; ?> />
@@ -52,3 +62,4 @@
 <input type="hidden" id="id_customer" value="<?php echo $order->id_customer; ?>" />
 <input type="hidden" id="role" value="1" />
 <input type="hidden" id="isOnline" value="1" />
+<input type="hidden" id="id_branch" value="<?php echo $order->id_branch; ?>" />

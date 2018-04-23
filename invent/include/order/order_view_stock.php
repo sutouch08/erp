@@ -1,7 +1,16 @@
 <div class="row top-row">
-	<div class="col-sm-7 top-col">
+	<div class="col-sm-4 top-col">
     	<h4 class="title"><i class="fa fa-shopping-bag"></i> เช็คสต็อก</h4>
     </div>
+		<div class="col-sm-2 padding-5">
+			<div class="input-group">
+				<span class="input-group-addon">สาขา</span>
+				<select class="form-control input-sm" id="id_branch">
+					<?php echo selectBranch(0); ?>
+				</select>
+
+			</div>
+		</div>
 		<div class="col-sm-3 padding-5">
 			<input type="text" class="form-control input-sm text-center" id="pd-search-box" placeholder="ค้นหารหัสรุ่นสินค้า" />
 		</div>

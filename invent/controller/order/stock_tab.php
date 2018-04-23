@@ -1,6 +1,7 @@
 <?php
 	$ds = "";
 	$id_tab = $_POST['id'];
+	$id_branch = isset($_POST['id_branch']) ? $_POST['id_branch'] : 0;
 	$cs = new product_tab();
 	$pd = new product();
 	$img = new image();
@@ -23,7 +24,7 @@
 				$ds	.= 			'<div class="description" style="font-size:10px; min-height:50px;">';
 				$ds	.= 				'<a href="javascript:void(0)" onClick="getStockGrid(\''.$rs->id_style.'\')">';
 				$ds	.= 			$style->code.'<br/>'. number_format($pd->getStylePrice($rs->id_style),2);
-				$ds 	.=  		$pd->isCountStock($rs->id_style) === TRUE ? ' | <span style="color:red;">'.$pd->getStyleSellStock($rs->id_style).'</span>' : '';
+				$ds 	.=  		$pd->isCountStock($rs->id_style) === TRUE ? ' | <span style="color:red;">'.$pd->getStyleSellStock($rs->id_style, $id_branch).'</span>' : '';
 				$ds	.= 				'</a>';
 				$ds 	.= 			'</div>';
 				$ds	.= 		'</div>';

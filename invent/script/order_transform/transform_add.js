@@ -27,7 +27,7 @@ function addToOrder(){
 //---- เปลี่ยนสถานะออเดอร์  เป็นบันทึกแล้ว
 function saveOrder(id){
 	if( validateTransformProducts() ){
-		
+
 		$.ajax({
 			url:"controller/orderController.php?saveOrder",
 			type:"POST",
@@ -79,6 +79,7 @@ function validUpdate(id){
 	var employee 		= $('#employee').val();
 	var id_employee = $('#id_employee').val();
 	var transRole		= $('#transform-role').val();
+	var id_branch   = $('#brahch').val();
 
 
 	if( ! isDate(dateAdd) ){
@@ -106,6 +107,11 @@ function validUpdate(id){
 		return false;
 	}
 
+	if(id_branch == ''){
+		swal('กรุณาเลือกสาขา');
+		return false;
+	}
+
 	updateOrder();
 
 }
@@ -120,6 +126,8 @@ function updateOrder(){
 	var id_employee = $('#id_employee').val();
 	var remark			= $("#remark").val();
 	var transRole		= $('#transform-role').val();
+	var id_branch   = $('#branch').val();
+
 	data = {
 				 "id_order" : id_order,
 				 "date_add"	: dateAdd,
@@ -127,7 +135,8 @@ function updateOrder(){
 				 "id_zone" : id_zone,
 				 "id_employee" : id_employee,
 				 "transRole" : transRole,
-				 "remark" : remark
+				 "remark" : remark,
+				 "id_branch" : id_branch
 		};
 
 	load_in();
@@ -180,6 +189,7 @@ function addNew(){
 	var remark			= $("#remark").val();
 	var role 				= $('#role').val();
 	var transRole		= $('#transform-role').val();
+	var id_branch   = $('#branch').val();
 
 
 	if( ! isDate(dateAdd) ){
@@ -207,6 +217,10 @@ function addNew(){
 		return false;
 	}
 
+	if( id_branch == ''){
+		swal('กรุณาเลือกสาขา');
+		return false;
+	}
 
 	$.ajax({
 		url:"controller/orderController.php?addNew",
@@ -220,6 +234,7 @@ function addNew(){
 				"id_employee" : id_employee,
 				"transform_role" : transRole,
 				"remark" : remark,
+				"id_branch" : id_branch,
 				"is_so" : 0
 		},
 		success: function(rs){

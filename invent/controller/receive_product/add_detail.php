@@ -40,14 +40,10 @@ else
     'id_supplier' => $po->id_supplier,
     'po' => $poCode,
     'invoice' => $invoice,
+    'approver' => $id_emp,
+    'approvKey' => $approvKey,
     'isSaved' => 1
   );
-
-  if($approvKey != '')
-  {
-    $arr['approver'] = $id_emp;
-    $arr['approvKey'] = $approvKey;
-  }
 
 
   if($cs->update($cs->id, $arr) !== TRUE)
@@ -115,12 +111,7 @@ else
             break;
           }
 
-          if( $cost->addCostList($id_pd, $pdCost, $qty, $date_add) !== TRUE)
-          {
-            $sc = FALSE;
-            $message = 'บันทึกต้นทุนสินค้าไม่สำเร็จ';
-            break;
-          }
+          $cost->addCostList($id_pd, $pdCost, $qty, $date_add);
 
           //---	บันทึก movement เข้าโซนที่รับสินคาเข้า
           if( $mv->move_in( $reference, $id_wh, $id_zone, $id_pd, $qty, $date_add ) !== TRUE)
@@ -158,8 +149,6 @@ else
 
   } //--- end if update
 
-
-  //--- ถ้ารับเข้าครบแล้วเปลี่ยน
 
   if( $sc === TRUE )
   {

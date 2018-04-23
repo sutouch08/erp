@@ -25,6 +25,10 @@ $(".search-box").keyup(function(e){
 
 
 
+$('.search-select').change(function(event) {
+  getSearch();
+});
+
 
 
 

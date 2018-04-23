@@ -22,23 +22,31 @@
     <input type="text" class="form-control input-sm text-center input-header" id="zone" value="<?php echo zoneName($lend->id_zone); ?>" placeholder="กด * เพื่อแสดงโซนทั้งหมด"  <?php echo $disabled; ?>/>
   </div>
 
-	<div class="col-sm-3 padding-5">
+	<div class="col-sm-3 padding-5 last">
 		<label>ผู้เบิก [ คนสั่ง ]</label>
 		<input type="text" class="form-control input-sm text-center input-header" id="employee" value="<?php echo employee_name($order->id_employee); ?>" <?php echo $disabled; ?>/>
 	</div>
 
-	<div class="col-sm-10">
+	<div class="col-sm-1 col-1-harf padding-5 first">
+		<label>สาขา</label>
+		<select class="form-control input-sm input-header" id="branch" <?php echo $disabled; ?>>
+			<option value="">โปรดเลือก</option>
+			<?php echo selectBranch($order->id_branch); ?>
+		</select>
+	</div>
+
+	<div class="col-sm-9 col-9-harf padding-5">
   	<label>หมายเหตุ</label>
     <input type="text" class="form-control input-sm input-header" id="remark" value="<?php echo $order->remark; ?>" <?php echo $disabled; ?> />
   </div>
 
-  <div class="col-sm-2">
+  <div class="col-sm-1 padding-5 last">
     <label class="display-block not-show">btn</label>
     <?php if( isset( $_GET['id_order'] ) && $order->state < 8): ?>
   	<button type="button" class="btn btn-sm btn-warning btn-block" id="btn-edit-order" onclick="getEdit()">แก้ไข</button>
     <button type="button" class="btn btn-sm btn-success btn-block hide" id="btn-update-order" onclick="validUpdate()">บันทึก</button>
     <?php else : ?>
-  	<button type="button" class="btn btn-sm btn-success btn-block" onclick="addNew()">สร้างออเดอร์</button>
+  	<button type="button" class="btn btn-sm btn-success btn-block" onclick="addNew()">เพิ่มใหม่</button>
     <?php endif; ?>
   </div>
 
@@ -49,3 +57,4 @@
 <input type="hidden" id="id_zone" value="<?php echo $lend->id_zone; ?>" />
 <input type="hidden" id="id_employee" value="<?php echo $order->id_employee; ?>" />
 <input type="hidden" id="role" value="6" /><!--- 6 = ยืมสินค้า -->
+<input type="hidden" id="id_branch" value="<?php echo $order->id_branch; ?>" />

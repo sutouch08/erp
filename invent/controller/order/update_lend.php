@@ -1,6 +1,7 @@
 <?php
 	$cs = new lend();
 
+	$id_branch = isset($_POST['id_branch']) ? $_POST['id_branch'] : 0;
 	//---	เตรียมข้อมูลสำหรับ update order
 	$arr = array(
 						"date_add"	=> dbDate($_POST['date_add'],TRUE),
@@ -8,7 +9,8 @@
 						"id_employee"	=> $_POST['id_employee'],
 						"status"		=> 0, //--- เปลี่ยนกลับ ให้กดบันทึกใหม่
 						"emp_upd"		=> getCookie('user_id'),
-						"remark"		=> $_POST['remark']
+						"remark"		=> addslashes($_POST['remark']),
+						"id_branch" => $id_branch
 					);
 
 	//---	เตรียมข้อมูลสำหรับ update order_lend

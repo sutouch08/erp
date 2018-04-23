@@ -1,5 +1,6 @@
 <?php
 	$cs = new transform();
+	$id_branch = isset($_POST['id_branch']) ? $_POST['id_branch'] : 0;
 
 	//---	เตรียมข้อมูลสำหรับ update order
 	$arr = array(
@@ -8,7 +9,8 @@
 						"id_employee"	=> $_POST['id_employee'],
 						"status"		=> 0, //--- เปลี่ยนกลับ ให้กดบันทึกใหม่
 						"emp_upd"		=> getCookie('user_id'),
-						"remark"		=> $_POST['remark']
+						"remark"		=> $_POST['remark'],
+						"id_branch" => $id_branch
 					);
 
 	//---	เตรียมข้อมูลสำหรับ update order_transform

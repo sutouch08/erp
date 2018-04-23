@@ -12,7 +12,7 @@ $cs = new adjust($id);
     <?php echo goBackButton(); ?>
     <?php if( isset($_GET['id_adjust']) ) : ?>
 
-      <?php if( $cs->isSaved == 1 && $cs->isCancle == 0) : ?>
+      <?php if( $cs->isSaved == 1 && $cs->isCancle == 0 && $cs->is_so == 1) : ?>
         <button type="button" class="btn btn-sm btn-info" onclick="doExport()"><i class="fa fa-send"></i> ส่งข้อมูไป formula </button>
       <?php endif; ?>
       <!-- ยังไม่ได้ทำ

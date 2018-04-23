@@ -26,13 +26,22 @@ function collapseTab(el)
 //--------------------------------  โหลดรายการสินค้าสำหรับดูยอดคงเหลือ  -----------------------------//
 function getViewTabs(id) {
 	var output = $("#cat-" + id);
+	var id_branch = $('#id_branch').val();
+	if(id_branch == '' || id_branch == undefined){
+		id_branch = 0;
+	}
 	$(".tab-pane").removeClass("active");
 	$(".menu").removeClass("active");
 	if (output.html() == "") {
 		load_in();
 		$.ajax({
 			url: "controller/orderController.php?getProductsInViewTab",
-			type: "POST",	 cache: "false", data: { "id": id },
+			type: "POST",
+			cache: "false",
+			data: {
+				"id_branch" : id_branch,
+				"id": id
+			},
 			success: function(rs) {
 				load_out();
 				var rs = $.trim(rs);
@@ -50,13 +59,23 @@ function getViewTabs(id) {
 //--------------------------------  โหลดรายการสินค้าสำหรับจิ้มสั่งสินค้า  -----------------------------//
 function getOrderTabs(id) {
 	var output = $("#cat-" + id);
+	var id_branch = $('#id_branch').val();
+	if(id_branch == '' || id_branch == undefined){
+		id_branch = 0;
+	}
+
 	$(".tab-pane").removeClass("active");
 	$(".menu").removeClass("active");
 	if (output.html() == "") {
 		load_in();
 		$.ajax({
 			url: "controller/orderController.php?getProductsInOrderTab",
-			type: "POST", cache: "false", data: { "id": id },
+			type: "POST",
+			cache: "false",
+			data: {
+				"id": id,
+				"id_branch" : id_branch
+			},
 			success: function(rs) {
 				load_out();
 				var rs = $.trim(rs);

@@ -8,6 +8,7 @@ foreach( $ds as $items )
   {
     if( $qty > 0 )
     {
+      $qty = ceil($qty);
       //--- ถ้ามีสต็อกมากว่าที่สั่ง
       if( $stock->getSellStock($id) >= $qty )
       {

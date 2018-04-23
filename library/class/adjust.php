@@ -40,6 +40,9 @@ class adjust
   //--- บันทึกเอกสารแล้วหรือไม่
   public $isSaved = 0;
 
+  //--- ส่งข้อมูลออกไป Formula หรือไม่
+  public $is_so = 1;
+
 
   public function __construct($id = '')
   {

@@ -28,12 +28,18 @@
     <label class="form-control input-sm" disabled><?php echo $zone->name; ?></label>
   </div>
 
-<?php if( $order->remark != "" ) : ?>
-    <div class="col-sm-12 margin-top-10">
-    	<label>หมายเหตุ : </label>
-        <label  style="font-weight:normal;"><?php echo $order->remark; ?></label>
-    </div>
-<?php endif; ?>
-    <input type="hidden" name="id_order" id="id_order" value="<?php echo $order->id; ?>" />
+	<div class="divider-hidden margin-top-5 margin-bottom-5"></div>
+
+	<div class="col-sm-2 padding-5 first">
+		<label>สาขา</label>
+		<input type="text" class="form-control input-sm text-center" value="<?php echo getBranchName($order->id_branch); ?>" disabled />
+	</div>
+
+  <div class="col-sm-10 padding-5 last">
+  	<label>หมายเหตุ : </label>
+    <input type="text" class="form-control input-sm" value="<?php echo $order->remark; ?>" disabled />
+  </div>
+
+  <input type="hidden" name="id_order" id="id_order" value="<?php echo $order->id; ?>" />
 </div>
 <hr/>

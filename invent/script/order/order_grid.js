@@ -1,7 +1,7 @@
 // JavaScript Document
 function getProductGrid(){
 	var pdCode 	= $("#pd-box").val();
-	//var id_order = $('#id_order').val();
+	var id_branch = $('#id_branch').val();
 	if( pdCode.length > 0  ){
 		load_in();
 		$.ajax({
@@ -9,7 +9,7 @@ function getProductGrid(){
 			type:"GET",
 			cache:"false",
 			data:{
-				//"id_order" : id_order,
+				"id_branch" : id_branch,
 				"pdCode" : pdCode
 			},
 			success: function(rs){
@@ -36,15 +36,15 @@ function getProductGrid(){
 
 
 function getOrderGrid(id_style){
-	//var id_order = $('#id_order').val();
+	var id_branch = $('#id_branch').val();
 	load_in();
 	$.ajax({
 		url:"controller/orderController.php?getOrderGrid",
 		type:"GET",
 		cache:"false",
 		data:{
-			//"id_order" : id_order,
-			"id_style" : id_style			
+			"id_branch" : id_branch,
+			"id_style" : id_style
 		},
 		success: function(rs){
 			load_out();
@@ -73,10 +73,16 @@ function getStockGrid(id_style){
 	if(id_style == undefined){
 		var id_style = $('#id_style').val();
 	}
+	var id_branch = $('#id_branch').val();
 	load_in();
 	$.ajax({
 		url:"controller/orderController.php?getStockGrid",
-		type:"GET", cache:"false", data:{"id_style" : id_style},
+		type:"GET",
+		cache:"false",
+		data:{
+			"id_branch" : id_branch,
+			"id_style" : id_style
+		},
 		success: function(rs){
 			load_out();
 			var rs = rs.split(' | ');

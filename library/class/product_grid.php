@@ -61,18 +61,18 @@ class product_grid extends product
 
 
 
-	public function getOrderGrid($id_style, $view = FALSE, $id_order = '')
+	public function getOrderGrid($id_style, $view = FALSE, $id_branch = 0)
 	{
 		$sc = '';
 		$isVisual = $this->isCountStock($id_style) === TRUE ? FALSE : TRUE;
 		$attrs = $this->getAttribute($id_style);
 		if( count($attrs) == 1  )
 		{
-			$sc .= $this->orderGridOneAttribute($id_style, $attrs[0], $isVisual, $view, $id_order);
+			$sc .= $this->orderGridOneAttribute($id_style, $attrs[0], $isVisual, $view, $id_branch);
 		}
 		else if( count( $attrs ) == 2 )
 		{
-			$sc .= $this->orderGridTwoAttribute($id_style, $isVisual, $view, $id_order);
+			$sc .= $this->orderGridTwoAttribute($id_style, $isVisual, $view, $id_branch);
 		}
 		return $sc;
 	}
@@ -82,7 +82,7 @@ class product_grid extends product
 
 
 
-	private function orderGridOneAttribute($id_style, $attr, $isVisual, $view, $id_order = '')
+	private function orderGridOneAttribute($id_style, $attr, $isVisual, $view, $id_branch = 0)
 	{
 		$sc 		= '';
 		$data 	= $attr == 'color' ? $this->getAllColors($id_style) : $this->getAllSizes($id_style);
@@ -97,7 +97,7 @@ class product_grid extends product
 
 			$active	= $rs->active == 0 ? 'Disactive' : ( $rs->can_sell == 0 ? 'Not for sell' : ( $rs->is_deleted == 1 ? 'Deleted' : TRUE ) );
 			$stock	= $isVisual === FALSE ? ( $active == TRUE ? $this->showStock( $this->getStock($id) )  : 0 ) : 0; //---- สต็อกทั้งหมดทุกคลัง
-			$qty 		= $isVisual === FALSE ? ( $active == TRUE ? $this->showStock( $this->getSellStock($id, $id_order) ) : 0 ) : FALSE; //--- สต็อกที่สั่งซื้อได้
+			$qty 		= $isVisual === FALSE ? ( $active == TRUE ? $this->showStock( $this->getSellStock($id, $id_branch) ) : 0 ) : FALSE; //--- สต็อกที่สั่งซื้อได้
 			$disabled  = $isVisual === TRUE  && $active == TRUE ? '' : ( ($active !== TRUE OR $qty < 1 ) ? 'disabled' : '');
 			if( $qty < 1 && $active === TRUE )
 			{
@@ -143,7 +143,7 @@ class product_grid extends product
 
 
 
-	private function orderGridTwoAttribute($id_style, $isVisual, $view, $id_order = '')
+	private function orderGridTwoAttribute($id_style, $isVisual, $view, $id_branch = 0)
 	{
 
 		$colors	= $this->getAllColors($id_style);
@@ -168,7 +168,7 @@ class product_grid extends product
 					$id 		= $rs->id;
 					$active	= $rs->active == 0 ? 'Disactive' : ( $rs->can_sell == 0 ? 'Not for sell' : ( $rs->is_deleted == 1 ? 'Deleted' : TRUE ) );
 					$stock	= $isVisual === FALSE ? ( $active == TRUE ? $this->showStock( $this->getStock($id) )  : 0 ) : 0; //---- สต็อกทั้งหมดทุกคลัง
-					$qty 		= $isVisual === FALSE ? ( $active == TRUE ? $this->showStock( $this->getSellStock($id, $id_order) ) : 0 ) : FALSE; //--- สต็อกที่สั่งซื้อได้
+					$qty 		= $isVisual === FALSE ? ( $active == TRUE ? $this->showStock( $this->getSellStock($id, $id_branch) ) : 0 ) : FALSE; //--- สต็อกที่สั่งซื้อได้
 					$disabled  = $isVisual === TRUE  && $active == TRUE ? '' : ( ($active !== TRUE OR $qty < 1 ) ? 'disabled' : '');
 					if( $qty < 1 && $active === TRUE )
 					{

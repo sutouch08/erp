@@ -8,12 +8,16 @@
 
 	$refCode = isset($_POST['refCode']) ? $_POST['refCode'] : '';
 
+	$id_branch = isset($_POST['id_branch']) ? $_POST['id_branch'] : 0;
+
 	if( $recal == 0 )
 	{
 		$arr = array(
 			"ref_code" => $refCode,
-			"remark" => $_POST['remark']
+			"id_branch" => $id_branch,
+			"remark" => addslashes($_POST['remark'])
 		);
+
 		$rs = $order->update($order->id, $arr);
 	}
 	else
@@ -26,9 +30,10 @@
 						"id_payment"	=> $_POST['id_payment'],
 						"id_channels"	=> $_POST['id_channels'],
 						"ref_code"  => $refCode,
+						"id_branch" => $id_branch,
 						"status"		=> 0, //--- เปลี่ยนกลับ ให้กดบันทึกใหม่
 						"emp_upd"		=> getCookie('user_id'),
-						"remark"		=> $_POST['remark']
+						"remark"		=> addslashes($_POST['remark'])
 						);
 		//--- update order header first
 		$rs = $order->update($order->id, $arr);

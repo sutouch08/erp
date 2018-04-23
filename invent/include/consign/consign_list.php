@@ -217,21 +217,23 @@ $qs = dbQuery("SELECT * FROM tbl_consign ".$where." LIMIT ".$paginator->Page_Sta
        <thead>
          <tr class="font-size-12">
            <th class="width-5 text-center">ลำดับ</th>
-           <th class="width-10 text-center">วันที่</th>
-           <th class="width-10 text-center">เลขที่เอกสาร</th>
+           <th class="width-8 text-center">วันที่</th>
+           <th class="width-8 text-center">เลขที่เอกสาร</th>
            <th class="width-25">ลูกค้า</th>
-           <th class="width-30">โซน</th>
+           <th class="">โซน</th>
+           <th class="width-8">มูลค่า</th>
            <th class="width-5 text-center">INV</th>
            <th class="width-5 text-center">สถานะ</th>
-           <th></th>
+           <th class="width-8"></th>
          </tr>
        </thead>
        <tbody>
 <?php if( dbNumRows($qs) > 0 ) : ?>
 <?php   $zone = new zone(); ?>
+<?php   $cs = new consign(); ?>
 <?php   $no = row_no(); ?>
 <?php   while($rs = dbFetchObject($qs)) : ?>
-        <tr class="font-size-12" id="row-<?php echo $rs->id; ?>">
+        <tr class="font-size-10" id="row-<?php echo $rs->id; ?>">
           <td class="middle text-center">
             <?php echo $no; ?>
           </td>
@@ -246,6 +248,9 @@ $qs = dbQuery("SELECT * FROM tbl_consign ".$where." LIMIT ".$paginator->Page_Sta
           </td>
           <td class="middle">
             <?php echo $zone->getName($rs->id_zone); ?>
+          </td>
+          <td class="middle text-right">
+            <?php echo number($cs->getSumAmount($rs->id), 2); ?>
           </td>
           <td class="middle text-center">
             <?php echo ($rs->is_so == 1 ? 'Yes' : 'No'); ?>

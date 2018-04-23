@@ -30,7 +30,7 @@
 <?php   $product = new product($rs->id_product); ?>
 <?php   if( $product->count_stock == 1) : ?>
 <?php     $prepared = $pp->getPrepared($order->id, $rs->id_product); ?>
-<?php     $stockZone = stockInZone($rs->id_product); ?>
+<?php     $stockZone = stockInZone($rs->id_product, $order->id_branch); ?>
     <tr class="font-size-12 incomplete" id="incomplete-<?php echo $rs->id_product; ?>">
       <td class="middle text-center"><?php echo $bc->getBarcode($rs->id_product); ?></td>
       <td class="middle"><?php echo $product->code .' : '.$product->name; ?></td>

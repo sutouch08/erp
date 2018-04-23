@@ -14,6 +14,7 @@
 	include 'function/employee_helper.php';
 	include 'function/productTab_helper.php';
 	include 'function/zone_helper.php';
+	include 'function/branch_helper.php';
 
 ?>
 <div class="container">

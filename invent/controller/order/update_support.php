@@ -1,6 +1,7 @@
 <?php
 
 	$bd 	 = new support_budget();
+	$id_branch = isset($_POST['id_branch']) ? $_POST['id_branch'] : 0;
 
 	//---	เตรียมข้อมูลสำหรับ update
 	$arr = array(
@@ -9,7 +10,8 @@
 						"status"		=> 0, //--- เปลี่ยนกลับ ให้กดบันทึกใหม่
 						"emp_upd"		=> getCookie('user_id'),
 						"remark"		=> $_POST['remark'],
-						"id_budget" => $_POST['id_budget']
+						"id_budget" => $_POST['id_budget'],
+						"id_branch" => $id_branch
 						);
 
 		//----- ถ้ายังไม่มีรายการ ไม่ต้องคำนวณใหม่

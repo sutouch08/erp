@@ -24,7 +24,6 @@ function doPrepare(){
     return false;
   }
 
-
   $.ajax({
     url: "controller/prepareController.php?doPrepare",
     type:"POST", cache:"false",
@@ -124,10 +123,15 @@ function forceClose(){
 $("#barcode-zone").keyup(function(e){
   if(e.keyCode == 13){
     if( $(this).val() != ""){
-
+      var id_branch = $('#id_branch').val();
       $.ajax({
         url:"controller/prepareController.php?getZoneId",
-        type:"GET", cache:"false", data:{"barcode" : $(this).val()},
+        type:"GET",
+        cache:"false",
+        data:{
+          "barcode" : $(this).val(),
+          "id_branch" : id_branch
+        },
         success: function(rs){
             var rs = $.trim(rs);
             if( ! isNaN(parseInt(rs))){

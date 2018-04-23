@@ -538,10 +538,10 @@ class product
 
 
 	//--- ยอดรวมทุกคลังทุกโซนทั้งขายได้และไม่ได้
-	public function getStock($id)
+	public function getStock($id, $id_branch = 0)
 	{
 		$stock = new stock();
-		return $stock->getStock($id);
+		return $stock->getStock($id, $id_branch);
 	}
 
 
@@ -550,18 +550,19 @@ class product
 
 
 	//---- ยอดรวมสินค้าที่สั่งได้
-	public function getSellStock($id, $id_order = '')
+	public function getSellStock($id, $id_branch = 0)
 	{
 		$order = new order();
 		$stock = new stock();
 		$cancle = new cancle_zone();
 		$buffer = new buffer();
-		$sellStock = $stock->getSellStock($id);
-		$reservStock = $order->getReservQty($id);
-		$cancleQty = 0; //$cancle->getCancleQty($id);
-		$bufferStock = $id_order == '' ? 0 : $buffer->getSumQty($id_order, $id);
-		$availableStock = ($sellStock + $bufferStock) - $reservStock + $cancleQty;
-		return $availableStock < 0 ? 0 : $availableStock;
+		$sellStock = $stock->getSellStock($id, $id_branch);
+		//$reservStock = $order->getReservQty($id);
+		//$cancleQty = 0; //$cancle->getCancleQty($id);
+		//$bufferStock = $id_order == '' ? 0 : $buffer->getSumQty($id_order, $id);
+		//$availableStock = ($sellStock + $bufferStock) - $reservStock + $cancleQty;
+		//return $availableStock < 0 ? 0 : $availableStock;
+		return $sellStock < 0 ? 0 : $sellStock;
 	}
 
 
@@ -569,19 +570,19 @@ class product
 
 
 	//---- ยอดรวมของรุ่นสินค้าที่สั่งได้
-	public function getStyleSellStock($id_style)
+	public function getStyleSellStock($id_style, $id_branch = 0)
 	{
-		$order = new order();
+		//$order = new order();
 		$stock = new stock();
-		$cancle = new cancle_zone();
-		$sellStock = $stock->getStyleSellStock($id_style);
-		$reservStock = $order->getStyleReservQty($id_style);
-		$cancleQty = 0; //$cancle->getStyleCancleQty($id_style);
+		//$cancle = new cancle_zone();
+		$sellStock = $stock->getStyleSellStock($id_style, $id_branch);
+		//$reservStock = $order->getStyleReservQty($id_style);
+		//$cancleQty = 0; //$cancle->getStyleCancleQty($id_style);
 
-		$availableStock = $sellStock - $reservStock + $cancleQty;
+		//$availableStock = $sellStock - $reservStock + $cancleQty;
 
-		return $availableStock < 0 ? 0 : $availableStock;
-
+		//return $availableStock < 0 ? 0 : $availableStock;
+		return $sellStock < 0 ? 0 : $sellStock;
 	}
 
 

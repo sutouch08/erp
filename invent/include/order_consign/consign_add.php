@@ -36,7 +36,7 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
     <div class="col-sm-2">
     	<button type="button" class="btn btn-sm btn-primary btn-block" onclick="getProductGrid()"><i class="fa fa-tags"></i> แสดงสินค้า</button>
     </div>
-    
+
 </div>
 <hr class="margin-top-15 margin-bottom-0" />
 <!--- Category Menu ---------------------------------->

@@ -8,6 +8,7 @@ foreach( $ds as $items )
       $pd = new product($id);
       $bf = new buffer();
       $cn = new cancle_zone();
+      $qty = ceil($qty);
 
       //--- ยอดรวมสินค้าในโซน + สินค้าที่อยู่ใน buffer ที่ถูกจัดออกไปด้วยออเดอร์นี้
       $sumStock = $stock->getSellStock($id);// + $bf->getSumQty($order->id, $id);

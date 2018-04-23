@@ -195,6 +195,16 @@ class consign
   }
 
 
+
+  public function getSumAmount($id)
+  {
+    $qs = dbQuery("SELECT SUM(total_amount) AS amount FROM tbl_consign_detail WHERE id_consign = ".$id);
+    list($amount) = dbFetchArray($qs);
+    return is_null($amount) ? 0.00 : $amount;
+  }
+
+  
+
   public function getSavedDetails($id_consign)
   {
     return dbQuery("SELECT * FROM tbl_consign_detail WHERE id_consign = '".$id_consign."' AND status = 1");

@@ -6,8 +6,8 @@ $channels = new channels($order->id_channels);
 $expired = $order->isExpire == 1 ? 'disabled' : '';
 ?>
 <div class="row top-row">
-	<div class="col-sm-4 top-col"><h4 class="title"><i class="fa fa-shopping-bag"></i> <?php echo $pageTitle; ?></h4></div>
-    <div class="col-sm-8">
+	<div class="col-sm-3 top-col"><h4 class="title"><i class="fa fa-shopping-bag"></i> <?php echo $pageTitle; ?></h4></div>
+    <div class="col-sm-9">
     	<p class="pull-right top-p">
 			<?php if($order->isOnline == 1) : ?>
 					<button type="button" class="btn btn-sm btn-warning" onclick="goBackOnline()"><i class="fa fa-arrow-left"></i>  กลับ</button>

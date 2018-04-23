@@ -26,51 +26,11 @@ class stock
 		{
 			$this->error = dbError();
 		}
-		
-		$this->removeZero();
-
-		return $sc;
-	}
-
-/*
-	public function updateStockZone($id_zone, $id_pd, $qty)
-	{
-		$sc = FALSE;
-		$zone = new zone();
-		$cQty = $this->isExists($id_zone, $id_pd); ///-- return FALSE if not exists , return current qty if exists
-		$auz  = $zone->isAllowUnderZero($id_zone); //--- อนุญาติให้ติดลบได้หรือไม่
-		if( $cQty === FALSE )
-		{
-			if( $qty > 0 OR $auz === TRUE )
-			{
-				$sc =  $this->add( $id_zone, $id_pd, $qty );
-			}
-			else
-			{
-				$this->error = 'This Warehouse cannot store under zero stock';
-			}
-
-		}
-		else
-		{
-			//--- ถ้าจำนวนที่ update รวมกับจำนวนที่มีแล้ว มากกว่า 0
-			//--- หรือถ้าน้อยกว่าแต่โซนนี้ยอมให้ติดลบได้
-			if( ( $cQty + $qty ) >= 0 OR $auz === TRUE )
-			{
-				$sc = $this->update($id_zone, $id_pd, $qty);
-			}
-			else
-			{
-				$this->error = 'This Warehouse cannot store under zero stock';
-			}
-		}
 
 		$this->removeZero();
 
 		return $sc;
 	}
-*/
-
 
 
 
@@ -153,14 +113,17 @@ class stock
 
 
 	//----- จำนวนรวมทุกโซนทุกคลัง ที่คลัง Active
-	public function getStock($id_pd)
+	public function getStock($id_pd, $id_branch = 0)
 	{
 		$sc = 0;
 		$qr = "SELECT SUM(s.qty) FROM tbl_stock AS s ";
 		$qr .= "JOIN tbl_product AS p ON s.id_product = p.id ";
 		$qr .= "JOIN tbl_zone AS z ON s.id_zone = z.id_zone ";
 		$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
-		$qr .= "WHERE s.id_product = '".$id_pd."' AND p.is_deleted = 0 AND w.active = 1";
+		$qr .= "WHERE s.id_product = '".$id_pd."' ";
+		$qr .= $id_branch == 0 ? "" : "AND w.id_branch = '".$id_branch."' ";
+		$qr .= "AND p.is_deleted = 0 ";
+		$qr .= "AND w.active = 1";
 		$qs = dbQuery($qr);
 		list( $qty ) = dbFetchArray($qs);
 		if( ! is_null( $qty ) )
@@ -230,14 +193,20 @@ class stock
 
 
 
-	//---- จำนวนรวมสินค้าที่คลังระบุว่า ขายได้
-	public function getSellStock($id_pd)
+	//---- จำนวนรวมสินค้าที่คลังระบุว่า ขายได้ และระบุสาขา
+	public function getSellStock($id_pd, $id_branch = 0)
 	{
 		$qr = "SELECT SUM(qty) AS qty FROM tbl_stock AS s ";
 		$qr .= "JOIN tbl_product AS p ON s.id_product = p.id ";
 		$qr .= "JOIN tbl_zone AS z ON s.id_zone = z.id_zone ";
 		$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
-		$qr .= "WHERE s.id_product = '".$id_pd."' AND p.can_sell = 1 AND p.active = 1 AND p.is_deleted = 0 AND w.sell = 1 AND w.active = 1";
+		$qr .= "WHERE s.id_product = '".$id_pd."' ";
+		$qr .= $id_branch == 0 ? "" : "AND w.id_branch = '".$id_branch."' ";
+		$qr .= "AND p.can_sell = 1 ";
+		$qr .= "AND p.active = 1 ";
+		$qr .= "AND p.is_deleted = 0 ";
+		$qr .= "AND w.sell = 1 ";
+		$qr .= "AND w.active = 1";
 		$qs = dbQuery($qr);
 		list( $qty ) = dbFetchArray($qs);
 		return is_null( $qty ) ? 0 : $qty;
@@ -247,13 +216,19 @@ class stock
 
 
 
-	public function getStyleSellStock($id_style)
+	public function getStyleSellStock($id_style, $id_branch = 0)
 	{
-		$qr = "SELECT SUM(qty) AS qty FROM tbl_stock AS s ";
+		$qr  = "SELECT SUM(qty) AS qty FROM tbl_stock AS s ";
 		$qr .= "JOIN tbl_product AS p ON s.id_product = p.id ";
 		$qr .= "JOIN tbl_zone AS z ON s.id_zone = z.id_zone ";
 		$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
-		$qr .= "WHERE p.id_style = '".$id_style."' AND p.can_sell = 1 AND p.active = 1 AND p.is_deleted = 0 AND w.sell = 1 AND w.active = 1";
+		$qr .= "WHERE p.id_style = '".$id_style."' ";
+		$qr .= $id_branch == 0 ? "" : "AND w.id_branch = '".$id_branch."' ";
+		$qr .= "AND p.can_sell = 1 ";
+		$qr .= "AND p.active = 1 ";
+		$qr .= "AND p.is_deleted = 0 ";
+		$qr .= "AND w.sell = 1 ";
+		$qr .= "AND w.active = 1";
 		$qs = dbQuery($qr);
 		list( $qty ) = dbFetchArray($qs);
 		return is_null( $qty ) ? 0 : $qty;
@@ -264,20 +239,17 @@ class stock
 
 
 	//---- แสดงที่เก็บสินค้า สำหรับการจัดสินค้า
-	public function stockInZone($id_pd, $showAll = FALSE)
+	public function stockInZone($id_pd, $id_branch = 0)
 	{
-		if($showAll === FALSE)
+		$qr = "SELECT z.zone_name AS name, s.qty FROM tbl_stock AS s ";
+		$qr .= "JOIN tbl_zone AS z ON s.id_zone = z.id_zone ";
+		$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
+		$qr .= "WHERE id_product = '".$id_pd."' ";
+		$qr .= "AND w.prepare = 1 ";
+		$qr .= "AND w.active = 1 ";
+		if($id_branch != 0 OR $id_branch != '')
 		{
-			$qr = "SELECT z.zone_name AS name, s.qty FROM tbl_stock AS s ";
-			$qr .= "JOIN tbl_zone AS z ON s.id_zone = z.id_zone ";
-			$qr .= "JOIN tbl_warehouse AS w ON z.id_warehouse = w.id ";
-			$qr .= "WHERE id_product = '".$id_pd."' AND w.prepare = 1 AND w.active = 1 ";
-		}
-		else
-		{
-			$qr = "SELECT z.zone_name AS name, s.qty FROM tbl_stock AS s ";
-			$qr .= "JOIN tbl_zone AS z ON s.id_zone = z.id_zone ";
-			$qr .= "WHERE id_product = '".$id_pd."'";
+			$qr .= "AND w.id_branch = '".$id_branch."' ";
 		}
 
 		return dbQuery($qr);

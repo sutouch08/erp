@@ -132,10 +132,12 @@ function updateOrder(recal){
 	var id_payment = $("#paymentMethod").val();
 	var ref_code  = $('#ref-code').val();
 	var remark = $("#remark").val();
+	var branch = $('#branch').val();
 	if(recal == 1 ){
 		data = {
 					 "id_order" : id_order,
 					 "date_add"	: date_add,
+					 "id_branch" : branch,
 					 "id_customer" : id_customer,
 					 "id_channels" : id_channels,
 					 "id_payment" : id_payment,
@@ -146,6 +148,7 @@ function updateOrder(recal){
 		data = {
 			"id_order" : id_order,
 			"refCode" : ref_code,
+			"id_branch" : branch,
 			"remark" : remark };
 	}
 	load_in();
@@ -159,6 +162,7 @@ function updateOrder(recal){
 			load_out();
 			var rs = $.trim(rs);
 			if( rs == 'success' ){
+				$('#id_branch').val(branch);
 				swal({title: 'Done !', type: 'success', timer: 1000 });
 				setTimeout(function(){ window.location.reload(); }, 1200);
 			}else{
@@ -185,6 +189,7 @@ function addNew(){
 	var customer 		= $("#customer").val();
 	var channels 		= $("#channels").val();
 	var payment 		= $("#paymentMethod").val();
+	var branch      = $('#branch').val();
 	var remark			= $("#remark").val();
 	var isOnline		= $("#isOnline").val();
 	var refCode     = $('#ref-code').length == 1 ? $('#ref-code').val() : '';
@@ -200,6 +205,11 @@ function addNew(){
 		return false;
 	}
 
+	if(branch == ''){
+		swal('กรุณาเลือกสาขา');
+		return false;
+	}
+
 	$.ajax({
 		url:"controller/orderController.php?addNew",
 		type:"POST",
@@ -210,6 +220,7 @@ function addNew(){
 				"role"	: role,
 				"channels" : channels,
 				"paymentMethod" : payment,
+				"id_branch" : branch,
 				"remark" : remark,
 				"isOnline" : isOnline,
 				"refCode" : refCode,

@@ -69,6 +69,7 @@ function validUpdate(id){
 	var id_zone 		= $('#id_zone').val();
 	var id_customer_zone = $('#id_customer_zone').val();
 	var gp 					= $('#GP').val();
+	var branch = $('#branch').val();
 	//---- ตรวจสอบวันที่
 	if( ! isDate(date_add) ){
 		swal("วันที่ไม่ถูกต้อง");
@@ -104,6 +105,11 @@ function validUpdate(id){
 		return false;
 	}
 
+	if(branch == ''){
+		swal('กรุณาเลือกสาขา');
+		return false;
+	}
+
 	updateOrder();
 
 }
@@ -118,9 +124,11 @@ function updateOrder(){
 	var gp = $('#GP').val();
 	var is_so = $('#so').val();
 	var remark = $("#remark").val();
+	var branch = $('#branch').val();
 	data = {
 				 "id_order" : id_order,
 				 "date_add"	: date_add,
+				 "id_branch" : branch,
 				 "id_customer" : id_customer,
 				 "id_zone" : id_zone,
 				 "gp" : gp,
@@ -178,6 +186,7 @@ function addNew(){
 	var remark			= $("#remark").val();
 	var gp 					= $('#GP').val();
 	var id_customer_zone = $('#id_customer_zone').val();
+	var branch      = $('#branch').val();
 
 	if( ! isDate(dateAdd) ){
 		swal("วันที่ไม่ถูกต้อง");
@@ -199,6 +208,11 @@ function addNew(){
 		return false;
 	}
 
+	if(branch == ''){
+		swal('กรุณาเลือกสาขา');
+		return false;
+	}
+
 
 	$.ajax({
 		url:"controller/orderController.php?addNew",
@@ -209,6 +223,7 @@ function addNew(){
 				"id_customer" : id_customer,
 				"role" : role,
 				"id_zone" : id_zone,
+				"id_branch" : branch,
 				"remark" : remark,
 				"is_so"	: is_so,
 				"gp" : gp

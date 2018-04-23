@@ -52,6 +52,7 @@
 <?php endif; ?>
 
   <input type="hidden" id="id_order" value="<?php echo $order->id; ?>" />
+  <input type="hidden" id="id_branch" value="<?php echo $order->id_branch; ?>" />
 </div>
 
 

@@ -1,5 +1,4 @@
 <?php
-//----  store in WEB_ROOT/invent/controller/adjust
 
 //--- adjust object
 $cs = new adjust();
@@ -19,6 +18,9 @@ $requester = $_POST['requester'];
 //--- หมายเหตุเอกสาร
 $remark = $_POST['remark'];
 
+//--- ส่งข้อมูลไป formula หรือไม่
+$is_so = isset($_POST['is_so']) ? $_POST['is_so'] : 1;  //--- default คือ ส่ง
+
 //--- เลขที่เอกสาร
 $reference = $cs->getNewReference($date_add);
 
@@ -30,7 +32,8 @@ $arr = array(
         'id_employee' => getCookie('user_id'),
         'requester' => $requester,
         'remark'    => $remark,
-        'date_add'  => $date_add
+        'date_add'  => $date_add,
+        'is_so' => $is_so
       );
 
 //--- เพิ่มเอกสาร

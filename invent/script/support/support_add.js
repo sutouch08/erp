@@ -73,6 +73,7 @@ function validUpdate(id){
 	var date_add = $("#dateAdd").val();
 	var customer = $("#customer").val();
 	var id_customer = $("#id_customer").val();
+	var id_branch = $('#branch').val();
 
 	//---- ตรวจสอบวันที่
 	if( ! isDate(date_add) ){
@@ -87,6 +88,11 @@ function validUpdate(id){
 		return false;
 	}
 
+	if(id_branch == ''){
+		swal('กรุณาเลือกสาขา');
+		return false;
+	}
+
 	updateOrder();
 }
 
@@ -97,6 +103,7 @@ function updateOrder(){
 	var date_add = $("#dateAdd").val();
 	var id_customer = $("#id_customer").val();
 	var id_budget = $('#id_budget').val();
+	var id_branch = $('#branch').val();
 	var remark = $("#remark").val();
 
 	load_in();
@@ -110,14 +117,23 @@ function updateOrder(){
 					 "date_add"	: date_add,
 					 "id_customer" : id_customer,
 					 "id_budget" : id_budget,
-					 "remark" : remark
+					 "remark" : remark,
+					 "id_branch" : id_branch
 		} ,
 		success: function(rs){
 			load_out();
 			var rs = $.trim(rs);
 			if( rs == 'success' ){
-				swal({title: 'Done !', type: 'success', timer: 1000 });
-				setTimeout(function(){ window.location.reload(); }, 1200);
+				swal({
+					title: 'Done !',
+					type: 'success',
+					timer: 1000
+				});
+
+				setTimeout(function(){
+					window.location.reload();
+				}, 1200);
+
 			}else{
 				swal({ title: "Error!", text: rs, type: 'error'});
 			}
@@ -144,6 +160,7 @@ function addNew(){
 	var id_budget	  = $('#id_budget').val();
 	var customer 		= $('#customer').val();
 	var id_customer = $('#id_customer').val();
+	var id_branch   = $('#branch').val();
 
 	if( ! isDate(dateAdd) ){
 		swal("วันที่ไม่ถูกต้อง");
@@ -161,6 +178,11 @@ function addNew(){
 		return false;
 	}
 
+	if(id_branch == ''){
+		swal('กรุณาเลือกสาขา');
+		return false;
+	}
+
 	$.ajax({
 		url:"controller/orderController.php?addNew",
 		type:"POST",
@@ -172,6 +194,7 @@ function addNew(){
 				"channels" : 0,
 				"paymentMethod" : 0,
 				"remark" : remark,
+				"id_branch" : id_branch,
 				"isOnline" : 0,
 				"id_budget" : id_budget,
 				"id_customer" : id_customer,

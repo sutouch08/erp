@@ -17,12 +17,14 @@ function statusLabel($isCancle = 0, $isExport = 0, $isSaved = 0)
 	{
 		$rs = 'CN';
 	}
-	
+
 	$sc  = '<span class="red">';
 	$sc .= $rs;
 	$sc .= '</span>';
 
 	return $sc;
 }
+
+
 
 ?>

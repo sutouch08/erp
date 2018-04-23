@@ -35,6 +35,10 @@
 	//---	วันที่เอกสาร
 	$date_add = dbDate($_POST['dateAdd'], TRUE);
 
+	$remark = addslashes($_POST['remark']);
+
+	$id_branch = isset($_POST['id_branch']) ? $_POST['id_branch'] : 0;
+
 	//---	พนักงาน
 	//---	กรณีออเดอร์ขาย คือคนที่ทำการสั่งด้วยตัวเองหน้าเว็บ
 	//---	กรณีสปอนเซอร์จะเป็นชื่อคนสั่งให้เบิก
@@ -73,7 +77,8 @@
 					'id_channels'	=> $id_channels,
 					'isOnline'		=> $isOnline,
 					'date_add'		=> $date_add,
-					'remark'			=> addslashes($_POST['remark']),
+					'id_branch'		=> $id_branch,
+					'remark'			=> $remark,
 					'online_code'	=> $customerName,
 					'is_so'				=> $is_so,
 					'id_budget'		=> $id_budget,

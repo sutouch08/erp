@@ -66,12 +66,20 @@ if( isset( $_GET['finishPrepare'] ) )
 //--- เมื่อยิงบาร์โค้ดโซนเพื่อจัดสินค้า
 if( isset( $_GET['getZoneId'] ) )
 {
-	$sc = 'ไม่พบโซน หรือ บาร์โค้ดไม่ถูกต้อง';
+	$sc = TRUE;
+	$id_branch = $_GET['id_branch'];
+	$barcode = trim($_GET['barcode']);
 	$zone = new zone();
-	$id = $zone->getId($_GET['barcode']);
-	if( $id !== FALSE)
+
+	if($id_branch != 0 && $id_branch != '')
 	{
-		$sc = $id;
+		$id = $zone->getZoneIdWithBranch($barcode, $id_branch);
+		$sc = $id != FALSE ? $id : 'โซนไม่ตรงกับสาขาที่กำหนด';
+	}
+	else
+	{
+		$id = $zone->getId($barcode);
+		$sc = $id != FALSE ? $id : 'ไม่พบโซน หรือ บาร์โค้ดไม่ถูกต้อง';
 	}
 
 	echo $sc;
@@ -89,6 +97,7 @@ if( isset( $_GET['clearFilter']))
 	deleteCookie('sOrderEmp');
 	deleteCookie('fromDate');
 	deleteCookie('toDate');
+	deleteCookie('sBranch');
 	echo 'done';
 }
 

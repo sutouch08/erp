@@ -242,7 +242,8 @@ if( isset( $_GET['getProductGrid'] ) && isset( $_GET['pdCode'] ) )
 {
 	$sc = 'not exists';
 	$pdCode = trim($_GET['pdCode']);
-	$id_order = isset($_GET['id_order']) ? $_GET['id_order'] : '';
+	//$id_order = isset($_GET['id_order']) ? $_GET['id_order'] : '';
+	$id_branch = isset($_GET['id_branch']) ? $_GET['id_branch'] : 0;
 
 	$qr = "SELECT code FROM tbl_product_style WHERE code = '".$pdCode."' AND active = 1 AND can_sell = 1 AND is_deleted = 0";
 	$qs = dbQuery($qr);
@@ -253,7 +254,7 @@ if( isset( $_GET['getProductGrid'] ) && isset( $_GET['pdCode'] ) )
 		$style = new style();
 		$id_style = $style->getId($pdCode);
 		$view = FALSE; //----- View stock ? TRUE = view stock only FALSE = order
-		$sc = $grid->getOrderGrid($id_style, $view, $id_order);
+		$sc = $grid->getOrderGrid($id_style, $view, $id_branch);
 		$tableWidth	= $pd->countAttribute($id_style) == 1 ? 800 : $grid->getOrderTableWidth($id_style);
 		$sc .= ' | ' . $tableWidth;
 		$sc .= ' | ' . $id_style;
@@ -293,13 +294,14 @@ if( isset( $_GET['getOrderGrid'] ) && isset( $_GET['id_style'] ) )
 {
 	$sc = 'not exists';
 	$id_style = $_GET['id_style'];
-	$id_order = isset($_GET['id_order']) ? $_GET['id_order'] : '';
+	//$id_order = isset($_GET['id_order']) ? $_GET['id_order'] : '';
+	$id_branch = isset($_GET['id_branch']) ? $_GET['id_branch'] : 0;
 
 	$pd = new product();
 	$grid = new product_grid();
 	$style = new style();
 	$view = FALSE; //----- View stock ? TRUE = view stock only FALSE = order
-	$sc = $grid->getOrderGrid($id_style, $view, $id_order);
+	$sc = $grid->getOrderGrid($id_style, $view, $id_branch);
 	$tableWidth	= $pd->countAttribute($id_style) == 1 ? 600 : $grid->getOrderTableWidth($id_style);
 	$sc .= ' | '.$tableWidth;
 	$sc .= ' | ' . $style->getCode($id_style);
@@ -315,11 +317,12 @@ if( isset( $_GET['getStockGrid'] ) && isset( $_GET['id_style'] ) )
 {
 	$sc = 'not exists';
 	$id_style = $_GET['id_style'];
+	$id_branch = isset($_GET['id_branch']) ? $_GET['id_branch'] : 0;
 	$pd = new product();
 	$grid = new product_grid();
 	$style = new style();
 	$view = TRUE;  //--- view stock
-	$sc = $grid->getOrderGrid($id_style, $view);
+	$sc = $grid->getOrderGrid($id_style, $view, $id_branch);
 	$tableWidth	= $pd->countAttribute($id_style) == 1 ? 600 : $grid->getOrderTableWidth($id_style);
 	$sc .= ' | '.$tableWidth;
 	$sc .= ' | ' . $style->getCode($id_style);

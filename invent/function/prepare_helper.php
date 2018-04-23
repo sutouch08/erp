@@ -1,10 +1,10 @@
 <?php
 
-function stockInZone($id_pd)
+function stockInZone($id_pd, $id_branch = 0)
 {
 	$sc = "";
 	$stock = new stock();
-	$qs = $stock->stockInZone($id_pd);
+	$qs = $stock->stockInZone($id_pd, $id_branch);
 	if( dbNumRows($qs) > 0 )
 	{
 		while( $rs = dbFetchObject($qs))

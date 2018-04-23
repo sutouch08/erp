@@ -137,8 +137,7 @@ class receive_product
 
 	public function insertDetail(array $ds)
 	{
-		$sc = FALSE;
-		if( count( $ds ) > 0 )
+		if(!empty($ds))
 		{
 			$fields = "";
 			$values = "";
@@ -149,9 +148,11 @@ class receive_product
 				$values .= $i == 1 ? "'".$value."'" : ", '".$value."'";
 				$i++;
 			}
-			$sc = dbQuery("INSERT INTO tbl_receive_product_detail (".$fields.") VALUES (".$values.")");
+
+			return dbQuery("INSERT INTO tbl_receive_product_detail (".$fields.") VALUES (".$values.")");
 		}
-		return $sc;
+		
+		return FALSE;
 	}
 
 

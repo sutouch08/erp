@@ -3,6 +3,7 @@ function addNew(){
   var refer  = $('#refer').val();
   var requester = $('#requester').val();
   var remark = $('#remark').val();
+  var is_so = $('#is_so').val();
 
   if( !isDate(dateAdd)){
     swal('วันที่ไม่ถูกต้อง');
@@ -22,7 +23,8 @@ function addNew(){
       'date_add' : dateAdd,
       'refer' : refer,
       'requester' : requester,
-      'remark' : remark
+      'remark' : remark,
+      'is_so' : is_so
     },
     success:function(rs){
       //--- ตัดช่องว่างซ้ายขวา
@@ -51,6 +53,7 @@ function update(){
   var refer = $('#refer').val();
   var requester = $('#requester').val();
   var remark = $('#remark').val();
+  var is_so = $('#is_so').val();
 
   if( !isDate(date_add)){
     swal('วันที่ไม่ถูกต้อง');
@@ -71,7 +74,8 @@ function update(){
       'date_add' : date_add,
       'refer' : refer,
       'requester' : requester,
-      'remark' : remark
+      'remark' : remark,
+      'is_so' : is_so
     },
     success:function(rs){
       var rs = $.trim(rs);
@@ -80,6 +84,7 @@ function update(){
         $('#refer').attr('disabled', 'disabled');
         $('#requester').attr('disabled', 'disabled');
         $('#remark').attr('disabled', 'disabled');
+        $('#is_so').attr('disabled', 'disabled');
 
         $('#btn-update').addClass('hide');
         $('#btn-edit').removeClass('hide');
@@ -101,6 +106,7 @@ function getEdit(){
   $('#refer').removeAttr('disabled');
   $('#requester').removeAttr('disabled');
   $('#remark').removeAttr('disabled');
+  $('#is_so').removeAttr('disabled');
 
   $('#btn-edit').addClass('hide');
   $('#btn-update').removeClass('hide');

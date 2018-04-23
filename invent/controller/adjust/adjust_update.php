@@ -15,6 +15,9 @@ $requester = $_POST['requester'];
 //--- หมายเหตุเอกสาร
 $remark = $_POST['remark'];
 
+//---
+$is_so = isset($_POST['is_so']) ? $_POST['is_so'] : 1;
+
 $cs = new adjust();
 
 $arr = array(
@@ -22,6 +25,7 @@ $arr = array(
   'refer' => $refer,
   'requester' => $requester,
   'remark'  => $remark,
+  'is_so' => $is_so,
   'emp_upd' => getCookie('user_id')
 );
 
