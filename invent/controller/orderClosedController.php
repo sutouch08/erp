@@ -70,6 +70,7 @@ if( isset( $_GET['clearFilter']))
 	deleteCookie('sLend');
 	deleteCookie('sRequisition');
 	deleteCookie('sOnline');
+	deleteCookie('sBranch');
 	echo 'done';
 }
 

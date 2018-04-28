@@ -6,7 +6,7 @@
 			<div class="input-group">
 				<span class="input-group-addon">สาขา</span>
 				<select class="form-control input-sm" id="id_branch">
-					<?php echo selectBranch(0); ?>
+					<?php echo selectBranch('0'); ?>
 				</select>
 
 			</div>
@@ -94,5 +94,5 @@ $('#pd-search-box').autocomplete({
 	}
 });
 </script>
-<script src="script/order/order_grid.js"></script>
-<script src="script/product_tab_menu.js"></script>
+<script src="script/order/order_grid.js?token=<?php echo date('Ymd'); ?>"></script>
+<script src="script/product_tab_menu.js?token=<?php echo date('Ymd'); ?>"></script>

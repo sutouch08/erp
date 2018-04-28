@@ -113,6 +113,6 @@ else
 <?php endif; ?>
 
 <?php endif; ?>
-<script src="script/order/order_add.js"></script>
-<script src="script/product_tab_menu.js"></script>
-<script src="script/order/order_grid.js"></script>
+<script src="script/order/order_add.js?token=<?php echo date('Ymd'); ?>"></script>
+<script src="script/product_tab_menu.js?token=<?php echo date('Ymd'); ?>"></script>
+<script src="script/order/order_grid.js?token=<?php echo date('Ymd'); ?>"></script>

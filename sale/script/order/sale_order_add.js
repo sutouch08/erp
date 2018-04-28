@@ -78,6 +78,7 @@ function validUpdate(id){
 	var id_customer = $("#id_customer").val();
 	var id_channels = $("#channels").val();
 	var id_payment = $("#paymentMethod").val();
+	var id_branch = $('#branch').val();
 	//---- ตรวจสอบวันที่
 	if( ! isDate(date_add) ){
 		swal("วันที่ไม่ถูกต้อง");
@@ -89,6 +90,12 @@ function validUpdate(id){
 		swal("ชื่อลูกค้าไม่ถูกต้อง");
 		return false;
 	}
+
+	if(id_branch == ''){
+		swal('กรุณาเลือกสาขา');
+		return false;
+	}
+
 
 	//--- ตรวจสอบความเปลี่ยนแปลงที่สำคัญ
 	if( (date_add != order_date) || ( id_customer != customer_id ) || ( id_channels != channels_id ) || ( id_payment != payment_id ) ){
@@ -131,6 +138,8 @@ function updateOrder(recal){
 	var id_channels = $("#channels").val();
 	var id_payment = $("#paymentMethod").val();
 	var remark = $("#remark").val();
+	var id_branch = $('#branch').val();
+
 	if(recal == 1 ){
 		data = {
 					 "id_order" : id_order,
@@ -138,10 +147,15 @@ function updateOrder(recal){
 					 "id_customer" : id_customer,
 					 "id_channels" : id_channels,
 					 "id_payment" : id_payment,
-					 "remark" : remark
+					 "remark" : remark,
+					 "id_branch" : id_branch
 		};
 	}else{
-		data = { "id_order" : id_order, "remark" : remark };
+		data = {
+			"id_order" : id_order,
+			"remark" : remark,
+			"id_branch" : id_branch
+		};
 	}
 	load_in();
 
@@ -154,8 +168,16 @@ function updateOrder(recal){
 			load_out();
 			var rs = $.trim(rs);
 			if( rs == 'success' ){
-				swal({title: 'Done !', type: 'success', timer: 1000 });
-				setTimeout(function(){ window.location.reload(); }, 1200);
+				swal({
+					title: 'Done !',
+					type: 'success',
+					timer: 1000
+				});
+
+				setTimeout(function(){
+					window.location.reload();
+				}, 1200);
+
 			}else{
 				swal({ title: "Error!", text: rs, type: 'error'});
 			}
@@ -180,6 +202,7 @@ function addNew(){
 	var channels 		= $("#channels").val();
 	var payment 		= $("#paymentMethod").val();
 	var remark			= $("#remark").val();
+	var id_branch   = $('#branch').val();
 	var isOnline			= $("#isOnline").val();
 	var customerName = $("#onlineCustomer").length == 1 ? $("#onlineCustomer").val() : '';
 
@@ -193,6 +216,11 @@ function addNew(){
 		return false;
 	}
 
+	if(id_branch == ''){
+		swal('กรุณาเลือกสาขา');
+		return false;
+	}
+
 	$.ajax({
 		url:"../invent/controller/orderController.php?addNew",
 		type:"POST",
@@ -203,6 +231,7 @@ function addNew(){
 				"channels" : channels,
 				"paymentMethod" : payment,
 				"remark" : remark,
+				"id_branch" : id_branch,
 				"isOnline" : isOnline,
 				"customerName" : customerName
 		},

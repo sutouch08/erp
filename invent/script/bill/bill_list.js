@@ -30,6 +30,9 @@ $(".search-box").keyup(function(e){
 });
 
 
+$('#sBranch').change(function(){
+  getSearch();
+});
 
 
 

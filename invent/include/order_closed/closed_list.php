@@ -23,7 +23,7 @@
   $sLend  = getFilter('sLend', 'sLend', 0); //---  ยืมสินค้า  0 = not filter 1 = filter
   $sRequisition  = getFilter('sRequisition', 'sRequisition', 0); //---  เบิกทั่วไป  0 = not filter 1 = filter
   $sOnline = getFilter('sOnline', 'sOnline', 0); //--- ออนไลน์เท่านั้น
-
+  $sBranch = getFilter('sBranch', 'sBranch', '');
   $btn = array(
         '1' => $sOrder,
         '2' => $sConsign,
@@ -62,23 +62,30 @@
  ?>
 <form id="searchForm" method="post">
 <div class="row">
-  <div class="col-sm-2 padding-5 first">
+  <div class="col-sm-1 col-1-harf padding-5 first">
     <label>เลขที่เอกสาร</label>
     <input type="text" class="form-control input-sm text-center search-box" name="sCode" id="sCode" value="<?php echo $sCode; ?>" />
   </div>
 
 
-  <div class="col-sm-2 padding-5">
+  <div class="col-sm-1 col-1-harf padding-5">
     <label>ลูกค้า</label>
     <input type="text" class="form-control input-sm text-center search-box" name="sCust" id="sCust" value="<?php echo $sCust; ?>" />
   </div>
 
 
-  <div class="col-sm-2 padding-5">
+  <div class="col-sm-1 col-1-harf padding-5">
     <label>พนักงาน</label>
     <input type="text" class="form-control input-sm text-center search-box" name="sEmp" id="sEmp" value="<?php echo $sEmp; ?>" />
   </div>
 
+  <div class="col-sm-1 col-1-harf padding-5">
+    <label>สาขา</label>
+    <select class="form-control input-sm search-select" name="sBranch" id="sBranch">
+      <option value="">ทั้งหมด</option>
+      <?php echo selectBranch($sBranch); ?>
+    </select>
+  </div>
 
   <div class="col-sm-2 padding-5">
     <label class="display-block">วันที่</label>
@@ -178,6 +185,11 @@
     $where .= "AND id_employee IN(".getEmployeeIn($sEmp).") ";
   }
 
+  if( $sBranch != '')
+  {
+    createCookie('sBranch', $sBranch);
+    $where .= "AND id_branch = '".$sBranch."' ";
+  }
 
   if( $fromDate != '' && $toDate != '')
   {
@@ -235,12 +247,13 @@
         <tr class="font-size-12">
           <th class="width-5 text-center">ลำดับ</th>
           <th class="width-10 text-center">เลขที่เอกสาร</th>
-          <th class="width-25 text-center">ลูกค้า</th>
+          <th class="text-center">ลูกค้า</th>
           <th class="width-10 text-center">ยอดเงิน</th>
           <th class="width-10 text-center">รูปแบบ</th>
           <th class="width-15 text-center">พนักงาน</th>
-          <th class="width-10 text-center">วันที่เอกสาร</th>
-          <th class="width-15 text-center">วันที่ปรับปรุง</th>
+          <th class="width-10 text-center">สาขา</th>
+          <th class="width-8 text-center">วันที่</th>
+          <th class="width-8 text-center">ปรับปรุง</th>
         </tr>
       </thead>
       <tbody>
@@ -278,15 +291,19 @@
           </td>
 
           <td class="middle text-center pointer" onclick="viewDetail(<?php echo $rs->id; ?>)">
+            <?php echo getBranchName($rs->id); ?>
+          </td>
+
+          <td class="middle text-center pointer" onclick="viewDetail(<?php echo $rs->id; ?>)">
             <?php echo thaiDate($rs->date_add); ?>
           </td>
 
           <td class="middle text-center pointer" onclick="viewDetail(<?php echo $rs->id; ?>)">
-            <?php echo thaiDateTime($rs->date_upd); ?>
+            <?php echo thaiDate($rs->date_upd); ?>
           </td>
 
         </tr>
-<?php     $no++; ?>        
+<?php     $no++; ?>
 <?php   endwhile; ?>
 
 <?php else : ?>
@@ -304,4 +321,4 @@
 
 
 
-<script src="script/order_closed/closed_list.js"></script>
+<script src="script/order_closed/closed_list.js?token=<?php echo date('Ymd'); ?>"></script>

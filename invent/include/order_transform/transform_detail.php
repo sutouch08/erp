@@ -66,7 +66,7 @@
 				</td>
 
         <td class="text-center" id="connect-box-<?php echo $rs->id; ?>">
-				<?php if( $order->isExpire == 0 ) : ?>
+				<?php if( $order->isExpire == 0 && $hasTransformProduct === TRUE ) : ?>
 					<button type="button" class="btn btn-xs btn-success btn-block connect" id="btn-connect-<?php echo $rs->id; ?>" onclick="addTransformProduct(<?php echo $rs->id; ?>,'<?php echo $rs->id_product; ?>')"><i class="fa fa-plus"></i> เชื่อมโยง</button>
 				<?php endif; ?>
         </td>
@@ -188,4 +188,4 @@
     </tr>
 </script>
 
-<script src="script/order_transform/transform_detail.js"></script>
+<script src="script/order_transform/transform_detail.js?token=<?php echo date('Ymd'); ?>"></script>

@@ -17,6 +17,7 @@
 	require 'function/customer_helper.php';
 	include 'function/employee_helper.php';
 	include 'function/vat_helper.php';
+	include 'function/branch_helper.php';
 
 	if( isset( $_GET['view_detail']))
 	{

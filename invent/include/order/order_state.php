@@ -33,12 +33,16 @@ $canUnbill	= ($px['add'] + $px['edit'] + $px['delete']) > 0 ? TRUE : FALSE;
 								 <?php elseif( $order->state >= 8 && $canUnbill) : ?>
 												<option value="11">ยกเลิก</option>
                  <?php endif; ?>
+							<?php elseif($order->isExpire == 1 && $delete) : ?>
+												<option value="11">ยกเลิก</option>
 							<?php endif; ?>
                     </select>
                 </td>
                 <td class="width-30">
                 <?php if( $order->status == 1 && $order->isExpire == 0 ) : ?>
                 	<button class="btn btn-xs btn-primary btn-block" onclick="changeState()">เปลี่ยนสถานะ</button>
+								<?php elseif($order->isExpire == 1 && $delete) : ?>
+									<button class="btn btn-xs btn-primary btn-block" onclick="changeState()">เปลี่ยนสถานะ</button>
                 <?php endif; ?>
                 </td>
             </tr>

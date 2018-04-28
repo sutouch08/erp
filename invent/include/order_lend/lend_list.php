@@ -6,6 +6,7 @@ $sCus	 	= getFilter('sCus', 'sOrderCus', '' );	//---	customer
 $sEmp	  = getFilter('sEmp', 'sOrderEmp', '' );	//---	Employee
 $fromDate	= getFilter('fromDate', 'fromDate', '' );
 $toDate	  = getFilter('toDate', 'toDate', '' );
+$sBranch = getFilter('sBranch', 'sBranch', '');
 
 ?>
 <div class="row top-row">
@@ -36,6 +37,14 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
     	<label>ผู้สั่ง[พนักงาน]</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sEmp" id="sEmp" value="<?php echo $sEmp; ?>" />
     </div>
+
+		<div class="col-sm-2 padding-5">
+			<label>สาขา</label>
+			<select class="form-control input-sm search-select" name="sBranch" id="sBranch">
+				<option value="">ทั้งหมด</option>
+				<?php echo selectBranch($sBranch); ?>
+			</select>
+		</div>
 
     <div class="col-sm-2 padding-5">
     	<label class="display-block">วันที่</label>
@@ -78,7 +87,11 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 		$where .= "AND id_employee IN(".getEmployeeIn($sEmp).") "; //--- function/employee_helper.php
 	}
 
-
+	if($sBranch != '')
+	{
+		createCookie('sBranch', $sBranch);
+		$where .= "AND id_branch = '".$sBranch."' ";
+	}
 
 	if( $fromDate != "" && $toDate != "" )
 	{
@@ -103,12 +116,13 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
         	<thead>
             	<tr class="font-size-10">
                 <th class="width-5 text-center">ลำดับ</th>
+								<th class="width-10 text-center">วันที่</th>
                 <th class="width-10 text-center">เลขที่เอกสาร</th>
-								<th class="width-25 text-center">ผู้เบิก[ลูกค้า/พนักงาน]</th>
+								<th class="width-20 text-center">ผู้เบิก[ลูกค้า/พนักงาน]</th>
                 <th class="width-20 text-center">ผู้สั่งงาน[พนักงาน]</th>
                 <th class="width-10 text-center">ยอดเงิน</th>
                 <th class="width-10 text-center">สถานะ</th>
-                <th class="width-10 text-center">วันที่</th>
+                <th class="width-10 text-center">สาขา</th>
                 <th class="text-center"></th>
                 </tr>
             </thead>
@@ -122,6 +136,10 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status, $rs->isExpire); //--- order_help.php ?>>
         <td class="middle text-cennter pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
 					<?php echo $no; ?>
+				</td>
+
+				<td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
+					<?php echo thaiDate($rs->date_add); ?>
 				</td>
 
         <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
@@ -144,12 +162,12 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 					<?php echo stateName($rs->state, $rs->status, $rs->isExpire); ?>
 				</td>
 
-        <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
-					<?php echo thaiDate($rs->date_add); ?>
+				<td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
+					<?php echo getBranchName($rs->id_branch); ?>
 				</td>
 
         <td class="middle text-center">
-					<a href="#"  data-toggle="popover" data-html="true" data-placement="left" data-trigger="focus"
+					<a href="javascript:void(0)"  data-toggle="popover" data-html="true" data-placement="left" data-trigger="focus"
 						data-content="
 							พนักงาน : <?php echo employee_name($rs->id_employee); ?><br/>
               ปรับปรุงล่าสุด : <?php echo thaiDate($rs->date_upd); ?>
@@ -161,7 +179,7 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 <?php		endwhile; ?>
 <?php else : ?>
 			<tr>
-      	<td colspan="8" class="text-center"><h4>ไม่พบรายการ</h4></td>
+      	<td colspan="9" class="text-center"><h4>ไม่พบรายการ</h4></td>
       </tr>
 <?php endif; ?>
             </tbody>
@@ -178,4 +196,4 @@ $(function () {
   $('[data-toggle="popover"]').popover()
 })
 </script>
-<script src="script/order/order_list.js"></script><!--- ใช้ของ order เพราะเหมือนกัน -->
+<script src="script/order/order_list.js?token=<?php echo date('Ymd'); ?>"></script><!--- ใช้ของ order เพราะเหมือนกัน -->

@@ -3,6 +3,7 @@
 //--- function getFilter in function/tools.php
 $sCode 	= getFilter('sCode', 'sOrderCode', '');	//---	reference
 $sCus	 	= getFilter('sCus', 'sOrderCus', '' );	//---	customer
+$sBranch = getFilter('sBranch', 'sBranch','');
 
 //$sPaymet	= getFilter('sPayment', 'sOrderPaymentMethod', '' ); //--- Payment Method
 //$sChannels	= getFilter('sChannels', 'sOrderChannels', '' ); 	//---	Sales Channels
@@ -73,21 +74,29 @@ for($i =1; $i <= 11; $i++)
 <form id="searchForm" method="post">
 <div class="row">
 
-	<div class="col-sm-3 col-xs-12">
+	<div class="col-sm-2 col-xs-12 padding-5 first first-xs last-xs">
     <label class="hidden-xs">เลขที่เอกสาร</label>
     <input type="text" class="form-control input-sm text-center search" name="sCode" id="sCode" value="<?php echo $sCode; ?>" placeholder="ค้นเลขที่เอกสาร" />
   </div>
 
-  <div class="col-sm-3 col-xs-12">
+  <div class="col-sm-2 col-xs-12 padding-5 first-xs last-xs">
     <label class="hidden-xs">ลูกค้า</label>
     <input type="text" class="form-control input-sm text-center search" name="sCus" id="sCus" value="<?php echo $sCus; ?>" placeholder="ค้นชื่อลูกค้า" />
   </div>
 
-  <div class="col-sm-3 col-xs-12">
+  <div class="col-sm-3 col-xs-12 padding-5 first-xs last-xs">
   	<label class="display-block hidden-xs">วันที่</label>
     <input type="text" class="form-control input-sm text-center input-discount" name="fromDate" id="fromDate" value="<?php echo $fromDate; ?>" placeholder="เริ่มต้น" />
     <input type="text" class="form-control input-sm text-center input-unit" name="toDate" id="toDate" value="<?php echo $toDate; ?>" placeholder="สิ้นสุด" />
   </div>
+
+	<div class="col-sm-2 col-xs-12 padding-5 first-xs last-xs">
+		<label class="display-block hidden-xs">สาขา</label>
+		<select class="form-control input-sm search-select" name="sBranch" id="sBranch">
+			<option value="">ทั้งหมด</option>
+			<?php echo selectBranch($sBranch); ?>
+		</select>
+	</div>
 
   <div class="col-sm-3 col-xs-12">
   	<label class="display-block not-show hidden-xs">Apply</label>
@@ -99,7 +108,7 @@ for($i =1; $i <= 11; $i++)
 
 	<div class="divider-hidden margin-top-5 margin-bottom-5"></div>
 
-	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5 first">
+	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5 first first-xs">
 		<button type="button" class="btn btn-sm btn-block <?php echo $btn_1; ?>" id="btn-1" onclick="toggleState('btn-1', <?php echo $state_1; ?> )">รอชำระเงิน</button>
 	</div>
 
@@ -107,11 +116,11 @@ for($i =1; $i <= 11; $i++)
 		<button type="button" class="btn btn-sm btn-block <?php echo $btn_2; ?>" id="btn-2" onclick="toggleState('btn-2', <?php echo $state_2; ?> )">แจ้งชำระเงิน</button>
 	</div>
 
-	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5">
+	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5 last-xs">
 		<button type="button" class="btn btn-sm btn-block <?php echo $btn_3; ?>" id="btn-3" onclick="toggleState('btn-3', <?php echo $state_3; ?> )">รอจัด</button>
 	</div>
 
-	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5">
+	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5 first-xs">
 		<button type="button" class="btn btn-sm btn-block <?php echo $btn_4; ?>" id="btn-4" onclick="toggleState('btn-4', <?php echo $state_4; ?> )">กำลังจัด</button>
 	</div>
 
@@ -119,11 +128,11 @@ for($i =1; $i <= 11; $i++)
 		<button type="button" class="btn btn-sm btn-block <?php echo $btn_5; ?>" id="btn-5" onclick="toggleState('btn-5', <?php echo $state_5; ?> )">รอตรวจ</button>
 	</div>
 
-	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5 last">
+	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5 last last-xs">
 		<button type="button" class="btn btn-sm btn-block <?php echo $btn_6; ?>" id="btn-6" onclick="toggleState('btn-6', <?php echo $state_6; ?> )">กำลังตรวจ</button>
 	</div>
 
-	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5 first">
+	<div class="col-sm-2 col-xs-4 margin-bottom-5 padding-5 first first-xs">
 		<button type="button" class="btn btn-sm btn-block <?php echo $btn_7; ?>" id="btn-7" onclick="toggleState('btn-7', <?php echo $state_7; ?> )">รอเปิดบิล</button>
 	</div>
 
@@ -141,11 +150,11 @@ for($i =1; $i <= 11; $i++)
 		<button type="button" class="btn btn-sm btn-block <?php echo $btn_10; ?>" id="btn-10" onclick="toggleState('btn-10', <?php echo $state_10; ?> )">จัดส่งแล้ว</button>
 	</div>
 	-->
-	<div class="col-sm-2 col-xs-4 margin-bottom-5  padding-5">
+	<div class="col-sm-2 col-xs-4 margin-bottom-5  padding-5 last-xs">
 		<button type="button" class="btn btn-sm btn-block <?php echo $btn_11; ?>" id="btn-11" onclick="toggleState('btn-11', <?php echo $state_11; ?> )">ยกเลิก</button>
 	</div>
 
-	<div class="col-sm-2 col-xs-4 margin-bottom-5  padding-5">
+	<div class="col-sm-2 col-xs-4 margin-bottom-5  padding-5 first-xs">
 		<button type="button" class="btn btn-sm btn-block <?php echo $btn_notSave; ?>" id="btn-notSave" onclick="toggleState('btn-notSave', <?php echo $notSave; ?> )">ยังไม่บันทึก</button>
 	</div>
 
@@ -190,6 +199,12 @@ for($i =1; $i <= 11; $i++)
 	}
 
 
+	if($sBranch != "")
+	{
+		createCookie('sBranch', $sBranch);
+		$where .= "AND id_branch = '".$sBranch."' ";
+	}
+
 
 	if( $fromDate != "" && $toDate != "" )
 	{
@@ -229,14 +244,14 @@ for($i =1; $i <= 11; $i++)
 
 ?>
 <div class="row">
-	<div class="col-sm-8 padding-5 first">
+	<div class="col-sm-8 padding-5 first first-xs last-xs">
 		<?php $paginator->display($get_rows, 'index.php?content=order'); ?>
 	</div>
-	<div class="col-sm-3 padding-5">
+	<div class="col-sm-3 padding-5 first-xs last-xs">
 		<input type="text" class="form-control input-sm text-center margin-top-10" id="pd-search-box" placeholder="ค้นหารหัสรุ่นสินค้า" />
 	</div>
-	<div class="col-sm-1 padding-5 last">
-		<button type="button" class="btn btn-sm btn-block btn-primary margin-top-10" onclick="getStockGrid()">เช็คสต็อก</button>
+	<div class="col-sm-1 padding-5 last first-xs last-xs">
+		<button type="button" class="btn btn-sm btn-block btn-primary margin-top-10" onclick="getStockGrid()">check</button>
 	</div>
 	<div class="col-xs-12 visible-xs">&nbsp;</div>
 	<input type="hidden" id="id_style" />

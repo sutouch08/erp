@@ -95,6 +95,7 @@ if( isset( $_GET['clearFilter']))
 	deleteCookie('sOrderRole');
 	deleteCookie('fromDate');
 	deleteCookie('toDate');
+	deleteCookie('sBranch');
 	echo 'done';
 }
 

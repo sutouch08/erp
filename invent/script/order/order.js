@@ -1,6 +1,11 @@
 // JavaScript Document
 function goBack(){
-	window.location.href = "index.php?content=order";
+	if($('#isOnline').length){
+		goBackOnline();
+	}else{
+		window.location.href = "index.php?content=order";
+	}
+
 }
 
 function goBackOnline(){

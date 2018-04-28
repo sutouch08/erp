@@ -7,6 +7,7 @@ $sEmp	  = getFilter('sEmp', 'sOrderEmp', '' );	//---	Employee
 $sZone  = getFilter('sZone', 'sOrderZone', '');	//--- consing zone
 $fromDate	= getFilter('fromDate', 'fromDate', '' );
 $toDate	  = getFilter('toDate', 'toDate', '' );
+$sBranch = getFilter('sBranch', 'sBranch', '');
 
 ?>
 <div class="row top-row">
@@ -24,16 +25,16 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 <hr class="margin-bottom-15" />
 <form id="searchForm" method="post">
 <div class="row">
-	<div class="col-sm-2 padding-5 first">
+	<div class="col-sm-1 col-1-harf padding-5 first">
     	<label>เลขที่เอกสาร</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sCode" id="sCode" value="<?php echo $sCode; ?>" />
     </div>
-    <div class="col-sm-2 padding-5">
+    <div class="col-sm-1 col-1-harf padding-5">
     	<label>ลูกค้า</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sCus" id="sCus" value="<?php echo $sCus; ?>" />
     </div>
 
-    <div class="col-sm-2 padding-5">
+    <div class="col-sm-1 col-1-harf padding-5">
     	<label>พนักงาน</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sEmp" id="sEmp" value="<?php echo $sEmp; ?>" />
     </div>
@@ -42,6 +43,14 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
     	<label>พื้นที่เก็บ</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sZone" id="sZone" value="<?php echo $sZone; ?>" />
     </div>
+
+		<div class="col-sm-1 col-1-harf padding-5">
+			<label>สาขา</label>
+			<select class="form-control input-sm search-select" name="sBranch" id="sBranch">
+				<option value="">ทั้งหมด</option>
+				<?php echo selectBranch($sBranch); ?>
+			</select>
+		</div>
 
     <div class="col-sm-2 padding-5">
     	<label class="display-block">วันที่</label>
@@ -92,6 +101,12 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 		$where .= "AND id_zone IN(".getConsignZoneIn($sZone).") ";
 	}
 
+	//---- Branch
+	if($sBranch != '')
+	{
+		createCookie('sBranch', $sBranch);
+		$where .= "AND id_branch = '".$sBranch."' ";
+	}
 
 	if( $fromDate != "" && $toDate != "" )
 	{
@@ -193,4 +208,4 @@ $(function () {
   $('[data-toggle="popover"]').popover()
 })
 </script>
-<script src="script/order/order_list.js"></script><!--- ใช้ของ order เพราะเหมือนกัน -->
+<script src="script/order/order_list.js?token=<?php echo date('Ymd'); ?>"></script><!--- ใช้ของ order เพราะเหมือนกัน -->

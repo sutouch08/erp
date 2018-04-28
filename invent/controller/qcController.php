@@ -48,4 +48,16 @@ if( isset( $_GET['printBox']))
 	include '../print/packing/print_box.php';
 }
 
+
+if(isset($_GET['clearFilter']))
+{
+	deleteCookie('sOrderCode');
+	deleteCookie('sOrderCus');
+	deleteCookie('sOrderEmp');
+	deleteCookie('sBranch');
+	deleteCookie('fromDate');
+	deleteCookie('toDate');
+	echo 'done';
+}
+
 ?>

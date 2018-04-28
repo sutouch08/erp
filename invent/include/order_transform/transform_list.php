@@ -7,6 +7,7 @@ $sEmp	  = getFilter('sEmp', 'sOrderEmp', '' );	//---	Employee
 $sZone  = getFilter('sZone', 'sOrderZone', '');	//--- consing zone
 $fromDate	= getFilter('fromDate', 'fromDate', '' );
 $toDate	  = getFilter('toDate', 'toDate', '' );
+$sBranch = getFilter('sBranch', 'sBranch','');
 
 ?>
 <div class="row top-row">
@@ -24,16 +25,16 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 <hr class="margin-bottom-15" />
 <form id="searchForm" method="post">
 <div class="row">
-	<div class="col-sm-2 padding-5 first">
+	<div class="col-sm-1 col-1-harf padding-5 first">
     	<label>เลขที่เอกสาร</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sCode" id="sCode" value="<?php echo $sCode; ?>" />
     </div>
-    <div class="col-sm-2 padding-5">
+    <div class="col-sm-1 col-1-harf padding-5">
     	<label>ลูกค้า</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sCus" id="sCus" value="<?php echo $sCus; ?>" />
     </div>
 
-    <div class="col-sm-2 padding-5">
+    <div class="col-sm-1 col-1-harf padding-5">
     	<label>พนักงาน</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sEmp" id="sEmp" value="<?php echo $sEmp; ?>" />
     </div>
@@ -42,6 +43,14 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
     	<label>พื้นที่เก็บ</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sZone" id="sZone" value="<?php echo $sZone; ?>" />
     </div>
+
+		<div class="col-sm-1 col-1-harf padding-5">
+			<label>สาขา</label>
+			<select class="form-control input-sm search-select" name="sBranch" id="sBranch">
+				<option value="">ทั้งหมด</option>
+				<?php echo selectBranch($sBranch); ?>
+			</select>
+		</div>
 
     <div class="col-sm-2 padding-5">
     	<label class="display-block">วันที่</label>
@@ -92,6 +101,11 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 		$where .= "AND id_zone IN(".getConsignZoneIn($sZone).") ";
 	}
 
+	if($sBranch != '')
+	{
+		createCookie('sBranch', $sBranch);
+		$where .= "AND id_branch = '".$sBranch."' ";
+	}
 
 	if( $fromDate != "" && $toDate != "" )
 	{
@@ -114,18 +128,19 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 	<div class="col-sm-12">
     	<table class="table table-bordered">
         	<thead>
-            	<tr class="font-size-10">
-                <th class="width-5 text-center">ลำดับ</th>
-                <th class="width-8 text-center">เลขที่เอกสาร</th>
-								<th class="width-25 text-center">ผู้เบิก</th>
-                <th class="width-25 text-center">ลูกค้า</th>
-                <th class="width-8 text-center">ยอดเงิน</th>
-                <th class="width-8 text-center">สถานะ</th>
-                <th class="width-8 text-center">วันที่</th>
-                <th class="text-center"></th>
-                </tr>
-            </thead>
-            <tbody>
+          	<tr class="font-size-10">
+	            <th class="width-5 text-center">ลำดับ</th>
+							<th class="width-10 text-center">วันที่</th>
+	            <th class="width-10 text-center">เลขที่เอกสาร</th>
+							<th class="width-20 text-center">ผู้เบิก</th>
+	            <th class="width-20 text-center">ลูกค้า</th>
+	            <th class="width-8 text-center">ยอดเงิน</th>
+	            <th class="width-8 text-center">สถานะ</th>
+	            <th class="width-10 text-center">สาขา</th>
+	            <th class="text-center"></th>
+            </tr>
+          </thead>
+          <tbody>
 <?php if( dbNumRows($qs) > 0 ) : ?>
 <?php	$no 		= row_no();			?>
 <?php	$cs 		= new customer(); ?>
@@ -135,6 +150,10 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status, $rs->isExpire); //--- order_help.php ?>>
         <td class="middle text-cennter pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
 					<?php echo $no; ?>
+				</td>
+
+				<td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
+					<?php echo thaiDate($rs->date_add); ?>
 				</td>
 
         <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
@@ -158,7 +177,7 @@ $toDate	  = getFilter('toDate', 'toDate', '' );
 				</td>
 
         <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
-					<?php echo thaiDate($rs->date_add); ?>
+					<?php echo getBranchName($rs->id_branch); ?>
 				</td>
 
         <td class="middle text-center">
@@ -191,4 +210,4 @@ $(function () {
   $('[data-toggle="popover"]').popover()
 })
 </script>
-<script src="script/order/order_list.js"></script><!--- ใช้ของ order เพราะเหมือนกัน -->
+<script src="script/order/order_list.js?token=<?php echo date('Ymd'); ?>"></script><!--- ใช้ของ order เพราะเหมือนกัน -->

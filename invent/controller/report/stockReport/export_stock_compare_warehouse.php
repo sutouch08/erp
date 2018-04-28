@@ -36,8 +36,16 @@ if(dbNumRows($qs) > 0)
   }
 }
 
+$qr  = "SELECT pd.code FROM tbl_product AS pd ";
+$qr .= "JOIN tbl_product_style AS st ON pd.id_style = st.id ";
+$qr .= "JOIN tbl_color AS co ON pd.id_color = co.id ";
+$qr .= "JOIN tbl_size AS si ON pd.id_size = si.id ";
+$qr .= "WHERE pd.code >= '".$pdFrom."' ";
+$qr .= "AND pd.code <= '".$pdTo."' ";
+$qr .= "ORDER BY st.code ASC, co.code ASC, si.position ASC";
 
-$qs = dbQuery("SELECT code FROM tbl_product WHERE code >= '".$pdFrom."' AND code <= '".$pdTo."' ORDER BY code ASC");
+$qs = dbQuery($qr);
+//$qs = dbQuery("SELECT code FROM tbl_product WHERE code >= '".$pdFrom."' AND code <= '".$pdTo."' ORDER BY code ASC");
 if(dbNumRows($qs) > 0)
 {
   while($rs = dbFetchObject($qs))

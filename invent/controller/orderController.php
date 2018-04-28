@@ -270,15 +270,25 @@ if( isset( $_GET['getSaleProductGrid'] ) && isset( $_GET['pdCode'] ) )
 {
 	$sc = 'not exists';
 	$pdCode = trim($_GET['pdCode']);
-	$qr = "SELECT code FROM tbl_product_style WHERE code = '".$pdCode."' AND active = 1 AND can_sell = 1 AND is_deleted = 0 AND show_in_sale = 1";
+	$id_branch = isset($_GET['id_branch']) ? $_GET['id_branch'] : 0;
+	$view = FALSE;
+
+	$qr  = "SELECT code FROM tbl_product_style ";
+	$qr .= "WHERE code = '".$pdCode."' ";
+	$qr .= "AND active = 1 ";
+	$qr .= "AND can_sell = 1 ";
+	$qr .= "AND is_deleted = 0 ";
+	$qr .= "AND show_in_sale = 1";
+
 	$qs = dbQuery($qr);
+
 	if( dbNumRows($qs) > 0 )
 	{
 		$pd = new product();
 		$grid = new product_grid();
 		$style = new style();
 		$id_style = $style->getId($pdCode);
-		$sc = $grid->getOrderGrid($id_style);
+		$sc = $grid->getOrderGrid($id_style, $view, $id_branch);
 		$tableWidth	= $pd->countAttribute($id_style) == 1 ? 800 : $grid->getOrderTableWidth($id_style);
 		$sc .= ' | ' . $tableWidth;
 		$sc .= ' | ' . $id_style;
@@ -294,7 +304,6 @@ if( isset( $_GET['getOrderGrid'] ) && isset( $_GET['id_style'] ) )
 {
 	$sc = 'not exists';
 	$id_style = $_GET['id_style'];
-	//$id_order = isset($_GET['id_order']) ? $_GET['id_order'] : '';
 	$id_branch = isset($_GET['id_branch']) ? $_GET['id_branch'] : 0;
 
 	$pd = new product();
@@ -338,12 +347,14 @@ if( isset( $_GET['getSaleStockGrid'] ) && isset( $_GET['id_style'] ) )
 	$sc = 'not exists';
 	$id_style = $_GET['id_style'];
 	$style = new style($id_style);
+	$id_branch = isset($_GET['id_branch']) ? $_GET['id_branch'] : 0;
+	
 	if($style->show_in_sale == 1 && $style->can_sell == 1 && $style->active == 1 && $style->is_deleted == 0)
 	{
 		$pd = new product();
 		$grid = new product_grid();
 		$view = TRUE;  //--- view stock
-		$sc = $grid->getOrderGrid($id_style, $view);
+		$sc = $grid->getOrderGrid($id_style, $view, $id_branch);
 		$tableWidth	= $pd->countAttribute($id_style) == 1 ? 600 : $grid->getOrderTableWidth($id_style);
 		$sc .= ' | '.$tableWidth;
 		$sc .= ' | ' . $style->getCode($id_style);
@@ -747,6 +758,7 @@ if( isset( $_GET['clearFilter'] ) )
 	deleteCookie('sOrderChannels');
 	deleteCookie('sOrderZone');
 	deleteCookie('sOrderUser');
+	deleteCookie('sBranch');
 	deleteCookie('fromDate');
 	deleteCookie('toDate');
 	deleteCookie('state_1');

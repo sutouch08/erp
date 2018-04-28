@@ -32,3 +32,10 @@ $('.search-box').keyup(function(e) {
 $('.search-select').change(function(event) {
   getSearch();
 });
+
+
+function clearFilter(){
+  $.get('controller/qcController.php?clearFilter', function(){
+    window.location.reload();
+  });
+}

@@ -8,6 +8,7 @@ $sEmp		= getFilter('sEmp', 'sOrderEmp', '' );	//---	Employee
 //$sChannels	= getFilter('sChannels', 'sOrderChannels', '' ); 	//---	Sales Channels
 $fromDate	= getFilter('fromDate', 'fromDate', '' );
 $toDate		= getFilter('toDate', 'toDate', '' );
+$sBranch  = getFilter('sBranch', 'sBranch', '');
 
 ?>
 <div class="row top-row">
@@ -38,19 +39,26 @@ $toDate		= getFilter('toDate', 'toDate', '' );
     	<label>พนักงาน</label>
         <input type="text" class="form-control input-sm text-center search-box" name="sEmp" id="sEmp" value="<?php echo $sEmp; ?>" />
     </div>
+		<div class="col-sm-2 padding-5">
+			<label>สาขา</label>
+			<select class="form-control input-sm search-select" name="sBranch" id="sBranch">
+				<option value="">ทั้งหมด</option>
+				<?php echo selectBranch($sBranch); ?>
+			</select>
+		</div>
     <div class="col-sm-2 padding-5">
     	<label class="display-block">วันที่</label>
         <input type="text" class="form-control input-sm text-center input-discount" name="fromDate" id="fromDate" value="<?php echo $fromDate; ?>" placeholder="เริ่มต้น" />
         <input type="text" class="form-control input-sm text-center input-unit" name="toDate" id="toDate" value="<?php echo $toDate; ?>" placeholder="สิ้นสุด" />
     </div>
-    <div class="col-sm-2">
-        	<label class="display-block not-show">Apply</label>
-            <button type="button" class="btn btn-sm btn-primary btn-block" onClick="getSearch()"><i class="fa fa-search"></i> ค้นหา</button>
-        </div>
-        <div class="col-sm-2">
-        	<label class="display-block not-show">Apply</label>
-            <button type="button" class="btn btn-sm btn-warning btn-block" onClick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
-        </div>
+    <div class="col-sm-1 padding-5">
+      <label class="display-block not-show">Apply</label>
+      <button type="button" class="btn btn-sm btn-primary btn-block" onClick="getSearch()"><i class="fa fa-search"></i> ค้นหา</button>
+    </div>
+    <div class="col-sm-1 padding-5 last">
+    	<label class="display-block not-show">Apply</label>
+      <button type="button" class="btn btn-sm btn-warning btn-block" onClick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
+    </div>
 </div>
 </form>
 
@@ -79,6 +87,14 @@ $toDate		= getFilter('toDate', 'toDate', '' );
 		$where .= "AND id_employee IN(".getEmployeeIn($sEmp).") "; //--- function/employee_helper.php
 	}
 
+	//--- branch
+	if( $sBranch != '')
+	{
+		createCookie('sBranch', $sBranch);
+		$where .= "AND id_branch = '".$sBranch."' ";
+	}
+
+
 	if( $fromDate != "" && $toDate != "" )
 	{
 		createCookie('fromDate', $fromDate);
@@ -102,13 +118,13 @@ $toDate		= getFilter('toDate', 'toDate', '' );
         	<thead>
             	<tr class="font-size-10">
                 	<th class="width-5 text-center">ลำดับ</th>
-                    <th class="width-10 text-center">เลขที่เอกสาร</th>
-                    <th class="text-center">ลูกค้า</th>
-                    <th class="width-10 text-center">ยอดเงิน</th>
-                    <th class="width-10 text-center">สถานะ</th>
-                    <th class="width-15 text-center">พนักงาน</th>
-										<th class="width-10 text-center">วันที่</th>
-										<th class="width-10 text-center">ปรับปรุง</th>
+									<th class="width-10 text-center">วันที่</th>
+                  <th class="width-10 text-center">เลขที่เอกสาร</th>
+                  <th class="text-center">ลูกค้า</th>
+                  <th class="width-10 text-center">ยอดเงิน</th>
+                  <th class="width-10 text-center">สถานะ</th>
+                  <th class="width-15 text-center">พนักงาน</th>
+									<th class="width-10 text-center">สาขา</th>
                 </tr>
             </thead>
             <tbody>
@@ -122,13 +138,13 @@ $toDate		= getFilter('toDate', 'toDate', '' );
 
 			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status, $rs->isExpire); //--- order_help.php ?>>
         <td class="middle text-cennter pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $no; ?></td>
+				<td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo thaiDate($rs->date_add); ?></td>
         <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $rs->reference; ?></td>
         <td class="middle pointer" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo customerName($rs->id_customer); ?></td>
         <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo number_format($order->getTotalAmount($rs->id), 2); ?></td>
         <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo stateName($rs->state, $rs->status, $rs->isExpire); ?></td>
 				<td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo employee_name($rs->id_employee); ?></td>
-        <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo thaiDate($rs->date_add); ?></td>
-        <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo thaiDate($rs->date_upd); ?></td>
+        <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo getBranchName($rs->id_branch); ?></td>
       </tr>
 <?php		$no++; ?>
 <?php		endwhile; ?>
@@ -141,8 +157,6 @@ $toDate		= getFilter('toDate', 'toDate', '' );
         </table>
     </div>
 </div>
-
-
 
 
 <script src="script/order/order_list.js"></script><!--- ใช้ของ order เพราะว่าเหมือนกันหมด -->

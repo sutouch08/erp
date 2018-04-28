@@ -44,19 +44,21 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
 
 <!--  Search Product -->
 <div class="row">
-	<div class="col-sm-3 col-xs-12">
+	<div class="col-sm-4 col-xs-12 padding-5 first first-xs last-xs">
     	<input type="text" class="form-control text-center" id="pd-box" placeholder="ค้นรหัสสินค้า" />
   </div>
-  <div class="col-sm-2 col-xs-12 margin-bottom-15">
+  <div class="col-sm-2 col-xs-12 margin-bottom-15 padding-5 first-xs last-xs">
     	<button type="button" class="btn btn-primary btn-block" onclick="getProductGrid()"><i class="fa fa-tags"></i> แสดงสินค้า</button>
   </div>
 
-  <div class="col-sm-5 hidden-xs"></div>
+  <div class="col-sm-3 hidden-xs"></div>
 
-  <div class="col-sm-2 col-xs-12">
-  	<button type="button" class="btn btn-info" onclick="recalDiscount()">
-  		<i class="fa fa-calculator"></i> คำนวณส่วนลดใหม่</button>
-    </button>
+  <div class="col-sm-3 col-xs-12 padding-5 last first-xs last-xs">
+		<p class="pull-right top-p">
+	  	<button type="button" class="btn btn-info" onclick="recalDiscount()">
+	  		<i class="fa fa-calculator"></i> คำนวณส่วนลดใหม่</button>
+	    </button>
+		</p>
   </div>
 </div>
 <hr class="margin-top-15 margin-bottom-0" />
@@ -121,6 +123,6 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
 
 
 <?php endif; ?>
-<script src="script/order/sale_order_add.js"></script>
-<script src="script/product_tab_menu.js"></script>
-<script src="script/order/sale_order_grid.js"></script>
+<script src="script/order/sale_order_add.js?token=<?php echo date('Ymd'); ?>"></script>
+<script src="script/product_tab_menu.js?token=<?php echo date('Ymd'); ?>"></script>
+<script src="script/order/sale_order_grid.js?token=<?php echo date('Ymd'); ?>"></script>

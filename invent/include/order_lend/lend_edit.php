@@ -46,6 +46,6 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
 <!--- End order detail -------------------------------->
 
 
-<script src="script/order/order_edit.js"></script><!--- ใช้ของ order เพราะเหมือนกัน --->
-<script src="script/order_lend/lend_add.js"></script>
+<script src="script/order/order_edit.js?token=<?php echo date('Ymd'); ?>"></script><!--- ใช้ของ order เพราะเหมือนกัน --->
+<script src="script/order_lend/lend_add.js?token=<?php echo date('Ymd'); ?>"></script>
 <?php endif; //--- isset $_GET['id_order']  ?>

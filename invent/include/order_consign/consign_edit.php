@@ -64,6 +64,6 @@ if( ( $allowEditDisc == 1 OR $allowEditPrice == 1 ) && $order->state < 4 )
 <!--- End order detail -------------------------------->
 
 
-<script src="script/order/order_edit.js"></script><!--- ใช้ของ order เพราะเหมือนกัน --->
-<script src="script/order/order_add.js"></script>
+<script src="script/order/order_edit.js?token=<?php echo date('Ymd'); ?>"></script><!--- ใช้ของ order เพราะเหมือนกัน --->
+<script src="script/order/order_add.js?token=<?php echo date('Ymd'); ?>"></script>
 <?php endif; //--- isset $_GET['id_order']  ?>

@@ -11,6 +11,7 @@
 	include 'function/order_helper.php';
 	include 'function/customer_helper.php';
 	include 'function/employee_helper.php';
+	include 'function/branch_helper.php';
 	?>
 
 <div class="container">

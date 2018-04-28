@@ -1,11 +1,17 @@
 // JavaScript Document
 function getProductGrid(){
 	var pdCode 	= $("#pd-box").val();
+	var id_branch = $('#id_branch').val();
 	if( pdCode.length > 0  ){
 		load_in();
 		$.ajax({
 			url:"../invent/controller/orderController.php?getSaleProductGrid",
-			type:"GET", cache:"false", data:{"pdCode" : pdCode},
+			type:"GET",
+			cache:"false",
+			 data:{
+				 "pdCode" : pdCode,
+				 "id_branch" : id_branch
+			 },
 			success: function(rs){
 				load_out();
 				var rs = rs.split(' | ');
@@ -30,10 +36,16 @@ function getProductGrid(){
 
 
 function getOrderGrid(id_style){
+	var id_branch = $('#id_branch').val();
 	load_in();
 	$.ajax({
 		url:"../invent/controller/orderController.php?getOrderGrid",
-		type:"GET", cache:"false", data:{"id_style" : id_style},
+		type:"GET",
+		cache:"false",
+		data:{
+			"id_style" : id_style,
+			"id_branch" : id_branch
+		},
 		success: function(rs){
 			load_out();
 			var rs = rs.split(' | ');
@@ -59,13 +71,15 @@ function getOrderGrid(id_style){
 
 function getSaleStockGrid(){
 	var pdCode = $('#pd-box').val();
+	var id_branch = $('#id_branch').val();
 	load_in();
 	$.ajax({
 		url:"../invent/controller/orderController.php?getSaleStockGrid",
 		type:"GET",
 		cache:"false",
 		data:{
-			"pdCode" : pdCode
+			"pdCode" : pdCode,
+			"id_branch" : id_branch
 		},
 		success: function(rs){
 			load_out();

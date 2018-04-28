@@ -6,6 +6,7 @@ include '../invent/function/channels_helper.php';
 include '../invent/function/payment_method_helper.php';
 include '../invent/function/productTab_helper.php';
 include '../invent/function/payment_helper.php';
+include '../invent/function/branch_helper.php';
 
 
 if( isset( $_GET['add'] ) )

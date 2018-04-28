@@ -147,4 +147,4 @@
     </tr>
 </script>
 
-<script src="script/order_transform/transform_detail.js"></script>
+<script src="script/order_transform/lend_detail.js?token=<?php echo date('Ymd'); ?>"></script>

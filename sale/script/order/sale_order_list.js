@@ -25,6 +25,10 @@ function getSearch(){
   $('#searchForm').submit();
 }
 
+$('.search-select').change(function(event) {
+  getSearch();
+});
+
 
 function toggleState(btn, option){
 	var arr = btn.split('-');

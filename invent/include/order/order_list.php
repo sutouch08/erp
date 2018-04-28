@@ -14,6 +14,7 @@ $sDeliveryCode = getFilter('sDeliveryCode', 'sDeliveryCode', '');
 $selectState = getFilter('selectState', 'selectState', '');
 $startTime = getFilter('startTime', 'startTime', '');
 $endTime = getFilter('endTime', 'endTime','');
+$sBranch = getFilter('sBranch', 'sBranch', '');
 
 $state_1 = getFilter('state_1', 'state_1', 0);
 $state_2 = getFilter('state_2', 'state_2', 0);
@@ -166,6 +167,13 @@ for($i =1; $i <= 11; $i++)
 				<?php echo selectTime($endTime); ?>
 			</select>
 		</div>
+		<div class="col-sm-2 padding-5 last">
+			<label>สาขา</label>
+			<select class="form-control input-sm search-select" id="sBranch" name="sBranch">
+				<option value="">ทั้งหมด</option>
+				<?php echo selectBranch($sBranch); ?>
+			</select>
+		</div>
 
 		<div class="divider-hidden margin-top-5 margin-bottom-5"></div>
 
@@ -243,6 +251,11 @@ for($i =1; $i <= 11; $i++)
 		<input type="hidden" name="notSave" id="state_notSave" value="<?php echo $notSave; ?>" />
 		<input type="hidden" name="onlyMe" id="state_onlyMe" value="<?php echo $onlyMe; ?>" />
 		<input type="hidden" name="isExpire" id="state_expire" value="<?php echo $isExpire; ?>" />
+		<input type="hidden" name="id_branch" id="id_branch" value="<?php echo $sBranch; ?>" />
+
+		<?php if($isOnline == TRUE) : ?>
+		<input type="hidden" name="isOnline" id="isOnline" value="1" />
+		<?php endif; ?>
 
 </div>
 </form>
@@ -279,6 +292,12 @@ for($i =1; $i <= 11; $i++)
 	}
 
 
+	//--- สาขา
+	if($sBranch != '')
+	{
+		createCookie('sBranch', $sBranch);
+		$where .= "AND id_branch = '".$sBranch."' ";
+	}
 
 
 	if( $fromDate != "" && $toDate != "" )
@@ -401,15 +420,15 @@ for($i =1; $i <= 11; $i++)
         	<thead>
             	<tr class="font-size-10">
                 	<th class="width-5 text-center">ลำดับ</th>
-                    <th class="width-15 text-center">เลขที่เอกสาร</th>
-                    <th class="text-center">ลูกค้า</th>
-                    <th class="width-8 text-center">จังหวัด</th>
-                    <th class="width-8 text-center">ยอดเงิน</th>
-                    <th class="width-8 text-center">ช่องทางขาย</th>
-                    <th class="width-8 text-center">การชำระเงิน</th>
-                    <th class="width-8 text-center">สถานะ</th>
-                    <th class="width-8 text-center">วันที่</th>
-                    <th class="width-5 text-center"></th>
+									<th class="width-8 text-center">วันที่</th>
+                  <th class="text-center">เลขที่เอกสาร</th>
+                  <th class="text-center">ลูกค้า</th>
+                  <th class="width-8 text-center">จังหวัด</th>
+                  <th class="width-8 text-center">ยอดเงิน</th>
+                  <th class="width-8 text-center">ช่องทางขาย</th>
+                  <th class="width-8 text-center">การชำระเงิน</th>
+                  <th class="width-8 text-center">สถานะ</th>
+                  <th class="width-5 text-center"></th>
                 </tr>
             </thead>
             <tbody>
@@ -422,14 +441,22 @@ for($i =1; $i <= 11; $i++)
 <?php	while( $rs = dbFetchObject($qs) ) : ?>
 
 			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status, $rs->isExpire); //--- order_help.php ?>>
-            	<td class="middle text-cennter pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $no; ?></td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
+            	<td class="middle text-cennter pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
+								<?php echo $no; ?>
+							</td>
+
+							<td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
+								<?php echo thaiDate($rs->date_add); ?>
+							</td>
+
+							<td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
 									<?php echo $rs->reference; ?>
 									<?php if($rs->ref_code != '') : ?>
 											[ <?php echo $rs->ref_code; ?> ]
 									<?php endif; ?>
-								</td>
-                <td class="middle pointer" onclick="goEdit(<?php echo $rs->id; ?>)">
+							</td>
+
+              <td class="middle pointer" onclick="goEdit(<?php echo $rs->id; ?>)">
                  	<?php if( $rs->isOnline == 1 ) : ?>
                    		[  <?php echo $rs->online_code; ?>  ] &nbsp; &nbsp;
 									<?php endif; ?>
@@ -437,16 +464,31 @@ for($i =1; $i <= 11; $i++)
                   <?php if( $rs->role == 1 && $pm->hasTerm($rs->id_payment) === FALSE && $rs->isPaid == 0 ) : ?>
                   	<span class="red font-size-14 padding-10" style="margin-left:10px; background-color:#FFF;">ยังไม่ชำระเงิน</span>
                   <?php endif; ?>
-                </td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $cs->getProvince($rs->id_customer); ?></td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo number_format($order->getTotalAmount($rs->id), 2); ?></td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $ch->getName($rs->id_channels); ?></td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo $pm->getName($rs->id_payment); ?></td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo stateName($rs->state, $rs->status, $rs->isExpire); ?></td>
-                <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)"><?php echo thaiDate($rs->date_add); ?></td>
-                <td class="middle text-center">
+              </td>
+
+              <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
+								<?php echo $cs->getProvince($rs->id_customer); ?>
+							</td>
+
+              <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
+								<?php echo number_format($order->getTotalAmount($rs->id), 2); ?>
+							</td>
+
+              <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
+								<?php echo $ch->getName($rs->id_channels); ?>
+							</td>
+
+              <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
+								<?php echo $pm->getName($rs->id_payment); ?>
+							</td>
+
+              <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
+								<?php echo stateName($rs->state, $rs->status, $rs->isExpire); ?>
+							</td>
+
+              <td class="middle text-center">
                 <button type="button"
-                			class="btn btn-default btn-mini"
+                			class="btn btn-link btn-mini"
                             data-container="body"
                             data-toggle="popover"
 														data-html="true"
@@ -454,7 +496,8 @@ for($i =1; $i <= 11; $i++)
                             data-trigger="focus"
                             data-content="
 
-                            พนักงาน : <?php echo employee_name($rs->id_employee); ?><br/>
+                            สาขา : <?php echo getBranchName($rs->id_branch); ?><br/>
+														พนักงาน : <?php echo employee_name($rs->id_employee); ?><br/>
                             ปรับปรุงล่าสุด : <?php echo thaiDate($rs->date_upd); ?>
                         "><i class="fa fa-bars"></i></button>
 
@@ -497,4 +540,4 @@ $(function () {
   $('[data-toggle="popover"]').popover();
 });
 </script>
-<script src="script/order/order_list.js"></script>
+<script src="script/order/order_list.js?token=<?php echo date('Ymd'); ?>"></script>

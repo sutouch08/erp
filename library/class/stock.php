@@ -247,7 +247,8 @@ class stock
 		$qr .= "WHERE id_product = '".$id_pd."' ";
 		$qr .= "AND w.prepare = 1 ";
 		$qr .= "AND w.active = 1 ";
-		if($id_branch != 0 OR $id_branch != '')
+
+		if($id_branch != 0)
 		{
 			$qr .= "AND w.id_branch = '".$id_branch."' ";
 		}

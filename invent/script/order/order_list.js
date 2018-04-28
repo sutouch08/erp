@@ -1,4 +1,5 @@
 // JavaScript Document
+
 $("#fromDate").datepicker({
 	dateFormat: 'dd-mm-yy',
 	onClose: function(ds){
@@ -25,6 +26,10 @@ $(".search-box").keyup(function(e) {
     if( e.keyCode == 13 ){
 		getSearch();
 	}
+});
+
+$('.search-select').change(function(e){
+	getSearch();
 });
 
 
@@ -80,6 +85,7 @@ $('#pd-search-box').autocomplete({
 function getStockGrid(){
 	var pdCode = $('#pd-search-box').val();
 	var id_style = $('#id_style').val();
+	var id_branch = $('#sBranch').val();
 	if(pdCode.length > 0 && id_style != ''){
 		load_in();
 		$.ajax({
@@ -87,6 +93,7 @@ function getStockGrid(){
 			type:'GET',
 			cache:'false',
 			data:{
+				'id_branch' : id_branch,
 				'id_style' : id_style
 			},
 			success:function(rs){

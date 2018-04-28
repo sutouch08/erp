@@ -39,7 +39,9 @@ $(".search-box").keyup(function(e){
 });
 
 
-
+$('#sBranch').change(function(event) {
+  getSearch();
+});
 
 function getSearch(){
   $("#searchForm").submit();

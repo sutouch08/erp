@@ -86,6 +86,6 @@ $hide = ( $order->status == 0 OR $order->hasNotSaveDetail === TRUE ) ? '' : 'hid
 ?>
 
 <?php endif; ?>
-<script src="script/order_consignment/consignment_add.js"></script>
-<script src="script/product_tab_menu.js"></script>
-<script src="script/order/order_grid.js"></script>
+<script src="script/order_consignment/consignment_add.js?token=<?php echo date('Ymd'); ?>"></script>
+<script src="script/product_tab_menu.js?token=<?php echo date('Ymd'); ?>"></script>
+<script src="script/order/order_grid.js?token=<?php echo date('Ymd'); ?>"></script>

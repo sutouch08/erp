@@ -39,6 +39,11 @@
     $where .= "AND role = ".$sRole." ";
   }
 
+  if( $sBranch != '')
+  {
+    createCookie('sBranch', $sBranch);
+    $where .= "AND id_branch = '".$sBranch."' ";
+  }
 
   if( $fromDate != '' && $toDate != '')
   {
@@ -65,13 +70,13 @@
       <thead>
         <tr>
           <th class="width-5 text-center">ลำดับ</th>
-          <th class="width-15">เลขที่เอกสาร</th>
+          <th class="width-10 text-center">วันที่</th>
+          <th class="width-10">เลขที่เอกสาร</th>
           <th class="width-25">ลูกค้า/ผู้รับ/ผู้เบิก</th>
           <th class="width-10 text-center">ยอดเงิน</th>
           <th class="width-10 text-center">รูปแบบ</th>
           <th class="width-15 text-center">พนักงาน</th>
-          <th class="width-10 text-center">วันที่</th>
-          <th class="width-10 text-center">ปรับปรุง</th>
+          <th class="width-10 text-center">สาขา</th>
         </tr>
       </thead>
       <tbody>
@@ -84,6 +89,10 @@
 
           <td class="text-center pointer" onclick="goDetail(<?php echo $rs->id; ?>)">
             <?php echo $no; ?>
+          </td>
+
+          <td class="pointer text-center" onclick="goDetail(<?php echo $rs->id; ?>)">
+            <?php echo thaiDate($rs->date_add); ?>
           </td>
 
           <td class="pointer" onclick="goDetail(<?php echo $rs->id;?>)">
@@ -107,15 +116,11 @@
           </td>
 
           <td class="pointer text-center" onclick="goDetail(<?php echo $rs->id; ?>)">
-            <?php echo thaiDate($rs->date_add); ?>
-          </td>
-
-          <td class="pointer text-center" onclick="goDetail(<?php echo $rs->id; ?>)">
-            <?php echo thaiDate($rs->date_upd); ?>
+            <?php echo getBranchName($rs->id_branch); ?>
           </td>
 
         </tr>
-<?php  $no++; ?>        
+<?php  $no++; ?>
 <?php endwhile; ?>
 <?php else : ?>
       <tr>
@@ -128,4 +133,4 @@
 </div>
 
 
-<script src="script/bill/bill_list.js"></script>
+<script src="script/bill/bill_list.js?token=<?php echo date('Ymd'); ?>"></script>

@@ -1,6 +1,6 @@
 <script src="<?php echo WEB_ROOT; ?>library/js/clipboard.min.js"></script>
 <script src="<?php echo WEB_ROOT; ?>library/js/jquery.md5.js"></script>
-<?php 
+<?php
 	$page_name	= "ออเดอร์";
 	$id_tab 			= 14;
     $pm 				= checkAccess($id_profile, $id_tab);
@@ -15,9 +15,10 @@
 	include 'function/channels_helper.php';
 	include 'function/payment_method_helper.php';
 	include 'function/productTab_helper.php';
-?>    
+	include 'function/branch_helper.php';
+?>
 <div class="container">
-<?php 
+<?php
 
 if( isset( $_GET['add'] ) )
 {
@@ -33,7 +34,7 @@ else if( isset( $_GET['view_detail'] ) )
 }
 else
 {
-	include 'include/order/order_list.php';	
+	include 'include/order/order_list.php';
 }
 
 ?>

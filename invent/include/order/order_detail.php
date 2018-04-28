@@ -225,4 +225,4 @@
     </tr>
 </script>
 
-<script src="script/order/order_detail.js"></script>
+<script src="script/order/order_detail.js?token=<?php echo date('Ymd'); ?>"></script>

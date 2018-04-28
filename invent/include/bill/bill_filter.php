@@ -6,11 +6,12 @@ $sEmp     = getFilter('sEmp', 'sOrderEmp', '');
 $sRole    = getFilter('sRole', 'sOrderRole', '');
 $fromDate = getFilter('fromDate', 'fromDate', '');
 $toDate   = getFilter('toDate', 'toDate', '');
+$sBranch  = getFilter('sBranch', 'sBranch', '');
 
  ?>
  <form id="searchForm" method="post">
 <div class="row">
-  <div class="col-sm-2 padding-5 first">
+  <div class="col-sm-1 col-1-harf padding-5 first">
     <label>เลขที่เอกสาร</label>
     <input type="text" class="form-control input-sm search-box" id="sCode" name="sCode" value="<?php echo $sCode; ?>" />
   </div>
@@ -20,16 +21,24 @@ $toDate   = getFilter('toDate', 'toDate', '');
     <input type="text" class="form-control input-sm search-box" id="sName" name="sName" value="<?php echo $sName; ?>" />
   </div>
 
-  <div class="col-sm-2 padding-5">
+  <div class="col-sm-1 col-1-harf padding-5">
     <label>พนักงาน</label>
     <input type="text" class="form-control input-sm text-center search-box" id="sEmp" name="sEmp" value="<?php echo $sEmp; ?>" />
   </div>
 
-  <div class="col-sm-2 padding-5">
+  <div class="col-sm-1 col-1-harf padding-5">
     <label>รูปแบบ</label>
     <select class="form-control input-sm" name="sRole" id="sRole">
       <option value="">ทั้งหมด</option>
       <?php echo selectRole($sRole); ?>
+    </select>
+  </div>
+
+  <div class="col-sm-1 col-1-harf padding-5">
+    <label>สาขา</label>
+    <select class="form-control input-sm search-select" id="sBranch" name="sBranch">
+      <option value="">ทั้งหมด</option>
+      <?php echo selectBranch($sBranch); ?>
     </select>
   </div>
 

@@ -29,7 +29,7 @@ if( dbNumRows($qs) > 0)
     {
       break;
     }
-    
+
     //--- 1. เพิ่มสต็อกในโซนที่ถูกตัด
     if( $stock->updateStockZone($cs->id_zone, $rs->id_product, $rs->qty) !== TRUE)
     {
@@ -45,20 +45,24 @@ if( dbNumRows($qs) > 0)
     }
 
     //--- 3. ลบรายการบันทึกขาย
-    $sold = $order->getConsignSoldDetail($cs->reference, $rs->id_product, $cs->id_zone);
-    if( $sold === FALSE )
+    if($cs->isSaved == 1)
     {
-      $sc = FALSE;
-      $message = 'ไม่พบรายการบันทึกขาย';
-    }
-    else
-    {
-      if( $order->unSold($sold->id) !== TRUE )
+      $sold = $order->getConsignSoldDetail($cs->reference, $rs->id_product, $cs->id_zone);
+      if( $sold === FALSE )
       {
         $sc = FALSE;
-        $message = 'ลบรายการบันทึกขายไม่สำเร็จ';
+        $message = 'ไม่พบรายการบันทึกขาย';
       }
-    } //--- end if id_sold === false
+      else
+      {
+        if( $order->unSold($sold->id) !== TRUE )
+        {
+          $sc = FALSE;
+          $message = 'ลบรายการบันทึกขายไม่สำเร็จ';
+        }
+      } //--- end if id_sold === false
+    }
+    
 
     //--- 4. ลบรายการตัดยอด
     if( $cs->deleteDetail($rs->id) !== TRUE)

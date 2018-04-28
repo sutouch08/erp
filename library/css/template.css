@@ -1100,7 +1100,16 @@ td.one-attribute{
   .last{
     padding-right : 5px !important;
   }
+
+  .first-xs{
+    padding-left : 15px !important;
+  }
+
+  .last-xs{
+    padding-right : 15px !important;
+  }
 }
+
 
 
 
