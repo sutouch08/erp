@@ -748,9 +748,15 @@ class order
 
 
 
-	public function getReservQty($id_pd)
+	public function getReservQty($id_pd, $id_branch = 0)
 	{
-		$qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_order_detail WHERE id_product = '".$id_pd."' AND valid = 0 AND is_expired = 0");
+		$qr = "SELECT SUM(qty) AS qty FROM tbl_order_detail AS od ";
+		$qr .= "JOIN tbl_order AS o ON od.id_order = o.id ";
+		$qr .= "WHERE od.id_product = '".$id_pd."' ";
+		$qr .= "AND od.valid = 0 ";
+		$qr .= "AND od.is_expired = 0 ";
+		$qr .= $id_branch == 0 ? "" : "AND o.id_branch = '".$id_branch."' ";
+		$qs = dbQuery($qr);
 		list( $qty ) = dbFetchArray($qs);
 		return is_null( $qty ) ? 0 : $qty;
 	}
@@ -759,9 +765,16 @@ class order
 
 
 
-	public function getStyleReservQty($id_style)
+	public function getStyleReservQty($id_style, $id_branch = 0)
 	{
-		$qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_order_detail WHERE id_style = '".$id_style."' AND valid = 0 AND is_expired = 0");
+		$qr  = "SELECT SUM(qty) AS qty ";
+		$qr .= "FROM tbl_order_detail AS od ";
+		$qr .= "JOIN tbl_order AS o ON od.id_order = o.id ";
+		$qr .= "WHERE od.id_style = '".$id_style."' ";
+		$qr .= "AND od.valid = 0 ";
+		$qr .= "AND od.is_expired = 0 ";
+		$qr .= $id_branch == 0 ? "" : "AND o.id_branch = '".$id_branch."' ";
+		$qs = dbQuery($qr);
 		list( $qty ) = dbFetchArray($qs);
 		return is_null( $qty ) ? 0 : $qty;
 	}

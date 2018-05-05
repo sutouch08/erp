@@ -228,7 +228,7 @@ function save(){
 							});
 
 							setTimeout(function(){
-								goBack();
+								goDetail(id);
 							}, 1200);
 
 						}else{

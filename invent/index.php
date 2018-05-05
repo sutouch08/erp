@@ -538,6 +538,10 @@ if( !getConfig('CLOSED') )
 			$content = 'report/purchase/po_backlog.php';
 			$pageTitle = 'รายงานใบสั่งซื้อค้างรับ';
 			break;
+		case 'po_history_by_product' :
+			$content = 'report/purchase/po_history_by_product.php';
+			$pageTitle = 'รายงาน สรุปยอดการสั่งซื้อ ตามรุ่นสินค้า';
+			break;
 
 		default:
 			$content = 'main.php';

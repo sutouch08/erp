@@ -253,7 +253,7 @@
           <th class="width-15 text-center">พนักงาน</th>
           <th class="width-10 text-center">สาขา</th>
           <th class="width-8 text-center">วันที่</th>
-          <th class="width-8 text-center">ปรับปรุง</th>
+          <th class="width-10 text-center">ปรับปรุง</th>
         </tr>
       </thead>
       <tbody>
@@ -261,7 +261,7 @@
 <?php   $order = new order(); ?>
 <?php   $no = row_no(); ?>
 <?php   while( $rs = dbFetchObject($qs)) : ?>
-        <tr class="font-size-12">
+        <tr class="font-size-10">
 
           <td class="middle text-center pointer" onclick="viewDetail(<?php echo $rs->id; ?>)">
             <?php echo number($no); ?>
@@ -299,7 +299,7 @@
           </td>
 
           <td class="middle text-center pointer" onclick="viewDetail(<?php echo $rs->id; ?>)">
-            <?php echo thaiDate($rs->date_upd); ?>
+            <?php echo thaiDateTime($rs->date_upd); ?>
           </td>
 
         </tr>

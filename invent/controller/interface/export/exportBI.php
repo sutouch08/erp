@@ -19,7 +19,7 @@
 		$QCJOB		= ""; 	//--  รหัสโครงการ (ถ้ามี)
 		$STAT			= "";	//-- 	สถานะของเอกสาร ปกติว่างไว้,  C = CANCEL
 		$QCBOOK 	= tis($cs->bookcode);		//--	รหัสเล่มเอกสาร
-		$CODE			= "";	//--	เลขที่เอกสาร ถ้าว่างไว้ระบบจะ gen ให้เอง
+		$CODE			= $cs->reference;	//--	เลขที่เอกสาร ถ้าว่างไว้ระบบจะ gen ให้เอง
 		$REFNO	 	= $cs->reference;		//--	เลขที่อ้างอิง (เลขที่เอกสารใน Smart Invent)
 		$DATE			= thaiDate($cs->date_add, '/');	//--	วันที่ของเอกสาร
 		$RECEDATE	= thaiDate($cs->date_add, '/');;	//--	วันที่ยื่นภาษี

@@ -6,6 +6,7 @@
 	$edit = $pm['edit'];
 	$delete = $pm['delete'];
   accessDeny($view);
+	include 'function/warehouse_helper.php';
 	?>
 
 <div class="container">
@@ -24,6 +25,7 @@
 <?php
 $reference = getFilter('reference', 'reference', '');
 $pdCode = getFilter('pdCode', 'pdCode', '');
+$whCode = getFilter('whCode', 'whCode', '');
 $zoneCode = getFilter('zoneCode', 'zoneCode', '');
 $fromDate = getFilter('fromDate', 'fromDate', '');
 $toDate = getFilter('toDate', 'toDate', '');
@@ -37,6 +39,10 @@ $toDate = getFilter('toDate', 'toDate', '');
   <div class="col-sm-2 padding-5">
     <label>สินค้า</label>
     <input type="text" class="form-control input-sm search-box" name="pdCode" value="<?php echo $pdCode; ?>" />
+  </div>
+	<div class="col-sm-2 padding-5">
+    <label>คลัง</label>
+    <input type="text" class="form-control input-sm search-box" name="whCode" value="<?php echo $whCode; ?>" />
   </div>
   <div class="col-sm-2 padding-5">
     <label>โซน</label>
@@ -76,6 +82,13 @@ if($pdCode != '')
   $where .= "AND p.code LIKE '%".$pdCode."%' ";
 	$length++;
 }
+
+if($whCode != '')
+{
+	createCookie('whCode', $whCode);
+	$where .= "AND z.id_warehouse IN(".getWarehouseIn($whCode).") ";
+}
+
 
 if($zoneCode != '')
 {

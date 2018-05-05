@@ -24,20 +24,20 @@
         <?php echo selectPaymentMethod($order->id_payment); ?>
         </select>
     </div>
-		<div class="col-sm-1 col-1-harf padding-5 last">
+		<div class="col-sm-1 col-1-harf col-xs-6 padding-5 last last-xs">
 			<label>สาขา</label>
 			<select class="form-control input-sm input-header" id="branch" <?php echo $disabled; ?>>
 				<option value="">โปรดเลือก</option>
 				<?php echo selectBranch($order->id_branch); ?>
 			</select>
 		</div>
-		<div class="divider-hidden margin-top-5 margin-bottom-5"></div>
-		<div class="col-sm-1 col-1-harf padding-5 first">
+		<div class="divider-hidden margin-top-5 margin-bottom-5 hidden-xs"></div>
+		<div class="col-sm-1 col-1-harf col-xs-6 padding-5 first first-xs">
 			<label>อ้างอิงออเดอร์</label>
 			<input type="text" class="form-control input-sm input-header" id="ref-code" value="<?php echo $order->ref_code; ?>" <?php echo $disabled; ?> />
 		</div>
 
-    <div class="col-sm-9 padding-5">
+    <div class="col-sm-9 col-xs-12 padding-5 first-xs last-xs">
     	<label>หมายเหตุ</label>
         <input type="text" class="form-control input-sm input-header" id="remark" value="<?php echo $order->remark; ?>" <?php echo $disabled; ?> />
     </div>

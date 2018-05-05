@@ -33,7 +33,6 @@ function doExport(){
 }
 
 
-
 function goDelete(id, name){
 	swal({
 		title: "คุณแน่ใจ ?",

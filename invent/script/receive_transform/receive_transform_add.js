@@ -208,7 +208,7 @@ function save(){
 								});
 
 								setTimeout(function(){
-									goBack();
+									goDetail(id_rec);
 								}, 1200);
 
 							}else{

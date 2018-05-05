@@ -94,7 +94,6 @@
       {{/each}}
     {{/if}}
 
-  <tfoot
 </table>
 </script>
 <script src="script/report/sale/support_by_customer_order.js"></script>

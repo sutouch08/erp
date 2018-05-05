@@ -7,7 +7,7 @@ $prevDate   = $_GET['prevDate'];
 $selectDate = $_GET['selectDate'];
 $pdFrom     = $_GET['pdFrom'];
 $pdTo       = $_GET['pdTo'];
-$whList     = $_GET['warehouse'];
+$whList     = $allWarehouse == 1 ? FALSE : $_GET['warehouse'];
 $wh = new warehouse();
 $wh_in      = "";
 $wh_list    = "";

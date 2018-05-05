@@ -2,6 +2,25 @@
 /////////////////////////////////
 ///////   Warehouse Helper //////
 ////////////////////////////////
+function getWarehouseIn($txt)
+{
+	$sc = '1234567890';
+	$qs = dbQuery("SELECT id FROM tbl_warehouse WHERE code LIKE'%".$txt."%' OR name LIKE'%".$txt."%'");
+	if(dbNumRows($qs) > 0)
+	{
+		$sc = '';
+		$i = 1;
+		while($rs = dbFetchObject($qs))
+		{
+			$sc .= $i == 1? "'".$rs->id."'" : ", '".$rs->id."'";
+			$i++;
+		}
+	}
+
+	return $sc;
+}
+
+
 function selectWarehouse($se = 0 )
 {
 	$warehouse = new warehouse();

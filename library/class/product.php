@@ -557,12 +557,12 @@ class product
 		$cancle = new cancle_zone();
 		$buffer = new buffer();
 		$sellStock = $stock->getSellStock($id, $id_branch);
-		//$reservStock = $order->getReservQty($id);
+		$reservStock = $order->getReservQty($id, $id_branch);
 		//$cancleQty = 0; //$cancle->getCancleQty($id);
 		//$bufferStock = $id_order == '' ? 0 : $buffer->getSumQty($id_order, $id);
-		//$availableStock = ($sellStock + $bufferStock) - $reservStock + $cancleQty;
+		$availableStock = $sellStock - $reservStock;
 		//return $availableStock < 0 ? 0 : $availableStock;
-		return $sellStock < 0 ? 0 : $sellStock;
+		return $availableStock < 0 ? 0 : $availableStock;
 	}
 
 
@@ -572,17 +572,17 @@ class product
 	//---- ยอดรวมของรุ่นสินค้าที่สั่งได้
 	public function getStyleSellStock($id_style, $id_branch = 0)
 	{
-		//$order = new order();
+		$order = new order();
 		$stock = new stock();
 		//$cancle = new cancle_zone();
 		$sellStock = $stock->getStyleSellStock($id_style, $id_branch);
-		//$reservStock = $order->getStyleReservQty($id_style);
+		$reservStock = $order->getStyleReservQty($id_style, $id_branch);
 		//$cancleQty = 0; //$cancle->getStyleCancleQty($id_style);
 
-		//$availableStock = $sellStock - $reservStock + $cancleQty;
+		$availableStock = $sellStock - $reservStock;
 
 		//return $availableStock < 0 ? 0 : $availableStock;
-		return $sellStock < 0 ? 0 : $sellStock;
+		return $availableStock < 0 ? 0 : $availableStock;
 	}
 
 

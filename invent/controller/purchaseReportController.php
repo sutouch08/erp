@@ -23,4 +23,28 @@ if(isset($_GET['poBacklogs']) && isset($_GET['export']))
 
 }
 
+
+//--- รายงานประวัติการสั่งซื้อ แยกตามรุ่นสินค้า
+if(isset($_GET['poHistoryByProduct']) && isset($_GET['report']))
+{
+  include 'report/purchase/report_po_history_by_product.php';
+}
+
+
+if(isset($_GET['getPoList']))
+{
+  include 'report/purchase/report_get_po_list.php';
+}
+
+
+//--- รายงานประวัติการสั่งซื้อ แยกตามรุ่นสินค้า
+if(isset($_GET['poHistoryByProduct']) && isset($_GET['export']))
+{
+  include 'report/purchase/export_po_history_by_product.php';
+}
+
+
+
+
+
  ?>

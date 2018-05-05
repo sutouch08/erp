@@ -335,5 +335,5 @@ for($i =1; $i <= 11; $i++)
 	</div>
 </div>
 
-<script src="script/order/sale_order_list.js"></script>
-<script src="script/order/sale_order_add.js"></script>
+<script src="script/order/sale_order_list.js?token=<?php echo date('Ymd'); ?>"></script>
+<script src="script/order/sale_order_add.js?token=<?php echo date('Ymd'); ?>"></script>

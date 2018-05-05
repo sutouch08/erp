@@ -86,6 +86,8 @@ $('#pd-search-box').autocomplete({
 function getStockGrid(){
 	var pdCode = $('#pd-search-box').val();
 	var id_style = $('#id_style').val();
+  var id_branch = $('#sBranch').val();
+  console.log('ok');
 	if(pdCode.length > 0 && id_style != ''){
 		load_in();
 		$.ajax({
@@ -93,7 +95,8 @@ function getStockGrid(){
 			type:'GET',
 			cache:'false',
 			data:{
-				'id_style' : id_style
+				'id_style' : id_style,
+        'id_branch' : id_branch
 			},
 			success:function(rs){
 				load_out();

@@ -102,6 +102,7 @@
        <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ระบบซื้อ</a>
       	<ul class="dropdown-menu">
         	<li><a href="index.php?content=po_backlog"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ใบสั่งซื้อค้างรับ</a></li>
+          <li><a href="index.php?content=po_history_by_product"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดการสั่งซื้อ ตามรุ่นสินค้า</a></li>
         </ul>
       </li>
 

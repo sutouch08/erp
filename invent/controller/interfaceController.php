@@ -220,6 +220,33 @@ if( isset( $_GET['export'] ) && isset( $_GET['FR'] ) )
 
 }
 
+if(isset($_GET['export']) && isset($_GET['rangeFR']))
+{
+	$from = $_GET['from_id'];
+	$to = $_GET['to_id'];
+
+	include '../function/vat_helper.php';
+	include "interface/export/exportFR.php";
+
+	while($from <= $to)
+	{
+		$id = $from;
+		$FR = exportFR($id);
+		if( $FR === TRUE )
+		{
+			echo $from." EXPORTED <br/>";
+		}
+		else
+		{
+			echo $FR;
+		}
+
+		$from++;
+	}
+
+
+}
+
 
 
 //---	Export Sale order

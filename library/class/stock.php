@@ -11,25 +11,12 @@ class stock
 
 	public function updateStockZone($id_zone, $id_pd, $qty)
 	{
-		$sc = FALSE;
-		$cQty = $this->isExists($id_zone, $id_pd);
-		if($cQty === FALSE)
+		if($this->isExists($id_zone, $id_pd) === FALSE)
 		{
-			$sc = $this->add($id_zone, $id_pd, $qty);
-		}
-		else
-		{
-			$sc = $this->update($id_zone, $id_pd, $qty);
+			 return $this->add($id_zone, $id_pd, $qty);
 		}
 
-		if($sc == FALSE)
-		{
-			$this->error = dbError();
-		}
-
-		$this->removeZero();
-
-		return $sc;
+		return $this->update($id_zone, $id_pd, $qty);
 	}
 
 
@@ -45,18 +32,7 @@ class stock
 
 	private function update($id_zone, $id_pd, $qty)
 	{
-		$sc = FALSE;
-		if($qty < 0)
-		{
-			$qty = $qty * (-1);
-			$sc = dbQuery("UPDATE tbl_stock SET qty = qty - ".$qty." WHERE id_zone = ".$id_zone." AND id_product = '".$id_pd."'");
-		}
-		else
-		{
-			$sc = dbQuery("UPDATE tbl_stock SET qty = (qty + ".$qty.") WHERE id_zone = ".$id_zone." AND id_product = '".$id_pd."'");
-		}
-
-		return $sc;
+		return dbQuery("UPDATE tbl_stock SET qty = qty + ".$qty." WHERE id_zone = ".$id_zone." AND id_product = '".$id_pd."'");
 	}
 
 
@@ -66,7 +42,7 @@ class stock
 
 	private function removeZero()
 	{
-		dbQuery("DELETE FROM tbl_stock WHERE qty = 0");
+		return dbQuery("DELETE FROM tbl_stock WHERE qty = 0");
 	}
 
 
@@ -75,16 +51,15 @@ class stock
 
 	public function isExists($id_zone, $id_pd)
 	{
-		$sc = FALSE;
 		$qs = dbQuery("SELECT qty FROM tbl_stock WHERE id_zone = '".$id_zone."' AND id_product = '".$id_pd."'");
 		if( dbNumRows($qs) == 1 )
 		{
 			list( $sc ) = dbFetchArray($qs);
+			return $sc;
 		}
-		return $sc;
+
+		return FALSE;
 	}
-
-
 
 
 

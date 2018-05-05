@@ -5,7 +5,7 @@ $allProduct = $_GET['allProduct'];
 $allWarehouse = $_GET['allWhouse'];
 $pdFrom     = $_GET['pdFrom'];
 $pdTo       = $_GET['pdTo'];
-$whList     = $_GET['warehouse'];
+$whList     = $allWarehouse == 1 ? FALSE : $_GET['warehouse'];
 $wh = new warehouse();
 $wh_in      = "";
 $wh_list    = "";

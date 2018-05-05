@@ -810,6 +810,7 @@ hr{
 }
 
 
+@media (min-width: 768px){
 
 .col-1-harf {
 	width: 12.5%;
@@ -881,7 +882,7 @@ hr{
 	width: 95.833333333%;
 }
 
-
+}
 
 .pointer{
 	cursor:pointer;
@@ -1108,6 +1109,8 @@ td.one-attribute{
   .last-xs{
     padding-right : 15px !important;
   }
+
+
 }
 
 

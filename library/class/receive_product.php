@@ -151,7 +151,7 @@ class receive_product
 
 			return dbQuery("INSERT INTO tbl_receive_product_detail (".$fields.") VALUES (".$values.")");
 		}
-		
+
 		return FALSE;
 	}
 
@@ -183,7 +183,7 @@ class receive_product
 		$date = $date == '' ? date('Y-m-d') : $date;
 		$Y		= date('y', strtotime($date));
 		$M		= date('m', strtotime($date));
-		$runDigit = getConfig('RUN_DIGIT');
+		$runDigit = 4; //getConfig('RUN_DIGIT');
 		$prefix = getConfig('PREFIX_RECEIVE');
 		$preRef = $prefix . '-' . $Y . $M;
 		$qs = dbQuery("SELECT MAX(reference) AS reference FROM tbl_receive_product WHERE reference LIKE '".$preRef."%' ORDER BY reference DESC");

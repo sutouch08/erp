@@ -72,6 +72,7 @@ function getOrderGrid(id_style){
 function getSaleStockGrid(){
 	var pdCode = $('#pd-box').val();
 	var id_branch = $('#id_branch').val();
+	console.log('ok');
 	load_in();
 	$.ajax({
 		url:"../invent/controller/orderController.php?getSaleStockGrid",
