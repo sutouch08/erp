@@ -71,6 +71,56 @@ include 'include/qc/qc_complete_list.php';
     </div>
   </div>
 
+  <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="optionModal" aria-hidden="true">
+    <div class="modal-dialog" style="width:500px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="edit-title"></h4>
+        </div>
+        <div class="modal-body" id="edit-body">
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script id="edit-template" type="text/x-handlebarsTemplate">
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="width-20">รหัส</th>
+            <th class="width-40">กล่อง</th>
+            <th class="width-15 text-center">ในกล่อง</th>
+            <th class="width-15 text-center">เอาออก</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+      {{#each this}}
+        <tr>
+          <td>{{barcode}}</td>
+          <td>กล่องที่ {{box_no}}</td>
+          <td class="text-center"><span id="label-{{id_qc}}">{{qty}}</span></td>
+          <td class="text-center">
+            <input type="number" class="form-control input-sm text-center" id="input-{{id_qc}}" />
+          </td>
+          <td class="text-right">
+          <?php if($delete) : ?>
+            <button type="button" class="btn btn-sm btn-danger" onclick="updateQty({{id_qc}})">Update</button>
+          <?php endif; ?>
+          </td>
+        </tr>
+      {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </script>
+
 <?php
 
 $qr = dbQuery("SELECT id_product FROM tbl_prepare WHERE id_order = ".$order->id." GROUP BY id_product");
@@ -86,7 +136,7 @@ while( $res = dbFetchObject($qr))
 
  ?>
 
-<script src="script/qc/qc_process.js"></script>
-<script src="script/qc/qc_control.js"></script>
-<script src="script/print/print_address.js"></script>
+<script src="script/qc/qc_process.js?token=<?php echo date('Ymd'); ?>"></script>
+<script src="script/qc/qc_control.js?token=<?php echo date('Ymd'); ?>"></script>
+<script src="script/print/print_address.js?token=<?php echo date('Ymd'); ?>"></script>
 <?php endif; ?>

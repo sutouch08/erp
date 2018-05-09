@@ -77,7 +77,7 @@ class qc
   public function getCompleteList($id_order)
   {
     $qr = "SELECT o.id_product, o.product_code, o.product_name, o.qty AS order_qty, ";
-    $qr .= "(SELECT SUM(qty) FROM tbl_prepare WHERE id_order = ".$id_order." AND id_product = o.id_product) AS prepared, ";
+    $qr .= "(SELECT SUM(qty) FROM tbl_buffer WHERE id_order = ".$id_order." AND id_product = o.id_product) AS prepared, ";
     $qr .= "(SELECT SUM(qty) FROM tbl_qc WHERE id_order = ".$id_order." AND id_product = o.id_product) AS qc ";
     $qr .= "FROM tbl_order_detail AS o ";
     $qr .= "WHERE o.id_order = ".$id_order." GROUP BY o.id_product HAVING prepared <= qc ";
@@ -85,6 +85,19 @@ class qc
     return dbQuery($qr);
   }
 
+  /*
+  //--- รายการที่ตรวจครบแล้ว
+  public function getCompleteList($id_order)
+  {
+    $qr = "SELECT o.id_product, o.product_code, o.product_name, o.qty AS order_qty, ";
+    $qr .= "(SELECT SUM(qty) FROM tbl_prepare WHERE id_order = ".$id_order." AND id_product = o.id_product) AS prepared, ";
+    $qr .= "(SELECT SUM(qty) FROM tbl_qc WHERE id_order = ".$id_order." AND id_product = o.id_product) AS qc ";
+    $qr .= "FROM tbl_order_detail AS o ";
+    $qr .= "WHERE o.id_order = ".$id_order." GROUP BY o.id_product HAVING prepared <= qc ";
+
+    return dbQuery($qr);
+  }
+*/
 
 
 
@@ -101,6 +114,19 @@ class qc
     return is_null($qty) ? 0 : $qty;
   }
 
+
+  //---- ยอดรวมสินค้าที่ตรวจไปแล้ว
+  public function getSumQty($id_order, $id_pd)
+  {
+    $qr  = "SELECT SUM(qty) AS qty FROM tbl_qc ";
+    $qr .= "WHERE id_order = '".$id_order."' ";
+    $qr .= "AND id_product = '".$id_pd."' ";
+
+    $qs = dbQuery($qr);
+
+    list($qty) = dbFetchArray($qs);
+    return is_null($qty) ? 0 : $qty;
+  }
 
 
 

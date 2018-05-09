@@ -42,5 +42,5 @@ else
 
 
 </div><!-- /container -->
-<script src="script/receive_product/receive_product.js"></script>
+<script src="script/receive_product/receive_product.js?token=<?php echo date('Ymd'); ?>"></script>
 <!---------------  Beep sount for alert ----------->

@@ -49,8 +49,10 @@ class buffer
 
   public function add($id_order, $id_style, $id_pd, $id_zone, $id_warehouse, $qty)
   {
-    $qr = "INSERT INTO tbl_buffer (id_order, id_style, id_product, qty, id_zone, id_warehouse) VALUES ";
-    $qr .= "(".$id_order.", '".$id_style."', '".$id_pd."', ".$qty.", '".$id_zone."', '".$id_warehouse."')";
+    $qr  = "INSERT INTO tbl_buffer (id_order, id_style, id_product, qty, id_zone, id_warehouse) ";
+    $qr .= "VALUES ";
+    $qr .= "(".$id_order.", '".$id_style."', '".$id_pd."', ".$qty.", ".$id_zone.", '".$id_warehouse."')";
+
     return dbQuery($qr);
   }
 
@@ -63,7 +65,7 @@ class buffer
   {
     $qr = "UPDATE tbl_buffer SET qty = qty + ".$qty." ";
     $qr .= "WHERE id_order = ".$id_order." AND id_product = '".$id_pd."' ";
-    $qr .= "AND id_zone = '".$id_zone."'";
+    $qr .= "AND id_zone = ".$id_zone;
 
     return dbQuery($qr);
   }
@@ -81,14 +83,18 @@ class buffer
 
   public function isExists($id_order, $id_product, $id_zone)
   {
-      $sc = FALSE;
-      $qs = dbQuery("SELECT id FROM tbl_buffer WHERE id_order = '".$id_order."' AND id_product ='".$id_product."' AND id_zone = '".$id_zone."'");
+      $qr  = "SELECT id FROM tbl_buffer ";
+      $qr .= "WHERE id_order = ".$id_order." ";
+      $qr .= "AND id_product = '".$id_product."' ";
+      $qr .= "AND id_zone = ".$id_zone." ";
+
+      $qs = dbQuery($qr);
       if( dbNumRows($qs) == 1 )
       {
-          $sc = TRUE;
+          return TRUE;
       }
 
-      return $sc;
+      return FALSE;
   }
 
 
@@ -98,16 +104,12 @@ class buffer
 
   public function updateBuffer($id_order, $id_style, $id_pd, $id_zone, $id_warehouse, $qty)
   {
-
-    if( $this->isExists($id_order, $id_pd, $id_zone))
-    {
-      return $this->update($id_order, $id_pd, $id_zone, $qty);
-    }
-    else
+    if(!$this->isExists($id_order, $id_pd, $id_zone))
     {
       return $this->add($id_order, $id_style, $id_pd, $id_zone, $id_warehouse, $qty);
     }
 
+    return $this->update($id_order, $id_pd, $id_zone, $qty);
   }
 
 

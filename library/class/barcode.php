@@ -139,13 +139,13 @@ public function getBarcodes($id_pd)
 
 public function getDetail($barcode)
 {
-	$sc = FALSE;
 	$qs = dbQuery("SELECT * FROM tbl_barcode WHERE barcode = '".$barcode."'");
 	if( dbNumRows($qs) == 1 )
 	{
-		$sc = dbFetchObject($qs);
+		return dbFetchObject($qs);
 	}
-	return $sc;
+
+	return FALSE;
 }
 
 

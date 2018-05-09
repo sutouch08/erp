@@ -1,4 +1,5 @@
 <?php
+  $sc           = TRUE;
 
   $id_move 	= $_GET['id_move'];
 
@@ -22,20 +23,19 @@
   //------  ดึงสินค้าทั้งหมดในโซน
   $qs = $stock->getStockInZone($id_zone);
 
-  $rows = dbNumRows($qs);
-  $error = 0;
-  $success = 0;
-
-  if( $rows > 0 )
+  if( dbNumRows($qs) > 0 )
   {
     //--- เริ่มใช้งาน transection
     startTransection();
 
     while( $rs = dbFetchObject($qs) )
     {
-      $sc  = TRUE;
+      if($sc === FALSE)
+      {
+        break;
+      }
 
-      if( $rs->qty < 0 OR $rs->qty > 0 )
+      if( $rs->qty != 0 && $rs->qty > 0 )
       {
         //--- เตรียมข้อมูลสำหรับเพิ่มเข้า tbl_move_detail
         $arr = array(
@@ -57,12 +57,11 @@
         {
           $sc = FALSE;
           $message = 'เพิ่ม/ปรับปรุง รายการไม่สำเร็จ';
-
+          break;
         }
-
-        //----- If insert or update move detail successful  do insert or update move temp
-        if($sc === TRUE)
+        else
         {
+          //----- If insert or update move detail successful  do insert or update move temp
           $temp = array(
                     "id_move_detail" => $ra,
                     "id_move"        => $id_move,
@@ -74,44 +73,47 @@
                     );
 
           //---  เพิ่มยอดเข้า temp
-          if(!$cs->updateTemp($temp))
+          if( $cs->updateTemp($temp) !== TRUE )
           {
             //---- if insert or update move temp fail
             $sc = FALSE;
             $message = 'เพิ่ม/ปรับปรุง temp ไม่สำเร็จ';
+            break;
           }
 
           //--- ตัดยอดออกจากโซนต้นทาง
-          if( !$stock->updateStockZone($id_zone, $rs->id_product, ($rs->qty * -1)))
+          if( $stock->updateStockZone($id_zone, $rs->id_product, ($rs->qty * -1)) !== TRUE )
           {
             //--- if update stock fail
             $sc = FALSE;
             $message = 'ปรับยอดสต็อกไม่สำเร็จ';
+            break;
           }
 
           //--- บันทึก movement ออก
-          if(!$mv->move_out($cs->reference, $id_warehouse, $id_zone, $rs->id_product, $rs->qty, $cs->date_add))
+          if( $mv->move_out($cs->reference, $id_warehouse, $id_zone, $rs->id_product, $rs->qty, $cs->date_add) !== TRUE )
           {
             $sc = FALSE;
             $message = 'บันทึก movement ไม่สำเร็จ';
+            break;
           }
 
-        }
-
-        if($sc === TRUE)
-        {
-          commitTransection();
-          $success++;
-        }
-        else
-        {
-          dbRollback();
-          $error++;
-        }
+        } //--- end if $ra === FALSE
 
       } //---- end if qty != 0
 
     } //--- endwhile
+
+    if( $sc === TRUE )
+    {
+      //--- ถ้าไม่มีอะไรผิดพลาด commit transection
+      commitTransection();
+    }
+    else
+    {
+      //--- ถ้ามีบางรายการไม่สำเร็จ rollback
+      dbRollback();
+    }
 
     //--- จบ transection
     endTransection();
@@ -119,14 +121,12 @@
   else
   {
     //--- ถ้าไม่มีสินค้าคงเหลือในโซนเลย
+    $sc = FALSE;
     $message = 'ไม่มีสินค้าในโซน';
+
   } //--- end if dbNumRows
 
-  if($error == 0)
-  {
-    $message == 'success';
-  }
 
-  echo $message;
+  echo $sc === TRUE ? 'success' : $message;
 
  ?>

@@ -57,11 +57,14 @@ function forceClose(){
 
 //--- บันทึกยอดตรวจนับที่ยังไม่ได้บันทึก
 function saveQc(option){
-
   //--- Option 0 = just save, 1 = change box after saved, 2 = close order after Saved
-
   var id_order = $("#id_order").val();
   var id_box = $("#id_box").val();
+
+  if(id_box == '' || id_order == ''){
+    return false;
+  }
+
   var ds = [];
   ds.push({"name" : "id_order", "value" : id_order});
   ds.push({"name" : "id_box", "value" : id_box});
@@ -309,4 +312,66 @@ function showCloseButton(){
 function showForceCloseBar(){
   $("#close-bar").addClass('hide');
   $("#force-bar").removeClass('hide');
+}
+
+function updateQty(id_qc){
+  remove_qty = Math.ceil($('#input-'+id_qc).val());
+  limit = parseInt($('#label-'+id_qc).text());
+  limit = isNaN(limit) ? 0 : limit;
+
+  if(remove_qty > limit){
+    swal('ยอดที่เอาออกต้องไม่มากกว่ายอดตรวจนับ');
+    return false;
+  }
+  
+  if(limit >= remove_qty){
+    load_in();
+    $.ajax({
+      url:'controller/qcController.php?decreaseCheckedQty',
+      type:'POST',
+      cache:'false',
+      data:{
+        'id_qc' : id_qc,
+        'remove_qty' : remove_qty
+      },
+      success:function(rs){
+        load_out();
+        var rs = $.trim(rs);
+        if(rs == 'success'){
+          qty = limit - remove_qty;
+          $('#label-'+id_qc).text(qty);
+          $('#input-'+id_qc).val('');
+        }
+      }
+    });
+  }
+}
+
+
+
+function showEditOption(id_order, id_product, pdCode){
+  $('#edit-title').text(pdCode);
+  load_in();
+  $.ajax({
+    url:'controller/qcController.php?getCheckedTable',
+    type:'GET',
+    cache:'false',
+    data:{
+      'id_order' : id_order,
+      'id_product' : id_product
+    },
+    success:function(rs){
+      load_out();
+      var rs = $.trim(rs);
+      if(isJson(rs)){
+        var source = $('#edit-template').html();
+        var data = $.parseJSON(rs);
+        var output = $('#edit-body');
+        render(source, data, output);
+        $('#edit-modal').modal('show');
+      }else{
+        swal('Error!',rs, 'error');
+      }
+    }
+  });
 }

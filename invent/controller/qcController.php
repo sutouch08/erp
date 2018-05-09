@@ -43,6 +43,58 @@ if( isset( $_GET['getBoxList']))
 }
 
 
+
+if(isset($_GET['getCheckedTable']))
+{
+	include 'qc/qc_checked_table.php';
+}
+
+
+
+if(isset($_GET['decreaseCheckedQty']))
+{
+	$sc = TRUE;
+	$id_qc = $_POST['id_qc'];
+	$remove_qty = $_POST['remove_qty'];
+
+	$qr = dbQuery("SELECT qty FROM tbl_qc WHERE id = '".$id_qc."'");
+	if(dbNumRows($qr) == 1 )
+	{
+		list($qty) = dbFetchArray($qr);
+		if($remove_qty <= $qty)
+		{
+			if($remove_qty == $qty)
+			{
+				$qs = dbQuery("DELETE FROM tbl_qc WHERE id = ".$id_qc);
+			}
+			else
+			{
+				$qs = dbQuery("UPDATE tbl_qc SET qty = qty - ".$remove_qty." WHERE id = ".$id_qc);
+			}
+
+			if(!$qs)
+			{
+				$sc = FALSE;
+				$message = 'ลบยอดตรวจนับไม่สำเร็จ';
+			}
+		}
+		else
+		{
+			$sc = FALSE;
+			$message = 'ยอดที่เอาออกต้องไม่มากกว่ายอดตรวจนับ';
+		}
+	}
+	else
+	{
+		$sc = FALSE;
+		$message = 'ไม่พบรายการตรวจนับ';
+	}
+
+	echo $sc === TRUE ? 'success' : $message;
+}
+
+
+
 if( isset( $_GET['printBox']))
 {
 	include '../print/packing/print_box.php';

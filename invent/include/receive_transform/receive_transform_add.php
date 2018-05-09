@@ -183,5 +183,5 @@ $dis = $cs->isSaved == 1 ? 'disabled' : '';
 <?php else : ?>
 <?php include 'include/page_error.php'; ?>
 <?php endif; ?>
-<script src="script/receive_transform/receive_transform_add.js"></script>
+<script src="script/receive_transform/receive_transform_add.js?token=<?php echo date('Ymd'); ?>"></script>
 <script src="script/validate.js"></script>

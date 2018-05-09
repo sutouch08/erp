@@ -177,5 +177,5 @@
 <?php include 'include/page_error.php'; ?>
 <?php endif; ?>
 
-<script src="script/receive_product/receive_product_add.js"></script>
+<script src="script/receive_product/receive_product_add.js?token=<?php echo date('Ymd'); ?>"></script>
 <script src="script/validate.js"></script>

@@ -41,5 +41,5 @@ else
 
 
 </div><!-- /container -->
-<script src="script/receive_transform/receive_transform.js"></script>
+<script src="script/receive_transform/receive_transform.js?token=<?php echo date('Ymd'); ?>"></script>
 <!---------------  Beep sount for alert ----------->
