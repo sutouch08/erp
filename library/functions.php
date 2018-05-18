@@ -344,7 +344,7 @@ function isViewStockOnly($id_profile)
 
 function checkAccess($id_profile, $id_tab)
 {
-	if($id_profile == 1000000)
+	if($id_profile == 1)
 	{
 		$pm = array(
 			'view' => 1,

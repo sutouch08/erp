@@ -48,7 +48,7 @@
 
 
 				<td class="middle text-center">
-				<?php if( $order->state < 3 && $order->isExpire == 0) : ?>
+				<?php if( $order->isExpire == 0) : ?>
 					<input type="checkbox" class="not-return" id="chk-<?php echo $rs->id; ?>" onchange="toggleReturn(<?php echo $rs->id; ?>)" <?php echo $checked; ?> />
 				<?php else : ?>
 					<?php echo $hasTransformProduct === TRUE ? '' : isActived(1); ?>
@@ -130,6 +130,41 @@
 			 <div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
 				<button type="button" class="btn btn-primary" onClick="addToTransform()" >เชื่อมโยง</button>
+			 </div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:500px;">
+		<div class="modal-content">
+  		<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" >แก้ไขการเชื่อมโยง</h4>
+        <input type="hidden" id="id-order-detail" value="" />
+				<input type="hidden" id="max-qty" value="" />
+				<input type="hidden" id="id-product" value="" />
+			 </div>
+			 <div class="modal-body">
+				 <div class="row">
+				 	<div class="col-sm-3">
+				 		<label>จำนวน</label>
+						<input type="number" class="form-control input-sm text-center" id="edit-trans-qty" value="" />
+						<span class="help-block red not-show" id="edit-qty-error">error</span>
+				 	</div>
+					<div class="col-sm-9">
+						<label>สินค้าแปรสภาพ</label>
+						<input type="text" class="form-control input-sm" id="tr-product" value="" disabled />
+					</div>
+					<div class="col-sm-12">
+
+					</div>
+				 </div>
+
+			 </div>
+			 <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+				<button type="button" class="btn btn-primary" onClick="updateTransformQty()" >เชื่อมโยง</button>
 			 </div>
 		</div>
 	</div>

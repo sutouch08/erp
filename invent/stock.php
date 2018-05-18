@@ -1,5 +1,5 @@
 <?php
-	$id_tab = 90;
+	$id_tab = 94;
   $pm = checkAccess($id_profile, $id_tab);
 	$view = $pm['view'];
 	$add = $pm['add'];
@@ -15,7 +15,9 @@
     </div>
     <div class="col-sm-6">
       <p class="pull-right top-p">
-
+				<?php if($delete) : ?>
+					<button type="button" class="btn btn-sm btn-success" onclick="addStock()">เพิ่มสต็อก</button>
+				<?php endif; ?>
       </p>
     </div>
   </div>
@@ -46,6 +48,7 @@ $zoneCode = getFilter('zoneCode', 'zoneCode', '');
   </div>
 </div>
 </form>
+
 <hr class="margin-top-15 margin-bottom-15" />
 <?php
 
@@ -95,7 +98,9 @@ $qs = dbQuery($qr. $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_
 		<th class="width-40">โซน</th>
     <th class="width-8 text-center">คงเหลือ</th>
     <th class="width-15 text-center">ปรับปรุง</th>
+		<?php if($delete) : ?>
 		<th class="width-10 text-center"></th>
+		<?php endif; ?>
   </tr>
   <tbody>
 <?php if( dbNumRows($qs) > 0) : ?>
@@ -106,25 +111,71 @@ $qs = dbQuery($qr. $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_
     <td><?php echo $rs->code; ?></td>
 		<td class=""><?php echo $rs->zone_name; ?></td>
     <td class="text-center">
+			<?php if($delete) : ?>
 			<input type="number" class="form-control input-xs text-center edit-qty" id="qty-<?php echo $rs->id_stock; ?>" value="<?php echo $rs->qty; ?>" disabled />
+			<?php else : ?>
+				<?php echo number($rs->qty); ?>
+			<?php endif; ?>
+
 		</td>
 		<td class="text-center"><?php echo thaiDateTime($rs->date_upd); ?></td>
+		<?php if($delete) : ?>
 		<td class="text-center">
 			<button type="button" class="btn btn-xs btn-warning" id="btn-edit-<?php echo $rs->id_stock; ?>" onclick="editStock(<?php echo $rs->id_stock; ?>)"><i class="fa fa-pencil"></i></button>
 			<button type="button" class="btn btn-xs btn-success hide" id="btn-update-<?php echo $rs->id_stock; ?>" onclick="updateStock(<?php echo $rs->id_stock; ?>)"><i class="fa fa-save"></i></button>
 			<button type="button" class="btn btn-xs btn-danger" onclick="deleteStock(<?php echo $rs->id_stock; ?>)"><i class="fa fa-trash"></i></button>
 		</td>
+		<?php endif; ?>
   </tr>
 <?php  $no++; ?>
 <?php endwhile; ?>
 <?php else : ?>
   <tr>
-    <td colspan="5" class="text-center">--- ไม่พบข้อมูล ---</td>
+    <td colspan="6" class="text-center">--- ไม่พบข้อมูล ---</td>
   </tr>
 <?php endif; ?>
   </tbody>
 </table>
 
+
+<?php if($delete) : ?>
+
+	<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" id="modal" style="width:300px;">
+			<div class="modal-content">
+	  			<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modal_title">เพิ่มสต็อกสินค้า</h4>
+	         <input type="hidden" id="id_product" value="" />
+					 <input type="hidden" id="id_zone" value="" />
+				 </div>
+				 <div class="modal-body" id="modal_body">
+					 <div class="row">
+					 	<div class="col-sm-12">
+					 		<label>รหัสสินค้า</label>
+							<input type="text" class="form-control input-sm text-center" id="pd-code" />
+							<span class="help-block red not-show" id="pd-error">สินค้าไม่ถูกต้อง</span>
+					 	</div>
+						<div class="col-sm-12">
+							<label>โซน</label>
+							<input type="text" class="form-control input-sm text-center" id="zone-code" />
+							<span class="help-block red not-show" id="zone-error">โซนไม่ถูกต้อง</span>
+						</div>
+						<div class="col-sm-12">
+							<label>จำนวน</label>
+							<input type="number" class="form-control input-sm text-center" id="add-qty" />
+							<span class="help-block red not-show" id="qty-error">จำนวนไม่ถูกต้อง</span>
+						</div>
+					 </div>
+				 </div>
+				 <div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+					<button type="button" class="btn btn-primary" id="add-btn" onClick="addToStock()" >เพิ่มในโซน</button>
+				 </div>
+			</div>
+		</div>
+	</div>
+<?php endif; ?>
 </div><!--- container --->
 
-<script src="script/stock.js"></script>
+<script src="script/stock.js?token=<?php echo date('Ymd'); ?>"></script>

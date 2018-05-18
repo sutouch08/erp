@@ -32,6 +32,12 @@ function getTransformProducts($id_order_detail, $state = 1, $isExpired = 0)
 				$sc .= '</i></span>';
 			}
 
+			if( $isExpired == 0 && $rs->received > 0)
+			{
+				$sc .= '<span class="red pointer" onClick="editTransformProduct('.$id_order_detail.', \''.$rs->id_product.'\', '.$rs->received.', '.$rs->sold_qty.')"> <i class="fa fa-pencil">';
+				$sc .= '</i></span>';
+			}
+
 			$sc .= '</div>';
 		}
 	}

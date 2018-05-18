@@ -1,20 +1,29 @@
 
-<?php 
+<?php
 require "../../library/config.php";
 require "../../library/functions.php";
 require "../function/tools.php";
 require "../function/setting_helper.php";
 
+
 if( isset( $_GET['updateConfig'] ) )
 {
-	$sc = '';
+	$sc = TRUE;
 	$config = $_POST;
 	foreach($config as $configName => $val )
 	{
-		updateConfig($configName, $val);
+		if(updateConfig($configName, $val) == FALSE)
+		{
+			$sc = FALSE;
+			$message = 'UPDATE '.$configName.' not successfully';
+		}
 	}
-	echo $sc;
+
+	echo $sc === TRUE ? 'success' : $message;
 }
+
+
+
 
 if( isset( $_GET['activeSystem'] ) )
 {
@@ -58,7 +67,7 @@ if( isset( $_GET['updatePopup'] ) )
 	{
 		$sc = 'success';
 	}
-	
+
 	//header("location: ../index.php?content=popup");
 	echo $sc;
 }

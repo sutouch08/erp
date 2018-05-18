@@ -2,13 +2,8 @@
 
 function updateConfig( $configName, $value = '', $id_employee = 0 )
 {
-	$sc = FALSE;
-	$id_emp  = $id_employee == 0 ? $_COOKIE['user_id'] : $id_employee;	
-	if( $value !== '' )
-	{
-		$se = dbQuery("UPDATE tbl_config SET value = '".$value."', id_employee = ".$id_emp." WHERE config_name = '".$configName."'");
-	}
-	return $sc;	
+	$id_emp  = $id_employee == 0 ? $_COOKIE['user_id'] : $id_employee;
+	return dbQuery("UPDATE tbl_config SET value = '".$value."', id_employee = ".$id_emp." WHERE config_name = '".$configName."'");
 }
 
 
@@ -21,7 +16,7 @@ function selectInterval($se = '')
 	$sc .= '<option value="21600" '.isSelected(21600, $se).'>ทุก 6 ชั่วโมง</option>';
 	$sc .= '<option value="43200" '.isSelected(43200, $se).'>ทุก 12 ชั่วโมง</option>';
 	$sc .= '<option value="86400" '.isSelected(86400, $se).'>ทุก 24 ชั่วโมง</option>';
-	
+
 	return $sc;
 }
 

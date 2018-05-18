@@ -197,6 +197,16 @@ function clearFields(){
 	$('#trans-product').val('');
 }
 
+
+//----- แก้ไขรายการเชื่อมโยงสินค้า
+function editTransformProduct(id_order_detail, id_product, limit){
+	
+}
+
+
+
+
+
 //---- 	เปิดกล่องเชื่อมโยงสินค้า
 function addTransformProduct(id, from_product){
 	//---	id = id_order_detail

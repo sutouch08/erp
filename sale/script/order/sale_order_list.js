@@ -87,7 +87,7 @@ function getStockGrid(){
 	var pdCode = $('#pd-search-box').val();
 	var id_style = $('#id_style').val();
   var id_branch = $('#sBranch').val();
-  console.log('ok');
+  var branch = $('#sBranch :selected').text();
 	if(pdCode.length > 0 && id_style != ''){
 		load_in();
 		$.ajax({
@@ -107,7 +107,7 @@ function getStockGrid(){
 					var pdCode = rs[2];
 					var id_style = rs[3];
 					$("#modal").css("width", width +"px");
-					$("#modalTitle").html(pdCode);
+					$("#modalTitle").html(pdCode+' : '+branch);
 					$("#modalBody").html(grid);
 					$("#orderGrid").modal('show');
 				}else{

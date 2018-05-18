@@ -28,4 +28,4 @@ else
 
 
 ?>
-<script src="script/order/sale_order.js"></script>
+<script src="script/order/sale_order.js?token=<?php echo date('Ymd'); ?>"></script>

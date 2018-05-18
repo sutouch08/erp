@@ -2,6 +2,7 @@
 function getProductGrid(){
 	var pdCode 	= $("#pd-box").val();
 	var id_branch = $('#id_branch').val();
+	var branch = $('#branch :selected').text();
 	if( pdCode.length > 0  ){
 		load_in();
 		$.ajax({
@@ -20,7 +21,7 @@ function getProductGrid(){
 					var width = rs[1];
 					var id_style = rs[2];
 					$("#modal").css("width", width +"px");
-					$("#modalTitle").html(pdCode);
+					$("#modalTitle").html(pdCode+' : '+branch);
 					$("#id_style").val(id_style);
 					$("#modalBody").html(grid);
 					grid_init();
@@ -37,6 +38,8 @@ function getProductGrid(){
 
 function getOrderGrid(id_style){
 	var id_branch = $('#id_branch').val();
+	var branch = $('#branch :selected').text();
+	console.log(branch);
 	load_in();
 	$.ajax({
 		url:"../invent/controller/orderController.php?getOrderGrid",
@@ -55,7 +58,7 @@ function getOrderGrid(id_style){
 				var pdCode = rs[2];
 				var id_style = rs[3];
 				$("#modal").css("width", width +"px");
-				$("#modalTitle").html(pdCode);
+				$("#modalTitle").html(pdCode+' : '+branch);
 				$("#id_style").val(id_style);
 				$("#modalBody").html(grid);
 				grid_init();
@@ -72,7 +75,8 @@ function getOrderGrid(id_style){
 function getSaleStockGrid(){
 	var pdCode = $('#pd-box').val();
 	var id_branch = $('#id_branch').val();
-	console.log('ok');
+	var branch = $('#branch :selected').text();
+	console.log(branch);
 	load_in();
 	$.ajax({
 		url:"../invent/controller/orderController.php?getSaleStockGrid",
