@@ -203,7 +203,7 @@ class consign
     return is_null($amount) ? 0.00 : $amount;
   }
 
-  
+
 
   public function getSavedDetails($id_consign)
   {
@@ -276,7 +276,7 @@ class consign
     $date     = $date == '' ? date('Y-m-d') : $date;
     $Y		    = date('y', strtotime($date));
     $M		    = date('m', strtotime($date));
-    $runDigit = getConfig('RUN_DIGIT');
+    $runDigit = getConfig('RUN_DIGIT_CONSIGN_SOLD');
     $prefix   = getConfig('PREFIX_CONSIGN_SOLD');
     $preRef   = $prefix . '-' . $Y . $M;
 

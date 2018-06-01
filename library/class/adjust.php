@@ -268,7 +268,7 @@ class adjust
 		$date     = $date == '' ? date('Y-m-d') : $date;
 		$Y		    = date('y', strtotime($date));
 		$M		    = date('m', strtotime($date));
-		$runDigit = getConfig('RUN_DIGIT');
+		$runDigit = getConfig('RUN_DIGIT_ADJUST');
 		$prefix   = getConfig('PREFIX_ADJUST');
 		$preRef   = $prefix . '-' . $Y . $M;
 

@@ -137,6 +137,41 @@ if(isset($_GET['movementByProduct']) && isset($_GET['export']))
 }
 
 
+//-- รายงานสินค้าไม่เคลื่อนไหว
+if(isset($_GET['stockNonMove']) && isset($_GET['report']))
+{
+  include 'report/stockReport/report_stock_non_move.php';
+}
+
+if(isset($_GET['stockNonMove']) && isset($_GET['export']))
+{
+  include 'report/stockReport/export_stock_non_move.php';
+}
+
+
+//--- รายงานสินค้าคงเหลือแยกตามปีสินค้า รายงานหน้าจอ
+if(isset($_GET['getProductYear']) && isset($_GET['report']))
+{
+  include 'report/stockReport/report_stock_year.php';
+}
+
+//--- รายงานสินค้าคงเหลือแยกตามปีสินค้า ส่งออกไฟล์
+if(isset($_GET['getProductYear']) && isset($_GET['export']))
+{
+  include 'report/stockReport/export_stock_year.php';
+}
+
+
+
+//---- รายงานการยืมสินค้ายังไม่ส่งคืน แสดงหน้าจอ
+if(isset($_GET['getLendNotReturn']) && isset($_GET['report']))
+{
+  include 'report/stockReport/report_lend_not_return.php';
+}
+
+
+
+
 
 if(isset($_GET['getStockGrid']))
 {

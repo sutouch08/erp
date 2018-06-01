@@ -70,7 +70,7 @@ else
 
 <!------------------- ปุ่มแก้ไขราคาและส่วนลด ------------->
 <?php
-if( ( $allowEditDisc == 1 OR $allowEditPrice == 1 ) && $order->state < 4 )
+if( ( $allowEditDisc == 1 OR $allowEditPrice == 1 OR $allowEditCost) && $order->state < 4 )
 {
  	include 'include/order/order_discount_bar.php';
 }

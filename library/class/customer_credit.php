@@ -9,9 +9,11 @@ class customer_credit
 	public $balance;
 	public $date_upd;
 	public $error;
+	public $isLimit = TRUE;
 
 	public function __construct($id = "")
 	{
+		$this->isLimit = getConfig('USE_CREDIT_LIMIT') == 1 ? TRUE : FALSE;
 		if( $id != "" )
 		{
 			$this->getData($id);
@@ -169,13 +171,16 @@ class customer_credit
 
 	public function isEnough($id, $amount)
 	{
-		$sc = FALSE;
-		$balance = $this->getBalance($id);
-		if( $amount <= $balance )
+		if($this->isLimit)
 		{
-			$sc = TRUE;
+			$balance = $this->getBalance($id);
+			if( $amount > $balance )
+			{
+				return FALSE;
+			}
 		}
-		return $sc;
+
+		return TRUE;
 	}
 
 

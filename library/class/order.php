@@ -568,7 +568,6 @@ class order
 
 
 
-
 	//-----------------  New Reference --------------//
 	public function getNewReference($role = 1, $date = '', $is_so = 1)
 	{
@@ -576,7 +575,7 @@ class order
 		$Y		= date('y', strtotime($date));
 		$M		= date('m', strtotime($date));
 		$prefix = $this->getPrefix($role, $is_so);
-		$runDigit = getConfig('RUN_DIGIT'); //--- รันเลขที่เอกสารกี่หลัก
+		$runDigit = $this->getRunDigit($role, $is_so); //--- รันเลขที่เอกสารกี่หลัก
 		$preRef = $prefix . '-' . $Y . $M;
 		$qs = dbQuery("SELECT MAX(reference) AS reference FROM tbl_order WHERE reference LIKE '".$preRef."%' ORDER BY reference DESC");
 		list( $ref ) = dbFetchArray($qs);
@@ -626,6 +625,47 @@ class order
 
 		return $prefix;
 
+	}
+
+
+	public function getRunDigit($role, $is_so)
+	{
+		switch($role)
+		{
+			case 1 :
+			$digit = getConfig('RUN_DIGIT_ORDER');
+			break;
+
+			case 2 :
+			$digit = $is_so == 1 ? getConfig('RUN_DIGIT_CONSIGN') : getConfig('RUN_DIGIT_CONSIGNMENT');
+			break;
+
+			case 3 :
+			$digit = getConfig('RUN_DIGIT_SUPPORT');
+			break;
+
+			case 4 :
+			$digit = getConfig('RUN_DIGIT_SPONSOR');
+			break;
+
+			case 5 :
+			$digit = getConfig('RUN_DIGIT_TRANSFORM');
+			break;
+
+			case 6 :
+			$digit = getConfig('RUN_DIGIT_LEND');
+			break;
+
+			case 7 :
+			$digit = getConfig('RUN_DIGIT_REQUESITION');
+			break;
+
+			default :
+			$digit = getConfig('RUN_DIGIT_ORDER');
+			break;
+		}
+
+		return $digit;
 	}
 
 

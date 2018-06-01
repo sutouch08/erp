@@ -359,7 +359,7 @@ class transfer
 		$date     = $date == '' ? date('Y-m-d') : $date;
 		$Y		    = date('y', strtotime($date));
 		$M		    = date('m', strtotime($date));
-		$runDigit = getConfig('RUN_DIGIT');
+		$runDigit = getConfig('RUN_DIGIT_TRANSFER');
 		$prefix   = getConfig('PREFIX_TRANSFER');
 		$preRef   = $prefix . '-' . $Y . $M;
 

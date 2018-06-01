@@ -1,45 +1,37 @@
+<?php
+//--- ปิดใบสั่งซื้ออัตโนมัติหรือไม่
+$autoClose = getConfig('PO_AUTO_CLOSE');
+$btn_po_yes = $autoClose == 1 ? 'btn-success' : '';
+$btn_po_no = $autoClose == 0 ? 'btn-danger' : '';
+?>
+
 <div class="tab-pane fade active in" id="general">
-            	<form id="generalForm">
-            	<div class="row">
-                	<div class="col-sm-3"><span class="form-control left-label">แบรนด์สินค้า</span></div>
-                    <div class="col-sm-9"><input type="text" class="form-control input-sm input-medium input-line padding-left-0" name="COMPANY_NAME" id="brand" value="<?php echo getConfig('COMPANY_NAME'); ?>" /></div>
-                    <div class="divider-hidden"></div>
-                    
-                    <div class="col-sm-3"><span class="form-control left-label">ชื่อบริษัท</span></div>
-                    <div class="col-sm-9"><input type="text" class="form-control input-sm input-large input-line padding-left-0" name="COMPANY_FULL_NAME" id="cName" value="<?php echo getConfig('COMPANY_FULL_NAME'); ?>" /></div>
-                    <div class="divider-hidden"></div>
-                    
-                    <div class="col-sm-3"><span class="form-control left-label">ที่อยู่</span></div>
-                    <div class="col-sm-9"><input type="text" class="form-control input-sm input-line padding-left-0" name="COMPANY_ADDRESS" id="cAddress" value="<?php echo getConfig('COMPANY_ADDRESS'); ?>" /></div>
-                    <div class="divider-hidden"></div>
-                    
-                    <div class="col-sm-3"><span class="form-control left-label">รหัสไปรษณีย์</span></div>
-                    <div class="col-sm-9"><input type="text" class="form-control input-sm input-mini input-line padding-left-0" name="COMPANY_POST_CODE" id="postCode" value="<?php echo getConfig('COMPANY_POST_CODE'); ?>" /></div>
-                    <div class="divider-hidden"></div>
-                    
-                    <div class="col-sm-3"><span class="form-control left-label">โทรศัพท์</span></div>
-                    <div class="col-sm-9"><input type="text" class="form-control input-sm input-medium input-line padding-left-0" name="COMPANY_PHONE" id="phone" value="<?php echo getConfig('COMPANY_PHONE'); ?>" /></div>
-                    <div class="divider-hidden"></div>
-                    
-                    <div class="col-sm-3"><span class="form-control left-label">แฟกซ์</span></div>
-                    <div class="col-sm-9"><input type="text" class="form-control input-sm input-medium input-line padding-left-0" name="COMPANY_FAX_NUMBER" id="fax" value="<?php echo getConfig('COMPANY_FAX_NUMBER'); ?>" /></div>
-                    <div class="divider-hidden"></div>
-                    
-                    <div class="col-sm-3"><span class="form-control left-label">อีเมล์</span></div>
-                    <div class="col-sm-9"><input type="text" class="form-control input-sm input-medium input-line padding-left-0" name="COMPANY_EMAIL" id="email" value="<?php echo getConfig('COMPANY_EMAIL'); ?>" /></div>
-                    <div class="divider-hidden"></div>
-                    
-                    <div class="col-sm-3"><span class="form-control left-label">เลขประจำตัวผู้เสียภาษี</span></div>
-                    <div class="col-sm-9"><input type="text" class="form-control input-sm input-medium input-line padding-left-0" name="COMPANY_TAX_ID" id="taxID" value="<?php echo getConfig('COMPANY_TAX_ID'); ?>" /></div>
-                    <div class="divider-hidden"></div>
-                    
-                    <div class="col-sm-3"><span class="form-control left-label">สกุลเงิน</span></div>
-                    <div class="col-sm-9"><input type="text" class="form-control input-sm input-medium input-line padding-left-0" name="CURRENCY" id="currency" value="<?php echo getConfig('CURRENCY'); ?>" /></div>
-                    <div class="divider-hidden"></div>
-                    
-                    <div class="col-sm-9 col-sm-offset-3"><button type="button" class="btn btn-sm btn-success input-mini" onClick="updateConfig('generalForm')"><i class="fa fa-save"></i> บันทึก</button></div>
-                    <div class="divider-hidden"></div>
-                  
-            	</div><!--/ row -->
-                </form>
-            </div>
+	<form id="generalForm">
+    <div class="row">
+      <div class="col-sm-3"><span class="form-control left-label">ปิดใบสั่งซื้ออัตโนมัติ</span></div>
+      <div class="col-sm-9">
+      	<div class="btn-group input-small">
+        	<button type="button" class="btn btn-sm <?php echo $btn_po_yes; ?>" style="width:50%;" id="btn-po-yes" onClick="toggleAutoClose(1)">ใช่</button>
+          <button type="button" class="btn btn-sm <?php echo $btn_po_no; ?>" style="width:50%;" id="btn-po-no" onClick="toggleAutoClose(0)">ไม่ใช่</button>
+        </div>
+        <span class="help-block">หากเลือก "ใช่" ใบสั่งซื้อจะถูกปิดอัตโนมัติเมื่อรับสินค้าครบตามจำนวนที่สั่งซื้อแล้ว</span>
+      	<input type="hidden" name="PO_AUTO_CLOSE" id="po-auto-close" value="<?php echo $autoClose; ?>" />
+      </div>
+      <div class="divider-hidden"></div>
+
+
+      <div class="col-sm-3"><span class="form-control left-label">รับสินค้าเกินใบสั่งซื้อ ( % )</span></div>
+        <div class="col-sm-9">
+        	<input type="text" class="form-control input-sm input-mini input-line" name="RECEIVE_OVER_PO" id="overPO" value="<?php echo getConfig('RECEIVE_OVER_PO'); ?>" />
+          <span class="help-block">จำกัดการรับสินค้าเข้าเกินกว่ายอดในใบสั่งซื้อได้ไม่เกินกี่เปอร์เซ็น</span>
+        </div>
+        <div class="divider-hidden"></div>
+
+        <div class="col-sm-9 col-sm-offset-3">
+        	<button type="button" class="btn btn-sm btn-success input-mini" onClick="updateConfig('generalForm')"><i class="fa fa-save"></i> บันทึก</button>
+        </div>
+        <div class="divider-hidden"></div>
+
+    </div><!--/row-->
+  </form>
+</div>

@@ -50,7 +50,7 @@ if($cs->isSaved == 0 && $cs->isCancle == 0)
         {
           break;
         }
-        
+
         if($i > 1)
         {
           //--- A => product code
@@ -63,8 +63,8 @@ if($cs->isSaved == 0 && $cs->isCancle == 0)
           $pdCode = $rs['A'];
           $price  = $rs['B'];
           $qty    = $rs['C'];
-          $pDisc  = $rs['D'];
-          $aDisc  = $rs['E'];
+          $pDisc  = round($rs['D'], 2);
+          $aDisc  = round($rs['E'],2);
 
           //--- เอาเฉพาะที่มียอดต่าง และ ยอดต่างต้องไม่ติดลบ
           if($qty > 0)

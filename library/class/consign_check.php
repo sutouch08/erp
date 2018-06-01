@@ -485,7 +485,7 @@ class consign_check
     $date     = $date == '' ? date('Y-m-d') : $date;
     $Y		    = date('y', strtotime($date));
     $M		    = date('m', strtotime($date));
-    $runDigit = getConfig('RUN_DIGIT');
+    $runDigit = getConfig('RUN_DIGIT_CONSIGN_CHECK');
     $prefix   = getConfig('PREFIX_CONSIGN_CHECK');
     $preRef   = $prefix . '-' . $Y . $M;
 

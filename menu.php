@@ -84,9 +84,11 @@
           <li><a href="index.php?content=current_stock"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือปัจจุบัน</a></li>
           <li><a href="index.php?content=stock_balance_by_zone"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือแยกตามโซน</a></li>
           <li><a href="index.php?content=stock_balance_compare_warehouse"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือเปรียบเทียบคลัง</a></li>
+          <li><a href="index.php?content=stock_year"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือแยกตามปีสินค้า</a></li>
           <li class="divider"></li>
           <li><a href="index.php?content=stock_movement_by_warehouse"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน ความเคลื่อนไหวสินค้าแยกตามคลังสินค้า</a></li>
           <li><a href="index.php?content=stock_movement_by_product"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน ความเคลื่อนไหวสินค้าแยกตามสินค้า</a></li>
+          <li><a href="index.php?content=stock_not_move"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าไม่เคลื่อนไหว</a></li>
         </ul>
       </li>
 
@@ -109,6 +111,7 @@
       <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ติดตาม</a>
       	<ul class="dropdown-menu">
         	<li><a href="index.php?content=stock_backlogs"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สินค้าค้างส่ง</a></li>
+          <li><a href="index.php?content=lend_not_return"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน การยืมสินค้ายังไม่ส่งคืน</a></li>
         </ul>
       </li>
 
@@ -123,6 +126,7 @@
           <li><a href="index.php?content=support_by_customer_items"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดอภินันท์แยกตามผู้รับ แสดงรายการสินค้า</a></li>
           <li class="divider"></li>
         	<li><a href="index.php?content=discount_edit"><i class="fa fa-bar-chart"></i>&nbsp;รายงานการแก้ไขส่วนลด</a></li>
+          <li><a href="index.php?content=permission_by_employee"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ตรวจสอบสิทธิ์ แยกตามพนักงาน</a></li>
         </ul>
       </li>
 

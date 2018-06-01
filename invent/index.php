@@ -461,6 +461,7 @@ if( !getConfig('CLOSED') )
 		break;
 
 
+		//---- รายงานตรวจสอบ
 		case 'sponsor_by_customer_order' :
 			$content = 'report/sales/sponsor_by_customer_order.php';
 			$pageTitle = 'รายงาน สรุปยอดสปอนเซอร์แยกตามผู้รับ แสดงเลขที่เอกสาร';
@@ -491,6 +492,17 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รายงาน สรุปยอดอภินันท์แยกตามผู้รับ แสดงรายการสินค้า';
 		break;
 
+		case 'permission_by_employee' :
+			$content = 'report/other/permission_by_employee.php';
+			$pageTitle = 'รายงาน ตรวจสอบสิทธิ์แยกตามพนักงาน';
+		break;
+
+
+		//---------- รายงานติดตาม
+		case 'lend_not_return' :
+			$content = 'report/other/lend_not_return.php';
+			$pageTitle = 'รายงาน การยืมสินค้ายังไม่ส่งคืน';
+		break;
 
 		//---------- รายงานระบบคลังสินค้า
 		case 'stock_balance' :
@@ -532,6 +544,16 @@ if( !getConfig('CLOSED') )
 			$content = 'report/stock/stock_movement_by_product.php';
 			$pageTitle = 'รายงานความเคลื่อนไหวสินค้าแยกตามรายการสินค้า';
 			break;
+
+		case 'stock_not_move' :
+			$content = 'report/stock/stock_not_move.php';
+			$pageTitle = 'รายงานสินค้าไม่เคลื่อนไหว';
+		break;
+
+		case 'stock_year' :
+			$content = 'report/stock/stock_year.php';
+			$pageTitle = 'รายงานสินค้าคงเหลือแยกตามปีสินค้า';
+		break;
 
 		//---------- รายงานระบบซื้อ
 		case 'po_backlog' :

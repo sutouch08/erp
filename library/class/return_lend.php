@@ -148,7 +148,7 @@ class return_lend
 		$Y		= date('y', strtotime($date));
 		$M		= date('m', strtotime($date));
 		$prefix = getConfig('PREFIX_RETURN_LEND');
-		$runDigit = getConfig('RUN_DIGIT'); //--- รันเลขที่เอกสารกี่หลัก
+		$runDigit = getConfig('RUN_DIGIT_LEND'); //--- รันเลขที่เอกสารกี่หลัก
 		$preRef = $prefix . '-' . $Y . $M;
 		$qs = dbQuery("SELECT MAX(reference) AS reference FROM tbl_return_lend WHERE reference LIKE '".$preRef."%' ORDER BY reference DESC");
 		list( $ref ) = dbFetchArray($qs);
