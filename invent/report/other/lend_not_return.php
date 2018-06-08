@@ -5,8 +5,9 @@
     </div>
     <div class="col-sm-6">
       <p class="pull-right top-p">
-        <button type="button" class="btn btn-sm btn-success" onclick="getReport()"><i class="fa fa-list"></i>&nbsp; รายงาน</button>
-        <button type="button" class="btn btn-sm btn-info" onclick="doExport()"><i class="fa fa-file-excel-o"></i>&nbsp; ส่งออก</button>
+        <button type="button" class="btn btn-sm btn-success hidden-print" onclick="getReport()"><i class="fa fa-list"></i>&nbsp; รายงาน</button>
+        <button type="button" class="btn btn-sm btn-info hidden-print" onclick="doExport()"><i class="fa fa-file-excel-o"></i>&nbsp; ส่งออก</button>
+        <button type="button" class="btn btn-sm btn-primary hidden-print" onclick="print()"><i class="fa fa-print"></i>&nbsp; พิมพ์</button>
       </p>
     </div>
   </div>
@@ -82,7 +83,7 @@
 <script id="template" type="text/x-handlebarsTemplate">
 {{#each this}}
   {{#if @last}}
-  <tr>
+  <tr class="font-size-12">
     <td colspan="4" class="middle text-right">รวม</td>
     <td class="middle text-right">{{totalQty}}</td>
     <td class="middle text-right">{{totalReceived}}</td>
@@ -158,7 +159,7 @@ $('#lender').autocomplete({
       name = arr[1];
       id = arr[2];
       $('#id_customer').val(id);
-      $('#lender').val(code+':'+name);
+      $('#lender').val(code+' : '+name);
     }else{
       $('#id_customer').val('');
       $('#lender').val('');
@@ -282,6 +283,52 @@ function getReport(){
       }
     }
   });
+}
+
+
+function doExport(){
+  allLender = $('#allLender').val();
+  lender = $('#id_customer').val();
+
+  allProduct = $('#allProduct').val();
+  pdFrom = $('#pdFrom').val();
+  pdTo = $('#pdTo').val();
+
+  fromDate = $('#fromDate').val();
+  toDate = $('#toDate').val();
+
+  if(allLender == 0 && lender == ''){
+    swal('ชื่อผู้ยืมไม่ถูกต้อง');
+    return false;
+  }
+
+  if(allProduct == 0 && (pdFrom == '' || pdTo == '')){
+    swal('รหัสสินค้าไม่ถูกต้อง');
+    return false;
+  }
+
+  if(!isDate(fromDate) || !isDate(toDate)){
+    swal('วันที่ไม่ถูกต้อง');
+    return false;
+  }
+
+  var token = new Date().getTime();
+  var data = [
+    {'name':'allLender', 'value': allLender},
+    {'name':'lender', 'value':lender},
+    {'name':'allProduct', 'value':allProduct},
+    {'name':'pdFrom', 'value' : pdFrom},
+    {'name':'pdTo', 'value' : pdTo},
+    {'name' : 'fromDate', 'value' : fromDate},
+    {'name' : 'toDate', 'value' : toDate},
+    {'name' : 'token', 'value' : token}
+  ];
+
+  data = $.param(data);
+
+  target = 'controller/stockReportController.php?getLendNotReturn&export&'+data;
+  get_download(token);
+  window.location.href = target;
 }
 
 </script>

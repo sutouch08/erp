@@ -84,6 +84,7 @@
           <li><a href="index.php?content=current_stock"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือปัจจุบัน</a></li>
           <li><a href="index.php?content=stock_balance_by_zone"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือแยกตามโซน</a></li>
           <li><a href="index.php?content=stock_balance_compare_warehouse"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือเปรียบเทียบคลัง</a></li>
+          <li><a href="index.php?content=stock_balance_by_warehouse"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือแยกตามคลัง</a></li>
           <li><a href="index.php?content=stock_year"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน สินค้าคงเหลือแยกตามปีสินค้า</a></li>
           <li class="divider"></li>
           <li><a href="index.php?content=stock_movement_by_warehouse"><i class="fa fa-bar-chart"></i>&nbsp;รายงาน ความเคลื่อนไหวสินค้าแยกตามคลังสินค้า</a></li>

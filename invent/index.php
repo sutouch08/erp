@@ -525,6 +525,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รายงานสินค้าคงเหลือเปรียบเทียบคลัง';
 			break;
 
+		case 'stock_balance_by_warehouse' :
+			$content = 'report/stock/stock_balance_by_warehouse.php';
+			$pageTitle = 'รายงานสินค้าคงเหลือแยกตามคลัง';
+		break;
+
 		case 'received_by_document' :
 			$content = 'report/stock/received_by_document.php';
 			$pageTitle = 'รายงานการรับสินค้าแยกตามเลขที่เอกสาร';

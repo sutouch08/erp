@@ -51,7 +51,7 @@ public function add(array $ds)
 	return $sc;
 }
 
-
+/*
 public function update($id, array $ds)
 {
 	$sc = FALSE;
@@ -70,6 +70,28 @@ public function update($id, array $ds)
 
 	return $sc;
 }
+*/
+
+
+public function update($barcode, array $ds)
+{
+	$sc = FALSE;
+	if( count( $ds ) > 0 )
+	{
+		$set = "";
+		$i = 1;
+		foreach( $ds as $field => $value )
+		{
+			$set .= $i== 1 ? $field ." = '".$value."'" : ", ".$field . " = '".$value."'";
+			$i++;
+		}
+		$sc = dbQuery("UPDATE tbl_barcode SET ".$set." WHERE barcode = '".$barcode."'");
+		$this->error = $sc === FALSE ? dbError() : '';
+	}
+
+	return $sc;
+}
+
 
 
 public function delete($barcode)

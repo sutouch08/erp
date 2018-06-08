@@ -158,7 +158,7 @@ class movement
 		}
 
 		$this->dropZeroMovement();
-		
+
 		return $sc;
 	}
 
@@ -192,16 +192,16 @@ class movement
 	}
 
 
-	public function getStockBalance($id_pd, $wh_in = 0, $date)
+	public function getStockBalance($id_pd, $wh_in = '', $date)
 	{
 		$qr  = "SELECT SUM(move_in) AS move_in, SUM(move_out) AS move_out ";
 		$qr .= "FROM tbl_stock_movement WHERE id_product = '".$id_pd."' ";
-		$qr .= "AND date_upd <= '".fromDate($date)."' ";
-		if($wh_in != 0)
-		{
-			$qr .= "AND id_warehouse IN(".$id_wh.") ";
-		}
+		$qr .= "AND date_upd <= '".toDate($date)."' ";
 
+		if($wh_in != '')
+		{
+			$qr .= "AND id_warehouse IN(".$wh_in.") ";
+		}
 
 		$qs = dbQuery($qr);
 

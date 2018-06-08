@@ -8,7 +8,7 @@ $from = fromDate($_GET['fromDate']);
 $to  = toDate($_GET['toDate']);
 $allWh = $_GET['allWarehouse'];
 $WH = isset($_GET['wh']) ? $_GET['wh'] : FALSE;
-$wh_in = 0;
+$wh_in = "";
 $wh_code = "";
 
 $mv = new movement();
@@ -17,7 +17,6 @@ if($allWh == 0 && $WH != FALSE)
 {
   if(!empty($WH)){
     $i = 1;
-    $wh_in = "";
     foreach($WH as $id_warehouse)
     {
       $warehouse = new warehouse($id_warehouse);
@@ -147,6 +146,7 @@ echo '<pre>';
 print_r($excel);
 echo '</pre>';
 */
+
 setToken($_GET['token']);
 $file_name = "Stock Card.xlsx";
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); /// form excel 2007 XLSX

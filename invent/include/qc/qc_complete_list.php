@@ -27,7 +27,7 @@
         <td class="middle text-center" id="prepared-<?php echo $rs->id_product; ?>"><?php echo number($rs->prepared); ?></td>
         <td class="middle text-center" id="qc-<?php echo $rs->id_product; ?>"><?php echo number($rs->qc); ?></td>
         <td class="middle text-right">
-          <?php if($rs->qc > $rs->prepared && $delete) : ?>
+          <?php if(($rs->qc > $rs->prepared OR $rs->qc > $rs->order_qty) && $delete) : ?>
             <button type="button" class="btn btn-xs btn-warning" onclick="showEditOption('<?php echo $order->id; ?>', '<?php echo $rs->id_product; ?>', '<?php echo $rs->product_code; ?>')">
               <i class="fa fa-pencil"></i> แก้ไข
             </button>

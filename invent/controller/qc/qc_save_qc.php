@@ -45,6 +45,7 @@
         $sc = FALSE;
         $message = $pd->getCode($id_pd).' บันทึกยอดตรวจไม่สำเร็จ';
       }
+      dbQuery("DELETE FROM tbl_qc WHERE id_order = '".$id_order."' AND qty <= 0");
 
     } //--- end foreach
 

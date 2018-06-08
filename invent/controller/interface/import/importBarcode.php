@@ -32,7 +32,7 @@
 					$id = $rs['A'];
 					$code = trim($rs['B']);
 					$id_pd = $pd->getId($rs['C']);
-					if( $cs->isAllExists($id, $code) === FALSE )
+					if( $cs->isExists($code) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
@@ -50,11 +50,13 @@
 							$error++;
 							writeErrorLogs('Barcode', $cs->error);
 						}
+						$import++;
 					}
 					else
 					{
 						//--- If exists do update
 						$arr = array(
+								'id' => $id,
 								'id_product'	=> $id_pd,
 								'reference'	=> $rs['C'],
 								'unit_code'	=> $rs['D'],
@@ -62,13 +64,15 @@
 								);
 
 
-						if($cs->update($id, $arr) === FALSE)
+						if($cs->update($code, $arr) === FALSE)
 						{
 							$sc = FALSE;
 							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
 							$error++;
 							writeErrorLogs('Barcode', $cs->error);
 						}
+
+						$update++;
 
 					}	/// end if
 				}//-- end if not first row

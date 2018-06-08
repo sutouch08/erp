@@ -170,6 +170,13 @@ if(isset($_GET['getLendNotReturn']) && isset($_GET['report']))
 }
 
 
+//------ รายงานการยืมสินค้ายังไม่ส่งคืน ส่งออกไฟล์ excel
+if(isset($_GET['getLendNotReturn']) && isset($_GET['export']))
+{
+  include 'report/stockReport/export_lend_not_return.php';
+}
+
+
 
 
 

@@ -354,6 +354,7 @@ class move
 		$Y		    = date('y', strtotime($date));
 		$M		    = date('m', strtotime($date));
 		$runDigit = getConfig('RUN_DIGIT_MOVE');
+    $runDigit = $runDigit == '' ? 5 : $runDigit;
 		$prefix   = getConfig('PREFIX_MOVE');
 		$preRef   = $prefix . '-' . $Y . $M;
 
