@@ -365,9 +365,16 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'วงเงินเครดิตคงเหลือ';
 			break;
 
+
+	//------- สปอนเซอร์ -----/
 		case 'sponsor' :
 			$content = 'sponsor.php';
 			$pageTitle = 'เพิ่ม/แก้ไข รายชื่อสปอนเซอร์';
+			break;
+
+		case 'sponsor_approver' :
+			$content = 'sponsor_approver.php';
+			$pageTitle = 'เพิ่ม/แก้ไข ผู้อนุมัติงบสปอนเซอร์';
 			break;
 
 	//*****  พนักงาน  *****//
@@ -394,6 +401,11 @@ if( !getConfig('CLOSED') )
 		case 'support' :
 			$content = 'support.php';
 			$pageTitle = 'เพิ่ม/แก้ไข รายชื่ออภินันทนาการ';
+			break;
+
+		case 'support_approver' :
+			$content = 'support_approver.php';
+			$pageTitle = 'เพิ่ม/แก้ไข ผู้อนุมัติงบอภินันทนาการ';
 			break;
 
 		//******** ผู้จำหน่าย  *******//

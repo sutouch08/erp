@@ -22,3 +22,72 @@ function doExport(){
 		}
 	});
 }
+
+
+
+function setDelivered(){
+	var id = $('#id_order').val();
+
+	load_in();
+	$.ajax({
+		url:'controller/orderController.php?setDelivered',
+		type:'POST',
+		cache:'false',
+		data:{
+			'id_order' : id
+		},
+		success:function(rs){
+			load_out();
+			var rs = $.trim(rs);
+			if(rs == 'success'){
+				swal({
+					title:'Success',
+					timer:1000,
+					type:'success'
+				});
+
+				setTimeout(function(){ window.location.reload(); }, 1200);
+			}else{
+				swal({
+					title:'Error',
+					text: rs,
+					type:'error'
+				});
+			}
+		}
+	});
+}
+
+
+function setNotDelivery(){
+	var id = $('#id_order').val();
+
+	load_in();
+	$.ajax({
+		url:'controller/orderController.php?setNotDelivery',
+		type:'POST',
+		cache:'false',
+		data:{
+			'id_order' : id
+		},
+		success:function(rs){
+			load_out();
+			var rs = $.trim(rs);
+			if(rs == 'success'){
+				swal({
+					title:'Success',
+					timer:1000,
+					type:'success'
+				});
+
+				setTimeout(function(){ window.location.reload(); }, 1200);
+			}else{
+				swal({
+					title:'Error',
+					text: rs,
+					type:'error'
+				});
+			}
+		}
+	});
+}

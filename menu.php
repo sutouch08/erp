@@ -199,6 +199,7 @@
       <li class="dropdown-submenu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-shield"></i> &nbsp; สปอนเซอร์</a>
         <ul class="dropdown-menu">
           <li><a href="index.php?content=sponsor"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข รายชื่อสปอนเซอร์</a></li>
+          <li><a href="index.php?content=sponsor_approver"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข ผู้อนุมัติงบสปอนเซอร์</a></li>
         </ul>
       </li>
       <li class="dropdown-submenu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>&nbsp; พนักงาน</a>
@@ -207,6 +208,7 @@
           <li><a href="index.php?content=sale_group"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข ทีมขาย</a></li>
           <li><a href="index.php?content=sale"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข พนักงานขาย</a></li>
           <li><a href="index.php?content=support"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข  รายชื่ออภินันทนาการ</a></li>
+          <li><a href="index.php?content=support_approver"><i class="fa fa-user"></i>&nbsp; เพิ่ม/แก้ไข ผู้อนุมัติงบอภินันท์</a></li>
         </ul>
       </li>
       <li class="dropdown-submenu"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-users"></i>&nbsp; ผู้จำหน่าย</a>

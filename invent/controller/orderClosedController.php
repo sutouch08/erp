@@ -71,6 +71,8 @@ if( isset( $_GET['clearFilter']))
 	deleteCookie('sRequisition');
 	deleteCookie('sOnline');
 	deleteCookie('sBranch');
+	deleteCookie('sDelivered');
+	deleteCookie('sNotDelivery');
 	echo 'done';
 }
 

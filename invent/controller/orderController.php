@@ -348,7 +348,7 @@ if( isset( $_GET['getSaleStockGrid'] ) && isset( $_GET['id_style'] ) )
 	$id_style = $_GET['id_style'];
 	$style = new style($id_style);
 	$id_branch = isset($_GET['id_branch']) ? $_GET['id_branch'] : 0;
-	
+
 	if($style->show_in_sale == 1 && $style->can_sell == 1 && $style->active == 1 && $style->is_deleted == 0)
 	{
 		$pd = new product();
@@ -718,6 +718,46 @@ if( isset( $_GET['stateChange']))
 }
 
 
+//---- เปลี่ยนสถานะเป็นจัดส่งแล้ว
+if( isset($_GET['setDelivered']))
+{
+	$sc = TRUE;
+	$id_order = $_POST['id_order'];
+	$state = 10; //--- จัดส่งแล้ว
+	$order = new order($id_order);
+
+	if($order->state == 8 OR $order->state == 9)
+	{
+		if( $order->stateChange($order->id, $state) !== TRUE)
+		{
+			$sc = FALSE;
+			$message = 'เปลี่ยนสถานะไม่สำเร็จ';
+		}
+	}
+
+	echo $sc === TRUE ? 'success' : $message;
+}
+
+
+//---- เปลี่ยนสถานะกลับมาเป็นรอจัดส่งเหมือนเดิม
+if(isset($_GET['setNotDelivery']))
+{
+	$sc = TRUE;
+	$id_order = $_POST['id_order'];
+	$state = 8; //---- รอจัดส่ง
+	$order  = new order($id_order);
+
+	if($order->state == 10 OR $order->state == 9)
+	{
+		if( $order->stateChange($order->id, $state) !== TRUE)
+		{
+			$sc = FALSE;
+			$message = 'เปลี่ยนสถานะไม่สำเร็จ';
+		}
+	}
+
+	echo $sc === TRUE ? 'success' : $message;
+}
 
 
 if(isset($_GET['setExpired']))

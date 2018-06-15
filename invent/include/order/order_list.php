@@ -213,11 +213,12 @@ for($i =1; $i <= 11; $i++)
 
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_9; ?>" id="btn-9" onclick="toggleState('btn-9', <?php echo $state_9; ?> )">กำลังจัดส่ง</button>
 		</div>
-		<div class="col-sm-1 padding-5">
 
+			-->
+		<div class="col-sm-1 padding-5">
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_10; ?>" id="btn-10" onclick="toggleState('btn-10', <?php echo $state_10; ?> )">จัดส่งแล้ว</button>
 		</div>
-		-->
+
 		<div class="col-sm-1 padding-5">
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_11; ?>" id="btn-11" onclick="toggleState('btn-11', <?php echo $state_11; ?> )">ยกเลิก</button>
 		</div>
@@ -226,14 +227,15 @@ for($i =1; $i <= 11; $i++)
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_notSave; ?>" id="btn-notSave" onclick="toggleState('btn-notSave', <?php echo $notSave; ?> )">ยังไม่บันทึก</button>
 		</div>
 
-		<div class="col-sm-1 padding-5">
+		<div class="col-sm-1 padding-5 last">
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_onlyMe; ?>" id="btn-onlyMe" onclick="toggleState('btn-onlyMe', <?php echo $onlyMe; ?> )">เฉพาะฉัน</button>
 		</div>
 
+		<!--
 		<div class="col-sm-1 padding-5 last">
 			<button type="button" class="btn btn-sm btn-block <?php echo $btn_expire; ?>" id="btn-expire" onclick="toggleState('btn-expire', <?php echo $isExpire; ?> )">หมดอายุ</button>
 		</div>
-
+	-->
 
 
 

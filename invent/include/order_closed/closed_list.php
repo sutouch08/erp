@@ -24,6 +24,8 @@
   $sRequisition  = getFilter('sRequisition', 'sRequisition', 0); //---  เบิกทั่วไป  0 = not filter 1 = filter
   $sOnline = getFilter('sOnline', 'sOnline', 0); //--- ออนไลน์เท่านั้น
   $sBranch = getFilter('sBranch', 'sBranch', '');
+  $isDelivered = getFilter('sDelivered', 'sDelivered', 0); //---- จัดส่งแล้วเท่านั้น
+  $isNotDelivery = getFilter('sNotDelivery', 'sNotDelivery', 0); //--- ยังไม่จัดส่ง
   $btn = array(
         '1' => $sOrder,
         '2' => $sConsign,
@@ -59,7 +61,12 @@
   $b_requis     = $sRequisition == 0 ? '' : 'btn-primary';
   $b_online     = $sOnline == 0 ? '' : 'btn-primary';
 
+
+  //--- delivery
+  $b_delivered    = $isDelivered == 0 ? '' : 'btn-primary';
+  $b_notdelivery  = $isNotDelivery == 0 ? '' : 'btn-primary';
  ?>
+
 <form id="searchForm" method="post">
 <div class="row">
   <div class="col-sm-1 col-1-harf padding-5 first">
@@ -148,6 +155,13 @@
     <button type="button" class="btn btn-sm btn-block <?php echo $b_online; ?>" onclick="toggleButton('Online')">ออนไลน์</button>
   </div>
 
+  <div class="col-sm-1 col-sm-offset-2 padding-5">
+    <button type="button" class="btn btn-sm btn-block <?php echo $b_delivered; ?>" onclick="toggleButton('Delivered')">จัดส่งแล้ว</button>
+  </div>
+  <div class="col-sm-1 padding-5 last">
+    <button type="button" class="btn btn-sm btn-block <?php echo $b_notdelivery; ?>" onclick="toggleButton('NotDelivery')">รอการจัดส่ง</button>
+  </div>
+
 
   <input type="hidden" name="viewDate" id="viewDate" value="<?php echo $viewDate; ?>" />
 
@@ -159,13 +173,39 @@
   <input type="hidden" name="sLend" id="sLend" value="<?php echo $sLend; ?>" />
   <input type="hidden" name="sRequisition" id="sRequisition" value="<?php echo $sRequisition; ?>" />
   <input type="hidden" name="sOnline" id="sOnline" value="<?php echo $sOnline; ?>" />
+  <input type="hidden" name="sDelivered" id="sDelivered" value="<?php echo $isDelivered; ?>" />
+  <input type="hidden" name="sNotDelivery" id="sNotDelivery" value="<?php echo $isNotDelivery; ?>" />
 
 </div>
 </form>
 
 <hr/>
 <?php
+
   $where = "WHERE state IN(8,9,10) ";
+
+  createCookie('sDelivered', $isDelivered);
+  createCookie('sNotDelivery', $isNotDelivery);
+  
+  if($isDelivered == 1 OR $isNotDelivery == 1)
+  {
+    if($isDelivered == 1 && $isNotDelivery == 1)
+    {
+      $where .= "AND (state = 10 OR state = 8) ";
+    }
+
+    if($isDelivered == 1 && $isNotDelivery == 0)
+    {
+      $where .= "AND state = 10 ";
+    }
+
+    if($isDelivered == 0 && $isNotDelivery == 1)
+    {
+      $where .= "AND state = 8 ";
+    }
+  }
+
+
 
   if( $sCode != '')
   {
@@ -242,7 +282,7 @@
 ?>
 <div class="row">
   <div class="col-sm-12">
-    <table class="table table-striped table-bordered">
+    <table class="table table-bordered">
       <thead>
         <tr class="font-size-12">
           <th class="width-5 text-center">ลำดับ</th>
@@ -261,7 +301,7 @@
 <?php   $order = new order(); ?>
 <?php   $no = row_no(); ?>
 <?php   while( $rs = dbFetchObject($qs)) : ?>
-        <tr class="font-size-10">
+        <tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status, $rs->isExpire); //--- order_help.php ?>>
 
           <td class="middle text-center pointer" onclick="viewDetail(<?php echo $rs->id; ?>)">
             <?php echo number($no); ?>
@@ -308,7 +348,7 @@
 
 <?php else : ?>
       <tr>
-        <td colspan="8" class="text-center"><h4>ไม่พบรายการ</h4></td>
+        <td colspan="9" class="text-center"><h4>ไม่พบรายการ</h4></td>
       </tr>
 <?php endif; ?>
       </tbody>

@@ -16,7 +16,7 @@
 <?php     include 'include/page_error.php';   ?>
 <?php else : ?>
 <?php   $order = new order($_GET['id_order']); ?>
-<?php   if( $order->state < 8 ) : ?>
+<?php   if( $order->state < 8 OR $order->state > 10 ) : ?>
 <?php     include 'include/page_error.php'; ?>
 <?php   else : ?>
   <input type="hidden" id="id_order" value="<?php echo $order->id; ?>" />
@@ -44,6 +44,12 @@
 
   <div class="row">
     <div class="col-sm-12 text-right">
+      <?php if($order->state == 8 && $edit) : ?>
+        <button type="button" class="btn btn-sm btn-primary" onclick="setDelivered()"><i class="fa fa-check"></i> จัดส่งแล้ว</button>
+      <?php endif; ?>
+      <?php if($order->state == 10 && $edit) : ?>
+        <button type="button" class="btn btn-sm btn-warning" onclick="setNotDelivery()"><i class="fa fa-trash"></i> ยกเลิกการจัดส่ง</button>
+      <?php endif; ?>
       <button type="button" class="btn btn-sm btn-info" onclick="printAddress()"><i class="fa fa-print"></i> ใบนำส่ง</button>
       <button type="button" class="btn btn-sm btn-primary" onclick="printOrder()"><i class="fa fa-print"></i> Packing List </button>
       <button type="button" class="btn btn-sm btn-success" onclick="printOrderBarcode()"><i class="fa fa-print"></i> Packing List (barcode)</button>
