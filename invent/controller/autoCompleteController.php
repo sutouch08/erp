@@ -91,4 +91,12 @@ if(isset($_GET['getSupplier']))
 }
 
 
+
+//---- รายงานรายละเอียดใบสั่งซื้อ
+if(isset($_GET['getSupplierCodeAndName']))
+{
+	include 'autocomplete/get_supplier_code_and_name.php';
+}
+
+
 ?>

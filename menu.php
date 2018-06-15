@@ -106,12 +106,13 @@
       	<ul class="dropdown-menu">
         	<li><a href="index.php?content=po_backlog"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ใบสั่งซื้อค้างรับ</a></li>
           <li><a href="index.php?content=po_history_by_product"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดการสั่งซื้อ ตามรุ่นสินค้า</a></li>
+          <li><a href="index.php?content=po_detail"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน รายละเอียดใบสั่งซื้อ</a></li>
         </ul>
       </li>
 
       <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ติดตาม</a>
       	<ul class="dropdown-menu">
-        	<li><a href="index.php?content=stock_backlogs"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สินค้าค้างส่ง</a></li>
+        	<!--<li><a href="index.php?content=stock_backlogs"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สินค้าค้างส่ง</a></li>-->
           <li><a href="index.php?content=lend_not_return"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน การยืมสินค้ายังไม่ส่งคืน</a></li>
         </ul>
       </li>
@@ -126,14 +127,14 @@
           <li><a href="index.php?content=support_by_customer_order"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดอถินันท์แยกตามผู้รับ แสดงเลขที่เอกสาร</a></li>
           <li><a href="index.php?content=support_by_customer_items"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดอภินันท์แยกตามผู้รับ แสดงรายการสินค้า</a></li>
           <li class="divider"></li>
-        	<li><a href="index.php?content=discount_edit"><i class="fa fa-bar-chart"></i>&nbsp;รายงานการแก้ไขส่วนลด</a></li>
+        	<!-- <li><a href="index.php?content=discount_edit"><i class="fa fa-bar-chart"></i>&nbsp;รายงานการแก้ไขส่วนลด</a></li> -->
           <li><a href="index.php?content=permission_by_employee"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ตรวจสอบสิทธิ์ แยกตามพนักงาน</a></li>
         </ul>
       </li>
 
       <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน วิเคราะห์</a>
       	<ul class="dropdown-menu">
-        	<li><a href="index.php?content=sale_product_deep_analyz"><i class="fa fa-bar-chart"></i>&nbsp;รายงานวิเคราะห์ขายแบบละเอียด</a></li>
+
         </ul>
       </li>
     </ul>

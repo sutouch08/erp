@@ -45,6 +45,19 @@ if(isset($_GET['poHistoryByProduct']) && isset($_GET['export']))
 
 
 
+//---- รายงานรายละเอียดใบสั่งซื้อ
+if(isset($_GET['getPoDetail']) && isset($_GET['report']))
+{
+  include 'report/purchase/report_po_detail.php';
+}
+
+
+if(isset($_GET['getPoDetail']) && isset($_GET['export']))
+{
+  include 'report/purchase/export_po_detail.php';
+}
+
+
 
 
  ?>

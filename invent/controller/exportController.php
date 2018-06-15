@@ -6,6 +6,9 @@ include "../function/report_helper.php";
 
 if( isset($_GET['exportProductSelected']))
 {
+  ini_set('memory_limit', '1024M');
+  set_time_limit(600);
+
  	$exp 	= $_POST['style'];
 	$web_id = getConfig("ITEMS_GROUP");
 	$excel = new PHPExcel();
@@ -60,6 +63,9 @@ if( isset($_GET['exportProductSelected']))
 
 if(isset( $_GET['exportAllProduct'] ))
 {
+  ini_set('memory_limit', '1024M');
+  set_time_limit(600);
+
 	$web_id = getConfig("ITEMS_GROUP");
 	$excel = new PHPExcel();
 	$excel->setActiveSheetIndex(0);
