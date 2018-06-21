@@ -48,7 +48,6 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
       <option value="">ทั้งหมด</option>
       <option value="AS" <?PHP echo isSelected($sStatus, 'AS'); ?>>บันทึกแล้ว</option>
       <option value="NC" <?PHP echo isSelected($sStatus, 'NC'); ?>>ยังไม่บันทึก</option>
-      <option value="NE" <?php echo isSelected($sStatus, 'NE'); ?>>ยังไม่ส่งออก</option>
       <option value="CN" <?php echo isSelected($sStatus, 'CN'); ?>>ยกเลิก</option>
     </select>
   </div>
@@ -98,12 +97,12 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
     {
       //--- เฉพาะที่บันทึกแล้ว
       case 'AS' :
-        $where .= "AND isSaved = 1 ";
+        $where .= "AND isSaved = 1 AND isCancle = 0 ";
       break;
 
       //--- เฉพาะที่ยังไม่บันทึก
       case 'NC' :
-        $where .= "AND isSaved = 0 ";
+        $where .= "AND isSaved = 0 AND isCancle = 0 ";
       break;
 
       //--- เฉพาะที่ยกเลิก

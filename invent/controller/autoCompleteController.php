@@ -99,4 +99,10 @@ if(isset($_GET['getSupplierCodeAndName']))
 }
 
 
+//---
+if(isset($_GET['getEmployeeIdAndName']))
+{
+	include 'autocomplete/get_employee_id_and_name.php';
+}
+
 ?>

@@ -242,6 +242,68 @@ if( isset( $_GET['isExistsSupport']))
 }
 
 
+//----- เปิดสิทธิ์การอนุมัติงบประมาณ
+if(isset($_GET['setActiveApprover']))
+{
+	$sc = TRUE;
+	$id = $_POST['id'];
+	$apv = new approver();
+	$arr = array('active' => 1);
+
+	if($apv->update($id, $arr) === FALSE)
+	{
+		$sc = FALSE;
+		$message = 'เปิดใช้งานไม่สำเร็จ';
+	}
+
+	echo $sc === TRUE ? 'success' : $message;
+}
+
+
+
+//---- ปิดสิทธิ์การอนุมัติงบประมาณ
+if(isset($_GET['disActiveApprover']))
+{
+	$sc = TRUE;
+	$id = $_POST['id'];
+	$apv = new approver();
+	$arr = array('active' => 0);
+
+	if($apv->update($id, $arr) === FALSE)
+	{
+		$sc = FALSE;
+		$message = 'ปิดใช้งานไม่สำเร็จ';
+	}
+
+	echo $sc === TRUE ? 'success' : $message;
+}
+
+
+
+//----- ตรวจสอบว่ามีรายชื่ออยู่แล้วหรือไม่
+if(isset($_GET['isExistsApprover']))
+{
+	$id_emp = $_GET['id_employee'];
+	$doc_type = 'SU-BUDGET';
+	$ap = new approver();
+	$sc = $ap->isExistsApprover($doc_type, $id_emp);
+
+	echo $sc === TRUE ? 'exists' : 'ok';
+}
+
+
+//----- เพิ่มผู้อนุมัติงบประมาณ
+if(isset($_GET['addApprover']))
+{
+	include 'support/support_approver_add.php';
+}
+
+
+//----- ลบผู้อนุมัติงบประมาณ
+if(isset($_GET['removeApprover']))
+{
+	include 'support/support_approver_delete.php';
+}
 
 
 
@@ -249,6 +311,8 @@ if( isset($_GET['clearFilter']))
 {
 	deleteCookie('sSupportName');
 	deleteCookie('sSupportYear');
+	deleteCookie('sName');
+	deleteCookie('isActive');
 	echo 'done';
 }
 ?>

@@ -30,7 +30,7 @@ else
   $header .=  '</tr>';
   $header .=  '<tr>';
   $header .=  '<td style="width:80%; height:10mm; line-height:10mm; padding-left:10px;">วันที่ : '.thaiDate($order->date_add, '/').'</td>';
-  $header .=  '<td rowspan="2" class="middle text-center font-size-48 blod" style="border-left:solid 1px #CCC;">'.$box->getBoxNo($id_box).'</td>';
+  $header .=  '<td rowspan="2" class="middle text-center font-size-48 blod" style="border-left:solid 1px #CCC;">'.$box->getBoxNo($id_box).'/'.$box->getTotalBox($order->id).'</td>';
   $header .=  '</tr>';
   $header .= '<tr>';
   $header .=  '<td style="width:80%; height:10mm; line-height:10mm; padding-left:10px;">';

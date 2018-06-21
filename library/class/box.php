@@ -77,6 +77,14 @@ class box
   }
 
 
+  public function getTotalBox($id_order)
+  {
+    $qs = dbQuery("SELECT MAX(box_no) AS no FROM tbl_box WHERE id_order = '".$id_order."'");
+    list($no) = dbFetchArray($qs);
+
+    return is_null($no) ? 1 : $no;
+  }
+
 
 
 } //--- end class

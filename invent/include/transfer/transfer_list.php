@@ -103,12 +103,12 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
 
       //--- เฉพาะที่ยังไม่บันทึก
       case 'NC' :
-        $where .= "AND isSaved = 0 ";
+        $where .= "AND isSaved = 0 AND isCancle = 0 ";
       break;
 
       //--- เฉพาะที่ยังไม่ส่งออก
       case 'NE' :
-        $where .= "AND isExport = 0 ";
+        $where .= "AND isExport = 0 AND isCancle = 0 ";
       break;
 
       //--- เฉพาะที่ยกเลิก

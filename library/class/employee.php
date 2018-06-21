@@ -239,6 +239,23 @@ public function whoUseThisKey($s_key)
 
 
 
+//---
+public function getKey($id)
+{
+	$qs = dbQuery("SELECT s_key FROM tbl_employee WHERE id_employee = '".$id."'");
+	if(dbNumRows($qs) == 1)
+	{
+		list($s_key) = dbFetchArray($qs);
+
+		$s_key = $s_key == '' ? md5($id) : $s_key;
+		return $s_key;
+	}
+
+	return FALSE;
+}
+
+
+
 
 
 

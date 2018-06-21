@@ -62,14 +62,16 @@
         <thead>
           <tr class="font-size-12">
             <th class="width-5 text-center">ลำดับ</th>
-            <th class="text-center">ผู้ยืม</th>
-            <th class="width-15 text-center">เลขที่เอกสาร</th>
+            <th class="width-15 text-center">ผู้ยืม</th>
+            <th class="width-15 text-center">ผู้สั่ง</th>
+            <th class="width-10 text-center">ผู้ทำรายการ</th>
+            <th class="width-10 text-center">เลขที่เอกสาร</th>
             <th class="width-15 text-center">รหัสสินค้า</th>
-            <th class="width-8 text-center">ยืม</th>
-            <th class="width-8 text-center">คืนแล้ว</th>
-            <th class="width-8 text-center">คงเหลือ</th>
-            <th class="width-8 text-center">ต้นทุน</th>
-            <th class="width-10 text-center">มูลค่า</th>
+            <th class="width-5 text-center">ยืม</th>
+            <th class="width-5 text-center">คืน</th>
+            <th class="width-5 text-center">ค้าง</th>
+            <th class="width-8 text-center">ราคา</th>
+            <th class="width-8 text-center">มูลค่า</th>
           </tr>
         </thead>
         <tbody id="result">
@@ -84,7 +86,7 @@
 {{#each this}}
   {{#if @last}}
   <tr class="font-size-12">
-    <td colspan="4" class="middle text-right">รวม</td>
+    <td colspan="6" class="middle text-right">รวม</td>
     <td class="middle text-right">{{totalQty}}</td>
     <td class="middle text-right">{{totalReceived}}</td>
     <td class="middle text-right">{{totalBalance}}</td>
@@ -92,15 +94,17 @@
     <td class="middle text-right">{{totalAmount}}</td>
   </tr>
   {{else}}
-  <tr class="font-size-12">
+  <tr class="font-size-10">
     <td class="middle text-center">{{no}}</td>
     <td class="middle">{{cusName}}</td>
+    <td class="middle">{{empName}}</td>
+    <td class="middle">{{userName}}</td>
     <td class="middle text-center">{{reference}}</td>
     <td class="middle">{{pdCode}}</td>
     <td class="middle text-right">{{qty}}</td>
     <td class="middle text-right">{{received}}</td>
     <td class="middle text-right">{{balance}}</td>
-    <td class="middle text-right">{{cost}}</td>
+    <td class="middle text-right">{{price}}</td>
     <td class="middle text-right">{{amount}}</td>
   </tr>
   {{/if}}
