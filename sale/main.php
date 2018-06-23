@@ -48,7 +48,7 @@
   </div>
 
   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 margin-top-15 margin-bottom-15">
-    <button type="button" class="btn btn-lg btn-primary btn-block" onclick="goOrder()">
+    <button type="button" class="btn btn-lg btn-primary btn-block" onclick="goReport()">
       รายงาน
     </button>
   </div>
@@ -67,5 +67,9 @@ function goOrder(){
 
 function goStock(){
   window.location.href = 'index.php?content=check_stock';
+}
+
+function goReport(){
+	window.location.href = 'index.php?content=dashboard';
 }
 </script>

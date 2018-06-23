@@ -37,6 +37,7 @@ function getProductGrid(){
 
 function getOrderGrid(id_style){
 	var id_branch = $('#id_branch').val();
+	var branch = $('#id_branch :selected').text();
 	load_in();
 	$.ajax({
 		url:"controller/orderController.php?getOrderGrid",
@@ -74,6 +75,8 @@ function getStockGrid(id_style){
 		var id_style = $('#id_style').val();
 	}
 	var id_branch = $('#id_branch').val();
+	var branch = $('#id_branch :selected').text();
+
 	load_in();
 	$.ajax({
 		url:"controller/orderController.php?getStockGrid",
@@ -92,7 +95,7 @@ function getStockGrid(id_style){
 				var pdCode = rs[2];
 
 				$("#modal").css("width", width +"px");
-				$("#modalTitle").html(pdCode);
+				$("#modalTitle").html(pdCode+' : '+branch);
 
 				$("#modalBody").html(grid);
 				grid_init();

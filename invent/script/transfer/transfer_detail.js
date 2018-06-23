@@ -138,31 +138,36 @@ function addToTransfer(){
 
 
 	if( count > 0 ){
-		$.ajax({
-			url:"controller/transferController.php?addToTransfer",
-			type:"POST",
-			cache:"false",
-			data: ds ,
-			success: function(rs){
-				var rs = $.trim(rs);
-				if( rs == 'success' ){
-					swal({
-						title: 'success',
-						text: 'เพิ่มรายการเรียบร้อยแล้ว',
-						type: 'success',
-						timer: 1000
-					});
+		load_in();
+		setTimeout(function(){
+			$.ajax({
+				url:"controller/transferController.php?addToTransfer",
+				type:"POST",
+				cache:"false",
+				data: ds ,
+				success: function(rs){
+					load_out();
+					var rs = $.trim(rs);
+					if( rs == 'success' ){
+						swal({
+							title: 'success',
+							text: 'เพิ่มรายการเรียบร้อยแล้ว',
+							type: 'success',
+							timer: 1000
+						});
 
-					setTimeout( function(){
-						showTransferTable();
-					}, 1200);
+						setTimeout( function(){
+							showTransferTable();
+						}, 1200);
 
-				}else{
+					}else{
 
-					swal("ข้อผิดพลาด", rs, "error");
+						swal("ข้อผิดพลาด", rs, "error");
+					}
 				}
-			}
-		});
+			});
+		}, 500);
+
 
 	}else{
 

@@ -1,326 +1,139 @@
-<?php 
-	$page_menu = "sale_dashboard";
-	$page_name = "SALE DASHBOARD";
-	$id_profile = $_COOKIE['profile_id'];
-	$id_user= $_COOKIE['user_id'];
-	$today = date('Y-m-d');
-	$this_month = date("m",strtotime("this month"));
-	$last_month = date("m",strtotime("-1 month"));
-	$last_year = date("Y",strtotime("-1 year"))+543;
-	$rang = getMonth();
-	$from = $rang['from'];
-	$to = $rang['to'];
-	$employee = new employee($id_user);
-	$id_sale = $employee->get_id_sale($id_user);
-	$sale = new sale($id_sale);
-	function posColor($n){
-		$i = 10-$n;
-		switch($i){
-			case 9 :
-			$class = "#4FC1E9";
-			break;
-			case 8 :
-			$class = "#48CFAD";
-			break;
-			case 7 :
-			$class = "#A0D468";
-			break;
-			case 6 :
-			$class = "#FFCE54";
-			break;
-			case 5 :
-			$class = "#FC6E51";
-			break;
-			default :
-			$class = "#DA4453";
-			break;
-		}
-		return $class;
-	}
-	
-	?>
-    
-<div class="container">
-<!-- page place holder -->
-<div class="row">
-	<div class="col-sm-6"><h3 style="margin-top:15px; margin-bottom:0px;"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;<?php echo $page_name; ?></h3>
-	</div>
-    <div class="col-sm-6">
-       <ul class="nav navbar-nav navbar-right">
-     		<li><a href='index.php?content=order' style='color:black; text-align:center; background-color:transparent; padding-top:10px; padding-bottom:10px;'><span class='glyphicon glyphicon-plus-sign' style='color:#5cb85c; font-size:30px;'></span><br />New Order</a></li>
-       </ul>
-    </div>
-</div>
-<hr style="border-color:#CCC; margin-top: 0px; margin-bottom:5px;" />
-<!-- End page place holder -->
-<div class='row'>
-	<div class='col-sm-3'>
-    	<div class="panel panel-primary">
-  			<div class="panel-heading">
-                <h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>ยอดขายวันนี้</h4>
-              </div>
-             <div class="panel-body" style="background-color:#4FC1E9;">
-                   <h3 style='color:#FFF; margin-top:5px; text-align:center;'><?php  echo $sale->sale_amount("today",$id_sale); ?></h3>
-              </div>
-           </div>
-    </div>
-	<div class='col-sm-3'>
-    	<div class="panel panel-primary">
-  			<div class="panel-heading">
-                <h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>ยอดขายเมื่อวาน</h4>
-              </div>
-             <div class="panel-body" style="background-color:#4FC1E9;">
-                   <h3 style='color:#FFF; margin-top:5px; text-align:center;'><?php  echo $sale->sale_amount("yesterday",$id_sale); ?></h3>
-              </div>
-           </div>
-    </div>
-    <div class='col-sm-3'>
-    	<div class="panel panel-success">
-  			<div class="panel-heading">
-                <h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>ยอดขายสัปดาห์นี้</h4>
-              </div>
-             <div class="panel-body" style="background-color:#A0D468;">
-                   <h3 style='color:#FFF; margin-top:5px; text-align:center;'><?php echo $sale->sale_amount("this_week",$id_sale); ?></h3>
-              </div>
-           </div>
-    </div>
-     <div class='col-sm-3'>
-    	<div class="panel panel-success">
-  			<div class="panel-heading">
-                <h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>ยอดขายสัปดาห์ที่แล้ว</h4>
-              </div>
-             <div class="panel-body" style="background-color:#A0D468;">
-                   <h3 style='color:#FFF; margin-top:5px; text-align:center;'><?php echo $sale->sale_amount("last_week",$id_sale); ?></h3>
-              </div>
-           </div>
-    </div>
-    <div class='col-sm-3'>
-    	<div class="panel panel-info">
-  			<div class="panel-heading">
-                <h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>ยอดขายเดือนนี้</h4>
-              </div>
-             <div class="panel-body" style="background-color:#48CFAD;">
-                   <h3 style='color:#FFF; margin-top:5px; text-align:center;'><?php echo $sale->sale_amount("this_month",$id_sale); ?></h3>
-              </div>
-           </div>
-    </div>
- <div class='col-sm-3'>
-    	<div class="panel panel-info">
-  			<div class="panel-heading">
-                <h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>ยอดขายเดือนนที่แล้ว</h4>
-              </div>
-             <div class="panel-body" style="background-color:#48CFAD;">
-                   <h3 style='color:#FFF; margin-top:5px; text-align:center;'><?php echo $sale->sale_amount("last_month",$id_sale); ?></h3>
-              </div>
-           </div>
-    </div>
-     <div class='col-sm-3'>
-    	<div class="panel panel-warning">
-  			<div class="panel-heading">
-                <h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>เดือนนี้ ปีที่แล้ว</h4>
-              </div>
-             <div class="panel-body" style="background-color:#FFCE54;">
-                   <h3 style='color:#FFF; margin-top:5px; text-align:center;'><?php  echo $sale->sale_amount("this_month_last_year", $id_sale); ?></h3>
-              </div>
-           </div>
-    </div>
-    <div class='col-sm-3'>
-    	<div class="panel panel-warning">
-  			<div class="panel-heading">
-                <h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>ปีนี้</h4>
-              </div>
-             <div class="panel-body" style="background-color:#FFCE54;">
-                   <h3 style='color:#FFF; margin-top:5px; text-align:center;'><?php  echo $sale->sale_amount("this_year",$id_sale); ?></h3>
-              </div>
-           </div>
-    </div>
-</div>
-<div class='row'>
-	<div class='col-sm-3'>
-    	<div class='panel panel-primary'>
-        	<div class='panel-heading'>
-            	<h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>วันนี้</h4>
-            </div>
-            <div class='panel-body'>
-           <div class='row' style='margin-top:-15px; margin-bottom:-15px;'>
-                <table class='table' style='margin-bottom:0px;'>
-                <?php
-				$result = $sale->LeaderBoard("today");
-				$n = 1;
-				foreach($result as $data){
-					echo"<tr style='background-color:".posColor($n)."; color:#FFF;'>
-					<td align='center' style='border-top:0px;'>$n</td><td style='border-top:0px;'>".$data['first_name']."</td><td align='right' style='border-top:0px;'>".number_format($data['sale_amount'],2)."</td>
-					</tr>";
-					$n++;
-				}
-				?>
-					</table>		
-                    </div>	
-            </div>
-        </div>
-    </div>
-    <div class='col-sm-3'>
-    	<div class='panel panel-primary'>
-        	<div class='panel-heading'>
-            	<h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>เมื่อวานนี้</h4>
-            </div>
-            <div class='panel-body'>
-           <div class='row' style='margin-top:-15px; margin-bottom:-15px;'>
-                <table class='table' style='margin-bottom:0px;'>
-                <?php
-				$result = $sale->LeaderBoard("yesterday");
-				$n = 1;
-				foreach($result as $data){
-					echo"<tr style='background-color:".posColor($n)."; color:#FFF;'>
-					<td align='center' style='border-top:0px;'>$n</td><td style='border-top:0px;'>".$data['first_name']."</td><td align='right' style='border-top:0px;'>".number_format($data['sale_amount'],2)."</td>
-					</tr>";
-					$n++;
-				}
-				?>
-					</table>		
-                    </div>	
-            </div>
-        </div>
-    </div>
-    <div class='col-sm-3'>
-    	<div class='panel panel-primary'>
-        	<div class='panel-heading'>
-            	<h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>สัปดาห์นี้</h4>
-            </div>
-            <div class='panel-body'>
-           <div class='row' style='margin-top:-15px; margin-bottom:-15px;'>
-                <table class='table' style='margin-bottom:0px;'>
-                <?php
-				$result = $sale->LeaderBoard("this_week");
-				$n = 1;
-				foreach($result as $data){
-					echo"<tr style='background-color:".posColor($n)."; color:#FFF;'>
-					<td align='center' style='border-top:0px;'>$n</td><td style='border-top:0px;'>".$data['first_name']."</td><td align='right' style='border-top:0px;'>".number_format($data['sale_amount'],2)."</td>
-					</tr>";
-					$n++;
-				}
-				?>
-					</table>		
-                    </div>	
-            </div>
-        </div>
-    </div>
-    <div class='col-sm-3'>
-    	<div class='panel panel-primary'>
-        	<div class='panel-heading'>
-            	<h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>สัปดาห์ที่แล้ว</h4>
-            </div>
-            <div class='panel-body'>
-           <div class='row' style='margin-top:-15px; margin-bottom:-15px;'>
-                <table class='table' style='margin-bottom:0px;'>
-                <?php
-				$result = $sale->LeaderBoard("last_week");
-				$n = 1;
-				foreach($result as $data){
-					echo"<tr style='background-color:".posColor($n)."; color:#FFF;'>
-					<td align='center' style='border-top:0px;'>$n</td><td style='border-top:0px;'>".$data['first_name']."</td><td align='right' style='border-top:0px;'>".number_format($data['sale_amount'],2)."</td>
-					</tr>";
-					$n++;
-				}
-				?>
-					</table>		
-                    </div>	
-            </div>
-        </div>
-    </div>
-	<div class='col-sm-3'>
-    	<div class='panel panel-primary'>
-        	<div class='panel-heading'>
-            	<h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>เดือนนี้</h4>
-            </div>
-            <div class='panel-body'>
-           <div class='row' style='margin-top:-15px; margin-bottom:-15px;'>
-                <table class='table' style='margin-bottom:0px;'>
-                <?php
-				$result = $sale->LeaderBoard("this_month");
-				$n = 1;
-				foreach($result as $data){
-					echo"<tr style='background-color:".posColor($n)."; color:#FFF;'>
-					<td align='center' style='border-top:0px;'>$n</td><td style='border-top:0px;'>".$data['first_name']."</td><td align='right' style='border-top:0px;'>".number_format($data['sale_amount'],2)."</td>
-					</tr>";
-					$n++;
-				}
-				?>
-					</table>		
-                    </div>	
-            </div>
-        </div>
-    </div>
-    <div class='col-sm-3'>
-    	<div class='panel panel-primary'>
-        	<div class='panel-heading'>
-            	<h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>เดือนที่แล้ว</h4>
-            </div>
-            <div class='panel-body'>
-           <div class='row' style='margin-top:-15px; margin-bottom:-15px;'>
-                <table class='table' style='margin-bottom:0px;'>
-                <?php
-				$result = $sale->LeaderBoard("last_month");
-				$n = 1;
-				foreach($result as $data){
-					echo"<tr style='background-color:".posColor($n)."; color:#FFF;'>
-					<td align='center' style='border-top:0px;'>$n</td><td style='border-top:0px;'>".$data['first_name']."</td><td align='right' style='border-top:0px;'>".number_format($data['sale_amount'],2)."</td>
-					</tr>";
-					$n++;
-				}
-				?>
-					</table>		
-                    </div>	
-            </div>
-        </div>
-    </div>
-    <div class='col-sm-3'>
-    	<div class='panel panel-primary'>
-        	<div class='panel-heading'>
-            	<h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>ปีนี้</h4>
-            </div>
-            <div class='panel-body'>
-           <div class='row' style='margin-top:-15px; margin-bottom:-15px;'>
-                <table class='table' style='margin-bottom:0px;'>
-                <?php
-				$result = $sale->LeaderBoard("this_year");
-				$n = 1;
-				foreach($result as $data){
-					echo"<tr style='background-color:".posColor($n)."; color:#FFF;'>
-					<td align='center' style='border-top:0px;'>$n</td><td style='border-top:0px;'>".$data['first_name']."</td><td align='right' style='border-top:0px;'>".number_format($data['sale_amount'],2)."</td>
-					</tr>";
-					$n++;
-				}
-				?>
-					</table>		
-                    </div>	
-            </div>
-        </div>
-    </div>
-    <div class='col-sm-3'>
-    	<div class='panel panel-primary'>
-        	<div class='panel-heading'>
-            	<h4 style='color:#FFF; margin-top:5px; margin-bottom:0px; text-align:center;'>ปีที่แล้ว</h4>
-            </div>
-            <div class='panel-body'>
-           <div class='row' style='margin-top:-15px; margin-bottom:-15px;'>
-                <table class='table' style='margin-bottom:0px;'>
-                <?php
-				$result = $sale->LeaderBoard("last_year");
-				$n = 1;
-				foreach($result as $data){
-					echo"<tr style='background-color:".posColor($n)."; color:#FFF;'>
-					<td align='center' style='border-top:0px;'>$n</td><td style='border-top:0px;'>".$data['first_name']."</td><td align='right' style='border-top:0px;'>".number_format($data['sale_amount'],2)."</td>
-					</tr>";
-					$n++;
-				}
-				?>
-					</table>		
-                    </div>	
-            </div>
-        </div>
-    </div>
-</div>
 
- </div>
-  
+<?php
+	$sales = new sales_report();
+?>
+
+
+<style>
+.padding-bottom-0 {
+	padding-bottom:0;
+}
+
+.blue {
+	background-color:#4FC1E9;
+}
+
+.green {
+	background-color: #A0D468;
+}
+
+.info {
+	background-color: #48CFAD;
+}
+
+.warning {
+	background-color: #FFCE54;
+}
+
+
+.sale-box {
+	height:100px;
+	padding-top: 30px;
+	text-align: center;
+	font-size:28px;
+	color: white;
+}
+
+</style>
+
+<div class="container">
+	<div class="row top-row">
+		<div class="col-sm-12 top-col">
+			<h4 class="title padding-bottom-0"><i class="fa fa-home"></i> <?php echo $pageTitle; ?></h4>
+		</div>
+	</div>
+	<hr/>
+
+	<div class="row">
+		<div class="col-sm-3 padding-5 first">
+			<div class="panel panel-primary">
+				<div class="panel-heading padding-bottom-0" >
+					<h4 class="title text-center">ยอดวันนี้</h4>
+				</div>
+				<div class="panel-body sale-box blue">
+					<?php echo number($sales->getTodaySales($id_sale)); ?>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-3 padding-5">
+			<div class="panel panel-primary">
+				<div class="panel-heading padding-bottom-0" >
+					<h4 class="title text-center">ยอดเมื่อวาน</h4>
+				</div>
+				<div class="panel-body sale-box blue">
+					<?php echo number($sales->getYesterdaySales($id_sale)); ?>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-3 padding-5">
+			<div class="panel panel-success">
+				<div class="panel-heading padding-bottom-0" >
+					<h4 class="title text-center">ยอดสัปดาห์นี้</h4>
+				</div>
+				<div class="panel-body sale-box green">
+					<?php echo number($sales->getThisWeekSales($id_sale)); ?>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-3 padding-5">
+			<div class="panel panel-success">
+				<div class="panel-heading padding-bottom-0" >
+					<h4 class="title text-center">ยอดสัปดาห์ที่แล้ว</h4>
+				</div>
+				<div class="panel-body sale-box green">
+					<?php echo number($sales->getLastWeekSales($id_sale)); ?>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="col-sm-3 padding-5 first">
+			<div class="panel panel-info">
+				<div class="panel-heading padding-bottom-0" >
+					<h4 class="title text-center">ยอดเดือนนี้</h4>
+				</div>
+				<div class="panel-body sale-box info">
+					<?php echo number($sales->getThisMonthSales($id_sale)); ?>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-3 padding-5">
+			<div class="panel panel-info">
+				<div class="panel-heading padding-bottom-0" >
+					<h4 class="title text-center">ยอดเดือนที่แล้ว</h4>
+				</div>
+				<div class="panel-body sale-box info">
+					<?php echo number($sales->getLastMonthSales($id_sale)); ?>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-3 padding-5">
+			<div class="panel panel-warning">
+				<div class="panel-heading padding-bottom-0" >
+					<h4 class="title text-center">ยอดปีนี้</h4>
+				</div>
+				<div class="panel-body sale-box warning">
+					<?php echo number($sales->getThisYearSales($id_sale)); ?>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-3 padding-5">
+			<div class="panel panel-warning">
+				<div class="panel-heading padding-bottom-0" >
+					<h4 class="title text-center">ยอดปีที่แล้ว</h4>
+				</div>
+				<div class="panel-body sale-box warning">
+					<?php echo number($sales->getLastYearSales($id_sale)); ?>
+				</div>
+			</div>
+		</div>
+
+
+	</div><!-- row -->
+</div>

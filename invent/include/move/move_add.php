@@ -69,7 +69,7 @@ $disabled = $id === FALSE ? '' : 'disabled';
 
 
 
-<script src="script/move/move_add.js"></script>
-<script src="script/move/move_control.js"></script>
-<script src="script/move/move_detail.js"></script>
-<script src="script/move/move_cancle.js"></script>
+<script src="script/move/move_add.js?token=<?php echo date('Ymd'); ?>"></script>
+<script src="script/move/move_control.js?token=<?php echo date('Ymd'); ?>"></script>
+<script src="script/move/move_detail.js?token=<?php echo date('Ymd'); ?>"></script>
+<script src="script/move/move_cancle.js?token=<?php echo date('Ymd'); ?>"></script>

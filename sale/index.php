@@ -58,7 +58,7 @@ if( ! getConfig("CLOSED") )
 
 		case "dashboard":
 			$content = "dashboard.php";
-			$pageTitle = "Sale Dash Board";
+			$pageTitle = "สรุปยอดขาย (ไม่รวม VAT)";
 			break;
 
 		case "tracking":

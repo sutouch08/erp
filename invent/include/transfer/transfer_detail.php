@@ -41,4 +41,4 @@ $disabled = $id === FALSE ? '' : 'disabled';
 
 
 
-<script src="script/transfer/transfer_add.js"></script>
+<script src="script/transfer/transfer_add.js?token=<?php echo date('Ymd'); ?>"></script>

@@ -217,4 +217,4 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
   </div>
 </div>
 
-<script src="script/transfer/transfer_list.js"></script>
+<script src="script/transfer/transfer_list.js?token=<?php echo date('Ymd'); ?>"></script>
