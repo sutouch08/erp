@@ -15,12 +15,14 @@ $em = new employee();
 
 $qr  = "SELECT cus.name, od.reference, pd.code, ld.qty, ld.received, pd.price, em.first_name, em.last_name, ou.id_user ";
 $qr .= "FROM tbl_order_lend_detail AS ld ";
+$qr .= "JOIN tbl_order_lend AS lo ON ld.id_order = lo.id_order ";
 $qr .= "JOIN tbl_order AS od ON ld.id_order = od.id ";
 $qr .= "JOIN tbl_product AS pd ON ld.id_product = pd.id ";
 $qr .= "JOIN tbl_customer AS cus ON od.id_customer = cus.id ";
 $qr .= "JOIN tbl_employee AS em ON od.id_employee = em.id_employee ";
 $qr .= "JOIN tbl_order_user AS ou ON od.id = ou.id_order ";
-$qr .= "WHERE ld.received < ld.qty ";
+$qr .= "WHERE lo.isClosed = 0 ";
+$qr .= "AND ld.received < ld.qty ";
 $qr .= "AND od.date_add >= '".$from."' ";
 $qr .= "AND od.date_add <= '".$to."' ";
 

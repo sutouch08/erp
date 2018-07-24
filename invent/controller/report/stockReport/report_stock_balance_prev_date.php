@@ -32,9 +32,11 @@ $sc['productList']   = $allProduct == 1 ? 'ทั้งหมด' : '('.$pdFrom.
 
 $qr  = "SELECT b.barcode, p.code, p.name, p.cost, (SUM(s.move_in) - SUM(s.move_out)) AS qty ";
 $qr .= "FROM tbl_stock_movement AS s ";
-$qr .= "LEFT JOIN tbl_product AS p ON s.id_product = p.id ";
-$qr .= "LEFT JOIN tbl_product_style AS ps ON p.id_style = ps.id ";
+$qr .= "JOIN tbl_product AS p ON s.id_product = p.id ";
+$qr .= "JOIN tbl_product_style AS ps ON p.id_style = ps.id ";
 $qr .= "LEFT JOIN tbl_barcode AS b ON p.code = b.reference ";
+$qr .= "JOIN tbl_warehouse AS wh ON s.id_warehouse = wh.id "; //--- add
+$qr .= "JOIN tbl_zone AS zn ON zn.id_zone = s.id_zone "; //--- add
 $qr .= "WHERE s.date_upd <= '".toDate($selectDate)."' ";
 
 if($allProduct != 1)
@@ -45,7 +47,7 @@ if($allProduct != 1)
 
 if($allWarehouse != 1)
 {
-  $qr .= "AND s.id_warehouse IN(".$wh_in.") ";
+  $qr .= "AND zn.id_warehouse IN(".$wh_in.") ";
 }
 
 $qr .= "GROUP BY p.id ";
