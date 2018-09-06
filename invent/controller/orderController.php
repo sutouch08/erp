@@ -173,6 +173,19 @@ if( isset( $_GET['updateEditPrice'] ) )
 
 
 
+//---- แก้ไขราคาสินค้าที่ไม่มีการนับสต็อก
+if( isset($_GET['updateNonCountPrice']) )
+{
+	$order = new order($_POST['id_order']);
+	if($order->state > 7)
+	{
+		echo 'ไม่สามารถแก้ไขราคาได้ เนื่องจากออเดอร์ถูกเปิดบิลไปแล้ว';
+	}
+	else
+	{
+		include 'order/edit_order_non_count_price.php';		
+	}
+}
 
 
 //---- แก้ไขราคาทุนสินค้า โดยพนักงาน และมีผู้อนุมัติการแก้ไข

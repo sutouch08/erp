@@ -56,6 +56,9 @@
 
 	        <td class="middle text-center" >
 						<?php echo number_format($rs->qty) .' / '. number_format(($rs->qty - $cs->getTempQty($rs->id))); ?>
+						<?php if( $edit && ($rs->valid == 0 OR $rs->to_zone == 0)) : ?>
+	          	<button type="button" class="btn btn-xs btn-danger pull-right" onclick="deleteMoveItem(<?php echo $id_td; ?>, '<?php echo $pReference; ?>')"><i class="fa fa-trash"></i></button>
+	          <?php endif; ?>
 					</td>
 	      </tr>
 <?php			$no++;			?>

@@ -66,7 +66,8 @@ class qc
     $qr .= "(SELECT SUM(qty) FROM tbl_prepare WHERE id_order = ".$id_order." AND id_product = o.id_product) AS prepared, ";
     $qr .= "(SELECT SUM(qty) FROM tbl_qc WHERE id_order = ".$id_order." AND id_product = o.id_product) AS qc ";
     $qr .= "FROM tbl_order_detail AS o ";
-    $qr .= "WHERE o.id_order = ".$id_order." GROUP BY o.id_product HAVING ( prepared > qc OR ISNULL(qc) )";
+    $qr .= "JOIN tbl_product AS p ON o.id_product = p.id ";
+    $qr .= "WHERE o.id_order = ".$id_order." AND p.count_stock = 1 GROUP BY o.id_product HAVING ( prepared > qc OR ISNULL(qc) )";
 
     return dbQuery($qr);
   }
@@ -84,6 +85,18 @@ class qc
 
     return dbQuery($qr);
   }
+
+
+  public function getVisualProductList($id_order)
+  {
+    $qr  = "SELECT o.id_product, o.product_code, o.product_name, o.qty AS order_qty ";
+    $qr .= "FROM tbl_order_detail AS o ";
+    $qr .= "JOIN tbl_product AS p ON o.id_product = p.id ";
+    $qr .= "WHERE o.id_order = ".$id_order." AND p.count_stock = 0 ";
+
+    return dbQuery($qr);
+  }
+
 
   /*
   //--- รายการที่ตรวจครบแล้ว

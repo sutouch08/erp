@@ -60,56 +60,56 @@
         $totalPrice = 0;
 ?>
 <?php   while( $rs = dbFetchObject($qs)) :  ?>
-<?php     $color = ($rs->order_qty == $rs->qc) ? '' : 'red'; ?>
-        <tr class="font-size-12 <?php echo $color; ?>">
-          <td class="text-center">
-            <?php echo $no; ?>
-          </td>
+  <?php     $color = ($rs->order_qty == $rs->qc OR $rs->isCount == 0) ? '' : 'red'; ?>
+          <tr class="font-size-12 <?php echo $color; ?>">
+            <td class="text-center">
+              <?php echo $no; ?>
+            </td>
 
-          <!--- รายการสินค้า ที่มีการสั่งสินค้า --->
-          <td>
-            <?php echo limitText($rs->product_code.' : '. $rs->product_name, 100); ?>
-          </td>
+            <!--- รายการสินค้า ที่มีการสั่งสินค้า --->
+            <td>
+              <?php echo limitText($rs->product_code.' : '. $rs->product_name, 100); ?>
+            </td>
 
-          <!--- ราคาสินค้า  --->
-          <td class="text-center">
-            <?php echo number($rs->price, 2); ?>
-          </td>
+            <!--- ราคาสินค้า  --->
+            <td class="text-center">
+              <?php echo number($rs->price, 2); ?>
+            </td>
 
-          <!---   จำนวนที่สั่ง  --->
-          <td class="text-center">
-            <?php echo number($rs->order_qty); ?>
-          </td>
+            <!---   จำนวนที่สั่ง  --->
+            <td class="text-center">
+              <?php echo number($rs->order_qty); ?>
+            </td>
 
-          <!--- จำนวนที่จัดได้  --->
-          <td class="text-center">
-            <?php echo number($rs->prepared); ?>
-          </td>
+            <!--- จำนวนที่จัดได้  --->
+            <td class="text-center">
+              <?php echo $rs->isCount == 0 ? number($rs->order_qty) : number($rs->prepared); ?>
+            </td>
 
-          <!--- จำนวนที่ตรวจได้ --->
-          <td class="text-center">
-            <?php echo number($rs->qc); ?>
-          </td>
+            <!--- จำนวนที่ตรวจได้ --->
+            <td class="text-center">
+              <?php echo $rs->isCount == 0 ? number($rs->order_qty) : number($rs->qc); ?>
+            </td>
 
-          <!--- ส่วนลด  --->
-          <td class="text-center">
-            <?php echo discountLabel($rs->discount); ?>
-          </td>
+            <!--- ส่วนลด  --->
+            <td class="text-center">
+              <?php echo discountLabel($rs->discount); ?>
+            </td>
 
-          <td class="text-right">
-            <?php echo number( $rs->final_price * $rs->qc , 2); ?>
-          </td>
+            <td class="text-right">
+              <?php echo $rs->isCount == 0 ? number($rs->final_price * $rs->order_qty) : number( $rs->final_price * $rs->qc , 2); ?>
+            </td>
 
-        </tr>
-<?php
-      $totalQty += $rs->order_qty;
-      $totalPrepared += $rs->prepared;
-      $totalQc += $rs->qc;
-      $totalDiscount += $rs->discount_amount * $rs->qc;
-      $totalAmount += $rs->final_price * $rs->qc;
-      $totalPrice += $rs->price * $rs->qc;
-      $no++;
-?>
+          </tr>
+  <?php
+        $totalQty += $rs->order_qty;
+        $totalPrepared += ($rs->isCount == 0 ? $rs->order_qty : $rs->prepared);
+        $totalQc += ($rs->isCount == 0 ? $rs->order_qty : $rs->qc);
+        $totalDiscount += ($rs->isCount == 0 ? $rs->discount_amount * $rs->order_qty : $rs->discount_amount * $rs->qc);
+        $totalAmount += ($rs->isCount == 0 ? $rs->final_price * $rs->order_qty : $rs->final_price * $rs->qc);
+        $totalPrice += ($rs->isCount == 0 ? $rs->price * $rs->order_qty : $rs->price * $rs->qc);
+        $no++;
+  ?>
 <?php   endwhile; ?>
         <tr class="font-size-12">
           <td colspan="3" class="text-right font-size-14">

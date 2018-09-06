@@ -4,10 +4,10 @@
       <thead>
         <tr class="font-size-12">
           <th class="width-15 text-center">บาร์โค้ด</th>
-          <th class="width-40">สินค้า</th>
-          <th class="width-10 text-center">จำนวนที่สั่ง</th>
-          <th class="width-10 text-center">จำนวนที่จัด</th>
-          <th class="width-10 text-center">ตรวจแล้ว</th>
+          <th class="width-50">สินค้า</th>
+          <th class="width-8 text-center">จำนวนที่สั่ง</th>
+          <th class="width-8 text-center">จำนวนที่จัด</th>
+          <th class="width-8 text-center">ตรวจแล้ว</th>
           <th class="text-right">จากโซน</th>
         </tr>
       </thead>

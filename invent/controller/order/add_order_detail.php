@@ -36,7 +36,8 @@ foreach( $ds as $items )
                   "discount"	=> $discount['discount'],
                   "discount_amount" => $discount['amount'],
                   "total_amount"	=> ($pd->price * $qty) - $discount['amount'],
-                  "id_rule"	=> $discount['id_rule']
+                  "id_rule"	=> $discount['id_rule'],
+                  "isCount" => $pd->count_stock
                 );
 
           if( $order->addDetail($arr) === FALSE )
@@ -73,7 +74,7 @@ foreach( $ds as $items )
           else
           {
             //---- ถ้าเป้นเครดิตแล้วบันทึกไปแล้ว
-            if( $payment->hasTerm == 1 && $detail->isSaved == 1 )
+            if( $payment->hasTerm == 1 && $detail->isSaved == 1 && $detail->isCount == 1 )
             {
               //---- คืนยอดใช้ไปกลับมาก่อน เพื่อรอคำนวณ เครดิตอีกครั้งตอน บันทึก
               $credit->decreaseUsed($order->id_customer, $detail->total_amount);

@@ -49,5 +49,9 @@
     </tr>
 <?php   endif; ?>
 <?php endwhile; ?>
-
 <?php endif; ?>
+
+        </tbody>
+      </table>
+    </div>
+  </div>

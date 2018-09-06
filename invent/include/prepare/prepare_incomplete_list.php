@@ -94,3 +94,7 @@
   </tr>
 
 <?php endif; ?>
+      </tbody>
+    </table>
+  </div><!--/ col -->
+</div><!--/ row-->

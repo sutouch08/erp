@@ -1,5 +1,5 @@
 <?php
-	
+
 	$credit 	= new customer_credit();
 	$payment 	= new payment_method($order->id_payment);
 	$isEnought 	= TRUE;  //--- เอาไว้ตรวจสอบเครดิต ถ้าไม่พอจะเป็น FALSE;
@@ -10,7 +10,7 @@
 	//--- ถ้าเป็นการสั่งซื้อแบบเครดิตเทอม ให้คำนวณเครดิตคงเหลือก่อนบันทึก
 	if( $payment->hasTerm == 1 )
 	{
-		$amount = $order->getTotalAmountNotSave($order->id); //---- ยอดเงินหลังหักส่วนลดทั้งออเดอร์(ไม่รวมส่วนลดท้ายบิล) ที่ยังไม่ได้บันทึก ( isSaved = 0 )
+		$amount = $order->getTotalAmountNotSave($order->id); //---- ยอดเงินหลังหักส่วนลดทั้งออเดอร์(ไม่รวมส่วนลดท้ายบิล) ที่ยังไม่ได้บันทึก ( isSaved = 0 ) ไม่รวมที่ไม่นับสต็อก
 		$isEnought = $credit->isEnough($order->id_customer, $amount); //---- ตรวจสอบว่าเครดิตผ่านหรือไม่
 	}
 

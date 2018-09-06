@@ -68,30 +68,43 @@
         {
           while( $rs = dbFetchObject($qs))
           {
-            //--- เพิ่มข้อมูลกลับ buffer
-            if( $buffer->updateBuffer($rs->id_order, $rs->id_product_style, $rs->id_product, $rs->id_zone, $rs->id_warehouse, $rs->qty) !== TRUE)
+            if($rs->count_stock == 1)
             {
-              $sc = FALSE;
-              $message = 'เพิ่มข้อมูลเข้า buffer ไม่สำเร็จ';
-            }
 
-            //--- ลบรายการบันทึกขาย
-            if( $order->unSold($rs->id) !== TRUE )
-            {
-              $sc = FALSE;
-              $message = 'ลบรายการบันทึกขายไม่สำเร็จ';
-            }
+              //--- เพิ่มข้อมูลกลับ buffer
+              if( $buffer->updateBuffer($rs->id_order, $rs->id_product_style, $rs->id_product, $rs->id_zone, $rs->id_warehouse, $rs->qty) !== TRUE)
+              {
+                $sc = FALSE;
+                $message = 'เพิ่มข้อมูลเข้า buffer ไม่สำเร็จ';
+              }
 
-            if( $pdCost->addCostList($rs->id_product, $rs->cost_ex, $rs->qty) !== TRUE)
-            {
-              $sc = FALSE;
-              $message = 'ปรับปรุงต้นทุนสินค้าไม่สำเร็จ';
-            }
+              //--- ลบรายการบันทึกขาย
+              if( $order->unSold($rs->id) !== TRUE )
+              {
+                $sc = FALSE;
+                $message = 'ลบรายการบันทึกขายไม่สำเร็จ';
+              }
 
-            //--- ถ้ามีการใช้เครดิต รวมยอดเครดิตไว้คืน
-            if( $term === TRUE )
+              if( $pdCost->addCostList($rs->id_product, $rs->cost_ex, $rs->qty) !== TRUE)
+              {
+                $sc = FALSE;
+                $message = 'ปรับปรุงต้นทุนสินค้าไม่สำเร็จ';
+              }
+
+              //--- ถ้ามีการใช้เครดิต รวมยอดเครดิตไว้คืน
+              if( $term === TRUE )
+              {
+                $useCredit += $rs->total_amount_inc;
+              }
+            }
+            else
             {
-              $useCredit += $rs->total_amount_inc;
+              //--- ลบรายการบันทึกขาย
+              if( $order->unSold($rs->id) !== TRUE )
+              {
+                $sc = FALSE;
+                $message = 'ลบรายการบันทึกขายไม่สำเร็จ';
+              }
             }
 
           } //--- End while

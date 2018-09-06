@@ -7,6 +7,12 @@ function showPriceBox(){
 	$("#btn-update-price").removeClass('hide');
 }
 
+function showNonCountPriceBox(id){
+	$('#price_'+id).removeClass('hide');
+	$('#price-label-'+id).addClass('hide');
+	$('#btn-show-price-'+id).addClass('hide');
+	$('#btn-update-price-'+id).removeClass('hide');
+}
 
 
 function showCostBox(){
@@ -116,6 +122,43 @@ function updateDiscount(){
 
 
 
+function updateNonCountPrice(id){
+	var id_order = $('#id_order').val()
+	var price = parseFloat($('#price_'+id).val());
+	if(isNaN(price) || price < 0){
+		swal('ราคาไม่ถูกต้อง');
+		return false;
+	}
+
+	load_in();
+	$.ajax({
+		url:"controller/orderController.php?updateNonCountPrice",
+		type:"POST",
+		cache:"false",
+		data:{
+			"id_order" : id_order,
+			"id_order_detail" : id,
+			"price" : price
+		},
+		success: function(rs){
+			load_out();
+			var rs = $.trim(rs);
+			if(rs == 'success'){
+				swal({
+					title:'Updated',
+					text:'ปรับปรุงราคาเรียบร้อยแล้ว',
+					type:'success',
+					timer: 1000
+				});
+
+				setTimeout(function(){ window.location.reload(); }, 1200 );
+			}else{
+				swal('Error!', rs, 'error');
+			}
+		}
+	});
+}
+
 
 function updatePrice(){
 	var price = [];
@@ -125,10 +168,10 @@ function updatePrice(){
 	price.push( { "name" : "token", "value" : $("#approveToken").val() } ); //--- Token
 	$(".price-box").each(function(index, element) {
         var attr = $(this).attr('id').split('_');
-		var id = attr[1];
-		var name = "price["+id+"]";
-		var value = $(this).val();
-		price.push( {"name" : name, "value" : value });
+				var id = attr[1];
+				var name = "price["+id+"]";
+				var value = $(this).val();
+				price.push( {"name" : name, "value" : value });
     });
 	$.ajax({
 		url:"controller/orderController.php?updateEditPrice",

@@ -4,11 +4,11 @@
       <thead>
         <tr><th colspan="6" class="text-center">รายการที่ครบแล้ว</th></tr>
         <tr class="font-size-12">
-          <th class="width-15 text-center">บาร์โค้ด</th>
-          <th class="width-40">สินค้า</th>
-          <th class="width-10 text-center">จำนวนที่สั่ง</th>
-          <th class="width-10 text-center">จำนวนที่จัด</th>
-          <th class="width-10 text-center">ตรวจแล้ว</th>
+          <th class="width-15">บาร์โค้ด</th>
+          <th class="width-50">สินค้า</th>
+          <th class="width-8 text-center">จำนวนที่สั่ง</th>
+          <th class="width-8 text-center">จำนวนที่จัด</th>
+          <th class="width-8 text-center">ตรวจแล้ว</th>
           <th class="text-right">จากโซน</th>
         </tr>
       </thead>
@@ -50,7 +50,6 @@
       </tr>
 
 <?php   endwhile; ?>
-
 <?php endif; ?>
 
       </tbody>

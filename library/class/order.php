@@ -727,7 +727,7 @@ class order
 
 	public function getTotalAmountNotSave($id)
 	{
-		$qs = dbQuery("SELECT SUM(total_amount) AS amount FROM tbl_order_detail WHERE id_order = '".$id."' AND isSaved = 0");
+		$qs = dbQuery("SELECT SUM(total_amount) AS amount FROM tbl_order_detail WHERE id_order = '".$id."' AND isSaved = 0 AND isCount = 1");
 		list( $amount ) = dbFetchArray($qs);
 		return is_null( $amount ) ? 0.00 : $amount;
 	}
@@ -738,7 +738,7 @@ class order
 
 	public function getTotalAmountSaved($id)
 	{
-		$qs = dbQuery("SELECT SUM(total_amount) AS amount FROM tbl_order_detail WHERE id_order = '".$id."' AND isSaved = 1");
+		$qs = dbQuery("SELECT SUM(total_amount) AS amount FROM tbl_order_detail WHERE id_order = '".$id."' AND isSaved = 1 AND isCount = 1");
 		list( $amount ) = dbFetchArray($qs);
 		return is_null( $amount ) ? 0.00 : $amount;
 	}
