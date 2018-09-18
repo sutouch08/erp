@@ -89,7 +89,7 @@
 				</td>
 
         <td class="middle text-right">
-				<?php if( $rs->isCount == 0 && ($edit OR $add)) : ?>
+				<?php if( $rs->isCount == 0 && ($edit OR $add) && $order->state < 8) : ?>
 					<button type="button" class="btn btn-xs btn-warning" id="btn-show-price-<?php echo $rs->id; ?>" onclick="showNonCountPriceBox(<?php echo $rs->id; ?>)"><i class="fa fa-pencil"></i></button>
 					<button type="button" class="btn btn-xs btn-info hide" id="btn-update-price-<?php echo $rs->id; ?>" onclick="updateNonCountPrice(<?php echo $rs->id; ?>)"><i class="fa fa-save"></i></button>
 				<?php endif; ?>

@@ -2,6 +2,7 @@
   $bill = new bill();
   $payment  = new payment_method($order->id_payment);
   $credit = new customer_credit();
+  $wh = new warehouse();
 
   //--- ใช้งาน ทรานเซ็คชั่น
   startTransection();
@@ -238,6 +239,8 @@
   $qn = $bill->getNonCountBillDetail($order->id);
   if(dbNumRows($qn) > 0)
   {
+    $defaultWhId = $wh->getDefaultId();
+
     while( $rm = dbFetchObject($qn) )
     {
       if($rm->order_qty > 0)
@@ -324,6 +327,7 @@
                 'id_employee' => $employee->id_employee,
                 'employee_name' => $employee->full_name,
                 'date_add'  => dbDate($order->date_add, TRUE),
+                'id_warehouse'  => $defaultWhId,
                 'count_stock' => 0
         );
 

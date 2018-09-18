@@ -400,6 +400,20 @@
 
 
 
+		public function getDefaultId()
+		{
+			$qr  = "SELECT id FROM tbl_warehouse WHERE is_default = 1 LIMIT 1";
+			$qs = dbQuery($qr);
+			if(dbNumRows($qs) == 1)
+			{
+				$rs = dbFetchObject($qs);
+				return $rs->id;
+			}
+
+			return FALSE;
+		}
+
+
 	} 	//----- End class
 
 
