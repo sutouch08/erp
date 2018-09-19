@@ -16,10 +16,18 @@
         <label class="form-control input-sm" disabled><?php echo $customer->name . ' ['.$customer->province.']'; ?></label>
     </div>
 
+		<!--
     <div class="col-sm-2  col-xs-6">
     	<label>ช่องทางขาย</label>
-        <label class="form-control input-sm text-center" disabled><?php echo $channels->getName($order->id_channels); ?></label>
+        <label class="form-control input-sm text-center" disabled><?php // echo $channels->getName($order->id_channels); ?></label>
     </div>
+	-->
+
+		<div class="col-sm-2  col-xs-6">
+    	<label>สาขา</label>
+        <label class="form-control input-sm text-center" disabled><?php echo getBranchName($order->id_branch); ?></label>
+    </div>
+
     <div class="col-sm-2  col-xs-6">
     	<label>การชำระเงิน</label>
         <label class="form-control input-sm text-center" disabled><?php echo $pm->getName($order->id_payment); ?></label>
