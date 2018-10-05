@@ -69,7 +69,7 @@ $qr .= "FROM tbl_stock AS s ";
 $qr .= "LEFT JOIN tbl_zone AS z ON s.id_zone = z.id_zone ";
 $qr .= "LEFT JOIN tbl_product AS p ON s.id_product = p.id ";
 $qr .= "LEFT JOIN tbl_product_style AS ps ON p.id_style = ps.id ";
-$qr .= "LEFT JOIN tbl_barcode AS b ON p.code = b.reference ";
+$qr .= "LEFT JOIN tbl_barcode AS b ON p.id = b.id_product ";
 $qr .= "WHERE s.id_zone != '' ";
 
 if($allProduct != 1)

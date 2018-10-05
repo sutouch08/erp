@@ -3,6 +3,42 @@
   $payment  = new payment_method($order->id_payment);
   $credit = new customer_credit();
   $wh = new warehouse();
+  $customer = new customer($order->id_customer);
+  $employee = new employee($order->id_employee);
+  $channels = new channels($order->id_channels);
+  $role     = new order_role($order->role);
+  $vat      = getConfig('VAT');
+
+  $customer_type  = new customer_type($customer->id_type);
+  $customer_kind  = new customer_kind($customer->id_kind);
+  $customer_class = new customer_class($customer->id_class);
+  $customer_group = new customer_group($customer->id_group);
+  $customer_area  = new customer_area($customer->id_area);
+
+  $sale = new sale($order->id_sale);
+
+  $online_address = new online_address();
+
+  $stock    = new stock();
+
+  $movement = new movement();
+  $buffer   = new buffer();
+  $prepare  = new prepare();
+  $zone     = new zone();
+
+  $product  = new product();
+  $color    = new color();
+  $size     = new size();
+  $pd_group = new product_group();
+  $style    = new style();
+  $category = new category();
+  $kind     = new kind();
+  $type     = new type();
+  $brand    = new brand();
+
+  $rule     = new discount_rule();
+  $policy   = new discount_policy();
+
 
   //--- ใช้งาน ทรานเซ็คชั่น
   startTransection();
@@ -22,42 +58,6 @@
 
   if( dbNumRows($qs) > 0)
   {
-    $customer = new customer($order->id_customer);
-    $employee = new employee($order->id_employee);
-    $channels = new channels($order->id_channels);
-    $role     = new order_role($order->role);
-    $vat      = getConfig('VAT');
-
-    $customer_type  = new customer_type($customer->id_type);
-    $customer_kind  = new customer_kind($customer->id_kind);
-    $customer_class = new customer_class($customer->id_class);
-    $customer_group = new customer_group($customer->id_group);
-    $customer_area  = new customer_area($customer->id_area);
-
-    $sale = new sale($order->id_sale);
-
-    $online_address = new online_address();
-
-    $stock    = new stock();
-
-    $movement = new movement();
-    $buffer   = new buffer();
-    $prepare  = new prepare();
-    $zone     = new zone();
-
-    $product  = new product();
-    $color    = new color();
-    $size     = new size();
-    $pd_group = new product_group();
-    $style    = new style();
-    $category = new category();
-    $kind     = new kind();
-    $type     = new type();
-    $brand    = new brand();
-
-    $rule     = new discount_rule();
-    $policy   = new discount_policy();
-
 
     while( $rs = dbFetchObject($qs))
     {
@@ -229,11 +229,13 @@
     }
 
   }
+  /*
   else
   {
     $sc = FALSE;
     $message = 'ไม่พบรายการตรวจสินค้า';
   }
+  */
 
   //--- บันทึกขายรายการที่ไม่นับสต็อก
   $qn = $bill->getNonCountBillDetail($order->id);
@@ -348,6 +350,13 @@
         */
       } //--- end if sell_qty > 0
     } //--  end while
+  }
+
+
+  if(dbNumRows($qs) == 0 && dbNumRows($qn) == 0)
+  {
+    $sc = FALSE;
+    $message = 'ไม่พบรายการตรวจสินค้า';
   }
 
   //--- log การคืนยอดเครดิตหรืองบประมาณ
