@@ -48,6 +48,7 @@
 
 </div>
 <input type="hidden" id="id_product" />
+<input type="hidden" id="count_stock" value="1" />
 <hr class="margin-top-15 margin-bottom-15" />
 <div class="row margin-bottom-5">
   <div class="col-sm-12">

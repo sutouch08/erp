@@ -56,11 +56,11 @@ if($cs->isCancle == 0 && $cs->isSaved == 0)
 
     while($rs = dbFetchObject($qs))
     {
-      if($sc == FALSE)
+      if($sc === FALSE)
       {
         break;
       }
-      
+
       //--- ดึงข้อมูลสินค้า
       $pd->getData($rs->id_product);
 
@@ -144,7 +144,8 @@ if($cs->isCancle == 0 && $cs->isSaved == 0)
         'employee_name'   => $employee->full_name,
         'date_add'        => dbDate($cs->date_add, TRUE),
         'id_zone'         => $zone->id,
-        'id_warehouse'    => $zone->id_warehouse
+        'id_warehouse'    => $zone->id_warehouse,
+        'count_stock'     => $pd->count_stock
       );
 
       //--- บันทึกขาย
@@ -154,33 +155,39 @@ if($cs->isCancle == 0 && $cs->isSaved == 0)
         $message = 'บันทึกขายไม่สำเร็จ';
       }
 
-      //-------- ตัดยอดสต็อกจากโซน
-      //--- ตรวจสอบจำนวนคงเหลือในโซนว่าพอให้ตัดหรือไม่
-      $isEnough = $stock->isEnough($zone->id, $pd->id, $qty);
-
-      //--- ตรวจสอบว่าโซนอนุญาติให้ติดลบหรือไม่
-      $allowUnderZero = $zone->allowUnderZero;
-
-      if( $isEnough === FALSE && $allowUnderZero === FALSE)
+      //--- ถ้าไม่นับสต็อก ไม่ต้องตัดยอด ไม่ต้องบันทึก movement
+      if($pd->count_stock == 1)
       {
-        $sc = FALSE;
-        $message = 'จำนวนคงเหลือไม่เพียงพอ';
-      }
-      else
-      {
-        if( $stock->updateStockZone($zone->id, $pd->id, ($qty * -1)) !== TRUE )
+
+        //-------- ตัดยอดสต็อกจากโซน
+        //--- ตรวจสอบจำนวนคงเหลือในโซนว่าพอให้ตัดหรือไม่
+        $isEnough = $stock->isEnough($zone->id, $pd->id, $qty);
+
+        //--- ตรวจสอบว่าโซนอนุญาติให้ติดลบหรือไม่
+        $allowUnderZero = $zone->allowUnderZero;
+
+        if( $isEnough === FALSE && $allowUnderZero === FALSE)
         {
           $sc = FALSE;
-          $message = 'ตัดยอดในโซนไม่สำเร็จ';
+          $message = 'จำนวนคงเหลือไม่เพียงพอ2';
         }
-      }
+        else
+        {
+          if( $stock->updateStockZone($zone->id, $pd->id, ($qty * -1)) !== TRUE )
+          {
+            $sc = FALSE;
+            $message = 'ตัดยอดในโซนไม่สำเร็จ';
+          }
+        }
 
-      //--- บันทึก movement
-      if( $movement->move_out($cs->reference, $zone->id_warehouse, $zone->id, $pd->id, $qty, $cs->date_add) !== TRUE)
-      {
-        $sc = FALSE;
-        $message = 'บันทึก movement ไม่สำเร็จ';
-      }
+        //--- บันทึก movement
+        if( $movement->move_out($cs->reference, $zone->id_warehouse, $zone->id, $pd->id, $qty, $cs->date_add) !== TRUE)
+        {
+          $sc = FALSE;
+          $message = 'บันทึก movement ไม่สำเร็จ';
+        }
+
+      } //--- if count_stock
 
       //--- เปลี่ยนสถนาะรายการเป็น บันทึกแล้ว
       if($cs->updateDetail($rs->id, array('status' => 1)) !== TRUE)

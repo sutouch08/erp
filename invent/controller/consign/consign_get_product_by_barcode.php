@@ -10,7 +10,7 @@ if( $id_pd !== FALSE )
 {
   $pd = new product($id_pd);
   $gp = $cs->getProductGP($id_pd, $id_zone);
-  $stock = $st->getStockZone($id_zone, $id_pd);
+  $stock = $pd->count_stock == 1 ?$st->getStockZone($id_zone, $id_pd) : 0;
 
   $arr = array(
     'id_product' => $id_pd,
@@ -19,7 +19,8 @@ if( $id_pd !== FALSE )
     'price'      => $pd->price,
     'p_disc'     => $gp,
     'a_disc'     => 0,
-    'stock'      => $stock
+    'stock'      => $stock,
+    'count_stock' => $pd->count_stock
   );
 
   $sc = json_encode($arr);

@@ -52,6 +52,7 @@ function getItemByCode(){
         $('#txt-pDisc').val(ds.p_disc);
         $('#txt-aDisc').val(ds.a_disc);
         $('#stock-qty').text(ds.stock);
+        $('#count_stock').val(ds.count_stock);
         $('#txt-price').focus();
         $('#txt-price').select();
       }else{
@@ -62,6 +63,7 @@ function getItemByCode(){
         $('#txt-pDisc').val('');
         $('#txt-aDisc').val('');
         $('#stock-qty').text(0);
+        $('#count_stock').val(1);
       }
     }
   });
@@ -92,6 +94,7 @@ function getItemByBarcode(){
         $('#txt-pDisc').val(ds.p_disc);
         $('#txt-aDisc').val(ds.a_disc);
         $('#stock-qty').text(ds.stock);
+        $('#count_stock').val(ds.count_stock);
         $('#txt-price').focus();
         $('#txt-price').select();
       }else{
@@ -102,6 +105,7 @@ function getItemByBarcode(){
         $('#txt-pDisc').val('');
         $('#txt-aDisc').val('');
         $('#stock-qty').text(0);
+        $('#count_stock').val(1);
       }
     }
   });
@@ -257,13 +261,14 @@ function addToDetail(){
   var aDisc = $('#txt-aDisc').val();
   var id_zone = $('#id_zone').val();
   var allowUnderZero = $('#allowUnderZero').val();
+  var count_stock = $('#count_stock').val();
 
   if(qty <= 0){
     swal('จำนวนไม่ถูกต้อง');
     return false;
   }
 
-  if(qty > stock && allowUnderZero == 0){
+  if(qty > stock && allowUnderZero == 0 && count_stock == 1){
     swal('ยอดในโซนไม่พอตัด');
     return false;
   }

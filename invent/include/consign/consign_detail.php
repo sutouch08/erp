@@ -39,8 +39,8 @@ include 'include/consign/consign_view_header.php';
 include 'include/consign/consign_view_detail.php';
  ?>
 
-<script src="script/consign/consign_add.js"></script>
-<script src="script/consign/consign_edit.js"></script>
-<script src="script/consign/consign_control.js"></script>
-<script src="script/consign/consign_detail.js"></script>
-<script src="script/print/print_consign.js"></script>
+<script src="script/consign/consign_add.js?version=<?php echo date('Ymd'); ?>"></script>
+<script src="script/consign/consign_edit.js?version=<?php echo date('Ymd'); ?>"></script>
+<script src="script/consign/consign_control.js?version=<?php echo date('Ymd'); ?>"></script>
+<script src="script/consign/consign_detail.js?version=<?php echo date('Ymd'); ?>"></script>
+<script src="script/print/print_consign.js?version=<?php echo date('Ymd'); ?>"></script>

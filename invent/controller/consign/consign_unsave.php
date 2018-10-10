@@ -24,24 +24,31 @@ if($cs->isSaved == 1 && $cs->isCancle == 0)
       {
         break;
       }
-      
-      //--- 1.  ลบ movement
-      $move_out = $rs->qty * (-1);
-      if($mv->updateMoveOut($cs->reference, $cs->id_zone, $rs->id_product, $move_out) !== TRUE)
-      {
-        $sc = FALSE;
-        $message = 'ลบ movement '.$rs->product_code.' ไม่สำเร็จ';
-      }
 
-      //--- 2. คืนยอดสินค้ากลับเข้าโซน
-      if($st->updateStockZone($cs->id_zone, $rs->id_product, $rs->qty) !== TRUE)
+      $pd->getData($rs->id_product);
+
+      if($pd->count_stock == 1)
       {
-        $sc = FALSE;
-        $message = 'เพิ่มยอด '.$rs->product_code.' กลับเข้าโซนไม่สำเร็จ';
+        //--- 1.  ลบ movement
+        $move_out = $rs->qty * (-1);
+        if($mv->updateMoveOut($cs->reference, $cs->id_zone, $rs->id_product, $move_out) !== TRUE)
+        {
+          $sc = FALSE;
+          $message = 'ลบ movement '.$rs->product_code.' ไม่สำเร็จ';
+        }
+
+        //--- 2. คืนยอดสินค้ากลับเข้าโซน
+        if($st->updateStockZone($cs->id_zone, $rs->id_product, $rs->qty) !== TRUE)
+        {
+          $sc = FALSE;
+          $message = 'เพิ่มยอด '.$rs->product_code.' กลับเข้าโซนไม่สำเร็จ';
+        }
+
       }
 
       //--- 3. ลบยอดขาย
       $sold_id = $order->getConsignSoldDetailRowId($cs->reference, $rs->id_product, $cs->id_zone, $rs->price, $rs->qty, $rs->discount);
+
       if($order->unsold($sold_id) !== TRUE)
       {
         $sc = FALSE;

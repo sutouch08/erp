@@ -14,6 +14,7 @@ $pd    = new product();
 $bc    = new barcode();
 $st    = new stock();
 $zone  = new zone($id_zone);
+$pd->getData($id_pd);
 
 $discount = $pDisc > 0 ? $pDisc.' %' : $aDisc;
 
@@ -30,7 +31,7 @@ if(dbNumRows($qs) == 1)
 
   $qty = $rs->qty + $qty;
 
-  if($st->isEnough($id_zone, $id_pd, $max_qty) === FALSE && $zone->allowUnderZero === FALSE)
+  if($st->isEnough($id_zone, $id_pd, $max_qty) === FALSE && $zone->allowUnderZero === FALSE && $pd->count_stock == 1)
   {
     $sc = FALSE;
     $message = 'สต็อกในโซนไม่เพียงพอ';
@@ -77,7 +78,7 @@ else
 {
   //----- ถ้ายังไม่มีข้อมูล
   //---- ถ้าสินค้าในโซนไม่พอตัด
-  if($st->isEnough($id_zone, $id_pd, $qty) === FALSE && $zone->allowUnderZero === FALSE)
+  if($st->isEnough($id_zone, $id_pd, $qty) === FALSE && $zone->allowUnderZero === FALSE && $pd->count_stock == 1)
   {
     $sc = FALSE;
     $message = 'สต็อกในโซนไม่เพียงพอ';
