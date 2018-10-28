@@ -6,6 +6,12 @@ $('#barcode-item').keyup(function(e){
   }
 });
 
+$('#barcode-item').focusout(function(e){
+    if($(this).val() != ''){
+      getItemByBarcode();
+    }
+});
+
 
 
 
@@ -13,6 +19,10 @@ $('#item-code').keyup(function(e) {
   if(e.keyCode == 13){
     getItemByCode();
   }
+});
+
+$('#item-code').focusout(function(e){
+  getItemByCode();
 });
 
 
@@ -358,7 +368,6 @@ function reCal(id){
   var disc   = (price * (p_disc * 0.01)) + a_disc;
   var amount = qty * (price - disc);
   $('#amount-'+id).text(addCommas(amount.toFixed(2)));
-  console.log(disc);
   updateTotalAmount();
 }
 

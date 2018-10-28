@@ -35,13 +35,11 @@
     <span class="form-control input-sm text-center" id="txt-amount">0</span>
   </div>
 
-<!--
   <div class="col-sm-1 padding-5">
     <label class="display-block not-show">submit</label>
     <button type="button" class="btn btn-sm btn-primary btn-block" onclick="addToDetail()">เพิ่ม</button>
   </div>
--->
-  <div class="col-sm-1 padding-5">
+  <div class="col-sm-1 padding-5 last">
     <label class="display-block not-show">Reset</label>
     <button type="button" class="btn btn-sm btn-default btn-block" onclick="clearFields()">เคลียร์</button>
   </div>

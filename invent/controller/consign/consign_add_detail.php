@@ -62,11 +62,11 @@ if(dbNumRows($qs) == 1)
         'id' => $rs->id,
         'barcode' => $barcode,
         'product' => $rs->product_code.' : '.$rs->product_name,
-        'price' => number($rs->price,2),
-        'qty' => number($qty),
-        'p_disc' => number($pDisc,2),
-        'a_disc' => number($aDisc,2),
-        'amount' => number($totalAmount,2)
+        'price' => $rs->price,
+        'qty' => $qty,
+        'p_disc' => $pDisc,
+        'a_disc' => $aDisc,
+        'amount' => $totalAmount
       );
 
     }
@@ -125,11 +125,11 @@ else
           'id' => $rs->id,
           'barcode' => $barcode,
           'product' => $rs->product_code.' : '.$rs->product_name,
-          'price' => number($rs->price,2),
-          'qty' => number($rs->qty),
-          'p_disc' => number($pDisc,2),
-          'a_disc' => number($aDisc,2),
-          'amount' => number($totalAmount,2)
+          'price' => $rs->price,
+          'qty' => $rs->qty,
+          'p_disc' => $pDisc,
+          'a_disc' => $aDisc,
+          'amount' => $totalAmount
         );
       }
     }

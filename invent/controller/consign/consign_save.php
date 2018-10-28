@@ -14,10 +14,11 @@ if($cs->isCancle == 0 && $cs->isSaved == 0)
 {
   //--- ดึงรายการที่จะบันทึก
   $qs = $cs->getUnsaveDetails($id_consign);
+
+  startTransection();
+
   if(dbNumRows($qs) > 0)
   {
-    startTransection();
-
     $employee = new employee($cs->id_employee);
     $role     = new order_role(8);
     $channels = new channels($cs->id_channels);
@@ -169,7 +170,7 @@ if($cs->isCancle == 0 && $cs->isSaved == 0)
         if( $isEnough === FALSE && $allowUnderZero === FALSE)
         {
           $sc = FALSE;
-          $message = 'จำนวนคงเหลือไม่เพียงพอ2';
+          $message = $pd->code.' : จำนวนคงเหลือไม่เพียงพอ';
         }
         else
         {
@@ -198,48 +199,32 @@ if($cs->isCancle == 0 && $cs->isSaved == 0)
 
     } //--- endwhile
 
+  } //--- end if dbNumRows
 
-    if($sc === TRUE)
+
+  if($sc === TRUE)
+  {
+    //--- เปลี่ยนสถานะเป็นบันทึกแล้ว
+    if($cs->update($cs->id, array('isSaved' => 1)) !== TRUE)
     {
-      //--- เปลี่ยนสถานะเป็นบันทึกแล้ว
-      if($cs->update($cs->id, array('isSaved' => 1)) !== TRUE)
-      {
-        $sc = FALSE;
-        $message = 'เปลี่ยนสถานะเอกสารไม่สำเร็จ';
-      }
+      $sc = FALSE;
+      $message = 'เปลี่ยนสถานะเอกสารไม่สำเร็จ';
     }
+  }
 
 
-    if($sc === TRUE)
-    {
-      commitTransection();
-    }
-    else
-    {
-      dbRollback();
-    }
-
-    endTransection();
+  if($sc === TRUE)
+  {
+    commitTransection();
   }
   else
   {
-    $sc = FALSE;
-    $message = 'ไม่พบรายการที่ต้องบันทึก';
-  } //--- end if dbNumRows
-}
-else
-{
-  $sc = FALSE;
-  if($cs->isSaved == 1)
-  {
-    $message = 'เอกสารถูกบันทึกไปแล้ว ไม่สามารถบันทึกซ้ำได้';
+    dbRollback();
   }
 
-  if($cs->isCancle == 1)
-  {
-    $message = 'เอกสารถูกยกเลิกไปแล้ว ไม่สามารถบันทึกได้';
-  }
-}//--- end if iscancle
+  endTransection();
+
+} //--- end if iscancle
 
 
 echo $sc === TRUE ? 'success' : $message;
