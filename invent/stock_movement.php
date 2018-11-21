@@ -124,16 +124,19 @@ $paginator	= new paginator();
 $get_rows	= get_rows();
 $paginator->Per_Page($table, $where, $get_rows);
 $paginator->display($get_rows, 'index.php?content=stock_movement');
+
 $qs = dbQuery($qr. $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 
 $move_in = 0;
 $move_out = 0;
+
 
 $qa = dbQuery("SELECT SUM(move_in), SUM(move_out) FROM ".$table . $where);
 if(dbNumRows($qa) == 1)
 {
 	list($move_in, $move_out) = dbFetchArray($qa);
 }
+
 ?>
 
 <table class="table table-striped table-bordered">
