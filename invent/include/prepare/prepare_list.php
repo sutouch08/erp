@@ -71,7 +71,7 @@ $where = "WHERE state = 3 AND status = 1 ";
 if( $sCode != "")
 {
     createCookie('sOrderCode', $sCode);
-    $where .= "AND reference LIKE'%".$sCode."%' ";
+    $where .= "AND (reference LIKE'%".$sCode."%' OR ref_code LIKE '%".$sCode."%') ";
 }
 
 
@@ -121,13 +121,13 @@ $qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Sta
             <thead>
                 <tr>
                     <th class="width-5 text-center">No.</th>
-                    <th class="width-15">เลขที่เอกสาร</th>
-                    <th class="width-30">ลูกค้า/ผู้รับ/ผู้เบิก</th>
+                    <th class="width-20">เลขที่เอกสาร</th>
+                    <th class="">ลูกค้า/ผู้รับ/ผู้เบิก</th>
                     <th class="width-10 text-center">จำนวน</th>
                     <th class="width-10 text-center">รูปแบบ</th>
                     <th class="width-10 text-center">วันที่</th>
                     <th class="width-10 text-center">สาขา</th>
-                    <th></th>
+                    <th class="width-10"></th>
                 </tr>
             </thead>
             <tbody id="list-table">
@@ -137,7 +137,10 @@ $qs = dbQuery("SELECT * FROM tbl_order " . $where." LIMIT ".$paginator->Page_Sta
 <?php   while( $rs = dbFetchObject($qs)) : ?>
             <tr class="font-size-12">
                 <td class="middle text-center"><?php echo $no; ?></td>
-                <td class="middle"><?php echo $rs->reference; ?></td>
+                <td class="middle">
+                  <?php echo $rs->reference; ?>
+                  <?php echo ($rs->ref_code != '' ? ' ['.$rs->ref_code.']' : ''); ?>
+                </td>
                 <td class="middle">
                   <?php echo customerName($rs->id_customer);  ?>
                 </td>

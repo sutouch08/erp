@@ -2247,6 +2247,9 @@ class upload {
      *
      * @access private
      */
+
+
+
     function init() {
 
         // overiddable variables
@@ -2570,7 +2573,7 @@ class upload {
      *    or   string $file Local filename
      * @param  string $lang Optional language code
      */
-    function upload($file, $lang = 'en_GB') {
+    function __construct($file, $lang = 'en_GB') {
 
         $this->version            = '0.32';
 
@@ -3212,6 +3215,7 @@ class upload {
      */
     function getsize($size) {
         $last = strtolower($size{strlen($size)-1});
+        $size = substr($size, 0,-1);
         switch($last) {
             case 'g':
                 $size *= 1024;

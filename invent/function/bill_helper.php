@@ -170,11 +170,12 @@ function get_header($order)
 	else
 	{
 		$channels = new channels();
+		$refCode = $order->ref_code != '' ? ' [ '.$order->ref_code.' ]' : '';
 		$header	= array(
 							"ลูกค้า"			=> $customer->getName($order->id_customer),
 							"วันที่"			 => thaiDate($order->date_add),
 							"พนักงานขาย" => $sale->getName($order->id_sale),
-							"เลขที่เอกสาร" => $order->reference,
+							"เลขที่เอกสาร" => $order->reference.$refCode,
 							"ช่องทาง"		 => $channels->getName($order->id_channels)
 							);
 	}

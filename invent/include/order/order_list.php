@@ -70,6 +70,9 @@ for($i =1; $i <= 11; $i++)
     </div>
     <div class="col-sm-6">
     	<p class="pull-right top-p">
+				<?php if(getConfig('ALLOW_IMPORT_ORDER') == 1) : ?>
+					<button type="button" class="btn btn-sm btn-success" onclick="getUploadFile()">นำเข้าออเดอร์</button>
+				<?php endif; ?>
         	<button type="button" class="btn btn-sm btn-info" onclick="goViewStock()"><i class="fa fa-search"></i> ดูสต็อกคงเหลือ</button>
         	<?php if( $add ) : ?>
 						<?php if( $isOnline === TRUE ) : ?>
@@ -423,7 +426,7 @@ for($i =1; $i <= 11; $i++)
             	<tr class="font-size-10">
                 	<th class="width-5 text-center">ลำดับ</th>
 									<th class="width-8 text-center">วันที่</th>
-                  <th class="text-center">เลขที่เอกสาร</th>
+                  <th class="text-center" style="width:17%;">เลขที่เอกสาร</th>
                   <th class="text-center">ลูกค้า</th>
                   <th class="width-8 text-center">จังหวัด</th>
                   <th class="width-8 text-center">ยอดเงิน</th>
@@ -441,7 +444,7 @@ for($i =1; $i <= 11; $i++)
 <?php	$ch 		= new channels(); ?>
 <?php	$pm		  = new payment_method(); ?>
 <?php	while( $rs = dbFetchObject($qs) ) : ?>
-
+<?php    $address = getOnlineAddress($rs->online_code); ?>
 			<tr class="font-size-10" <?php echo stateColor($rs->state, $rs->status, $rs->isExpire); //--- order_help.php ?>>
             	<td class="middle text-cennter pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
 								<?php echo $no; ?>
@@ -454,18 +457,19 @@ for($i =1; $i <= 11; $i++)
 							<td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
 									<?php echo $rs->reference; ?>
 									<?php if($rs->ref_code != '') : ?>
-											[ <?php echo $rs->ref_code; ?> ]
+											[ <?php echo $rs->ref_code; ?>]
 									<?php endif; ?>
 							</td>
 
               <td class="middle pointer" onclick="goEdit(<?php echo $rs->id; ?>)">
-                 	<?php if( $rs->isOnline == 1 ) : ?>
-                   		[  <?php echo $rs->online_code; ?>  ] &nbsp; &nbsp;
-									<?php endif; ?>
+
                   <?php echo customerName($rs->id_customer); ?>
                   <?php if( $rs->role == 1 && $pm->hasTerm($rs->id_payment) === FALSE && $rs->isPaid == 0 ) : ?>
                   	<span class="red font-size-14 padding-10" style="margin-left:10px; background-color:#FFF;">ยังไม่ชำระเงิน</span>
                   <?php endif; ?>
+									<?php if( $rs->isOnline == 1 ) : ?>
+                   		[  <?php echo $rs->online_code; ?>  ] &nbsp; &nbsp;
+									<?php endif; ?>
               </td>
 
               <td class="middle pointer text-center" onclick="goEdit(<?php echo $rs->id; ?>)">
@@ -489,6 +493,11 @@ for($i =1; $i <= 11; $i++)
 							</td>
 
               <td class="middle text-center">
+								<?php if($rs->isOnline == 1 && $address !== FALSE) : ?>
+									<button type="button" class="btn btn-xs btn-primary" title="พิมพ์ใบปะหน้า" onclick="printOnlineAddress(<?php echo $address->id; ?>, <?php echo $rs->id; ?>)">
+										<i class="fa fa-print"></i>
+									</button>
+								<?php else : ?>
                 <button type="button"
                 			class="btn btn-link btn-mini"
                             data-container="body"
@@ -502,7 +511,7 @@ for($i =1; $i <= 11; $i++)
 														พนักงาน : <?php echo employee_name($rs->id_employee); ?><br/>
                             ปรับปรุงล่าสุด : <?php echo thaiDate($rs->date_upd); ?>
                         "><i class="fa fa-bars"></i></button>
-
+									<?php endif; ?>
                 </td>
             </tr>
 <?php		$no++; ?>
@@ -535,7 +544,11 @@ for($i =1; $i <= 11; $i++)
 	</div>
 </div>
 
-
+<?php
+if(getConfig('ALLOW_IMPORT_ORDER') == 1) :
+	include('import_order.php');
+endif;
+?>
 
 <script>
 $(function () {

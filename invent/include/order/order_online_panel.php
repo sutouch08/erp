@@ -64,10 +64,10 @@ $usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE || $order->is
                             <tr style="font-size:12px;">
                                 <td align="center" width="10%">ชื่อเรียก</td>
                                 <td width="12%">ผู้รับ</td>
-                                <td width="39%">ที่อยู่</td>
+                                <td width="35%">ที่อยู่</td>
                                 <td width="15%">อีเมล์</td>
                                 <td width="15%">โทรศัพท์</td>
-                                <td width="8%"></td>
+                                <td ></td>
                             </tr>
                             </thead>
                             <tbody id="adrs">
@@ -89,6 +89,7 @@ $usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE || $order->is
                                     <i class="fa fa-check"></i>
                                     </button>
                                 <?php endif; ?>
+																		<button type="button" class="btn btn-xs btn-primary" onclick="printOnlineAddress(<?php echo $rs['id']; ?>)"><i class="fa fa-print"></i></button>
                                     <button type="button" class="btn btn-xs btn-warning" onClick="editAddress(<?php echo $rs['id']; ?>)"><i class="fa fa-pencil"></i></button>
                                     <button type="button" class="btn btn-xs btn-danger" onClick="removeAddress(<?php echo $rs['id']; ?>)"><i class="fa fa-trash"></i></button>
                                 </td>

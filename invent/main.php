@@ -44,6 +44,9 @@
 		<div class="col-sm-1 col-1-harf padding-5">
 			<button type="button" class="btn btn-sm btn-info btn-block" onclick="findOrder()">ตรวจสอบออเดอร์</button>
 		</div>
+		<div class="col-sm-1 col-1-harf padding-5">
+			<button type="button" class="btn btn-sm btn-info btn-block" onclick="getViewStock()">ดูสต็อกคงเหลือ</button>
+		</div>
 	</div>
 	<hr class="margin-top-15 margin-bottom-15"/>
 
@@ -184,5 +187,9 @@ function getSearch(){
 
 function popover_init(){
 	$('[data-toggle="popover"]').popover();
+}
+
+function getViewStock(){
+	window.location.href = 'index.php?content=order&view_stock=Y';
 }
 </script>

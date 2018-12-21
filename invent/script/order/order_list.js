@@ -140,3 +140,34 @@ $(document).ready(function() {
 	//---	reload ทุก 5 นาที
 	setTimeout(function(){ goBack(); }, 300000);
 });
+
+
+function getDeliverySheet(id_order, code){
+	$.ajax({
+		url:"controller/orderClosedController.php?getOnlineAddress",
+		type:"GET",
+		cache:"false",
+		data:{"online_code" : code },
+		success: function(rs){
+			var rs = $.trim(rs);
+			if( rs == 'noaddress' || isNaN( parseInt(rs) ) ){
+				noAddress();
+			}else{
+				printDeliverySheet(id_order, rs);
+			}
+		}
+	});
+}
+
+function printDeliverySheet(id_order, id_address){
+	//--- properties for print
+	var prop 			= "width=800, height=900. left="+center+", scrollbars=yes";
+	var center    = ($(document).width() - 800)/2;
+	var target 		= "controller/orderClosedController.php?printOnlineAddressSheet&id_order="+id_order+"&id_address="+id_address;
+	window.open(target, "_blank", prop );
+}
+
+function noAddress()
+{
+	swal("ข้อผิดพลาด", "ไม่พบที่อยู่ของลูกค้า กรุณาตรวจสอบว่าลูกค้ามีที่อยู่ในระบบแล้วหรือยัง", "warning");
+}

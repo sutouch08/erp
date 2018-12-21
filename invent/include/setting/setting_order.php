@@ -19,6 +19,11 @@ $editDisc = getConfig('ALLOW_EDIT_DISCOUNT');
 $btn_disc_yes = $editDisc == 1 ? 'btn-success' : '';
 $btn_disc_no = $editDisc == 0 ? 'btn-danger' : '';
 
+$channels_id = getConfig('WEB_SITE_CHANNELS_ID');
+$cod_payment_id = getConfig('COD_PAYMENT_ID');
+$omise_payment_id = getConfig('OMISE_PAYMENT_ID');
+$branch_id = getConfig('WEB_SITE_BRANCH_ID');
+
 ?>
 <div class="tab-pane fade" id="order">
 <form id="orderForm">
@@ -81,6 +86,89 @@ $btn_disc_no = $editDisc == 0 ? 'btn-danger' : '';
 		</div>
 		<div class="divider-hidden"></div>
 
+<!--################################  config เพิ่มเติมเกี่ยวกับการ import ออเดอร์จากเว็บไซต์    ######################-->
+
+
+		<div class="divider"></div>
+		<div class="col-sm-12">
+			<h4 class="title">กำหนดค่าสำหรับการ import order ข้อมูลจาก Warrix12</h4>
+		</div>
+		<div class="divider"></div>
+
+		<div class="col-sm-3"><span class="form-control left-label">รหัสนำหน้าเลขที่จัดส่ง</span></div>
+    <div class="col-sm-9">
+      <input type="text" class="form-control input-sm input-mini input-line" name="PREFIX_SHIPPING_NUMBER" value="<?php echo getConfig('PREFIX_SHIPPING_NUMBER'); ?>" />
+      <span class="help-block">รหัสนำหน้าเลขที่จัดส่ง โดยใช้เลขที่ออเดอร์ของ Warrix12 แล้วเติมรหัสนี้นำหน้าและบันทึกเป็นเลขที่จัดส่งทันที ใช้ในการ import ออเดอร์จากเว็บไซต์</span>
+    </div>
+
+
+		<div class="col-sm-3"><span class="form-control left-label">รหัสลูกค้า OMISE</span></div>
+    <div class="col-sm-9">
+      <input type="text" class="form-control input-sm input-mini input-line" name="OMISE_CUSTOMER_CODE" id="omise_code" value="<?php echo getConfig('OMISE_CUSTOMER_CODE'); ?>" />
+      <span class="help-block">รหัสลูกค้า ที่ใช้ในการ import ออเดอร์จากเว็บไซต์ ในกรณีชำระเงินด้วย OMISE</span>
+    </div>
+
+		<?php $query = dbQuery("SELECT * FROM tbl_payment_method"); ?>
+		<div class="col-sm-3"><span class="form-control left-label">ช่องทางการชำระเงิน Omise</span></div>
+    <div class="col-sm-9">
+      <select class="form-control input-sm input-large" name="OMISE_PAYMENT_ID" id="OMISE_PAYMENT_ID">
+				<option value="0">กรุณาเลือก</option>
+				<?php while($rs = dbFetchObject($query)) : ?>
+					<option value="<?php echo $rs->id; ?>" <?php echo isSelected($rs->id, $omise_payment_id); ?>><?php echo $rs->code.' : '.$rs->name; ?></option>
+				<?php endwhile; ?>
+			</select>
+      <span class="help-block">ช่องทางการชำระเงิน ที่ใช้ในการ import ออเดอร์จากเว็บไซต์ ในกรณีชำระเงินแบบ Omise</span>
+    </div>
+
+    <div class="divider-hidden"></div>
+
+
+		<div class="col-sm-3"><span class="form-control left-label">รหัสลูกค้า COD</span></div>
+    <div class="col-sm-9">
+      <input type="text" class="form-control input-sm input-mini input-line" name="COD_CUSTOMER_CODE" id="cod_code" value="<?php echo getConfig('COD_CUSTOMER_CODE'); ?>" />
+      <span class="help-block">รหัสลูกค้า ที่ใช้ในการ import ออเดอร์จากเว็บไซต์ ในกรณีชำระเงินแบบ COD</span>
+    </div>
+
+		<?php $query = dbQuery("SELECT * FROM tbl_payment_method"); ?>
+		<div class="col-sm-3"><span class="form-control left-label">ช่องทางการชำระเงิน COD</span></div>
+    <div class="col-sm-9">
+      <select class="form-control input-sm input-large" name="COD_PAYMENT_ID" id="COD_PAYMENT_ID">
+				<option value="0">กรุณาเลือก</option>
+				<?php while($rs = dbFetchObject($query)) : ?>
+					<option value="<?php echo $rs->id; ?>" <?php echo isSelected($rs->id, $cod_payment_id); ?>><?php echo $rs->code.' : '.$rs->name; ?></option>
+				<?php endwhile; ?>
+			</select>
+      <span class="help-block">ช่องทางการชำระเงิน ที่ใช้ในการ import ออเดอร์จากเว็บไซต์ ในกรณีชำระเงินแบบ COD</span>
+    </div>
+    <div class="divider-hidden"></div>
+
+
+		<?php $query = dbQuery("SELECT * FROM tbl_channels WHERE isOnline = 1"); ?>
+		<div class="col-sm-3"><span class="form-control left-label">ช่องทางการขาย</span></div>
+    <div class="col-sm-9">
+      <select class="form-control input-sm input-large" name="WEB_SITE_CHANNELS_ID" id="WEB_SITE_CHANNELS_ID">
+				<option value="0">กรุณาเลือก</option>
+				<?php while($rs = dbFetchObject($query)) : ?>
+					<option value="<?php echo $rs->id; ?>" <?php echo isSelected($rs->id, $channels_id); ?>><?php echo $rs->code.' : '.$rs->name; ?></option>
+				<?php endwhile; ?>
+			</select>
+      <span class="help-block">รหัสลูกค้า ที่ใช้ในการ import ออเดอร์จากเว็บไซต์ ในกรณีชำระเงินแบบ COD</span>
+    </div>
+    <div class="divider-hidden"></div>
+
+
+		<?php $query = dbQuery("SELECT * FROM tbl_branch"); ?>
+		<div class="col-sm-3"><span class="form-control left-label">สาขาที่ใช้ในการตัดสต็อก</span></div>
+    <div class="col-sm-9">
+      <select class="form-control input-sm input-large" name="WEB_SITE_BRANCH_ID" id="WEB_SITE_BRANCH_ID">
+				<option value="0">กรุณาเลือก</option>
+				<?php while($rs = dbFetchObject($query)) : ?>
+					<option value="<?php echo $rs->id; ?>" <?php echo isSelected($rs->id, $branch_id); ?>><?php echo $rs->code.' : '.$rs->name; ?></option>
+				<?php endwhile; ?>
+			</select>
+      <span class="help-block">รหัสลูกค้า ที่ใช้ในการ import ออเดอร์จากเว็บไซต์ ในกรณีชำระเงินแบบ COD</span>
+    </div>
+    <div class="divider-hidden"></div>
 
     <div class="col-sm-9 col-sm-offset-3">
 			<button type="button" class="btn btn-sm btn-success input-mini" onClick="updateConfig('orderForm')"><i class="fa fa-save"></i> บันทึก</button>

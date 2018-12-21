@@ -151,6 +151,17 @@ class online_address
 	}
 
 
+	public function isExists($customer_code, $address)
+	{
+		$qs = dbQuery("SELECT id FROM tbl_address_online WHERE customer_code = '".$customer_code."' AND address1 = '".$address."'");
+		if(dbNumRows($qs) > 0)
+		{
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+
 
 }
 

@@ -16,7 +16,7 @@
   if($sCode != '')
   {
     createCookie('sOrderCode', $sCode);
-    $where .= "AND reference LIKE '%".$sCode."%' ";
+    $where .= "AND (reference LIKE'%".$sCode."%' OR ref_code LIKE '%".$sCode."%') ";
   }
 
   if($sName != '')
@@ -70,9 +70,9 @@
       <thead>
         <tr>
           <th class="width-5 text-center">ลำดับ</th>
-          <th class="width-10 text-center">วันที่</th>
-          <th class="width-10">เลขที่เอกสาร</th>
-          <th class="width-25">ลูกค้า/ผู้รับ/ผู้เบิก</th>
+          <th class="width-8 text-center">วันที่</th>
+          <th class="width-20">เลขที่เอกสาร</th>
+          <th class="">ลูกค้า/ผู้รับ/ผู้เบิก</th>
           <th class="width-10 text-center">ยอดเงิน</th>
           <th class="width-10 text-center">รูปแบบ</th>
           <th class="width-15 text-center">พนักงาน</th>
@@ -97,6 +97,7 @@
 
           <td class="pointer" onclick="goDetail(<?php echo $rs->id;?>)">
             <?php echo $rs->reference; ?>
+            <?php echo ($rs->ref_code != '' ? ' ['.$rs->ref_code.']' : ''); ?>
           </td>
 
           <td class="pointer hide-text" onclick="goDetail(<?php echo $rs->id; ?>)">

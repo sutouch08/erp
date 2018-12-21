@@ -16,6 +16,7 @@
 	include 'function/payment_method_helper.php';
 	include 'function/productTab_helper.php';
 	include 'function/branch_helper.php';
+	include 'function/address_helper.php';
 ?>
 <div class="container">
 <?php
@@ -40,4 +41,5 @@ else
 ?>
 
 </div><!--/container-->
-<script src="script/order/order.js"></script>
+<script src="script/order/order.js?v=1"></script>
+<script src="script/print/print_address.js?v=1"></script>

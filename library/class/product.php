@@ -61,6 +61,17 @@ class product
 	}
 
 
+public function getDataByCode($code)
+{
+	$qs = dbQuery("SELECT * FROM tbl_product WHERE code = '".$code."'");
+	if(dbNumRows($qs) == 1)
+	{
+		return dbFetchObject($qs);
+	}
+
+	return FALSE;
+}
+
 
 
 

@@ -186,7 +186,7 @@
 
   createCookie('sDelivered', $isDelivered);
   createCookie('sNotDelivery', $isNotDelivery);
-  
+
   if($isDelivered == 1 OR $isNotDelivery == 1)
   {
     if($isDelivered == 1 && $isNotDelivery == 1)
@@ -210,7 +210,7 @@
   if( $sCode != '')
   {
     createCookie('sOrderCode', $sCode);
-    $where .= "AND reference LIKE '%".$sCode."%' ";
+    $where .= "AND (reference LIKE '%".$sCode."%' OR ref_code LIKE '%".$sCode."%') ";
   }
 
   if( $sCust != '')
@@ -286,12 +286,12 @@
       <thead>
         <tr class="font-size-12">
           <th class="width-5 text-center">ลำดับ</th>
-          <th class="width-10 text-center">เลขที่เอกสาร</th>
+          <th class="width-20 text-center">เลขที่เอกสาร</th>
           <th class="text-center">ลูกค้า</th>
-          <th class="width-10 text-center">ยอดเงิน</th>
-          <th class="width-10 text-center">รูปแบบ</th>
+          <th class="width-8 text-center">ยอดเงิน</th>
+          <th class="width-8 text-center">รูปแบบ</th>
           <th class="width-15 text-center">พนักงาน</th>
-          <th class="width-10 text-center">สาขา</th>
+          <th class="width-8 text-center">สาขา</th>
           <th class="width-8 text-center">วันที่</th>
           <th class="width-10 text-center">ปรับปรุง</th>
         </tr>
@@ -307,11 +307,12 @@
             <?php echo number($no); ?>
           </td>
 
-          <td class="middle text-center pointer" onclick="viewDetail(<?php echo $rs->id; ?>)">
+          <td class="middle pointer" onclick="viewDetail(<?php echo $rs->id; ?>)">
             <?php echo $rs->reference; ?>
+            <?php echo ($rs->ref_code != '' ? '['.$rs->ref_code.']' : ''); ?>
           </td>
 
-          <td class="middle text-center pointer" onclick="viewDetail(<?php echo $rs->id; ?>)">
+          <td class="middle pointer" onclick="viewDetail(<?php echo $rs->id; ?>)">
             <?php echo customerName($rs->id_customer); ?>
           </td>
 

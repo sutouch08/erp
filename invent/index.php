@@ -462,6 +462,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รายงานยอดขายแยกตามช่องทางการขายแสดงเลขที่เอกสาร';
 		break;
 
+		case 'sale_online_channels_details' :
+			$content = 'report/sales/sale_online_channels_details.php';
+			$pageTitle = 'รายงาน ยอดขายออนไลน์ แสดงรายละเอียดต่างๆ';
+		break;
+
 		case 'sale_by_customer_order' :
 			$content = 'report/sales/sale_by_customer_order.php';
 			$pageTitle = 'รายงาน สรุปยอดขายแยกลูกค้า แสดงเลขที่เอกสาร';

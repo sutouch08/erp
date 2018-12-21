@@ -88,9 +88,12 @@ function printPackingSheet()
 
 
 
-function printOnlineAddress(id_address)
+function printOnlineAddress(id_address, id_order)
 {
-	var id_order	= $("#id_order").val();
+	if(id_order === undefined){
+		var id_order	= $("#id_order").val();
+	}
+	
 	var center 		= ($(document).width() - 800)/2;
 	var target 		= "controller/orderClosedController.php?printOnlineAddressSheet&id_order="+id_order+"&id_address="+id_address;
 

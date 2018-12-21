@@ -71,7 +71,7 @@ $qr .= "AND isCancle = 0 ";
 if( $sCode != "")
 {
     createCookie('sOrderCode', $sCode);
-    $qr .= "AND reference LIKE'%".$sCode."%' ";
+    $qr .= "AND (reference LIKE'%".$sCode."%' OR ref_code LIKE '%".$sCode."%') ";
 }
 
 
@@ -115,13 +115,13 @@ $qs = dbQuery($qr);
       <thead>
         <tr>
           <th class="width-5 text-center">ลำดับ</th>
-          <th class="width-10">เลขที่เอกสาร</th>
-          <th class="width-30">ลูกค้า</th>
+          <th class="width-20">เลขที่เอกสาร</th>
+          <th class="">ลูกค้า</th>
           <th class="width-10 text-center">รูปแบบ</th>
           <th class="width-15 text-center">พนักงาน</th>
           <th class="width-10 text-center">วันที่</th>
           <th class="width-10 text-center">สาขา</th>
-          <th></th>
+          <th class="width-10"></th>
         </tr>
       </thead>
       <tbody id="qcList">
@@ -131,7 +131,10 @@ $qs = dbQuery($qr);
 <?php   while( $rs = dbFetchObject($qs) ) : ?>
         <tr class="font-size-12" id="list-<?php echo $rs->id; ?>">
           <td class="middle text-center"><?php echo $no; ?></td>
-          <td class="middle"><?php echo $rs->reference; ?></td>
+          <td class="middle">
+            <?php echo $rs->reference; ?>
+            <?php echo ($rs->ref_code != '' ? ' ['.$rs->ref_code.']' : ''); ?>
+          </td>
           <td class="middle"><?php echo customerName($rs->id_customer); ?></td>
           <td class="middle text-center"><?php echo roleName($rs->role); ?></td>
           <td class="middle text-center"><?php echo employee_name($rs->emp_upd); ?></td>
@@ -139,7 +142,7 @@ $qs = dbQuery($qr);
           <td class="middle text-center"><?php echo getBranchName($rs->id_branch); ?></td>
           <td class="middle text-right">
           <?php if( $add || $edit ) : ?>
-            <button type="button" class="btn btn-sm btn-default" onclick="goQc(<?php echo $rs->id; ?>)">ตรวจสินค้า</button>
+            <button type="button" class="btn btn-xs btn-default" onclick="goQc(<?php echo $rs->id; ?>)">ตรวจสินค้า</button>
           <?php endif; ?>
           </td>
         </tr>

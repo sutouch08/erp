@@ -63,8 +63,16 @@ class customer {
 	}
 
 
+	public function getDataByCode($code)
+	{
+		$qs = dbQuery("SELECT * FROM tbl_customer WHERE code = '".$code."'");
+		if(dbNumRows($qs) == 1)
+		{
+			return dbFetchObject($qs);
+		}
 
-
+		return FALSE;
+	}
 
 
 	public function add(array $ds)

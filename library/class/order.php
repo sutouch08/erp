@@ -696,6 +696,19 @@ class order
 	}
 
 
+	public function getIdOrderByRefCode($ref_code)
+	{
+		$qs = dbQuery("SELECT id FROM tbl_order WHERE ref_code ='".$ref_code."'");
+		if(dbNumRows($qs) > 0)
+		{
+			list($sc) = dbFetchArray($qs);
+			return $sc;
+		}
+
+		return FALSE;
+	}
+
+
 
 
 	public function getOrderQty($id_order, $id_pd)

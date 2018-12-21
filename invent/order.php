@@ -24,6 +24,7 @@
 	include 'function/shipping_helper.php';
 	include 'function/location_helper.php';
 	include 'function/branch_helper.php';
+	include 'function/address_helper.php';
 
 	$allowEditDisc = getConfig('ALLOW_EDIT_DISCOUNT');
 	$allowEditPrice = getConfig('ALLOW_EDIT_PRICE');
@@ -52,5 +53,6 @@ else
 ?>
 
 </div><!--/container-->
-<script src="script/order/order.js"></script>
-<script src="script/print/print_order.js"></script>
+<script src="script/order/order.js?v=1"></script>
+<script src="script/print/print_order.js?v=1"></script>
+<script src="script/print/print_address.js?v=1"></script>

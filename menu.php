@@ -99,6 +99,7 @@
           <li><a href="index.php?content=sale_by_customer_items"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดขายแยกตามลูกค้า แสดงรายการสินค้า</a></li>
           <li><a href="index.php?content=sale_deep_analyz"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ขายแบบละเอียด</a></li>
           <li><a href="index.php?content=sale_by_channels_show_reference"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ยอดขายแยกตางช่องทางการขาย แสดงเลขที่เอกสาร</a></li>
+          <li><a href="index.php?content=sale_online_channels_details"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ยอดขายออนไลน์ แสดงรายละเอียดต่างๆ</a></li>
         </ul>
       </li>
 
@@ -127,7 +128,6 @@
           <li><a href="index.php?content=support_by_customer_order"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดอถินันท์แยกตามผู้รับ แสดงเลขที่เอกสาร</a></li>
           <li><a href="index.php?content=support_by_customer_items"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดอภินันท์แยกตามผู้รับ แสดงรายการสินค้า</a></li>
           <li class="divider"></li>
-        	<!-- <li><a href="index.php?content=discount_edit"><i class="fa fa-bar-chart"></i>&nbsp;รายงานการแก้ไขส่วนลด</a></li> -->
           <li><a href="index.php?content=permission_by_employee"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ตรวจสอบสิทธิ์ แยกตามพนักงาน</a></li>
         </ul>
       </li>

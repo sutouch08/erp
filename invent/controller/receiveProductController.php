@@ -180,6 +180,33 @@ if(isset($_GET['update']))
 }
 
 
+if(isset($_GET['updateDocument']))
+{
+	$sc = TRUE;
+	$id = $_POST['id_receive_product'];
+	$date_add = dbDate($_POST['date_add'], TRUE);
+	$invoice = $_POST['invoice'];
+	$id_supplier = $_POST['id_supplier'];
+	$remark = $_POST['remark'];
+
+	$arr = array(
+		'date_add' => $date_add,
+		'invoice' => addslashes($invoice),
+		'id_supplier' => $id_supplier,
+		'remark' => addslashes($remark)
+	);
+
+	$cs = new receive_product();
+	if($cs->update($id, $arr) !== TRUE)
+	{
+		$sc = FALSE;
+		$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
+	}
+
+	echo $sc === TRUE ? 'success' : $message;
+
+}
+
 
 
 if( isset( $_GET['clearFilter'] ) )
