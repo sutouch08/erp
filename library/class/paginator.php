@@ -81,7 +81,7 @@ class paginator{
 	}
 	function Per_Page($tbl,$where,$Per_Page)
 	{
-		$Num_Rows = dbNumRows(dbQuery("SELECT * FROM $tbl $where"));
+		list($Num_Rows) = dbFetchArray(dbQuery("SELECT count(*) FROM $tbl $where"));
 		$this->Per_Page = $Per_Page;
 		$this->Num_Rows= $Num_Rows;
 		$All_Pages		= ceil($Num_Rows / $Per_Page);

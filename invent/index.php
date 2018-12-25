@@ -44,6 +44,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'ส่งออกฐานข้อมูลสินค้า';
 			break;
 
+		case 'export_order_dhl' :
+			$content = 'export_order_dhl.php';
+			$pageTitle = 'ส่งออกออเดอร์ไป DHL';
+			break;
+
 		case 'order_expire' :
 			$content = 'order_expired.php';
 			$pageTitle = 'ตรวจสอบอายุออเดอร์';
@@ -464,7 +469,7 @@ if( !getConfig('CLOSED') )
 
 		case 'sale_online_channels_details' :
 			$content = 'report/sales/sale_online_channels_details.php';
-			$pageTitle = 'รายงาน ยอดขายออนไลน์ แสดงรายละเอียดต่างๆ';
+			$pageTitle = 'รายงาน ออเดอร์ออนไลน์ แสดงรายละเอียดการจัดส่ง (ไม่ใช่ยอดขาย)';
 		break;
 
 		case 'sale_by_customer_order' :

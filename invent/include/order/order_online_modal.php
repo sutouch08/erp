@@ -45,9 +45,13 @@
                 	<label class="input-label">ที่อยู่ 1 </label>
                     <input type="text" class="form-control input-sm" name="address1" id="address1" placeholder="เลขที่, หมู่บ้าน, ถนน (จำเป็น)" />
                 </div>
-                <div class="col-sm-12">
+                <div class="col-sm-6">
                 	<label class="input-label">ที่อยู่ 2 </label>
-                    <input type="text" class="form-control input-sm" name="address2" id="address2" placeholder="ตำบล, อำเภอ" />
+                    <input type="text" class="form-control input-sm" name="address2" id="address2" placeholder="ตำบล" />
+                </div>
+                <div class="col-sm-6">
+                	<label class="input-label">อำเภอ </label>
+                    <input type="text" class="form-control input-sm" name="district" id="district" placeholder="อำเภอ (จำเป็น)" />
                 </div>
                 <div class="col-sm-6">
                 	<label class="input-label">จังหวัด</label>
@@ -347,4 +351,4 @@ $('#province').autocomplete({
 });
 </script>
 
-<script src="script/order/order_online.js"></script>
+<script src="script/order/order_online.js?v=1"></script>

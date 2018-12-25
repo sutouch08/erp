@@ -99,7 +99,7 @@
           <li><a href="index.php?content=sale_by_customer_items"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน สรุปยอดขายแยกตามลูกค้า แสดงรายการสินค้า</a></li>
           <li><a href="index.php?content=sale_deep_analyz"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ขายแบบละเอียด</a></li>
           <li><a href="index.php?content=sale_by_channels_show_reference"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ยอดขายแยกตางช่องทางการขาย แสดงเลขที่เอกสาร</a></li>
-          <li><a href="index.php?content=sale_online_channels_details"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ยอดขายออนไลน์ แสดงรายละเอียดต่างๆ</a></li>
+          <li><a href="index.php?content=sale_online_channels_details"><i class="fa fa-bar-chart"></i>&nbsp; รายงาน ออเดอร์ออนไลน์ แสดงรายละเอียดการจัดส่ง</a></li>
         </ul>
       </li>
 
@@ -239,6 +239,7 @@
       <li class="divider"></li>
       <li><a href="index.php?content=export_product_db"><i class="fa fa-database"></i>&nbsp; ส่งออกรายการสินค้า นำเข้า POS</a></li>
       <li><a href="index.php?content=import_stock_zone"><i class='fa fa-database'></i>&nbsp; บันทึกยอดสินค้าคงเหลือยกมาต้นงวด</a></li>
+      <li><a href="index.php?content=export_order_dhl"><i class="fa fa-database"></i>&nbsp; ส่งออกออเดอร์ นำเข้า DHL</a></li>
       <!--<li><a href="index.php?content=test_run"><i class='fa fa-database'></i>&nbsp; ทดสอบระบบ</a></li> -->
 
     </ul>

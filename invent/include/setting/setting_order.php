@@ -101,6 +101,12 @@ $branch_id = getConfig('WEB_SITE_BRANCH_ID');
       <span class="help-block">รหัสนำหน้าเลขที่จัดส่ง โดยใช้เลขที่ออเดอร์ของ Warrix12 แล้วเติมรหัสนี้นำหน้าและบันทึกเป็นเลขที่จัดส่งทันที ใช้ในการ import ออเดอร์จากเว็บไซต์</span>
     </div>
 
+		<div class="col-sm-3"><span class="form-control left-label">น้ำหนักเหมารวม(กรัม)</span></div>
+    <div class="col-sm-9">
+      <input type="text" class="form-control input-sm input-mini input-line" name="DHL_DEFAULT_WEIGHT" value="<?php echo getConfig('DHL_DEFAULT_WEIGHT'); ?>" />
+      <span class="help-block">น้ำหนักเหมารวมในการจัดส่ง 1 แพ็คเกจ(กรัม)</span>
+    </div>
+
 
 		<div class="col-sm-3"><span class="form-control left-label">รหัสลูกค้า OMISE</span></div>
     <div class="col-sm-9">

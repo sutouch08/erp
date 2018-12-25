@@ -25,6 +25,21 @@ if(isset($_GET['saleByChannelsAndReference']) && isset($_GET['export']))
 }
 
 
+//--- รายงานยอดขายออนไลน์
+if(isset($_GET['saleOnlineByChannelsAndRefCode']) && isset($_GET['report']))
+{
+  include 'report/saleReport/report_sale_online_channels_details.php';
+}
+
+
+if(isset($_GET['saleOnlineByChannelsAndRefCode']) && isset($_GET['export']))
+{
+  include 'report/saleReport/export_sale_online_channels_details.php';
+}
+
+
+
+
 if(isset($_GET['saleByCustomerOrder']) && isset($_GET['report']))
 {
   include 'report/saleReport/report_sale_by_customer_order.php';

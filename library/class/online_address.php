@@ -1,6 +1,21 @@
 <?php
 class online_address
 {
+	public $id;
+	public $customer_code;
+	public $first_name;
+	public $last_name;
+	public $address1;
+	public $address2;
+	public $district;
+	public $province;
+	public $postcode;
+	public $phone;
+	public $email;
+	public $alias;
+	public $is_default;
+
+
 	public function __construct($id="")
 	{
 		if( $id != "" )
@@ -128,6 +143,19 @@ class online_address
 	}
 
 
+	public function getOnlineAddressByCustomerCode($customer_code)
+	{
+		$qs = dbQuery("SELECT * FROM tbl_address_online WHERE customer_code = '".$customer_code."' ORDER BY is_default DESC LIMIT 1");
+		if(dbNumRows($qs) == 1)
+		{
+			$result = dbFetchArray($qs);
+			foreach($result as $key => $val)
+			{
+				$this->$key = $val;
+			}
+		}
+	}
+
 
 
 	public function getAddressByCode(	$online_code)
@@ -160,6 +188,25 @@ class online_address
 		}
 
 		return FALSE;
+	}
+
+
+
+	public function clearProperties()
+	{
+		$this->id = '';
+		$this->customer_code = '';
+		$this->first_name = '';
+		$this->last_name = '';
+		$this->address1 = '';
+		$this->address2 = '';
+		$this->district = '';
+		$this->province = '';
+		$this->postcode = '';
+		$this->phone = '';
+		$this->email = '';
+		$this->alias = '';
+		$this->is_default = '';
 	}
 
 

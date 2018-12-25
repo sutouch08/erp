@@ -40,7 +40,7 @@ function viewPaymentDetail(id_order)
 $("#emsNo").keyup(function(e) {
     if( e.keyCode == 13 )
 	{
-		saveDeliveryNo();	
+		saveDeliveryNo();
 	}
 });
 
@@ -51,7 +51,7 @@ $("#emsNo").keyup(function(e) {
 
 function inputDeliveryNo()
 {
-	$("#deliveryModal").modal('show');	
+	$("#deliveryModal").modal('show');
 }
 
 
@@ -125,14 +125,14 @@ function submitPayment()
 			}
 			else if( rs == 'fail' )
 			{
-				swal("ข้อผิดพลาด", "ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่อีกครั้ง", "error");	
+				swal("ข้อผิดพลาด", "ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่อีกครั้ง", "error");
 			}
 			else
 			{
-				swal("ข้อผิดพลาด", rs, "error");	
+				swal("ข้อผิดพลาด", rs, "error");
 			}
 		}
-	});	
+	});
 }
 
 
@@ -140,7 +140,7 @@ function submitPayment()
 
 
 
-function readURL(input) 
+function readURL(input)
 {
    if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -170,9 +170,9 @@ $("#image").change(function(){
 			return false;
 		}
 		if( size > 2000000 )
-		{ 
-			swal("ขนาดไฟล์ใหญ่เกินไป", "ไฟล์แนบต้องมีขนาดไม่เกิน 2 MB", "error"); 
-			$(this).val(''); 
+		{
+			swal("ขนาดไฟล์ใหญ่เกินไป", "ไฟล์แนบต้องมีขนาดไม่เกิน 2 MB", "error");
+			$(this).val('');
 			return false;
 		}
 		readURL(this);
@@ -204,7 +204,7 @@ function removeFile()
 {
 	$("#previewImg").html('');
 	$("#block-image").css("opacity","0");
-	$("#btn-select-file").css('display', '');	
+	$("#btn-select-file").css('display', '');
 	$("#image").val('');
 }
 
@@ -225,7 +225,7 @@ $("#payAmount").focusout(function(e) {
 
 function dateClick()
 {
-	$("#payDate").focus();	
+	$("#payDate").focus();
 }
 
 
@@ -240,7 +240,7 @@ $("#payDate").datepicker({ dateFormat: 'dd-mm-yy'});
 
 function selectFile()
 {
-	$("#image").click();	
+	$("#image").click();
 }
 
 
@@ -288,7 +288,7 @@ function payOrder()
 			$("#payAmount").numberOnly();
 		}
 	});
-	$("#selectBankModal").modal('show');	
+	$("#selectBankModal").modal('show');
 }
 
 
@@ -299,7 +299,7 @@ function removeAddress(id)
 {
 	swal({
 		title: 'ต้องการลบที่อยู่ ?',
-		text: 'คุณแน่ใจว่าต้องการลบที่อยู่นี้ โปรดจำไว้ว่าการกระทำนี้ไม่สามารถกู้คืนได้',	
+		text: 'คุณแน่ใจว่าต้องการลบที่อยู่นี้ โปรดจำไว้ว่าการกระทำนี้ไม่สามารถกู้คืนได้',
 		type: 'warning',
 		showCancelButton: true,
 		confirmButtonColor: '#DD6855',
@@ -313,14 +313,14 @@ function removeAddress(id)
 				success: function(rs){
 					var rs = $.trim(rs);
 					if( rs == 'success' ){
-						swal({ title : "สำเร็จ", text: "ลบรายการเรียบร้อยแล้ว", timer: 1000, type: "success" });	
-						reloadAddressTable();						
+						swal({ title : "สำเร็จ", text: "ลบรายการเรียบร้อยแล้ว", timer: 1000, type: "success" });
+						reloadAddressTable();
 					}else{
-						swal("ข้อผิดพลาด!!", "ลบรายการไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", "error");	
+						swal("ข้อผิดพลาด!!", "ลบรายการไม่สำเร็จ กรุณาลองใหม่อีกครั้ง", "error");
 					}
 				}
 			});
-		});	
+		});
 }
 
 
@@ -343,6 +343,7 @@ function editAddress(id)
 				$("#Lname").val(ds.last_name);
 				$("#address1").val(ds.address1);
 				$("#address2").val(ds.address2);
+				$('#district').val(ds.district);
 				$("#province").val(ds.province);
 				$("#postcode").val(ds.postcode);
 				$("#phone").val(ds.phone);
@@ -366,7 +367,7 @@ function setDefault(id)
 	$.ajax({
 		url:"controller/orderController.php?setDefaultAddress",
 		type:"POST", cache:"false", data:{ "id_address" : id },
-		success: function(rs){			
+		success: function(rs){
 			$(".btn-address").removeClass('btn-success');
 			$("#btn-"+id).addClass('btn-success');
 		}
@@ -407,45 +408,59 @@ function saveAddress()
 {
 	var name			= $("#Fname").val();
 	var add1			= $("#address1").val();
+	var district  = $('#district').val();
+	var province  = $('#province').val();
 	var email			= $("#email").val();
 	var alias 		= $("#alias").val();
-	
-	if( name == '' ){ 
-		swal('กรุณาระบุชื่อผู้รับ'); 
-		return false; 
+
+	if( name == '' ){
+		swal('กรุณาระบุชื่อผู้รับ');
+		return false;
 	}
-	
-	if( add1 == '' ){ 
-		swal('กรุณาระบุที่อยู่ 1 '); 
-		return false; 
+
+	if( add1.length == 0 ){
+		swal('กรุณาระบุที่อยู่ 1 ');
+		return false;
 	}
-	
-	if( alias == '' ){ 
-		swal('กรุณาตั้งชื่อให้ที่อยู่'); 
-		return false; 
+
+	if(district.length == 0){
+		swal('กรุณาระบุอำเภอ');
+		return false;
 	}
-	
-	if( email != '' && ! validEmail(email) ){ 
-		swal("อีเมล์ไม่ถูกต้องกรุณาตรวจสอบ"); 
-		return false; 
+
+	if(province.length == 0){
+		swal('กรุณาระบุจังหวัด');
+		return false;
 	}
-	
+
+
+	if( alias == '' ){
+		swal('กรุณาตั้งชื่อให้ที่อยู่');
+		return false;
+	}
+
+	if( email != '' && ! validEmail(email) ){
+		swal("อีเมล์ไม่ถูกต้องกรุณาตรวจสอบ");
+		return false;
+	}
+
 	var ds = [];
-	
+
 	ds.push( {"name" : "id_address", "value" : $("#id_address").val() } );
 	ds.push( {"name" : "online_code", "value" : $("#online_code").val() } );
 	ds.push( {"name" : "first_name", "value" : $("#Fname").val() } );
 	ds.push( {"name" : "last_name", "value" : $("#Lname").val() } );
 	ds.push( {"name" : "address1", "value" : $("#address1").val() } );
 	ds.push( {"name" : "address2", "value" : $("#address2").val() } );
+	ds.push( {"name" : "district", "value" : $("#district").val() } );
 	ds.push( {"name" : "province", "value" : $("#province").val() } );
 	ds.push( {"name" : "postcode", "value" : $("#postcode").val() } );
 	ds.push( {"name" : "phone", "value" : $("#phone").val() } );
 	ds.push( {"name" : "email", "value" : $("#email").val() } );
 	ds.push( {"name" : "alias", "value" : $("#alias").val() } );
-	
+
 	$("#addressModal").modal('hide');
-	
+
 	load_in();
 	$.ajax({
 		url:"controller/orderController.php?saveAddress",
@@ -461,7 +476,7 @@ function saveAddress()
 				clearAddressField();
 			}
 		}
-	});			
+	});
 }
 
 
@@ -471,7 +486,7 @@ function saveAddress()
 function addNewAddress()
 {
 	clearAddressField();
-	$("#addressModal").modal('show');	
+	$("#addressModal").modal('show');
 }
 
 
@@ -489,13 +504,13 @@ function clearAddressField()
 	$("#postcode").val('');
 	$("#phone").val('');
 	$("#email").val('');
-	$("#alias").val('');	
+	$("#alias").val('');
 }
 
 
 
 
-var clipboard = new Clipboard('.btn');	
+var clipboard = new Clipboard('.btn');
 
 
 //------- Shipping Fee
@@ -544,7 +559,7 @@ function updateShippingFee()
 
 function changeShippingFee(){
 	var fee = $("#shippingFee").val();
-	$("#shipping-td").text( addCommas( parseFloat(fee).toFixed(2) ) );	
+	$("#shipping-td").text( addCommas( parseFloat(fee).toFixed(2) ) );
 }
 
 
@@ -562,7 +577,7 @@ function activeServiceFee(){
 	$("#btn-update-service-fee").removeClass('hide');
 	$("#serviceFee").numberOnly();
 	$("#serviceFee").focus();
-	$("#serviceFee").select();		
+	$("#serviceFee").select();
 }
 
 
@@ -599,7 +614,7 @@ function updateServiceFee()
 
 function changeServiceFee(){
 	var fee = $("#serviceFee").val();
-	$("#service-td").text( addCommas( parseFloat(fee).toFixed(2) ) );	
+	$("#service-td").text( addCommas( parseFloat(fee).toFixed(2) ) );
 }
 
 
@@ -617,10 +632,10 @@ function Summary(){
 	var discount 	= parseFloat( removeCommas( $("#discount-td").text() ) );
 	var shipping 	= parseFloat( removeCommas( $("#shipping-td").text() ) );
 	var service 		= parseFloat( removeCommas( $("#service-td").text() ) );
-	
+
 	var netAmount = amount - discount + shipping + service;
 	$("#netAmount-td").text( addCommas( parseFloat(netAmount).toFixed(2) ) );
-		
+
 }
 
 
@@ -628,7 +643,7 @@ function print_order(id)
 {
 	var wid = $(document).width();
 	var left = (wid - 900) /2;
-	window.open("controller/orderController.php?print_order&id_order="+id, "_blank", "width=900, height=1000, left="+left+", location=no, scrollbars=yes");	
+	window.open("controller/orderController.php?print_order&id_order="+id, "_blank", "width=900, height=1000, left="+left+", location=no, scrollbars=yes");
 }
 
 
@@ -651,7 +666,8 @@ function getSummary()
 $("#Fname").keyup(function(e){ if( e.keyCode == 13 ){ $("#Lname").focus(); 	} });
 $("#Lname").keyup(function(e){ if( e.keyCode == 13 ){ $("#address1").focus(); 	} });
 $("#address1").keyup(function(e){ if( e.keyCode == 13 ){ $("#address2").focus(); 	} });
-$("#address2").keyup(function(e){ if( e.keyCode == 13 ){ $("#province").focus(); 	} });
+$("#address2").keyup(function(e){ if( e.keyCode == 13 ){ $("#district").focus(); 	} });
+$("#district").keyup(function(e){ if( e.keyCode == 13 ){ $("#province").focus(); 	} });
 $("#province").keyup(function(e){ if( e.keyCode == 13 ){ $("#postcode").focus(); 	} });
 $("#postcode").keyup(function(e){ if( e.keyCode == 13 ){ $("#phone").focus(); 	} });
 $("#phone").keyup(function(e){ if( e.keyCode == 13 ){ $("#email").focus(); 	} });

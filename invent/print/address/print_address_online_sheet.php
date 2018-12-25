@@ -17,6 +17,7 @@ if( dbNumRows($ad) == 1 )
   $cusName		= $rs['first_name'].' '.$rs['last_name'];
   $cusAdr1		= $rs['address1'];
   $cusAdr2		= $rs['address2'];
+  $cusDistr   = $rs['district'];
   $cusProv		= $rs['province'];
   $cusPostCode	= $rs['postcode'];
   $cusPhone		= $rs['phone'];
@@ -55,7 +56,8 @@ $receiver	.=  '<span style="font-size:16px; font-weight:500">โทร. '.$cusPh
 $receiver	.=  '<span style="display:block;">'.$cusName.'</span>';
 $receiver	.=  '<span style="display:block;">'.$cusAdr1.'</span>';
 $receiver	.=  '<span style="display:block;">'.$cusAdr2.'</span>';
-$receiver	.=  '<span style="display:block;">จ. '.$cusProv.'</span>';
+$receiver	.=  '<span style="display:block;">'.$cusDistr.'</span>';
+$receiver	.=  '<span style="display:block;">'.$cusProv.'</span>';
 $receiver	.=  '<span style="display:block; margin-top:15px;">รหัสไปรษณีย์  <span style="font-size:30px;">'.$cusPostCode.'</span></span>';
 $receiver	.= '</div>';
 /********** / Receiver ***********/
@@ -78,7 +80,7 @@ if(dbNumRows($qs) > 0)
   $leftCol	.= 			'<span style="font-size:12px; font-weight:bold; display:block;">ชื่อ - ที่อยู่จัดส่งลูกค้า</span>';
   $leftCol 	.=			'<span style="font-size:12px; display:block;">รหัสลูกค้า : '.$cusCode.'</span>';
   $leftCol 	.=			'<span style="font-size:12px; display:block;">'.$cusName.'</span>';
-  $leftCol	.=			'<span style="font-size:12px; display:bolck;">'.$cusAdr1.' '.$cusAdr2.' '.$cusProv.' '.$cusPostCode.'</span>';
+  $leftCol	.=			'<span style="font-size:12px; display:bolck;">'.$cusAdr1.' '.$cusAdr2.' '.$cusDistr.' '.$cusProv.' '.$cusPostCode.'</span>';
   $leftCol	.= 		'</div>';
   $leftCol	.= '</div>';
 

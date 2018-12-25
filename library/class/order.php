@@ -1268,6 +1268,11 @@ class order
 		return $sc;
 	}
 
+	public function addOrderDHL($id)
+	{
+		return dbQuery("INSERT INTO tbl_order_dhl (id_order) VALUE (".$id.")");
+	}
+
 }//--- End Class
 
 ?>

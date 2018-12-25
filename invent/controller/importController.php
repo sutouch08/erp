@@ -366,6 +366,7 @@ if(isset($_GET['importOrderFromWeb']))
                 					"last_name"	=> '',
                 					"address1"	=> $rs['B'],
                 					"address2"	=> $rs['E'].' '.$rs['D'],
+                          "district"  => $rs['D'],
                 					"province"	=> $rs['C'],
                 					"postcode"	=> $rs['F'],
                 					"phone"		=> $rs['H'],

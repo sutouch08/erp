@@ -183,7 +183,7 @@ if( isset($_GET['updateNonCountPrice']) )
 	}
 	else
 	{
-		include 'order/edit_order_non_count_price.php';		
+		include 'order/edit_order_non_count_price.php';
 	}
 }
 
@@ -643,6 +643,7 @@ if( isset( $_GET['getAddressDetail']) )
 					"last_name"	=> $rs->last_name,
 					"address1"	=> $rs->address1,
 					"address2"	=> $rs->address2,
+					"district" => $rs->district,
 					"province"	=> $rs->province,
 					"postcode"	=> $rs->postcode,
 					"phone"		=> $rs->phone,
@@ -671,6 +672,7 @@ if( isset( $_GET['saveAddress'] ) )
 					"last_name"	=> $_POST['last_name'],
 					"address1"	=> $_POST['address1'],
 					"address2"	=> $_POST['address2'],
+					"district"	=> $_POST['district'],
 					"province"	=> $_POST['province'],
 					"postcode"	=> $_POST['postcode'],
 					"phone"		=> $_POST['phone'],
@@ -687,6 +689,7 @@ if( isset( $_GET['saveAddress'] ) )
 					"last_name"	=> $_POST['last_name'],
 					"address1"	=> $_POST['address1'],
 					"address2"	=> $_POST['address2'],
+					"district"  => $_POST['district'],
 					"province"	=> $_POST['province'],
 					"postcode"	=> $_POST['postcode'],
 					"phone"		=> $_POST['phone'],
@@ -800,6 +803,38 @@ if(isset($_GET['setNotExpire']))
 }
 
 
+
+if(isset($_GET['searchRefCode']) && isset($_REQUEST['term']))
+{
+	$txt = trim($_REQUEST['term']);
+	$field = 'ref_code';
+	$limit = 50; //---- limit result
+
+	$sc = array();
+
+	$qr  = "SELECT ref_code
+						FROM  tbl_order
+					WHERE
+						ref_code LIKE '%".$txt."%'
+					ORDER BY ref_code ASC
+					LIMIT 50";
+
+	$qs = dbQuery($qr);
+
+	if(dbNumRows($qs) > 0)
+	{
+	  while($rs = dbFetchObject($qs))
+	  {
+	    $sc[] = $rs->ref_code;
+	  }
+	}
+	else
+	{
+	  $sc[] = 'ไม่พบข้อมูล';
+	}
+
+	echo json_encode($sc);
+}
 
 
 if( isset( $_GET['clearFilter'] ) )
