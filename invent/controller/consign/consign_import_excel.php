@@ -8,9 +8,6 @@ if($cs->isSaved == 0 && $cs->isCancle == 0)
   $file_path 	= "../../upload/consign/";
   $upload	= new upload($file);
 
-  $zone = new zone($cs->id_zone);
-  $st = new stock();
-
   //--- ไว้ตรวจสอบว่ามียอดต่างบ้างหรือไม่
   //--- จำนวนจะถูกเพิ่มเมื่อรายการมียอดต่าง
   $totalImported = 0;
@@ -38,7 +35,7 @@ if($cs->isSaved == 0 && $cs->isCancle == 0)
     $pd = new product();
     $mv = new movement();
     $st = new stock();
-    $zone = new zone();
+    $zone = new zone($cs->id_zone);
     $wh = new warehouse();
 
     startTransection();

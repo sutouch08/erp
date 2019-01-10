@@ -71,7 +71,15 @@ if(isset($_GET['stock_balance_by_zone']) && isset($_GET['export']))
 //--- ส่งออกยอดตั้งต้น ไปตรวจนับ
 if(isset($_GET['exportToCheck']) && isset($_GET['id_zone']))
 {
-  include 'report/stockReport/export_to_check.php';
+  if($_GET['prevDate'] == 1)
+  {
+    include 'report/stockReport/export_to_check_prev_date.php';
+  }
+  else
+  {
+    include 'report/stockReport/export_to_check.php';
+  }
+
 }
 
 

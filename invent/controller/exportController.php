@@ -107,33 +107,26 @@ if( isset($_GET['exportOrderToDHL']))
   if($isInclude == 1)
   {
     $qr = "SELECT
-            o.id, o.ref_code, o.shipping_fee, o.id_payment,
-            ad.first_name, ad.last_name, ad.address1, ad.address2,
-            ad.district, ad.province, ad.postcode, ad.phone, ad.email
+            o.id, o.ref_code, o.shipping_fee, o.id_payment, o.online_code
           FROM
             tbl_order AS o
-          LEFT JOIN
-            tbl_address_online AS ad ON o.online_code = ad.customer_code
           WHERE
             o.ref_code != ''
             AND o.isOnline = 1
             AND o.isExpire = 0 ";
+
   }
   else
   {
     $qr = "SELECT
-            o.id, o.ref_code, o.shipping_fee, o.id_payment,
-            ad.first_name, ad.last_name, ad.address1, ad.address2,
-            ad.district, ad.province, ad.postcode, ad.phone, ad.email
+            o.id, o.ref_code, o.shipping_fee, o.id_payment, o.online_code
           FROM
             tbl_order AS o
           LEFT JOIN
             tbl_order_dhl AS od ON o.id = od.id_order
-          LEFT JOIN
-            tbl_address_online AS ad ON o.online_code = ad.customer_code
           WHERE
             od.id_order IS NULL
-            AND o.ref_code != '' 
+            AND o.ref_code != ''
             AND o.isOnline = 1
             AND o.isExpire = 0 ";
   }
@@ -158,6 +151,7 @@ if( isset($_GET['exportOrderToDHL']))
     $qr .= "AND o.date_add <= '".$toDate."' ";
   }
 
+  $qr .= "GROUP BY o.id ";
   $qr .= "ORDER BY o.ref_code ASC";
 
   $qs = dbQuery($qr);
@@ -174,7 +168,7 @@ if( isset($_GET['exportOrderToDHL']))
     $deliveryCode = 'PDO';
 
     $order = new order();
-
+    $adr = new online_address();
     while($rs = dbFetchObject($qs))
     {
       $order->addOrderDHL($rs->id);
@@ -185,75 +179,27 @@ if( isset($_GET['exportOrderToDHL']))
         $codAmount += $order->getTotalAmount($rs->id);
       }
 
-      //$excel->getActiveSheet()->setCellValue('A'.$row, 'เลขบัญชีที่รับสินค้า');
-      //$excel->getActiveSheet()->setCellValue('B'.$row, 'ช่องทางการขาย');
+      $adr->getOnlineAddressByCustomerCode($rs->online_code);
+
+
       $excel->getActiveSheet()->setCellValue('C'.$row, $rs->ref_code);
       $excel->getActiveSheet()->setCellValue('D'.$row, $deliveryCode);
-      //$excel->getActiveSheet()->setCellValue('E'.$row, 'บริษัท');
-      $excel->getActiveSheet()->setCellValue('F'.$row, trim($rs->first_name.' '.$rs->last_name));
-      $excel->getActiveSheet()->setCellValue('G'.$row, $rs->address1);
-      $excel->getActiveSheet()->setCellValue('H'.$row, $rs->address2);
-      //$excel->getActiveSheet()->setCellValue('I'.$row, 'ที่อยู่บรรทัดที่ 3');
-      $excel->getActiveSheet()->setCellValue('J'.$row, $rs->district);
-      $excel->getActiveSheet()->setCellValue('K'.$row, $rs->province);
-      $excel->getActiveSheet()->setCellValue('L'.$row, $rs->postcode);
+      $excel->getActiveSheet()->setCellValue('F'.$row, trim($adr->first_name.' '.$adr->last_name));
+      $excel->getActiveSheet()->setCellValue('G'.$row, $adr->address1.' '.$adr->address2);
+      $excel->getActiveSheet()->setCellValue('J'.$row, $adr->district);
+      $excel->getActiveSheet()->setCellValue('K'.$row, $adr->province);
+      $excel->getActiveSheet()->setCellValue('L'.$row, $adr->postcode);
       $excel->getActiveSheet()->setCellValue('M'.$row, $countryCode);
-      $excel->getActiveSheet()->setCellValueExplicit('N'.$row, $rs->phone);
-      $excel->getActiveSheet()->setCellValue('O'.$row, trim($rs->email));
+      $excel->getActiveSheet()->setCellValueExplicit('N'.$row, $adr->phone);
+      $excel->getActiveSheet()->setCellValue('O'.$row, trim($adr->email));
       $excel->getActiveSheet()->setCellValue('P'.$row, $defaultWeight);
-      //$excel->getActiveSheet()->setCellValue('Q'.$row, 'ความยาว (ซม)');
-      //$excel->getActiveSheet()->setCellValue('R'.$row, 'ความกว้าง (ซม)');
-      //$excel->getActiveSheet()->setCellValue('S'.$row, 'ความสูง (ซม)');
       $excel->getActiveSheet()->setCellValue('T'.$row, $currencyCode);
-      //$excel->getActiveSheet()->setCellValue('U'.$row, 'ยอดรวมมูลค่าสินค้า');
-      //$excel->getActiveSheet()->setCellValue('V'.$row, 'ประกัน');
-      //$excel->getActiveSheet()->setCellValue('W'.$row, 'มูลค่าการทำประกัน');
-      $excel->getActiveSheet()->setCellValue('X'.$row, $isCOD);
       if($isCOD === 'Y')
       {
+        $excel->getActiveSheet()->setCellValue('X'.$row, $isCOD);
         $excel->getActiveSheet()->setCellValue('Y'.$row, $codAmount);
       }
 
-      // $excel->getActiveSheet()->setCellValue('Z'.$row, 'รายละเอียดการจัดส่ง');
-      // $excel->getActiveSheet()->setCellValue('AA'.$row, 'หมายเหตุ');
-      // $excel->getActiveSheet()->setCellValue('AB'.$row, 'ชื่อบริษัทผู้จัดส่ง');
-      // $excel->getActiveSheet()->setCellValue('AC'.$row, 'ชื่อผู้จัดส่ง');
-      // $excel->getActiveSheet()->setCellValue('AD'.$row, 'ที่อยู่ผู้จัดส่งบรรทัดที่ 1');
-      // $excel->getActiveSheet()->setCellValue('AE'.$row, 'ที่อยู่ผู้จัดส่งบรรทัดที่ 2');
-      // $excel->getActiveSheet()->setCellValue('AF'.$row, 'ที่อยู่ผู้จัดส่งบรรทัดที่ 3');
-      // $excel->getActiveSheet()->setCellValue('AG'.$row, 'เขต (อำเภอ) ผู้จัดส่ง');
-      // $excel->getActiveSheet()->setCellValue('AH'.$row, 'จังหวัดผู้จัดส่ง');
-      // $excel->getActiveSheet()->setCellValue('AI'.$row, 'รหัสไปรษณีย์ผู้จัดส่ง');
-      // $excel->getActiveSheet()->setCellValue('AJ'.$row, 'รหัสประเทศปลายทางผู้จัดส่ง');
-      // $excel->getActiveSheet()->setCellValue('AK'.$row, 'หมายเลขโทรศัพท์ผู้จัดส่ง');
-      // $excel->getActiveSheet()->setCellValue('AL'.$row, 'อีเมล์ผู้จัดส่ง');
-      // $excel->getActiveSheet()->setCellValue('AM'.$row, 'รหัสบริการส่งคืนสินค้า');
-      // $excel->getActiveSheet()->setCellValue('AN'.$row, 'ชื่อบริษัทที่ส่งคืน');
-      // $excel->getActiveSheet()->setCellValue('AO'.$row, 'ชื่อที่ส่งคืน');
-      // $excel->getActiveSheet()->setCellValue('AP'.$row, 'ที่อยู่ที่ส่งคืนบรรทัดที่ 1');
-      // $excel->getActiveSheet()->setCellValue('AQ'.$row, 'ที่อยู่ที่ส่งคืนบรรทัดที่ 2');
-      // $excel->getActiveSheet()->setCellValue('AR'.$row, 'ที่อยู่ที่ส่งคืนบรรทัดที่ 3');
-      // $excel->getActiveSheet()->setCellValue('AS'.$row, 'เขต (อำเภอ) ที่ส่งคืน');
-      // $excel->getActiveSheet()->setCellValue('AT'.$row, 'จังหวัดที่ส่งคืน');
-      // $excel->getActiveSheet()->setCellValue('AU'.$row, 'รหัสไปรษณีย์ที่ส่งคืน');
-      // $excel->getActiveSheet()->setCellValue('AV'.$row, 'รหัสประเทศปลายทางที่ส่งคืน');
-      // $excel->getActiveSheet()->setCellValue('AW'.$row, 'หมายเลขโทรศัพท์ที่ส่งคืน');
-      // $excel->getActiveSheet()->setCellValue('AX'.$row, 'อีเมล์ที่ส่งคืน');
-      // $excel->getActiveSheet()->setCellValue('AY'.$row, 'บริการ 1');
-      // $excel->getActiveSheet()->setCellValue('AZ'.$row, 'บริการ 2');
-      // $excel->getActiveSheet()->setCellValue('BA'.$row, 'กระบวนการ Handover');
-      // $excel->getActiveSheet()->setCellValue('BB'.$row, 'โหมดการส่งคืนของ');
-      // $excel->getActiveSheet()->setCellValue('BC'.$row, 'การอ้างอิงการเรียกเก็บเงิน 1');
-      // $excel->getActiveSheet()->setCellValue('BD'.$row, 'การอ้างอิงการเรียกเก็บเงิน 2');
-      // $excel->getActiveSheet()->setCellValue('BE'.$row, 'IsMult');
-      // $excel->getActiveSheet()->setCellValue('BF'.$row, 'ตัวเลือกการจัดส่ง');
-      // $excel->getActiveSheet()->setCellValue('BG'.$row, 'รหัสชิ้น');
-      // $excel->getActiveSheet()->setCellValue('BH'.$row, 'คำอธิบายรายชิ้น');
-      // $excel->getActiveSheet()->setCellValue('BI'.$row, 'น้ำหนักรายชิ้น');
-      // $excel->getActiveSheet()->setCellValue('BJ'.$row, 'การเรียกเก็บเงินปลายทางรายชิ้น');
-      // $excel->getActiveSheet()->setCellValue('BK'.$row, 'มูลค่าการทำประกันรายชิ้น');
-      // $excel->getActiveSheet()->setCellValue('BL'.$row, 'การอ้างอิงการเรียกเก็บเงินรายชิ้น 1');
-      // $excel->getActiveSheet()->setCellValue('BM'.$row, 'การอ้างอิงการเรียกเก็บเงินรายชิ้น 2');
       $row++;
     }
 

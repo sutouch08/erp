@@ -60,7 +60,7 @@ $qr = "SELECT
         WHERE
           o.role = 1
           AND o.isOnline = 1
-          AND o.isExpire = 0";
+          AND o.isExpire = 0 ";
 
 
 if($allChannels == 0)

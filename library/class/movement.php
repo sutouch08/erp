@@ -81,9 +81,9 @@ class movement
 		$qr .= "AND id_warehouse = '".$id_warehouse."' ";
 		$qr .= "AND id_zone = '".$id_zone."' ";
 		$qr .= "AND id_product = '".$id_pd."' ";
-		$qr .= "AND move_in	 > 0 AND move_out = 0";
+		$qr .= "AND move_in	 != 0 AND move_out = 0";
 		$qs = dbQuery($qr);
-		if( dbNumRows($qs) == 1 )
+		if( dbNumRows($qs) > 0 )
 		{
 			$sc = TRUE;
 		}
@@ -102,9 +102,9 @@ class movement
 		$qr .= "AND id_warehouse = '".$id_warehouse."' ";
 		$qr .= "AND id_zone = '".$id_zone."' ";
 		$qr .= "AND id_product = '".$id_pd."' ";
-		$qr .= "AND move_out	 > 0 AND move_in = 0";
+		$qr .= "AND move_out	 != 0 AND move_in = 0";
 		$qs = dbQuery($qr);
-		if( dbNumRows($qs) == 1 )
+		if( dbNumRows($qs) > 0 )
 		{
 			$sc = TRUE;
 		}

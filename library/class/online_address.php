@@ -49,6 +49,12 @@ class online_address
 				$i++;
 			}
 			$sc = dbQuery("INSERT INTO tbl_address_online (".$fields.") VALUES (".$values.")");
+
+			if($sc === TRUE)
+			{
+				$id = dbInsertId();
+				$this->setDefault($id);
+			}
 		}
 		return $sc;
 	}
@@ -155,7 +161,7 @@ class online_address
 			}
 		}
 	}
-
+	
 
 
 	public function getAddressByCode(	$online_code)

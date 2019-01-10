@@ -14,9 +14,6 @@
 	//---	เป็นออเดอร์ออนไลน์หรือไม่
 	$isOnline = isset($_POST['isOnline']) ? ($_POST['isOnline'] == 1 ? 1 : 0) : 0;
 
-	//---- อ้างอิงออเดอร์จากเว็บอื่น
-	$refCode = isset($_POST['refCode']) ? $_POST['refCode'] : '';
-
 	//---	เป็นเอกสารประเภทไหน
 	$role 		= isset( $_POST['role']) ? $_POST['role'] : 1;
 
@@ -65,6 +62,14 @@
 	//--- รันเลขที่เอกสารตามประเภทเอาสาร
 	$reference = $order->getNewReference($role, $date_add, $is_so);
 
+	//---- อ้างอิงออเดอร์จากเว็บอื่น
+	$refCode = isset($_POST['refCode']) ? $_POST['refCode'] : '';
+
+	if($refCode == '' && $role == 1)
+	{
+		$refCode = $reference;
+	}
+	
 	//--- เตรียมข้อมูลสำหรับเพิ่มเอกสารใหม่
 	$arr = array(
 					'bookcode'		=> $bookcode,

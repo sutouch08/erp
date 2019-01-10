@@ -423,16 +423,35 @@ function getReport(){
 
 function exportToCheck(){
   var id_zone = $('#id_zone').val();
+  var prevDate  = $('#prevDate').val();
+  var date = $('#date').val();
 
   if(id_zone.length == 0 || id_zone == ''){
     swal('กรุณาระบุโซน');
     return false;
   }
 
+  //---  0 = วันที่ปัจจุบัน   1 = ย้อนหลัง
+  if(prevDate == 1 && !isDate(date) ){
+    swal('วันที่ไม่ถูกต้อง');
+    $('#date').addClass('has-error');
+    return false;
+  }else{
+    $('#date').removeClass('has-error');
+  }
+
   var token = new Date().getTime();
-  var target = 'controller/stockReportController.php?exportToCheck';
-  target += '&id_zone='+id_zone;
-  target += '&token='+token;
+
+  var data = [
+    {'name' : 'prevDate' , 'value' : prevDate},
+    {'name' : 'selectDate', 'value' : date},
+    {'name' : 'id_zone', 'value' : id_zone},
+    {'name' : 'token', 'value' : token}
+  ];
+
+  data = $.param(data);
+
+  var target = 'controller/stockReportController.php?exportToCheck&'+data;
   get_download(token);
   window.location.href = target;
 
