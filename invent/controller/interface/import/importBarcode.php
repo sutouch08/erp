@@ -32,7 +32,7 @@
 					$id = $rs['A'];
 					$code = trim($rs['B']);
 					$id_pd = $pd->getId($rs['C']);
-					if( $cs->isExists($code) === FALSE )
+					if( $cs->isAllExists($id, $code) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
@@ -57,6 +57,7 @@
 						//--- If exists do update
 						$arr = array(
 								'id' => $id,
+								'barcode' => $code,
 								'id_product'	=> $id_pd,
 								'reference'	=> $rs['C'],
 								'unit_code'	=> $rs['D'],

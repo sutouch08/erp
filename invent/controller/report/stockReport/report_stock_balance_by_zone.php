@@ -13,6 +13,8 @@ $warehouse    = isset($_GET['warehouse']) ? $_GET['warehouse'] : FALSE;
 $allZone    = $_GET['allZone'];
 $id_zone    = $_GET['id_zone'];
 
+$zone = new zone();
+
 $prevDate   = $_GET['prevDate'];
 $selectDate = $_GET['selectDate'];
 

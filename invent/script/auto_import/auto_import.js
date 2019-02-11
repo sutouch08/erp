@@ -18,13 +18,13 @@ function syncData(){
     {'name' : 'Area', 'url' : 'controller/interfaceController.php?syncMaster&customerArea'},
     {'name' : 'CusGroup', 'url' : 'controller/interfaceController.php?syncMaster&customerGroup'},
     {'name' : 'Customer', 'url' : 'controller/interfaceController.php?syncMaster&customer'},
-    {'name' : 'Credit', 'url' : 'controller/interfaceController.php?syncMaster&customerCredit'},
     {'name' : 'SupGroup', 'url' : 'controller/interfaceController.php?syncMaster&supplierGroup'},
     {'name' : 'Supplier', 'url' : 'controller/interfaceController.php?syncMaster&supplier'},
     {'name' : 'Warehouse', 'url' : 'controller/interfaceController.php?syncMaster&warehouse'},
     {'name' : 'PO', 'url' : 'controller/interfaceController.php?syncDocument&po'},
     {'name' : 'BM', 'url' : 'controller/interfaceController.php?syncDocument&BM'},
-    {'name' : 'SM', 'url' : 'controller/interfaceController.php?syncDocument&SM'}
+    {'name' : 'SM', 'url' : 'controller/interfaceController.php?syncDocument&SM'},
+    {'name' : 'Credit', 'url' : 'controller/interfaceController.php?syncMaster&customerCredit'}
   ];
 
   setTimeout(function(){

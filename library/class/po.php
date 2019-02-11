@@ -54,6 +54,10 @@ class po
 			}
 
 			$sc = dbQuery("INSERT INTO tbl_po (" . $fields.") VALUES (".$values.")");
+			if($sc === FALSE)
+			{
+				$this->error = dbError();
+			}
 		}
 		return $sc;
 	}

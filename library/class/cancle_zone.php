@@ -173,6 +173,12 @@ class cancle_zone
   }
 
 
+	public function getCancleProductByOrder($id_order)
+	{
+		$qr = "SELECT * FROM tbl_cancle WHERE id_order = ".$id_order;
+		return dbQuery($qr);
+	}
+
 
 
 }

@@ -85,11 +85,7 @@ function unSave(id){
             swal('Error!', rs, 'error');
           }
         }
-      });
-      setTimeout(function(){
-        load_out();
-        swal({title:'OK', type:'success', timer:1000});
-      }, 5000);
+      });      
   });
 }
 

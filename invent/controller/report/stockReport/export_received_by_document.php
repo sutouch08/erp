@@ -13,9 +13,10 @@ $date_range = thaiDate($_GET['fromDate'], '/').'  -  '.thaiDate($_GET['toDate'],
 $ref_range = $isAll == 1 ? 'ทั้งหมดง' : $fromCode.'  -  '.$toCode;
 
 
-$qr  = "SELECT rp.reference, rp.invoice, rp.date_add, SUM(rd.qty) AS qty, SUM(rd.qty * cost) AS amount ";
+$qr  = "SELECT rp.reference, rp.invoice, sp.code, sp.name, rp.date_add, SUM(rd.qty) AS qty, SUM(rd.qty * cost) AS amount ";
 $qr .= "FROM tbl_receive_product_detail AS rd ";
 $qr .= "LEFT JOIN tbl_receive_product AS rp ON rd.id_receive_product = rp.id ";
+$qr .= "LEFT JOIN tbl_supplier AS sp ON rp.id_supplier = sp.id ";
 $qr .= "WHERE rp.date_add >= '".$from."' AND rp.date_add <= '".$to."' ";
 $qr .= "AND rp.isCancle = 0 AND rd.is_cancle = 0 ";
 if($isAll == 0)
@@ -62,8 +63,10 @@ $excel->getActiveSheet()->setCellValue('A3', 'ลำดับ');
 $excel->getActiveSheet()->setCellValue('B3', 'วันที่');
 $excel->getActiveSheet()->setCellValue('C3', 'เลขที่เอกสาร');
 $excel->getActiveSheet()->setCellValue('D3', 'ใบกำกับภาษี');
-$excel->getActiveSheet()->setCellValue('E3', 'จำนวน');
-$excel->getActiveSheet()->setCellValue('F3', 'มูลค่า');
+$excel->getActiveSheet()->setCellValue('E3', 'รหัสผู้ขาย');
+$excel->getActiveSheet()->setCellValue('F3', 'ชื่อผู้ขาย');
+$excel->getActiveSheet()->setCellValue('G3', 'จำนวน');
+$excel->getActiveSheet()->setCellValue('H3', 'มูลค่า');
 
 
 //-------------  Set Column Width
@@ -72,9 +75,11 @@ $excel->getActiveSheet()->getColumnDimension('B')->setWidth(16);
 $excel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
 $excel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
 $excel->getActiveSheet()->getColumnDimension('E')->setWidth(10);
-$excel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+$excel->getActiveSheet()->getColumnDimension('F')->setWidth(30);
+$excel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
+$excel->getActiveSheet()->getColumnDimension('H')->setWidth(10);
 
-$excel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setHorizontal('center');
+$excel->getActiveSheet()->getStyle('A3:H3')->getAlignment()->setHorizontal('center');
 
 $row = 4;
 
@@ -89,8 +94,10 @@ if(dbNumRows($qs) > 0)
     $excel->getActiveSheet()->setCellValue('B'.$row, thaiDate($rs->date_add));
     $excel->getActiveSheet()->setCellValue('C'.$row, $rs->reference);
     $excel->getActiveSheet()->setCellValue('D'.$row, $rs->invoice);
-    $excel->getActiveSheet()->setCellValue('E'.$row, $rs->qty);
-    $excel->getActiveSheet()->setCellValue('F'.$row, $rs->amount);
+    $excel->getActiveSheet()->setCellValue('E'.$row, $rs->code);
+    $excel->getActiveSheet()->setCellValue('F'.$row, $rs->name);
+    $excel->getActiveSheet()->setCellValue('G'.$row, $rs->qty);
+    $excel->getActiveSheet()->setCellValue('H'.$row, $rs->amount);
 
     $no++;
     $row++;
@@ -101,11 +108,11 @@ if(dbNumRows($qs) > 0)
   $excel->getActiveSheet()->setCellValue('A'.$row, 'รวม');
   $excel->getActiveSheet()->mergeCells('A'.$row.':D'.$row);
   $excel->getActiveSheet()->getStyle('A'.$row)->getAlignment()->setHorizontal('right');
-  $excel->getActiveSheet()->setCellValue('E'.$row, '=SUM(E4:E'.$rx.')');
-  $excel->getActiveSheet()->setCellValue('F'.$row, '=SUM(F4:F'.$rx.')');
+  $excel->getActiveSheet()->setCellValue('G'.$row, '=SUM(G4:G'.$rx.')');
+  $excel->getActiveSheet()->setCellValue('H'.$row, '=SUM(H4:H'.$rx.')');
 
-  $excel->getActiveSheet()->getStyle('E4:E'.$row)->getNumberFormat()->setFormatCode('#,##0');
-  $excel->getActiveSheet()->getStyle('F4:F'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
+  $excel->getActiveSheet()->getStyle('G4:G'.$row)->getNumberFormat()->setFormatCode('#,##0');
+  $excel->getActiveSheet()->getStyle('H4:H'.$row)->getNumberFormat()->setFormatCode('#,##0.00');
 
 }
 

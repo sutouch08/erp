@@ -38,6 +38,8 @@ $qr = "SELECT
           o.reference,
           o.online_code,
           o.shipping_code,
+          o.shipping_fee,
+          o.service_fee,
           o.ref_code,
           c.name AS channels,
           pm.name AS payment,
@@ -152,7 +154,9 @@ $excel->getActiveSheet()->setCellValue('P5', 'ราคา');
 $excel->getActiveSheet()->setCellValue('Q5', 'จำนวน');
 $excel->getActiveSheet()->setCellValue('R5', 'ส่วนลด');
 $excel->getActiveSheet()->setCellValue('S5', 'มูลค่า');
-$excel->getActiveSheet()->setCellValue('T5', 'สถานะ');
+$excel->getActiveSheet()->setCellValue('T5', 'ค่าจัดส่ง');
+$excel->getActiveSheet()->setCellValue('U5', 'ค่าบริการ');
+$excel->getActiveSheet()->setCellValue('V5', 'สถานะ');
 
 //---- กำหนดความกว้างของคอลัมภ์
 $excel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
@@ -170,6 +174,8 @@ $excel->getActiveSheet()->getColumnDimension('M')->setWidth(15);
 $excel->getActiveSheet()->getColumnDimension('N')->setWidth(15);
 $excel->getActiveSheet()->getColumnDimension('O')->setWidth(25);
 $excel->getActiveSheet()->getColumnDimension('T')->setWidth(15);
+$excel->getActiveSheet()->getColumnDimension('U')->setWidth(15);
+$excel->getActiveSheet()->getColumnDimension('V')->setWidth(15);
 
 
 
@@ -252,8 +258,14 @@ if(dbNumRows($qs) > 0)
     //--- ยอดเงินรวม
     $excel->getActiveSheet()->setCellValue('S'.$row, $rs->total_amount);
 
+    //--- ค่าจัดส่ง
+    $excel->getActiveSheet()->setCellValue('T'.$row, $rs->shipping_fee);
+
+    //--- ค่าบริการ
+    $excel->getActiveSheet()->setCellValue('U'.$row, $rs->service_fee);
+
     //--- สถานะออเดอร์
-    $excel->getActiveSheet()->setCellValue('T'.$row, $rs->state);
+    $excel->getActiveSheet()->setCellValue('V'.$row, $rs->state);
 
     $no++;
     $row++;

@@ -16,6 +16,7 @@ $id_zone    = $_GET['id_zone'];
 $prevDate   = $_GET['prevDate'];
 $selectDate = $_GET['selectDate'];
 
+$zone = new zone();
 $wh = new warehouse();
 $wh_in      = "";
 $wh_list    = "";

@@ -41,22 +41,21 @@ class movement
 
 	public function move_out($reference, $id_warehouse, $id_zone, $id_pd, $qty, $date_upd)
 	{
-		if( $this->isMoveOutExists($reference, $id_warehouse, $id_zone, $id_pd) )
+		if( $this->isMoveOutExists($reference, $id_warehouse, $id_zone, $id_pd) === TRUE )
 		{
-			$qr = "UPDATE tbl_stock_movement SET move_out = move_out + ".$qty." ";
+			$qr  = "UPDATE tbl_stock_movement ";
+			$qr .= "SET move_out = move_out + ".$qty." ";
 			$qr .= "WHERE reference = '".$reference."' ";
 			$qr .= "AND id_warehouse = '".$id_warehouse."' ";
 			$qr .= "AND id_zone = '".$id_zone."' ";
 			$qr .= "AND id_product = '".$id_pd."' ";
-
 		}
 		else
 		{
-			$qr = "INSERT INTO tbl_stock_movement ";
+			$qr  = "INSERT INTO tbl_stock_movement ";
 			$qr .= "(reference, id_warehouse, id_zone, id_product, move_out, date_upd) ";
 			$qr .= "VALUES ";
 			$qr .= "('".$reference."', '".$id_warehouse."', '".$id_zone."', '".$id_pd."', '".$qty."', '".$date_upd."')";
-
 		}
 
 		$sc = dbQuery($qr);
@@ -75,19 +74,22 @@ class movement
 
 	private function isMoveInExists($reference, $id_warehouse, $id_zone, $id_pd)
 	{
-		$sc = FALSE;
-		$qr = "SELECT id FROM tbl_stock_movement ";
+		$qr  = "SELECT id FROM tbl_stock_movement ";
 		$qr .= "WHERE reference = '".$reference."' ";
 		$qr .= "AND id_warehouse = '".$id_warehouse."' ";
 		$qr .= "AND id_zone = '".$id_zone."' ";
 		$qr .= "AND id_product = '".$id_pd."' ";
-		$qr .= "AND move_in	 != 0 AND move_out = 0";
+		$qr .= "AND move_in	!= 0 ";
+		$qr .= "AND move_out = 0";
+
 		$qs = dbQuery($qr);
+
 		if( dbNumRows($qs) > 0 )
 		{
-			$sc = TRUE;
+			return TRUE;
 		}
-		return $sc;
+
+		return FALSE;
 	}
 
 
@@ -96,19 +98,22 @@ class movement
 
 	private function isMoveOutExists($reference, $id_warehouse, $id_zone, $id_pd)
 	{
-		$sc = FALSE;
-		$qr = "SELECT id FROM tbl_stock_movement ";
+		$qr  = "SELECT id FROM tbl_stock_movement ";
 		$qr .= "WHERE reference = '".$reference."' ";
 		$qr .= "AND id_warehouse = '".$id_warehouse."' ";
 		$qr .= "AND id_zone = '".$id_zone."' ";
 		$qr .= "AND id_product = '".$id_pd."' ";
-		$qr .= "AND move_out	 != 0 AND move_in = 0";
+		$qr .= "AND move_out != 0 ";
+		$qr .= "AND move_in = 0";
+
 		$qs = dbQuery($qr);
+
 		if( dbNumRows($qs) > 0 )
 		{
-			$sc = TRUE;
+			return TRUE;
 		}
-		return $sc;
+
+		return FALSE;
 	}
 
 
