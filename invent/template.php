@@ -39,7 +39,7 @@ function row_no()
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="shortcut icon" href="../favicon.ico" />
+		<link rel="shortcut icon" href="<?php echo WEB_ROOT; ?>favicon.ico" />
     <title><?php echo $pageTitle ?></title>
 
 		<script src="<?php echo WEB_ROOT; ?>library/js/jquery.min.js"></script>

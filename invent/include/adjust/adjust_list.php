@@ -148,7 +148,7 @@ $qs = dbQuery("SELECT * FROM tbl_adjust ".$where." LIMIT ".$paginator->Page_Star
           <td class="middle"><?php echo $rs->remark; ?></td>
           <td class="middle text-center"><?php echo thaiDate($rs->date_add); ?></td>
           <td class="middle text-center">
-            <?php echo statusLabel($rs->isCancle, $rs->isExport, $rs->isSaved); ?>
+            <?php echo statusLabel($rs->isCancle, $rs->isExport, $rs->isSaved, $rs->is_so); ?>
           </td>
           <td class="middle text-right">
             <button type="button" class="btn btn-xs btn-info" onclick="goDetail(<?php echo $rs->id; ?>)">

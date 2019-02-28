@@ -94,7 +94,7 @@ class paginator{
 			$Num_Rows = $rows;
 		}
 
-		
+
 		$this->Per_Page = $Per_Page;
 		$this->Num_Rows= $Num_Rows;
 		$All_Pages		= ceil($Num_Rows / $Per_Page);
@@ -146,8 +146,10 @@ class paginator{
 		$sc .= "<br><br></form>";
 		echo $sc;
 	}
+
+
 	function setcookie_rows($get_rows){
-		setcookie("get_rows", $get_rows,time()+(3600*24*365*30),'/');
+		setcookie("get_rows", $get_rows, intval(3600*24*365*30),'/');
 	}
 }
 ?>

@@ -130,6 +130,22 @@ if(isset($_GET['stock_balance']) && isset($_GET['export']))
 }
 
 
+
+//--- รายงานสินค้าคงเหลือไม่รวมยอดจอง
+if(isset($_GET['stock_net_balance']) && isset($_GET['report']))
+{
+  include 'report/stockReport/report_stock_net_balance_by_item.php';
+}
+
+
+
+//--- ส่งออกรายงานสินค้าคงเหลือไม่รวมยอดจอง
+if(isset($_GET['stock_net_balance']) && isset($_GET['export']))
+{
+  include 'report/stockReport/export_stock_net_balance_by_item.php';
+}
+
+
 //--- รายงานสินค้าคงเหลือปัจจุบัน
 if(isset($_GET['current_stock']) && isset($_GET['report']))
 {

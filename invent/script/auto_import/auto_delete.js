@@ -25,12 +25,12 @@ function syncData(){
     {'name' : 'PO', 'url' : 'controller/fileController.php?clearFile&po'},
     {'name' : 'BM', 'url' : 'controller/fileController.php?clearFile&BM'},
     {'name' : 'SM', 'url' : 'controller/fileController.php?clearFile&SM'},
-    {'name' : 'SO', 'url' : 'controller/fileController.php?clearFile&AJ'},
-    {'name' : 'SO', 'url' : 'controller/fileController.php?clearFile&BI'},
-    {'name' : 'SO', 'url' : 'controller/fileController.php?clearFile&FR'},
+    {'name' : 'AJ', 'url' : 'controller/fileController.php?clearFile&AJ'},
+    {'name' : 'BI', 'url' : 'controller/fileController.php?clearFile&BI'},
+    {'name' : 'FR', 'url' : 'controller/fileController.php?clearFile&FR'},
     {'name' : 'SO', 'url' : 'controller/fileController.php?clearFile&SO'},
-    {'name' : 'SO', 'url' : 'controller/fileController.php?clearFile&TR'},
-    {'name' : 'SO', 'url' : 'controller/fileController.php?clearFile&WR'}
+    {'name' : 'TR', 'url' : 'controller/fileController.php?clearFile&TR'},
+    {'name' : 'WR', 'url' : 'controller/fileController.php?clearFile&WR'}
   ];
 
   setTimeout(function(){

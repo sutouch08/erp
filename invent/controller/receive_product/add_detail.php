@@ -162,6 +162,15 @@ if($sc === TRUE)
 
   endTransection();
 
+  //--- ถ้าไม่สำเร็จเปลี่ยนกลับ
+  if($sc === FALSE)
+  {
+    $arr = array('isSaved' => 0);
+
+    //--- ปรับปรุงเอกสารก่อน
+    $cs->update($cs->id, $arr);
+  }
+
 
   //--- ถ้ารับเข้าครบ PO แล้ว
   if($po->isCompleted($poCode) === TRUE && getConfig('PO_AUTO_CLOSE') == 1)

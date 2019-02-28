@@ -15,6 +15,18 @@ if( isset( $_GET['addNew'] ) )
 
 
 
+//---- ย้อนสถานออเดอร์จากหมดอายุให้ไม่หมดอายุ
+if(isset($_GET['unExpireOrder']))
+{
+	$id	= $_GET['id_order'];
+	$order = new order();
+
+	$order->setOrderUnExpire($id);
+	$order->setOrderDetailUnExpire($id);
+
+	echo 'success';
+}
+
 //----- 	บันทึกเอกสารเปลี่ยนสถานะ เป็นบันทึกแล้ว
 //-----	ถ้ามีเครดิตเทอม จะตัดยอดเครดิตด้วย
 if( isset( $_GET['saveOrder'] ) )

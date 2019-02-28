@@ -1,9 +1,9 @@
 <?php
-function statusLabel($isCancle = 0, $isExport = 0, $isSaved = 0)
+function statusLabel($isCancle = 0, $isExport = 0, $isSaved = 0, $is_so)
 {
 
 	$rs = '';
-	if( $isExport == 0)
+	if( $isExport == 0 && $is_so == 1)
 	{
 		$rs = 'NE';
 	}

@@ -138,8 +138,12 @@ if( dbNumRows($qs) > 0)
 }
 else
 {
-  $sc = FALSE;
-  $message = 'ไม่พบรายการรับเข้า';
+  //--- cancle เอกสาร
+  if( $cs->cancleReceived($cs->id, $emp) === FALSE)
+  {
+    $sc = FALSE;
+    $message = 'ยกเลิกเอกสารไม่สำเร็จ';
+  }
 }
 
 echo $sc === TRUE ? 'success' : $message;

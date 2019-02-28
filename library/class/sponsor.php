@@ -30,6 +30,8 @@ class sponsor
   }
 
 
+
+
   public function getDataByCustomer($id_customer)
   {
     $qs = dbQuery("SELECT * FROM tbl_sponsor WHERE id_customer = '".$id_customer."'");
@@ -42,6 +44,16 @@ class sponsor
       }
     }
   }
+
+
+
+  //--- get all sponsor
+  public function getSponsorList()
+  {
+    return dbQuery("SELECT * FROM tbl_sponsor");
+  }
+
+
 
 
 
@@ -64,6 +76,8 @@ class sponsor
 
 		return $sc === TRUE ? dbInsertId() : FALSE;
 	}
+
+
 
 
 
@@ -92,6 +106,9 @@ class sponsor
   public function delete($id){
     return dbQuery("DELETE FROM tbl_sponsor WHERE id = ".$id);
   }
+
+
+
 
 
   public function isExistsCustomer($id_customer)
@@ -136,6 +153,9 @@ class sponsor
 
     return dbQuery($qr);
   }
+
+
+
 
 
   public function getBudgetBalanceByCustomer($id_customer)

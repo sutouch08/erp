@@ -1257,6 +1257,8 @@ class order
 	}
 
 
+
+
 	public function setOrderDetailExpired($id_order)
 	{
 		$sc = dbQuery("UPDATE tbl_order_detail SET is_expired = 1 WHERE id_order = '".$id_order."'");
@@ -1267,6 +1269,25 @@ class order
 
 		return $sc;
 	}
+
+
+
+
+
+	public function setOrderUnExpire($id)
+	{
+		return dbQuery("UPDATE tbl_order SET isExpire = 0 WHERE id = ".$id);
+	}
+
+
+
+
+	public function setOrderDetailUnExpire($id)
+	{
+		return dbQuery("UPDATE tbl_order_detail SET is_expired = 0 WHERE id_order = ".$id);
+	}
+
+
 
 	public function addOrderDHL($id)
 	{

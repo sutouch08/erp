@@ -4,6 +4,20 @@ require '../../library/functions.php';
 require '../function/tools.php';
 include '../function/report_helper.php';
 
+//--- รายงานฝากขาย
+if(isset($_GET['consignment_by_customer']) && isset($_GET['report']))
+{
+  include 'report/saleReport/report_consignment_by_customer.php';
+}
+
+
+
+if(isset($_GET['consignment_by_customer']) && isset($_GET['export']))
+{
+  include 'report/saleReport/export_consignment_by_customer.php';
+}
+
+
 
 //--- รายงานวิเคราะห์ขายแบบละเอียด
 if(isset($_GET['sale_deep_analyz']) && isset($_GET['export']))

@@ -88,3 +88,25 @@ function deleteSponsor(id){
     }
   });
 }
+
+
+function reCalBudget(id_budget){
+  load_in();
+  $.ajax({
+    url:'controller/sponsorController.php?reCalBudget',
+    type:'GET',
+    cache:false,
+    data:{
+      'id_budget' : id_budget
+    },
+    success:function(rs){
+      load_out();
+      var rs = $.trim(rs);
+      if(isJson(rs)){
+        ds = $.parseJSON(rs);
+        $('#used-'+id_budget).text(ds.used);
+        $('#balance-'+id_budget).text(ds.balance);
+      }
+    }
+  });
+}

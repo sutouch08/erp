@@ -482,6 +482,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รายงาน สรุปยอดขายแยกลูกค้า แสดงรายการสินค้า';
 		break;
 
+		case 'consignment_by_customer' :
+			$content = 'report/sales/consignment_by_customer.php';
+			$pageTitle = 'รายงาน ฝากขายแยกตามลูกค้า(ยอดส่ง)';
+		break;
+
 
 		//---- รายงานตรวจสอบ
 		case 'sponsor_by_customer_order' :
@@ -531,6 +536,11 @@ if( !getConfig('CLOSED') )
 			$content = 'report/stock/stock_balance.php';
 			$pageTitle = 'รายงานสินค้าคงเหลือ';
 			break;
+
+		case 'stock_net_balance' :
+				$content = 'report/stock/stock_net_balance.php';
+				$pageTitle = 'รายงานสินค้าคงเหลือ(หักยอดจอง)';
+				break;
 
 		case 'current_stock' :
 			$content = 'report/stock/current_stock.php';

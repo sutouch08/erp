@@ -219,6 +219,19 @@ class movement
 	}
 
 
+	public function hasMovement($reference)
+	{
+		$qr = "SELECT id FROM tbl_stock_movement WHERE reference = '".$reference."'";
+		$qs = dbQuery($qs);
+		if(dbNumRows($qs) > 0)
+		{
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+
+
 }//--- end class
 
 ?>

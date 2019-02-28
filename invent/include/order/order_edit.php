@@ -40,6 +40,9 @@ $expired = $order->isExpire == 1 ? 'disabled' : '';
             		<button type="button" class="btn btn-sm btn-warning" onclick="goAddDetail(<?php echo $order->id; ?>)"><i class="fa fa-pencil"></i> แก้ไขรายการ</button>
 				<?php endif; ?>
       <?php endif; ?>
+			<?php if($delete && $order->isExpire == 1) : ?>
+							<button type="button" class="btn btn-sm btn-warning" onclick="unExpired()">ทำให้ไม่หมดอายุ</button>
+			<?php endif; ?>
 
 			<button type="button" class="btn btn-sm btn-success <?php echo $hide; ?>" id="btn-save-order" onclick="saveOrder(<?php echo $order->id; ?>)">
             	<i class="fa fa-save"></i> บันทึก
@@ -95,6 +98,33 @@ if( ( $allowEditDisc == 1 OR $allowEditPrice == 1 OR $allowEditCost) && $order->
 				'id_order' : id_order,
 				'option' : option
 			},
+			success:function(rs){
+				load_out();
+				var rs = $.trim(rs);
+				if(rs == 'success'){
+					swal({
+						title:'Success',
+						type:'success',
+						timer: 1000
+					});
+
+					setTimeout(function(){
+						window.location.reload();
+					},1500);
+				}else{
+					swal('Error', rs, 'error');
+				}
+			}
+		});
+	}
+
+	function unExpired(){
+		var id_order = $('#id_order').val();
+		load_in();
+		$.ajax({
+			url:'controller/orderController.php?unExpireOrder&id_order='+id_order,
+			type:'GET',
+			cache:'false',
 			success:function(rs){
 				load_out();
 				var rs = $.trim(rs);

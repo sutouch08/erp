@@ -19,8 +19,10 @@
 
 	if( $dr !== FALSE )
 	{
+
 		while( $file = readdir($dr) )
 		{
+
 			if( $file == '.' OR $file == '..' )
 			{
 				continue;
@@ -31,8 +33,7 @@
 			$reader		= new PHPExcel_Reader_Excel5();
 			$excel		= $reader->load($fileName);
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
-
-
+			
 			$cs	= new unit();
 			$i = 1;
 			foreach( $collection as $rs )

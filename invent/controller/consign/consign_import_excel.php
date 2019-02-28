@@ -60,8 +60,8 @@ if($cs->isSaved == 0 && $cs->isCancle == 0)
           $pdCode = $rs['A'];
           $price  = $rs['B'];
           $qty    = $rs['C'];
-          $pDisc  = round($rs['D'], 2);
-          $aDisc  = round($rs['E'],2);
+          $pDisc  = isset($rs['D']) ? round($rs['D'], 2) : 0;
+          $aDisc  = isset($rs['E']) ? round($rs['E'], 2) : 0;
 
           //--- เอาเฉพาะที่มียอดต่าง และ ยอดต่างต้องไม่ติดลบ
           if($qty > 0)
