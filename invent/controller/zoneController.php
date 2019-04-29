@@ -179,6 +179,20 @@ if( isset( $_GET['checkName'] ) )
 
 
 
+if(isset($_GET['getZoneId']))
+{
+		$code = $_GET['zoneCode'];
+		$zone = new zone();
+		$id = $zone->getId($code);
+		if($id != ""){
+			echo $id;
+		}else{
+			echo "zone not found";
+		}
+}
+
+
+
 
 if( isset( $_GET['clearFilter'] ) )
 {

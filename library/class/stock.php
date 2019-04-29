@@ -37,6 +37,19 @@ class stock
 
 
 
+	public function updateStock($id_zone, $id_pd, $qty)
+	{
+		return dbQuery("UPDATE tbl_stock SET qty = ".$qty." WHERE id_zone = ".$id_zone." AND id_product = '".$id_pd."'");
+	}
+
+
+
+
+	public function addStock($id_zone, $id_pd, $qty)
+	{
+		return $this->add($id_zone, $id_pd, $qty);
+	}
+
 
 
 

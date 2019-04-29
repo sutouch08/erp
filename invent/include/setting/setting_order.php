@@ -22,6 +22,7 @@ $btn_disc_no = $editDisc == 0 ? 'btn-danger' : '';
 $channels_id = getConfig('WEB_SITE_CHANNELS_ID');
 $cod_payment_id = getConfig('COD_PAYMENT_ID');
 $omise_payment_id = getConfig('OMISE_PAYMENT_ID');
+$c2C2P_payment_id = getConfig('2C2P_PAYMENT_ID');
 $branch_id = getConfig('WEB_SITE_BRANCH_ID');
 
 ?>
@@ -121,6 +122,26 @@ $branch_id = getConfig('WEB_SITE_BRANCH_ID');
 				<option value="0">กรุณาเลือก</option>
 				<?php while($rs = dbFetchObject($query)) : ?>
 					<option value="<?php echo $rs->id; ?>" <?php echo isSelected($rs->id, $omise_payment_id); ?>><?php echo $rs->code.' : '.$rs->name; ?></option>
+				<?php endwhile; ?>
+			</select>
+      <span class="help-block">ช่องทางการชำระเงิน ที่ใช้ในการ import ออเดอร์จากเว็บไซต์ ในกรณีชำระเงินแบบ Omise</span>
+    </div>
+
+    <div class="divider-hidden"></div>
+
+		<div class="col-sm-3"><span class="form-control left-label">รหัสลูกค้า 2C2P</span></div>
+    <div class="col-sm-9">
+      <input type="text" class="form-control input-sm input-mini input-line" name="2C2P_CUSTOMER_CODE" id="2c2p_code" value="<?php echo getConfig('2C2P_CUSTOMER_CODE'); ?>" />
+      <span class="help-block">รหัสลูกค้า ที่ใช้ในการ import ออเดอร์จากเว็บไซต์ ในกรณีชำระเงินด้วย 2C2P</span>
+    </div>
+
+		<?php $query = dbQuery("SELECT * FROM tbl_payment_method"); ?>
+		<div class="col-sm-3"><span class="form-control left-label">ช่องทางการชำระเงิน 2C2P</span></div>
+    <div class="col-sm-9">
+      <select class="form-control input-sm input-large" name="2C2P_PAYMENT_ID" id="2C2P_PAYMENT_ID">
+				<option value="0">กรุณาเลือก</option>
+				<?php while($rs = dbFetchObject($query)) : ?>
+					<option value="<?php echo $rs->id; ?>" <?php echo isSelected($rs->id, $c2C2P_payment_id); ?>><?php echo $rs->code.' : '.$rs->name; ?></option>
 				<?php endwhile; ?>
 			</select>
       <span class="help-block">ช่องทางการชำระเงิน ที่ใช้ในการ import ออเดอร์จากเว็บไซต์ ในกรณีชำระเงินแบบ Omise</span>

@@ -1233,7 +1233,7 @@ class order
 		$qr .= "LEFT JOIN tbl_customer AS cus ON od.id_customer = cus.id ";
 		$qr .= "LEFT JOIN tbl_order_user AS us ON od.id = us.id_order ";
 		$qr .= "LEFT JOIN tbl_employee AS emp ON us.id_user = emp.id_employee ";
-		$qr .= "WHERE state IN(1,2,3) ";
+		$qr .= "WHERE od.state IN(1,2,3) ";
 		$qr .= "AND isExpire = 0 ";
 		$qr .= "AND isPaid = 0 ";
 		$qr .= "AND date_add < '".toDate($expireDate)."' ";

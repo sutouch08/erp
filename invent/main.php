@@ -122,6 +122,7 @@
 							data-toggle="popover"
 							data-html="true"
 							data-placement="left"
+							data-trigger="focus"
 							data-content="{{ stockInZone }}">
 							รายละเอียด
 				</button>

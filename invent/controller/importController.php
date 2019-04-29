@@ -188,11 +188,17 @@ if(isset($_GET['importOrderFromWeb']))
         //--- ดึงข้อมูลลูกค้า Omise ไว้ก่อน
         $omiseCustomer =  $customer->getDataByCode(getConfig('OMISE_CUSTOMER_CODE'));
 
+        //--- ดึงข้อมูลลูกค้า 2C2P ไว้ก่อน
+        $c2C2PCustomer =  $customer->getDataByCode(getConfig('2C2P_CUSTOMER_CODE'));
+
         //--- ดึงข้อมูลลูกค้า COD ไว้ก่อน
         $codCustomer = $customer->getDataByCode(getConfig('COD_CUSTOMER_CODE'));
 
         //--- ดึง ID payment ทาง Omise
         $omise_payment_id = getConfig('OMISE_PAYMENT_ID');
+
+        //--- ดึง ID payment ทาง 2C2P
+        $c2C2P_payment_id = getConfig('2C2P_PAYMENT_ID');
 
         //--- COD Id payment ทาง COD
         $cod_payment_id = getConfig('COD_PAYMENT_ID');
@@ -279,7 +285,7 @@ if(isset($_GET['importOrderFromWeb']))
             $ref_code = $rs['I'];
 
             //--- เลือกลูกค้าตามช่องทางการชำระเงิน
-            $cusData = $rs['K'] == 'cashondelivery' ? $codCustomer : $omiseCustomer;
+            $cusData = $rs['K'] == 'cashondelivery' ? $codCustomer : ($rs['K'] == 'Credit Card and Cash Payment (2C2P)' ? $c2C2PCustomer :$omiseCustomer);
 
             //------ เช็คว่ามีออเดอร์นี้อยู่ในฐานข้อมูลแล้วหรือยัง
             //------ ถ้ามีแล้วจะได้ id_order กลับมา ถ้ายังจะได้ FALSE;
@@ -302,7 +308,7 @@ if(isset($_GET['importOrderFromWeb']))
             	$customerName = addslashes(trim($rs['A']));
 
               //---	ช่องทางการชำระเงิน
-              $id_payment = $rs['K'] == 'omise_credit_debit' ? $omise_payment_id : $cod_payment_id;
+              $id_payment = $rs['K'] == 'Credit Card and Cash Payment (2C2P)' ? $c2C2P_payment_id : ($rs['k'] == 'cashondelivery' ? $cod_payment_id : $omise_payment_id);
 
             	//---	วันที่เอกสาร
             	$date_add = dbDate($rs['J'], TRUE);

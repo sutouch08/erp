@@ -11,6 +11,7 @@ function changeState(){
                 if(rs == 'success'){
                     swal({
                       title:'success',
+                      text:'status updated',
                       type:'success',
                       timer: 1000
                     });

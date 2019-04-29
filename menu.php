@@ -34,6 +34,7 @@
       <li><a href="index.php?content=cancle_zone"><span class="glyphicon glyphicon-tasks"></span> ตรวจสอบ CANCLE ZONE</a></li>
       <li><a href="index.php?content=stock_movement"><span class="glyphicon glyphicon-tasks"></span> ตรวจสอบ MOVEMENT</a></li>
       <li><a href="index.php?content=stock"><span class="glyphicon glyphicon-tasks"></span> ตรวจสอบ STOCK</a></li>
+      <li><a href="index.php?content=stock_recal"><span class="glyphicon glyphicon-tasks"></span> Recal Stock</a></li>
     </ul>
   </li>
 
