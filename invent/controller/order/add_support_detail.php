@@ -9,11 +9,12 @@ foreach( $ds as $items )
     if( $qty > 0 )
     {
       $qty = ceil($qty);
-      
+      $pd  = new product($id);
+
       //--- ถ้ามีสต็อกมากว่าที่สั่ง
-      if( $stock->getSellStock($id) >= $qty )
+      if( $pd->count_stock == 0 OR $stock->getSellStock($id) >= $qty )
       {
-        $pd 			= new product($id);
+
 
         //---- ถ้ายังไม่มีรายการในออเดอร์
         if( $order->isExistsDetail($order->id, $id) === FALSE )

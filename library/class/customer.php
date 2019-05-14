@@ -63,6 +63,17 @@ class customer {
 	}
 
 
+	public function getDataById($id)
+	{
+		$qs = dbQuery("SELECT * FROM tbl_customer WHERE id = '".$id."'");
+		if(dbNumRows($qs) == 1)
+		{
+			return dbFetchObject($qs);
+		}
+
+		return FALSE;
+	}
+
 	public function getDataByCode($code)
 	{
 		$qs = dbQuery("SELECT * FROM tbl_customer WHERE code = '".$code."'");

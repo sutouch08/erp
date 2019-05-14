@@ -1,6 +1,37 @@
 <?php
   $bill = new bill();
   $bd = new sponsor_budget($order->id_budget);
+  $customer = new customer($order->id_customer);
+  $employee = new employee($order->id_employee);
+
+  $role     = new order_role($order->role);
+  $vat      = getConfig('VAT');
+
+  $customer_type  = new customer_type($customer->id_type);
+  $customer_kind  = new customer_kind($customer->id_kind);
+  $customer_class = new customer_class($customer->id_class);
+  $customer_group = new customer_group($customer->id_group);
+  $customer_area  = new customer_area($customer->id_area);
+
+  //$sale = new sale($order->id_sale);
+
+  $stock    = new stock();
+
+  $movement = new movement();
+  $buffer   = new buffer();
+  $prepare  = new prepare();
+  $zone     = new zone();
+  $wh       = new warehouse();
+
+  $product  = new product();
+  $color    = new color();
+  $size     = new size();
+  $pd_group = new product_group();
+  $style    = new style();
+  $category = new category();
+  $kind     = new kind();
+  $type     = new type();
+  $brand    = new brand();
 
   //--- ใช้งาน ทรานเซ็คชั่น
   startTransection();
@@ -18,40 +49,6 @@
 
   if( dbNumRows($qs) > 0)
   {
-    $customer = new customer($order->id_customer);
-    $employee = new employee($order->id_employee);
-
-    $role     = new order_role($order->role);
-    $vat      = getConfig('VAT');
-
-    $customer_type  = new customer_type($customer->id_type);
-    $customer_kind  = new customer_kind($customer->id_kind);
-    $customer_class = new customer_class($customer->id_class);
-    $customer_group = new customer_group($customer->id_group);
-    $customer_area  = new customer_area($customer->id_area);
-
-    //$sale = new sale($order->id_sale);
-
-    $stock    = new stock();
-
-    $movement = new movement();
-    $buffer   = new buffer();
-    $prepare  = new prepare();
-    $zone     = new zone();
-
-    $product  = new product();
-    $color    = new color();
-    $size     = new size();
-    $pd_group = new product_group();
-    $style    = new style();
-    $category = new category();
-    $kind     = new kind();
-    $type     = new type();
-    $brand    = new brand();
-
-
-
-
     while( $rs = dbFetchObject($qs))
     {
       if($sc == FALSE)
@@ -205,10 +202,106 @@
     }
 
   }
-  else
+
+
+  //--- บันทึกขายรายการที่ไม่นับสต็อก
+  $qn = $bill->getNonCountBillDetail($order->id);
+  if(dbNumRows($qn) > 0)
   {
-    $sc = FALSE;
-    $message = 'ไม่พบรายการตรวจสินค้า';
+    $defaultWhId = $wh->getDefaultId();
+
+    while( $rm = dbFetchObject($qn) )
+    {
+      if($rm->order_qty > 0)
+      {
+
+        $product->getData($rm->id_product);
+
+        $ds = $order->getDetail($order->id, $product->id); //---  return as object of order_detail row
+
+        //----  ต้นทุนสินค้าแบบ average
+        $cost_ex = 0;
+        $cost_inc = 0;
+
+
+        //--- ข้อมูลสำหรับบันทึกยอดขาย
+        $arr = array(
+                'id_order'  => $order->id,
+                'reference' => $order->reference,
+                'id_role'   => $order->role,
+                'role_name' => $role->name,
+                'payment'   => 'sponsor',
+                'channels'  => 'sponsor',
+                'id_product'  => $product->id,
+                'product_code'  => $product->code,
+                'product_name'  => $product->name,
+                'id_color'  => $product->id_color,
+                'color'         => $color->getCode($product->id_color),
+                'color_group'   => $color->getGroupCode($product->id_color),
+                'id_size'       => $product->id_size,
+                'size'          => $size->getCode($product->id_size),
+                'size_group'    => $size->getGroupCode($product->id_size),
+                'id_product_style'  => $product->id_style,
+                'product_style' => $style->getCode($product->id_style),
+                'id_product_group'  => $product->id_group,
+                'product_group' => $pd_group->getName($product->id_group),
+                'id_product_category' => $product->id_category,
+                'product_category'  => $category->getName($product->id_category),
+                'id_product_kind' => $product->id_kind,
+                'product_kind'  => $kind->getName($product->id_kind),
+                'id_product_type' => $product->id_type,
+                'product_type'  => $type->getName($product->id_type),
+                'id_brand'      => $product->id_brand,
+                'brand'         => $brand->getName($product->id_brand),
+                'year'          => $product->year,
+                'cost_ex' => $cost_ex,
+                'cost_inc'  => $cost_inc,
+                'price_ex'  => removeVAT($ds->price, $vat),
+                'price_inc' => $ds->price,
+                'sell_ex'   => removeVAT( ($ds->total_amount/$ds->qty), $vat),
+                'sell_inc'  => $ds->total_amount / $ds->qty,
+                'qty'       => $ds->qty,
+                'discount_label'  => $ds->discount,
+                'discount_amount' => $ds->discount_amount,
+                'total_amount_ex' => removeVAT($ds->total_amount, $vat),
+                'total_amount_inc'  => $ds->total_amount,
+                'total_cost_ex'   => $cost_ex * $ds->qty,
+                'total_cost_inc'  => $cost_inc * $ds->qty,
+                'margin_ex'   => removeVAT($ds->total_amount, $vat) - ($cost_ex * $ds->qty),
+                'margin_inc'  => $ds->total_amount - ($cost_inc * $ds->qty),
+                'id_customer' => $customer->id,
+                'customer_code' => $customer->code,
+                'customer_name' => $customer->name,
+                'customer_group'  => $customer_group->name,
+                'customer_type'   => $customer_type->name,
+                'customer_kind'   => $customer_kind->name,
+                'customer_class'  => $customer_class->name,
+                'customer_area'   => $customer_area->name,
+                'id_employee' => $employee->id_employee,
+                'employee_name' => $employee->full_name,
+                'date_add'  => dbDate($order->date_add, TRUE),
+                'id_warehouse'  => $defaultWhId,
+                'id_budget' => $order->id_budget,
+                'count_stock' => 0
+        );
+
+        //--- 3. บันทึกยอดขาย
+        if($order->sold($arr) !== TRUE)
+        {
+          $sc = FALSE;
+          $message = 'บันทึกขายไม่สำเร็จ';
+          break;
+        }
+
+        //--- ถ้ามีการใช้เครดิต ตัดยอดเครดิตใช้ไป
+        /*
+        if( $term === TRUE && $useCredit > 0 )
+        {
+          $useCredit -= $arr['total_amount_inc'];
+        }
+        */
+      } //--- end if sell_qty > 0
+    } //--  end while
   }
 
   //--- log การคืนยอดเครดิตหรืองบประมาณ

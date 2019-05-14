@@ -68,11 +68,12 @@
           <tr class="font-size-12">
             <th class="width-5 text-center">ลำดับ</th>
             <th class="width-35 text-center">สินค้า</th>
-            <th class="width-10 text-center">ราคา</th>
-            <th class="width-10 text-center">ออเดอร์</th>
-            <th class="width-10 text-center">จัด</th>
-            <th class="width-10 text-center">ตรวจ</th>
-            <th class="width-10 text-center">ส่วนลด</th>
+            <th class="width-8 text-center">ราคา</th>
+            <th class="width-8 text-center">ออเดอร์</th>
+            <th class="width-8 text-center">จัด</th>
+            <th class="width-8 text-center">ตรวจ</th>
+            <th class="width-8 text-center">ขาย</th>
+            <th class="width-8 text-center">ส่วนลด</th>
             <th class="width-10 text-center">มูลค่า</th>
           </tr>
         </thead>
@@ -85,9 +86,11 @@
           $totalAmount = 0;
           $totalDiscount = 0;
           $totalPrice = 0;
+          $totalSold = 0;
   ?>
   <?php   while( $rs = dbFetchObject($qs)) :  ?>
-  <?php     $color = ($rs->order_qty == $rs->qc) ? '' : 'red'; ?>
+  <?php     $color = ($rs->order_qty == $rs->qc OR $rs->isCount == 0) ? '' : 'red'; ?>
+  <?php     $ds = $bill->getBilledRow($order->id, $rs->id_product); ?>
           <tr class="font-size-12 <?php echo $color; ?>">
             <td class="text-center">
               <?php echo $no; ?>
@@ -118,13 +121,19 @@
               <?php echo number($rs->qc); ?>
             </td>
 
+            <!--- จำนวนที่บันทึกขาย --->
+            <td class="text-center">
+              <?php echo number($ds['qty']); ?>
+            </td>
+
             <!--- ส่วนลด  --->
             <td class="text-center">
               <?php echo discountLabel($rs->discount); ?>
             </td>
 
             <td class="text-right">
-              <?php echo number( $rs->final_price * $rs->qc , 2); ?>
+              <?php //echo number( $rs->final_price * $rs->qc , 2); ?>
+              <?php echo number( $ds['amount'] , 2); ?>
             </td>
 
           </tr>
@@ -132,9 +141,10 @@
         $totalQty += $rs->order_qty;
         $totalPrepared += $rs->prepared;
         $totalQc += $rs->qc;
-        $totalDiscount += $rs->discount_amount * $rs->qc;
-        $totalAmount += $rs->final_price * $rs->qc;
-        $totalPrice += $rs->price * $rs->qc;
+        $totalDiscount += $rs->discount_amount * $ds['qty'];
+        $totalAmount += $ds['amount'];
+        $totalPrice += $rs->price * $ds['qty'];
+        $totalSold += $ds['qty'];
         $no++;
   ?>
   <?php   endwhile; ?>
@@ -156,6 +166,10 @@
             </td>
 
             <td class="text-center">
+              <?php echo number($totalSold); ?>
+            </td>
+
+            <td class="text-center">
               ส่วนลดท้ายบิล
             </td>
 
@@ -169,7 +183,7 @@
             <td colspan="3" rowspan="3">
               หมายเหตุ : <?php echo $order->remark; ?>
             </td>
-            <td colspan="3" class="blod">
+            <td colspan="4" class="blod">
               ราคารวม
             </td>
             <td colspan="2" class="text-right">
@@ -178,7 +192,7 @@
           </tr>
 
           <tr>
-            <td colspan="3">
+            <td colspan="4">
               ส่วนลดรวม
             </td>
             <td colspan="2" class="text-right">
@@ -187,7 +201,7 @@
           </tr>
 
           <tr>
-            <td colspan="3" class="blod">
+            <td colspan="4" class="blod">
               ยอดเงินสุทธิ
             </td>
             <td colspan="2" class="text-right">
@@ -196,7 +210,7 @@
           </tr>
 
   <?php else : ?>
-        <tr><td colspan="8" class="text-center"><h4>ไม่พบรายการ</h4></td></tr>
+        <tr><td colspan="9" class="text-center"><h4>ไม่พบรายการ</h4></td></tr>
   <?php endif; ?>
         </tbody>
       </table>

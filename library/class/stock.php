@@ -259,6 +259,11 @@ class stock
 	}
 
 
+	public function removeZeroStock()
+	{
+		return $this->removeZero();
+	}
+
 }//--- end class
 
 ?>

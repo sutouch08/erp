@@ -112,6 +112,7 @@ if( isset($_GET['exportOrderToDHL']))
             tbl_order AS o
           WHERE
             o.ref_code != ''
+            AND o.shipping_code != '' 
             AND o.isOnline = 1
             AND o.isExpire = 0 ";
 
@@ -127,6 +128,7 @@ if( isset($_GET['exportOrderToDHL']))
           WHERE
             od.id_order IS NULL
             AND o.ref_code != ''
+            AND o.shipping_code != ''
             AND o.isOnline = 1
             AND o.isExpire = 0 ";
   }

@@ -59,6 +59,23 @@ class bill
     return dbQuery($qr);
   }
 
+
+  public function getBilledRow($id_order, $id_product)
+  {
+    $ds = array('qty' => 0, 'amount' => 0);
+    $qr  = "SELECT SUM(qty) AS qty, SUM(total_amount_inc) AS amount FROM tbl_order_sold ";
+    $qr .= "WHERE id_order = ".$id_order." ";
+    $qr .= "AND id_product = '".$id_product."'";
+
+    $qs = dbQuery($qr);
+    if(dbNumRows($qs) == 1)
+    {
+      $ds = dbFetchArray($qs);
+    }
+
+    return $ds;
+  }
+
 } //--- End class
 
  ?>

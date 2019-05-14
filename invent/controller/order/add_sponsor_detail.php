@@ -9,16 +9,17 @@ foreach( $ds as $items )
     if( $qty > 0 )
     {
       $qty = ceil($qty);
+
+      $pd = new product($id);
       //--- ถ้ามีสต็อกมากว่าที่สั่ง
-      if( $stock->getSellStock($id) >= $qty )
+      if( $pd->count_stock == 0 OR $stock->getSellStock($id) >= $qty )
       {
-        $pd 			= new product($id);
 
         //---- ถ้ายังไม่มีรายการในออเดอร์
         if( $order->isExistsDetail($order->id, $id) === FALSE )
         {
           //---- คำนวณ ส่วนลดจากนโยบายส่วนลด
-          $discount 	=
+          $discount 	= 0;
 
           $arr = array(
                   "id_order"	    => $order->id,
@@ -29,7 +30,8 @@ foreach( $ds as $items )
                   "cost"          => $pd->cost,
                   "price"	        => $pd->price,
                   "qty"		        => $qty,
-                  "total_amount"	=> ($pd->price * $qty)
+                  "total_amount"	=> ($pd->price * $qty),
+                  "isCount"       => $pd->count_stock
                 );
 
           if( $order->addDetail($arr) === FALSE )

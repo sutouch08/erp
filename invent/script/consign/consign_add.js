@@ -41,7 +41,9 @@ function saveConsign(){
 
           }else{
             load_out();
-            swal('Error!', rs, 'error');
+            setTimeout(function(){
+              swal('Error!', rs, 'error');
+            }, 500);
           }
         }
       });

@@ -105,7 +105,7 @@ if(isset($_GET['recalStockZone']))
       while($rs = dbFetchObject($qs))
       {
         $qty = $rs->move_in - $rs->move_out;
-        if($stock->isExists($id_zone, $rs->id_product))
+        if($stock->isExists($id_zone, $rs->id_product) !== FALSE)
         {
           $stock->updateStock($id_zone, $rs->id_product, $qty);
         }
@@ -115,6 +115,8 @@ if(isset($_GET['recalStockZone']))
         }
       }
     }
+
+    $stock->removeZeroStock();
 
     echo 'success';
 }

@@ -65,11 +65,11 @@
 	//---- อ้างอิงออเดอร์จากเว็บอื่น
 	$refCode = isset($_POST['refCode']) ? $_POST['refCode'] : '';
 
-	if($refCode == '' && $role == 1)
-	{
-		$refCode = $reference;
-	}
-	
+	// if($refCode == '' && $role == 1)
+	// {
+	// 	$refCode = $reference;
+	// }
+
 	//--- เตรียมข้อมูลสำหรับเพิ่มเอกสารใหม่
 	$arr = array(
 					'bookcode'		=> $bookcode,

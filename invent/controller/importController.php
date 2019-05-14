@@ -180,6 +180,7 @@ if(isset($_GET['importOrderFromWeb']))
         $order = new order();
         $product = new product();
         $customer = new customer();
+        $channels = new channels();
 
         //--- รหัสเล่มเอกสาร [อ้างอิงจาก formula]
         //--- ถ้าเป็นฝากขายแบบโอนคลัง ยืมสินค้า เบิกแปรสภาพ เบิกสินค้า (ไม่เปิดใบกำกับ เปิดใบโอนคลังแทน) นอกนั้น เปิด SO
@@ -193,6 +194,12 @@ if(isset($_GET['importOrderFromWeb']))
 
         //--- ดึงข้อมูลลูกค้า COD ไว้ก่อน
         $codCustomer = $customer->getDataByCode(getConfig('COD_CUSTOMER_CODE'));
+
+        //---
+        $lazadaCustomer = $customer->getDataByCode('20OD0001(lazada)');
+
+        //--- Shopee
+        $shopeeCustomer = $customer->getDataByCode('020OS0001(ช้อปปี้)');
 
         //--- ดึง ID payment ทาง Omise
         $omise_payment_id = getConfig('OMISE_PAYMENT_ID');
@@ -214,9 +221,6 @@ if(isset($_GET['importOrderFromWeb']))
 
         //---	เป็นเอกสารที่ออก SO หรือไม่ (default = 1)
         $is_so 		=  1;
-
-        //---	ช่องทางการขาย
-        $id_channels = getConfig('WEB_SITE_CHANNELS_ID');
 
         //---	พนักงาน
         $id_employee = getCookie('user_id');
@@ -256,12 +260,14 @@ if(isset($_GET['importOrderFromWeb']))
               'I' => 'orderNumber',
               'J' => 'CreateDateTime',
               'K' => 'Payment Method',
-              'L' => 'itemId',
-              'M' => 'amount',
-              'N' => 'price',
-              'O' => 'shipping fee',
-              'P' => 'service fee',
-              'Q' => 'force update'
+              'L' => 'Channels',
+              'M' => 'itemId',
+              'N' => 'amount',
+              'O' => 'price',
+              'P' => 'shipping fee',
+              'Q' => 'service fee',
+              'R' => 'force update',
+              'S' => 'Is DHL'
             );
 
             foreach($headCol as $col => $field)
@@ -284,8 +290,27 @@ if(isset($_GET['importOrderFromWeb']))
             //---- order code from web site
             $ref_code = $rs['I'];
 
+            $shipping_code = '';
+            if($rs['S'] == 'Y' OR $rs['S'] == 'y' OR $rs['S'] == '1')
+            {
+              $shipping_code = $prefix.$ref_code;
+            }
+
             //--- เลือกลูกค้าตามช่องทางการชำระเงิน
-            $cusData = $rs['K'] == 'cashondelivery' ? $codCustomer : ($rs['K'] == 'Credit Card and Cash Payment (2C2P)' ? $c2C2PCustomer :$omiseCustomer);
+            //--- $cusData = $rs['K'] == 'Cash On Delivery' ? $codCustomer : ($rs['K'] == 'Credit Card and Cash Payment (2C2P)' ? $c2C2PCustomer : $omiseCustomer);
+
+            //--- เลือกลูกค้าตามช่องทางการชำระเงิน
+            $cusData = $rs['K'] == 'COD' ? $codCustomer : ($rs['K'] == 'CARD' ? $c2C2PCustomer : $omiseCustomer);
+
+            if($rs['L'] == 'LAZADA')
+            {
+              $cusData = $lazadaCustomer;
+            }
+
+            if($rs['L'] == 'SHOPEE')
+            {
+              $cusData = $shopeeCustomer;
+            }
 
             //------ เช็คว่ามีออเดอร์นี้อยู่ในฐานข้อมูลแล้วหรือยัง
             //------ ถ้ามีแล้วจะได้ id_order กลับมา ถ้ายังจะได้ FALSE;
@@ -296,7 +321,7 @@ if(isset($_GET['importOrderFromWeb']))
 
             //---- ถ้ายังไม่มีออเดอร์ ให้เพิ่มใหม่ หรือ มีออเดอร์แล้ว แต่ต้องการ update
             //---- โดยการใส่ force update มาเป็น 1
-            if($id_order === FALSE OR ($id_order !== FALSE && $rs['Q'] == 1))
+            if($id_order === FALSE OR ($id_order !== FALSE && $rs['R'] == 1))
             {
             	//---	ถ้าเป็นออเดอร์ขายหรือสปอนเซอร์ จะมี id_customer
             	$id_customer = $cusData->id;
@@ -308,16 +333,22 @@ if(isset($_GET['importOrderFromWeb']))
             	$customerName = addslashes(trim($rs['A']));
 
               //---	ช่องทางการชำระเงิน
-              $id_payment = $rs['K'] == 'Credit Card and Cash Payment (2C2P)' ? $c2C2P_payment_id : ($rs['k'] == 'cashondelivery' ? $cod_payment_id : $omise_payment_id);
+              //--- $id_payment = $rs['K'] == 'Credit Card and Cash Payment (2C2P)' ? $c2C2P_payment_id : ($rs['K'] == 'Cash On Delivery' ? $cod_payment_id : $omise_payment_id);
+
+              //---	ช่องทางการชำระเงิน
+              $id_payment = $rs['K'] == 'CARD' ? $c2C2P_payment_id : ($rs['K'] == 'COD' ? $cod_payment_id : $omise_payment_id);
+
+              //---	ช่องทางการขาย
+              $id_channels = $rs['L'] == '' ? getConfig('WEB_SITE_CHANNELS_ID') : $channels->getId($rs['L']);
 
             	//---	วันที่เอกสาร
             	$date_add = dbDate($rs['J'], TRUE);
 
               //--- ค่าจัดส่ง
-              $shipping_fee = $rs['O'] == '' ? 0.00 : $rs['O'];
+              $shipping_fee = $rs['P'] == '' ? 0.00 : $rs['P'];
 
               //--- ค่าบริการอื่นๆ
-              $service_fee = $rs['P'] == '' ? 0.00 : $rs['P'];
+              $service_fee = $rs['Q'] == '' ? 0.00 : $rs['Q'];
 
             	//--- รันเลขที่เอกสารตามประเภทเอาสาร
             	$reference = $order->getNewReference($role, $date_add, $is_so);
@@ -343,7 +374,7 @@ if(isset($_GET['importOrderFromWeb']))
               					'id_branch'		=> $id_branch,
               					'remark'			=> $remark,
               					'online_code'	=> $customerName,
-                        'shipping_code' => $prefix.$ref_code,
+                        'shipping_code' => $shipping_code,
                         'shipping_fee'  => $shipping_fee,
                         'service_fee'  => $service_fee,
               					'is_so'				=> $is_so,
@@ -419,12 +450,12 @@ if(isset($_GET['importOrderFromWeb']))
 
 
             //---- เตรียมข้อมูลสำหรับเพิมรายละเอียดออเดอร์
-            $pd = $product->getDataByCode($rs['L']);
+            $pd = $product->getDataByCode($rs['M']);
 
             if($pd === FALSE)
             {
               $sc = FALSE;
-              $message = 'ไม่พบข้อมูลสินค้าในระบบ : '.$rs['L'];
+              $message = 'ไม่พบข้อมูลสินค้าในระบบ : '.$rs['M'];
               break;
             }
 
@@ -440,11 +471,11 @@ if(isset($_GET['importOrderFromWeb']))
                       "product_code"	=> $pd->code,
                       "product_name"	=> $pd->name,
                       "cost"  => $pd->cost,
-                      "price"	=> ($rs['N']/$rs['M']),
-                      "qty"		=> $rs['M'],
+                      "price"	=> ($rs['O']/$rs['N']),
+                      "qty"		=> $rs['N'],
                       "discount"	=> 0,
                       "discount_amount" => 0,
-                      "total_amount"	=> $rs['N'],
+                      "total_amount"	=> $rs['O'],
                       "id_rule"	=> 0,
                       "isCount" => $pd->count_stock
                     );
@@ -459,7 +490,7 @@ if(isset($_GET['importOrderFromWeb']))
             else
             {
               //----  ถ้ามี force update และ สถานะออเดอร์ไม่เกิน 3 (รอจัดสินค้า)
-              if($rs['Q'] == 1 && $state <= 3)
+              if($rs['R'] == 1 && $state <= 3)
               {
                 $od = $order->getDetail($id_order, $pd->id);
 
@@ -470,11 +501,11 @@ if(isset($_GET['importOrderFromWeb']))
                         "product_code"	=> $pd->code,
                         "product_name"	=> $pd->name,
                         "cost"  => $pd->cost,
-                        "price"	=> ($rs['N']/$rs['M']),
-                        "qty"		=> $rs['M'],
+                        "price"	=> ($rs['O']/$rs['N']),
+                        "qty"		=> $rs['N'],
                         "discount"	=> 0,
                         "discount_amount" => 0,
-                        "total_amount"	=> $rs['N'],
+                        "total_amount"	=> $rs['O'],
                         "id_rule"	=> 0,
                         "isCount" => $pd->count_stock
                       );
