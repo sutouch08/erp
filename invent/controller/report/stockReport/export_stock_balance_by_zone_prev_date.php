@@ -1,4 +1,7 @@
 <?php
+ini_set('memory_limit', '2048M');
+set_time_limit(600);
+
 $allProduct = $_GET['allProduct'];
 $pdFrom     = $_GET['pdFrom'];
 $pdTo       = $_GET['pdTo'];

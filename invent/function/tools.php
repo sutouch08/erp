@@ -7,6 +7,13 @@ function tis($text)
 
 
 
+function utf8($text)
+{
+	return iconv('tis-620', 'utf-8', $text);
+}
+
+
+
 function goBackButton()
 {
 		return '<button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i> กลับ</button>';

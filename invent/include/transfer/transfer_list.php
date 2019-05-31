@@ -15,9 +15,16 @@
 <?php
 include 'function/employee_helper.php';
 include 'function/transfer_helper.php';
+include 'function/warehouse_helper.php';
 
 //--- ค้นหารหัสเอกสาร
 $sCode = getFilter('sCode', 'sTransferCode', '');
+
+//--- คลังต้นทาง
+$fWh = getFilter('fWh', 'fWh', '');
+
+//--- คลังปลายทาง
+$tWh = getFilter('tWh', 'tWh', '');
 
 //--- ค้นหาชื่อพนักงาน
 $sEmp  = getFilter('sEmp', 'sEmp', '');
@@ -34,15 +41,23 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
  ?>
 <form id="searchForm" method="post">
 <div class="row">
-  <div class="col-sm-2 padding-5 first">
+  <div class="col-sm-1 col-1-harf padding-5 first">
     <label>เลขที่เอกสาร</label>
     <input type="text" class="form-control input-sm text-center search-box" name="sCode" value="<?php echo $sCode; ?>" />
   </div>
-  <div class="col-sm-2 padding-5">
+  <div class="col-sm-1 col-1-harf padding-5">
+    <label>คลังต้นทาง</label>
+    <input type="text" class="form-control input-sm text-center search-box" name="fWh" value="<?php echo $fWh; ?>" />
+  </div>
+  <div class="col-sm-1 col-1-harf padding-5">
+    <label>คลังปลายทาง</label>
+    <input type="text" class="form-control input-sm text-center search-box" name="tWh" value="<?php echo $tWh; ?>" />
+  </div>
+  <div class="col-sm-1 col-1-harf padding-5">
     <label>พนักงาน</label>
     <input type="text" class="form-control input-sm text-center search-box" name="sEmp" value="<?php echo $sEmp; ?>" />
   </div>
-  <div class="col-sm-2 padding-5">
+  <div class="col-sm-1 col-1-harf padding-5">
     <label>สถานะ</label>
     <select class="form-control input-sm search-box" id="sStatus" name="sStatus">
       <option value="">ทั้งหมด</option>
@@ -52,16 +67,16 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
       <option value="CN" <?php echo isSelected($sStatus, 'CN'); ?>>ยกเลิก</option>
     </select>
   </div>
-  <div class="col-sm-3">
+  <div class="col-sm-2 padding-5">
     <label class="display-block">วันที่</label>
     <input type="text" class="form-control input-sm input-discount text-center" id="fromDate" name="fromDate" value="<?php echo $fromDate; ?>" />
     <input type="text" class="form-control input-sm input-unit text-center" id="toDate" name="toDate" value="<?php echo $toDate; ?>" />
   </div>
-  <div class="col-sm-1 col-1-harf padding-5">
+  <div class="col-sm-1 padding-5">
     <label class="display-block not-show">ค้นหา</label>
     <button type="button" class="btn btn-sm btn-primary btn-block" onclick="getSearch()"><i class="fa fa-search"></i> ค้นหา</button>
   </div>
-  <div class="col-sm-1 col-1-harf padding-5 last">
+  <div class="col-sm-1 padding-5 last">
     <label class="display-block not-show">Reset</label>
     <button type="button" class="btn btn-sm btn-warning btn-block" onclick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
   </div>
@@ -71,19 +86,45 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
 <hr class="margin-top-15"/>
 
 <?php
+  createCookie('sTransferCode', $sCode);
+  createCookie('fWh', $fWh);
+  createCookie('tWh', $tWh);
+  createCookie('sEmp', $sEmp);
+  createCookie('sStatus', $sStatus);
+  createCookie('fromDate', $fromDate);
+  createCookie('toDate', $toDate);
   //--- สร้าง query ตาม filter ที่กรองมา
   $where = "WHERE id != 0 ";
 
   //--- กรองตามเลขที่เอกสาร
-  createCookie('sTransferCode', $sCode);
+
   if( $sCode != '')
   {
     $where .= "AND reference LIKE '%".$sCode."%' ";
   }
 
+  if($fWh != '')
+  {
+    $fWh_in = getWarehouseIn($fWh);
+    if($fWh_in != '1234567890')
+    {
+      $where .= "AND from_warehouse IN($fWh_in) ";
+    }
+  }
+
+
+  if($tWh != '')
+  {
+    $tWh_in = getWarehouseIn($tWh);
+    if($tWh_in != '1234567890')
+    {
+      $where .= "AND to_warehouse IN($tWh_in) ";
+    }
+  }
+
 
   //--- กรองตามพนักงาน
-  createCookie('sEmp', $sEmp);
+
   if( $sEmp != '')
   {
     $where .= "AND id_employee IN(".getEmployeeIn($sEmp).") ";
@@ -91,7 +132,7 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
 
 
   //--- กรองตามสถานะ
-  createCookie('sStatus', $sStatus);
+
   if( $sStatus != '')
   {
     switch($sStatus)
@@ -119,8 +160,7 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
   }
 
   //--- กรองตามวันที่เอกสาร
-  createCookie('fromDate', $fromDate);
-  createCookie('toDate', $toDate);
+
   if( $fromDate != '' && $toDate != '')
   {
     $where .= "AND date_add >= '".fromDate($fromDate)."' ";

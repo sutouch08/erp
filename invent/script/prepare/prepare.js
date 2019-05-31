@@ -12,6 +12,10 @@ function goPrepare(id){
 }
 
 
+function goProcess(){
+  window.location.href = "index.php?content=prepare&viewProcess=Y";
+}
+
 
 function pullBack(id){
   $.ajax({

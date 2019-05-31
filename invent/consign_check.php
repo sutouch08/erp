@@ -1,5 +1,5 @@
 <?php
-//--------------- ตัดยอดฝากขาย
+//--------------- กระทบยอดฝากขาย
 $id_tab = 52;
 $pm = checkAccess($id_profile, $id_tab);
 
@@ -40,4 +40,4 @@ else
  ?>
 
  </div><!-- container -->
- <script src="script/consign_check/consign_check.js"></script>
+ <script src="script/consign_check/consign_check.js?v=<?php echo date('Ymd'); ?>"></script>

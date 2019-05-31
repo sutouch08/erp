@@ -18,6 +18,10 @@ $sEmp       = getFilter('sEmp', 'sOrderEmp', '');
 $fromDate   = getFilter('fromDate', 'fromDate', '');
 $toDate     = getFilter('toDate', 'toDate', '');
 $sBranch    = getFilter('sBranch', 'sBranch', '');
+$sOnline    = getFilter('sOnline', 'sOnline', 0);
+$sOffline   = getFilter('sOffline', 'sOffline', 0);
+$isOnline   = $sOnline == 1 ? 'btn-info' : '';
+$isOffline  = $sOffline == 1 ? 'btn-info' : '';
 
 ?>
 
@@ -34,11 +38,11 @@ $sBranch    = getFilter('sBranch', 'sBranch', '');
     </div>
 
     <div class="col-sm-2 padding-5">
-        <label>พนักงาน/ผู้เบิก/</label>
+        <label>พนักงาน/ผู้เบิก</label>
         <input type="text" class="form-control input-sm text-center search-box" id="sEmp" name="sEmp" value="<?php echo $sEmp; ?>"/>
     </div>
 
-    <div class="col-sm-1 col-1-harf padding-5">
+    <div class="col-sm-2 padding-5">
       <label>สาขา</label>
       <select class="form-control input-sm search-select" id="sBranch" name="sBranch">
         <option value="">ทั้งหมด</option>
@@ -55,17 +59,36 @@ $sBranch    = getFilter('sBranch', 'sBranch', '');
         <label class="display-block not-show">search</label>
         <button type="button" class="btn btn-sm btn-primary btn-block" onclick="getSearch()"><i class="fa fa-search"></i> ค้นหา</button>
     </div>
-    <div class="col-sm-1 padding-5">
+    <div class="col-sm-1 padding-5 last">
       <label class="display-block not-show">reset</label>
       <button type="button" class="btn btn-sm btn-warning btn-block" onclick="clearFilter()"><i class="fa fa-retweet"></i> Reset</button>
-
     </div>
+    <div class="col-sm-1 padding-5 first">
+        <label class="display-block not-show">Online</label>
+        <button type="button" class="btn btn-sm btn-block <?php echo $isOnline; ?>" id="btn-online" onclick="toggleOnline()">Online</button>
+    </div>
+    <div class="col-sm-1 padding-5">
+      <label class="display-block not-show">Offline</label>
+      <button type="button" class="btn btn-sm btn-block <?php echo $isOffline; ?>" id="btn-offline" onclick="toggleOffline()">Offline</button>
+    </div>
+
 </div>
+<input type="hidden" name="sOnline" id="sOnline" value="<?php echo $sOnline; ?>" />
+<input type="hidden" name="sOffline" id="sOffline" value="<?php echo $sOffline; ?>" />
 </form>
 
 <hr class="margin-top-10"/>
 
 <?php
+createCookie('sOrderCode', $sCode);
+createCookie('sOrderCus', $sCus);
+createCookie('sOrderEmp', $sEmp);
+createCookie('sBranch', $sBranch);
+createCookie('fromDate', $fromDate);
+createCookie('toDate', $toDate);
+createCookie('sOnline', $sOnline);
+createCookie('sOffline', $sOffline);
+
 $qr  = "SELECT DISTINCT o.* FROM tbl_order AS o ";
 $qr .= "JOIN tbl_order_state AS s ON o.id = s.id_order AND o.state = s.id_state ";
 
@@ -78,7 +101,7 @@ if( ! $supervisor )
 
 if( $sCode != "")
 {
-    createCookie('sOrderCode', $sCode);
+
     $qr .= "AND (reference LIKE'%".$sCode."%' OR ref_code LIKE '%".$sCode."%') ";
 }
 
@@ -86,30 +109,39 @@ if( $sCode != "")
 
 if( $sCus != "")
 {
-    createCookie('sOrderCus', $sCus);
+
     $qr .= "AND id_customer IN(".getCustomerIn($sCus).") ";
 }
 
 
 if( $sEmp != '')
 {
-  createCookie('sOrderEmp', $sEmp);
+
   $qr .= "AND id_employee IN(".getEmployeeIn($sEmp).") ";
 }
 
 
 if( $sBranch != '')
 {
-  createCookie('sBranch', $sBranch);
+
   $qr .= "AND id_branch = '".$sBranch."' ";
 }
 
 
 if( $fromDate != "" && $toDate != "" )
 {
-    createCookie('fromDate', $fromDate);
-    createCookie('toDate', $toDate);
+
     $qr .= "AND date_add >= '".fromDate($fromDate)."' AND date_add <= '". toDate($toDate)."' ";
+}
+
+if($sOnline == 1 && $sOffline == 0)
+{
+  $qr .= "AND isOnline = 1 ";
+}
+
+if($sOffline == 1 && $sOnline == 0)
+{
+  $qr .= "AND isOnline = 0 ";
 }
 
 
@@ -121,7 +153,7 @@ $qs = dbQuery($qr);
 
 <div class="row">
     <div class="col-sm-12">
-        <table class="table table-striped border-1">
+        <table class="table border-1">
             <thead>
                 <tr class="font-size-12">
                     <th class="width-5 text-center">No.</th>
@@ -141,8 +173,8 @@ $qs = dbQuery($qr);
 <?php   $state = new state(); ?>
 <?php   $order = new order(); ?>
 <?php   while( $rs = dbFetchObject($qs)) : ?>
-
-            <tr class="font-size-12" id="order-<?php echo $rs->id; ?>">
+<?php    $hilight = $rs->isOnline == 1 ? 'background-color:#DEFFF9;' : ''; ?>
+            <tr class="font-size-12" id="order-<?php echo $rs->id; ?>" style="<?php echo $hilight; ?>">
                 <td class="middle text-center"><?php echo $no; ?></td>
                 <td class="middle">
                   <?php echo $rs->reference; ?>
@@ -179,4 +211,4 @@ $qs = dbQuery($qr);
     </div>
 </div>
 
-<script src="script/prepare/prepare_list.js"></script>
+<script src="script/prepare/prepare_list.js?<?php echo date('Ymd'); ?>"></script>

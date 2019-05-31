@@ -15,7 +15,7 @@ function selectOnlineChannels($id="")
 			}
 		}
 	}
-	return $sc;	
+	return $sc;
 }
 
 
@@ -34,7 +34,7 @@ function selectOfflineChannels($id="")
 			}
 		}
 	}
-	return $sc;	
+	return $sc;
 }
 
 
@@ -44,7 +44,7 @@ function selectChannels($id="")
 {
 	$sc = '';
 	$cs = new channels();
-	$id = $id == "" ? $cs->getDefaultId() : $id;
+	//$id = $id == "" ? $cs->getDefaultId() : $id;
 	$qs = $cs->getData();
 	if( dbNumRows($qs) > 0 )
 	{
@@ -53,7 +53,7 @@ function selectChannels($id="")
 			$sc .= '<option value="'.$rs->id.'" '.isSelected($id, $rs->id).'>'.$rs->name.'</option>';
 		}
 	}
-	return $sc;		
+	return $sc;
 }
 
 
@@ -74,7 +74,7 @@ function getChannelsIn($txt)
 	}
 	else
 	{
-		$sc = "0";	
+		$sc = "0";
 	}
 	return $sc;
 }

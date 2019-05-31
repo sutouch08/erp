@@ -42,8 +42,15 @@ function checkItem(barcode, qty){
       },
       success:function(rs){
         var rs = $.trim(rs);
-        if(rs == 'success'){
-
+        rs = $.parseJSON(rs);
+        if(rs.status == 'success'){
+          if(rs.message != 'success'){
+            swal({
+              title:'warning',
+              text:rs.message,
+              type:'warning'
+            });
+          }
           var stock = parseInt($('#stock-qty-'+barcode).text());
           var checked = parseInt($('#check-qty-'+barcode).text());
           var box_qty = parseInt($('#box-qty').text());
@@ -72,7 +79,7 @@ function checkItem(barcode, qty){
           $('#txt-pd-barcode').focus();
 
         }else{
-          swal('Error!', rs, 'error');
+          swal('Error!', rs.message, 'error');
           $('#txt-qty').val(1);
           $('#txt-pd-barcode').val('');
         }

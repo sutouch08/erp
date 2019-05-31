@@ -127,7 +127,7 @@ for($i =1; $i <= 11; $i++)
 			<label class="display-block">ช่องทางขาย</label>
 			<select class="form-control input-sm" name= "sChannels" id="sChannels" onchange="getSearch()">
 				<option value="">ทั้งหมด</option>
-				<?php echo selectOfflineChannels($sChannels); ?>
+				<?php	echo selectChannels($sChannels);	 ?>
 			</select>
 		</div>
 

@@ -63,7 +63,7 @@
 
 			$file_name = $path.$transfer->reference.'-'.date('YmdHis').'.xls';
 			$workbook = new Spreadsheet_Excel_Writer($file_name);
-			$excel =& $workbook->addWorksheet('TR');
+			$excel = $workbook->addWorksheet('TR');
 
 			//------- SET Header Row
 			$row = 0;

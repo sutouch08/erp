@@ -37,7 +37,7 @@
 
 ?>
 
-<script src="script/prepare/prepare.js"></script>
+<script src="script/prepare/prepare.js?v=<?php echo date('Ymd'); ?>"></script>
 
 
 </div>

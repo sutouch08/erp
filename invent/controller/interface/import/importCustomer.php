@@ -67,6 +67,10 @@
 							'zip'				  => $rs['G'],
 							'active'			=> $active
 							);
+
+							// echo '<pre>';
+							// print_r($arr);
+							// echo '</pre>';
 					if( $cs->isExists( $id ) === FALSE )
 					{
 						//-- If not exists do insert

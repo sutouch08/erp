@@ -68,7 +68,7 @@
 			{
 				//------------------------ จบกำหนดค่าตัวแปรที่ต้องใส่ในทุกบรรทัด-----------------//
 				//--	เลขที่อ้างอิง (เลขที่เอกสารใน Smart Invent)
-				$REFNO	= $rw > 1 ? $order->reference.'/'.$i : $order->reference;
+				//$REFNO	= $rw > 1 ? $order->reference.'/'.$i : $order->reference;
 				$name = $rw > 1 ? $order->reference.'-'.$i : $order->reference;
 				$i++;
 

@@ -95,5 +95,5 @@ $(document).ready(function() {
 
 </script>
 
-<script src="script/consign_check/consign_check_add.js"></script>
-<script src="script/print/print_packing.js"></script>
+<script src="script/consign_check/consign_check_add.js?v=<?php echo date('Ymd'); ?>"></script>
+<script src="script/print/print_packing.js?v=<?php echo date('Ymd'); ?>"></script>

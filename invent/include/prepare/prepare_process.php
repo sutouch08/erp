@@ -10,7 +10,8 @@
   </div>
   <div class="col-sm-6">
     <p class="pull-right top-p">
-      <button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i> กลับ</button>
+      <button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i> รอจัด</button>
+      <button type="button" class="btn btn-sm btn-warning" onclick="goProcess()"><i class="fa fa-arrow-left"></i> กำลังจัด</button>
     </p>
   </div>
 
@@ -68,7 +69,7 @@
 
 <?php endif; //--- endif order->state ?>
 
-<script src="script/prepare/prepare_process.js"></script>
+<script src="script/prepare/prepare_process.js?v=<?php echo date('Ymd'); ?>"></script>
 <script src="script/beep.js"></script>
 
 <?php endif; ?>

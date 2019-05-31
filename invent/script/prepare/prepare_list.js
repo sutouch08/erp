@@ -49,6 +49,34 @@ $("#toDate").datepicker({
 
 
 
+function toggleOnline(){
+  var i = $('#sOnline').val();
+  if(i == 1){
+    $('#sOnline').val(0);
+    $('#btn-online').removeClass('btn-info');
+  }else{
+    $('#sOnline').val(1);
+    $('#btn-online').addClass('btn-info');
+  }
+
+  getSearch();
+
+}
+
+
+function toggleOffline(){
+  var i = $('#sOffline').val();
+  if(i == 1){
+    $('#sOffline').val(0);
+    $('#btn-offline').removeClass('btn-info');
+  }else{
+    $('#sOffline').val(1);
+    $('#btn-offline').addClass('btn-info');
+  }
+
+  getSearch();
+
+}
 
 
 //---- Reload page every 5 minute

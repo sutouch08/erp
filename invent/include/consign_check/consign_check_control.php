@@ -117,5 +117,5 @@
 </div>
 </script>
 
-<script src="script/consign_check/consign_check_control.js"></script>
+<script src="script/consign_check/consign_check_control.js?v=<?php echo date('Ymd'); ?>"></script>
 <!--/ Control --->

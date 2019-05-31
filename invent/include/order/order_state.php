@@ -35,6 +35,8 @@ $canUnbill	= ($px['add'] + $px['edit'] + $px['delete']) > 0 ? TRUE : FALSE;
                  <?php endif; ?>
 							<?php elseif($order->isExpire == 1 && $delete) : ?>
 												<option value="11">ยกเลิก</option>
+							<?php elseif($order->state == 11 && $edit) : ?>
+												<option value="1">รอชำระเงิน</option>
 							<?php endif; ?>
                     </select>
                 </td>

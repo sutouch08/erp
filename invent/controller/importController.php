@@ -175,12 +175,43 @@ if(isset($_GET['importOrderFromWeb']))
 
       $i = 1;
       $count = count($collection);
+
       if( $count <= 501 )
       {
+        $ds = array();
+        foreach($collection as $cs)
+        {
+          //---- order code from web site
+          $key = $cs['I'];
+
+          $str = substr($key, 0, 2);
+
+          if($str == 'LA')
+          {
+            $key = substr($key, 2);
+          }
+
+          $cs['I'] = $key;
+
+          $key = $key.$cs['M'];
+
+
+          if(isset($ds[$key]))
+          {
+            $ds[$key]['N'] += $cs['N'];
+            $ds[$key]['O'] += $cs['O'];
+          }
+          else
+          {
+            $ds[$key] = $cs;
+          }
+        }
+
         $order = new order();
         $product = new product();
         $customer = new customer();
         $channels = new channels();
+        $payment = new payment_method();
 
         //--- รหัสเล่มเอกสาร [อ้างอิงจาก formula]
         //--- ถ้าเป็นฝากขายแบบโอนคลัง ยืมสินค้า เบิกแปรสภาพ เบิกสินค้า (ไม่เปิดใบกำกับ เปิดใบโอนคลังแทน) นอกนั้น เปิด SO
@@ -196,7 +227,7 @@ if(isset($_GET['importOrderFromWeb']))
         $codCustomer = $customer->getDataByCode(getConfig('COD_CUSTOMER_CODE'));
 
         //---
-        $lazadaCustomer = $customer->getDataByCode('20OD0001(lazada)');
+        $lazadaCustomer = $customer->getDataByCode('020OD0001(lazada)');
 
         //--- Shopee
         $shopeeCustomer = $customer->getDataByCode('020OS0001(ช้อปปี้)');
@@ -238,7 +269,7 @@ if(isset($_GET['importOrderFromWeb']))
 
         $prefix = getConfig('PREFIX_SHIPPING_NUMBER');
 
-        foreach($collection as $rs)
+        foreach($ds as $rs)
         {
           //--- ถ้าพบ Error ให้ออกจากลูปทันที
           if($sc === FALSE)
@@ -290,7 +321,15 @@ if(isset($_GET['importOrderFromWeb']))
             //---- order code from web site
             $ref_code = $rs['I'];
 
+            // $str = substr($ref_code, 0, 2);
+            //
+            // if($str == 'LA')
+            // {
+            //   $ref_code = substr($ref_code, 2);
+            // }
+
             $shipping_code = '';
+
             if($rs['S'] == 'Y' OR $rs['S'] == 'y' OR $rs['S'] == '1')
             {
               $shipping_code = $prefix.$ref_code;
@@ -299,8 +338,9 @@ if(isset($_GET['importOrderFromWeb']))
             //--- เลือกลูกค้าตามช่องทางการชำระเงิน
             //--- $cusData = $rs['K'] == 'Cash On Delivery' ? $codCustomer : ($rs['K'] == 'Credit Card and Cash Payment (2C2P)' ? $c2C2PCustomer : $omiseCustomer);
 
+
             //--- เลือกลูกค้าตามช่องทางการชำระเงิน
-            $cusData = $rs['K'] == 'COD' ? $codCustomer : ($rs['K'] == 'CARD' ? $c2C2PCustomer : $omiseCustomer);
+            $cusData = $rs['K'] == 'COD' ? $codCustomer : (($rs['K'] == 'CARD' OR $rs['K'] == '2C2P') ? $c2C2PCustomer : $omiseCustomer);
 
             if($rs['L'] == 'LAZADA')
             {
@@ -311,6 +351,7 @@ if(isset($_GET['importOrderFromWeb']))
             {
               $cusData = $shopeeCustomer;
             }
+
 
             //------ เช็คว่ามีออเดอร์นี้อยู่ในฐานข้อมูลแล้วหรือยัง
             //------ ถ้ามีแล้วจะได้ id_order กลับมา ถ้ายังจะได้ FALSE;
@@ -336,13 +377,18 @@ if(isset($_GET['importOrderFromWeb']))
               //--- $id_payment = $rs['K'] == 'Credit Card and Cash Payment (2C2P)' ? $c2C2P_payment_id : ($rs['K'] == 'Cash On Delivery' ? $cod_payment_id : $omise_payment_id);
 
               //---	ช่องทางการชำระเงิน
-              $id_payment = $rs['K'] == 'CARD' ? $c2C2P_payment_id : ($rs['K'] == 'COD' ? $cod_payment_id : $omise_payment_id);
+              //$id_payment = $rs['K'] == 'CARD' OR $rs['K'] == '2C2P' ? $c2C2P_payment_id : ($rs['K'] == 'COD' ? $cod_payment_id : $omise_payment_id);
+
+              //---	ช่องทางการชำระเงิน
+              $id_payment = $payment->getId($rs['K']);
 
               //---	ช่องทางการขาย
               $id_channels = $rs['L'] == '' ? getConfig('WEB_SITE_CHANNELS_ID') : $channels->getId($rs['L']);
 
             	//---	วันที่เอกสาร
-            	$date_add = dbDate($rs['J'], TRUE);
+              $date_add =
+            	$date_add = PHPExcel_Style_NumberFormat::toFormattedString($rs['J'], 'YYYY-MM-DD');
+              $date_add = dbDate($date_add, TRUE);
 
               //--- ค่าจัดส่ง
               $shipping_fee = $rs['P'] == '' ? 0.00 : $rs['P'];
@@ -492,7 +538,8 @@ if(isset($_GET['importOrderFromWeb']))
               //----  ถ้ามี force update และ สถานะออเดอร์ไม่เกิน 3 (รอจัดสินค้า)
               if($rs['R'] == 1 && $state <= 3)
               {
-                $od = $order->getDetail($id_order, $pd->id);
+                $od  = $order->getDetail($id_order, $pd->id);
+                //$line = count(array_keys(array_column($collection, 'M'), $pd->code));
 
                 $arr = array(
                         "id_order"	=> $id_order,

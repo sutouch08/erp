@@ -141,6 +141,19 @@ class consign_check
   }
 
 
+  //---
+  public function getDetail($id, $id_pd)
+  {
+    $qs = dbQuery("SELECT * FROM tbl_consign_check_detail WHERE id_consign_check = $id AND id_product = '$id_pd'");
+    if(dbNumRows($qs) == 1)
+    {
+      return dbFetchObject($qs);
+    }
+
+    return FALSE;
+  }
+
+
 
   //----- เพิ่มรายการกระทบยอด
   public function addDetail(array $ds = array())
@@ -478,6 +491,7 @@ class consign_check
 
     return $sc == 0 ? FALSE : TRUE;
   }
+
 
   //-----------------  New Reference --------------//
   public function getNewReference($date = '')

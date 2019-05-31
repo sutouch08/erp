@@ -59,81 +59,95 @@
 		//---	หมายเหตุที่หัวเอกสาร
 		$REMARKH1	= tis($order->remark);
 
-		//------------------------ จบกำหนดค่าตัวแปรที่ต้องใส่ในทุกบรรทัด-----------------//
-		$file_name = $path.$order->reference.'-'.date('YmdHis').".xls";
-		$workbook	= new Spreadsheet_Excel_Writer($file_name);
-		$excel =& $workbook->addWorksheet('TR');
-
-		//------- SET Header Row
-		$row = 0;
-		$excel->writeString($row, 0, 'ERRMSG');
-		$excel->writeString($row, 1, 'REFTYPE');
-		$excel->writeString($row, 2, 'QCCORP');
-		$excel->writeString($row, 3, 'QCBRANCH');
-		$excel->writeString($row, 4, 'STAT');
-		$excel->writeString($row, 5, 'QCBOOK');
-		$excel->writeString($row, 6, 'CODE');
-		$excel->writeString($row, 7, 'REFNO');
-		$excel->writeString($row, 8, 'DATE');
-		$excel->writeString($row, 9, 'QCFRWHOUSE');
-		$excel->writeString($row, 10, 'QCTOWHOUSE');
-		$excel->writeString($row, 11, 'QCSECT');
-		$excel->writeString($row, 12, 'QCJOB');
-		$excel->writeString($row, 13, 'REMARKH1');
-		$excel->writeString($row, 14, 'QCPROD');
-		$excel->writeString($row, 15, 'LOT');
-		$excel->writeString($row, 16, 'QTY');
-		$excel->writeString($row, 17, 'QCUM');
-		$excel->writeString($row, 18, 'UMQTY');
-		$excel->writeString($row, 19, 'COST');
-		$excel->writeString($row, 20, 'REMARKI1');
-
-
-
-		//------ End Header Row
-
-		//---- Start
-		$row = 1;  //--- start on row 2
-		$qs = $order->getSoldDetails($order->id);
-		if( dbNumRows($qs) > 0 )
+		$qa = $order->getSoldWarehouse($id_order);
+		$rw = dbNumRows($qa);
+		if($rw > 0)
 		{
-			while( $rs = dbFetchObject($qs) )
+			$i = 1;
+			while($WH = dbFetchObject($qa))
 			{
-				$excel->writeString($row, 0, $ERRMSG);
-				$excel->writeString($row, 1, $REFTYPE);
-				$excel->writeString($row, 2, $QCCORP);
-				$excel->writeString($row, 3, $QCBRANCH);
-				$excel->writeString($row, 4, $STAT);
-				$excel->writeString($row, 5, $QCBOOK);
-				$excel->writeString($row, 6, $CODE);
-				$excel->writeString($row, 7, $REFNO);
-				$excel->write($row, 8, $DATE);
-				$excel->writeString($row, 9, tis($wh->getCode($rs->id_warehouse)));
-				$excel->writeString($row, 10, $QCTOWHOUSE);
-				$excel->writeString($row, 11, $QCSECT);
-				$excel->writeString($row, 12, $QCJOB);
-				$excel->writeString($row, 13, $REMARKH1);
-				$excel->writeString($row, 14, tis($rs->product_code));
-				$excel->writeString($row, 15, $LOT);
-				$excel->write($row, 16, $rs->qty);
-				$excel->writeString($row, 17, ($pd->getUnitCode($rs->id_product)));
-				$excel->write($row, 18, 1);
-				$excel->writeString($row, 19, $rs->cost_inc );
-				$excel->writeString($row, 20, '');
-				$row++;
+				//------------------------ จบกำหนดค่าตัวแปรที่ต้องใส่ในทุกบรรทัด-----------------//
+				//--	เลขที่อ้างอิง (เลขที่เอกสารใน Smart Invent)
+				//$REFNO	= $rw > 1 ? $order->reference.'/'.$i : $order->reference;
+				$name = $rw > 1 ? $order->reference.'-'.$i : $order->reference;
+				$i++;
 
+				$file_name = $path.$name.'-'.date('YmdHis').'.xls';
+				$workbook	= new Spreadsheet_Excel_Writer($file_name);
+				$excel = $workbook->addWorksheet('TR');
+
+				//------- SET Header Row
+				$row = 0;
+				$excel->writeString($row, 0, 'ERRMSG');
+				$excel->writeString($row, 1, 'REFTYPE');
+				$excel->writeString($row, 2, 'QCCORP');
+				$excel->writeString($row, 3, 'QCBRANCH');
+				$excel->writeString($row, 4, 'STAT');
+				$excel->writeString($row, 5, 'QCBOOK');
+				$excel->writeString($row, 6, 'CODE');
+				$excel->writeString($row, 7, 'REFNO');
+				$excel->writeString($row, 8, 'DATE');
+				$excel->writeString($row, 9, 'QCFRWHOUSE');
+				$excel->writeString($row, 10, 'QCTOWHOUSE');
+				$excel->writeString($row, 11, 'QCSECT');
+				$excel->writeString($row, 12, 'QCJOB');
+				$excel->writeString($row, 13, 'REMARKH1');
+				$excel->writeString($row, 14, 'QCPROD');
+				$excel->writeString($row, 15, 'LOT');
+				$excel->writeString($row, 16, 'QTY');
+				$excel->writeString($row, 17, 'QCUM');
+				$excel->writeString($row, 18, 'UMQTY');
+				$excel->writeString($row, 19, 'COST');
+				$excel->writeString($row, 20, 'REMARKI1');
+
+
+
+				//------ End Header Row
+
+				//---- Start
+				$row = 1;  //--- start on row 2
+				$qs = $order->getSoldDetailsByWarehouse($order->id, $WH->id_warehouse);
+				if( dbNumRows($qs) > 0 )
+				{
+					while( $rs = dbFetchObject($qs) )
+					{
+						$excel->writeString($row, 0, $ERRMSG);
+						$excel->writeString($row, 1, $REFTYPE);
+						$excel->writeString($row, 2, $QCCORP);
+						$excel->writeString($row, 3, $QCBRANCH);
+						$excel->writeString($row, 4, $STAT);
+						$excel->writeString($row, 5, $QCBOOK);
+						$excel->writeString($row, 6, $CODE);
+						$excel->writeString($row, 7, $REFNO);
+						$excel->write($row, 8, $DATE);
+						$excel->writeString($row, 9, tis($wh->getCode($rs->id_warehouse)));
+						$excel->writeString($row, 10, $QCTOWHOUSE);
+						$excel->writeString($row, 11, $QCSECT);
+						$excel->writeString($row, 12, $QCJOB);
+						$excel->writeString($row, 13, $REMARKH1);
+						$excel->writeString($row, 14, tis($rs->product_code));
+						$excel->writeString($row, 15, $LOT);
+						$excel->write($row, 16, $rs->qty);
+						$excel->writeString($row, 17, ($pd->getUnitCode($rs->id_product)));
+						$excel->write($row, 18, 1);
+						$excel->writeString($row, 19, $rs->cost_inc );
+						$excel->writeString($row, 20, '');
+						$row++;
+
+					}
+				}
+
+				try
+				{
+					$workbook->close();
+					$sc = TRUE;
+					$order->exported($order->id);
+				}
+				catch (Exception $e)
+				{
+					$sc =  "ERROR : ".$e->getMessage();
+				}
 			}
-		}
-
-		try
-		{
-			$workbook->close();
-			$sc = TRUE;
-			$order->exported($order->id);
-		}
-		catch (Exception $e)
-		{
-			$sc =  "ERROR : ".$e->getMessage();
 		}
 
 		return $sc;

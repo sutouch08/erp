@@ -69,11 +69,20 @@
       {
         include 'order/lend_state.php';
       }
-      
+
     }
     else
     {
-      echo 'ออเดอร์ถูกยกเลิกแล้ว';
+      $qr = "UPDATE tbl_order SET isCancle = 0 WHERE id_order = ".$id;
+      if(dbQuery($qr))
+      {
+        echo 'success';
+      }
+      else
+      {
+        echo 'ย้อนสถานะไม่สำเร็จ';
+      }
+      
     }
 
 
