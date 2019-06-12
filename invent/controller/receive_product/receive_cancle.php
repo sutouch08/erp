@@ -24,7 +24,9 @@ while( $rs = dbFetchObject($qs) )
   if($isEnought == FALSE && $allowUnderZero == FALSE)
   {
     $sc = FALSE;
-    $message = 'สต็อกคงเหลือไม่พอให้ตัด';
+    $pd = new product($rs->id_product);
+    $zone = new zone($rs->id_zone);
+    $message = 'โซน : '.$zone->zone_name.'-> '.$pd->code.' : สต็อกคงเหลือไม่พอให้ตัด';
     break;
   }
 

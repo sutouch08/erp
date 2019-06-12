@@ -73,7 +73,7 @@ public function update($id, array $ds)
 */
 
 
-public function update($barcode, array $ds)
+public function update($id, array $ds)
 {
 	$sc = FALSE;
 	if( count( $ds ) > 0 )
@@ -85,7 +85,7 @@ public function update($barcode, array $ds)
 			$set .= $i== 1 ? $field ." = '".$value."'" : ", ".$field . " = '".$value."'";
 			$i++;
 		}
-		$sc = dbQuery("UPDATE tbl_barcode SET ".$set." WHERE barcode = '".$barcode."'");
+		$sc = dbQuery("UPDATE tbl_barcode SET ".$set." WHERE id = '".$id."'");
 		$this->error = $sc === FALSE ? dbError() : '';
 	}
 

@@ -1,7 +1,7 @@
 
 <div class="row">
 	<div class="col-sm-12">
-		<span class="red" style="padding-top:10px;">** สามารถเชื่อมโยงสินค้าได้เฉพาะสถานะ "รอชำระเงิน" เท่านั้น</span>
+		
     	<table class="table table-striped border-1">
         <thead>
         	<tr class="font-size-12">

@@ -73,16 +73,20 @@
     }
     else
     {
-      $qr = "UPDATE tbl_order SET isCancle = 0 WHERE id_order = ".$id;
+      $qr = "UPDATE tbl_order SET isCancle = 0, state = $state WHERE id = ".$id;
       if(dbQuery($qr))
       {
+        $id_emp = getCookie('user_id');
+    		$st = new state();
+    		$st->add($id, $state, $id_emp);
         echo 'success';
+
       }
       else
       {
         echo 'ย้อนสถานะไม่สำเร็จ';
       }
-      
+
     }
 
 

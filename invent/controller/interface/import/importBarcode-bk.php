@@ -22,6 +22,7 @@
 			$excel		= $reader->load($fileName);
 			$collection	= $excel->getActiveSheet()->toArray(NULL, TRUE, TRUE, TRUE);
 
+			$cs 	= new barcode();
 			$pd			= new product();
 			$i 	= 1;
 			foreach ( $collection as $rs )
@@ -30,14 +31,14 @@
 				{
 					$id = $rs['A'];
 					$code = trim($rs['B']);
-					$cs = new barcode($rs['A']);
-					if($cs->id != $rs['A'])
+					$id_pd = $pd->getId($rs['C']);
+					if( $cs->isAllExists($id, $code) === FALSE )
 					{
 						//-- If not exists do insert
 						$arr = array(
 								'id'				=> $id,
 								'barcode'	=> $code,
-								'id_product'	=> $pd->getId($rs['C']),
+								'id_product'	=> $id_pd,
 								'reference'	=> $rs['C'],
 								'unit_code'	=> $rs['D'],
 								'unit_qty'		=> $rs['E']
@@ -53,25 +54,23 @@
 					}
 					else
 					{
-						if($cs->barcode != $rs['B'] || $cs->reference != $rs['C'] || $cs->unit_code != $rs['D'] || $cs->unit_qty != $rs['E'])
-						{
-							//--- If exists do update
-							$arr = array(
-									'id' => $id,
-									'barcode' => $code,
-									'id_product'	=> $pd->getId($rs['C']),
-									'reference'	=> $rs['C'],
-									'unit_code'	=> $rs['D'],
-									'unit_qty'		=> $rs['E']
-									);
+						//--- If exists do update
+						$arr = array(
+								'id' => $id,
+								'barcode' => $code,
+								'id_product'	=> $id_pd,
+								'reference'	=> $rs['C'],
+								'unit_code'	=> $rs['D'],
+								'unit_qty'		=> $rs['E']
+								);
 
-							if($cs->update($id, $arr) === FALSE)
-							{
-								$sc = FALSE;
-								$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
-								$error++;
-								writeErrorLogs('Barcode', $cs->error);
-							}
+
+						if($cs->update($code, $arr) === FALSE)
+						{
+							$sc = FALSE;
+							$message = 'ปรับปรุงข้อมูลไม่สำเร็จ';
+							$error++;
+							writeErrorLogs('Barcode', $cs->error);
 						}
 
 						$update++;
