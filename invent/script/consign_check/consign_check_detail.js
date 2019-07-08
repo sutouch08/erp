@@ -202,6 +202,48 @@ function closeConsignCheck(id_consign_check){
   });
 }
 
+function reloadStock(){
+  swal({
+    title:'โหลดยอดตั้งต้นใหม่ ?',
+    text:'ต้องการโหลดยอดตั้งต้นใหม่หรือไม่ ?',
+    type:'warning',
+    html:true,
+    showCancelButton:true,
+    confirmButtonText:'ดำเนินการ',
+    cancelButtonText:'ไม่',
+    confirmButtonColor:'#F6BB42',
+    closeOnConfirm:false
+  }, function(){
+    var id_consign_check = $('#id_consign_check').val();
+    load_in();
+    $.ajax({
+      url:'controller/consignCheckController.php?reloadStockZone',
+      type:'POST',
+      cache:'false',
+      data:{
+        'id_consign_check' : id_consign_check
+      },
+      success:function(rs){
+        load_out();
+        var rs = $.trim(rs);
+        if(rs == 'success'){
+          swal({
+            title:'Success',
+            type:'success',
+            timer:1000
+          });
+
+          setTimeout(function(){
+            window.location.reload();
+          }, 1500);
+        }else{
+          swal('Error!', rs, 'error');
+        }
+      }
+    });
+  });
+}
+
 
 function openCheck(){
   swal({

@@ -6,6 +6,10 @@ $setPrice = trim($_POST['set_price']);
 $price = $_POST['price'];
 $disc = trim($_POST['disc']);
 $unit = $_POST['disc_unit'];
+$disc2 = trim($_POST['disc2']);
+$unit2 = $_POST['disc_unit2'];
+$disc3 = trim($_POST['disc3']);
+$unit3 = $_POST['disc_unit3'];
 $minQty = $_POST['min_qty'];
 $minAmount = $_POST['min_amount'];
 $canGroup = trim($_POST['can_group']);
@@ -14,6 +18,8 @@ $minQty = $minQty > 0 ? $minQty : 0; //-- ต้องไม่ติดลบ
 $minAmount = $minAmount > 0 ? $minAmount : 0; //--- ต้องไม่ติดลบ
 $canGroup = $canGroup == 'Y' ? 1 : 0;
 $discUnit = $unit == 'P' ? 'percent' : ($unit == 'A' ? 'amount' : 'percent');
+$discUnit2 = $unit2 == 'P' ? 'percent' : ($unit2 == 'A' ? 'amount' : 'percent');
+$discUnit3 = $unit3 == 'P' ? 'percent' : ($unit3 == 'A' ? 'amount' : 'percent');
 
 if($setPrice == 'Y')
 {
@@ -35,6 +41,18 @@ if($setPrice == 'N' && $unit == 'P' && $disc > 100)
   $message = 'ส่วนลดต้องไม่เกิน 100%';
 }
 
+if($setPrice == 'N' && $disc == 0 && $disc2 > 0)
+{
+  $sc = FALSE;
+  $message = 'ต้องกำหนดส่วนลด step 1 ก่อนระบุส่วนลด step 2';
+}
+
+if($disc2 == 0 && $disc3 > 0)
+{
+  $sc = FALSE;
+  $message = 'ต้องกำหนดส่วนลด step 2 ก่อนระบุส่วนลด step 3';
+}
+
 
 //---- ถ้าไม่มีอะไรผิดพลาด
 if($sc === TRUE)
@@ -47,6 +65,10 @@ if($sc === TRUE)
     'item_price' => $price,
     'item_disc' => $disc,
     'item_disc_unit' => $discUnit,
+    'item_disc_2' => $disc2,
+    'item_disc_2_unit' => $discUnit2,
+    'item_disc_3' => $disc3,
+    'item_disc_3_unit' => $discUnit3,
     'emp_upd' => getCookie('user_id')
   );
 

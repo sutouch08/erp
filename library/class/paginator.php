@@ -79,6 +79,7 @@ class paginator{
 	{
 		return $this->return;
 	}
+
 	function Per_Page($tbl,$where,$Per_Page)
 	{
 		$qs = dbQuery("SELECT count(*) FROM $tbl $where");

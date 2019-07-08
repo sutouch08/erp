@@ -37,8 +37,8 @@
 <?php	$order_amount = 0; ?>
 <?php	$image = new image(); ?>
 <?php	while( $rs = dbFetchObject($detail) ) : ?>
-<?php 	$discount = $order->role == 2 ? $rs->gp : $rs->discount; ?>
-<?php 	$discLabel = $order->role == 2 ? $rs->gp .' %' : $rs->discount; ?>
+<?php 	$discount = $order->role == 2 ? $rs->gp : discountLabel($rs->discount, $rs->discount2, $rs->discount3); ?>
+<?php 	$discLabel = $order->role == 2 ? $rs->gp .' %' : discountLabel($rs->discount, $rs->discount2, $rs->discount3); ?>
 <?php 	$cost = isset($canEditCost) && $canEditCost === TRUE ? $rs->cost : '0' ; ?>
 			<tr class="font-size-10" id="row_<?php echo $rs->id; ?>">
       	<td class="middle text-center">
@@ -81,7 +81,7 @@
         	<?php if( $allowEditDisc && $order->state < 4 ) : ?>
           <input type="text" class="form-control input-sm text-center discount-box hide" id="disc_<?php echo $rs->id; ?>" name="disc[<?php echo $rs->id; ?>]" value="<?php echo $discount; ?>" />
         	<?php endif; ?>
-          <span class="discount-label"><?php echo $discLabel; ?></span>
+          <span class="discount-label" id="disc_label_<?php echo $rs->id; ?>"><?php echo $discLabel; ?></span>
         </td>
 
         <td class="middle text-right">

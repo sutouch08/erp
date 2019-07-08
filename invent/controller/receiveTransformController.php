@@ -78,8 +78,8 @@ if( isset( $_GET['search_transform'] ) && isset( $_REQUEST['term'] ) )
 {
 	$sc = array();
 	$cs = new transform();
-	$is_closed = 0; //---	ยังไม่ปิด
-	$qs = $cs->searchReference($_REQUEST['term'], $is_closed);
+	//$is_closed = 0; //---	0 = ยังไม่ปิด, 1 = ปิดแล้ว, ว่าง = ทั้งหมด
+	$qs = $cs->searchReference($_REQUEST['term']);
 	if(dbNumRows($qs) > 0)
 	while( $rs = dbFetchObject($qs) )
 	{

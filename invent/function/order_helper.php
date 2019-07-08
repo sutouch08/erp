@@ -63,17 +63,24 @@ function roleName($role)
 
 
 //--- แสดงป้ายส่วนลด
-function discountLabel($disc)
+function discountLabel($disc = 0, $disc2 = 0, $disc3 = 0)
+{
+	$label = '';
+	$label = $disc == 0 ? 0 : getDiscLabel($disc);
+	$label .= $disc2 == 0 ? '' : '+'.getDiscLabel($disc2);
+	$label .= $disc3 == 0 ? '' : '+'.getDiscLabel($disc3);
+	return $label;
+}
+
+
+function getDiscLabel($disc)
 {
 	$arr = explode('%', $disc);
 	if( count($arr) > 1)
 	{
 		return number_format(trim($arr[0]),2).' %';
 	}
-	else
-	{
-		return number_format($arr[0],2);
-	}
+	return number_format($arr[0],2);
 }
 
 

@@ -1,4 +1,4 @@
-<?php 
+<?php
 	$id_tab 	= 22;
     $pm 		= checkAccess($id_profile, $id_tab);
 	$view 	= $pm['view'];
@@ -7,8 +7,9 @@
 	$delete 	= $pm['delete'];
 	accessDeny($view);
   	include 'function/transport_helper.php';
-	include 'function/customer_helper.php';
-	?>    
+		include 'function/customer_helper.php';
+		include 'function/address_helper.php';
+	?>
 <div class="container">
 <!-- page place holder -->
 <div class="row top-row">
@@ -33,7 +34,7 @@
 <div class="row">
 	<div class="col-sm-3">
     	<label>ลูกค้า</label>
-        <input type="text" class="form-control input-sm text-center search-box" name="sCustomer" id="sCustomer" value="<?php echo $sCustomer; ?>" />    
+        <input type="text" class="form-control input-sm text-center search-box" name="sCustomer" id="sCustomer" value="<?php echo $sCustomer; ?>" />
     </div>
     <div class="col-sm-3">
     	<label>ที่อยู่</label>
@@ -61,25 +62,25 @@
 		createCookie('sCustomer', $sCustomer);
 		$where .= "AND ( first_name LIKE '%".$sCustomer."%' OR last_name LIKE '%".$sCustomer."%' OR company LIKE '%".$sCustomer."%' ) ";
 	}
-	
+
 	if( $sAddress != '' )
 	{
 		createCookie('sAddress', $sAddress);
 		$where .= "AND ( address1 LIKE '%".$sAddress."%' OR address2 LIKE '%".$sAddress."%' ) ";
 	}
-	
+
 	if( $sProvince != '' )
 	{
 		createCookie('sProvince', $sProvince);
-		$where .= "AND city LIKE '%".$sProvince."%' ";	
+		$where .= "AND city LIKE '%".$sProvince."%' ";
 	}
-	
+
 	$where .= "ORDER BY date_upd DESC";
 	$paginator	= new paginator();
 	$get_rows	= get_rows();
 	$paginator->Per_Page('tbl_address', $where, $get_rows);
 	$paginator->display($get_rows, 'index.php?content=customer_address');
-	
+
 	$qs = dbQuery("SELECT * FROM tbl_address ". $where ." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_Page);
 ?>
 <div class="row">
@@ -97,7 +98,7 @@
             </thead>
             <tbody>
 	<?php if( dbNumRows($qs) > 0 ) : 	?>
-    <?php	$no = row_no(); 			?>     
+    <?php	$no = row_no(); 			?>
     <?php	while( $rs = dbFetchObject($qs) ) : ?>
     		<tr class="font-size-12" id="row_<?php echo $rs->id_address; ?>">
             	<td class="middle text-center"><?php echo $no; ?></td>
@@ -117,10 +118,10 @@
             </tr>
     <?php	$no++;		?>
     <?php	endwhile; ?>
-    
+
     <?php else : ?>
-    
-    <?php endif; ?>            
+
+    <?php endif; ?>
             </tbody>
 		</table>
 	</div>
@@ -159,7 +160,7 @@
                         <label class="input-label">สกุล</label>
                         <input type="text" class="form-control input-sm" name="Lname" id="Lname" placeholder="นามสกุลผู้รับ" />
                     </div>
-                    
+
                 </div>
                 <div class="col-sm-12">
                 	<label class="input-label">บริษัท/ห้าง/ร้าน</label>
@@ -264,8 +265,8 @@ $(document).ready(function(e) {
         Alias.push($(this).text());
     });
 });
-</script> 
+</script>
 
-                       
+
 </div><!--/ container -->
 <script src="script/address.js"></script>

@@ -1,4 +1,7 @@
 <?php
+ini_set('memory_limit', '1024M');
+set_time_limit(600);
+
 $sc = TRUE;
 $id = $_POST['id_consign'];
 $cs = new consign($id);
@@ -87,8 +90,12 @@ if($cs->isSaved == 1 && $cs->isCancle == 0)
   }
   else
   {
-    $sc = FALSE;
-    $message = 'ไม่พบรายการที่บันทึกแล้ว';
+    //--- เปลี่ยนสถานะเอกสารเป็นยังไม่บันทึก
+    if($cs->setSaved($cs->id, 0) !== TRUE)
+    {
+      $sc = FALSE;
+      $message = 'เปลี่ยนสถานะเอกสารไม่สำเร็จ';
+    }
   }
 }
 else  //--- if(isSaved == 1 && isCancle == 0)

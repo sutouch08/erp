@@ -17,22 +17,27 @@
   <hr style="margin-bottom:15px;" />
 
 <?php
-if( isset( $_GET['stock']))
-{
-  include 'include/test/stock.php';
-}
-else if( isset( $_GET['movement']))
-{
-  include 'include/test/movement.php';
-}
-else if( isset( $_GET['buffer']))
-{
-  include 'include/test/buffer.php';
-}
-else if( isset($_GET['cancle']))
-{
-  include 'include/test/cancle.php';
-}
+  $value = '299.00';
+  $step = explode('+', $value);
+  $count = count($step);
+
+  print_r($step);
+// if( isset( $_GET['stock']))
+// {
+//   include 'include/test/stock.php';
+// }
+// else if( isset( $_GET['movement']))
+// {
+//   include 'include/test/movement.php';
+// }
+// else if( isset( $_GET['buffer']))
+// {
+//   include 'include/test/buffer.php';
+// }
+// else if( isset($_GET['cancle']))
+// {
+//   include 'include/test/cancle.php';
+// }
 
 
 ?>

@@ -29,10 +29,10 @@
     */
 
     $id = $_POST['id_order'];
+    $state = $_POST['state'];
     $order = new order($id);
     if( $order->state != 11)
     {
-      $state = $_POST['state'];
       include '../function/bill_helper.php';
       //--- ขาย อภินันท์ สปอนเซอร์
       if( $order->role == 1)

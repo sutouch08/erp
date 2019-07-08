@@ -222,9 +222,40 @@ class consign_check
   }
 
 
+  public function updateStockQty($id_consign_check, $id_pd, $qty)
+  {
+    $qr = "UPDATE tbl_consign_check_detail
+            SET stock_qty = $qty
+            WHERE
+              id_consign_check = $id_consign_check
+            AND id_product = '$id_pd'";
+    return dbQuery($qr);
+  }
+
+
+  public function isExistsDetail($id_consign_check, $id_pd)
+  {
+    $qr = "SELECT id
+            FROM
+              tbl_consign_check_detail
+            WHERE
+              id_consign_check = $id_consign_check
+            AND
+              id_product = '$id_pd'";
+    if(dbNumRows(dbQuery($qr)) > 0)
+    {
+      return TRUE;
+    }
+
+    return FALSE;
+  }
 
 
 
+  public function setStockZero($id)
+  {
+    return dbQuery("UPDATE tbl_consign_check_detail SET stock_qty = 0 WHERE id_consign_check = $id");
+  }
 
 
   public function updateConsignBoxDetail($id_consign_box, $id_consign_check, $id_pd, $qty)

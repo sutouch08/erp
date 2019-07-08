@@ -45,27 +45,26 @@ function showbDiscBox(){
 
 
 
-$(document).ready(function(e) {
-	//$(".discount-box").numberOnly();
-    $(".discount-box").keyup(function(e) {
-		var id = $(this).attr('id').split('_');
-		var id = id[1];
-		var price = $("#price_"+id).val();
-		var discount = $(this).val();
-		var disc = discount.split('%');
-		if( disc.length > 1 ){
-			if( parseFloat( disc[0] ) > 100 ){
-				swal("ส่วนลดไม่ถูกต้อง");
-				$(this).val('');
-			}
-		}else{
-			if( isNaN( parseFloat(disc[0]/1) ) || parseFloat( disc[0] ) > parseFloat(price) ){
-				swal("ส่วนลดไม่ถูกต้อง");
-				$(this).val('');
-			}
-		}
-	});
-});
+// $(document).ready(function(e) {
+//     $(".discount-box").keyup(function(e) {
+// 			var id = $(this).attr('id').split('_');
+// 			var id = id[1];
+// 			var price = $("#price_"+id).val();
+// 			var discount = $(this).val();
+// 			var disc = discount.split('%');
+// 			if( disc.length > 1 ){
+// 				if( parseFloat( disc[0] ) > 100 ){
+// 					swal("ส่วนลดไม่ถูกต้อง");
+// 					$(this).val('');
+// 				}
+// 			}else{
+// 				if( isNaN( parseFloat(disc[0]/1) ) || parseFloat( disc[0] ) > parseFloat(price) ){
+// 					swal("ส่วนลดไม่ถูกต้อง");
+// 					$(this).val('');
+// 				}
+// 			}
+// 	});
+// });
 
 
 
@@ -93,20 +92,97 @@ $(document).ready(function(e) {
 
 
 function updateDiscount(){
+	var error = 0;
+	var message = '';
 	var disc = [];
 	disc.push( {"name" : "id_order", "value" : $("#id_order").val() } ); //---- id_order
 	disc.push( { "name" : "approver", "value" : $("#approverName").val() } ); //--- ชื่อผู้อนุมัติ
 	disc.push( { "name" : "token", "value" : $("#approveToken").val() } ); //--- Token
 	$(".discount-box").each(function(index, element) {
-        var attr = $(this).attr('id').split('_');
+    var attr = $(this).attr('id').split('_');
 		var id = attr[1];
 		var name = "discount["+id+"]";
+		var price = parseFloat($("#price_"+id).val());
+		var cPrice = price;
+		var amount = 0;
+		var oldValue = $('#disc_label_'+id).text();
 		var value = $(this).val();
-		disc.push( {"name" : name, "value" : value }); //----- discount each row
+		if(value != '' && value != 0 && value != oldValue){
+			var rs = value.split('+');
+			if(rs.length > 1){
+				for(let ele of rs){
+					let el = ele.split('%');
+					el[0] = $.trim(el[0]);
+					vdis = parseFloat(el[0]);
+					if(isNaN(vdis)){
+						error++;
+						message = 'รูปแบบส่วนลดไม่ถูกต้อง';
+						$(this).addClass('has-error');
+						return;
+					}
+
+					if(el.length == 2){
+						let discAmount = cPrice * (vdis * 0.01);
+						cPrice -= discAmount;
+						amount += discAmount;
+					}
+
+					if(el.length == 1){
+						let discAmount = vdis;
+						cPrice -= discAmount;
+						amount += discAmount;
+					}
+				}
+			}else{
+				let el = rs[0].split('%');
+				el[0] = $.trim(el[0]);
+				vdis = parseFloat(el[0]);
+				console.log(vdis);
+				if(isNaN(vdis)){
+					error++;
+					message = 'รูปแบบส่วนลดไม่ถูกต้อง';
+					$(this).addClass('has-error');
+					return;
+				}
+
+				if(el.length == 2){
+					let discAmount = cPrice * (vdis * 0.01);
+					cPrice -= discAmount;
+					amount += discAmount;
+				}
+
+				if(el.length == 1){
+					let discAmount = vdis;
+					cPrice -= discAmount;
+					amount += discAmount;
+				}
+			}
+		}
+
+		if(amount > price){
+			error++;
+			message = 'ส่วนลดต้องไม่เกินราคาขาย';
+			$(this).addClass('has-error');
+			return;
+		}
+
+		if(value != oldValue){
+			disc.push( {"name" : name, "value" : value }); //----- discount each row
+		}
+
     });
+
+		if(error > 0)
+		{
+			swal(message);
+			return false;
+		}
+
 	$.ajax({
 		url:"controller/orderController.php?updateEditDiscount",
-		type:"POST", cache:"false", data: disc,
+		type:"POST",
+		cache:"false",
+		data: disc,
 		success: function(rs){
 			var rs = $.trim(rs);
 			if( rs == 'success' ){

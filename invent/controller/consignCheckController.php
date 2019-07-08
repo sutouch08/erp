@@ -12,6 +12,11 @@ if(isset($_GET['addNew']))
 }
 
 
+//---- โหลดยอดตั้งต้นใหม่
+if(isset($_GET['reloadStockZone']))
+{
+  include 'consign_check/consign_check_reload_stock.php';
+}
 
 //----  ยิงบาร์โค้ดตรวจนับสินค้า
 if(isset($_GET['checkItem']))

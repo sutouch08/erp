@@ -118,8 +118,7 @@
 				}//--- end if first row
 				$i++;
 			}//------ end foreach
-			//rename($fileName, $moveName); //---- move each file to another folder
-			unlink($fileName);
+			rename($fileName, $moveName); //---- move each file to another folder
 		}//----- end while
 	}
 	else

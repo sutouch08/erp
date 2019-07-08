@@ -11,6 +11,9 @@ $cs = $id === FALSE ? new consign_check() : new consign_check($id);
       <?php echo goBackButton(); ?>
       <?php if($id != FALSE && ($add OR $edit) && $cs->valid == 0) : ?>
         <?php if( $cs->status == 0) : ?>
+          <button type="button" class="btn btn-sm btn-primary" onclick="reloadStock()">
+            <i class="fa fa-refresh"></i> โหลดยอดตั้งต้นใหม่
+          </button>
           <!--- consign_check_detail.js --->
           <button type="button" class="btn btn-sm btn-success" onclick="closeCheck()">
             <i class="fa fa-bolt"></i> บันทึกการตรวจนับ

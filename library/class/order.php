@@ -852,7 +852,9 @@ class order
 					$discount = $disc->getItemRecalDiscount($id, $rs->id_product, $rs->price, $this->id_customer, $rs->qty, $this->id_payment, $this->id_channels, $this->date_add);
 
 					$arr = array(
-								"discount" => $discount['discount'],
+								"discount" => $discount['discLabel1'],
+								"discount2" => $discount['discLabel2'],
+								"discount3" => $discount['discLabel3'],
 								"discount_amount"	=> $discount['amount'],
 								"total_amount" => ($rs->qty * $rs->price) - $discount['amount'],
 								"id_rule"	=> $discount['id_rule']
