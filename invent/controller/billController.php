@@ -7,6 +7,7 @@ require "../function/bill_helper.php";
 //require "../function/sponsor_helper.php";
 //require "../function/lend_helper.php";
 include '../function/vat_helper.php';
+include '../function/order_helper.php';
 
 if(isset( $_GET['checkState']))
 {

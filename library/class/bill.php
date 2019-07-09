@@ -11,7 +11,7 @@ class bill
   public function getBillDetail($id_order)
   {
     $qr = "SELECT o.id, o.id_product, o.product_code, o.product_name, o.qty AS order_qty, ";
-    $qr .= "o.price, o.discount, ";
+    $qr .= "o.price, o.discount, o.discount2, o.discount3, ";
     $qr .= "(o.discount_amount / o.qty) AS discount_amount, ";
     $qr .= "(o.total_amount/o.qty) AS final_price, ";
     $qr .= "(SELECT SUM(qty) FROM tbl_prepare WHERE id_order = ".$id_order." AND id_product = o.id_product) AS prepared, ";
@@ -33,7 +33,7 @@ class bill
   public function getBilledDetail($id_order)
   {
     $qr = "SELECT o.id_product, o.product_code, o.product_name, o.qty AS order_qty, o.isCount, ";
-    $qr .= "o.price, o.discount, ";
+    $qr .= "o.price, o.discount, o.discount2, o.discount3, ";
     $qr .= "(o.discount_amount / o.qty) AS discount_amount, ";
     $qr .= "(o.total_amount/o.qty) AS final_price, ";
     $qr .= "(SELECT SUM(qty) FROM tbl_prepare WHERE id_order = ".$id_order." AND id_product = o.id_product) AS prepared, ";
@@ -48,7 +48,7 @@ class bill
   public function getNonCountBillDetail($id_order)
   {
     $qr  = "SELECT o.id, o.id_product, o.product_code, o.product_name, o.qty AS order_qty, o.isCount, ";
-    $qr .= "o.price, o.discount, ";
+    $qr .= "o.price, o.discount, o.discount2, o.discount3, ";
     $qr .= "(o.discount_amount / o.qty) AS discount_amount, ";
     $qr .= "(o.total_amount/o.qty) AS final_price ";
     $qr .= "FROM tbl_order_detail AS o ";

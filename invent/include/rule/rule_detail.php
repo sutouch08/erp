@@ -1,3 +1,4 @@
+
 <div class="row top-row">
   <div class="col-sm-6 top-col">
     <h4 class="title"><i class="fa fa-exclamation-circle"></i>&nbsp; <?php echo $pageTitle; ?></h4>
@@ -19,7 +20,7 @@ $id_rule = (isset($_GET['id_rule']) && $_GET['id_rule'] != '') ? $_GET['id_rule'
 $cs = new discount_rule($id_rule);
 $pl = new discount_policy($cs->id_discount_policy);
 $emp = new employee();
-$currency = getConfig('CURRENCY');
+include 'function/rule_helper.php';
 
 ?>
 <div class="row">
@@ -48,8 +49,11 @@ $currency = getConfig('CURRENCY');
       <tr class="font-size-12">
         <td class="width-10 middle text-right"><strong>ส่วนลด</strong></td>
         <td class="width-10 middle text-center">
-          <?php echo $cs->item_disc; ?>
-          <?php echo ($cs->item_disc_unit == 'amount' ? $currency : '%'); ?>
+          <?php
+          echo discount_label($cs->item_disc, $cs->item_disc_unit);
+          echo discount_label($cs->item_disc_2, $cs->item_disc_2_unit, ' + ');
+          echo discount_label($cs->item_disc_3, $cs->item_disc_3_unit, ' + ');    
+          ?>
         </td>
         <td class="width-10 middle text-right"><strong>กำหนดราคา</strong></td>
         <td class="width-10 middle text-center"><?php echo ($cs->item_price > 0 ? number($cs->item_price, 2).' '.$currency : 'No'); ?></td>

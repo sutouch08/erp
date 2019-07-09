@@ -12,6 +12,7 @@ class discount
 		$date = $date == "" ? date('Y-m-d') : $date;
 		$pd = new product($id_pd);
 		$cs = new customer($id_cus);
+		$order = new order();
 		$price = $pd->price;
 
 		//--- default value if dont have any discount
@@ -134,7 +135,7 @@ class discount
 
 			$qr .= "AND r.active = 1 AND r.isDeleted = 0 ";
 
-
+			//echo $qr;
 
 
 			$qs = dbQuery($qr);

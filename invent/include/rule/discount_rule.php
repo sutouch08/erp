@@ -19,7 +19,7 @@ $ac_disc2 = $set_price === 'Y' ? 'disabled' : '';
 
 $btn_unit_p3 = $cs->item_disc_3_unit == 'percent' ? 'btn-primary' : '';
 $btn_unit_a3 = $cs->item_disc_3_unit == 'amount' ? 'btn-primary' : '';
-$unit2 = $cs->item_disc_3_unit == 'amount' ? 'A' :'P';
+$unit3 = $cs->item_disc_3_unit == 'amount' ? 'A' :'P';
 $ac_disc3 = $set_price === 'Y' ? 'disabled' : '';
 
 $can_group = $cs->canGroup == 1 ? 'Y' : 'N';

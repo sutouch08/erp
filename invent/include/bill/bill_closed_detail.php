@@ -93,7 +93,7 @@
 
             <!--- ส่วนลด  --->
             <td class="text-center">
-              <?php echo discountLabel($rs->discount); ?>
+              <?php echo discountLabel($rs->discount, $rs->discount2, $rs->discount3); ?>
             </td>
 
             <td class="text-right">

@@ -59,7 +59,7 @@
 								"discount" => $discLabel[0],
 								"discount2" => $discLabel[1],
 								"discount3" => $discLabel[2],
-								"discount_amount"	=> $detail->qty * $discount,
+								"discount_amount"	=> $total_discount,
 								"total_amount" => $total_amount ,
 								"id_rule"	=> 0
 							);
