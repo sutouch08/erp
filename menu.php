@@ -117,7 +117,7 @@
 
       <li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i> รายงาน ติดตาม</a>
       	<ul class="dropdown-menu">
-        	<!--<li><a href="index.php?content=stock_backlogs"><i class="fa fa-bar-chart"></i> รายงาน สินค้าค้างส่ง</a></li>-->
+        	<li><a href="index.php?content=transform_backlogs"><i class="fa fa-bar-chart"></i> รายงาน สินค้าแปรสภาพค้างรับ</a></li>
           <li><a href="index.php?content=lend_not_return"><i class="fa fa-bar-chart"></i> รายงาน การยืมสินค้ายังไม่ส่งคืน</a></li>
         </ul>
       </li>

@@ -531,6 +531,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รายงาน การยืมสินค้ายังไม่ส่งคืน';
 		break;
 
+		case 'transform_backlogs' :
+			$content = 'report/other/transform_backlogs.php';
+			$pageTitle = 'รายงาน สินค้าแปรสภาพค้างร้บ';
+		break;
+
 		//---------- รายงานระบบคลังสินค้า
 		case 'stock_balance' :
 			$content = 'report/stock/stock_balance.php';

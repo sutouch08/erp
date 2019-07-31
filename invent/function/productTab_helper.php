@@ -30,7 +30,7 @@ function productTabMenu($mode = 'order')
 function getSubTab($parent, $ajax)
 {
 	$sc = '';
-	$qs = dbQuery("SELECT * FROM tbl_product_tab WHERE id_parent = ".$parent);
+	$qs = dbQuery("SELECT * FROM tbl_product_tab WHERE id_parent = ".$parent." ORDER BY name ASC");
 
 	if( dbNumRows($qs) > 0 )
 	{

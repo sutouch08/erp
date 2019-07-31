@@ -202,6 +202,11 @@ if(isset($_GET['getLendNotReturn']) && isset($_GET['export']))
 
 
 
+if(isset($_GET['transformBacklogs']) && isset($_GET['export']))
+{
+  include 'report/stockReport/export_transform_backlogs.php';
+}
+
 
 
 if(isset($_GET['getStockGrid']))
