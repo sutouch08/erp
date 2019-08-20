@@ -55,10 +55,10 @@ $bill_discount		= $order->bDiscAmount;
 $thead	= array(
           array("ลำดับ", "width:5%; text-align:center; border-top:0px; border-top-left-radius:10px;"),
           array("บาร์โค้ด", "width:15%; text-align:center;border-left: solid 1px #ccc; border-top:0px;"),
-          array("สินค้า", "width:40%; text-align:center;border-left: solid 1px #ccc; border-top:0px;"),
+          array("สินค้า", "width:35%; text-align:center;border-left: solid 1px #ccc; border-top:0px;"),
           array("ราคา", "width:10%; text-align:center; border-left: solid 1px #ccc; border-top:0px;"),
           array("จำนวน", "width:10%; text-align:center; border-left: solid 1px #ccc; border-top:0px;"),
-          array("ส่วนลด", "width:10%; text-align:center; border-left: solid 1px #ccc; border-top:0px;"),
+          array("ส่วนลด", "width:15%; text-align:center; border-left: solid 1px #ccc; border-top:0px;"),
           array("มูลค่า", "width:10%; text-align:center; border-left: solid 1px #ccc; border-top:0px; border-top-right-radius:10px")
           );
 
@@ -128,7 +128,7 @@ while($total_page > 0 )
       $price = $rs->price;
 
       //--- ส่วนลดสินค้า (ไว้แสดงไม่มีผลในการคำนวณ)
-      $discount = $rs->discount;
+      $discount = discountLabel($rs->discount, $rs->discount2, $rs->discount3);
 
       //--- ส่วนลดสินค้า (มีผลในการคำนวณ)
       //--- ทั้งสองตารางใช้ชือฟิลด์ เดียวกัน

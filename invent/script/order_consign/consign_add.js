@@ -94,16 +94,16 @@ function validUpdate(id){
 		return false;
 	}
 
-	//---	ตรวจสอบความถูกต้องของ GP
-	if( gp != '' && isNaN( parseFloat(gp) ) ){
-		swal('GP ไม่ถูกต้อง');
-		return false;
-	}
-
-	if( parseFloat(gp) > 100 ){
-		swal('GP เกิน 100 %');
-		return false;
-	}
+	// //---	ตรวจสอบความถูกต้องของ GP
+	// if( gp != '' && isNaN( parseFloat(gp) ) ){
+	// 	swal('GP ไม่ถูกต้อง');
+	// 	return false;
+	// }
+	//
+	// if( parseFloat(gp) > 100 ){
+	// 	swal('GP เกิน 100 %');
+	// 	return false;
+	// }
 
 	if(branch == ''){
 		swal('กรุณาเลือกสาขา');
@@ -243,9 +243,9 @@ function addNew(){
 
 
 
-$(document).ready(function(){
-	$('#GP').numberOnly();
-})
+// $(document).ready(function(){
+// 	$('#GP').numberOnly();
+// })
 
 
 

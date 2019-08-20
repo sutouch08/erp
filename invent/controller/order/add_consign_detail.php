@@ -15,8 +15,33 @@ foreach( $ds as $items )
         //---- ถ้ายังไม่มีรายการในออเดอร์
         if( $order->isExistsDetail($order->id, $id) === FALSE )
         {
-          $discount['discount'] = $order->gp.' %';
-          $discount['amount']   = ($pd->price * ($order->gp * 0.01)) * $qty;
+          $gp = $order->gp;
+          //------ คำนวณส่วนลดใหม่
+					$step = explode('+', $gp);
+					$discAmount = 0;
+					$discLabel = array(0, 0, 0);
+					$price = $pd->price;
+					$i = 0;
+					foreach($step as $discText)
+					{
+						if($i < 3) //--- limit ไว้แค่ 3 เสต็ป
+						{
+							$disc = explode('%', $discText);
+							$disc[0] = trim($disc[0]); //--- ตัดช่องว่างออก
+							$discount = count($disc) == 1 ? $disc[0] : $price * ($disc[0] * 0.01); //--- ส่วนลดต่อชิ้น
+							$discLabel[$i] = count($disc) == 1 ? $disc[0] : $disc[0].'%';
+							$discAmount += $discount;
+							$price -= $discount;
+						}
+						$i++;
+					}
+
+					$total_discount = $qty * $discAmount; //---- ส่วนลดรวม
+					$total_amount = ( $qty * $price ) - $total_discount; //--- ยอดรวมสุดท้าย
+
+        
+          //$discount['discount'] = $order->gp.' %';
+        //  $discount['amount']   = ($pd->price * ($order->gp * 0.01)) * $qty;
 
           $arr = array(
                     'id_order'	      => $order->id,
@@ -27,9 +52,11 @@ foreach( $ds as $items )
                     'cost'            => $pd->cost,
                     'price'	          => $pd->price,
                     'qty'		          => $qty,
-                    'discount'	      => $discount['discount'],
-                    'discount_amount' => $discount['amount'],
-                    'total_amount'	  => ($pd->price * $qty) - $discount['amount'],
+                    'discount'	      => $discLabel[0], //$discount['discount'],
+                    'discount2'       => $discLabel[1],
+                    'discount3'       => $discLabel[2],
+                    'discount_amount' => $total_discount, ///$discount['amount'],
+                    'total_amount'	  => ($pd->price * $qty) - $total_discount, //$discount['amount'],
                     'gp'              => $order->gp
                       );
 
@@ -46,16 +73,38 @@ foreach( $ds as $items )
           $detail 	= $order->getDetail($order->id, $id);
           $qty			= $qty + $detail->qty;
 
-          $discount['discount'] = $order->gp.' %';
-          $discount['amount']   = ($pd->price * ($order->gp * 0.01)) * $qty;
+          $gp = $order->gp;
+          //------ คำนวณส่วนลดใหม่
+					$step = explode('+', $gp);
+					$discAmount = 0;
+					$discLabel = array(0, 0, 0);
+					$price = $pd->price;
+					$i = 0;
+					foreach($step as $discText)
+					{
+						if($i < 3) //--- limit ไว้แค่ 3 เสต็ป
+						{
+							$disc = explode('%', $discText);
+							$disc[0] = trim($disc[0]); //--- ตัดช่องว่างออก
+							$discount = count($disc) == 1 ? $disc[0] : $price * ($disc[0] * 0.01); //--- ส่วนลดต่อชิ้น
+							$discLabel[$i] = count($disc) == 1 ? $disc[0] : $disc[0].'%';
+							$discAmount += $discount;
+							$price -= $discount;
+						}
+						$i++;
+					}
 
+					$total_discount = $qty * $discAmount; //---- ส่วนลดรวม
+					$total_amount = ( $qty * $price ) - $total_discount; //--- ยอดรวมสุดท้าย
 
           $arr = array(
                   'id_product'      => $id,
                   'qty'             => $qty,
-                  'discount'	      => $discount['discount'],
-                  'discount_amount'	=> $discount['amount'],
-                  'total_amount'	  => ($pd->price * $qty) - $discount['amount'],
+                  'discount'	      => $discLabel[0],
+                  'discount2' => $discLabel[1],
+                  'discount3' => $discLabel[2],
+                  'discount_amount'	=> $total_discount,
+                  'total_amount'	  => ($pd->price * $qty) - $total_discount,
                   'valid'           => 0,
                   'isSaved'	        => 0, //--- ย้อนกลับมาเป็นยังไม่ได้บันทึกอีกครั้ง
                   'gp'              => $order->gp

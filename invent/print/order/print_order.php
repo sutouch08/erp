@@ -25,17 +25,18 @@ $print->add_header($header);
 //--- ฝากขาย โอนเข้าคลังฝากขาย เบิกแปรสภาพ เข้าคลังแปรสภาพ  ยืม เข้าคลังยืม
 //--- รายการที่จะพิมพ์ต้องเอามาจากการสั่งสินค้า เปรียบเทียบ กับยอดตรวจ ที่เท่ากัน หรือ ตัวที่น้อยกว่า
 
-if( $order->role == 2 OR $order->role == 5 OR $order->role == 6 )
-{
+// if( $order->role == 2 OR $order->role == 5 OR $order->role == 6 )
+// {
+//
+//   $detail = $bill->getBillDetail($order->id);
+//
+// }
+// else
+// {
+//   $detail = $order->getSoldDetails($order->id);
+// }
 
-  $detail = $bill->getBillDetail($order->id);
-
-}
-else
-{
-  $detail = $order->getSoldDetails($order->id);
-}
-
+$detail = $order->getSoldDetails($order->id);
 
 $total_row 	= dbNumRows($detail);
 
@@ -64,10 +65,10 @@ $bill_discount		= $order->bDiscAmount;
 $thead	= array(
           array("ลำดับ", "width:5%; text-align:center; border-top:0px; border-top-left-radius:10px;"),
           array("บาร์โค้ด", "width:15%; text-align:center;border-left: solid 1px #ccc; border-top:0px;"),
-          array("สินค้า", "width:40%; text-align:center;border-left: solid 1px #ccc; border-top:0px;"),
+          array("สินค้า", "width:35%; text-align:center;border-left: solid 1px #ccc; border-top:0px;"),
           array("ราคา", "width:10%; text-align:center; border-left: solid 1px #ccc; border-top:0px;"),
           array("จำนวน", "width:10%; text-align:center; border-left: solid 1px #ccc; border-top:0px;"),
-          array("ส่วนลด", "width:10%; text-align:center; border-left: solid 1px #ccc; border-top:0px;"),
+          array("ส่วนลด", "width:15%; text-align:center; border-left: solid 1px #ccc; border-top:0px;"),
           array("มูลค่า", "width:10%; text-align:center; border-left: solid 1px #ccc; border-top:0px; border-top-right-radius:10px")
           );
 

@@ -2,7 +2,7 @@
 <?php $zone = new zone($consign->id_zone); ?>
 
 <div class="row">
-	<div class="col-sm-2 padding-5 first">
+	<div class="col-sm-1 col-1-harf padding-5 first">
   	<label>เลขที่เอกสาร</label>
     <input tpe="text" class="form-control input-sm text-center" value="<?php echo $order->reference; ?>" <?php echo $disabled; ?>/>
   </div>
@@ -22,9 +22,9 @@
     <input type="text" class="form-control input-sm text-center input-header" id="zone" value="<?php echo zoneName($consign->id_zone); ?>"  <?php echo $disabled; ?>/>
   </div>
 
-	<div class="col-sm-1 padding-5">
-		<label>GP [ % ]</label>
-		<input type="text" class="form-control input-sm text-center input-header" id="GP" maxlength="5" value="<?php echo $order->gp; ?>" <?php echo $disabled; ?> />
+	<div class="col-sm-1 col-1-harf padding-5">
+		<label>GP</label>
+		<input type="text" class="form-control input-sm text-center input-header" id="GP" value="<?php echo $order->gp; ?>" <?php echo $disabled; ?> />
 	</div>
 	<div class="col-sm-1 col-1-harf padding-5 last">
 		<label>สาขา</label>

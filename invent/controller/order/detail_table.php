@@ -22,7 +22,7 @@
 							"cost"				=> $rs->cost,
 							"price"	=> number_format($rs->price, 2),
 							"qty"	=> number_format($rs->qty),
-							"discount"	=> ($order->role == 2 ? $rs->gp .' %' : discountLabel($rs->discount, $rs->discount2, $rs->discount3)),
+							"discount"	=> ($order->role == 2 ? $rs->gp : discountLabel($rs->discount, $rs->discount2, $rs->discount3)),
 							"amount"	=> number_format($rs->total_amount, 2)
 							);
 			array_push($ds, $arr);

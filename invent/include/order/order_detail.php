@@ -38,7 +38,7 @@
 <?php	$image = new image(); ?>
 <?php	while( $rs = dbFetchObject($detail) ) : ?>
 <?php 	$discount = $order->role == 2 ? $rs->gp : discountLabel($rs->discount, $rs->discount2, $rs->discount3); ?>
-<?php 	$discLabel = $order->role == 2 ? $rs->gp .' %' : discountLabel($rs->discount, $rs->discount2, $rs->discount3); ?>
+<?php 	$discLabel = $order->role == 2 ? $rs->gp : discountLabel($rs->discount, $rs->discount2, $rs->discount3); ?>
 <?php 	$cost = isset($canEditCost) && $canEditCost === TRUE ? $rs->cost : '0' ; ?>
 			<tr class="font-size-10" id="row_<?php echo $rs->id; ?>">
       	<td class="middle text-center">
