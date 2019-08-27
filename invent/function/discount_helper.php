@@ -24,4 +24,57 @@ function getDiscountAmount($p_disc, $a_disc, $price)
 }
 
 
+//--- return discount label
+function discountPercentToLabel($discount)
+{
+	$discLabel = '';
+	//------ คำนวณส่วนลดใหม่
+	$step = explode('+', $discount);
+	$i = 0;
+	foreach($step as $discText)
+	{
+		if($i < 3) //--- limit ไว้แค่ 3 เสต็ป
+		{
+			$disc = explode('%', $discText);
+			$disc[0] = trim($disc[0]); //--- ตัดช่องว่างออก
+			$discLabel .= $i === 0 ? $disc[0].'%' : '+'.$disc[0].'%';
+		}
+		$i++;
+	}
+
+	return $discLabel;
+}
+
+
+//--- return discount amount per item
+function parseDiscount($discountText, $price)
+{
+	$discAmount = 0;
+	$discLabel = array(0, 0, 0);
+	$step = explode('+', $discountText);
+	$i = 0;
+	foreach($step as $discText)
+	{
+		if($i < 3)
+		{
+			$disc = explode('%', trim($discText));
+			$disc[0] = trim($disc[0]);
+			$discount = count($disc) === 1 ? ($disc[0] > $price ? $price : $disc[0]) : ($disc[0] > 100 ? 1 : $price * ($disc[0] * 0.01)); //--- ส่วนลดต่อชิ้น เป็นจำนวนเงิน
+			$discLabel[$i] = count($disc) == 1 ? $disc[0] : $disc[0].'%';
+			$discAmount += $discount;
+			$price -= $discount;
+		}
+		$i++;
+	}
+
+	$ds = array(
+		'discAmount' => $discAmount,
+		'discLabel1' => $discLabel[0],
+		'discLabel2' => $discLabel[1],
+		'discLabel3' => $discLabel[2]
+	);
+
+	return $ds;
+}
+
 ?>

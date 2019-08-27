@@ -24,9 +24,9 @@ $qs = $cs->getDetails($cs->id);
 <?php  $totalAmount = 0; ?>
 <?php  $bc = new barcode(); ?>
 <?php  while($rs = dbFetchObject($qs)) : ?>
-<?php   $disc = explode(' ', $rs->discount); ?>
-<?php   $p_disc = count($disc) > 1 ? $disc[0] : 0; ?>
-<?php   $a_disc = count($disc) == 1 ? $disc[0] : 0; ?>
+<?php   $disc = explode('%', $rs->discount); ?>
+<?php   $p_disc = count($disc) > 1 ? $rs->discount : 0; ?>
+<?php   $a_disc = count($disc) == 1 ? $rs->discount : 0; ?>
         <tr class="font-size-12 rox" id="row-<?php echo $rs->id; ?>">
           <td class="middle text-center no">
             <?php echo $no; ?>
@@ -35,15 +35,15 @@ $qs = $cs->getDetails($cs->id);
             <?php echo $bc->getBarcode($rs->id_product); ?>
           </td>
           <td class="middle hide-text">
-            <?php echo $rs->product_code.' : '.$rs->product_name; ?>
+            <?php echo inputRow($rs->product_code.' : '.$rs->product_name); ?>
           </td>
           <td class="middle text-center">
             <span class="price" id="price-<?php echo $rs->id; ?>"><?php echo number($rs->price,2); ?></span>
             <input type="number" class="form-control input-xs text-center hide input-price" id="input-price-<?php echo $rs->id; ?>" value="<?php echo $rs->price; ?>" />
           </td>
           <td class="middle text-center">
-            <span class="p-disc" id="p_disc-<?php echo $rs->id; ?>"><?php echo number($p_disc,2); ?></span>
-            <input type="number" class="form-control input-xs text-center hide input-p_disc" id="input-p_disc-<?php echo $rs->id; ?>" value="<?php echo $p_disc; ?>" />
+            <span class="p-disc" id="p_disc-<?php echo $rs->id; ?>"><?php echo $p_disc; ?></span>
+            <input type="text" class="form-control input-xs text-center hide input-p_disc" id="input-p_disc-<?php echo $rs->id; ?>" value="<?php echo $p_disc; ?>" />
           </td>
           <td class="middle text-center">
             <span class="a-disc" id="a_disc-<?php echo $rs->id; ?>"><?php echo number($a_disc, 2); ?></span>

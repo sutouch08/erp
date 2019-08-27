@@ -17,28 +17,17 @@
   <hr style="margin-bottom:15px;" />
 
 <?php
-  $value = '299.00';
-  $step = explode('+', $value);
-  $count = count($step);
+  include 'function/discount_helper.php';
 
-  print_r($step);
-// if( isset( $_GET['stock']))
-// {
-//   include 'include/test/stock.php';
-// }
-// else if( isset( $_GET['movement']))
-// {
-//   include 'include/test/movement.php';
-// }
-// else if( isset( $_GET['buffer']))
-// {
-//   include 'include/test/buffer.php';
-// }
-// else if( isset($_GET['cancle']))
-// {
-//   include 'include/test/cancle.php';
-// }
+  $disc = '0';
+  $price = 100;
 
+  $discountText = $disc;//discountPercentToLabel($disc);
+  echo $discountText.'<br/>';
+  $discount = parseDiscount($discountText, $price);
+  echo '<pre>';
+  print_r($discount);
+  echo '</pre>';
 
 ?>
 

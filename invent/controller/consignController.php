@@ -3,6 +3,7 @@ require '../../library/config.php';
 require '../../library/functions.php';
 require '../function/tools.php';
 require '../function/zone_helper.php';
+include '../function/discount_helper.php';
 
 if(isset($_GET['addToDetail']))
 {
@@ -78,7 +79,6 @@ if(isset($_GET['addNew']))
 
 if(isset($_GET['saveConsign']))
 {
-  include '../function/discount_helper.php';
   include '../function/vat_helper.php';
   include 'consign/consign_save.php';
 }

@@ -1,6 +1,5 @@
 <?php
 $sc    = TRUE;
-
 $id    = $_POST['id_consign'];
 $id_pd = $_POST['id_product'];
 $qty   = $_POST['qty'];
@@ -16,8 +15,8 @@ $st    = new stock();
 $zone  = new zone($id_zone);
 $pd->getData($id_pd);
 
-$discount = $pDisc > 0 ? $pDisc.' %' : $aDisc;
-
+$discount = $pDisc > 0 ? discountPercentToLabel($pDisc) : $aDisc; ///--- discount_helper resturcture discount label
+$disc = parseDiscount($discount, $price);
 //---- ดึงรายการที่มีอยู่แล้ว
 $qs = $cs->getExistsDetail($id, $id_pd, $price, $discount);
 
@@ -38,7 +37,7 @@ if(dbNumRows($qs) == 1)
   }
   else
   {
-    $discountAmount = $pDisc > 0 ? (($price * ($pDisc * 0.01)) * $qty) : ($aDisc * $qty);
+    $discountAmount = $disc['discAmount'] * $qty; //$pDisc > 0 ? (($price * ($pDisc * 0.01)) * $qty) : ($aDisc * $qty);
     $totalAmount = ($qty * $price) - $discountAmount;
     $arr = array(
       'qty'  => $qty,
@@ -64,7 +63,7 @@ if(dbNumRows($qs) == 1)
         'product' => $rs->product_code.' : '.$rs->product_name,
         'price' => $rs->price,
         'qty' => $qty,
-        'p_disc' => $pDisc,
+        'p_disc' => $pDisc > 0 ? $discount : 0,
         'a_disc' => $aDisc,
         'amount' => $totalAmount
       );
@@ -86,7 +85,7 @@ else
   else
   {
     //---- Insert if not exists
-    $discountAmount = $pDisc > 0 ? (($price * ($pDisc * 0.01)) * $qty) : ($aDisc * $qty);
+    $discountAmount = $disc['discAmount'] * $qty; //$pDisc > 0 ? (($price * ($pDisc * 0.01)) * $qty) : ($aDisc * $qty);
     $totalAmount = ($qty * $price) - $discountAmount;
     $pd->getData($id_pd);
     $barcode = $bc->getBarcode($id_pd);
@@ -127,7 +126,7 @@ else
           'product' => $rs->product_code.' : '.$rs->product_name,
           'price' => $rs->price,
           'qty' => $rs->qty,
-          'p_disc' => $pDisc,
+          'p_disc' => $pDisc > 0 ? $discount : 0,
           'a_disc' => $aDisc,
           'amount' => $totalAmount
         );

@@ -80,6 +80,30 @@ function getItemByCode(){
 }
 
 
+//--- return discount amount each
+function parseDiscount(disc, price){
+  var arr = disc.split('+');
+  var discAmount = 0;
+  var price = parseFloat(price);
+  if(arr.length >= 2){
+    arr.forEach(function(item, index){
+      item = $.trim(item);
+      if(item !== '%' && item !== ''){
+        ds = item.split('%');
+        amount = price * (parseFloat(ds[0]) * 0.01);
+        discAmount += amount;
+        price -= amount;
+      }
+    });
+  }else{
+    amount = price * (parseFloat(arr[0]) * 0.01);
+    discAmount += amount;
+    price -= amount;
+  }
+
+  return discAmount;
+}
+
 
 
 function getItemByBarcode(){
@@ -239,8 +263,7 @@ function calAmount(){
   qty = isNaN(qty) ? 0 : qty;
   price = parseFloat($('#txt-price').val());
   price = isNaN(price) ? 0 : price;
-  p_disc = parseFloat($('#txt-pDisc').val());
-  p_disc = isNaN(p_disc) ? 0 : p_disc;
+  p_disc = parseDiscount($('#txt-pDisc').val(), price);
   a_disc = parseFloat($('#txt-aDisc').val());
   a_disc = isNaN(a_disc) ? 0 : a_disc;
   disc = 0;
@@ -249,7 +272,7 @@ function calAmount(){
   }
 
   if(p_disc > 0 ){
-    disc = (p_disc * 0.01) * price;
+    disc = p_disc;
   }
 
   discount = disc * qty;
@@ -357,15 +380,14 @@ function focusRow(id){
 
 function reCal(id){
   var price  = parseFloat(removeCommas($('#input-price-'+id).val()));
-  var p_disc = parseFloat(removeCommas($('#input-p_disc-'+id).val()));
+  var p_disc = removeCommas($('#input-p_disc-'+id).val());
   var a_disc = parseFloat(removeCommas($('#input-a_disc-'+id).val()));
   var qty    = parseFloat(removeCommas($('#qty-'+id).text()));
 
   price  = isNaN(price) ? 0 : price;
-  p_disc = isNaN(p_disc) ? 0 : p_disc;
+  p_disc = parseDiscount(p_disc, price);
   a_disc = isNaN(a_disc) ? 0 : a_disc;
-
-  var disc   = (price * (p_disc * 0.01)) + a_disc;
+  var disc   = p_disc + a_disc;
   var amount = qty * (price - disc);
   $('#amount-'+id).text(addCommas(amount.toFixed(2)));
   updateTotalAmount();

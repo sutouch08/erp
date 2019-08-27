@@ -15,7 +15,7 @@
 
   <div class="col-sm-1 padding-5">
     <label>ส่วนลด(%)</label>
-    <input type="number" class="form-control input-sm text-center" id="txt-pDisc" />
+    <input type="text" class="form-control input-sm text-center" id="txt-pDisc" />
   </div>
   <div class="col-sm-1 padding-5">
     <label>ส่วนลด(฿)</label>

@@ -35,6 +35,7 @@ $canEditPrice = ($pm['add'] + $pm['edit'] + $pm['delete']) > 0 ? TRUE : FALSE;
 
 
 include 'function/customer_helper.php';
+include 'function/print_helper.php';
  ?>
 
  <div class="container">

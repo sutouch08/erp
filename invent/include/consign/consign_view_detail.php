@@ -25,7 +25,7 @@
         <tr class="font-size-12">
           <td class="middle text-center"><?php echo $no; ?></td>
           <td class="middle text-center"><?php echo $bc->getBarcode($rs->id_product); ?></td>
-          <td class="middle"><?php echo limitText($rs->product_code.' : '.$rs->product_name, 120); ?></td>
+          <td class="middle"><?php echo inputRow($rs->product_code.' : '.$rs->product_name); ?></td>
           <td class="middle text-center"><?php echo number($rs->price, 2); ?></td>
           <td class="middle text-center"><?php echo $rs->discount; ?></td>
           <td class="middle text-center"><?php echo number($rs->qty); ?></td>

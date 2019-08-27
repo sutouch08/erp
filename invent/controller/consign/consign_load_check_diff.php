@@ -38,7 +38,7 @@ if($cs->isSaved == 0 && $cs->isCancle == 0 && $cs->id_consign_check == 0)
           {
             break;
           }
-          
+
           //--- สินค้าคงเหลือในโซนพอตัดหรือไม่
           $isEnough = $st->isEnough($id_zone, $rs->id_product, $diff);
 
@@ -49,11 +49,12 @@ if($cs->isSaved == 0 && $cs->isCancle == 0 && $cs->id_consign_check == 0)
             //--- ดึง GP จากเอกสารฝากขายล่าสุด
             $gp = $cs->getProductGP($rs->id_product, $id_zone);
 
+            $disc = parseDiscount($gp, $pd->price);
             //--- แปลงเป็นส่วนลด (Label)
-            $disc = $gp > 0 ? $gp.' %' : 0;
+            //$disc = $gp != 0 ? $gp.' %' : 0;
 
             //--- แปลงเป็นส่วนลดรวม (ยอดเงิน)
-            $discAmount = $gp > 0 ? (($gp * 0.01) * $pd->price) * $diff : 0;
+            $discAmount = $disc['discAmount'];
 
             //--- มูลค่าหลังหักส่วนลด (ยอดเงิน)
             $totalAmount = ($diff * $pd->price) - $discAmount;
@@ -67,7 +68,7 @@ if($cs->isSaved == 0 && $cs->isCancle == 0 && $cs->id_consign_check == 0)
               'cost' => $pd->cost,
               'price' => $pd->price,
               'qty' => $diff,
-              'discount' => $disc,
+              'discount' => $gp,
               'discount_amount' => $discAmount,
               'total_amount' => $totalAmount,
               'id_consign_check_detail' => $rs->id,
