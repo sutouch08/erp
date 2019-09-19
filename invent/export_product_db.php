@@ -8,6 +8,7 @@
 		<p class="pull-right top-p">
 			<button class="btn btn-info btn-sm" type="button" onclick="doExportAll()"><i class="fa fa-file-excel-o"></i> ส่งออกรายการทั้งหมด</button>
 			<button class="btn btn-success btn-sm" type="button" onclick="doExport()"><i class="fa fa-file-excel-o"></i> ส่งออกรายการที่เลือก</button>
+			<button class="btn btn-primary btn-sm" type="button" onclick="doExportSqlAll()"><i class="fa fa-file-o"></i> ส่งออกรายการทั้งหมดเป็น SQL</button>
 		</p>
 	</div>
 
@@ -178,6 +179,14 @@ function doExportAll(){
 	get_download(token);
 	window.location.href = "controller/exportController.php?exportAllProduct&token="+token;
 }
+
+
+function doExportSqlAll(){
+	var token = new Date().getTime();
+	get_download(token);
+	window.location.href = "controller/exportController.php?exportAllProductSql&token="+token;
+}
+
 
 
 $('#fromDate').datepicker({

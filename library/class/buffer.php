@@ -182,6 +182,14 @@ class buffer
   }
 
 
+  public function get_buffer_zone_product($id_pd, $id_zone)
+  {
+    $qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_buffer WHERE id_product = '{$id_pd}' AND id_zone = {$id_zone}");
+    list($qty) = dbFetchArray($qs);
+    return $qty === NULL ? 0 : $qty;
+  }
+
+
 
 
 

@@ -112,7 +112,7 @@ if( isset($_GET['exportOrderToDHL']))
             tbl_order AS o
           WHERE
             o.ref_code != ''
-            AND o.shipping_code != '' 
+            AND o.shipping_code != ''
             AND o.isOnline = 1
             AND o.isExpire = 0 ";
 
@@ -327,6 +327,60 @@ if(isset( $_GET['exportAllProduct'] ))
 	$writer = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
 	$writer->save('php://output');
 
+}
+
+
+
+if(isset( $_GET['exportAllProductSql'] ))
+{
+  ini_set('memory_limit', '1024M');
+  set_time_limit(600);
+
+	$qr  = "SELECT bc.barcode, pd.code AS item_code, pd.name AS item_name, st.code AS style, pd.cost, pd.price ";
+	$qr .= "FROM tbl_product AS pd ";
+	$qr .= "JOIN tbl_product_style AS st ON pd.id_style = st.id ";
+	$qr .= "LEFT JOIN tbl_barcode AS bc ON pd.id = bc.id_product ";
+	$qr .= "ORDER BY pd.id_style ASC ";
+
+	$qs = dbQuery($qr);
+  $ds = "";
+  $rows = dbNumRows($qs);
+
+	if( $rows > 0 )
+	{
+    $id = 1;
+    $count = 0;
+		while( $rs = dbFetchObject($qs) )
+		{
+      if($count%100 == 0 OR $count == 0)
+      {
+        $ds .= "\n\nINSERT INTO tbl_items (id_item, barcode, item_code, item_name, style, cost, price) VALUES ";
+      }
+
+      $ds .= "\n({$id}, '{$rs->barcode}', '{$rs->item_code}', '".addslashes($rs->item_name)."', '{$rs->style}', {$rs->cost}, {$rs->price})";
+
+      if(($count+1)%100 == 0 && $count != 0 OR ($count+1) == $rows)
+      {
+        $ds .= ";";
+      }
+      else
+      {
+        $ds .= ",";
+      }
+
+      $count++;
+      $id++;
+		}
+	}
+
+	setToken($_GET['token']);
+  $date = date('Y-m-d H:i:s');
+	$file_name = "items-{$date}.sql";
+  header('Content-Type: application/octet-stream');
+  header("Content-Transfer-Encoding: Binary");
+  header("Content-disposition: attachment; filename=\"".$file_name."\"");
+  echo $ds;
+  exit;
 }
 
 if(isset($_GET['clearFilter']))

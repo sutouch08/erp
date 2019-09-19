@@ -9,6 +9,45 @@ $('#add-modal').on('shown.bs.modal', function(){
 
 
 
+$('#pdCode').autocomplete({
+  source:'controller/autoCompleteController.php?getItemCodeAndId',
+  autoFocus:true,
+  close:function(){
+    var rs = $(this).val();
+    var arr = rs.split(' | ');
+    if(arr.length == 2){
+      var code = arr[0];
+      var id = arr[1];
+      $(this).val(code);
+      $('#id_pd').val(id);
+    }else{
+      $(this).val('');
+      $('#id_pd').val('');
+    }
+  }
+});
+
+
+$('#zoneCode').autocomplete({
+  source:'controller/autoCompleteController.php?getZone',
+  autoFocus:true,
+  close:function(){
+    var rs = $(this).val();
+    var arr = rs.split(' | ');
+    if(arr.length == 2){
+      var code = arr[0];
+      var id = arr[1];
+      $(this).val(code);
+      $('#id_zone').val(id);
+    }else{
+      $(this).val('');
+      $('#id_zone').val('');
+    }
+  }
+});
+
+
+
 function recalStock(){
   var zoneCode = $('#zoneCode').val();
   if(zoneCode.length == 0){

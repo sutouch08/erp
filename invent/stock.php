@@ -53,6 +53,8 @@ $zoneCode = getFilter('zoneCode', 'zoneCode', '');
 	</div>
 	<?php endif; ?>
 </div>
+<input type="hidden" name="id_zone" id="id_zone">
+<input type="hidden" name="id_pd" id="id_pd">
 </form>
 
 <hr class="margin-top-15 margin-bottom-15" />

@@ -181,5 +181,13 @@ class cancle_zone
 
 
 
+	public function get_cancle_zone_product($id_pd, $id_zone)
+	{
+		$qs = dbQuery("SELECT SUM(qty) AS qty FROM tbl_cancle WHERE id_product = '{$id_pd}' AND id_zone = {$id_zone}");
+		list($qty) = dbFetchArray($qs);
+		return $qty === NULL ? 0 : $qty;
+	}
+
+
 }
 ?>
