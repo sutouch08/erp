@@ -84,6 +84,7 @@ $excel->getActiveSheet()->setCellValue('AO1', 'rule_name');
 $excel->getActiveSheet()->setCellValue('AP1', 'zone');
 $excel->getActiveSheet()->setCellValue('AQ1', 'warehouse');
 $excel->getActiveSheet()->setCellValue('AR1', 'emp_name');
+$excel->getActiveSheet()->setCellValue('AS1', 'emp_name');
 
 $row = 2;
 
@@ -141,6 +142,7 @@ if(dbNumRows($qs) > 0)
     $excel->getActiveSheet()->setCellValue('AP'.$row, $rs->id_zone);
     $excel->getActiveSheet()->setCellValue('AQ'.$row, $wh->getName($rs->id_warehouse));
     $excel->getActiveSheet()->setCellValue('AR'.$row, $rs->employee_name);
+    $excel->getActiveSheet()->setCellValue('AS'.$row, $rs->reference);
     $row++;
   }
 

@@ -232,6 +232,12 @@ if(isset($_GET['importOrderFromWeb']))
         //--- Shopee
         $shopeeCustomer = $customer->getDataByCode('020OS0001(ช้อปปี้)');
 
+        //--- K Plus
+        $K_PlusCustomer = $customer->getDataByCode('020OMK001');
+
+        //--- JD Central
+        $JD_CentralCustomer = $customer->getDataByCode('020OMJ01');
+
         //--- ดึง ID payment ทาง Omise
         $omise_payment_id = getConfig('OMISE_PAYMENT_ID');
 
@@ -346,12 +352,18 @@ if(isset($_GET['importOrderFromWeb']))
             {
               $cusData = $lazadaCustomer;
             }
-
-            if($rs['L'] == 'SHOPEE')
+            else if($rs['L'] == 'SHOPEE')
             {
               $cusData = $shopeeCustomer;
             }
-
+            else if($rs['L'] == 'KB')
+            {
+              $cusData = $K_PlusCustomer;
+            }
+            else if($rs['L'] == 'JD')
+            {
+              $cusData = $JD_CentralCustomer;
+            }
 
             //------ เช็คว่ามีออเดอร์นี้อยู่ในฐานข้อมูลแล้วหรือยัง
             //------ ถ้ามีแล้วจะได้ id_order กลับมา ถ้ายังจะได้ FALSE;

@@ -38,6 +38,8 @@
 
     $buffer = new buffer();
 
+    $cancle = new cancle_zone();
+
     $stock = new stock();
 
     $consign = new order_consign($order->id);
@@ -100,6 +102,21 @@
           } //--- End while
 
         } //--- end if dbNumRows
+
+        //--- ดึงรายการใน cancle กลับเข้า buffer
+        $cancleProduct = $cancle->getCancleProductByOrder($order->id);
+
+        if(dbNumRows($cancleProduct) > 0)
+        {
+          while($cp = dbFetchObject($cancleProduct))
+          {
+            $cs = $buffer->updateBuffer($cp->id_order, $cp->id_style, $cp->id_product, $cp->id_zone, $cp->id_warehouse, $cp->qty);
+            if($cs === TRUE)
+            {
+              $cancle->delete($cp->id);
+            }
+          }
+        }
 
       } //--- end if order->state >= 8  ถ้าสถานะปัจจุบัน มากกกว่า หรือ เท่ากับ 8 (เปิดบิลแล้ว)
 

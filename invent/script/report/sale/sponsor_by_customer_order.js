@@ -96,6 +96,8 @@ function getReport(){
   var fromDate = $('#fromDate').val();
   var toDate = $('#toDate').val();
 
+  var year = $('#budgetYear').val();
+
   //--- กรุณาระบุลูกค้า
   if(allCustomer == 0 ){
     if(fromCode.length == 0 || toCode.length == 0){
@@ -117,6 +119,7 @@ function getReport(){
     {'name' : 'toCode', 'value' : toCode},
     {'name' : 'fromDate', 'value' : fromDate},
     {'name' : 'toDate', 'value' : toDate},
+    {'name' : 'year', 'value' : year}
   ];
 
 
@@ -190,6 +193,7 @@ function doExport(){
   //----  วันที่
   var fromDate = $('#fromDate').val();
   var toDate = $('#toDate').val();
+  var year = $('#budgetYear').val();
 
   //--- กรุณาระบุลูกค้า
   if(allCustomer == 0 ){
@@ -212,6 +216,7 @@ function doExport(){
     {'name' : 'toCode', 'value' : toCode},
     {'name' : 'fromDate', 'value' : fromDate},
     {'name' : 'toDate', 'value' : toDate},
+    {'name' : 'year', 'value' : year}
   ];
 
   data = $.param(data);

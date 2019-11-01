@@ -127,6 +127,76 @@ class support_budget
   }
 
 
+  //--- คำนวนยอดใช้ไปใหม่
+  public function reCalBudget($id)
+  {
+    //---- ดึงยอดใช้แต่ยังไม่เปิดบิล
+    $temp = $this->getTempUsed($id);
+
+    //--- ยอดใช้ไปเปิดบิลแล้ว
+    $sold = $this->getSoldAmount($id);
+
+    //--- รวม 2 ยอดเป็นยอดใช้ไป
+    $used = $temp + $sold;
+
+    //--- update ยอดใช้ไป
+    $this->updateUsed($id, $used);
+
+    //--- update ยอดคงเหลือ
+    $this->calculate($id);
+
+    return TRUE;
+  }
+
+
+
+  //--- ยอดที่อยู่ในออเดอร์แล้วแต่ยังไม่เปิดบิล
+  public function getTempUsed($id)
+  {
+    $qr  = "SELECT SUM(od.total_amount) AS used ";
+    $qr .= "FROM tbl_order_detail AS od ";
+    $qr .= "JOIN tbl_order AS o ON od.id_order = o.id ";
+    $qr .= "WHERE o.role = 3 ";
+    $qr .= "AND o.isExpire = 0 ";
+    $qr .= "AND o.isCancle = 0 ";
+    $qr .= "AND od.is_expired = 0 ";
+    $qr .= "AND od.valid = 0 ";
+    $qr .= "AND o.id_budget = ".$id;
+
+    $qs = dbQuery($qr);
+
+    if(dbNumRows($qs) == 1)
+    {
+      $rs = dbFetchObject($qs);
+      return is_null($rs->used) ? 0 : $rs->used;
+    }
+
+    return 0;
+  }
+
+  //--- ยอดสปอนเซอร์ที่เปิดบิลแล้ว ตาม id_budget
+  public function getSoldAmount($id)
+  {
+    $qr  = "SELECT SUM(total_amount_inc) AS used ";
+  	$qr .= "FROM tbl_order_sold ";
+  	$qr .= "WHERE id_role = 3 ";
+  	$qr .= "AND id_budget = ".$id;
+
+    $qs = dbQuery($qr);
+
+    if(dbNumRows($qs) == 1)
+    {
+      $rs = dbFetchObject($qs);
+      return is_null($rs->used) ? 0 : $rs->used;
+    }
+
+    return 0;
+  }
+
+  public function updateUsed($id, $used)
+  {
+    return dbQuery("UPDATE tbl_support_budget SET used = ".$used." WHERE id = ".$id);
+  }
 
   public function getBudgetList($id_support)
   {

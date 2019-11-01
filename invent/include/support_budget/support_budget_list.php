@@ -107,9 +107,10 @@ $sYear = getFilter('sYear', 'sSupportYear', '');
         <td class="middle"><?php echo $rs->name; ?></td>
         <td class="middle text-center"><?php echo $bd->year; ?></td>
         <td class="middle text-center"><?php echo number($bd->budget, 2); ?></td>
-        <td class="middle text-center"><?php echo number($bd->used, 2); ?></td>
-        <td class="middle text-center"><?php echo number($bd->balance, 2); ?></td>
+        <td class="middle text-center" id="used-<?php echo $rs->id_budget; ?>"><?php echo number($bd->used, 2); ?></td>
+        <td class="middle text-center" id="balance-<?php echo $rs->id_budget; ?>"><?php echo number($bd->balance, 2); ?></td>
         <td class="middle text-right">
+          <button type="button" class="btn btn-xs btn-primary" onclick="reCalBudget(<?php echo $rs->id_budget; ?>)">Recal</button>
           <button type="button" class="btn btn-xs btn-info" onclick="getDetail(<?php echo $rs->id; ?>)"><i class="fa fa-eye"></i></button>
           <?php if( $edit ) : ?>
           <button type="button" class="btn btn-xs btn-warning" onclick="goEdit(<?php echo $rs->id; ?>)"><i class="fa fa-pencil"></i></button>

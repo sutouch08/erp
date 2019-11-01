@@ -160,7 +160,8 @@ class sponsor_budget
     $qr .= "AND o.isExpire = 0 ";
     $qr .= "AND o.isCancle = 0 ";
     $qr .= "AND od.is_expired = 0 ";
-    $qr .= "AND od.valid = 0 ";
+    $qr .= "AND o.state < 8 ";
+    $qr .= "AND od.isSaved = 1 ";
     $qr .= "AND o.id_budget = ".$id;
 
     $qs = dbQuery($qr);

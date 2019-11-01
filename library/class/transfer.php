@@ -245,7 +245,8 @@ class transfer
 
   public function cancled($id)
   {
-    return dbQuery("UPDATE tbl_transfer SET isCancle = 1 WHERE id = '".$id."'");
+    $emp = getCookie('user_id');
+    return dbQuery("UPDATE tbl_transfer SET isCancle = 1, emp_upd = $emp WHERE id = '".$id."'");
   }
 
 

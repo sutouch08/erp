@@ -1,3 +1,4 @@
+<?php include 'function/sponsor_helper.php'; ?>
 <div class="container">
   <div class="row top-row">
     <div class="col-sm-6 top-col">
@@ -38,6 +39,12 @@
     <label class="display-block not-show">วันที่</label>
     <input type="text" class="form-control input-sm text-center date-box" id="toDate" placeholder="สิ้นสุด"  />
   </div>
+  <div class="col-sm-1 padding-5 last">
+    <label class="display-block">ปีงบประมาณ</label>
+    <select class="form-control input-sm text-center" id="budgetYear">
+      <option value="0">ทั้งหมด</option>
+      <?php echo selectSponsorYears(); ?>
+    </select>
 </div>
 
 <input type="hidden" id="allCustomer" value="1" />

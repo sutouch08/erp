@@ -17,6 +17,32 @@ if( isset( $_GET['addNewSupport']))
 
 
 
+//---- Recal ยอดใช้ไป ยอดคงเหลือ
+if(isset($_GET['reCalBudget']))
+{
+	$sc = TRUE;
+	$id_budget = $_GET['id_budget'];
+	$budget = new support_budget();
+
+	if($budget->reCalBudget($id_budget) === FALSE)
+	{
+		$sc = FALSE;
+		$message = 'Recalculate budget not successfully please try again later';
+	}
+
+	if($sc === TRUE)
+	{
+		$budget->getData($id_budget);
+		$ds = array(
+			'used' => number($budget->used, 2),
+			'balance' => number($budget->balance,2)
+		);
+	}
+
+	echo $sc === TRUE ? json_encode($ds) : $message;
+
+}
+
 
 
 //---	ตรวจสอบปีซ้ำกันมั้ย

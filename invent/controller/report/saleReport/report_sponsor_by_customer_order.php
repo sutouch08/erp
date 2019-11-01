@@ -8,12 +8,19 @@ $toCode = $_GET['toCode']; //-- รหัสลูกค้า
 
 $fromDate = fromDate($_GET['fromDate']);
 $toDate = toDate($_GET['toDate']);
+$year = $_GET['year'];
+
 $ds = array();
 
 
-$qr  = "SELECT reference, customer_code, customer_name, SUM(qty) AS qty, SUM(total_amount_inc) AS amount, date_add ";
-$qr .= "FROM tbl_order_sold ";
-$qr .= "WHERE id_role IN(".$role.") ";
+$qr  = "SELECT o.reference, o.customer_code, o.customer_name, SUM(o.qty) AS qty, SUM(o.total_amount_inc) AS amount, o.date_add ";
+$qr .= "FROM tbl_order_sold AS o ";
+$qr .= "LEFT JOIN tbl_sponsor_budget AS b ON o.id_budget = b.id ";
+$qr .= "WHERE o.id_role IN(".$role.") ";
+if($year != 0)
+{
+  $qr .= "AND b.year = '{$year}' ";
+}
 
 if($allCustomer == 0)
 {
