@@ -31,7 +31,8 @@ foreach( $ds as $items )
                   "cost"          => $pd->cost,
                   "price"	        => $pd->price,
                   "qty"		        => $qty,
-                  "total_amount"	=> ($pd->price * $qty)
+                  "total_amount"	=> ($pd->price * $qty),
+                  "isCount"       => $pd->count_stock
                 );
 
           if( $order->addDetail($arr) === FALSE )
