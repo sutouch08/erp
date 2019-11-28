@@ -256,6 +256,12 @@ if( isset( $_GET['removeDetail'] ) )
 		include 'order/delete_transform_detail.php';
 	}
 
+	//---	ยืมสินค้า
+	if( $order->role == 6)
+	{
+		include 'order/delete_lend_detail.php';
+	}
+
 }
 
 

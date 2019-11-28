@@ -16,6 +16,9 @@
 	include 'function/zone_helper.php';
 	include 'function/branch_helper.php';
 
+	$allowEditDisc  = getConfig('ALLOW_EDIT_DISCOUNT');
+	$allowEditPrice = getConfig('ALLOW_EDIT_PRICE');
+	$allowEditCost  = getConfig('ALLOW_EDIT_COST');
 
 ?>
 <div class="container">
