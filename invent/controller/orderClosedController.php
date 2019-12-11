@@ -39,6 +39,13 @@ if( isset( $_GET['printOrderBarcode']))
 }
 
 
+//---	พิมพ์ packing list แบบมีบาร์โค้ด
+if( isset( $_GET['printOrderZoneBarcode']))
+{
+	include '../print/order/print_order_zone_barcode.php';
+}
+
+
 if( isset( $_GET['getOnlineAddress'] ) )
 {
 

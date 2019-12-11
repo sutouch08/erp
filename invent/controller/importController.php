@@ -438,7 +438,8 @@ if(isset($_GET['importOrderFromWeb']))
               					'is_so'				=> $is_so,
               					'id_budget'		=> $id_budget,
               					'gp'					=> $gp,
-              					'ref_code' 		=> $ref_code
+              					'ref_code' 		=> $ref_code,
+                        'is_import'   => 1
               					);
 
 
@@ -459,10 +460,10 @@ if(isset($_GET['importOrderFromWeb']))
                 					"customer_code"	=> $customerName,
                 					"first_name"	=> $customerName,
                 					"last_name"	=> '',
-                					"address1"	=> $rs['B'],
-                					"address2"	=> $rs['E'],
-                          "district"  => $rs['D'],
-                					"province"	=> $rs['C'],
+                					"address1"	=> addslashes($rs['B']),
+                					"address2"	=> addslashes($rs['E']),
+                          "district"  => addslashes($rs['D']),
+                					"province"	=> addslashes($rs['C']),
                 					"postcode"	=> $rs['F'],
                 					"phone"		=> $rs['H'],
                 					"email"			=> $rs['G'],

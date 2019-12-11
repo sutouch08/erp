@@ -34,3 +34,13 @@ function printOrderBarcode(){
   window.open(target, '_blank', prop);
 
 }
+
+
+//--- พิมพ์ packing list แบบมีบาร์โค้ดและโซน
+function printOrderZoneBarcode(){
+
+  var id      = $("#id_order").val();
+  var target  = "controller/orderClosedController.php?printOrderZoneBarcode&id_order="+id;
+  window.open(target, '_blank', prop);
+
+}

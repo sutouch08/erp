@@ -50,6 +50,7 @@
       <?php if($order->state == 10 && $edit) : ?>
         <button type="button" class="btn btn-sm btn-warning" onclick="setNotDelivery()"><i class="fa fa-trash"></i> ยกเลิกการจัดส่ง</button>
       <?php endif; ?>
+      <button type="button" class="btn btn-sm btn-success" onclick="printOrderZoneBarcode()"><i class="fa fa-print"></i>ใบจัดสินค้า(มีโซน)</button>
       <button type="button" class="btn btn-sm btn-info" onclick="printAddress()"><i class="fa fa-print"></i> ใบนำส่ง</button>
       <button type="button" class="btn btn-sm btn-primary" onclick="printOrder()"><i class="fa fa-print"></i> Packing List </button>
       <button type="button" class="btn btn-sm btn-success" onclick="printOrderBarcode()"><i class="fa fa-print"></i> Packing List (barcode)</button>

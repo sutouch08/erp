@@ -183,7 +183,6 @@ if( isset($_GET['exportOrderToDHL']))
 
       $adr->getOnlineAddressByCustomerCode($rs->online_code);
 
-
       $excel->getActiveSheet()->setCellValue('C'.$row, $rs->ref_code);
       $excel->getActiveSheet()->setCellValue('D'.$row, $deliveryCode);
       $excel->getActiveSheet()->setCellValue('F'.$row, trim($adr->first_name.' '.$adr->last_name));

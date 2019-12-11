@@ -1062,6 +1062,12 @@ class order
 	}
 
 
+	//---- รายการที่บันทึกขายไว้พิมพ์แบบมีโซน
+	public function getSoldDetailsWhithZone($id)
+	{
+		$qr = "SELECT * FROM tbl_order_sold WHERE id_order = {$id}";
+	}
+
 	//---	รายการที่บันทึกขายไว้ เพื่อส่งออกไป Formula
 	public function getSoldDetails($id)
 	{

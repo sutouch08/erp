@@ -160,8 +160,24 @@ class online_address
 				$this->$key = $val;
 			}
 		}
+		else
+		{
+			$this->id = NULL;
+			$this->customer_code = NULL;
+			$this->first_name = NULL;
+			$this->last_name = NULL;
+			$this->address1 = NULL;
+			$this->address2 = NULL;
+			$this->district = NULL;
+			$this->province = NULL;
+			$this->postcode = NULL;
+			$this->phone = NULL;
+			$this->email = NULL;
+			$this->alias = NULL;
+			$this->is_default = 0;
+		}
 	}
-	
+
 
 
 	public function getAddressByCode(	$online_code)
