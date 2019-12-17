@@ -487,6 +487,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รายงาน ฝากขายแยกตามลูกค้า(ยอดส่ง)';
 		break;
 
+		case 'consignment_by_customer_group_by_document' :
+			$content = 'report/sales/consignment_by_customer_group_by_document.php';
+			$pageTitle = 'รายงาน เอกสารฝากขายแยกตามลูกค้า(ยอดส่ง)';
+		break;
+
 
 		//---- รายงานตรวจสอบ
 		case 'sponsor_by_customer_order' :

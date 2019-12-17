@@ -104,6 +104,7 @@
           <li><a href="index.php?content=sale_online_channels_details"><i class="fa fa-bar-chart"></i> รายงาน ออเดอร์ออนไลน์ แสดงรายละเอียดการจัดส่ง</a></li>
           <li class="divider"></li>
           <li><a href="index.php?content=consignment_by_customer"><i class="fa fa-bar-chart"></i> รายงาน ฝากขายแยกตามลูกค้า(ยอดส่ง)</a></li>
+          <li><a href="index.php?content=consignment_by_customer_group_by_document"><i class="fa fa-bar-chart"></i> รายงาน เอกสารฝากขายแยกตามลูกค้า(ยอดส่ง)</a></li>
         </ul>
       </li>
 
