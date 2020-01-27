@@ -117,6 +117,12 @@ class consign_check
   }
 
 
+  public function unvalid($id)
+  {
+    $id_emp = getCookie('user_id');
+    return dbQuery("UPDATE tbl_consign_check SET valid = 0, id_consign = 0, emp_upd = {$id_emp} WHERE id = {$id} AND valid = 1");
+  }
+
 
   public function cancleConsignCheck($id)
   {

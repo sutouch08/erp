@@ -50,10 +50,16 @@ if( isset( $_GET['getOnlineAddress'] ) )
 {
 
 	$code 	= $_GET['online_code'];
-	$online = new online_address();
-	$id 		= $online->getDefaultId($code);
-
-	echo $id == '' ? 'noaddress' : $id;
+	$id_order = $_GET['id_order'];
+	$order = new order();
+	$address_id = $order->get_address_id($id_order);
+	
+	if($address_id === FALSE)
+	{
+		$online = new online_address();
+		$address_id = $online->getDefaultId($code);
+	}
+	echo empty($address_id) ? 'noaddress' : $address_id;
 }
 
 

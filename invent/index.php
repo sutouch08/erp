@@ -577,6 +577,11 @@ if( !getConfig('CLOSED') )
 			$pageTitle = 'รายงานการรับสินค้าแยกตามเลขที่เอกสาร';
 			break;
 
+		case 'received_by_items' :
+			$content = 'report/stock/received_by_items.php';
+			$pageTitle = 'รายงานการรับสินค้าแยกตามรายการสินค้า';
+			break;
+
 		case 'received_transform_by_document' :
 			$content = 'report/stock/received_transform_by_document.php';
 			$pageTitle = 'รายงานการรับสินค้าแปรสภาพแยกตามเลขที่เอกสาร';

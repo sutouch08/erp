@@ -1,4 +1,6 @@
 <?php
+ini_set('memory_limit', '2048M');
+set_time_limit(600);
 //--- รายงานสินค้าคงเหลือ ณ ปัจจุบัน
 $sc = array();
 $allProduct = $_GET['allProduct'];

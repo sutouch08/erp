@@ -16,7 +16,7 @@ if($txt != '*')
   $qr .= "WHERE pd.code LIKE '%".$txt."%' ";
 }
 
-$qr .= "ORDER BY ps.code ASC, pd.code ASC ";
+$qr .= "ORDER BY ps.code, co.code, si.position ASC ";
 $qr .= "LIMIT ".$limit;
 
 $qs = dbQuery($qr);

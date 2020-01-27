@@ -48,6 +48,21 @@ class order
 	}
 
 
+	public function get_address_id($id)
+	{
+		$qs = dbQuery("SELECT address_id FROM tbl_order WHERE id = {$id}");
+		if(dbNumRows($qs) === 1)
+		{
+			$rs = dbFetchArray($qs);
+			if($rs['address_id'] !== NULL){
+				return $rs['address_id'];
+			}
+
+			return FALSE;
+		}
+
+		return FALSE;
+	}
 
 
 

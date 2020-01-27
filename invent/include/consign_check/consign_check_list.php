@@ -201,6 +201,11 @@ $qs = dbQuery("SELECT * FROM tbl_consign_check ".$where." LIMIT ".$paginator->Pa
               <i class="fa fa-trash"></i>
             </button>
           <?php endif; ?>
+          <?php if($delete && $rs->valid == 1) : ?>
+            <button type="button" class="btn btn-xs btn-danger" title="ดึงกลับ" id="btn-pull-back-<?php echo $rs->id; ?>" onclick="pullback(<?php echo $rs->id;?>, '<?php echo $rs->reference; ?>')">
+              <i class="fa fa-refresh"></i>
+            </button>
+          <?php endif; ?>
         <?php endif; //--- end if status != 2 ?>
           </td>
         </tr>

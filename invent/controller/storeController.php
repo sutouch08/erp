@@ -122,6 +122,7 @@ if(isset($_GET['clearFilter']) && isset($_GET['stock_movement']))
 {
 	deleteCookie('reference');
 	deleteCookie('pdCode');
+	deleteCookie('whCode');
 	deleteCookie('zoneCode');
 	deleteCookie('fromDate');
 	deleteCookie('toDate');

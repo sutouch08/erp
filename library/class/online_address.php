@@ -213,6 +213,18 @@ class online_address
 	}
 
 
+	public function get_id($customer_code, $address)
+	{
+		$qs = dbQuery("SELECT id FROM tbl_address_online WHERE customer_code = '".$customer_code."' AND address1 = '".$address."'");
+		if(dbNumRows($qs) > 0)
+		{
+			$rs = dbFetchArray($qs);
+			return $rs['id'];
+		}
+
+		return FALSE;
+	}
+
 
 	public function clearProperties()
 	{

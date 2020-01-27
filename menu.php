@@ -80,6 +80,7 @@
     	<li class="dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i> รายงาน ระบบคลังสินค้า</a>
         <ul class="dropdown-menu">
           <li><a href="index.php?content=received_by_document"><i class="fa fa-bar-chart"></i>รายงาน การรับสินค้าจากการซื้อแยกตามเอกสาร</a></li>
+          <li><a href="index.php?content=received_by_items"><i class="fa fa-bar-chart"></i>รายงาน การรับสินค้าจากการซื้อแยกรายการสินค้า</a></li>
           <li><a href="index.php?content=received_transform_by_document"><i class="fa fa-bar-chart"></i>รายงาน การรับสินค้าแปรสภาพแยกตามเอกสาร</a></li>
           <li><a href="index.php?content=stock_balance"><i class="fa fa-bar-chart"></i>รายงาน สินค้าคงเหลือ</a></li>
           <li><a href="index.php?content=current_stock"><i class="fa fa-bar-chart"></i>รายงาน สินค้าคงเหลือปัจจุบัน</a></li>

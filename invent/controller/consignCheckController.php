@@ -12,6 +12,12 @@ if(isset($_GET['addNew']))
 }
 
 
+//--- ดึงสถานะกลับมาเป็นยังไม่ถูกดึงไปเปิดบิล
+if(isset($_GET['pullBack']))
+{
+  include 'consign_check/consign_check_pull_back.php';
+}
+
 //---- โหลดยอดตั้งต้นใหม่
 if(isset($_GET['reloadStockZone']))
 {

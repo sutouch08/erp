@@ -212,6 +212,7 @@ if(isset($_GET['importOrderFromWeb']))
         $customer = new customer();
         $channels = new channels();
         $payment = new payment_method();
+        $address = new online_address();
 
         //--- รหัสเล่มเอกสาร [อ้างอิงจาก formula]
         //--- ถ้าเป็นฝากขายแบบโอนคลัง ยืมสินค้า เบิกแปรสภาพ เบิกสินค้า (ไม่เปิดใบกำกับ เปิดใบโอนคลังแทน) นอกนั้น เปิด SO
@@ -414,6 +415,28 @@ if(isset($_GET['importOrderFromWeb']))
               //---- กรณียังไม่มีออเดอร์
               if($id_order === FALSE)
               {
+                //--- add new address
+                if($address->isExists($customerName, $rs['B']) === FALSE)
+                {
+                  $arr = array(
+                        "customer_code"	=> $customerName,
+                        "first_name"	=> $customerName,
+                        "last_name"	=> '',
+                        "address1"	=> addslashes($rs['B']),
+                        "address2"	=> addslashes($rs['E']),
+                        "district"  => addslashes($rs['D']),
+                        "province"	=> addslashes($rs['C']),
+                        "postcode"	=> $rs['F'],
+                        "phone"		=> $rs['H'],
+                        "email"			=> $rs['G'],
+                        "alias"			=> 'home'
+                      );
+
+                  $address->add($arr);
+                }
+
+                $address_id = $address->get_id($customerName, addslashes($rs['B']));
+
                 //--- เตรียมข้อมูลสำหรับเพิ่มเอกสารใหม่
               	$arr = array(
               					'bookcode'		=> $bookcode,
@@ -439,7 +462,8 @@ if(isset($_GET['importOrderFromWeb']))
               					'id_budget'		=> $id_budget,
               					'gp'					=> $gp,
               					'ref_code' 		=> $ref_code,
-                        'is_import'   => 1
+                        'is_import'   => 1,
+                        'address_id'  => $address_id === FALSE ? NULL : $address_id
               					);
 
 
@@ -450,28 +474,6 @@ if(isset($_GET['importOrderFromWeb']))
 
               		//---	เพิ่มผู้ทำรายการแยกตางหาก
               		$order->insertUser($id_order, $id_user);
-
-                  //--- เช็คที่อยู่ของลูกค้าว่ามีแล้วหรือยัง
-                  $address = new online_address();
-
-                  if($address->isExists($customerName, $rs['B']) === FALSE)
-                  {
-                    $arr = array(
-                					"customer_code"	=> $customerName,
-                					"first_name"	=> $customerName,
-                					"last_name"	=> '',
-                					"address1"	=> addslashes($rs['B']),
-                					"address2"	=> addslashes($rs['E']),
-                          "district"  => addslashes($rs['D']),
-                					"province"	=> addslashes($rs['C']),
-                					"postcode"	=> $rs['F'],
-                					"phone"		=> $rs['H'],
-                					"email"			=> $rs['G'],
-                					"alias"			=> 'home'
-                				);
-
-                    $address->add($arr);
-                  }
 
                   $import++;
                 }
@@ -520,7 +522,7 @@ if(isset($_GET['importOrderFromWeb']))
 
             //---- เช็คข้อมูล ว่ามีรายละเอียดนี้อยู่ในออเดอร์แล้วหรือยัง
             //---- ถ้ามีข้อมูลอยู่แล้ว (TRUE)ให้ข้ามการนำเข้ารายการนี้ไป
-            if($order->isExistsDetail($id_order, $pd->id) === FALSE)
+            if($order->isExistsDetail($id_order, $pd->id) === FALSE && $state <= 3)
             {
               //--- ถ้ายังไม่มีรายการอยู่ เพิ่มใหม่
               $arr = array(

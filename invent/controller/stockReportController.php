@@ -22,6 +22,22 @@ if(isset($_GET['received_by_document']))
 
 
 
+//---- รายงานการรับสินค้าแยกตามเอกสาร
+if(isset($_GET['received_by_items']))
+{
+  if(isset($_GET['report']))
+  {
+    include 'report/stockReport/report_received_by_items.php';
+  }
+
+  if(isset($_GET['export']))
+  {
+    include 'report/stockReport/export_received_by_items.php';
+  }
+}
+
+
+
 //---- รายงานการรับสินค้าแปรสภาพแยกตามเอกสาร
 if(isset($_GET['received_transform_by_document']))
 {

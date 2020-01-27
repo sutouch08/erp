@@ -9,66 +9,145 @@ class movement
 
 	public function move_in($reference, $id_warehouse, $id_zone, $id_pd, $qty, $date_upd)
 	{
-		if( $this->isMoveInExists($reference, $id_warehouse, $id_zone, $id_pd) )
+		$movement = $this->get_move_in($reference, $id_warehouse, $id_zone, $id_pd);
+		if(!empty($movement))
 		{
-			$qr = "UPDATE tbl_stock_movement SET move_in = move_in + ".$qty." ";
-			$qr .= "WHERE reference = '".$reference."' ";
-			$qr .= "AND id_warehouse = '".$id_warehouse."' ";
-			$qr .= "AND id_zone = '".$id_zone."' ";
-			$qr .= "AND id_product = '".$id_pd."' ";
+			$arr = array(
+				'move_in' => $movement->move_in + $qty,
+				'date_upd' => $date_upd
+			);
 
+			return $this->update($movement->id, $arr);
 		}
 		else
 		{
-			$qr = "INSERT INTO tbl_stock_movement ";
-			$qr .= "(reference, id_warehouse, id_zone, id_product, move_in, date_upd) ";
-			$qr .= "VALUES ";
-			$qr .= "('".$reference."', '".$id_warehouse."', '".$id_zone."', '".$id_pd."', '".$qty."', '".$date_upd."')";
+			$arr = array(
+				'reference' => $reference,
+				'id_warehouse' => $id_warehouse,
+				'id_zone' => $id_zone,
+				'id_product' => $id_pd,
+				'move_in' => $qty,
+				'date_upd' => $date_upd
+			);
 
+			return $this->add($arr);
 		}
-
-		$sc = dbQuery($qr);
-		if($sc === FALSE )
-		{
-			$this->error = dbError();
-		}
-
-		return $sc;
 	}
-
 
 
 
 	public function move_out($reference, $id_warehouse, $id_zone, $id_pd, $qty, $date_upd)
 	{
-		if( $this->isMoveOutExists($reference, $id_warehouse, $id_zone, $id_pd) === TRUE )
+		$movement = $this->get_move_out($reference, $id_warehouse, $id_zone, $id_pd);
+		if(!empty($movement))
 		{
-			$qr  = "UPDATE tbl_stock_movement ";
-			$qr .= "SET move_out = move_out + ".$qty." ";
-			$qr .= "WHERE reference = '".$reference."' ";
-			$qr .= "AND id_warehouse = '".$id_warehouse."' ";
-			$qr .= "AND id_zone = '".$id_zone."' ";
-			$qr .= "AND id_product = '".$id_pd."' ";
+			$arr = array(
+				'move_out' => $movement->move_out + $qty,
+				'date_upd' => $date_upd
+			);
+
+			return $this->update($movement->id, $arr);
 		}
 		else
 		{
-			$qr  = "INSERT INTO tbl_stock_movement ";
-			$qr .= "(reference, id_warehouse, id_zone, id_product, move_out, date_upd) ";
-			$qr .= "VALUES ";
-			$qr .= "('".$reference."', '".$id_warehouse."', '".$id_zone."', '".$id_pd."', '".$qty."', '".$date_upd."')";
+			$arr = array(
+				'reference' => $reference,
+				'id_warehouse' => $id_warehouse,
+				'id_zone' => $id_zone,
+				'id_product' => $id_pd,
+				'move_out' => $qty,
+				'date_upd' => $date_upd
+			);
+
+			return $this->add($arr);
 		}
-
-		$sc = dbQuery($qr);
-
-		if($sc === FALSE )
-		{
-			$this->error = dbError();
-		}
-
-		return $sc;
 	}
 
 
+	private function get_move_in($reference, $id_warehouse, $id_zone, $id_pd)
+	{
+		$qr = "SELECT * FROM tbl_stock_movement ";
+		$qr .= "WHERE reference = '{$reference}' ";
+		$qr .= "AND id_warehouse = '{$id_warehouse}' ";
+		$qr .= "AND id_zone = {$id_zone} ";
+		$qr .= "AND id_product = '{$id_pd}' ";
+		$qr .= "AND move_in > 0 AND move_out = 0";
+
+		$qs = dbQuery($qr);
+		if(dbNumRows($qs) === 1)
+		{
+			return dbFetchObject($qs);
+		}
+
+		return FALSE;
+	}
+
+
+
+	private function get_move_out($reference, $id_warehouse, $id_zone, $id_pd)
+	{
+		$qr = "SELECT * FROM tbl_stock_movement ";
+		$qr .= "WHERE reference = '{$reference}' ";
+		$qr .= "AND id_warehouse = '{$id_warehouse}' ";
+		$qr .= "AND id_zone = {$id_zone} ";
+		$qr .= "AND id_product = '{$id_pd}' ";
+		$qr .= "AND move_in = 0 AND move_out > 0";
+
+		$qs = dbQuery($qr);
+
+		if(dbNumRows($qs) === 1)
+		{
+			return dbFetchObject($qs);
+		}
+
+		return FALSE;
+	}
+
+
+
+	private function add(array $ds = array())
+	{
+		if(!empty($ds))
+		{
+			$fields = "";
+			$values = "";
+			$i = 1;
+			foreach($ds as $field => $value)
+			{
+				$fields .= $i === 1 ? "{$field}" : ", {$field}";
+				$values .= $i === 1 ? "'{$value}'" : ", '{$value}'";
+				$i++;
+			}
+
+			$qr = "INSERT INTO tbl_stock_movement ({$fields}) VALUES ({$values})";
+			
+			return dbQuery($qr);
+		}
+
+		return FALSE;
+	}
+
+
+
+	private function update($id, $arr)
+	{
+		if(!empty($arr))
+		{
+			$i = 1;
+			$set = "";
+			foreach($arr as $field => $val)
+			{
+				$set .= $i === 1 ? "{$field} = '{$val}'" : ", {$field} = '{$val}'";
+				$i++;
+			}
+
+			$qr = "UPDATE tbl_stock_movement SET {$set} WHERE id = {$id}";
+
+			return dbQuery($qr);
+		}
+
+		return FALSE;
+	}
 
 
 

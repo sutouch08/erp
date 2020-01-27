@@ -10,7 +10,7 @@ function printAddress()
 	var id_customer = $('#id_customer').val();
 	var online_code = $('#online_code').val();
 	if( online_code != '' ){
-		getOnlineAddress();
+		getOnlineAddress(id_order);
 	}else{
 		getAddressForm(id_order, id_customer);
 	}
@@ -20,7 +20,7 @@ function printAddress()
 
 
 //--- เอา id address online
-function getOnlineAddress()
+function getOnlineAddress(id_order)
 {
 	var code = $("#online_code").val();
 	var id_order = $("#id_order").val();
@@ -28,7 +28,10 @@ function getOnlineAddress()
 		url:"controller/orderClosedController.php?getOnlineAddress",
 		type:"GET",
 		cache:"false",
-		data:{"online_code" : code },
+		data:{
+			"online_code" : code ,
+			"id_order" : id_order
+		},
 		success: function(rs){
 			var rs = $.trim(rs);
 			if( rs == 'noaddress' || isNaN( parseInt(rs) ) ){
@@ -93,7 +96,7 @@ function printOnlineAddress(id_address, id_order)
 	if(id_order === undefined){
 		var id_order	= $("#id_order").val();
 	}
-	
+
 	var center 		= ($(document).width() - 800)/2;
 	var target 		= "controller/orderClosedController.php?printOnlineAddressSheet&id_order="+id_order+"&id_address="+id_address;
 
