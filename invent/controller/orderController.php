@@ -216,6 +216,13 @@ if( isset( $_GET['addToOrder'] ) )
 }
 
 
+//----		เพิ่มรายการสินค้าเข้าออเดอร์พร้อมคำนวณส่วนลดจากนโยบายส่วนลด
+if( isset( $_GET['addItemToOrder'] ) )
+{
+	include 'order/add_item_detail.php';
+}
+
+
 
 
 
@@ -265,6 +272,31 @@ if( isset( $_GET['removeDetail'] ) )
 }
 
 
+if( isset( $_GET['getItemGrid'] ) && isset( $_GET['itemCode'] ) )
+{
+	$sc = "";
+	$pdCode = trim($_GET['itemCode']);
+	$id_branch = isset($_GET['id_branch']) ? $_GET['id_branch'] : 0;
+
+	$qr = "SELECT * FROM tbl_product WHERE code = '".$pdCode."' AND is_deleted = 0";
+	$qs = dbQuery($qr);
+
+	if( dbNumRows($qs) === 1 )
+	{
+		$filter = getConfig('MAX_SHOW_STOCK');
+		$item = dbFetchObject($qs);
+		$pd = new product();
+		$qty = $item->count_stock == 1 ? ( $item->active == 1 ? showStock( $pd->getSellStock($item->id, $id_branch), $filter ) : 0 ) : FALSE; //--- สต็อกที่สั่งซื้อได้
+
+		$sc = "success | {$pdCode} | {$qty}";
+	}
+	else
+	{
+		$sc = "Error | ไม่พบสินค้า | {$pdCode}";
+	}
+
+	echo $sc;
+}
 
 
 
@@ -497,6 +529,30 @@ if( isset( $_GET['searchProducts'] ) && isset( $_REQUEST['term'] ) )
 	$sc = array();
 	$qr  = "SELECT code FROM tbl_product_style WHERE code LIKE '%".$_REQUEST['term']."%' ";
 	$qr .= "AND active = 1 AND can_sell = 1 AND is_deleted = 0 ORDER BY code ASC";
+	$qs = dbQuery($qr);
+	while( $rs = dbFetchObject($qs) )
+	{
+		$sc[] = $rs->code;
+	}
+	echo json_encode($sc);
+}
+
+
+
+
+//---	autocomplete for search box in order page
+if( isset( $_GET['searchItems'] ) && isset( $_REQUEST['term'] ) )
+{
+	$sc = array();
+	$qr  = "SELECT pd.code FROM tbl_product AS pd ";
+	$qr .= "LEFT JOIN tbl_product_style AS ps ON pd.id_style = ps.id ";
+	$qr .= "LEFT JOIN tbl_color AS co ON pd.id_color = co.id ";
+	$qr .= "LEFT JOIN tbl_size AS si ON pd.id_size = si.id ";
+	$qr .= "WHERE pd.code LIKE '%{$_REQUEST['term']}%' ";
+	$qr .= "AND pd.active = 1 AND pd.can_sell = 1 AND pd.is_deleted = 0 ";
+	$qr .= "ORDER BY ps.code, co.code, si.position ASC ";
+	$qr .= "LIMIT 50";
+
 	$qs = dbQuery($qr);
 	while( $rs = dbFetchObject($qs) )
 	{

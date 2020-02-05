@@ -264,3 +264,11 @@ function printOut(url)
 	var center = ($(document).width() - 800) /2;
 	window.open(url, "_blank", "width=800, height=900. left="+center+", scrollbars=yes");
 }
+
+
+function parseDefault(value, def){
+	if(isNaN(value)){
+		return def; //--- return default value
+	}
+	return value;
+}

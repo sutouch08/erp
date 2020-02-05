@@ -167,5 +167,10 @@ function getOrderStateChangeIn($state, $fromDate, $toDate, $startTime, $endTime)
 }
 
 
+function showStock($qty, $filter)
+{
+	return $filter == 0 ? $qty : ($filter < $qty ? $filter : $qty);
+}
+
 
 ?>

@@ -20,7 +20,7 @@
 			if( $detail !== FALSE )
 			{
 				//---	ถ้ามีการแก้ไขราคา (ราคาไม่เท่าเดิม)
-				if($detil->price != $value)
+				if($detail->price != $value)
 				{
 					//---- ถ้ารายการนี้เป็นเครดิตเทอมและคำนวณยอดใช้ไปแล้ว
 					if( $detail->isSaved == 1)
@@ -42,6 +42,7 @@
 					//---	ข้อมูลสำหรับ update
 					$arr = array(
 								"price"				=> $price,
+								"discount_amount" => $total_discount,
 								"total_amount" => $total_amount
 							);
 

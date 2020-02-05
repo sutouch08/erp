@@ -1,4 +1,33 @@
 // JavaScript Document
+function getItemGrid(){
+	var itemCode 	= $("#item-code").val();
+	var id_branch = $('#id_branch').val();
+	if( itemCode.length > 0  ){
+		$.ajax({
+			url:'controller/orderController.php?getItemGrid',
+			type:'GET',
+			cache:false,
+			data:{
+				'id_branch' : id_branch,
+				'itemCode' : itemCode
+			},
+			success:function(rs){
+				var rs = rs.split(' | ');
+				if(rs[0] === 'success'){
+					$('#stock-qty').val(rs[2]);
+					$('#input-qty').val('').focus();
+				}else{
+					$('#stock-qty').val('');
+					$('#input-qty').val('');
+					swal(rs[1]);
+				}
+			}
+		})
+	}
+}
+
+
+
 function getProductGrid(){
 	var pdCode 	= $("#pd-box").val();
 	var id_branch = $('#id_branch').val();

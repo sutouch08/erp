@@ -3,6 +3,7 @@ foreach( $ds as $items )
 {
   foreach( $items as $id => $qty )
   {
+    
     if( $qty > 0 )
     {
       $pd = new product($id);

@@ -69,7 +69,38 @@ if(isset($_GET['deleteBuffer']))
 
 
 //----- ย้ายสินค้าจาก Cancle zone กลับโซนเดิม
-if(isset($_GET['deleteCancle']))
+if(isset($_GET['removeCancle']))
+{
+
+	$sc = TRUE;
+
+	$id = $_POST['id_cancle'];
+	$cancle = new cancle_zone($id);
+
+	if($cancle->id_order != '' && $cancle->id_product != '' && $cancle->id_zone != '')
+	{
+
+		if($cancle->delete($id) !== TRUE)
+		{
+			$sc = FALSE;
+			$message = 'ลบ Cancle ไม่สำเร็จ';
+		}
+
+	}
+	else
+	{
+		$sc = FALSE;
+		$message = 'ไม่พบข้อมูล หรือ Cancle อาจถูกลบไปแล้ว';
+	}
+
+	echo $sc === TRUE ? 'success' : $message;
+
+}
+
+
+
+//----- ย้ายสินค้าจาก Cancle zone กลับโซนเดิม
+if(isset($_GET['moveBackToZone']))
 {
 
 	$sc = TRUE;
@@ -114,6 +145,7 @@ if(isset($_GET['deleteCancle']))
 	echo $sc === TRUE ? 'success' : $message;
 
 }
+
 
 
 

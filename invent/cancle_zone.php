@@ -135,7 +135,10 @@ $qs = dbQuery($qr. $where." LIMIT ".$paginator->Page_Start.", ".$paginator->Per_
     <td class="text-center"><?php echo $rs->zone_name; ?></td>
 		<?php if($delete) : ?>
 			<td class="text-center">
-				<button type="button" class="btn btn-xs btn-danger" onclick="removeCancle('<?php echo $rs->id; ?>', '<?php echo $rs->reference; ?>', '<?php echo $rs->code; ?>')">
+				<button type="button" class="btn btn-xs btn-warning" onclick="moveBackToZone('<?php echo $rs->id; ?>', '<?php echo $rs->reference; ?>', '<?php echo $rs->code; ?>')">
+					<i class="fa fa-refresh"></i>
+				</button>
+				<button type="button" class="btn btn-xs btn-danger" onclick="deleteCancle('<?php echo $rs->id; ?>', '<?php echo $rs->reference; ?>', '<?php echo $rs->code; ?>')">
 					<i class="fa fa-trash"></i>
 				</button>
 			</td>

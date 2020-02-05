@@ -45,10 +45,10 @@ $('#toDate').datepicker({
 });
 
 
-function removeCancle(id, reference, pdCode){
+function moveBackToZone(id, reference, pdCode){
   swal({
-		title: "คุณแน่ใจ ?",
-		text: "ต้องการลบ '"+pdCode+"' ที่มาจาก '"+reference+"' หรือไม่ ? <br/> เมื่อลบแล้วยอดสินค้าจะกลับเข้าโซนเดิม",
+		title: "ย้ายสินค้ากลับโซนเดิม",
+		text: "ต้องการย้าย '"+pdCode+"' ที่มาจาก '"+reference+"' กลับโซนเดิมหรือไม่ ?",
 		type: "warning",
     html:true,
 		showCancelButton: true,
@@ -58,7 +58,43 @@ function removeCancle(id, reference, pdCode){
 		closeOnConfirm: false
 		}, function(){
 			$.ajax({
-				url:"controller/storeController.php?deleteCancle",
+				url:"controller/storeController.php?moveBackToZone",
+				type:"POST",
+        cache:"false",
+        data:{
+          "id_cancle" : id },
+				success: function(rs){
+					var rs = $.trim(rs);
+					if( rs == 'success' ){
+						swal({
+              title: 'Deleted',
+              text: 'ย้ายสินค้ากลับโซนเดิมเรียบร้อยแล้ว',
+              type: 'success',
+              timer: 1000 });
+						$("#row_"+id).remove();
+					}else{
+						swal("ข้อผิดพลาด !", "ลบรายการไม่สำเร็จ", "error");
+					}
+				}
+			});
+	});
+}
+
+
+function deleteCancle(id, reference, pdCode){
+  swal({
+		title: "คุณแน่ใจ ?",
+		text: "ต้องการลบ '"+pdCode+"' ที่มาจาก '"+reference+"' หรือไม่ ?",
+		type: "warning",
+    html:true,
+		showCancelButton: true,
+		confirmButtonColor: "#FA5858",
+		confirmButtonText: 'ใช่, ฉันต้องการลบ',
+		cancelButtonText: 'ยกเลิก',
+		closeOnConfirm: false
+		}, function(){
+			$.ajax({
+				url:"controller/storeController.php?removeCancle",
 				type:"POST",
         cache:"false",
         data:{

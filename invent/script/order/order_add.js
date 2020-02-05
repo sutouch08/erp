@@ -24,6 +24,59 @@ function addToOrder(){
 }
 
 
+
+
+//---- เพิ่มรายการสินค้าเช้าออเดอร์
+function addItemToOrder(){
+	var id_order = $('#id_order').val();
+	var qty = parseDefault(parseInt($('#input-qty').val()), 0);
+	var limit = parseDefault(parseInt($('#stock-qty').val()), 0);
+	var itemCode = $('#item-code').val();
+
+	if(qty > 0 && qty <= limit){
+		load_in();
+		$.ajax({
+			url:"controller/orderController.php?addItemToOrder",
+			type:"POST",
+			cache:"false",
+			data:{
+				'id_order' : id_order,
+				'itemCode' : itemCode,
+				'qty' : qty
+			},
+			success: function(rs){
+				load_out();
+				var rs = $.trim(rs);
+				if( rs == 'success' ){
+					swal({
+						title: 'success',
+						type: 'success',
+						timer: 1000
+					});
+
+					$("#btn-save-order").removeClass('hide');
+					updateDetailTable(); //--- update list of order detail
+
+					setTimeout(function(){
+						$('#item-code').val('');
+						$('#stock-qty').val('');
+						$('#input-qty').val('');
+						$('#item-code').focus();
+					},1200);
+
+
+				}else{
+					swal("Error", rs, "error");
+				}
+			}
+		});
+	}
+}
+
+
+
+
+
 //---- เปลี่ยนสถานะออเดอร์  เป็นบันทึกแล้ว
 function saveOrder(id){
 	$.ajax({
@@ -291,10 +344,39 @@ $('#pd-box').keyup(function(event) {
 			setTimeout(function(){
 				getProductGrid();
 			}, 300);
-
 		}
 	}
 
+});
+
+
+$('#item-code').autocomplete({
+	source:"controller/orderController.php?searchItems",
+	minLength: 4,
+	autoFocus:true,
+	close:function(){
+		setTimeout(function(){
+			getItemGrid();
+		}, 200);
+	}
+});
+
+$('#item-code').keyup(function(e){
+	if(e.keyCode == 13){
+		var code = $(this).val();
+		if(code.length > 4){
+			setTimeout(function(){
+				getItemGrid();
+			}, 200);
+		}
+	}
+});
+
+
+$('#input-qty').keyup(function(e){
+	if(e.keyCode == 13){
+		addItemToOrder();
+	}
 });
 
 

@@ -569,10 +569,7 @@ public function getDataByCode($code)
 		$buffer = new buffer();
 		$sellStock = $stock->getSellStock($id, $id_branch);
 		$reservStock = $order->getReservQty($id, $id_branch);
-		//$cancleQty = 0; //$cancle->getCancleQty($id);
-		//$bufferStock = $id_order == '' ? 0 : $buffer->getSumQty($id_order, $id);
 		$availableStock = $sellStock - $reservStock;
-		//return $availableStock < 0 ? 0 : $availableStock;
 		return $availableStock < 0 ? 0 : $availableStock;
 	}
 
