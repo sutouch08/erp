@@ -18,7 +18,7 @@
     	<div class="btn-group" style="width:100%;">
         	<button type="button" class="btn btn-sm btn-primary" id="btn-all"  onClick="toggleSale(0)" style="width:33%;">ทั้งหมด</button>
             <button type="button" class="btn btn-sm" id="btn-sale" onClick="toggleSale(1)" style="width:33%;">ปกติ</button>
-            <button type="button" class="btn btn-sm" id="btn-consign" onClick="toggleSale(5)" style="width:34%;">ฝากขาย</button>
+            <button type="button" class="btn btn-sm" id="btn-consign" onClick="toggleSale(8)" style="width:34%;">ฝากขาย</button>
         </div>
     </div>
 
