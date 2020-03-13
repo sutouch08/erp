@@ -47,14 +47,14 @@ if($cs->isSaved == 0 && $cs->isCancle == 0 && $cs->id_consign_check == 0)
           {
             $pd = new product($rs->id_product);
             //--- ดึง GP จากเอกสารฝากขายล่าสุด
-            $gp = $cs->getProductGP($rs->id_product, $id_zone);
+            $gp = discountPercentToLabel($cs->getProductGP($rs->id_product, $id_zone));
 
             $disc = parseDiscount($gp, $pd->price);
             //--- แปลงเป็นส่วนลด (Label)
             //$disc = $gp != 0 ? $gp.' %' : 0;
 
             //--- แปลงเป็นส่วนลดรวม (ยอดเงิน)
-            $discAmount = $disc['discAmount'];
+            $discAmount = $disc['discAmount'] * $diff;
 
             //--- มูลค่าหลังหักส่วนลด (ยอดเงิน)
             $totalAmount = ($diff * $pd->price) - $discAmount;

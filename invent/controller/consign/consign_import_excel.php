@@ -62,8 +62,8 @@ if($cs->isSaved == 0 && $cs->isCancle == 0)
           $qty    = $rs['C'];
           $pDisc  = isset($rs['D']) ? $rs['D'] : 0;
           $aDisc  = isset($rs['E']) ? round($rs['E'], 2) : 0;
-          $pDisc  = $pDisc > 0 ? discountPercentToLabel($pDisc) : $pDisc;
-          $discount = $pDisc > 0 ? parseDiscount($pDisc, $price) : parseDiscount($aDisc, $price);
+          $discount = $pDisc > 0 ? discountPercentToLabel($pDisc) : $aDisc; ///--- discount_helper resturcture discount label
+          $disc = parseDiscount($discount, $price);
           //--- เอาเฉพาะที่มียอดต่าง และ ยอดต่างต้องไม่ติดลบ
           if($qty > 0)
           {
@@ -78,23 +78,8 @@ if($cs->isSaved == 0 && $cs->isCancle == 0)
             }
             else
             {
-              // if($pDisc > 100)
-              // {
-              //   $sc = FALSE;
-              //   $message = $pdCode .' ส่วนลดเกิน 100% ';
-              // }
-              //
-              // if($aDisc > $price)
-              // {
-              //   $sc = FALSE;
-              //   $message = $pdCode.' ส่วนลดเกินราคาขาย ';
-              // }
-
-              //--- แปลงเป็นส่วนลด (Label)
-              $discLabel = $pDisc > 0 ? $pDisc : ($aDisc > 0 ? ($aDisc > $price ? $price : $aDisc) : 0);
-
               //---- ดึงรายการที่มีอยู่แล้ว
-              $qs = $cs->getExistsDetail($cs->id, $id_pd, $price, $discLabel);
+              $qs = $cs->getExistsDetail($cs->id, $id_pd, $price, $discount);
 
               //--- ถ้ามีรายการสินค้าอยู่ในเอกสารแล้ว
               if(dbNumRows($qs) == 1)
@@ -110,7 +95,7 @@ if($cs->isSaved == 0 && $cs->isCancle == 0)
                 //--- ถ้าสินค้าคงเหลือในโซนพอตัด หรือ คลังนี้สามารถติดลบได้
                 if( $isEnough === TRUE OR $zone->allowUnderZero === TRUE)
                 {
-                  $discountAmount = $discount['discAmount'] * $qty;
+                  $discountAmount = $disc['discAmount'] * $qty;
                   $totalAmount = ($qty * $price) - $discountAmount;
                   $arr = array(
                     'qty'  => $qty,
@@ -146,7 +131,7 @@ if($cs->isSaved == 0 && $cs->isCancle == 0)
                   $pd->getData($id_pd);
 
                   //---- Insert if not exists
-                  $discountAmount = $discount['discAmount'] * $qty;
+                  $discountAmount = $disc['discAmount'] * $qty;
                   $totalAmount = ($qty * $price) - $discountAmount;
                   $arr = array(
                     'id_consign' => $cs->id,
@@ -157,7 +142,7 @@ if($cs->isSaved == 0 && $cs->isCancle == 0)
                     'cost' => $pd->cost,
                     'price' => $price,
                     'qty' => $qty,
-                    'discount' => $discLabel,
+                    'discount' => $discount,
                     'discount_amount' => $discountAmount,
                     'total_amount' => $totalAmount,
                     'input_type' => 2 //--- 0 = hand, 1 = load diff, 2 = excel

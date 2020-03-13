@@ -59,7 +59,7 @@ function parseDiscount($discountText, $price)
 		{
 			$disc = explode('%', trim($discText));
 			$disc[0] = trim($disc[0]);
-			$discount = count($disc) === 1 ? ($disc[0] > $price ? $price : $disc[0]) : ($disc[0] > 100 ? 1 : $price * ($disc[0] * 0.01)); //--- ส่วนลดต่อชิ้น เป็นจำนวนเงิน
+			$discount = count($disc) === 1 ? ($disc[0] > $price ? $price : $disc[0]) : ($disc[0] > 100 ? $price : $price * ($disc[0] * 0.01)); //--- ส่วนลดต่อชิ้น เป็นจำนวนเงิน
 			$discLabel[$i] = count($disc) == 1 ? $disc[0] : $disc[0].'%';
 			$discAmount += $discount;
 			$price -= $discount;
