@@ -293,7 +293,7 @@
           <th class="width-15 text-center">พนักงาน</th>
           <th class="width-8 text-center">สาขา</th>
           <th class="width-8 text-center">วันที่</th>
-          <th class="width-10 text-center">ปรับปรุง</th>
+          <th class="width-10 text-center"></th>
         </tr>
       </thead>
       <tbody>
@@ -339,8 +339,10 @@
             <?php echo thaiDate($rs->date_add); ?>
           </td>
 
-          <td class="middle text-center pointer" onclick="viewDetail(<?php echo $rs->id; ?>)">
-            <?php echo thaiDateTime($rs->date_upd); ?>
+          <td class="middle text-center">
+            <button type="button" class="btn btn-xs btn-primary" onclick="sendToIX(<?php echo $rs->id; ?>)">
+              <i class="fa fa-send"></i> Sent to IX
+            </button>
           </td>
 
         </tr>
@@ -359,7 +361,36 @@
 </div>
 
 
-
+<script>
+  function sendToIX(id){
+    load_in();
+    $.ajax({
+      url:'controller/IXController.php?export_to_ix',
+      type:'POST',
+      cache: false,
+      data:{
+        'id' : id
+      },
+      success:function(rs){
+        load_out();
+        if(rs === 'success'){
+          swal({
+            title:'Success',
+            text:'success',
+            type:'success',
+            timer:1000
+          });
+        }else{
+          swal({
+            title:'Error',
+            text:rs,
+            type:'error'
+          })
+        }
+      }
+    })
+  }
+</script>
 
 
 <script src="script/order_closed/closed_list.js?token=<?php echo date('Ymd'); ?>"></script>

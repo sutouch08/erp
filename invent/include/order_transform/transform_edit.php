@@ -1,5 +1,5 @@
 <?php
-$order = isset( $_GET['id_order'] ) ? new order( $_GET['id_order'] ) : new order();
+$order = new order( $_GET['id_order'] );
 $hide = ( $order->isExpire == 0 && ($order->status == 0 OR $order->hasNotSaveDetail === TRUE )) ? '' : 'hide';
 ?>
 <div class="row top-row">
@@ -8,8 +8,9 @@ $hide = ( $order->isExpire == 0 && ($order->status == 0 OR $order->hasNotSaveDet
     	<p class="pull-right top-p">
         	<button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i>  กลับ</button>
         	<button type="button" class="btn btn-sm btn-default" onClick="printOrderSheet()"><i class="fa fa-print"></i> พิมพ์</button>
-
-
+			<?php if(isClosed($order->id) === TRUE && ($edit OR $delete)) : ?>
+					<button type="button" class="btn btn-sm btn-danger" onclick="unClose(<?php echo $order->id; ?>)">ยกเลิกการปิด</button>
+			<?php endif; ?>
 
 			<?php if( ($add && $order->status == 0 && $order->id_employee == getCookie('user_id') ) OR ($edit && $order->status == 1 && $order->state < 4 ) ) : ?>
 				<?php if( $order->isExpire == 0 && ($order->isOnline == 0 OR $order->hasPayment == FALSE )) : ?>

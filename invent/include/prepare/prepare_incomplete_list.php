@@ -31,8 +31,11 @@
 <?php   if( $product->count_stock == 1) : ?>
 <?php     $prepared = $pp->getPrepared($order->id, $rs->id_product); ?>
 <?php     $stockZone = stockInZone($rs->id_product, $order->id_branch); ?>
+<?php     $barcode = $bc->getBarcode($rs->id_product); ?>
     <tr class="font-size-12 incomplete" id="incomplete-<?php echo $rs->id_product; ?>">
-      <td class="middle text-center"><?php echo $bc->getBarcode($rs->id_product); ?></td>
+      <td class="middle text-center b-click">
+        <?php echo (empty($barcode) ? $product->code : $barcode);  ?>
+      </td>
       <td class="middle"><?php echo $product->code .' : '.$product->name; ?></td>
       <td class="middle text-center" id="order-qty-<?php echo $rs->id_product; ?>"><?php echo number($rs->qty); ?></td>
       <td class="middle text-center" id="prepared-qty-<?php echo $rs->id_product; ?>"><?php echo number($prepared); ?></td>
@@ -98,3 +101,14 @@
     </table>
   </div><!--/ col -->
 </div><!--/ row-->
+<script>
+$('.b-click').click(function(){
+  if(!$('#barcode-item').prop('disabled'))
+  {
+    var barcode = $.trim($(this).text());
+    $('#barcode-item').val(barcode);
+    $('#barcode-item').focus();
+  }
+
+});
+</script>

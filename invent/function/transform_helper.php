@@ -45,4 +45,16 @@ function getTransformProducts($id_order_detail, $state = 1, $isExpired = 0)
 	return $sc;
 }
 
+
+function isClosed($id)
+{
+	$qr = "SELECT * FROM tbl_order_transform WHERE id_order = {$id} AND is_closed = 1";
+	$qs = dbQuery($qr);
+	if(dbNumRows($qs) === 1)
+	{
+		return TRUE;
+	}
+
+	return FALSE;
+}
 ?>

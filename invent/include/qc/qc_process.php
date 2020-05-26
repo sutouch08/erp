@@ -123,15 +123,31 @@ include 'include/qc/qc_complete_list.php';
 
 <?php
 
-$qr = dbQuery("SELECT id_product FROM tbl_prepare WHERE id_order = ".$order->id." GROUP BY id_product");
+//$qr = dbQuery("SELECT id_product FROM tbl_prepare WHERE id_order = ".$order->id." GROUP BY id_product");
+$qr = "SELECT pre.id_product, pd.code FROM tbl_prepare AS pre ";
+$qr .= "LEFT JOIN tbl_product AS pd ON pre.id_product = pd.id ";
+$qr .= "WHERE pre.id_order = {$order->id} ";
+$qr .= "GROUP BY pre.id_product";
+
+$qs = dbQuery($qr);
+
 $bac = new barcode();
-while( $res = dbFetchObject($qr))
+
+while( $res = dbFetchObject($qs))
 {
   $qm = $bac->getBarcodes($res->id_product);
-  while( $rm = dbFetchObject($qm))
+  if(dbNumRows($qm) > 0)
   {
-    echo '<input type="hidden" class="'.$rm->barcode.'" id="'.$rm->id_product.'" value="'.$rm->unit_qty.'"/>';
+    while( $rm = dbFetchObject($qm))
+    {
+      echo '<input type="hidden" class="'.$rm->barcode.'" id="'.$rm->id_product.'" value="'.$rm->unit_qty.'"/>';
+    }
   }
+  else
+  {
+    echo '<input type="hidden" class="'.$res->code.'" id="'.$res->id_product.'" value="1"/>';
+  }
+
 }
 
  ?>

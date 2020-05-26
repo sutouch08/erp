@@ -302,10 +302,11 @@ if(isset($_GET['importOrderFromWeb']))
               'M' => 'itemId',
               'N' => 'amount',
               'O' => 'price',
-              'P' => 'shipping fee',
-              'Q' => 'service fee',
-              'R' => 'force update',
-              'S' => 'Is DHL'
+              'P' => 'discount amount',
+              'Q' => 'shipping fee',
+              'R' => 'service fee',
+              'S' => 'force update',
+              'T' => 'Is DHL'
             );
 
             foreach($headCol as $col => $field)
@@ -337,7 +338,7 @@ if(isset($_GET['importOrderFromWeb']))
 
             $shipping_code = '';
 
-            if($rs['S'] == 'Y' OR $rs['S'] == 'y' OR $rs['S'] == '1')
+            if($rs['T'] == 'Y' OR $rs['T'] == 'y' OR $rs['T'] == '1')
             {
               $shipping_code = $prefix.$ref_code;
             }
@@ -375,7 +376,7 @@ if(isset($_GET['importOrderFromWeb']))
 
             //---- ถ้ายังไม่มีออเดอร์ ให้เพิ่มใหม่ หรือ มีออเดอร์แล้ว แต่ต้องการ update
             //---- โดยการใส่ force update มาเป็น 1
-            if($id_order === FALSE OR ($id_order !== FALSE && $rs['R'] == 1))
+            if($id_order === FALSE OR ($id_order !== FALSE && $rs['S'] == 1))
             {
             	//---	ถ้าเป็นออเดอร์ขายหรือสปอนเซอร์ จะมี id_customer
             	$id_customer = $cusData->id;
@@ -404,10 +405,10 @@ if(isset($_GET['importOrderFromWeb']))
               $date_add = dbDate($date_add, TRUE);
 
               //--- ค่าจัดส่ง
-              $shipping_fee = $rs['P'] == '' ? 0.00 : $rs['P'];
+              $shipping_fee = $rs['Q'] == '' ? 0.00 : $rs['Q'];
 
               //--- ค่าบริการอื่นๆ
-              $service_fee = $rs['Q'] == '' ? 0.00 : $rs['Q'];
+              $service_fee = $rs['R'] == '' ? 0.00 : $rs['R'];
 
             	//--- รันเลขที่เอกสารตามประเภทเอาสาร
             	$reference = $order->getNewReference($role, $date_add, $is_so);
@@ -486,7 +487,7 @@ if(isset($_GET['importOrderFromWeb']))
               else
               {
                 $state = $order->getState($id_order);
-                if($state <= 3)
+                if($state <= 20)
                 {
                   //--- เตรียมข้อมูลสำหรับเพิ่มเอกสารใหม่
                 	$arr = array(
@@ -520,6 +521,22 @@ if(isset($_GET['importOrderFromWeb']))
               break;
             }
 
+            $qty = $rs['N'];
+
+            //--- ส่วนลด (รวม)
+            $discount_amount = $rs['P'] == '' ? 0.00 : $rs['P'];
+
+            //--- ส่วนลด (ต่อชิ้น)
+            $discount = $discount_amount > 0 ? ($discount_amount / $qty) : 0;
+
+            //--- ราคา (เอาราคาที่ใส่มา / จำนวน + ส่วนลดต่อชิ้น)
+            $price = $rs['O']; //--- ราคารวมไม่หักส่วนลด
+            $price = $price > 0 ? ($price/$qty) : 0; //--- ราคาต่อชิ้น
+            //$price = $price + $discount; //--- ราคาเต็มต่อชิ้น ไม่หักส่วนลด
+
+            //--- total_amount
+            $total_amount = ($price * $qty) - $discount_amount;
+
             //---- เช็คข้อมูล ว่ามีรายละเอียดนี้อยู่ในออเดอร์แล้วหรือยัง
             //---- ถ้ามีข้อมูลอยู่แล้ว (TRUE)ให้ข้ามการนำเข้ารายการนี้ไป
             if($order->isExistsDetail($id_order, $pd->id) === FALSE && $state <= 3)
@@ -532,11 +549,11 @@ if(isset($_GET['importOrderFromWeb']))
                       "product_code"	=> $pd->code,
                       "product_name"	=> $pd->name,
                       "cost"  => $pd->cost,
-                      "price"	=> ($rs['O']/$rs['N']),
-                      "qty"		=> $rs['N'],
-                      "discount"	=> 0,
-                      "discount_amount" => 0,
-                      "total_amount"	=> $rs['O'],
+                      "price"	=> $price,
+                      "qty"		=> $qty,
+                      "discount"	=> $discount,
+                      "discount_amount" => $discount_amount,
+                      "total_amount"	=> $total_amount,
                       "id_rule"	=> 0,
                       "isCount" => $pd->count_stock
                     );
@@ -551,7 +568,7 @@ if(isset($_GET['importOrderFromWeb']))
             else
             {
               //----  ถ้ามี force update และ สถานะออเดอร์ไม่เกิน 3 (รอจัดสินค้า)
-              if($rs['R'] == 1 && $state <= 3)
+              if($rs['S'] == 1 && $state <= 3)
               {
                 $od  = $order->getDetail($id_order, $pd->id);
                 //$line = count(array_keys(array_column($collection, 'M'), $pd->code));
@@ -563,11 +580,11 @@ if(isset($_GET['importOrderFromWeb']))
                         "product_code"	=> $pd->code,
                         "product_name"	=> $pd->name,
                         "cost"  => $pd->cost,
-                        "price"	=> ($rs['O']/$rs['N']),
-                        "qty"		=> $rs['N'],
-                        "discount"	=> 0,
-                        "discount_amount" => 0,
-                        "total_amount"	=> $rs['O'],
+                        "price"	=> $price,
+                        "qty"		=> $qty,
+                        "discount"	=> $discount,
+                        "discount_amount" => $discount_amount,
+                        "total_amount"	=> $total_amount,
                         "id_rule"	=> 0,
                         "isCount" => $pd->count_stock
                       );

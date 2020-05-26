@@ -180,4 +180,20 @@ if( isset($_GET['getProduct']))
 
   echo json_encode($sc);
 }
+
+
+if(isset($_GET['unClose']) && isset($_GET['id_order']))
+{
+  $id = $_GET['id_order'];
+  $qr = "UPDATE tbl_order_transform SET is_closed = 0 WHERE id_order = {$id}";
+  $qs = dbQuery($qr);
+  if($qs)
+  {
+    echo "success";
+  }
+  else
+  {
+    echo "failed";
+  }
+}
  ?>

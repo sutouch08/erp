@@ -20,9 +20,10 @@
 <?php  if( dbNumRows($qs) > 0) : ?>
 <?php   while( $rs = dbFetchObject($qs)) : ?>
 <?php   $barcode = $bc->getBarcode($rs->id_product); ?>
+<?php   $barcode = empty($barcode) ? $rs->product_code : $barcode; ?>
 
       <tr class="font-size-12 incomplete" id="row-<?php echo $rs->id_product; ?>">
-        <td class="middle text-center td"><?php echo $barcode; ?></td>
+        <td class="middle text-center td b-click"><?php echo $barcode; ?></td>
         <td class="middle td"><?php echo $rs->product_code.' : '.$rs->product_name; ?></td>
         <td class="middle text-center td"><?php echo number($rs->order_qty); ?></td>
         <td class="middle text-center td" id="prepared-<?php echo $rs->id_product; ?>"> <?php echo number($rs->prepared); ?></td>
@@ -72,3 +73,14 @@
     </table>
   </div>
 </div>
+<script>
+$('.b-click').click(function(){
+  if(!$('#barcode-item').prop('disabled'))
+  {
+    var barcode = $.trim($(this).text());
+    $('#barcode-item').val(barcode);
+    $('#barcode-item').focus();
+  }
+
+});
+</script>
