@@ -191,6 +191,29 @@ class qc
   }
 
 
+  //---- ใช้กับการส่งข้อมูลไประบบ IX เท่านั้น
+  public function get_details($id_order)
+  {
+    $qr  = "SELECT pd.code AS product_code, SUM(qc.qty) AS qty FROM tbl_qc AS qc ";
+    $qr .= "LEFT JOIN tbl_product AS pd ON qc.id_product = pd.id ";
+    $qr .= "WHERE qc.id_order = {$id_order} ";
+    $qr .= "GROUP BY qc.id_product";
+    $qs = dbQuery($qr);
+    if(dbNumRows($qs) > 0)
+    {
+      $ds = array();
+      while($row = dbFetchObject($qs))
+      {
+        $ds[] = $row;
+      }
+
+      return $ds;
+    }
+
+    return NULL;
+  }
+
+
 } //--- end class
 
  ?>

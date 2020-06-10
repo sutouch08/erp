@@ -38,6 +38,9 @@ $toDate = getFilter('toDate', 'toDate','');
 //--- ค้นตามสถานะเอกสาร  '' = ทั้งหมด / AS = บันทึกแล้ว / NC = ยังไม่สมบูรณ์ / NE = ยังไม่ส่งออก / CN = ยกเลิก
 $sStatus = getFilter('sStatus', 'sStatus', '');
 
+//--- ส่งออกไป IX
+$ix = getFilter('ix', 'ix', 'all');
+
  ?>
 <form id="searchForm" method="post">
 <div class="row">
@@ -53,10 +56,12 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
     <label>คลังปลายทาง</label>
     <input type="text" class="form-control input-sm text-center search-box" name="tWh" value="<?php echo $tWh; ?>" />
   </div>
+  <!--
   <div class="col-sm-1 col-1-harf padding-5">
     <label>พนักงาน</label>
     <input type="text" class="form-control input-sm text-center search-box" name="sEmp" value="<?php echo $sEmp; ?>" />
   </div>
+-->
   <div class="col-sm-1 col-1-harf padding-5">
     <label>สถานะ</label>
     <select class="form-control input-sm search-box" id="sStatus" name="sStatus">
@@ -65,6 +70,16 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
       <option value="NC" <?PHP echo isSelected($sStatus, 'NC'); ?>>ยังไม่บันทึก</option>
       <option value="NE" <?php echo isSelected($sStatus, 'NE'); ?>>ยังไม่ส่งออก</option>
       <option value="CN" <?php echo isSelected($sStatus, 'CN'); ?>>ยกเลิก</option>
+    </select>
+  </div>
+
+  <div class="col-sm-1 col-1-harf padding-5">
+    <label>ส่งออก IX</label>
+    <select class="form-control input-sm search-box" id="ix" name="ix" onchange="getSearch()">
+      <option value="all">ทั้งหมด</option>
+      <option value="0" <?PHP echo isSelected($ix, '0'); ?>>ยังไม่ส่งออก</option>
+      <option value="1" <?PHP echo isSelected($ix, '1'); ?>>ส่งออกแล้ว</option>
+      <option value="3" <?php echo isSelected($ix, '3'); ?>>Error</option>
     </select>
   </div>
   <div class="col-sm-2 padding-5">
@@ -93,6 +108,7 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
   createCookie('sStatus', $sStatus);
   createCookie('fromDate', $fromDate);
   createCookie('toDate', $toDate);
+  createCookie('ix', $ix);
   //--- สร้าง query ตาม filter ที่กรองมา
   $where = "WHERE id != 0 ";
 
@@ -167,6 +183,11 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
     $where .= "AND date_add <= '".toDate($toDate)."' ";
   }
 
+  if($ix !== 'all')
+  {
+    $where .= "AND ix = {$ix} ";
+  }
+
   $where .= "ORDER BY reference DESC";
 
   $paginator = new paginator();
@@ -225,6 +246,11 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
           <td class="middle text-center"><?php echo showTransferStatus($status); ?></td>
           <td class="middle text-right">
           <?php if( $rs->isCancle == 0) : ?>
+            <?php if($rs->isSaved == 1 && $rs->date_add >= '2019-10-01 00:00:00') : ?>
+              <button type="button" class="btn btn-xs btn-primary" onclick="sendToIX(<?php echo $rs->id; ?>)">
+                <i class="fa fa-send"></i> Send to IX
+              </button>
+            <?php endif; ?>
             <button type="button" class="btn btn-xs btn-info" onclick="goDetail(<?php echo $rs->id; ?>)">
               <i class="fa fa-eye"></i>
             </button>
@@ -257,4 +283,36 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
   </div>
 </div>
 
+<script>
+  function sendToIX(id){
+    load_in();
+    $.ajax({
+      url:'controller/IXController.php?export_ix_transfer',
+      type:'POST',
+      cache: false,
+      data:{
+        'id' : id
+      },
+      success:function(rs){
+        load_out();
+        var rs = $.trim(rs);
+        if(rs === 'success'){
+          swal({
+            title:'Success',
+            text:'success',
+            type:'success',
+            timer:1000
+          });
+          $('#row_'+id).remove();
+        }else{
+          swal({
+            title:'Error',
+            text:rs,
+            type:'error'
+          })
+        }
+      }
+    })
+  }
+</script>
 <script src="script/transfer/transfer_list.js?token=<?php echo date('Ymd'); ?>"></script>

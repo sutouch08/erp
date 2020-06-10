@@ -340,6 +340,26 @@ class order
 
 
 
+	//---- ใช้สำหรับส่งข้อมูลไป IX เท่านั้น
+	public function get_details($id)
+	{
+		$qr  = "SELECT * FROM tbl_order_detail WHERE id_order = {$id}";
+		$qs  = dbQuery($qr);
+		if(dbNumRows($qs) > 0)
+		{
+			$ds = array();
+			while($row = dbFetchObject($qs))
+			{
+				$ds[] = $row;
+			}
+
+			return $ds;
+		}
+
+		return NULL;
+	}
+
+
 	//---	รายการที่จัดสินค้าครบแล้ว
 	public function getValidDetails($id)
 	{

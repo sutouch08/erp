@@ -381,4 +381,9 @@ function clearToken($token)
 	setcookie("file_download_token", $token, time() +3600,"/");
 }
 
+
+function get_null($value)
+{
+	return empty($value) ? NULL : $value;
+}
 ?>

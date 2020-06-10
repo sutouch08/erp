@@ -12,6 +12,7 @@
   $sEmp  = getFilter('sEmp', 'sOrderEmployee', '');
   $fromDate = getFilter('fromDate', 'fromDate', '');
   $toDate   = getFilter('toDate', 'toDate', '');
+  $ix = getFilter('ix', 'ix', 'all');
 
   //--- button values
   $viewDate = getFilter('viewDate', 'viewDate', 0); //--- 0 = date_add, 1 = date_upd
@@ -154,8 +155,18 @@
   <div class="col-sm-1 padding-5">
     <button type="button" class="btn btn-sm btn-block <?php echo $b_online; ?>" onclick="toggleButton('Online')">ออนไลน์</button>
   </div>
-
-  <div class="col-sm-1 col-sm-offset-2 padding-5">
+  <div class="col-sm-2 padding-5">
+    <div class="input-group width-100">
+      <span class="input-group-addon">IX</span>
+      <select name="ix" class="form-control input-sm" onchange="getSearch()">
+        <option value="all" <?php echo isSelected('all', $ix); ?>>ทั้งหมด</option>
+        <option value="0" <?php echo isSelected('0', $ix); ?>>ยังไม่ส่ง</option>
+        <option value="1" <?php echo isSelected('1', $ix); ?>>ส่งแล้ว</option>
+        <option value="3" <?php echo isSelected('3', $ix); ?>>Error</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-sm-1 padding-5">
     <button type="button" class="btn btn-sm btn-block <?php echo $b_delivered; ?>" onclick="toggleButton('Delivered')">จัดส่งแล้ว</button>
   </div>
   <div class="col-sm-1 padding-5 last">
@@ -248,6 +259,7 @@
   createCookie('sLend', $sLend);
   createCookie('sRequisition', $sRequisition);
   createCookie('sOnline', $sOnline);
+  createCookie('ix', $ix);
 
   //--- ถ้ามีการใช้ตัวกรอง order role
   if( ! empty( $activeButton ) )
@@ -267,6 +279,12 @@
   if( $sOnline != 0 )
   {
     $where .= "AND isOnline = 1 ";
+  }
+
+  //--- ส่งไป IX หรือยัง
+  if($ix != 'all')
+  {
+    $where .= "AND ix = {$ix} ";
   }
 
   $where .= "ORDER BY ".( $viewDate == 1 ? 'date_upd' : 'date_add')." DESC, reference DESC";
@@ -340,9 +358,11 @@
           </td>
 
           <td class="middle text-center">
+            <?php if(($rs->role == 1 OR $rs->role == 2) && $rs->date_add >= '2019-08-01 00:00:00') : ?>
             <button type="button" class="btn btn-xs btn-primary" onclick="sendToIX(<?php echo $rs->id; ?>)">
               <i class="fa fa-send"></i> Sent to IX
             </button>
+            <?php endif; ?>
           </td>
 
         </tr>
@@ -365,7 +385,7 @@
   function sendToIX(id){
     load_in();
     $.ajax({
-      url:'controller/IXController.php?export_to_ix',
+      url:'controller/IXController.php?export_ix_order',
       type:'POST',
       cache: false,
       data:{
@@ -373,6 +393,7 @@
       },
       success:function(rs){
         load_out();
+        var rs = $.trim(rs);
         if(rs === 'success'){
           swal({
             title:'Success',

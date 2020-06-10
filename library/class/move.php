@@ -451,5 +451,32 @@ class move
   }
 
 
+  //--- for expor to ix
+  public function get_details($id_move)
+  {
+    $qr  = "SELECT mv.*, pd.code AS product_code, ";
+    $qr .= "fzone.barcode_zone AS from_zone_code, tzone.barcode_zone AS to_zone_code ";
+    $qr .= "FROM tbl_move_detail AS mv ";
+    $qr .= "LEFT JOIN tbl_product AS pd ON mv.id_product = pd.id ";
+    $qr .= "LEFT JOIN tbl_zone AS fzone ON mv.from_zone = fzone.id_zone ";
+    $qr .= "LEFT JOIN tbl_zone AS tzone ON mv.to_zone = tzone.id_zone ";
+    $qr .= "WHERE mv.id_move = {$id_move}";
+
+    $qs = dbQuery($qr);
+    if(dbNumRows($qs) > 0)
+    {
+      $ds = array();
+      while($row = dbFetchObject($qs))
+      {
+        $ds[] = $row;
+      }
+
+      return $ds;
+    }
+
+    return NULL;
+  }
+
+
 } //--- end class
  ?>

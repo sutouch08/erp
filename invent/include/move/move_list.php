@@ -31,6 +31,9 @@ $toDate = getFilter('toDate', 'toDate','');
 //--- ค้นตามสถานะเอกสาร  '' = ทั้งหมด / AS = บันทึกแล้ว / NC = ยังไม่สมบูรณ์ / NE = ยังไม่ส่งออก / CN = ยกเลิก
 $sStatus = getFilter('sStatus', 'sStatus', '');
 
+//--- ส่งออกไป IX แล้วหรือยัง
+$ix = getFilter('ix', 'ix', 'all');
+
  ?>
 <form id="searchForm" method="post">
 <div class="row">
@@ -42,19 +45,28 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
     <label>พนักงาน</label>
     <input type="text" class="form-control input-sm text-center search-box" name="sEmp" value="<?php echo $sEmp; ?>" />
   </div>
-  <div class="col-sm-2 padding-5">
+  <div class="col-sm-1 col-1-harf padding-5">
     <label>สถานะ</label>
-    <select class="form-control input-sm search-box" id="sStatus" name="sStatus">
+    <select class="form-control input-sm search-box" id="sStatus" name="sStatus" onchange="getSearch()">
       <option value="">ทั้งหมด</option>
       <option value="AS" <?PHP echo isSelected($sStatus, 'AS'); ?>>บันทึกแล้ว</option>
       <option value="NC" <?PHP echo isSelected($sStatus, 'NC'); ?>>ยังไม่บันทึก</option>
       <option value="CN" <?php echo isSelected($sStatus, 'CN'); ?>>ยกเลิก</option>
     </select>
   </div>
-  <div class="col-sm-3">
+  <div class="col-sm-2 padding-5">
     <label class="display-block">วันที่</label>
     <input type="text" class="form-control input-sm input-discount text-center" id="fromDate" name="fromDate" value="<?php echo $fromDate; ?>" />
     <input type="text" class="form-control input-sm input-unit text-center" id="toDate" name="toDate" value="<?php echo $toDate; ?>" />
+  </div>
+  <div class="col-sm-1 col-1-harf padding-5">
+    <label>ส่งออก IX</label>
+    <select class="form-control input-sm" name="ix" id="ix" onchange="getSearch()">
+      <option value="all" <?php echo isSelected($ix, "all"); ?>>ทั้งหมด</option>
+      <option value="0" <?php echo isSelected($ix, "0"); ?>>ยังไม่ส่งออก</option>
+      <option value="1" <?php echo isSelected($ix, "1"); ?>>ส่งออกแล้ว</option>
+      <option value="3" <?php echo isSelected($ix, "3"); ?>>Error</option>
+    </select>
   </div>
   <div class="col-sm-1 col-1-harf padding-5">
     <label class="display-block not-show">ค้นหา</label>
@@ -121,6 +133,12 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
     $where .= "AND date_add <= '".toDate($toDate)."' ";
   }
 
+  createCookie('ix', $ix);
+  if($ix !== 'all')
+  {
+    $where .= "AND ix = {$ix} ";
+  }
+
   $where .= "ORDER BY reference DESC";
 
   $paginator = new paginator();
@@ -137,7 +155,8 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
   <div class="col-sm-5 margin-top-15">
     <p class="pull-right">
       <span class="">ว่างๆ </span><span class="margin-right-10"> = ปกติ, </span>
-      <span class="red">NC</span><span> = ยังไม่สมบูรณ์ </span>
+      <span class="blue">NC</span><span> = ยังไม่สมบูรณ์, </span>
+      <span class="red">CN</span><span> = ยกเลิก </span>
     </p>
   </div>
 </div>
@@ -168,9 +187,20 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
           <td class="middle"><?php echo $wh->getName($rs->id_warehouse); ?></td>
           <td class="middle"><?php echo employee_name($rs->id_employee); ?></td>
           <td class="middle text-center"><?php echo thaiDate($rs->date_add); ?></td>
-          <td class="middle text-center"><?php echo $cs->isCompleted($rs->id) === FALSE ? 'NC':'' ; ?></td>
+          <td class="middle text-center">
+            <?php if($rs->isCancle == 1) : ?>
+              <span class="red">CN</span>
+            <?php else : ?>
+            <?php echo $cs->isCompleted($rs->id) === FALSE ? 'NC':'' ; ?>
+            <?php endif; ?>
+          </td>
           <td class="middle text-right">
           <?php if( $rs->isCancle == 0) : ?>
+            <?php if($rs->isSaved == 1 && $rs->date_add >= '2019-10-01 00:00:00') : ?>
+              <button type="button" class="btn btn-xs btn-primary" onclick="sendToIX(<?php echo $rs->id; ?>)">
+                <i class="fa fa-send"></i> send to IX
+              </button>
+            <?php endif; ?>
             <button type="button" class="btn btn-xs btn-info" onclick="goDetail(<?php echo $rs->id; ?>)">
               <i class="fa fa-eye"></i>
             </button>
@@ -202,5 +232,37 @@ $sStatus = getFilter('sStatus', 'sStatus', '');
     </table>
   </div>
 </div>
+
+<script>
+  function sendToIX(id){
+    load_in();
+    $.ajax({
+      url:'controller/IXController.php?export_ix_move',
+      type:'POST',
+      cache: false,
+      data:{
+        'id' : id
+      },
+      success:function(rs){
+        load_out();
+        var rs = $.trim(rs);
+        if(rs === 'success'){
+          swal({
+            title:'Success',
+            text:'success',
+            type:'success',
+            timer:1000
+          });
+        }else{
+          swal({
+            title:'Error',
+            text:rs,
+            type:'error'
+          })
+        }
+      }
+    })
+  }
+</script>
 
 <script src="script/move/move_list.js"></script>

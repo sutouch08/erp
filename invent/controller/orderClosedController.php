@@ -53,7 +53,7 @@ if( isset( $_GET['getOnlineAddress'] ) )
 	$id_order = $_GET['id_order'];
 	$order = new order();
 	$address_id = $order->get_address_id($id_order);
-	
+
 	if($address_id === FALSE)
 	{
 		$online = new online_address();
@@ -86,6 +86,7 @@ if( isset( $_GET['clearFilter']))
 	deleteCookie('sBranch');
 	deleteCookie('sDelivered');
 	deleteCookie('sNotDelivery');
+	deleteCookie('ix');
 	echo 'done';
 }
 

@@ -3,38 +3,140 @@ require "../../library/config.php";
 require "../../library/functions.php";
 require "../function/tools.php";
 include "../../library/db.php";
+include "ix/ixFunctions.php";
 
-if(isset($_GET['export_to_ix']))
+
+//---- export TR to IX
+if(isset($_GET['export_ix_transfer']))
 {
-  $sc = TRUE;
-  $error = "";
-  $id = $_POST['id'];
-  $order = new order($id);
-  if(!empty($order->id))
-  {
-    $cs = new customer();
-    $customer = $cs->getDataById($order->id_customer);
-    //----- เอารหัสลูกค้าไปดึงข้อมูลลูกค้าใน IX โดยใช้ field old_code
-    $sql = db2Query("SELECT * FROM customers WHERE old_code = '{$customer->code}'");
-    $rows = db2NumRows($sql);
-    if($rows == 0)
-    {
-      $sc = FALSE;
-      $error = "ไม่พบลูกค้า {$customer->code} ในระบบ IX กรุณาตรวจสอบ";
-    }
-    else if($rows > 1)
-    {
-      $sc = FALSE;
-      $error = "รหัสเก่าลูกค้า {$customer->code} ใน IX มี {$rows} คน";
-    }
-    else if($rows == 1)
-    {
-      $ixCustomer = db2FetchObject($sql);
+  include "ix/export_ix_transfer.php";
+}
 
-      print_r($ixCustomer);
+
+
+//----- export mv to IX
+if(isset($_GET['export_ix_move']))
+{
+  include "ix/export_ix_move.php";
+}
+
+
+//--- export orde to IX
+if(isset($_GET['export_ix_order']))
+{
+  include "ix/export_ix_order.php";
+} //--- end function
+
+
+
+
+//----- get order list to export (for auto export)
+if(isset($_GET['get_order_list']))
+{
+  $from_date = fromDate($_GET['from_date']);
+  $to_date = toDate($_GET['to_date']);
+  $limit = $_GET['limit'];
+
+  $qr  = "SELECT id FROM tbl_order ";
+  $qr .= "WHERE role IN(1,2) ";
+  $qr .= "AND state IN(8, 9, 10) ";
+  $qr .= "AND date_add >= '{$from_date}' ";
+  $qr .= "AND date_add <= '{$to_date}' ";
+  $qr .= "AND ix IN(0,3) ";
+  $qr .= "ORDER BY date_add ASC ";
+  $qr .= "LIMIT {$limit}";
+
+  $qs = dbQuery($qr);
+  if(dbNumRows($qs) > 0)
+  {
+    $ds = array();
+    while($rs = dbFetchObject($qs))
+    {
+      $ds[] = $rs->id;
     }
+
+    echo json_encode($ds);
+  }
+  else
+  {
+    echo 'not found';
   }
 
 }
+
+
+
+//----- get order list to export (for auto export)
+if(isset($_GET['get_move_list']))
+{
+  $from_date = fromDate($_GET['from_date']);
+  $to_date = toDate($_GET['to_date']);
+  $limit = $_GET['limit'];
+
+  $qr  = "SELECT id FROM tbl_move ";
+  $qr .= "WHERE isSaved = 1 ";
+  $qr .= "AND isCancle = 0 ";
+  $qr .= "AND date_add >= '{$from_date}' ";
+  $qr .= "AND date_add <= '{$to_date}' ";
+  $qr .= "AND ix IN(0,3) ";
+  $qr .= "ORDER BY date_add ASC ";
+  $qr .= "LIMIT {$limit}";
+
+  $qs = dbQuery($qr);
+  if(dbNumRows($qs) > 0)
+  {
+    $ds = array();
+    while($rs = dbFetchObject($qs))
+    {
+      $ds[] = $rs->id;
+    }
+
+    echo json_encode($ds);
+  }
+  else
+  {
+    echo 'not found';
+  }
+
+}
+
+
+
+//----- get order list to export (for auto export)
+if(isset($_GET['get_transfer_list']))
+{
+  $from_date = fromDate($_GET['from_date']);
+  $to_date = toDate($_GET['to_date']);
+  $limit = $_GET['limit'];
+
+  $qr  = "SELECT id FROM tbl_transfer ";
+  $qr .= "WHERE isSaved = 1 ";
+  $qr .= "AND isCancle = 0 ";
+  $qr .= "AND date_add >= '{$from_date}' ";
+  $qr .= "AND date_add <= '{$to_date}' ";
+  $qr .= "AND ix IN(0,3) ";
+  $qr .= "ORDER BY date_add ASC ";
+  $qr .= "LIMIT {$limit}";
+
+  $qs = dbQuery($qr);
+  if(dbNumRows($qs) > 0)
+  {
+    $ds = array();
+    while($rs = dbFetchObject($qs))
+    {
+      $ds[] = $rs->id;
+    }
+
+    echo json_encode($ds);
+  }
+  else
+  {
+    echo 'not found';
+  }
+
+}
+
+
+
 
  ?>

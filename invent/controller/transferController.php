@@ -261,6 +261,7 @@ if( isset( $_GET['clearFilter'] ) )
 	deleteCookie('fromDate');
 	deleteCookie('toDate');
 	deleteCookie('sStatus');
+	deleteCookie('ix');
 	echo 'done';
 }
 ?>

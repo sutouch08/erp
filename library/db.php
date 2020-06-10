@@ -7,7 +7,7 @@ $db2Pass = 'ZT20o15u21c3H808';
 $db2Name = 'warrix_sap';
 
 
-$db2Conn = mysqli_connect ($db2Host, $db2User, $db2Pass, $db2Name) or die ('MySQL connect failed. ' . mysql_error());
+$db2Conn = mysqli_connect ($db2Host, $db2User, $db2Pass, $db2Name) or die ('MySQL connect failed. ' . mysqli_error());
 mysqli_query($db2Conn,'SET NAMES utf8');
 date_default_timezone_set('Asia/Bangkok');
 
@@ -130,6 +130,28 @@ function dbRollback2()
 {
 	global $db2Conn;
 	return mysqli_rollback($db2Conn);
+}
+
+
+function get_insert_query($table, array $ds = array())
+{
+	if(!empty($ds))
+	{
+		$i = 1;
+		$fields = "";
+		$values = "";
+		foreach($ds as $field => $value)
+		{
+			$fields .= $i === 1 ? $field : ", {$field}";
+			$values .= $i === 1 ? (is_null($value) ? NULL : "'{$value}'") : (is_null($value) ? ", NULL" : ", '{$value}'");
+			$i++;
+		}
+
+		$qr = "INSERT INTO {$table} ({$fields}) VALUES ({$values})";
+		return $qr;
+	}
+
+	return FALSE;
 }
 
 

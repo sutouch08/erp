@@ -198,6 +198,35 @@ class transfer
 
 
 
+  //--- ใช้กับ การ export to ix เท่านั้น
+  public function get_details($id)
+  {
+    $qr  = "SELECT tr.*, pd.code AS product_code ";
+    $qr .= ",fzone.barcode_zone AS from_zone_code ";
+    $qr .= ", tzone.barcode_zone AS to_zone_code ";
+    $qr .= "FROM tbl_transfer_detail AS tr ";
+    $qr .= "LEFT JOIN tbl_product AS pd ON tr.id_product = pd.id ";
+    $qr .= "LEFT JOIN tbl_zone AS fzone ON tr.from_zone = fzone.id_zone ";
+    $qr .= "LEFT JOIN tbl_zone AS tzone ON tr.to_zone = tzone.id_zone ";
+    $qr .= "WHERE tr.id_transfer = {$id} ";
+    $qr .= "AND tr.valid = 1";
+
+    $qs = dbQuery($qr);
+    if(dbNumRows($qs) > 0)
+    {
+      $ds = array();
+      while($row = dbFetchObject($qs))
+      {
+        $ds[] = $row;
+      }
+
+      return $ds;
+    }
+
+    return NULL;
+  }
+
+
   public function deleteDetail($id)
   {
     return dbQuery("DELETE FROM tbl_transfer_detail WHERE id = '".$id."'");
@@ -436,6 +465,20 @@ class transfer
 
 
 
+  //--- ตรวจสอบว่ายังมีรายการที่ไม่สมบูรณ์หรือไม่
+  public function is_complete($id)
+  {
+    $qs = dbQuery("SELECT id FROM tbl_transfer_detail WHERE id_transfer = {$id} AND valid = 0");
+    if(dbNumRows($qs) > 0)
+    {
+      return FALSE;
+    }
+
+    return TRUE;
+  }
+
+
+
   public function hasDetail($id)
   {
     $sc = FALSE;
@@ -455,6 +498,7 @@ class transfer
     list($qty) = dbFetchArray($qs);
     return is_null($qty) ? 0 : $qty;
   }
+
 
 
 } //--- end class
