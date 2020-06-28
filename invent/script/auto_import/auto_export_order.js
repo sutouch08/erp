@@ -1,14 +1,28 @@
+var exported = 0;
 var i = 0;
-var limit = 100;
+var limit = 0;
 var ds;
 $(document).ready(function() {
-  syncData();
+  getData();
 });
+
+function addlog(text){
+  var el = document.createElement('P');
+  el.innerHTML = (text);
+  $('#result').append(el);
+}
+
+function clearlog(){
+  $('#result').html('');
+}
 
 
 function getData(){
   var from_date = '2020-01-01 00:00:00';
-  var to_date = '2020-05-31 23:59:59';
+  var to_date = '2020-06-30 23:59:59';
+  addlog("Get Order Between " + from_date + " AND " + to_date);
+  i = 0;
+  limit = 100;
   $.ajax({
     url:"controller/IXController.php?get_order_list",
     type:'GET',
@@ -22,24 +36,22 @@ function getData(){
       if(isJson(rs)){
         ds = $.parseJSON(rs);
         limit = ds.length;
+        addlog("พบ " + limit + " ออเดอร์");
         export_to_ix();
       }else{
+        addlog("พบ 0 ออเดอร์");
         window.close();
       }
     }
   })
 }
 
-function syncData(){
-  var data = getData();
-  if(data !== false){
-
-  }
-}
 
 
 function export_to_ix(){
   if(i === limit){
+    //clearlog();
+    //getData();
     window.close();
   }else{
     $.ajax({
@@ -50,11 +62,19 @@ function export_to_ix(){
         'id' : ds[i]
       },
       success:function(rs){
+        addlog(i + " : ID "+ ds[i] + " : " + rs);
+        update_stat();
         i++;
         export_to_ix();
       }
     })
   }
+}
+
+
+function update_stat(){
+  exported++;
+  $('#stat-qty').text(exported);
 }
 
 

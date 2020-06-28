@@ -3,6 +3,7 @@ $sc = TRUE;
 $error = "";
 $id = $_POST['id'];
 $order = new order($id);
+$bookcode = 'SO';
 
 if(!empty($order->id))
 {
@@ -40,16 +41,18 @@ if(!empty($order->id))
           $zone_code = $ix_zone->code;
           $warehouse_code = $ix_zone->warehouse_code;
         }
+
+        $bookcode = $order->is_so == 1 ? 'CS' : 'CT';
       }
 
       //---- 1. add order to IX
       $ds = array(
         'code' => $order->reference,
         'role' => get_IX_role($order->role, $order->is_so),
-        'bookcode' => $order->bookcode,
+        'bookcode' => $bookcode,
         'reference' => $order->ref_code,
-        'customer_code' => $ixCustomer->code,
-        'customer_ref' => $order->online_code,
+        'customer_code' => addslashes($ixCustomer->code),
+        'customer_ref' => addslashes($order->online_code),
         'channels_code' => get_IX_channels_code($order->id_channels),
         'payment_code' => (empty($payment) ? NULL : $payment->code),
         'sale_code' => NULL,
@@ -63,11 +66,12 @@ if(!empty($order->id))
         'user' => NULL,
         'gp' => $order->gp,
         'status' => $order->status,
-        'remark' => $order->remark,
+        'remark' => addslashes($order->remark),
         'date_add' => $order->date_add,
         'warehouse_code' => $warehouse_code,
         'zone_code' => $zone_code,
-        'order_id' => $order->id
+        'order_id' => $order->id,
+        'is_approved' => 1
       );
 
       if(add_ix_order($ds))
@@ -90,7 +94,7 @@ if(!empty($order->id))
                 'order_code' => $order->reference,
                 'style_code' => $item->style_code,
                 'product_code' => $item->code,
-                'product_name' => $item->name,
+                'product_name' => addslashes($item->name),
                 'cost' => $rs->cost,
                 'price' => $rs->price,
                 'qty' => $rs->qty,
@@ -107,6 +111,7 @@ if(!empty($order->id))
               {
                 $sc = FALSE;
                 $error = "add details error : เพิ่มรายการสินค้า {$rs->product_code} ในเอกสารไม่สำเร็จ";
+                $error .= ": ".json_encode($arr);
                 break;
               }
             }

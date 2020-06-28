@@ -158,7 +158,7 @@ function add_ix_move_out(array $ds = array())
 
 function get_ix_item($code)
 {
-  $qr = "SELECT * FROM products WHERE old_code = '{$code}'";
+  $qr = "SELECT * FROM products WHERE old_code = '{$code}' OR code = '{$code}'";
   $qs = db2Query($qr);
   if(db2NumRows($qs) === 1)
   {

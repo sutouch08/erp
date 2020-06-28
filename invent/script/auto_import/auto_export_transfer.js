@@ -8,7 +8,7 @@ $(document).ready(function() {
 
 function getData(){
   var from_date = '2020-01-01 00:00:00';
-  var to_date = '2020-05-31 23:59:59';
+  var to_date = '2020-12-31 23:59:59';
   $.ajax({
     url:"controller/IXController.php?get_transfer_list",
     type:'GET',
