@@ -71,7 +71,9 @@ for($i =1; $i <= 11; $i++)
     <div class="col-sm-6">
     	<p class="pull-right top-p">
 				<?php if(getConfig('ALLOW_IMPORT_ORDER') == 1) : ?>
+					<?php if($add OR $edit) : ?>
 					<button type="button" class="btn btn-sm btn-success" onclick="getUploadFile()">นำเข้าออเดอร์</button>
+					<?php endif; ?>
 				<?php endif; ?>
         	<button type="button" class="btn btn-sm btn-info" onclick="goViewStock()"><i class="fa fa-search"></i> ดูสต็อกคงเหลือ</button>
         	<?php if( $add ) : ?>

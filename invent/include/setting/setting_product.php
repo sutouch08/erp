@@ -7,28 +7,28 @@
                         <span class="help-block">กำหนดจำนวนวัน ที่จะแสดงไฮไลท์ว่าเป็นสินค้าใหม่</span>
                     </div>
                     <div class="divider-hidden"></div>
-                    
+
                     <div class="col-sm-3"><span class="form-control left-label">สินค้าใหม่</span></div>
                     <div class="col-sm-9">
                     	<input type="text" class="form-control input-sm input-mini input-line" name="NEW_PRODUCT_QTY" id="newProductQty" value="<?php echo getConfig('NEW_PRODUCT_QTY'); ?>" />
                     	<span class="help-block">กำหนดจำนวนสินค้าที่จะแสดงรายการสินค้าใหม่บนหน้าแรก (สำหรับลูกค้า และ พนักงานขาย) </span>
                     </div>
                     <div class="divider-hidden"></div>
-                    
+
                     <div class="col-sm-3"><span class="form-control left-label">สินค้าหน้าแรก</span></div>
                     <div class="col-sm-9">
                     	<input type="text" class="form-control input-sm input-mini input-line" name="FEATURES_PRODUCT" id="featuresProduct" value="<?php echo getConfig('FEATURES_PRODUCT'); ?>" />
                     	<span class="help-block">กำหนดจำนวนสินค้าที่จะแสดงเป็นรายการสินค้าแนะนำบนหน้าแรก (สำหรับลูกค้า และ พนักงานขาย) </span>
                     </div>
                     <div class="divider-hidden"></div>
-                    
+
                     <div class="col-sm-3"><span class="form-control left-label">Stock Filter</span></div>
                     <div class="col-sm-9">
                     	<input type="text" class="form-control input-sm input-mini input-line" name="MAX_SHOW_STOCK" id="stockFilter" value="<?php echo getConfig('MAX_SHOW_STOCK'); ?>" />
                     	<span class="help-block">กำหนดจำนวนสินค้าคงเหลือสูงสุดที่จะแสดงให้ลูกค้าเห็น (สำหรับลูกค้า) ถ้าไม่ต้องการใช้กำหนดเป็น 0 </span>
                     </div>
                     <div class="divider-hidden"></div>
-                    
+
                     <div class="col-sm-3"><span class="form-control left-label">รูปแบบบาร์โค้ด</span></div>
                     <div class="col-sm-9">
                     	<?php $barcodeType = getConfig('BARCODE_TYPE'); ?>
@@ -41,12 +41,14 @@
                         <span class="help-block">เลือก Format ของบาร์โค้ดที่ใช้กับเอกสารต่างๆ</span>
                     </div>
                     <div class="divider-hidden"></div>
-                    
+
                     <div class="cols-sm-9 col-sm-offset-3">
+                      <?php if($add OR $edit) : ?>
                     	<button type="button" class="btn btn-sm btn-success input-mini" onClick="updateConfig('productForm')"><i class="fa fa-save"></i> บันทึก</button>
+                      <?php endif; ?>
                     </div>
                     <div class="divider-hidden"></div>
-                    
+
             	</div><!--/ row -->
                 </form>
             </div>

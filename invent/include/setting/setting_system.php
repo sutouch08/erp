@@ -3,6 +3,7 @@
     $closed   = getConfig('CLOSED'); //--- ปิดระบบทั้งหมดหรือไม่
     $open     = $closed == 0 ? 'btn-success' : '';
     $close    = $closed == 1 ? 'btn-danger' : '';
+    $freze    = $closed == 2 ? 'btn-warning' : '';
 ?>
 
   <form id="systemForm">
@@ -10,9 +11,10 @@
   	<?php if( $cando === TRUE ): //---- ถ้ามีสิทธิ์ปิดระบบ ---//	?>
     	<div class="col-sm-3"><span class="form-control left-label">ปิดระบบ</span></div>
       <div class="col-sm-9">
-      	<div class="btn-group input-small">
-        	<button type="button" class="btn btn-sm <?php echo $open; ?>" style="width:50%;" id="btn-open" onClick="openSystem()">เปิด</button>
-          <button type="button" class="btn btn-sm <?php echo $close; ?>" style="width:50%;" id="btn-close" onClick="closeSystem()">ปิด</button>
+      	<div class="btn-group input-large">
+        	<button type="button" class="btn btn-sm <?php echo $open; ?>" style="width:33%;" id="btn-open" onClick="openSystem()">เปิด</button>
+          <button type="button" class="btn btn-sm <?php echo $freze; ?>" style="width:34%;" id="btn-freze" onClick="frezeSystem()">ดูอย่างเดียว</button>
+          <button type="button" class="btn btn-sm <?php echo $close; ?>" style="width:33%;" id="btn-close" onClick="closeSystem()">ปิด</button>
         </div>
         <span class="help-block">กรณีปิดระบบจะไม่สามารถเข้าใช้งานระบบได้ในทุกส่วน โปรดใช้ความระมัดระวังในการกำหนดค่านี้</span>
       	<input type="hidden" name="CLOSED" id="closed" value="<?php echo $closed; ?>" />
@@ -53,7 +55,9 @@
 
 
       <div class="col-sm-9 col-sm-offset-3">
+        <?php if($add OR $edit) : ?>
       	<button type="button" class="btn btn-sm btn-success input-mini" onClick="updateConfig('systemForm')"><i class="fa fa-save"></i> บันทึก</button>
+        <?php endif; ?>
       </div>
       <div class="divider-hidden"></div>
 

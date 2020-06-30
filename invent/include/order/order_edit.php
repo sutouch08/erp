@@ -15,7 +15,7 @@ $expired = $order->isExpire == 1 ? 'disabled' : '';
 					<button type="button" class="btn btn-sm btn-warning" onclick="goBack()"><i class="fa fa-arrow-left"></i>  กลับ</button>
 			<?php endif; ?>
 
-			<?php if( $order->isOnline == 1 && $payment->hasTerm == 0 ) : ?>
+			<?php if( ($add OR $edit) && $order->isOnline == 1 && $payment->hasTerm == 0 ) : ?>
             <?php $payed = ( $order->status == 0 || $order->hasPayment == 1 || $order->isExpire == 1) ? 'disabled' : '' ;	?>
             <button type="button" class="btn btn-sm btn-primary" onClick="payOrder()" <?php echo $payed; ?>><i class="fa fa-credit-card"></i> แจ้งชำระเงิน</button>
 

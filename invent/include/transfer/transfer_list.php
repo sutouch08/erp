@@ -246,7 +246,7 @@ $ix = getFilter('ix', 'ix', 'all');
           <td class="middle text-center"><?php echo showTransferStatus($status); ?></td>
           <td class="middle text-right">
           <?php if( $rs->isCancle == 0) : ?>
-            <?php if($rs->isSaved == 1 && $rs->date_add >= '2019-10-01 00:00:00') : ?>
+            <?php if($rs->isSaved == 1 && ($add OR $edit) && $rs->date_add >= '2019-10-01 00:00:00') : ?>
               <button type="button" class="btn btn-xs btn-primary" onclick="sendToIX(<?php echo $rs->id; ?>)">
                 <i class="fa fa-send"></i> Send to IX
               </button>

@@ -19,6 +19,7 @@ $usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE || $order->is
     </div>
 
 	<div class="col-sm-8">
+		<?php if($add OR $edit) : ?>
     	<p class="pull-right top-p">
         <label class="inline padding-10" style="font-weight:normal;">ค่าจัดส่ง</label>
         <input type="text" class="form-control input-sm input-mini inline text-center" id="shippingFee" value="<?php echo $order->shipping_fee; ?>" <?php echo $dship; ?> />
@@ -29,6 +30,7 @@ $usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE || $order->is
         <button type="button" class="btn btn-sm btn-warning <?php echo $esbtn; ?>" id="btn-edit-service-fee" onClick="activeServiceFee()" <?php echo $payed; ?>>แก้ไขค่าบริการ</button>
         <button type="button" class="btn btn-sm btn-primary <?php echo $usbtn; ?>" id="btn-update-service-fee" onClick="updateServiceFee()">บันทึกค่าบริการ</button>
         </p>
+		<?php endif; ?>
     </div>
 </div>
 <hr />
@@ -58,7 +60,11 @@ $usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE || $order->is
                             <tr>
                             <td colspan="6" align="center">
                                 ที่อยู่สำหรับจัดส่ง
-                                <p class="pull-right top-p"><button type="button" class="btn btn-info btn-xs" onClick="addNewAddress()"> เพิ่มที่อยู่ใหม่</button></p>
+                                <p class="pull-right top-p">
+																	<?php if($add OR $edit) : ?>
+																	<button type="button" class="btn btn-info btn-xs" onClick="addNewAddress()"> เพิ่มที่อยู่ใหม่</button>
+																	<?php endif; ?>
+																</p>
                                 </td>
                             </tr>
                             <tr style="font-size:12px;">
@@ -90,8 +96,10 @@ $usbtn 	= ( $order->service_fee > 0 || $order->hasPayment === TRUE || $order->is
                                     </button>
                                 <?php endif; ?>
 																		<button type="button" class="btn btn-xs btn-primary" onclick="printOnlineAddress(<?php echo $rs['id']; ?>)"><i class="fa fa-print"></i></button>
+																		<?php if($add OR $edit) : ?>
                                     <button type="button" class="btn btn-xs btn-warning" onClick="editAddress(<?php echo $rs['id']; ?>)"><i class="fa fa-pencil"></i></button>
                                     <button type="button" class="btn btn-xs btn-danger" onClick="removeAddress(<?php echo $rs['id']; ?>)"><i class="fa fa-trash"></i></button>
+																		<?php endif; ?>
                                 </td>
                                 </tr>
                             <?php 	endwhile; ?>

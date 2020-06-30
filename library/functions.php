@@ -344,6 +344,8 @@ function isViewStockOnly($id_profile)
 
 function checkAccess($id_profile, $id_tab)
 {
+	$isClose = getConfig('CLOSED');
+
 	if($id_profile == 1)
 	{
 		$pm = array(
@@ -355,26 +357,39 @@ function checkAccess($id_profile, $id_tab)
 	}
 	else
 	{
-		$qs = dbQuery("SELECT a.view, a.add, a.edit, a.delete FROM tbl_access AS a WHERE id_profile = '".$id_profile."' AND id_tab = '".$id_tab."'");
-		if(dbNumRows($qs) == 1)
-		{
-			$rs = dbFetchObject($qs);
-			$pm = array(
-				'view' => $rs->view,
-				'add' => $rs->add,
-				'edit' => $rs->edit,
-				'delete' => $rs->delete
-			);
-		}
-		else
+		if($isClose == 2)
 		{
 			$pm = array(
-				'view' => 0,
+				'view' => 1,
 				'add' => 0,
 				'edit' => 0,
 				'delete' => 0
 			);
 		}
+		else
+		{
+			$qs = dbQuery("SELECT a.view, a.add, a.edit, a.delete FROM tbl_access AS a WHERE id_profile = '".$id_profile."' AND id_tab = '".$id_tab."'");
+			if(dbNumRows($qs) == 1)
+			{
+				$rs = dbFetchObject($qs);
+				$pm = array(
+					'view' => $rs->view,
+					'add' => $rs->add,
+					'edit' => $rs->edit,
+					'delete' => $rs->delete
+				);
+			}
+			else
+			{
+				$pm = array(
+					'view' => 0,
+					'add' => 0,
+					'edit' => 0,
+					'delete' => 0
+				);
+			}
+		}
+
 	}
 	return $pm;
 }

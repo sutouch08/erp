@@ -46,7 +46,11 @@
       <div class="divider-hidden"></div>
 
 
-      <div class="col-sm-9 col-sm-offset-3"><button type="button" class="btn btn-sm btn-success input-mini" onClick="checkExportSetting()"><i class="fa fa-save"></i> บันทึก</button></div>
+      <div class="col-sm-9 col-sm-offset-3">
+				<?php if($add OR $edit) : ?>
+					<button type="button" class="btn btn-sm btn-success input-mini" onClick="checkExportSetting()"><i class="fa fa-save"></i> บันทึก</button>
+				<?php endif; ?>
+			</div>
       <div class="divider-hidden"></div>
 
   	</div><!--/ row -->

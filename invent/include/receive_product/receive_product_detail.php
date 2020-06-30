@@ -61,6 +61,7 @@
 			<input type="text" class="form-control input-sm" id="remark" value="<?php echo $cs->remark; ?>" disabled />
     </div>
 		<div class="col-sm-2 margin-top-10 padding-5 last">
+			<?php if($add OR $edit) : ?>
 			<label class="display-block not-show">แก้ไข</label>
 			<button type="button" class="btn btn-sm btn-warning btn-block" id="btn-edit" onclick="toggleEdit()">
 				<i class="fa fa-pencil"></i> แก้ไข
@@ -68,6 +69,7 @@
 			<button type="button" class="btn btn-sm btn-success btn-block hide" id="btn-update" onclick="updateChange()">
 				<i class="fa fa-save"></i> บันทึก
 			</button>
+			<?php endif; ?>
 		</div>
 
     <?php if( $cs->approver != 0 ) :  ?>

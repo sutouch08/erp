@@ -359,9 +359,11 @@
 
           <td class="middle text-center">
             <?php if(($rs->role == 1 OR $rs->role == 2) && $rs->date_add >= '2019-08-01 00:00:00') : ?>
+              <?php if($add OR $edit) : ?>
             <button type="button" class="btn btn-xs btn-primary" onclick="sendToIX(<?php echo $rs->id; ?>)">
               <i class="fa fa-send"></i> Sent to IX
             </button>
+            <?php endif; ?>
             <?php endif; ?>
           </td>
 

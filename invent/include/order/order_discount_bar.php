@@ -1,6 +1,7 @@
 <?php if( $order->hasPayment == 0 && $order->isPaid == 0 && $order->isExpire == 0 ) : ?>
 <div class="row">
 	<div class="col-sm-12 margin-top-5 margin-bottom-5">
+		<?php if($add OR $edit) : ?>
 		<?php if( isset($allowEditDisc) && $allowEditDisc && ($order->role == 1 OR $order->role == 2)) : ?>
     	<button type="button" class="btn btn-sm btn-default" id="btn-edit-discount" onclick="showDiscountBox()">
 				<?php if($order->role == 2) : ?>
@@ -24,6 +25,7 @@
 		<?php if( isset($allowEditCost) && $allowEditCost) : ?>
 			<button type="button" class="btn btn-sm btn-default" id="btn-edit-cost" onClick="showCostBox()">แก้ไขต้นทุน</button>
       <button type="button" class="btn btn-sm btn-primary hide" id="btn-update-cost" onClick="getApprove('cost')">บันทึกต้นทุน</button>
+		<?php endif; ?>
 		<?php endif; ?>
         <!-- Bill discount
         <button type="button" class="btn btn-sm btn-default" id="btn-edit-bDisc" onclick="showbDiscBox()">แก้ไขส่วนลดท้ายบิล</button>

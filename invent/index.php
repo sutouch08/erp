@@ -3,7 +3,7 @@ require_once '../library/config.php';
 require_once '../library/functions.php';
 require_once 'function/tools.php';
 
-if( !getConfig('CLOSED') )
+if( getConfig('CLOSED') != 1 )
 {
 	checkUser();
 	$user_id = getCookie('user_id');
