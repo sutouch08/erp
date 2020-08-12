@@ -113,12 +113,13 @@
     </tr>
     <tr class="font-size-12">
       <th class="width-5 middle text-center">ลำดับ</th>
-      <th class="width-15 middle text-center">บาร์โค้ด</th>
+      <th class="width-10 middle text-center">บาร์โค้ด</th>
       <th class="width-15 middle text-center">รหัส</th>
       <th class="width-30 middle text-center">สินค้า</th>
-      <th class="width-10 middle text-right">ทุน</th>
-      <th class="width-10 text-right middle">คงเหลือ</th>
-      <th class="width-15 text-right middle">มูลค่า</th>
+      <th class="width-8 middle text-center">ปี</th>
+      <th class="width-8 middle text-right">ทุน</th>
+      <th class="width-8 text-right middle">คงเหลือ</th>
+      <th class="width-10 text-right middle">มูลค่า</th>
     </tr>
 {{#each bs}}
   {{#if nodata}}
@@ -138,6 +139,7 @@
       <td class="middle text-center">{{ barcode }}</td>
       <td class="middle">{{ pdCode }}</td>
       <td class="middle">{{ pdName }}</td>
+      <td class="middle">{{ year }}</td>
       <td class="middle text-right">{{ cost }}</td>
       <td class="middle text-right">{{ qty }}</td>
       <td class="middle text-right">{{ amount }}</td>

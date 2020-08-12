@@ -28,6 +28,14 @@ if(isset($_GET['export_ix_order']))
 } //--- end function
 
 
+//--- export WM to IX
+if(isset($_GET['export_ix_wm']))
+{
+  include "ix/export_ix_wm.php";
+} //--- end function
+
+
+
 
 
 //----- get order list to export (for auto export)
@@ -172,6 +180,76 @@ if(isset($_GET['get_transfer_list']))
     echo 'not found';
   }
 
+}
+
+
+
+if(isset($_GET['get_wm_list']))
+{
+  $from_date = fromDate($_GET['from_date']);
+  $to_date = toDate($_GET['to_date']);
+  $limit = $_GET['limit'];
+
+  $qr  = "SELECT id FROM tbl_consign ";
+  $qr .= "WHERE isSaved = 1 ";
+  $qr .= "AND isCancle = 0 ";
+  $qr .= "AND is_so = 0 ";
+  $qr .= "AND date_add >= '{$from_date}' ";
+  $qr .= "AND date_add <= '{$to_date}' ";
+  $qr .= "AND ix = 0 ";
+  $qr .= "ORDER BY date_add ASC ";
+  $qr .= "LIMIT {$limit}";
+
+  $qs = dbQuery($qr);
+  if(dbNumRows($qs) > 0)
+  {
+    $ds = array();
+    while($rs = dbFetchObject($qs))
+    {
+      $ds[] = $rs->id;
+    }
+
+    echo json_encode($ds);
+  }
+  else
+  {
+    echo 'not found';
+  }
+}
+
+
+
+if(isset($_GET['get_error_wm_list']))
+{
+  $from_date = fromDate($_GET['from_date']);
+  $to_date = toDate($_GET['to_date']);
+  $limit = $_GET['limit'];
+
+  $qr  = "SELECT id FROM tbl_consign ";
+  $qr .= "WHERE isSaved = 1 ";
+  $qr .= "AND isCancle = 0 ";
+  $qr .= "AND is_so = 0 ";
+  $qr .= "AND date_add >= '{$from_date}' ";
+  $qr .= "AND date_add <= '{$to_date}' ";
+  $qr .= "AND ix = 3 ";
+  $qr .= "ORDER BY date_add ASC ";
+  $qr .= "LIMIT {$limit}";
+
+  $qs = dbQuery($qr);
+  if(dbNumRows($qs) > 0)
+  {
+    $ds = array();
+    while($rs = dbFetchObject($qs))
+    {
+      $ds[] = $rs->id;
+    }
+
+    echo json_encode($ds);
+  }
+  else
+  {
+    echo 'not found';
+  }
 }
 
 

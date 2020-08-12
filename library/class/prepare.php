@@ -133,12 +133,16 @@ class prepare
 
     public function get_details($id_order)
     {
-      $qr  = "SELECT pre.*, pd.code AS product_code, zone.barcode_zone AS zone_code ";
+      $qr  = "SELECT pre.*, pd.code AS product_code, zone.barcode_zone AS zone_code, ";
+      $qr .= "pd.id_style, zone.id_warehouse ";
       $qr .= "FROM tbl_prepare AS pre ";
       $qr .= "LEFT JOIN tbl_product AS pd ON pre.id_product = pd.id ";
       $qr .= "LEFT JOIN tbl_zone AS zone ON pre.id_zone = zone.id_zone ";
       $qr .= "WHERE pre.id_order = {$id_order}";
+
+
       $qs = dbQuery($qr);
+
       if(dbNumRows($qs) > 0)
       {
         $ds = array();
@@ -152,6 +156,8 @@ class prepare
 
       return NULL;
     }
+
+
 
 
 }   //---   End class

@@ -65,34 +65,30 @@
         }
 
         //--- เพิ่มรายการกลับ buffer และลบรายการบันทึกขายทีละรายการ
-        //$qs = $order->getSoldOrderDetail($order->id);
-        $qs = $prepare->get_details($order->id);
-
-        if(!empty($qs))
+        $qs = $order->getSoldOrderDetail($order->id);
+        if( dbNumRows($qs) > 0)
         {
-          foreach( $qs as $rs)
+          while( $rs = dbFetchObject($qs))
           {
-
-
-            //--- เพิ่มข้อมูลกลับ buffer
-            if( $buffer->updateBuffer($rs->id_order, $rs->id_style, $rs->id_product, $rs->id_zone, $rs->id_warehouse, $rs->qty) !== TRUE)
+            if($rs->count_stock == 1)
             {
-              $sc = FALSE;
-              $message = 'เพิ่มข้อมูลเข้า buffer ไม่สำเร็จ';
-            }
+
+              //--- เพิ่มข้อมูลกลับ buffer
+              if( $buffer->updateBuffer($rs->id_order, $rs->id_product_style, $rs->id_product, $rs->id_zone, $rs->id_warehouse, $rs->qty) !== TRUE)
+              {
+                $sc = FALSE;
+                $message = 'เพิ่มข้อมูลเข้า buffer ไม่สำเร็จ';
+              }
 
 
-            $sold = $order->getSoldDetail($rs->id_order, $rs->id_product, $rs->id_zone);
-            if(!empty($sold))
-            {
               //--- ลบรายการบันทึกขาย
-              if( $order->unSold($sold->id) !== TRUE )
+              if( $order->unSold($rs->id) !== TRUE )
               {
                 $sc = FALSE;
                 $message = 'ลบรายการบันทึกขายไม่สำเร็จ';
               }
 
-              if( $pdCost->addCostList($sold->id_product, $sold->cost_ex, $sold->qty) !== TRUE)
+              if( $pdCost->addCostList($rs->id_product, $rs->cost_ex, $rs->qty) !== TRUE)
               {
                 $sc = FALSE;
                 $message = 'ปรับปรุงต้นทุนสินค้าไม่สำเร็จ';
@@ -101,32 +97,35 @@
               //--- ถ้ามีการใช้เครดิต รวมยอดเครดิตไว้คืน
               if( $term === TRUE )
               {
-                $useCredit += $sold->total_amount_inc;
+                $useCredit += $rs->total_amount_inc;
+              }
+            }
+            else
+            {
+              //--- ลบรายการบันทึกขาย
+              if( $order->unSold($rs->id) !== TRUE )
+              {
+                $sc = FALSE;
+                $message = 'ลบรายการบันทึกขายไม่สำเร็จ';
               }
             }
 
           } //--- End while
         } //--- end if dbNumRows
 
-        if($order->unSoldAll($order->id) === FALSE)
-        {
-          $sc = FALSE;
-          $message = 'ลบรายการขายไม่สำเร็จ';
-        }
+        $cancleProduct = $cancle->getCancleProductByOrder($order->id);
 
-        // $cancleProduct = $cancle->getCancleProductByOrder($order->id);
-        //
-        // if(dbNumRows($cancleProduct) > 0)
-        // {
-        //   while($cp = dbFetchObject($cancleProduct))
-        //   {
-        //     $cs = $buffer->updateBuffer($cp->id_order, $cp->id_style, $cp->id_product, $cp->id_zone, $cp->id_warehouse, $cp->qty);
-        //     if($cs === TRUE)
-        //     {
-        //       $cancle->delete($cp->id);
-        //     }
-        //   }
-        // }
+        if(dbNumRows($cancleProduct) > 0)
+        {
+          while($cp = dbFetchObject($cancleProduct))
+          {
+            $cs = $buffer->updateBuffer($cp->id_order, $cp->id_style, $cp->id_product, $cp->id_zone, $cp->id_warehouse, $cp->qty);
+            if($cs === TRUE)
+            {
+              $cancle->delete($cp->id);
+            }
+          }
+        }
 
       } //--- end if order->state >= 8  ถ้าสถานะปัจจุบัน มากกกว่า หรือ เท่ากับ 8 (เปิดบิลแล้ว)
 

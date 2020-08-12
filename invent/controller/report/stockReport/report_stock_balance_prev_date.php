@@ -32,7 +32,7 @@ $sc['whList']   = $allWarehouse == 1 ? 'ทั้งหมด' : $wh_list;
 $sc['productList']   = $allProduct == 1 ? 'ทั้งหมด' : '('.$pdFrom.') - ('.$pdTo.')';
 
 
-$qr  = "SELECT b.barcode, p.code, p.name, p.cost, (SUM(s.move_in) - SUM(s.move_out)) AS qty ";
+$qr  = "SELECT b.barcode, p.code, p.name, p.year, p.cost, (SUM(s.move_in) - SUM(s.move_out)) AS qty ";
 $qr .= "FROM tbl_stock_movement AS s ";
 $qr .= "JOIN tbl_product AS p ON s.id_product = p.id ";
 $qr .= "JOIN tbl_product_style AS ps ON p.id_style = ps.id ";
@@ -76,6 +76,7 @@ if(dbNumRows($qs) > 0)
       'barcode' => $rs->barcode,
       'pdCode' => $rs->code,
       'pdName' => $rs->name,
+      'year' => $rs->year,
       'cost' => number($rs->cost, 2),
       'qty' => number($rs->qty),
       'amount' => number($rs->cost * $rs->qty, 2)

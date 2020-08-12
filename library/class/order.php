@@ -1031,6 +1031,12 @@ class order
 	}
 
 
+	public function unSoldAll($id_order)
+	{
+		return dbQuery("DELETE FROM tbl_order_sold WHERE id_order = {$id_order}");
+	}
+
+
 
 
 	//---
@@ -1102,6 +1108,25 @@ class order
 	{
 		$qr = "SELECT * FROM tbl_order_sold WHERE id_order = {$id}";
 	}
+
+
+	public function getSoldDetail($id_order, $id_product, $id_zone)
+	{
+		$qr = "SELECT * FROM tbl_order_sold WHERE ";
+		$qr .= "id_order = {$id_order} ";
+		$qr .= "AND id_product = '{$id_product}' ";
+		$qr .= "AND id_zone = '{$id_zone}'";
+
+		$qs = dbQuery($qr);
+		if(dbNumRows($qs) == 1)
+		{
+			return dbFetchObject($qs);
+		}
+
+		return NULL;
+	}
+
+
 
 	//---	รายการที่บันทึกขายไว้ เพื่อส่งออกไป Formula
 	public function getSoldDetails($id)

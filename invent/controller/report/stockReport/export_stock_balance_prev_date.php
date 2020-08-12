@@ -68,7 +68,7 @@ $excel->getActiveSheet()->getColumnDimension('G')->setWidth(10);
 $excel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
 
 
-$qr  = "SELECT b.barcode, p.code, p.name, p.cost, (SUM(s.move_in) - SUM(s.move_out)) AS qty ";
+$qr  = "SELECT b.barcode, p.code, p.name, p.year, p.cost, (SUM(s.move_in) - SUM(s.move_out)) AS qty ";
 $qr .= "FROM tbl_stock_movement AS s ";
 $qr .= "JOIN tbl_product AS p ON s.id_product = p.id ";
 $qr .= "JOIN tbl_product_style AS ps ON p.id_style = ps.id ";

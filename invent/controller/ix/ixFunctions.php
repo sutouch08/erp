@@ -1,5 +1,25 @@
 <?php
 
+function get_ix_customer($code)
+{
+  $qs = db2Query("SELECT * FROM customers WHERE old_code = '{$code}' OR code = '{$code}'");
+  $rows = db2NumRows($qs);
+  if($rows === 0)
+  {
+    return NULL;
+  }
+  else if($rows > 1)
+  {
+    $rows;
+  }
+  else
+  {
+    return db2FetchObject($qs);
+  }
+
+}
+
+
 //--- add ix qc
 function add_ix_qc(array $ds = array())
 {
@@ -156,9 +176,32 @@ function add_ix_move_out(array $ds = array())
 }
 
 
+function add_ix_wm(array $ds = array())
+{
+  if(!empty($ds))
+  {
+    $qr = get_insert_query('consignment_order', $ds);
+    return db2Query($qr);
+  }
+
+  return FALSE;
+}
+
+
+function add_ix_wm_detail(array $ds = array())
+{
+  if(!empty($ds))
+  {
+    return db2Query(get_insert_query('consignment_order_detail', $ds));
+  }
+
+  return FALSE;
+}
+
+
 function get_ix_item($code)
 {
-  $qr = "SELECT * FROM products WHERE old_code = '{$code}' OR code = '{$code}'";
+  $qr = "SELECT * FROM products WHERE old_code = '{$code}' OR code = '{$code}' AND active = 1 ";
   $qs = db2Query($qr);
   if(db2NumRows($qs) === 1)
   {
@@ -278,6 +321,19 @@ function is_exists_in_ix($code)
 function is_mv_exists_in_ix($code)
 {
   $qr = "SELECT code FROM move WHERE code = '{$code}'";
+  $qs = db2Query($qr);
+  if(db2NumRows($qs) > 0)
+  {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+
+function is_consign_exists_in_ix($code)
+{
+  $qr = "SELECT code FROM consignment_order WHERE code = '{$code}'";
   $qs = db2Query($qr);
   if(db2NumRows($qs) > 0)
   {

@@ -162,6 +162,25 @@ class consign
     return dbQuery("SELECT * FROM tbl_consign_detail WHERE id_consign = '".$id."'");
   }
 
+  public function get_details($id)
+  {
+    $qr = "SELECT * FROM tbl_consign_detail WHERE id_consign = {$id}";
+    $qs = dbQuery($qr);
+
+    if(dbNumRows($qs) > 0)
+    {
+      $ds = array();
+      while($row = dbFetchObject($qs))
+      {
+        $ds[] = $row;
+      }
+
+      return $ds;
+    }
+
+    return NULL;
+  }
+
 
 
 
